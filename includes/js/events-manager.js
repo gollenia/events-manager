@@ -739,8 +739,8 @@ jQuery(document).ready( function($){
 			return jQuery( "<li></li>" ).data( "item.autocomplete", item ).append(html_val).appendTo( ul );
 		};
 		jQuery('#em-location-reset a').on('click', function(){
-			jQuery('div.em-location-data input').css('background-color','#fff').val('').prop('readonly', false);
-			jQuery('div.em-location-data select').css('background-color','#fff').css('color', 'auto').prop('disabled', false);
+			jQuery('div.em-location-data input').val('').prop('readonly', false);
+			jQuery('div.em-location-data select').prop('disabled', false);
 			jQuery('div.em-location-data option:selected').removeAttr('selected');
 			jQuery('input#location-id').val('');
 			jQuery('#em-location-reset').hide();
@@ -755,8 +755,8 @@ jQuery(document).ready( function($){
 			return false;
 		});
 		if( jQuery('input#location-id').val() != '0' && jQuery('input#location-id').val() != '' ){
-			jQuery('div.em-location-data input').css('background-color','#ccc').prop('readonly', true);
-			jQuery('div.em-location-data select').css('background-color','#ccc').css('color', '#666666').prop('disabled', true);
+			jQuery('div.em-location-data input').prop('readonly', true);
+			jQuery('div.em-location-data select').prop('disabled', true);
 			jQuery('#em-location-reset').show();
 			jQuery('#em-location-search-tip').hide();
 		}

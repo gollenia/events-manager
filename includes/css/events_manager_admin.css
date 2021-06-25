@@ -30,7 +30,7 @@ table.events-table .category { color:#888; }
 
 /* Events Add Page */
 #post-body .misc-pub-post-status.misc-event-duplicate-link:before { content: "\f132"; }
-#event-form #event-name, #location-form, #location-name { margin: 2px 0 7px; padding: 6px 5px; width: 98%; }
+#event-form #event-name, #location-form, #location-name { }
 /* Recurring Event Rescheduling */
 #event-form .reschedule-hidden, #post .reschedule-hidden { display:none; visibility:hidden; }
 #event-form .em-recurrence-reschedule, #post .em-recurrence-reschedule { padding:15px 20px; border-left: 4px solid #ffa500; }
@@ -42,7 +42,7 @@ table.events-table .category { color:#888; }
 .em-location-type-single .em-location-type { border-top:0; margin-top:0; padding-top:0; }
 .em-location-type.em-location-type-single { border:none; margin-top:10px; padding-top:10px; }
 .em-location-type p:first-child { margin-top:0; }
-div.em-location-data table { float:left; margin:0 15px 0 0; }
+
 .em-event-location-data h4 { padding-bottom:5px; border-bottom:1px solid #dedede; margin-bottom:15px; }
 .em-input-field { margin-bottom:10px; }
 .em-input-field label { display: block; margin-bottom:5px; }
@@ -51,12 +51,10 @@ div.em-location-data table { float:left; margin:0 15px 0 0; }
 /* Location form */
 div.em-location-type, div.em-location-type-delete-active-alert { display:none; }
 div.em-location-types-single { display:none; visibility: hidden; }
-div.em-location-data table.em-location-data td, div.em-location-data table.em-location-data th { vertical-align:top; border:none; }
-div.em-location-data table.em-location-data { width:50%; float:left; border:none; }
-div.em-location-data table.em-location-data .em-location-data-url input { width:100%; }
+
 div.em-location-data .em-location-map-container, div.em-location-data .em-location-map-404, div.em-location-data .em-location-map-content { width: 400px; height: 300px; float:left; }
 div.em-location-data .em-location-map-404 { vertical-align:middle; text-align: center; }
-/* MS Global Categories */
+/* MS Global Categories */ {}
 .ms-global-categories { line-height:1.8em; }
 /*Bookings */
 #event-rsvp-box { margin:10px; }

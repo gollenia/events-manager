@@ -160,6 +160,7 @@ $reschedule_warnings = !empty($EM_Event->event_id) && $EM_Event->is_recurring() 
     	</div>
 		<?php endif; ?>
 	</div>
+	
 	<h3 class="title"><?php esc_html_e('Event Options','events-manager'); ?></h3>
 	<table id="em-booking-options" class="form-table">
 	<tbody>
@@ -183,12 +184,12 @@ $reschedule_warnings = !empty($EM_Event->event_id) && $EM_Event->is_recurring() 
 		<th><?php esc_html_e('Booking Cut-Off Date','events-manager'); ?></th>
 		<td><span class="em-booking-date-normal">
 			<span class="em-date-single">
-				<input id="em-bookings-date-loc" class="em-date-input-loc" type="text" />
-				<input id="em-bookings-date" class="em-date-input" type="hidden" name="event_rsvp_date" value="<?php echo $EM_Event->event_rsvp_date; ?>" />
+				<input id="em-bookings-date" class="em-date-input" type="date" name="event_rsvp_date" value="<?php echo $EM_Event->event_rsvp_date; ?>" />
 			</span>
 		</span>
+		um
 		<span class="em-booking-date-recurring">
-			<input type="text" name="recurrence_rsvp_days" size="3" value="<?php echo absint($EM_Event->recurrence_rsvp_days); ?>" />
+			<input type="time" name="recurrence_rsvp_days" size="3" value="<?php echo absint($EM_Event->recurrence_rsvp_days); ?>" />
 			<?php _e('day(s)','events-manager'); ?>
 			<select name="recurrence_rsvp_days_when">
 				<option value="before" <?php if( !empty($EM_Event->recurrence_rsvp_days) && $EM_Event->recurrence_rsvp_days <= 0) echo 'selected="selected"'; ?>><?php echo sprintf(_x('%s the event starts','before or after','events-manager'),__('Before','events-manager')); ?></option>
@@ -196,7 +197,7 @@ $reschedule_warnings = !empty($EM_Event->event_id) && $EM_Event->is_recurring() 
 			</select>
 			<?php _e('at','events-manager'); ?>
 		</span>
-		<input type="text" name="event_rsvp_time" class="em-time-input" maxlength="8" size="8" value="<?php if (!empty($EM_Event->event_rsvp_time)) echo $EM_Event->rsvp_end()->format(em_get_hour_format()); ?>" />
+		<input type="time" name="event_rsvp_time" class="em-time-input" maxlength="8" size="8" value="<?php if (!empty($EM_Event->event_rsvp_time)) echo $EM_Event->rsvp_end()->format(em_get_hour_format()); ?>" />
 		<br />
 		<p class="description"><?php esc_html_e('This is the definite date after which bookings will be closed for this event, regardless of individual ticket settings above. Default value will be the event start date.','events-manager'); ?></p>
 		</td>
@@ -204,6 +205,7 @@ $reschedule_warnings = !empty($EM_Event->event_id) && $EM_Event->is_recurring() 
 	<?php endif; ?>
 	</tbody>
 	</table>
+	<hr>
 	<?php
 		if( !empty($delete_temp_ticket) ){
 			array_pop($EM_Tickets->tickets);

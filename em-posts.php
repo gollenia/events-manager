@@ -1,6 +1,6 @@
 <?php
 //Custom Post Type and Taxonomy Names, overridable in wp-config.php, not adviseable but the point is flexibility if you know what you're doing ;)
-if( !defined('EM_POST_TYPE_EVENT') ) define('EM_POST_TYPE_EVENT','event');
+if( !defined('EM_POST_TYPE_EVENT') ) define('EM_POST_TYPE_EVENT','event'); 
 if( !defined('EM_POST_TYPE_LOCATION') ) define('EM_POST_TYPE_LOCATION','location');
 if( !defined('EM_TAXONOMY_CATEGORY') ) define('EM_TAXONOMY_CATEGORY','event-categories');
 if( !defined('EM_TAXONOMY_TAG') ) define('EM_TAXONOMY_TAG','event-tags');

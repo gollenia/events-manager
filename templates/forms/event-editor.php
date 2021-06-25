@@ -96,7 +96,7 @@ if( !empty($_REQUEST['success']) ){
 		<?php if( get_option('dbem_rsvp_enabled') && $EM_Event->can_manage('manage_bookings','manage_others_bookings') ) : ?>
 		<!-- START Bookings -->
 		<h3><?php esc_html_e('Bookings/Registration','events-manager'); ?></h3>
-		<div class="inside event-form-bookings">				
+		<div class="inside event-form-bookings" style="background: #f0f0f1">				
 			<?php em_locate_template('forms/event/bookings.php',true); ?>
 		</div>
 		<!-- END Bookings -->
