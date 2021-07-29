@@ -1,11 +1,11 @@
 <?php
 /*
 Plugin Name: Events Manager
-Version: 5.9.11.3
-Plugin URI: http://wp-events-plugin.com
+Version: 5.10
+Plugin URI: https://github.com/gollenia/events-manager
 Description: Event registration and booking management for WordPress. Recurring events, locations, webinars, google maps, rss, ical, booking registration and more!
 Author: Marcus Sykes
-Author URI: http://wp-events-plugin.com
+Author URI: https://github.com/gollenia/events-manager
 Text Domain: events-manager
 */
 
@@ -28,12 +28,13 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 */
 
 // Setting constants
-define('EM_VERSION', 5.9942); //self expanatory, although version currently may not correspond directly with published version number
+define('EM_VERSION', 5.10); //self expanatory, although version currently may not correspond directly with published version number
 define('EM_PRO_MIN_VERSION', 2.6712); //self expanatory
 define('EM_PRO_MIN_VERSION_CRITICAL', 2.377); //self expanatory
 define('EM_DIR', dirname( __FILE__ )); //an absolute path to this directory
 define('EM_DIR_URI', trailingslashit(plugins_url('',__FILE__))); //an absolute path to this directory
 define('EM_SLUG', plugin_basename( __FILE__ )); //for updates
+define('EM_MS_GLOBAL',false);
 
 //temporarily disable AJAX by default, future updates will eventually have this turned on as we work out some kinks
 if( !defined('EM_AJAX') ){
@@ -42,26 +43,7 @@ if( !defined('EM_AJAX') ){
 
 if( !defined('EM_CONDITIONAL_RECURSIONS') ) define('EM_CONDITIONAL_RECURSIONS', get_option('dbem_conditional_recursions', 1)); //allows for conditional recursios to be nested
 
-//EM_MS_GLOBAL
-if( is_multisite() && get_site_option('dbem_ms_global_table') ){
-	define('EM_MS_GLOBAL', true);
-}else{
-	define('EM_MS_GLOBAL',false);
-}
 
-//DEBUG MODE - currently not public, not fully tested
-if( !defined('WP_DEBUG') && get_option('dbem_wp_debug') ){
-	define('WP_DEBUG',true);
-}
-function dbem_debug_mode(){
-	if( !empty($_REQUEST['dbem_debug_off']) ){
-		update_option('dbem_debug',0);
-		wp_safe_redirect($_SERVER['HTTP_REFERER']);
-	}
-	if( current_user_can('activate_plugins') ){
-		include_once('em-debug.php');
-	}
-}
 //add_action('plugins_loaded', 'dbem_debug_mode');
 
 // INCLUDES
@@ -82,16 +64,10 @@ include("em-events.php");
 include("em-emails.php");
 include("em-functions.php");
 include("em-ical.php");
-include("em-shortcode.php");
 include("em-template-tags.php");
 include("em-data-privacy.php");
 include("multilingual/em-ml.php");
-//Widgets
-include("widgets/em-events.php");
-if( get_option('dbem_locations_enabled') ){
-	include("widgets/em-locations.php");
-}
-include("widgets/em-calendar.php");
+
 //Classes
 include('classes/em-booking.php');
 include('classes/em-bookings.php');
@@ -148,13 +124,6 @@ if( is_admin() ){
 		include('admin/bookings/em-person.php');
 }
 
-/* Only load the component if BuddyPress is loaded and initialized. */
-function bp_em_init() {
-	if ( version_compare( BP_VERSION, '1.3', '>' ) ){
-		require( dirname( __FILE__ ) . '/buddypress/bp-em-core.php' );
-	}
-}
-add_action( 'bp_include', 'bp_em_init' );
 
 //Table names
 global $wpdb;
@@ -463,15 +432,7 @@ function em_plugins_loaded(){
 		/* Upload Capabilities */
 		'upload_event_images' => __('You do not have permission to upload images','events-manager')
 	));
-	//WPFC Integration
-	if( defined('WPFC_VERSION') ){
-		function load_em_wpfc_plugin(){
-			if( !function_exists('wpfc_em_init') ) include('em-wpfc.php');	
-		}
-		add_action('init', 'load_em_wpfc_plugin', 200);
-	}
-	//bbPress
-	if( class_exists( 'bbPress' ) ) include('em-bbpress.php');
+
 }
 add_filter('plugins_loaded','em_plugins_loaded');
 
@@ -745,15 +706,6 @@ function em_modified_monitor($result){
 add_filter('em_event_save', 'em_modified_monitor', 10,1);
 add_filter('em_location_save', 'em_modified_monitor', 10,1);
 
-function em_admin_bar_mod($wp_admin_bar){
-	$wp_admin_bar->add_menu( array(
-		'parent' => 'network-admin',
-		'id'     => 'network-admin-em',
-		'title'  => __( 'Events Manager','events-manager'),
-		'href'   => network_admin_url('admin.php?page=events-manager-options'),
-	) );
-}
-add_action( 'admin_bar_menu', 'em_admin_bar_mod', 21 );
 
 function em_delete_blog( $blog_id ){
 	global $wpdb;
@@ -784,13 +736,4 @@ function em_deactivate() {
 }
 register_deactivation_hook( __FILE__,'em_deactivate');
 
-/**
- * Fail-safe compatibility checking of EM Pro 
- */
-function em_check_pro_compatability(){
-	if( defined('EMP_VERSION') && EMP_VERSION < EM_PRO_MIN_VERSION_CRITICAL && (!defined('EMP_DISABLE_CRITICAL_WARNINGS') || !EMP_DISABLE_CRITICAL_WARNINGS) ){
-		include('em-pro-compatibility.php');
-	}
-}
-add_action('plugins_loaded','em_check_pro_compatability', 1);
 ?>
