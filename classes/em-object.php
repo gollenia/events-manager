@@ -231,7 +231,7 @@ class EM_Object {
 		$tag = $args['tag'];// - not used anymore, accesses the $args directly
 		$location = $args['location'];
 		$bookings = $args['rsvp'];
-		$bookings = !empty($args['bookings']) ? $args['bookings']:$bookings;
+		$bookings = $args['bookings'] !== false ? absint($args['bookings']):$bookings;
 		$owner = $args['owner'];
 		$event = $args['event'];
 		$month = $args['month'];
@@ -590,6 +590,8 @@ class EM_Object {
 			}else{
 				$conditions['bookings'] = "(event_id = 0)";
 			}
+		}elseif( $bookings == 0 && $bookings !== false ){
+			$conditions['bookings'] = 'event_rsvp=0';
 		}
 		//Default ownership belongs to an event, child objects can just overwrite this if needed.
 		if( is_numeric($owner) ){
@@ -1688,7 +1690,7 @@ class EM_Object {
 	}
 
 	function sanitize_time( $time ){
-		if( !empty($time) && preg_match ( '/^([01]\d|2[0-3]):([0-5]\d) ?(AM|PM)?$/', $time, $match ) ){
+		if( !empty($time) && preg_match ( '/^([01]?\d|2[0-3]):([0-5]\d) ?(AM|PM)?$/', $time, $match ) ){
 			if( !empty($match[3]) && $match[3] == 'PM' && $match[1] != 12 ){
 				$match[1] = 12+$match[1];
 			}elseif( !empty($match[3]) && $match[3] == 'AM' && $match[1] == 12 ){

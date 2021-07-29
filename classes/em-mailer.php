@@ -29,11 +29,14 @@ class EM_Mailer {
 		$subject = html_entity_decode(wp_kses_data($subject)); //decode entities, but run kses first just in case users use placeholders containing html
 		if( is_array($receiver) ){
 			$receiver_emails = array();
-			foreach($receiver as $receiver_email){
+			foreach($receiver as $k => $receiver_email){
+				$receiver_email = trim($receiver_email);
+				$receiver[$k] = $receiver_email;
 				$receiver_emails[] = is_email($receiver_email);
 			}
 			$emails_ok = !in_array(false, $receiver_emails);
 		}else{
+			$receiver = trim($receiver);
 			$emails_ok = is_email($receiver);
 		}
 		if( get_option('dbem_smtp_html') && get_option('dbem_smtp_html_br') ){
@@ -56,8 +59,10 @@ class EM_Mailer {
 			remove_action('phpmailer_init', 'EM_Mailer::add_attachments_to_mailer', 9999);
 			//send email
 			if(!$send){
-				global $phpmailer;
-				$this->errors[] = $phpmailer->ErrorInfo;
+				global $phpmailer; /* @var PHPMailer $phpmailer */
+				if( !empty($phpmailer->ErrorInfo) ) {
+					$this->errors[] = $phpmailer->ErrorInfo;
+				}
 			}
 			//cleanup
 			self::delete_email_attachments($attachments);

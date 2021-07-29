@@ -423,12 +423,13 @@ class EM_Event extends EM_Object{
 			0 => __('Pending','events-manager'),
 			1 => __('Approved','events-manager')
 		);
+		// fire hook to add any extra info to an event
+		do_action('em_event', $this, $id, $search_by);
 		//add this event to the cache
 		if( $this->event_id && $this->post_id ){
 			wp_cache_set($this->event_id, $this, 'em_events');
 			wp_cache_set($this->post_id, $this->event_id, 'em_events_ids');
 		}
-		do_action('em_event', $this, $id, $search_by);
 	}
 	
 	function __get( $var ){
@@ -1928,8 +1929,8 @@ class EM_Event extends EM_Object{
 					$offset = 3;
 				}
 			}
-			if( $date == 'end' && $this->event_end == $this->event_start ){
-				$replace = __( apply_filters('em_event_output_placeholder', '', $this, $result, $target, array($result)) );
+			if( $date == 'end' && $this->event_start_date == $this->event_end_date ){
+				$replace = apply_filters('em_event_output_placeholder', '', $this, $result, $target, array($result));
 			}else{
 				$date_format = substr( $result, $offset, (strlen($result)-($offset+1)) );
 				if( !empty($show_site_timezone) ){
@@ -2605,7 +2606,7 @@ class EM_Event extends EM_Object{
 						$dateEnd = $this->end()->format('Ymd\THis');
 					}
 					//build url
-					$gcal_url = 'http://www.google.com/calendar/event?action=TEMPLATE&text=event_name&dates=start_date/end_date&details=post_content&location=location_name&trp=false&sprop=event_url&sprop=name:blog_name&ctz=event_timezone';
+					$gcal_url = 'https://www.google.com/calendar/event?action=TEMPLATE&text=event_name&dates=start_date/end_date&details=post_content&location=location_name&trp=false&sprop=event_url&sprop=name:blog_name&ctz=event_timezone';
 					$gcal_url = str_replace('event_name', urlencode($this->event_name), $gcal_url);
 					$gcal_url = str_replace('start_date', urlencode($dateStart), $gcal_url);
 					$gcal_url = str_replace('end_date', urlencode($dateEnd), $gcal_url);
@@ -2628,8 +2629,7 @@ class EM_Event extends EM_Object{
 					//get the final url
 					$replace = $gcal_url;
 					if( $result == '#_EVENTGCALLINK' ){
-						$img_url = 'www.google.com/calendar/images/ext/gc_button2.gif';
-						$img_url = is_ssl() ? 'https://'.$img_url:'http://'.$img_url;
+						$img_url = 'https://www.google.com/calendar/images/ext/gc_button2.gif';
 						$replace = '<a href="'.esc_url($replace).'" target="_blank"><img src="'.esc_url($img_url).'" alt="0" border="0"></a>';
 					}
 					break;

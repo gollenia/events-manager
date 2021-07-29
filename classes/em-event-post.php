@@ -142,6 +142,8 @@ class EM_Event_Post {
 						//we don't do extra checks here because WP will have already done the work for us here...
 						$EM_Event->post_content = $post->post_content;
 						$EM_Event->post_content_filtered = $post->post_content_filtered;
+					}else{
+						$EM_Event->post_content = $content;
 					}
 					ob_start();
 					em_locate_template('templates/event-single.php',true);

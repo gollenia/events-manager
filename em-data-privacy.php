@@ -6,14 +6,20 @@
 function em_data_privacy_consent_checkbox( $EM_Object = false ){
 	if( !empty($EM_Object) && (!empty($EM_Object->booking_id) || !empty($EM_Object->post_id)) ) return; //already saved so consent was given at one point
 	$label = get_option('dbem_data_privacy_consent_text');
+	// buddyboss fix since bb v1.6.0
+	if( has_filter( 'the_privacy_policy_link', 'bp_core_change_privacy_policy_link_on_private_network') ) $bb_fix = remove_filter('the_privacy_policy_link', 'bp_core_change_privacy_policy_link_on_private_network', 999999);
+	// replace privacy policy text %s with link to policy page
 	if( function_exists('get_the_privacy_policy_link') ) $label = sprintf($label, get_the_privacy_policy_link());
+	// buddyboss unfix since bb v1.6.0
+	if( !empty($bb_fix) ) add_filter( 'the_privacy_policy_link', 'bp_core_change_privacy_policy_link_on_private_network', 999999, 2 );
+	// check if consent was previously given and check box if true
 	if( is_user_logged_in() ){
-	    //check if consent was previously given and check box if true
         $consent_given_already = get_user_meta( get_current_user_id(), 'em_data_privacy_consent', true );
         if( !empty($consent_given_already) && get_option('dbem_data_privacy_consent_remember') == 1 ) return; //ignore if consent given as per settings
 		if( !empty($consent_given_already) && get_option('dbem_data_privacy_consent_remember') == 2 ) $checked = true;
     }
     if( empty($checked) && !empty($_REQUEST['data_privacy_consent']) ) $checked = true;
+    // output checkbox
 	?>
     <p class="input-group input-checkbox input-field-data_privacy_consent">
 		<label>

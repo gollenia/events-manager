@@ -24,7 +24,10 @@ class EM_ML_Bookings {
 			EM_ML_Bookings::$ignore_post_ids[] = $post_id;
 		});
     }
-    
+	
+	/**
+	 * @param EM_Booking $EM_Booking
+	 */
     public static function em_booking_email_before_send( $EM_Booking ){
     	if( $EM_Booking->language  && get_locale() !== $EM_Booking->language ){
             static::$displaying_locale = EM_ML::$current_language;
@@ -115,8 +118,8 @@ class EM_ML_Bookings {
 	 * @return EM_Event
 	 */
 	public static function em_booking_get_event($EM_Event, $EM_Booking){
-	    if( EM_ML::get_the_language($EM_Event) != get_locale() ){
-		    $EM_Event = EM_ML::get_translation($EM_Event, get_locale());
+	    if( EM_ML::get_the_language($EM_Event) != $EM_Booking->language ){
+		    $EM_Event = EM_ML::get_translation($EM_Event, $EM_Booking->language);
 		    $EM_Booking->event = $EM_Event; // so that we always fire this filter each time get_event() is called
 		}
 	    return $EM_Event;

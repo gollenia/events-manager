@@ -156,7 +156,7 @@ function em_admin_warnings() {
 		if( !empty($_GET['em_dismiss_events_page']) ){
 			update_option('dbem_dismiss_events_page',1);
 		}else{
-			if ( !get_page($events_page_id) && !get_option('dbem_dismiss_events_page') ){
+			if ( !get_post($events_page_id) && !get_option('dbem_dismiss_events_page') ){
 				?>
 				<div id="em_page_error" class="updated">
 					<p><?php echo sprintf ( __( 'Uh Oh! For some reason WordPress could not create an events page for you (or you just deleted it). Not to worry though, all you have to do is create an empty page, name it whatever you want, and select it as your events page in your <a href="%s">settings page</a>. Sorry for the extra step! If you know what you are doing, you may have done this on purpose, if so <a href="%s">ignore this message</a>', 'events-manager'), EM_ADMIN_URL .'&amp;page=events-manager-options', esc_url($_SERVER['REQUEST_URI'].$dismiss_link_joiner.'em_dismiss_events_page=1') ); ?></p>
@@ -188,35 +188,9 @@ function em_admin_warnings() {
 				<?php
 			}
 		}
-		if( !empty($_REQUEST['page']) && 'events-manager-options' == $_REQUEST['page'] && get_option('dbem_pro_dev_updates') == 1 ){
-			?>
-			<div id="message" class="updated">
-				<p><?php echo sprintf(__('Dev Mode active: Just a friendly reminder that you are updating to development versions. Only admins see this message, and it will go away when you disable this <a href="#pro-api">here</a> in your settings.','events-manager'),'<code>define(\'EMP_DEV_UPDATES\',true);</code>'); ?></p>
-			</div>
-			<?php
-		}
-		if( class_exists('SitePress') && !class_exists('EM_WPML') && !get_site_option('disable_em_wpml_warning') ){
-			if( !empty($_REQUEST['disable_em_wpml_warning']) ){
-				update_site_option('disable_em_wpml_warning',1);
-			}else{
-				?>
-				<div id="message" class="updated">
-					<p><?php echo sprintf(__('It looks like you have WPML enabled on your site. We advise you also install our extra <a href="%s">Events Manager WPML Connector</a> plugin which helps the two work better together. <a href="%s">Dismiss message</a>','events-manager'),'http://wordpress.org/extend/plugins/events-manager-wpml/', esc_url(add_query_arg(array('disable_em_wpml_warning'=>1)))); ?></p>
-				</div>
-				<?php
-			}
-		}
-		if( array_key_exists('dbem_disable_timthumb', wp_load_alloptions()) ){
-			if( !empty($_REQUEST['dbem_disable_timthumb']) ){
-				delete_option('dbem_disable_timthumb',1);
-			}else{
-				?>
-				<div id="message" class="updated">
-					<p>We have stopped using TimThumb for thumbnails in Events Manager, <a href="http://wp-events-plugin.com/blog/2014/12/05/bye-timthumb/">please see this post</a> for more information on how this may affect you and what options are available to you. <a href="<?php echo esc_url(add_query_arg(array('dbem_disable_timthumb'=>1))); ?>">Dismiss</a></p>
-				</div>
-				<?php
-			}		    
-		}
+
+		
+		
 	}
 	//Warn about EM page edit
 	if ( preg_match( '/(post|page).php/', $_SERVER ['SCRIPT_NAME']) && isset ( $_GET ['action'] ) && $_GET ['action'] == 'edit' && isset ( $_GET ['post'] ) && $_GET ['post'] == "$events_page_id") {
@@ -247,50 +221,6 @@ function em_plugin_action_links($actions, $file, $plugin_data) {
 	return $new_actions;
 }
 add_filter( 'plugin_action_links_events-manager/events-manager.php', 'em_plugin_action_links', 10, 3 );
-
-//Updates and Dev versions
-function em_updates_check( $transient ) {
-    // Check if the transient contains the 'checked' information
-    if( empty( $transient->checked ) )
-        return $transient;
-        
-    //only bother if we're checking for dev versions
-    if( get_option('em_check_dev_version') || get_option('dbem_pro_dev_updates') ){     
-	    //check WP repo for trunk version
-	    $plugin_slugs = apply_filters('em_org_dev_version_slugs', array('events-manager'=> EM_SLUG));
-	    foreach( $plugin_slugs as $org_slug => $wp_slug ) {
-		    $request = wp_remote_get('https://plugins.svn.wordpress.org/'.$org_slug.'/trunk/'.$org_slug.'.php');
-		
-		    if (!is_wp_error($request)) {
-			    preg_match('/Version: ([0-9a-z\.]+)/', $request['body'], $matches);
-			
-			    if (!empty($matches[1])) {
-				    //we have a version number!
-				    if (version_compare($transient->checked[$wp_slug], $matches[1]) < 0) {
-					    $response = new stdClass();
-					    $response->slug = $wp_slug;
-					    $response->new_version = $matches[1];
-					    $response->url = 'http://wordpress.org/extend/plugins/'.$org_slug.'/';
-					    $response->package = 'http://downloads.wordpress.org/plugin/'.$org_slug.'.zip';
-					    $icon_test = wp_remote_get('https://ps.w.org/'.$org_slug.'/assets/icon-128x128.png');
-					    if( !is_wp_error($icon_test) && $icon_test['response']['code'] == 200 ){
-						    $response->icons = array(
-						        '1x' => 'https://ps.w.org/'.$org_slug.'/assets/icon-128x128.png',
-						        '2x' => 'https://ps.w.org/'.$org_slug.'/assets/icon-256x256.png'
-						    );
-						}
-					    $transient->response[$wp_slug] = $response;
-				    }
-			    }
-		    }
-	    }
-		
-		delete_option('em_check_dev_version');
-    }
-    
-    return $transient;
-}
-add_filter('pre_set_site_transient_update_plugins', 'em_updates_check', 100); // Hook into the plugin update check and mod for dev version
 
 function em_user_action_links( $actions, $user ){
 	if ( !is_network_admin() && current_user_can( 'manage_others_bookings' ) ){

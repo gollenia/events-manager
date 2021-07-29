@@ -143,18 +143,17 @@ class EM_Booking extends EM_Object{
 			//Save into the object
 			$this->to_object($booking);
 			$this->previous_status = $this->booking_status;
-			$this->get_person();
 			$this->booking_date = !empty($booking['booking_date']) ? $booking['booking_date']:false;
 		}
 		//Do it here so things appear in the po file.
-		$this->status_array = array(
+		$this->status_array = [
 			0 => __('Pending','events-manager'),
 			1 => __('Approved','events-manager'),
 			2 => __('Rejected','events-manager'),
 			3 => __('Cancelled','events-manager'),
 			4 => __('Awaiting Online Payment','events-manager'),
 			5 => __('Awaiting Payment','events-manager')
-		);
+		];
 		$this->compat_keys(); //depricating in 6.0
 		//do some legacy checking here for bookings made prior to 5.4, due to how taxes are calculated
 		$this->get_tax_rate();
@@ -741,7 +740,7 @@ class EM_Booking extends EM_Object{
 	 */
 	function get_event(){
 		global $EM_Event;
-		if( is_object($this->event) && get_class($this->event)=='EM_Event' && $this->event->event_id == $this->event_id ){
+		if( is_object($this->event) && get_class($this->event)=='EM_Event' && ($this->event->event_id == $this->event_id || (EM_ML::$is_ml && $this->event->event_parent == $this->event_id)) ){
 			return $this->event;
 		}elseif( is_object($EM_Event) && $EM_Event->event_id == $this->event_id ){
 			$this->event = $EM_Event;

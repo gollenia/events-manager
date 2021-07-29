@@ -448,6 +448,7 @@ function em_bookings_single(){
 								$('.em-booking-single-status-edit').hide();
 							});
 						</script>
+						<?php do_action('em_bookings_single_details_footer', $EM_Booking); ?>
 					</div>
 				</div>
 				<div id="em-booking-notes" class="postbox">

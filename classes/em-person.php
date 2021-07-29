@@ -109,9 +109,9 @@ class EM_Person extends WP_User{
 
 	function get_summary(){
 	    $summary = array(
-            'dbem_phone' => array('name' => __('Name','events-manager'), 'value' => $this->get_name()),
-		    'user_name' => array('name' => __('Email','events-manager'), 'value' => $this->user_email),
-		    'user_email' => array('name' => __('Phone','events-manager'), 'value' => $this->phone),
+		    'user_name' => array('name' => __('Name','events-manager'), 'value' => $this->get_name()),
+		    'user_email' => array('name' => __('Email','events-manager'), 'value' => $this->user_email),
+		    'dbem_phone' => array('name' => __('Phone','events-manager'), 'value' => $this->phone),
         );
 	    $summary = array_merge( $summary, $this->custom_user_fields );
 	    return apply_filters('em_person_get_summary', $summary, $this);

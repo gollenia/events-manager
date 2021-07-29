@@ -42,7 +42,7 @@ function wpfc_em_install(){
 	//check for updates - try adding one option, if it works then it's a first time install so add more
 	if( current_user_can('manage_options') && get_option('dbem_emfc_full_calendar_event_format', false) ){
 	    add_option('dbem_emfc_full_calendar_event_format','#_EVENTTIMES - #_EVENTNAME');
-		add_option('dbem_emfc_qtips_format', '{has_image}<div style="float:left; margin:0px 5px 5px 0px;">#_EVENTIMAGE{75,75}</div>{/has_image}#_EVENTEXCERPT');
+		add_option('dbem_emfc_qtips_format', '{has_image}<div style="float:left; margin:5px 10px 5px 0px;">#_EVENTIMAGE{75,75}</div>{/has_image}#_EVENTEXCERPT');
 	}
 }
 add_action('init', 'wpfc_em_install');

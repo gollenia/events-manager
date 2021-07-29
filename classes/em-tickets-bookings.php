@@ -89,6 +89,7 @@ class EM_Tickets_Bookings extends EM_Object implements Iterator, Countable {
 	/**
 	 * Add a booking into this event object, checking that there's enough space for the event
 	 * @param EM_Ticket_Booking $EM_Ticket_Booking
+	 * @param boolean $override
 	 * @return boolean
 	 */
 	function add( $EM_Ticket_Booking, $override = false ){ //note, $override was a quick fix, not necessarily permanent, so don't depend on it just yet
