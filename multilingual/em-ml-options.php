@@ -139,6 +139,7 @@ class EM_ML_Options {
 				'dbem_booking_button_msg_already_booked',
 				'dbem_booking_button_msg_error',
 				'dbem_booking_button_msg_full',
+				'dbem_booking_button_msg_closed',
 				'dbem_booking_button_msg_cancel',
 				'dbem_booking_button_msg_canceling',
 				'dbem_booking_button_msg_cancelled',
