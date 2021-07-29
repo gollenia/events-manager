@@ -4,8 +4,8 @@ Donate link: http://wp-events-plugin.com
 Tags: bookings, calendar, tickets, events, buddypress, event management, google maps, maps, locations, registration, zoom
 Text Domain: events-manager
 Requires at least: 5.2
-Tested up to: 5.7
-Stable tag: 5.9.11.3
+Tested up to: 5.8
+Stable tag: 5.10
 Requires PHP: 5.3
 
 Fully featured event registration management including recurring events, locations management, calendar, Google map integration, booking management
@@ -119,6 +119,33 @@ See our [FAQ](http://wp-events-plugin.com/documentation/faq/) page, which is upd
 6. Manage attendees with various booking reports
 
 == Changelog ==
+= 5.10 =
+* fixed a minor PHPMailer PHP warning tiggered when mailing errors occur
+* fixed date validation errors restting available from/until times to 12AM for tickets
+* fixed WP Fullcalendar style tweak for tip image
+* removed loading of EM_Person upon construct of EM_Booking to prevent unecessary pre-loading
+* fixed bookings closed text not being translatable by ML plugins
+* fixed multilingual translation failures when triggering actions like ML booking emails as an admin
+* added em_ml_swiitch_locale and em_ml_restore_locale actions for ML plugins that don't hook into WP's switch_locale
+* fixed potential ML translation issues when switching translated event objects in a booking
+* optimized translated event switching in booking objects
+* added em_pre_taxonomy_template, em_pre_{taxonomy_name}_taxonomy_template and em_taxonomy_template
+* added temporary fix for compatibility issue with/caused by BuddyBoss
+* fixed PHP warnings caused by dev version update checks, also removed em_org_dev_version_slugs filter in place of em_org_dev_versions
+* added em_bookings_single_details_footer filter
+* added extra email trimming to prevent mail errors due to errant whitespaces
+* added em_ticket_get_price_without_tax filter
+* fixed #@_{...} placeholders still showing if end date is the same
+* fixed email fatal errors when password reset is disabled by other plugins or custom code
+* fixed caching issues with custom code hooking into em_event by firing the action before caching occurs
+* fixed reported issues with Elementor by writing $content into event and location object post_content properties (kudos to @martinneumannat)
+* fixed CZY currency symbols not being included
+* fixed dbem_maps_text_format and potentially other formats retrieved via AJAX not being overridable using our em_formats_filter filter
+* fixed bookings="0" not returning non-bookable events in shortcodes
+* fixed google ical link using http://
+* fixed EM_Person::get_summary() returning mixed up array key/values (props @duisterdenhaag)
+* removed outline style rules from CSS to help with WCAG compliance
+
 = 5.9.11.3 =
 * fixed issues with WooCommerce add-on circumventing currency formatting
 * changed various AJAX/Admin actions to fire on wp_loaded rather than init action to allow better plugin compatibility
