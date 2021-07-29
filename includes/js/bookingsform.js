@@ -3,6 +3,11 @@ $('#em-booking-form').addClass('em-booking-form'); //backward compatability
 $(document).on('submit', '.em-booking-form', function(e){
 	e.preventDefault();
 	var em_booking_form = $(this);
+	var event = new CustomEvent('bookingpending', {
+		bubbles: true,
+		cancelable: true
+	});
+	window.dispatchEvent(event);
 	$.ajax({
 		url: EM.bookingajaxurl,
 		data: em_booking_form.serializeArray(),
