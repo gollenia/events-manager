@@ -10,19 +10,8 @@ class EM_Event_Post {
 		//Front Side Modifiers
 		if( !is_admin() ){
 			//override single page with formats? 
-			add_filter('the_content', array('EM_Event_Post','the_content'));
-			add_filter('the_excerpt_rss', array('EM_Event_Post','the_excerpt_rss'));
+			
 			//excerpts can trigger the_content which isn't ideal, so we disable the_content between the first and last excerpt calls within WP logic
-			add_filter('get_the_excerpt', array('EM_Event_Post','disable_the_content'), 1);
-			add_filter('get_the_excerpt', array('EM_Event_Post','enable_the_content'), 100);
-			if( get_option('dbem_cp_events_excerpt_formats') ){
-				//important add this before wp_trim_excerpt hook, as it can screw up things like wp_editor() for WordPress SEO plugin
-			    add_filter('get_the_excerpt', array('EM_Event_Post','get_the_excerpt'));
-			}
-			//display as page template?
-			if( get_option('dbem_cp_events_template') ){
-				add_filter('single_template',array('EM_Event_Post','single_template'));
-			}
 			//add classes to body and post_class()
 			if( get_option('dbem_cp_events_post_class') != '' ){
 			    add_filter('post_class', array('EM_Event_Post','post_class'), 10, 3);
@@ -118,7 +107,7 @@ class EM_Event_Post {
 	}
 	
 	public static function enable_the_content( $content ){
-		add_filter('the_content', array('EM_Event_Post','the_content'));
+		//add_filter('the_content', array('EM_Event_Post','the_content'));
 		return $content;
 	}
 	public static function disable_the_content( $content ){

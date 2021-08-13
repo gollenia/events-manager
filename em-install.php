@@ -448,7 +448,6 @@ function em_add_options() {
 		'dbem_events_form_reshow' => 1,
 		'dbem_events_form_result_success' => __('You have successfully submitted your event, which will be published pending approval.','events-manager'),
 		'dbem_events_form_result_success_updated' => __('You have successfully updated your event, which will be republished pending approval.','events-manager'),
-		'dbem_events_anonymous_submissions' => 0,
 		'dbem_events_anonymous_user' => 0,
 		'dbem_events_anonymous_result_success' => __('You have successfully submitted your event, which will be published pending approval.','events-manager'),
 		//Event Emails

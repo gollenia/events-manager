@@ -621,17 +621,7 @@ class EM_Event extends EM_Object{
 		if( get_option('dbem_categories_enabled') ) $this->get_categories()->get_post();
 		//get the rest and validate (optional)
 		$this->get_post_meta();
-		//anonymous submissions and guest basic info
-		if( !is_user_logged_in() && get_option('dbem_events_anonymous_submissions') && empty($this->event_id) ){
-			$this->event_owner_anonymous = 1;
-			$this->event_owner_name = !empty($_POST['event_owner_name']) ? wp_kses_data(wp_unslash($_POST['event_owner_name'])):'';
-			$this->event_owner_email = !empty($_POST['event_owner_email']) ? wp_kses_data($_POST['event_owner_email']):'';
-			if( empty($this->location_id) && !($this->location_id === 0 && !get_option('dbem_require_location',true)) ){
-				$this->get_location()->owner_anonymous = 1;
-				$this->location->owner_email = $this->event_owner_email;
-				$this->location->owner_name = $this->event_owner_name;
-			}
-		}
+		
 		//validate and return results
 		$result = $validate ? $this->validate():true; //validate both post and meta, otherwise return true
 		return apply_filters('em_event_get_post', $result, $this);
@@ -693,7 +683,7 @@ class EM_Event extends EM_Object{
 		if( get_option('dbem_locations_enabled') ){
 			// determine location type, with backward compatibility considerations for those overriding the location forms
 			$location_type = isset($_POST['location_type']) ? sanitize_key($_POST['location_type']) : 'location';
-			if( !empty($_POST['no_location']) ) $location_type = 0; //backwards compat
+			
 			if( $location_type == 'location' && empty($_POST['location_id']) && get_option('dbem_use_select_for_locations')) $location_type = 0; //backward compat
 			// assign location data
 			if( $location_type === 0 || $location_type === '0' ){
@@ -724,6 +714,7 @@ class EM_Event extends EM_Object{
 					$this->get_event_location()->get_post();
 				}
 			}
+            
 		}else{
 			$this->location_id = 0;
 			$this->event_location_type = null;
@@ -1004,7 +995,7 @@ class EM_Event extends EM_Object{
 	function save(){
 		global $wpdb, $current_user, $blog_id, $EM_SAVING_EVENT;
 		$EM_SAVING_EVENT = true; //this flag prevents our dashboard save_post hooks from going further
-		if( !$this->can_manage('edit_events', 'edit_others_events') && !( get_option('dbem_events_anonymous_submissions') && empty($this->event_id)) ){
+		if( !$this->can_manage('edit_events', 'edit_others_events') && empty($this->event_id) ){
 			//unless events can be submitted by an anonymous user (and this is a new event), user must have permissions.
 			return apply_filters('em_event_save', false, $this);
 		}
@@ -1035,11 +1026,7 @@ class EM_Event extends EM_Object{
 		}else{
 		    $post_array['post_status'] = $this->force_status;
 		}
-		//anonymous submission only
-		if( !is_user_logged_in() && get_option('dbem_events_anonymous_submissions') && empty($this->event_id) ){
-			$post_array['post_author'] = get_option('dbem_events_anonymous_user');
-			if( !is_numeric($post_array['post_author']) ) $post_array['post_author'] = 0;
-		}
+		
 		//Save post and continue with meta
 		$post_id = wp_insert_post($post_array);
 		$post_save = false;
@@ -1060,12 +1047,7 @@ class EM_Event extends EM_Object{
     			$this->categories->post_id = $this->post_id;
     			$this->categories->save();
 			}
-			//anonymous submissions should save this information
-			if( !empty($this->event_owner_anonymous) ){
-				update_post_meta($this->post_id, '_event_owner_anonymous', 1);
-				update_post_meta($this->post_id, '_event_owner_name', $this->event_owner_name);
-				update_post_meta($this->post_id, '_event_owner_email', $this->event_owner_email);
-			}
+		
 			//save the image, errors here will surface during $this->save_meta()
 			$this->image_upload();
 			//now save the meta
@@ -1105,7 +1087,7 @@ class EM_Event extends EM_Object{
 		$this->start();
 		$this->end();
 		//continue with saving if permissions allow
-		if( ( get_option('dbem_events_anonymous_submissions') && empty($this->event_id)) || $this->can_manage('edit_events', 'edit_others_events') ){
+		if( $this->can_manage('edit_events', 'edit_others_events') ){
 			do_action('em_event_save_meta_pre', $this);
 			//language default
 			if( !$this->event_language ) $this->event_language = EM_ML::$current_language;
@@ -1225,14 +1207,7 @@ class EM_Event extends EM_Object{
 					if( $this->previous_status != $this->get_status() ) $this->set_status($this->get_status());
 					$this->feedback_message = sprintf(__('Successfully saved %s','events-manager'),__('Event','events-manager'));
 				}
-				//check anonymous submission information
-    			if( !empty($this->event_owner_anonymous) && get_option('dbem_events_anonymous_user') != $this->event_owner ){
-    			    //anonymous user owner has been replaced with a valid wp user account, so we remove anonymous status flag but leave email and name for future reference
-    			    update_post_meta($this->post_id, '_event_owner_anonymous', 0);
-    			}elseif( get_option('dbem_events_anonymous_submissions') && get_option('dbem_events_anonymous_user') == $this->event_owner && is_email($this->event_owner_email) && !empty($this->event_owner_name) ){
-    			    //anonymous user account has been reinstated as the owner, so we can restore anonymous submission status
-    			    update_post_meta($this->post_id, '_event_owner_anonymous', 1);
-    			}
+				
 			}
 			//update event location via post meta
 			if( $this->has_event_location() ){
@@ -3442,9 +3417,6 @@ class EM_Event extends EM_Object{
 	 * Can the user manage this? 
 	 */
 	function can_manage( $owner_capability = false, $admin_capability = false, $user_to_check = false ){
-		if( ($this->just_added_event || $this->event_id == '') && !is_user_logged_in() && get_option('dbem_events_anonymous_submissions') ){
-			$user_to_check = get_option('dbem_events_anonymous_user');
-		}
 		return apply_filters('em_event_can_manage', parent::can_manage($owner_capability, $admin_capability, $user_to_check), $this, $owner_capability, $admin_capability, $user_to_check);
 	}
 }

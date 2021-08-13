@@ -1605,10 +1605,8 @@ class EM_Object {
 	
 	function image_upload(){
 		$type = $this->get_image_type();
-		//Handle the attachment as a WP Post
-		$attachment = '';
-		$user_to_check = ( !is_user_logged_in() && get_option('dbem_events_anonymous_submissions') ) ? get_option('dbem_events_anonymous_user'):false;		
-		if ( !empty($_FILES[$type.'_image']['size']) && file_exists($_FILES[$type.'_image']['tmp_name']) && $this->image_validate() && $this->can_manage('upload_event_images','upload_event_images', $user_to_check) ) {
+			
+		if ( !empty($_FILES[$type.'_image']['size']) && file_exists($_FILES[$type.'_image']['tmp_name']) && $this->image_validate() && $this->can_manage('upload_event_images','upload_event_images', false) ) {
 			require_once(ABSPATH . "wp-admin" . '/includes/file.php');					
 			require_once(ABSPATH . "wp-admin" . '/includes/image.php');
         	require_once( ABSPATH . 'wp-admin/includes/media.php' );

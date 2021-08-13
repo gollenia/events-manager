@@ -66,105 +66,7 @@ function em_init_actions() {
 		}
 	}
 	
-	//Event Actions
-	if( !empty($_REQUEST['action']) && substr($_REQUEST['action'],0,5) == 'event' ){
-		//Load the event object, with saved event if requested
-		if( !empty($_REQUEST['event_id']) ){
-			$EM_Event = new EM_Event( absint($_REQUEST['event_id']) );
-		}else{
-			$EM_Event = new EM_Event();
-		}
-		//Save Event, only via BP or via [event_form]
-		if( $_REQUEST['action'] == 'event_save' && $EM_Event->can_manage('edit_events','edit_others_events') ){
-			//Check Nonces
-			if( !wp_verify_nonce($_REQUEST['_wpnonce'], 'wpnonce_event_save') ) exit('Trying to perform an illegal action.');
-			//Set server timezone to UTC in case other plugins are doing something naughty
-			$server_timezone = date_default_timezone_get();
-			date_default_timezone_set('UTC');
-			//Grab and validate submitted data
-			if ( $EM_Event->get_post() && $EM_Event->save() ) { //EM_Event gets the event if submitted via POST and validates it (safer than to depend on JS)
-				$events_result = true;
-				//Success notice
-				if( is_user_logged_in() ){
-					if( empty($_REQUEST['event_id']) ){
-						$EM_Notices->add_confirm( $EM_Event->output(get_option('dbem_events_form_result_success')), true);
-					}else{
-					    $EM_Notices->add_confirm( $EM_Event->output(get_option('dbem_events_form_result_success_updated')), true);
-					}
-				}else{
-					$EM_Notices->add_confirm( $EM_Event->output(get_option('dbem_events_anonymous_result_success')), true);
-				}
-				$redirect = !empty($_REQUEST['redirect_to']) ? $_REQUEST['redirect_to'] : em_wp_get_referer();
-				$redirect = em_add_get_params($redirect, array('success'=>1), false, false);
-				wp_safe_redirect( $redirect );
-				exit();
-			}else{
-				$EM_Notices->add_error( $EM_Event->get_errors() );
-				$events_result = false;				
-			}
-			//Set server timezone back, even though it should be UTC anyway
-			date_default_timezone_set($server_timezone);
-		}
-		if ( $_REQUEST['action'] == 'event_duplicate' && wp_verify_nonce($_REQUEST['_wpnonce'],'event_duplicate_'.$EM_Event->event_id) ) {
-			$event = $EM_Event->duplicate();
-			if( $event === false ){
-				$EM_Notices->add_error($EM_Event->errors, true);
-				wp_safe_redirect( em_wp_get_referer() );
-			}else{
-				$EM_Notices->add_confirm($event->feedback_message, true);
-				wp_safe_redirect( $event->get_edit_url() );
-			}
-			exit();
-		}
-		if ( $_REQUEST['action'] == 'event_delete' && wp_verify_nonce($_REQUEST['_wpnonce'],'event_delete_'.$EM_Event->event_id) ) { 
-			//DELETE action
-			$selectedEvents = !empty($_REQUEST['events']) ? $_REQUEST['events']:'';
-			if(  EM_Object::array_is_numeric($selectedEvents) ){
-				$events_result = EM_Events::delete( $selectedEvents );
-			}elseif( is_object($EM_Event) ){
-				$events_result = $EM_Event->delete();
-			}		
-			$plural = (count($selectedEvents) > 1) ? __('Events','events-manager'):__('Event','events-manager');
-			if($events_result){
-				$message = ( !empty($EM_Event->feedback_message) ) ? $EM_Event->feedback_message : sprintf(__('%s successfully deleted.','events-manager'),$plural);
-				$EM_Notices->add_confirm( $message, true );
-			}else{
-				$message = ( !empty($EM_Event->errors) ) ? $EM_Event->errors : sprintf(__('%s could not be deleted.','events-manager'),$plural);
-				$EM_Notices->add_error( $message, true );		
-			}
-			wp_safe_redirect( em_wp_get_referer() );
-			exit();
-		}elseif( $_REQUEST['action'] == 'event_detach' && wp_verify_nonce($_REQUEST['_wpnonce'],'event_detach_'.get_current_user_id().'_'.$EM_Event->event_id) ){ 
-			//Detach event and move on
-			if($EM_Event->detach()){
-				$EM_Notices->add_confirm( $EM_Event->feedback_message, true );
-			}else{
-				$EM_Notices->add_error( $EM_Event->errors, true );			
-			}
-			wp_safe_redirect(em_wp_get_referer());
-			exit();
-		}elseif( $_REQUEST['action'] == 'event_attach' && !empty($_REQUEST['undo_id']) && wp_verify_nonce($_REQUEST['_wpnonce'],'event_attach_'.get_current_user_id().'_'.$EM_Event->event_id) ){ 
-			//Detach event and move on
-			if( $EM_Event->attach( absint($_REQUEST['undo_id']) ) ){
-				$EM_Notices->add_confirm( $EM_Event->feedback_message, true );
-			}else{
-				$EM_Notices->add_error( $EM_Event->errors, true );
-			}
-			wp_safe_redirect(em_wp_get_referer());
-			exit();
-		}
-		
-		//AJAX Exit
-		if( isset($events_result) && !empty($_REQUEST['em_ajax']) ){
-			if( $events_result ){
-				$return = array('result'=>true, 'message'=>$EM_Event->feedback_message);
-			}else{		
-				$return = array('result'=>false, 'message'=>$EM_Event->feedback_message, 'errors'=>$EM_Event->errors);
-			}
-			echo EM_Object::json_encode($return);
-			edit();
-		}
-	}
+
 	
 	//Location Actions
 	if( !empty($_REQUEST['action']) && substr($_REQUEST['action'],0,8) == 'location' ){
@@ -217,13 +119,9 @@ function em_init_actions() {
 			}
 		}elseif( !empty($_REQUEST['action']) && $_REQUEST['action'] == "locations_search" && (!empty($_REQUEST['term']) || !empty($_REQUEST['q'])) ){
 			$results = array();
-			if( is_user_logged_in() || ( get_option('dbem_events_anonymous_submissions') && user_can(get_option('dbem_events_anonymous_user'), 'read_others_locations') ) ){
+			if( is_user_logged_in()){
 				$location_cond = (is_user_logged_in() && !current_user_can('read_others_locations')) ? "AND location_owner=".get_current_user_id() : '';
-				if( !is_user_logged_in() && get_option('dbem_events_anonymous_submissions') ){
-					if( !user_can(get_option('dbem_events_anonymous_user'),'read_private_locations') ){
-						$location_cond = " AND location_private=0";	
-					}
-				}elseif( is_user_logged_in() && !current_user_can('read_private_locations') ){
+				if( is_user_logged_in() && !current_user_can('read_private_locations') ){
 				    $location_cond = " AND location_private=0";
 				}elseif( !is_user_logged_in() ){
 					$location_cond = " AND location_private=0";		    
@@ -266,7 +164,7 @@ function em_init_actions() {
 	}
 	
 	//Booking Actions
-	if( !empty($_REQUEST['action']) && substr($_REQUEST['action'],0,7) == 'booking' && (is_user_logged_in() || ($_REQUEST['action'] == 'booking_add' && get_option('dbem_bookings_anonymous'))) ){
+	if( !empty($_REQUEST['action']) && substr($_REQUEST['action'],0,7) == 'booking' && (is_user_logged_in()) ){
 		global $EM_Event, $EM_Booking, $EM_Person;
 		//Load the booking object, with saved booking if requested
 		$EM_Booking = ( !empty($_REQUEST['booking_id']) ) ? em_get_booking($_REQUEST['booking_id']) : em_get_booking();
@@ -513,7 +411,7 @@ function em_init_actions() {
 			echo EM_Object::json_encode(apply_filters('em_action_'.$_REQUEST['action'], $return, $EM_Booking));
 			die();
 		}
-	}elseif( !empty($_REQUEST['action']) && $_REQUEST['action'] == 'booking_add' && !is_user_logged_in() && !get_option('dbem_bookings_anonymous')){
+	}elseif( !empty($_REQUEST['action']) && $_REQUEST['action'] == 'booking_add' && !is_user_logged_in() ){
 		$EM_Notices->add_error( get_option('dbem_booking_feedback_log_in') );
 		if( !$result && defined('DOING_AJAX') ){
 			$return = array('result'=>false, 'message'=>$EM_Booking->feedback_message, 'errors'=>$EM_Notices->get_errors());

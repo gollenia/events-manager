@@ -48,90 +48,82 @@ if( !defined('EM_CONDITIONAL_RECURSIONS') ) define('EM_CONDITIONAL_RECURSIONS', 
 
 // INCLUDES
 //Base classes
-include('classes/em-exception.php');
-include('classes/em-options.php');
-include('classes/em-object.php');
-include('classes/em-datetime.php');
-include('classes/em-datetimezone.php');
-include('classes/em-taxonomy-term.php');
-include('classes/em-taxonomy-terms.php');
-include('classes/em-taxonomy-frontend.php');
+require_once('classes/em-exception.php');
+require_once('classes/em-options.php');
+require_once('classes/em-object.php');
+require_once('classes/em-datetime.php');
+require_once('classes/em-datetimezone.php');
+require_once('classes/em-taxonomy-term.php');
+require_once('classes/em-taxonomy-terms.php');
+require_once('classes/em-taxonomy-frontend.php');
 //set up events as posts
-include("em-posts.php");
+require_once("em-posts.php");
 //Template Tags & Template Logic
-include("em-actions.php");
-include("em-events.php");
-include("em-emails.php");
-include("em-functions.php");
-include("em-ical.php");
-include("em-template-tags.php");
-include("em-data-privacy.php");
-include("multilingual/em-ml.php");
+require_once("em-actions.php");
+require_once("em-emails.php");
+require_once("em-functions.php");
+require_once("em-ical.php");
+require_once("em-data-privacy.php");
+require_once("multilingual/em-ml.php");
 
 //Classes
-include('classes/em-booking.php');
-include('classes/em-bookings.php');
-include("classes/em-bookings-table.php") ;
-include('classes/em-calendar.php');
-include('classes/em-category.php');
-include('classes/em-categories.php');
-include('classes/em-categories-frontend.php');
-include('classes/em-event.php');
-include('classes/event-locations/em-event-locations.php');
-include('classes/em-event-post.php');
-include('classes/em-events.php');
-include('classes/em-location.php');
-include('classes/em-location-post.php');
-include('classes/em-locations.php');
-include("classes/em-mailer.php") ;
-include('classes/em-notices.php');
-include('classes/em-people.php');
-include('classes/em-person.php');
-include('classes/em-permalinks.php');
-include('classes/em-tag.php');
-include('classes/em-tags.php');
-include('classes/em-tags-frontend.php');
-include('classes/em-ticket-booking.php');
-include('classes/em-ticket.php');
-include('classes/em-tickets-bookings.php');
-include('classes/em-tickets.php');
+require_once('classes/em-booking.php');
+require_once('classes/em-bookings.php');
+require_once("classes/em-bookings-table.php") ;
+require_once('classes/em-calendar.php');
+require_once('classes/em-category.php');
+require_once('classes/em-categories.php');
+require_once('classes/em-categories-frontend.php');
+require_once('classes/em-event.php');
+require_once('classes/event-locations/em-event-locations.php');
+require_once('classes/em-event-post.php');
+require_once('classes/em-events.php');
+require_once('classes/em-location.php');
+require_once('classes/em-location-post.php');
+require_once('classes/em-locations.php');
+require_once("classes/em-mailer.php") ;
+require_once('classes/em-notices.php');
+require_once('classes/em-people.php');
+require_once('classes/em-person.php');
+require_once('classes/em-permalinks.php');
+require_once('classes/em-tag.php');
+require_once('classes/em-tags.php');
+require_once('classes/em-tags-frontend.php');
+require_once('classes/em-ticket-booking.php');
+require_once('classes/em-ticket.php');
+require_once('classes/em-tickets-bookings.php');
+require_once('classes/em-tickets.php');
 //Admin Files
 if( is_admin() ){
-	include('classes/em-admin-notices.php');
-	include('admin/em-admin.php');
-	include('admin/em-bookings.php');
-	include('admin/em-docs.php');
-	include('admin/em-help.php');
-	include('admin/em-options.php');
-	include('admin/em-data-privacy.php');
-	if( is_multisite() ){
-		include('admin/em-ms-options.php');
-	}
+	require_once('classes/em-admin-notices.php');
+	require_once('admin/em-admin.php');
+	require_once('admin/em-bookings.php');
+	require_once('admin/em-docs.php');
+	require_once('admin/em-help.php');
+	require_once('admin/em-options.php');
+	require_once('admin/em-data-privacy.php');
+
 	//post/taxonomy controllers
-	include('classes/em-event-post-admin.php');
-	include('classes/em-event-posts-admin.php');
-	include('classes/em-location-post-admin.php');
-	include('classes/em-location-posts-admin.php');
-	include('classes/em-taxonomy-admin.php');
-	include('classes/em-categories-admin.php');
-	include('classes/em-tags-admin.php');
+	require_once('classes/em-event-post-admin.php');
+	require_once('classes/em-event-posts-admin.php');
+	require_once('classes/em-location-post-admin.php');
+	require_once('classes/em-location-posts-admin.php');
+	require_once('classes/em-taxonomy-admin.php');
+	require_once('classes/em-categories-admin.php');
+	require_once('classes/em-tags-admin.php');
 	//bookings folder
-		include('admin/bookings/em-cancelled.php');
-		include('admin/bookings/em-confirmed.php');
-		include('admin/bookings/em-events.php');
-		include('admin/bookings/em-rejected.php');
-		include('admin/bookings/em-pending.php');
-		include('admin/bookings/em-person.php');
+		require_once('admin/bookings/em-cancelled.php');
+		require_once('admin/bookings/em-confirmed.php');
+		require_once('admin/bookings/em-events.php');
+		require_once('admin/bookings/em-rejected.php');
+		require_once('admin/bookings/em-pending.php');
+		require_once('admin/bookings/em-person.php');
 }
 
 
 //Table names
-global $wpdb;
-if( EM_MS_GLOBAL ){
-	$prefix = $wpdb->base_prefix;
-}else{
+	global $wpdb;
 	$prefix = $wpdb->prefix;
-}
 	define('EM_EVENTS_TABLE',$prefix.'em_events'); //TABLE NAME
 	define('EM_TICKETS_TABLE', $prefix.'em_tickets'); //TABLE NAME
 	define('EM_TICKETS_BOOKINGS_TABLE', $prefix.'em_tickets_bookings'); //TABLE NAME
@@ -140,16 +132,10 @@ if( EM_MS_GLOBAL ){
 	define('EM_LOCATIONS_TABLE',$prefix.'em_locations'); //TABLE NAME
 	define('EM_BOOKINGS_TABLE',$prefix.'em_bookings'); //TABLE NAME
 
-//Backward compatability for old images stored in < EM 5
-if( EM_MS_GLOBAL ){
-	//If in ms recurrence mode, we are getting the default wp-content/uploads folder
-	$upload_dir = array(
-		'basedir' => WP_CONTENT_DIR.'/uploads/',
-		'baseurl' => WP_CONTENT_URL.'/uploads/'
-	);
-}else{
+	//Backward compatability for old images stored in < EM 5
+
 	$upload_dir = wp_upload_dir();
-}
+
 if( file_exists($upload_dir['basedir'].'/locations-pics' ) ){
 	define("EM_IMAGE_UPLOAD_DIR", $upload_dir['basedir']."/locations-pics/");
 	define("EM_IMAGE_UPLOAD_URI", $upload_dir['baseurl']."/locations-pics/");
@@ -211,10 +197,10 @@ class EM_Scripts_and_Styles {
 			$obj_id = $obj->ID;
 		}
 		
-	    //Decide whether or not to include certain JS files and dependencies
+	    //Decide whether or not to require_once certain JS files and dependencies
 	    $script_deps = array();
         if( get_option('dbem_js_limit') ){
-            //determine what script dependencies to include, and which to not include
+            //determine what script dependencies to require_once, and which to not require_once
             if( is_page($pages) ){
                 $script_deps['jquery'] = 'jquery';
             }
@@ -272,15 +258,15 @@ class EM_Scripts_and_Styles {
         
 		//Now decide on showing the CSS file
 		if( get_option('dbem_css_limit') ){
-			$includes = get_option('dbem_css_limit_include');
+			$includes = get_option('dbem_css_limit_require_once');
 			$excludes = get_option('dbem_css_limit_exclude');
 			if( (!empty($pages) && is_page($pages)) || (!empty($obj->post_type) && in_array($obj->post_type, array(EM_POST_TYPE_EVENT, EM_POST_TYPE_LOCATION))) || $includes === "0" || in_array($obj_id, explode(',', $includes)) ){
-			    $include = true;
+			    $require_once = true;
 			}
 			if( $excludes === '0' || (!empty($obj_id) && in_array($obj_id, explode(',', $excludes))) ){
 				$exclude = true;
 			}
-			if( !empty($include) && empty($exclude) ){
+			if( !empty($require_once) && empty($exclude) ){
 			    wp_enqueue_style('events-manager', plugins_url('includes/css/events_manager.css',__FILE__), array(), EM_VERSION); //main css
 	    		do_action('em_enqueue_styles');
 			}
@@ -629,7 +615,7 @@ function em_locate_template( $template_name, $load=false, $the_args = array() ) 
 	if( $located && $load ){
 		$the_args = apply_filters('em_locate_template_args_'.$template_name, $the_args, $located);
 		if( is_array($the_args) ) extract($the_args);
-		include($located);
+		require_once($located);
 	}
 	return $located;
 }
@@ -651,7 +637,7 @@ class EM_Formats {
 		$format = em_locate_template( 'formats/'.substr($name, 5).'.php' );
 		if( $format ){
 			ob_start();
-			include($format);
+			require_once($format);
 			$value[0] = ob_get_clean();
 		}
 		return $value[0];

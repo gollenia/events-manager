@@ -53,6 +53,7 @@ class EM_Tickets extends EM_Object implements Iterator, Countable {
 				$EM_Ticket = new EM_Ticket($ticket);
 				$EM_Ticket->event_id = $this->event_id;
 				$this->tickets[$EM_Ticket->ticket_id] = $EM_Ticket;
+                
 			}
 		}elseif( is_array($object) ){ //expecting an array of EM_Ticket objects or ticket db array
 			if( is_object(current($object)) && get_class(current($object)) == 'EM_Ticket' ){
@@ -246,10 +247,10 @@ class EM_Tickets extends EM_Object implements Iterator, Countable {
 	}
 	
 	/**
-	 * Returns the collumns used in ticket public pricing tables/forms
+	 * Returns the columns used in ticket public pricing tables/forms
 	 * @param unknown_type $EM_Event
 	 */
-	function get_ticket_collumns($EM_Event = false){
+	function get_ticket_columns($EM_Event = false){
 		if( !$EM_Event ) $EM_Event = $this->get_event();
 		$collumns = array( 'type' => __('Ticket Type','events-manager'), 'price' => __('Price','events-manager'), 'spaces' => __('Spaces','events-manager'));
 		if( $EM_Event->is_free() ) unset($collumns['price']); //add event price

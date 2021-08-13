@@ -28,6 +28,7 @@ class EM_Ticket extends EM_Object{
 	var $ticket_parent;
 	var $ticket_meta = array();
 	var $ticket_order;
+    var $count = 0;
 	var $fields = array(
 		'ticket_id' => array('name'=>'id','type'=>'%d'),
 		'event_id' => array('name'=>'event_id','type'=>'%d'),
@@ -729,9 +730,6 @@ class EM_Ticket extends EM_Object{
 	 * Can the user manage this event? 
 	 */
 	function can_manage( $owner_capability = false, $admin_capability = false, $user_to_check = false ){
-		if( $this->ticket_id == '' && !is_user_logged_in() && get_option('dbem_events_anonymous_submissions') ){
-			$user_to_check = get_option('dbem_events_anonymous_user');
-		}
 		return $this->get_event()->can_manage('manage_bookings','manage_others_bookings', $user_to_check);
 	}
 	

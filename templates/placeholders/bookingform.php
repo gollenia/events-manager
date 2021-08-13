@@ -69,6 +69,7 @@ if( !$is_open && !is_user_logged_in() && $EM_Event->get_bookings()->is_open(true
 								do_action('em_booking_form_before_tickets', $EM_Event); //do not delete
 								//show single ticket form, only necessary to show to users able to book (or guests if enabled)
 								$EM_Ticket = $EM_Event->get_bookings()->get_available_tickets()->get_first();
+                                
 								em_locate_template('forms/bookingform/ticket-single.php',true, array('EM_Event'=>$EM_Event, 'EM_Ticket'=>$EM_Ticket));
 								do_action('em_booking_form_after_tickets', $EM_Event); //do not delete
 							} 

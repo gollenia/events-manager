@@ -281,12 +281,7 @@ class EM_Location extends EM_Object {
 		$this->location_name = ( !empty($_POST['location_name']) ) ? sanitize_post_field('post_title', $_POST['location_name'], $this->post_id, 'db'):'';
 		$this->post_content = ( !empty($_POST['content']) ) ? wp_kses( wp_unslash($_POST['content']), $allowedtags):'';
 		$this->get_post_meta(false);
-		//anonymous submissions and guest basic info
-		if( !is_user_logged_in() && get_option('dbem_events_anonymous_submissions') && empty($this->location_id) ){
-			$this->owner_anonymous = 1;
-			$this->owner_name = !empty($_POST['owner_name']) ? wp_kses_data(wp_unslash($_POST['owner_name'])):'';
-			$this->owner_email = !empty($_POST['owner_email']) ? wp_kses_data($_POST['owner_email']):'';
-		}
+		
 		$result = $validate ? $this->validate():true; //validate both post and meta, otherwise return true
 		$this->compat_keys();
 		return apply_filters('em_location_get_post', $result, $this);		
@@ -377,7 +372,7 @@ class EM_Location extends EM_Object {
 		$EM_SAVING_LOCATION = true; //this flag prevents our dashboard save_post hooks from going further
 		//TODO shuffle filters into right place
 		if( get_site_option('dbem_ms_mainblog_locations') ){ self::ms_global_switch(); }
-		if( !$this->can_manage('edit_locations', 'edit_others_locations') && !( get_option('dbem_events_anonymous_submissions') && empty($this->location_id)) ){
+		if( !$this->can_manage('edit_locations', 'edit_others_locations') && empty($this->location_id) ){
 			return apply_filters('em_location_save', false, $this);
 		}
 		do_action('em_location_save_pre', $this);
@@ -415,11 +410,7 @@ class EM_Location extends EM_Object {
 		if( !empty($this->force_status) ){
 			$post_array['post_status'] = $this->force_status;
 		}
-		//Anonymous submission
-		if( !is_user_logged_in() && get_option('dbem_events_anonymous_submissions') && empty($this->location_id) ){
-			$post_array['post_author'] = get_option('dbem_events_anonymous_user');
-			if( !is_numeric($post_array['post_author']) ) $post_array['post_author'] = 0;
-		}
+		
 		//Save post and continue with meta
 		$post_id = wp_insert_post($post_array);
 		$post_save = false;
@@ -434,12 +425,7 @@ class EM_Location extends EM_Object {
 			$this->location_owner = $post_data->post_author;
 			$this->post_status = $post_data->post_status;
 			$this->get_status();
-			//anonymous submissions should save this information
-			if( !empty($this->owner_anonymous) ){
-				update_post_meta($this->post_id, '_owner_anonymous', 1);
-				update_post_meta($this->post_id, '_owner_name', $this->owner_name);
-				update_post_meta($this->post_id, '_owner_email', $this->owner_email);
-			}
+			
 			//save the image, errors here will surface during $this->save_meta()
 			$this->image_upload();
 			//now save the meta
@@ -467,7 +453,7 @@ class EM_Location extends EM_Object {
 	function save_meta(){
 		//echo "<pre>"; print_r($this); echo "</pre>"; die();
 		global $wpdb;
-		if( $this->can_manage('edit_locations','edit_others_locations') || ( get_option('dbem_events_anonymous_submissions') && empty($this->location_id)) ){
+		if( $this->can_manage('edit_locations','edit_others_locations') ){
 			do_action('em_location_save_meta_pre', $this);
 			//language default
 			if( !$this->location_language ) $this->location_language = EM_ML::$current_language;
@@ -539,14 +525,7 @@ class EM_Location extends EM_Object {
 					//Also set the status here if status != previous status
 					if( $this->previous_status != $this->get_status() ) $this->set_status($this->get_status());
 				}
-				//check anonymous submission information
-				if( !empty($this->owner_anonymous) && get_option('dbem_events_anonymous_user') != $this->location_owner ){
-					//anonymous user owner has been replaced with a valid wp user account, so we remove anonymous status flag but leave email and name for future reference
-					update_post_meta($this->post_id, '_owner_anonymous', 0);
-				}elseif( get_option('dbem_events_anonymous_submissions') && get_option('dbem_events_anonymous_user') == $this->location_owner && is_email($this->owner_email) && !empty($this->owner_name) ){
-					//anonymous user account has been reinstated as the owner, so we can restore anonymous submission status
-					update_post_meta($this->post_id, '_owner_anonymous', 1);
-				}
+				
 			}
 		}else{
 			$this->add_error( sprintf(__('You do not have permission to create/edit %s.','events-manager'), __('locations','events-manager')) );
@@ -722,9 +701,6 @@ class EM_Location extends EM_Object {
 	 * Can the user manage this location? 
 	 */
 	function can_manage( $owner_capability = false, $admin_capability = false, $user_to_check = false ){
-		if( $this->location_id == '' && !is_user_logged_in() && get_option('dbem_events_anonymous_submissions') ){
-			$user_to_check = get_option('dbem_events_anonymous_user');
-		}
 		if( $admin_capability && EM_MS_GLOBAL && get_site_option('dbem_ms_mainblog_locations') ){
 			//if in global mode with locations restricted to main blog, we check capabilities against the main blog
 		    self::ms_global_switch();
