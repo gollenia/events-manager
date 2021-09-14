@@ -336,4 +336,36 @@ class EM_DateTime extends DateTime {
 		if( $DateTime === false ) return false;
 		return new EM_DateTime($DateTime->format('Y-m-d H:i:s'), $timezone);
 	}
+	
+	/**
+	 * Gets a set of start/end dates for the relative week of this $EM_DateTime, until the day before the starting weekday as per WP Settings.
+	 *
+	 * Accepts two scopes for $scope, both which calculate relative dates until the day before next start day of week.:
+	 * 'this-week' - events for the rest of the week starting 'today'
+	 * 'week' - events from start of relative week since previous start day of week
+	 *
+	 * @param string $scope
+	 * @return string[]
+	 */
+	public function get_week_dates( $scope = 'week' ) {
+		$start_of_week = get_option('start_of_week');
+		$days_of_week = array( 0 => 'Sunday', 1 => 'Monday', 2 => 'Tuesday', 3 => 'Wednesday', 4 => 'Thursday', 5 => 'Friday', 6 => 'Saturday');
+		$EM_DateTime = $this->copy(); // so we don't modify this $EM_DateTime
+		$today_day_of_week = $EM_DateTime->format('w');
+		$end_of_week = $start_of_week > 0 ? $start_of_week-1 : 6;
+		$end_of_week_name = $days_of_week[$end_of_week];
+		// get stat date, either today if it's start of week or 'this-week' scope, or the previous start day of week
+		if( $scope == 'this-week' || $today_day_of_week == $start_of_week ){
+			$start_date = $EM_DateTime->getDate();
+		}else{
+			$start_of_week_name = $days_of_week[$start_of_week];
+			$start_date = $EM_DateTime->modify('last '. $start_of_week_name)->getDate();
+		}
+		$end_date = $start_date; // set as today in event it's the last day of week
+		if( $scope == 'week' || $today_day_of_week != $end_of_week ){
+			// if we're looking for whole week, $EM_DateTime is set to start of week, so get relative end of week even if it's today
+			$end_date = $EM_DateTime->modify('next '. $end_of_week_name)->getDate();
+		}
+		return array($start_date, $end_date);
+	}
 }

@@ -201,13 +201,20 @@ function em_get_countries($add_blank = false, $sort = true){
  * Returns an array of scopes available to events manager. Hooking into this function's em_get_scopes filter will allow you to add scope options to the event pages.
  */
 function em_get_scopes(){
+	global $wp_locale;
+	$start_of_week = get_option('start_of_week');
+	$end_of_week_name = $start_of_week > 0 ? $wp_locale->get_weekday($start_of_week-1) : $wp_locale->get_weekday(6);
+	$start_of_week_name = $wp_locale->get_weekday($start_of_week);
 	$scopes = array(
 		'all' => __('All events','events-manager'),
 		'future' => __('Future events','events-manager'),
 		'past' => __('Past events','events-manager'),
 		'today' => __('Today\'s events','events-manager'),
 		'tomorrow' => __('Tomorrow\'s events','events-manager'),
+		'week' => sprintf(__('Events this whole week (%s to %s)','events-manager'), $wp_locale->get_weekday_abbrev($start_of_week_name), $wp_locale->get_weekday_abbrev($end_of_week_name)),
+		'this-week' => sprintf(__('Events this week (today to %s)','events-manager'), $wp_locale->get_weekday_abbrev($end_of_week_name)),
 		'month' => __('Events this month','events-manager'),
+		'this-month' => __('Events this month (today onwards)', 'events-manager'),
 		'next-month' => __('Events next month','events-manager'),
 		'1-months'  => __('Events current and next month','events-manager'),
 		'2-months'  => __('Events within 2 months','events-manager'),

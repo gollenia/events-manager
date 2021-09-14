@@ -10,8 +10,19 @@ class EM_Event_Post {
 		//Front Side Modifiers
 		if( !is_admin() ){
 			//override single page with formats? 
-			
+			add_filter('the_content', array('EM_Event_Post','the_content'));
+			add_filter('the_excerpt_rss', array('EM_Event_Post','the_excerpt_rss'));
 			//excerpts can trigger the_content which isn't ideal, so we disable the_content between the first and last excerpt calls within WP logic
+			add_filter('get_the_excerpt', array('EM_Event_Post','disable_the_content'), 1);
+			add_filter('get_the_excerpt', array('EM_Event_Post','enable_the_content'), 100);
+			if( get_option('dbem_cp_events_excerpt_formats') ){
+				//important add this before wp_trim_excerpt hook, as it can screw up things like wp_editor() for WordPress SEO plugin
+			    add_filter('get_the_excerpt', array('EM_Event_Post','get_the_excerpt'));
+			}
+			//display as page template?
+			if( get_option('dbem_cp_events_template') ){
+				add_filter('single_template',array('EM_Event_Post','single_template'));
+			}
 			//add classes to body and post_class()
 			if( get_option('dbem_cp_events_post_class') != '' ){
 			    add_filter('post_class', array('EM_Event_Post','post_class'), 10, 3);
@@ -107,7 +118,7 @@ class EM_Event_Post {
 	}
 	
 	public static function enable_the_content( $content ){
-		//add_filter('the_content', array('EM_Event_Post','the_content'));
+		add_filter('the_content', array('EM_Event_Post','the_content'));
 		return $content;
 	}
 	public static function disable_the_content( $content ){
@@ -278,16 +289,25 @@ class EM_Event_Post {
 				}else{
 					$query[] = array( 'key' => '_event_end', 'value' => $EM_DateTime->getDateTime(), 'compare' => $compare, 'type' => 'DATETIME' );
 				}
-			}elseif ($scope == "month" || $scope == "next-month" ){
+			}elseif ($scope == "month" || $scope == "next-month" || $scope == 'this-month'){
 				$EM_DateTime = new EM_DateTime(); //create default time in blog timezone
 				if( $scope == 'next-month' ) $EM_DateTime->add('P1M');
-				$start_month = $EM_DateTime->modify('first day of this month')->getDate();
+				$start_month = $scope == 'this-month' ? $EM_DateTime->getDate() : $EM_DateTime->modify('first day of this month')->getDate();
 				$end_month = $EM_DateTime->modify('last day of this month')->getDate();
 				if( get_option('dbem_events_current_are_past') && $wp_query->query_vars['post_type'] != 'event-recurring' ){
 					$query[] = array( 'key' => '_event_start_date', 'value' => array($start_month,$end_month), 'type' => 'DATE', 'compare' => 'BETWEEN');
 				}else{
 					$query[] = array( 'key' => '_event_start_date', 'value' => $end_month, 'compare' => '<=', 'type' => 'DATE' );
 					$query[] = array( 'key' => '_event_end_date', 'value' => $start_month, 'compare' => '>=', 'type' => 'DATE' );
+				}
+			}elseif ($scope == "week" || $scope == 'this-week'){
+				$EM_DateTime = new EM_DateTime(); //create default time in blog timezone
+				list($start_date, $end_date) = $EM_DateTime->get_week_dates( $scope );
+				if( get_option('dbem_events_current_are_past') && $wp_query->query_vars['post_type'] != 'event-recurring' ){
+					$query[] = array( 'key' => '_event_start_date', 'value' => array($start_date,$end_date), 'type' => 'DATE', 'compare' => 'BETWEEN');
+				}else{
+					$query[] = array( 'key' => '_event_start_date', 'value' => $end_date, 'compare' => '<=', 'type' => 'DATE' );
+					$query[] = array( 'key' => '_event_end_date', 'value' => $start_date, 'compare' => '>=', 'type' => 'DATE' );
 				}
 			}elseif( preg_match('/(\d\d?)\-months/',$scope,$matches) ){ // next x months means this month (what's left of it), plus the following x months until the end of that month.
 				$EM_DateTime = new EM_DateTime(); //create default time in blog timezone

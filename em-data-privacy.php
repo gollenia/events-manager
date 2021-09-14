@@ -170,7 +170,9 @@ function em_data_privacy_cpt_validate( $result, $EM_Object ){
 function em_data_privacy_cpt_save( $result, $EM_Object ){
 	$attributes = get_class($EM_Object) == 'EM_Event' ? 'event_attributes':'location_attributes';
 	if( $result && !empty($EM_Object->{$attributes}['_consent_given'])){
-		update_user_meta( $EM_Object->post_author, 'em_data_privacy_consent', current_time('mysql') );
+		if( !get_option('dbem_events_anonymous_submissions') || $EM_Object->post_author != get_option('dbem_events_anonymous_user') ){
+			update_user_meta( $EM_Object->post_author, 'em_data_privacy_consent', current_time('mysql') );
+		}
 	}
     return $result;
 }

@@ -29,6 +29,7 @@ function em_get_booking($id = false) {
  * Contains all information and relevant functions surrounding a single booking made with Events Manager
  * @property int|false $booking_status
  * @property string $language
+ * @property EM_Person $person
  */
 class EM_Booking extends EM_Object{
 	//DB Fields
@@ -78,7 +79,7 @@ class EM_Booking extends EM_Object{
 	/**
 	 * @var EM_Person
 	 */
-	var $person;
+	protected $person;
 	var $required_fields = array('booking_id', 'event_id', 'person_id', 'booking_spaces');
 	var $feedback_message = "";
 	var $errors = array();
@@ -146,14 +147,14 @@ class EM_Booking extends EM_Object{
 			$this->booking_date = !empty($booking['booking_date']) ? $booking['booking_date']:false;
 		}
 		//Do it here so things appear in the po file.
-		$this->status_array = [
+		$this->status_array = array(
 			0 => __('Pending','events-manager'),
 			1 => __('Approved','events-manager'),
 			2 => __('Rejected','events-manager'),
 			3 => __('Cancelled','events-manager'),
 			4 => __('Awaiting Online Payment','events-manager'),
 			5 => __('Awaiting Payment','events-manager')
-		];
+		);
 		$this->compat_keys(); //depricating in 6.0
 		//do some legacy checking here for bookings made prior to 5.4, due to how taxes are calculated
 		$this->get_tax_rate();
@@ -176,6 +177,8 @@ class EM_Booking extends EM_Object{
 		    }
 	    }elseif( $var == 'booking_status' ){
 			return ($this->booking_status == 0 && !get_option('dbem_bookings_approval') ) ? 1:$this->booking_status;
+	    }elseif( $var == 'person' ){
+	    	return $this->get_person();
 	    }
 	    return null;
 	}
