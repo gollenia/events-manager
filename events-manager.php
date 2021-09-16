@@ -744,7 +744,7 @@ function ctx_plugin_info( $res, $action, $args ){
 
 	// info.json is the file with the actual plugin information on your server
 	$remote = wp_remote_get( 
-		'https://wp-update.kids-team.at/info.php?plugin_id=events-manager', 
+		'http://wp-update.kids-team.at/info.php?plugin_id=events-manager', 
 		array(
 			'timeout' => 10,
 			'headers' => array(
