@@ -758,7 +758,7 @@ function ctx_plugin_info( $res, $action, $args ){
 		is_wp_error( $remote )
 		|| 200 !== wp_remote_retrieve_response_code( $remote )
 		|| empty( wp_remote_retrieve_body( $remote ) 
-	) {
+	)) {
 		return false;	
 	}
 
