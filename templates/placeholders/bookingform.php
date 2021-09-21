@@ -79,6 +79,7 @@ if( !$is_open && !is_user_logged_in() && $EM_Event->get_bookings()->is_open(true
 							if( has_action('em_booking_form_custom') ){ 
 								//Pro Custom Booking Form. You can create your own custom form by hooking into this action and setting the option above to true
 								do_action('em_booking_form_custom', $EM_Event); //do not delete
+                                
 							}else{
 								//If you just want to modify booking form fields, you could do so here
 								em_locate_template('forms/bookingform/booking-fields.php',true, array('EM_Event'=>$EM_Event));
