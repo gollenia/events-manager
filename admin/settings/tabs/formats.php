@@ -47,91 +47,6 @@
 	</div> <!-- . inside -->
 	</div> <!-- .postbox -->
 
-	<div  class="postbox " id="em-opt-search-form" >
-	<div class="handlediv" title="<?php __('Click to toggle', 'events-manager'); ?>"><br /></div><h3><span><?php _e ( 'Search Form', 'events-manager'); ?> </span></h3>
-	<div class="inside">
-		<table class="form-table em-search-form-main">
-		    <tr class="em-header"><td colspan="2"><h4><?php _e('Main Search Fields','events-manager'); ?></h4></td></tr>
-		    <tbody class="em-subsection">
-			<tr class="em-subheader"><td colspan="2"><h5><?php esc_html_e( 'Search', 'events-manager'); ?></h5></td></tr>
-			<?php
-			em_options_radio_binary ( __( 'Show text search?', 'events-manager'), 'dbem_search_form_text', '', '', '#dbem_search_form_text_label_row' );
-			em_options_input_text ( __( 'Label', 'events-manager'), 'dbem_search_form_text_label', __('Appears within the input box.','events-manager') );
-			?>
-			</tbody>
-			<tbody class="em-settings-geocoding em-subsection">
-			<tr class="em-subheader"><td colspan="2"><h5><?php esc_html_e( 'Geolocation Search', 'events-manager'); ?></h5></td></tr>
-			<?php
-			em_options_radio_binary ( __( 'Show geolocation search?', 'events-manager'), 'dbem_search_form_geo', '', '', '#dbem_search_form_geo_label_row, #dbem_search_form_geo_distance_default_row, #dbem_search_form_geo_unit_default_row' );
-			em_options_input_text ( __( 'Label', 'events-manager'), 'dbem_search_form_geo_label', __('Appears within the input box.','events-manager') );
-			em_options_input_text ( __( 'Default distance', 'events-manager'), 'dbem_search_form_geo_distance_default', __('Enter a number.','events-manager'), '');
-			em_options_select ( __( 'Default distance unit', 'events-manager'), 'dbem_search_form_geo_unit_default', array('km'=>'km','mi'=>'mi'), '');
-			?>
-			</tbody>
-		</table>
-		<table class="form-table">
-		    <tr class="em-header"><td colspan="2"><h4><?php _e('Advanced Search Fields','events-manager'); ?></h4></td></tr>
-			<?php
-			em_options_radio_binary ( __( 'Enable advanced fields?', 'events-manager'), 'dbem_search_form_advanced', __('Enables additional advanced search fields such as dates, country, etc.','events-manager'), '', '.em-search-form-advanced' );
-			?>
-			<tbody class="em-search-form-advanced">
-			<?php 
-			em_options_input_text ( __( 'Search button text', 'events-manager'), 'dbem_search_form_submit', __("If there's no fields to show in the main search section, this button will be used instead at the bottom of the advanced fields.",'events-manager'));
-			em_options_radio_binary ( __( 'Hidden by default?', 'events-manager'), 'dbem_search_form_advanced_hidden', __('If set to yes, advanced search fields will be hidden by default and can be revealed by clicking the "Advanced Search" link.','events-manager'), '', '#dbem_search_form_advanced_show_row, #dbem_search_form_advanced_hide_row' );
-			em_options_input_text ( __( 'Show label', 'events-manager'), 'dbem_search_form_advanced_show', __('Appears as the label for this search option.','events-manager') );
-			em_options_input_text ( __( 'Hide label', 'events-manager'), 'dbem_search_form_advanced_hide', __('Appears as the label for this search option.','events-manager') );
-			?>
-			</tbody>
-			<tbody class="em-search-form-advanced em-subsection">
-			<tr class="em-subheader"><td colspan="2"><h5><?php esc_html_e( 'Dates', 'events-manager'); ?></h5></td></tr>
-			<?php
-			em_options_radio_binary ( __( 'Show date range?', 'events-manager'), 'dbem_search_form_dates', '', '', '#dbem_search_form_dates_label_row, #dbem_search_form_dates_separator_row' );
-			em_options_input_text ( __( 'Label', 'events-manager'), 'dbem_search_form_dates_label', __('Appears as the label for this search option.','events-manager') );
-			em_options_input_text ( __( 'Date Separator', 'events-manager'), 'dbem_search_form_dates_separator', sprintf(__( 'For when start/end %s are present, this will separate the two (include spaces here if necessary).', 'events-manager'), __('dates','events-manager')) );
-			?>
-			<tr class="em-subheader"><td colspan="2"><h5><?php esc_html_e( 'Category', 'events-manager'); ?></h5></td></tr>
-			<?php
-			em_options_radio_binary ( __( 'Show categories?', 'events-manager'), 'dbem_search_form_categories', '', '', '#dbem_search_form_category_label_row, #dbem_search_form_categories_label_row' );
-			em_options_input_text ( __( 'Label', 'events-manager'), 'dbem_search_form_category_label', __('Appears as the label for this search option.','events-manager') );
-			em_options_input_text ( __( 'Categories dropdown label', 'events-manager'), 'dbem_search_form_categories_label', __('Appears as the first default search option.','events-manager') );
-			?>
-			<tr class="em-subheader"><td colspan="2"><h5><?php esc_html_e( 'Geolocation Search', 'events-manager'); ?></h5></td></tr>
-			<?php
-			em_options_radio_binary ( __( 'Show distance options?', 'events-manager'), 'dbem_search_form_geo_units', '', '', '#dbem_search_form_geo_units_label_row, #dbem_search_form_geo_distance_options_row' );
-			em_options_input_text ( __( 'Label', 'events-manager'), 'dbem_search_form_geo_units_label', __('Appears as the label for this search option.','events-manager') );
-			em_options_input_text ( __( 'Distance Values', 'events-manager'), 'dbem_search_form_geo_distance_options', __('The numerical units shown to those searching by distance. Use comma-separated numbers, such as "25,50,100".','events-manager') );
-			?>
-			<tr class="em-subheader"><td colspan="2"><h5><?php esc_html_e( 'Country', 'events-manager'); ?></h5></td></tr>
-			<?php
-			em_options_radio_binary ( __( 'Show countries?', 'events-manager'), 'dbem_search_form_countries', '', '', '#dbem_search_form_default_country_row, #dbem_search_form_country_label_row, #dbem_search_form_countries_label_row' );
-			em_options_select ( __( 'Default Country', 'events-manager'), 'dbem_search_form_default_country', em_get_countries(__('no default country', 'events-manager')), __('Search form will be pre-selected with this country.','events-manager') );
-			em_options_input_text ( __( 'Label', 'events-manager'), 'dbem_search_form_country_label', __('Appears as the label for this search option.','events-manager') );
-			em_options_input_text ( __( 'All countries text', 'events-manager'), 'dbem_search_form_countries_label', __('Appears as the first default search option.','events-manager') );
-			?>
-			<tr class="em-subheader"><td colspan="2"><h5><?php esc_html_e( 'Region', 'events-manager'); ?></h5></td></tr>
-			<?php
-			em_options_radio_binary ( __( 'Show regions?', 'events-manager'), 'dbem_search_form_regions', '', '', '#dbem_search_form_region_label_row, #dbem_search_form_regions_label_row' );
-			em_options_input_text ( __( 'Label', 'events-manager'), 'dbem_search_form_region_label', __('Appears as the label for this search option.','events-manager') );
-			em_options_input_text ( __( 'All regions text', 'events-manager'), 'dbem_search_form_regions_label', __('Appears as the first default search option.','events-manager') );
-			?>
-			<tr class="em-subheader"><td colspan="2"><h5><?php esc_html_e( 'State/County', 'events-manager'); ?></h5></td></tr>
-			<?php
-			em_options_radio_binary ( __( 'Show states?', 'events-manager'), 'dbem_search_form_states', '', '', '#dbem_search_form_state_label_row, #dbem_search_form_states_label_row' );
-			em_options_input_text ( __( 'Label', 'events-manager'), 'dbem_search_form_state_label', __('Appears as the label for this search option.','events-manager') );
-			em_options_input_text ( __( 'All states text', 'events-manager'), 'dbem_search_form_states_label', __('Appears as the first default search option.','events-manager') );
-			?>
-			<tr class="em-subheader"><td colspan="2"><h5><?php esc_html_e( 'City/Town', 'events-manager'); ?></h5></td></tr>
-			<?php
-			em_options_radio_binary ( __( 'Show towns/cities?', 'events-manager'), 'dbem_search_form_towns', '', '', '#dbem_search_form_town_label_row, #dbem_search_form_towns_label_row' );
-			em_options_input_text ( __( 'Label', 'events-manager'), 'dbem_search_form_town_label', __('Appears as the label for this search option.','events-manager') );
-			em_options_input_text ( __( 'All towns/cities text', 'events-manager'), 'dbem_search_form_towns_label', __('Appears as the first default search option.','events-manager') );
-			?>
-			</tbody>
-			<?php echo $save_button; ?>
-		</table>
-	</div> <!-- . inside -->
-	</div> <!-- .postbox -->
-
 	<div  class="postbox " id="em-opt-date-time" >
 	<div class="handlediv" title="<?php __('Click to toggle', 'events-manager'); ?>"><br /></div><h3><span><?php _e ( 'Date/Time', 'events-manager'); ?> </span></h3>
 	<div class="inside">
@@ -142,7 +57,6 @@
 		<table class="form-table">
     		<?php
 			em_options_input_text ( __( 'Date Format', 'events-manager'), 'dbem_date_format', sprintf(__('For use with the %s placeholder','events-manager'),'<code>#_EVENTDATES</code>') );
-			em_options_input_text ( __( 'Date Picker Format', 'events-manager'), 'dbem_date_format_js', sprintf(__( 'Same as <em>Date Format</em>, but this is used for the datepickers used by Events Manager. This uses a slightly different format to the others on here, for a list of characters to use, visit the <a href="%s">jQuery formatDate reference</a>', 'events-manager'),'https://api.jqueryui.com/datepicker/#utility-formatDate') );
 			em_options_input_text ( __( 'Date Separator', 'events-manager'), 'dbem_dates_separator', sprintf(__( 'For when start/end %s are present, this will separate the two (include spaces here if necessary).', 'events-manager'), __('dates','events-manager')) );
 			em_options_input_text ( __( 'Time Format', 'events-manager'), 'dbem_time_format', sprintf(__('For use with the %s placeholder','events-manager'),'<code>#_EVENTTIMES</code>') );
 			em_options_input_text ( __( 'Time Separator', 'events-manager'), 'dbem_times_separator', sprintf(__( 'For when start/end %s are present, this will separate the two (include spaces here if necessary).', 'events-manager'), __('times','events-manager')) );
