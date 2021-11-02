@@ -9,27 +9,7 @@ class EM_Event_Post {
 	public static function init(){
 		//Front Side Modifiers
 		if( !is_admin() ){
-			//override single page with formats? 
-			add_filter('the_content', array('EM_Event_Post','the_content'));
-			add_filter('the_excerpt_rss', array('EM_Event_Post','the_excerpt_rss'));
-			//excerpts can trigger the_content which isn't ideal, so we disable the_content between the first and last excerpt calls within WP logic
-			add_filter('get_the_excerpt', array('EM_Event_Post','disable_the_content'), 1);
-			add_filter('get_the_excerpt', array('EM_Event_Post','enable_the_content'), 100);
-			if( get_option('dbem_cp_events_excerpt_formats') ){
-				//important add this before wp_trim_excerpt hook, as it can screw up things like wp_editor() for WordPress SEO plugin
-			    add_filter('get_the_excerpt', array('EM_Event_Post','get_the_excerpt'));
-			}
-			//display as page template?
-			if( get_option('dbem_cp_events_template') ){
-				add_filter('single_template',array('EM_Event_Post','single_template'));
-			}
-			//add classes to body and post_class()
-			if( get_option('dbem_cp_events_post_class') != '' ){
-			    add_filter('post_class', array('EM_Event_Post','post_class'), 10, 3);
-			}
-			if( get_option('dbem_cp_events_body_class') != '' ){
-			    add_filter('body_class', array('EM_Event_Post','body_class'), 10, 3);
-			}
+
 			//Override post template tags
 			add_filter('get_the_date',array('EM_Event_Post','the_date'),10,3);
 			add_filter('get_the_time',array('EM_Event_Post','the_time'),10,3);
@@ -72,50 +52,7 @@ class EM_Event_Post {
 		return $template;
 	}
 	
-	public static function post_class( $classes, $class, $post_id ){
-	    $post = get_post($post_id);
-	    if( $post->post_type == EM_POST_TYPE_EVENT ){
-	        foreach( explode(' ', get_option('dbem_cp_events_post_class')) as $class ){
-	            $classes[] = esc_attr($class);
-	        }
-	    }
-	    return $classes;
-	}
-	
-	public static function body_class( $classes ){
-	    if( em_is_event_page() ){
-	        foreach( explode(' ', get_option('dbem_cp_events_body_class')) as $class ){
-	            $classes[] = esc_attr($class);
-	        }
-	    }
-	    return $classes;
-	}
-	
-	/**
-	 * Overrides the_excerpt if this is an event post type
-	 */
-	public static function get_the_excerpt($content){
-		global $post;
-		if( $post->post_type == EM_POST_TYPE_EVENT ){
-			$EM_Event = em_get_event($post);
-			$output = !empty($EM_Event->post_excerpt) ? get_option('dbem_event_excerpt_format'):get_option('dbem_event_excerpt_alt_format');
-			$content = $EM_Event->output($output);
-		}
-		return $content;
-	}
-	public static function the_excerpt($content){ return self::get_the_excerpt($content); }
-	
-	public static function the_excerpt_rss( $content ){
-		global $post;
-		if( $post->post_type == EM_POST_TYPE_EVENT ){
-			if( get_option('dbem_cp_events_formats') ){
-				$EM_Event = em_get_event($post);
-				$content = $EM_Event->output( get_option ( 'dbem_rss_description_format' ), "rss");
-				$content = ent2ncr(convert_chars($content)); //Some RSS filtering
-			}
-		}
-		return $content;
-	}
+
 	
 	public static function enable_the_content( $content ){
 		add_filter('the_content', array('EM_Event_Post','the_content'));
@@ -123,40 +60,6 @@ class EM_Event_Post {
 	}
 	public static function disable_the_content( $content ){
 		remove_filter('the_content', array('EM_Event_Post','the_content'));
-		return $content;
-	}
-	
-	public static function the_content( $content ){
-		global $post, $EM_Event;
-		if( !empty($post) && $post->post_type == EM_POST_TYPE_EVENT ){
-			if( is_archive() || is_search() ){
-				if(get_option('dbem_cp_events_archive_formats')){
-					$EM_Event = em_get_event($post);
-					$content = $EM_Event->output(get_option('dbem_event_list_item_format'));
-				}
-			}else{
-				if( get_option('dbem_cp_events_formats') && !post_password_required() ){
-					$EM_Event = em_get_event($post);
-					//do a little check for preview mode and re-insert content from $post
-					if( !empty($_REQUEST['preview']) ){
-						//we don't do extra checks here because WP will have already done the work for us here...
-						$EM_Event->post_content = $post->post_content;
-						$EM_Event->post_content_filtered = $post->post_content_filtered;
-					}else{
-						$EM_Event->post_content = $content;
-					}
-					ob_start();
-					em_locate_template('templates/event-single.php',true);
-					$content = ob_get_clean();
-				}elseif( !post_password_required() ){
-					$EM_Event = em_get_event($post);
-					if( $EM_Event->event_rsvp && (!defined('EM_DISABLE_AUTO_BOOKINGSFORM') || !EM_DISABLE_AUTO_BOOKINGSFORM) ){
-						$content .= '<h2>'.esc_html__('Bookings','events-manager').'</h2>';
-					    $content .= $EM_Event->output('#_BOOKINGFORM');
-					}
-				}
-			}
-		}
 		return $content;
 	}
 	

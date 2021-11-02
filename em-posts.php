@@ -86,7 +86,7 @@ function wp_events_plugin_init(){
 		]
 	]));
 	
-	$event_post_type_supports = apply_filters('em_cp_event_supports', ['custom-fields','title','editor','excerpt','comments','thumbnail','author']);
+	$event_post_type_supports = apply_filters('em_cp_event_supports', ['title','editor','excerpt','thumbnail','author']);
 	$event_post_type = apply_filters('em_cpt_event', [	
 		'public' => true,
 		'hierarchical' => false,
@@ -227,6 +227,42 @@ function wp_events_plugin_init(){
 			],
 		]);
 	}
+
+	
+	$speaker_post_type = apply_filters('em_cpt_speaker', [	
+		'public' => true,
+		'hierarchical' => false,
+		'show_in_rest' => true,
+		'show_in_admin_bar' => true,
+		'show_ui' => true,
+		'show_in_menu' => 'edit.php?post_type=event',
+		'show_in_nav_menus'=>true,
+		'can_export' => true,
+		'publicly_queryable' => true,
+		'rewrite' => ['slug' => 'event-speaker', 'with_front'=>false],
+		'query_var' => true,
+		'has_archive' => false,
+		'supports' => ['title','thumbnail'],
+		'label' => __('Speakers','events-manager'),
+		'description' => __('Speakers for an event.','events-manager'),
+		'labels' => [
+			'name' => __('Speakers','events-manager'),
+			'singular_name' => __('Speaker','events-manager'),
+			'menu_name' => __('Speakers','events-manager'),
+			'add_new' => __('Add Speaker','events-manager'),
+			'add_new_item' => __('Add New Speaker','events-manager'),
+			'edit' => __('Edit','events-manager'),
+			'edit_item' => __('Edit Speaker','events-manager'),
+			'new_item' => __('New Speaker','events-manager'),
+			'view' => __('View','events-manager'),
+			'view_item' => __('View Speaker','events-manager'),
+			'search_items' => __('Search Speaker','events-manager'),
+			'not_found' => __('No Speaker Found','events-manager'),
+			'not_found_in_trash' => __('No Speaker Found in Trash','events-manager'),
+			'parent' => __('Parent Speaker','events-manager'),
+		],
+	]);
+	
 	
 
 	
@@ -245,37 +281,21 @@ function wp_events_plugin_init(){
 		if ( get_option('dbem_recurrence_enabled') ){
 			register_post_type('event-recurring', $event_recurring_post_type);
 		}
-		if( get_option('dbem_locations_enabled', true) ){
-			register_post_type(EM_POST_TYPE_LOCATION, $location_post_type);
-		}
+		register_post_type(EM_POST_TYPE_LOCATION, $location_post_type);
+		
 	}else{
-		if( get_option('dbem_locations_enabled', true) ){
-			register_post_type(EM_POST_TYPE_LOCATION, $location_post_type);
-		}
+		register_post_type(EM_POST_TYPE_LOCATION, $location_post_type);
 		register_post_type(EM_POST_TYPE_EVENT, $event_post_type);
 		//Now register posts, but check slugs in case of conflicts and reorder registrations
 		if ( get_option('dbem_recurrence_enabled') ){
 			register_post_type('event-recurring', $event_recurring_post_type);
 		}
 	}
+
+	register_post_type('event-speaker', $speaker_post_type);
 }
 
-//Post Customization
-function supported_event_custom_fields($supported){
-	$remove = [];
-	if( !get_option('dbem_cp_events_custom_fields') ) $remove[] = 'custom-fields';
-	if( !get_option('dbem_cp_events_comments') ) $remove[] = 'comments';
-	return  supported_custom_fields($supported, $remove);
-}
-add_filter('em_cp_event_supports', 'supported_event_custom_fields',10,1);
 
-function supported_location_custom_fields($supported){
-	$remove = [];
-	if( !get_option('dbem_cp_locations_custom_fields') ) $remove[] = 'custom-fields';
-	if( !get_option('dbem_cp_locations_comments') ) $remove[] = 'comments';
-	return supported_custom_fields($supported, $remove);
-}
-add_filter('em_cp_location_supports', 'supported_location_custom_fields',10,1);
 
 function supported_custom_fields($supported, $remove = []){
 	foreach($supported as $key => $support_field){

@@ -70,7 +70,7 @@ We provide the tools to [help you be GDPR compliant](http://wp-events-plugin.com
 We have a premium [Pro add-on for Events Manager](http://eventsmanagerpro.com/gopro/) which not only demonstrates the flexibility of Events Manager, but also adds some important features including but not limited to:
 
 * WooCommerce integration included FREE (limited-time offer)
-* PayPal, Stripe, Authorize.net and Offline Payments
+* Stripe, Authorize.net and Offline Payments
 * Custom booking forms
 * Individual Attendee custom forms
 * Coupon Codes

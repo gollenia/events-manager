@@ -204,7 +204,7 @@ function em_ms_admin_options_page() {
 				em_admin_option_box_caps();
 				em_admin_option_box_image_sizes();
 				em_admin_option_box_email();
-				em_admin_option_box_uninstall();
+				
 				?>
 				
 				<?php do_action('em_ms_options_page_footer'); ?>

@@ -6,16 +6,17 @@ class EM_Update {
     public static function init()
     {
         $self = new self();
-        add_filter( 'plugins_api', [$self, 'ctx_plugin_info'], 20, 3);
+        add_filter( 'plugins_api', ["EM_Update", 'ctx_plugin_info'], 10, 3);
     }
 
-    function ctx_plugin_info( $res, $action, $args ){
-
+    public static function ctx_plugin_info( $res, $action, $args ){
+        
         // do nothing if this is not about getting plugin information
+        
         if( 'plugin_information' !== $action ) {
             return false;
         }
-
+        
         // do nothing if it is not our plugin
         if( plugin_basename( __DIR__ ) !== $args->slug ) {
             return false;
@@ -23,7 +24,7 @@ class EM_Update {
 
         // info.json is the file with the actual plugin information on your server
         $remote = wp_remote_get( 
-            'http://wp-update.kids-team.at/info.php?plugin_id=events-manager', 
+            'https://wp-update.kids-team.at/info.php?plugin_id=events-manager', 
             array(
                 'timeout' => 10,
                 'headers' => array(
@@ -31,6 +32,8 @@ class EM_Update {
                 ) 
             )
         );
+        
+        
 
         // do nothing if we don't get the correct response from the server
         if( 
@@ -75,6 +78,8 @@ class EM_Update {
         return $res;
 
     }
+
+    
 }
 
 

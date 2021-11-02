@@ -13,7 +13,7 @@ $events_count = EM_Events::count( apply_filters('em_content_calendar_day_args', 
 if ( $events_count > 1 || get_option('dbem_display_calendar_day_single') == 1 ) {
 	em_locate_template('templates/events-list.php', true, array('args' => apply_filters('em_content_calendar_day_output_args', $args)) );
 } elseif( $events_count == 1 ) {
-    $args['format'] = get_option('dbem_single_event_format');
+    $args['format'] = "";
 	echo EM_Events::output(apply_filters('em_content_calendar_day_output_args', $args));
 } else {
 	echo get_option('dbem_no_events_message');

@@ -114,63 +114,7 @@
 	</div> <!-- .postbox -->
 	<?php endif; ?>
 	
-	<div  class="postbox " id="em-opt-event-submission-emails" >
-	<div class="handlediv" title="<?php __('Click to toggle', 'events-manager'); ?>"><br /></div><h3><span><?php _e ( 'Event Submission Templates', 'events-manager'); ?> </span></h3>
-	<div class="inside">
-		<table class='form-table'>
-			<tr class="em-header"><td colspan='2'><h4><?php _e('Event Admin Emails', 'events-manager'); ?></h4></td></tr>
-			<?php 
-			em_options_input_text ( __( 'Administrator Email', 'events-manager'), 'dbem_event_submitted_email_admin', __('Event submission notifications will be sent to emails added here.','events-manager').' '.__('If left blank, no emails will be sent. Separate emails with commas for more than one email.','events-manager') );
-			?>
-			<tbody class="em-subsection">
-			<tr class="em-subheader"><td colspan='2'>
-				<h5><?php _e('Event Submitted','events-manager') ?></h5>
-				<em><?php echo __('An email will be sent to your administrator emails when an event is submitted and pending approval.','events-manager').$bookings_placeholder_tip ?></em>
-			</td></tr>
-			<?php
-			em_options_input_text ( __( 'Event submitted subject', 'events-manager'), 'dbem_event_submitted_email_subject', __('If left blank, this email will not be sent.','events-manager') );
-			em_options_textarea ( __( 'Event submitted email', 'events-manager'), 'dbem_event_submitted_email_body', '' );
-			?>
-			<tr class="em-subheader"><td colspan='2'>
-				<h5><?php _e('Event Re-Submitted','events-manager') ?></h5>
-				<em><?php echo __('When a user modifies a previously published event, it will be put back into pending review status and will not be published until you re-approve it.','events-manager').$bookings_placeholder_tip ?></em>
-			</td></tr>
-			<?php
-			em_options_input_text ( __( 'Event resubmitted subject', 'events-manager'), 'dbem_event_resubmitted_email_subject', __('If left blank, this email will not be sent.','events-manager') );
-			em_options_textarea ( __( 'Event resubmitted email', 'events-manager'), 'dbem_event_resubmitted_email_body', '' );
-			?>
-			<tr class="em-subheader"><td colspan='2'>
-				<h5><?php _e('Event Published','events-manager') ?></h5>
-				<em><?php echo __('An email will be sent to an administrator of your choice when an event is published by users who are not administrators.','events-manager').$bookings_placeholder_tip ?>
-			</td></tr>
-			<?php
-			em_options_input_text ( __( 'Event published subject', 'events-manager'), 'dbem_event_published_email_subject', __('If left blank, this email will not be sent.','events-manager') );
-			em_options_textarea ( __( 'Event published email', 'events-manager'), 'dbem_event_published_email_body', '' );
-			?>
-			</tbody>
-			<tr class="em-header"><td colspan='2'><h4><?php _e('Event Submitter Emails', 'events-manager'); ?></h4></td></tr>
-			<tbody class="em-subsection">
-			<tr class="em-subheader"><td colspan='2'>
-				<h5><?php _e('Event Approved','events-manager') ?></h5>
-				<em><?php echo __('An email will be sent to the event owner when their event is approved. Users requiring event approval do not have the <code>publish_events</code> capability.','events-manager').$bookings_placeholder_tip ?>
-			</td></tr>
-			<?php
-			em_options_input_text ( __( 'Event approved subject', 'events-manager'), 'dbem_event_approved_email_subject', __('If left blank, this email will not be sent.','events-manager') );
-			em_options_textarea ( __( 'Event approved email', 'events-manager'), 'dbem_event_approved_email_body', '' );
-			?>
-			<tr class="em-subheader"><td colspan='2'>
-				<h5><?php _e('Event Reapproved','events-manager') ?></h5>
-			    <?php echo __('When a user modifies a previously published event, it will be put back into pending review status and will not be published until you re-approve it.','events-manager').$bookings_placeholder_tip ?>
-			</td></tr>
-			<?php
-			em_options_input_text ( __( 'Event reapproved subject', 'events-manager'), 'dbem_event_reapproved_email_subject', __('If left blank, this email will not be sent.','events-manager') );
-			em_options_textarea ( __( 'Event reapproved email', 'events-manager'), 'dbem_event_reapproved_email_body', '' );
-			?>
-			</tbody>
-			<?php echo $save_button; ?>
-		</table>
-	</div> <!-- . inside -->
-	</div> <!-- .postbox -->
+	
 	
 	<?php do_action('em_options_page_footer_emails'); ?>
 	

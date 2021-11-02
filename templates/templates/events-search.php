@@ -37,7 +37,7 @@ $args = !empty($args) ? $args:array(); /* @var $args array */
 			//date range (scope)
 			if( !empty($args['search_scope']) ) em_locate_template('templates/search/scope.php',true,array('args'=>$args));
 			//categories
-			if( get_option('dbem_categories_enabled') && !empty($args['search_categories']) ) em_locate_template('templates/search/categories.php',true,array('args'=>$args));
+			if( !empty($args['search_categories']) ) em_locate_template('templates/search/categories.php',true,array('args'=>$args));
 			//Location data
 			em_locate_template('templates/search/location.php',true, array('args'=>$args));
 			if( !empty($args['search_geo_units']) ) em_locate_template('templates/search/geo-units.php',true, array('args'=>$args));

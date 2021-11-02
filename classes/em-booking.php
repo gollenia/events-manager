@@ -846,54 +846,7 @@ class EM_Booking extends EM_Object{
 	 * @return boolean
 	 */
 	function get_person_post(){
-	    $user_data = array();
-	    $registration = true;
-	    if( empty($this->booking_meta['registration']) ) $this->booking_meta['registration'] = array();
-	    // Check the e-mail address
-	    $user_email = trim(wp_unslash($_REQUEST['user_email'])); //apostrophes will not be allowed otherwise
-	    if ( $user_email == '' ) {
-	    	$registration = false;
-	    	$this->add_error(__( '<strong>ERROR</strong>: Please type your e-mail address.', 'events-manager') );
-	    } elseif ( !is_email( $user_email ) ) {
-	    	$registration = false;
-	    	$this->add_error( __( '<strong>ERROR</strong>: The email address isn&#8217;t correct.', 'events-manager') );
-	    }elseif(email_exists( $user_email ) && !get_option('dbem_bookings_registration_disable_user_emails') ){
-	    	$registration = false;
-	    	$this->add_error( get_option('dbem_booking_feedback_email_exists') );
-	    }else{
-	    	$user_data['user_email'] = $user_email;
-	    }
-	    //Check the user name
-	    if( !empty($_REQUEST['user_name']) ){
-	    	//split full name up and save full, first and last names
-	    	$user_data['user_name'] = wp_kses(wp_unslash($_REQUEST['user_name']), array());
-	    	$name_string = explode(' ',$user_data['user_name']);
-	    	$user_data['first_name'] = array_shift($name_string);
-	    	$user_data['last_name'] = implode(' ', $name_string);
-	    }else{
-		    //Check the first/last name
-		    $name_string = array();
-		    if( !empty($_REQUEST['first_name']) ){
-		    	$user_data['first_name'] = $name_string[] = wp_kses(wp_unslash($_REQUEST['first_name']), array()); 
-		    }
-		    if( !empty($_REQUEST['last_name']) ){
-		    	$user_data['last_name'] = $name_string[] = wp_kses(wp_unslash($_REQUEST['last_name']), array());
-		    }
-		    if( !empty($name_string) ) $user_data['user_name'] = implode(' ', $name_string);
-	    }
-	    //Check the phone
-	    if( !empty($_REQUEST['dbem_phone']) ){
-	    	$user_data['dbem_phone'] = wp_kses(wp_unslash($_REQUEST['dbem_phone']), array());
-	    }
-	    //Add booking meta
-	    if( $registration ){
-		    $this->booking_meta['registration'] = array_merge($this->booking_meta['registration'], $user_data);	//in case someone else added stuff
-	    }
-	    $registration = apply_filters('em_booking_get_person_post', $registration, $this);
-	    if( $registration ){
-	        $this->feedback_message = __('Personal details have successfully been modified.', 'events-manager');
-	    }
-	    return $registration;
+	    return false;
 	}
 	
 	/**

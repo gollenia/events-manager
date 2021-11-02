@@ -384,13 +384,6 @@ class EM_Ticket extends EM_Object{
 		$return = false;
 		if( $this->is_available($ignore_member_restrictions, $ignore_guest_restrictions) ){
 			$return = true;
-		}else{
-			if( get_option('dbem_bookings_tickets_show_unavailable') ){
-				$return =  true;
-				if( $this->ticket_members && !get_option('dbem_bookings_tickets_show_member_tickets') ){
-					$return = false;
-				}
-			}
 		}
 		return apply_filters('em_ticket_is_displayable', $return, $this, $ignore_guest_restrictions, $ignore_member_restrictions);
 	}

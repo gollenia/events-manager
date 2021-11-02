@@ -26,14 +26,7 @@ $admin_recurring = is_admin() && $EM_Event->is_recurring();
 		<input class="em-time-input em-time-end" type="text" size="8" maxlength="8" name="event_end_time" value="<?php echo $EM_Event->end()->i18n($hours_format); ?>" />
 		<?php _e('All day','events-manager'); ?> <input type="checkbox" class="em-time-allday" name="event_all_day" id="em-time-all-day" value="1" <?php if(!empty($EM_Event->event_all_day)) echo 'checked="checked"'; ?> />
 	</p>
-	<?php if( get_option('dbem_timezone_enabled') ): ?>
-	<p class="em-timezone">
-		<label for="event-timezone"><?php esc_html_e('Timezone', 'events-manager'); ?></label>
-		<select id="event-timezone" name="event_timezone" aria-describedby="timezone-description">
-			<?php echo wp_timezone_choice( $EM_Event->get_timezone()->getName(), get_user_locale() ); ?>
-		</select>
-	</p>
-	<?php endif; ?>
+
 	<div class="em-recurring-text">
 		<p>
 			<?php _e ( 'This event repeats', 'events-manager'); ?> 

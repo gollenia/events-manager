@@ -20,12 +20,12 @@
 			if( get_option('dbem_locations_enabled')  && !(EM_MS_GLOBAL && get_site_option('dbem_ms_mainblog_locations') && !is_main_site()) ){
             	em_options_input_text ( __( 'Locations', 'events-manager'), 'dbem_cp_locations_slug', sprintf(__('e.g. %s - you can use / Separators too', 'events-manager'), '<strong>'.home_url().'/<code>'.esc_html(get_option('dbem_cp_locations_slug',EM_POST_TYPE_LOCATION_SLUG)).'</code>/wembley-stadium/</strong>'), EM_POST_TYPE_LOCATION_SLUG );
 			}
-        	if( get_option('dbem_categories_enabled') && !(EM_MS_GLOBAL && !is_main_site()) ){
-        		em_options_input_text ( __( 'Event Categories', 'events-manager'), 'dbem_taxonomy_category_slug', sprintf(__('e.g. %s - you can use / Separators too', 'events-manager'), '<strong>'.home_url().'/<code>'.esc_html(get_option('dbem_taxonomy_category_slug',EM_TAXONOMY_CATEGORY_SLUG)).'</code>/sports/</strong>'), EM_TAXONOMY_CATEGORY_SLUG );
-        	}
-        	if( get_option('dbem_tags_enabled') ){
-            	em_options_input_text ( __( 'Event Tags', 'events-manager'), 'dbem_taxonomy_tag_slug', sprintf(__('e.g. %s - you can use / Separators too', 'events-manager'), '<strong>'.home_url().'/<code>'.esc_html(get_option('dbem_taxonomy_tag_slug',EM_TAXONOMY_TAG_SLUG)).'</code>/running/</strong>'), EM_TAXONOMY_TAG_SLUG );
-        	}
+        	
+			em_options_input_text ( __( 'Event Categories', 'events-manager'), 'dbem_taxonomy_category_slug', sprintf(__('e.g. %s - you can use / Separators too', 'events-manager'), '<strong>'.home_url().'/<code>'.esc_html(get_option('dbem_taxonomy_category_slug',EM_TAXONOMY_CATEGORY_SLUG)).'</code>/sports/</strong>'), EM_TAXONOMY_CATEGORY_SLUG );
+        	
+        	
+			em_options_input_text ( __( 'Event Tags', 'events-manager'), 'dbem_taxonomy_tag_slug', sprintf(__('e.g. %s - you can use / Separators too', 'events-manager'), '<strong>'.home_url().'/<code>'.esc_html(get_option('dbem_taxonomy_tag_slug',EM_TAXONOMY_TAG_SLUG)).'</code>/running/</strong>'), EM_TAXONOMY_TAG_SLUG );
+        	
         	echo $save_button;
         	?>
         	</table>
@@ -41,8 +41,7 @@
         	em_options_select( sprintf(__( 'Display %s as', 'events-manager'),__('events','events-manager')), 'dbem_cp_events_template', $page_templates, sprintf($template_page_tip, __('events','events-manager'), EM_POST_TYPE_EVENT) );
         	em_options_input_text( __('Body Classes','events-manager'), 'dbem_cp_events_body_class', sprintf($body_class_tip, __('event','events-manager')) );
         	em_options_input_text( __('Post Classes','events-manager'), 'dbem_cp_events_post_class', $post_class_tip );
-        	em_options_radio_binary ( __( 'Override with Formats?', 'events-manager'), 'dbem_cp_events_formats', sprintf($format_override_tip,__('events','events-manager')));
-        	em_options_radio_binary ( __( 'Enable Comments?', 'events-manager'), 'dbem_cp_events_comments', sprintf(__('If you would like to disable comments entirely, disable this, otherwise you can disable comments on each single %s. Note that %s with comments enabled will still be until you resave them.','events-manager'),__('event','events-manager'),__('events','events-manager')));
+        	
 			echo $save_button;
         	?>
         	</table>
@@ -360,7 +359,7 @@
 		</div> <!-- .postbox -->
 		<?php endif; ?>
 		
-		<?php if( get_option('dbem_categories_enabled') && !(EM_MS_GLOBAL && !is_main_site()) ): ?>
+		
 		<div  class="postbox " id="em-opt-categories-pages" >
 		<div class="handlediv" title="<?php __('Click to toggle', 'events-manager'); ?>"><br /></div><h3><span><?php echo __('Event Categories','events-manager'); ?></span></h3>
 		<div class="inside">
@@ -492,9 +491,9 @@
         	</table>
 		</div> <!-- . inside --> 
 		</div> <!-- .postbox -->
-		<?php endif; ?>	
 		
-		<?php if( get_option('dbem_tags_enabled') ): //disabled for now, will add tag stuff later ?>
+		
+		
 		<div  class="postbox " id="em-opt-tags-pages" >
 		<div class="handlediv" title="<?php __('Click to toggle', 'events-manager'); ?>"><br /></div><h3><span><?php echo __('Event Tags','events-manager'); ?></span></h3>
 		<div class="inside">
@@ -625,7 +624,6 @@
             </table>					    
 		</div> <!-- . inside --> 
 		</div> <!-- .postbox -->
-		<?php endif; ?>
 		
 		<div  class="postbox " id="em-opt-other-pages" >
 		<div class="handlediv" title="<?php __('Click to toggle', 'events-manager'); ?>"><br /></div><h3><span><?php echo sprintf(__('%s Pages','events-manager'),__('Other','events-manager')); ?></span></h3>

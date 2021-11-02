@@ -954,3 +954,63 @@ function em_esc_attr( str ){
 	return str.replace(/</gi,'&lt;').replace(/>/gi,'&gt;');
 }
 
+// TODO: Put this in extra file
+let EventsManager = {
+
+	init: () => {
+		EventsManager.autofillDate();
+		EventsManager.autofillTime();
+		EventsManager.lockTime();
+	},
+
+	getElementByName: (element) => {
+		var elements = document.getElementsByName(element);
+		if (elements.length) {
+			return elements[0];
+		} else {
+			return false;
+		}
+	},
+
+	autofillDate: () => {
+		const dateStartSelector = EventsManager.getElementByName("event_start_date")
+		const dateEndSelector = EventsManager.getElementByName("event_end_date")
+		if (dateStartSelector && dateEndSelector) {
+			dateStartSelector.addEventListener("change", (event) => {
+				if(dateEndSelector.value == "") {
+					dateEndSelector.value = dateStartSelector.value;
+				} 
+			})
+		}
+	},
+
+	autofillTime: () => {
+		const timeStartSelector = EventsManager.getElementByName("event_start_time")
+		const timeEndSelector = EventsManager.getElementByName("event_end_time")
+		if (timeStartSelector && timeEndSelector) {
+			timeStartSelector.addEventListener("change", (event) => {
+				if(timeEndSelector.value == "00:00") {
+					timeEndSelector.value = timeStartSelector.value;
+				} 
+			})
+		}
+	},
+
+	lockTime: () => {
+		const allDaySelector = EventsManager.getElementByName("event_all_day")
+		const timeStartSelector = EventsManager.getElementByName("event_start_time")
+		const timeEndSelector = EventsManager.getElementByName("event_end_time")
+		if(allDaySelector) {
+			allDaySelector.addEventListener("change", (event) => {
+				timeStartSelector.disabled = allDaySelector.checked;
+				timeEndSelector.disabled = allDaySelector.checked;
+			})
+		}
+	}
+}
+
+document.addEventListener('DOMContentLoaded', EventsManager.init, false);
+
+
+
+

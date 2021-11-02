@@ -72,6 +72,7 @@ class EM_Location extends EM_Object {
 	var $location_longitude = 0;
 	var $post_content = '';
 	var $location_owner = '';
+	var $location_url = '';
 	var $location_status = 0;
 	var $location_language;
 	var $location_translation = 0;
@@ -95,6 +96,7 @@ class EM_Location extends EM_Object {
 		'location_country' => array('name'=>'country','type'=>'%s','null'=>true),
 		'location_latitude' =>  array('name'=>'latitude','type'=>'%f','null'=>true),
 		'location_longitude' => array('name'=>'longitude','type'=>'%f','null'=>true),
+		'location_url' => array('name'=>'url','type'=>'%s','null'=>true),
 		'post_content' => array('name'=>'description','type'=>'%s', 'null'=>true),
 		'location_owner' => array('name'=>'owner','type'=>'%d', 'null'=>true),
 		'location_status' => array('name'=>'status','type'=>'%d', 'null'=>true),
@@ -300,26 +302,11 @@ class EM_Location extends EM_Object {
 		$this->location_postcode = ( !empty($_POST['location_postcode']) ) ? wp_kses(wp_unslash($_POST['location_postcode']), array()):'';
 		$this->location_region = ( !empty($_POST['location_region']) ) ? wp_kses(wp_unslash($_POST['location_region']), array()):'';
 		$this->location_country = ( !empty($_POST['location_country']) ) ? wp_kses(wp_unslash($_POST['location_country']), array()):'';
+		$this->location_url = ( !empty($_POST['location_url']) ) ? wp_kses(wp_unslash($_POST['location_url']), array()):'';
 		$this->location_latitude = ( !empty($_POST['location_latitude']) && is_numeric($_POST['location_latitude']) ) ? round($_POST['location_latitude'], 6):'';
 		$this->location_longitude = ( !empty($_POST['location_longitude']) && is_numeric($_POST['location_longitude']) ) ? round($_POST['location_longitude'], 6):'';
 		//Sort out event attributes - note that custom post meta now also gets inserted here automatically (and is overwritten by these attributes)
-		if(get_option('dbem_location_attributes_enabled')){
-			global $allowedtags;
-			if( !is_array($this->location_attributes) ){ $this->location_attributes = array(); }
-			$location_available_attributes = em_get_attributes(true); //lattributes only
-			if( !empty($_POST['em_attributes']) && is_array($_POST['em_attributes']) ){
-				foreach($_POST['em_attributes'] as $att_key => $att_value ){
-					if( (in_array($att_key, $location_available_attributes['names']) || array_key_exists($att_key, $this->location_attributes) ) ){
-						$att_vals = count($location_available_attributes['values'][$att_key]);
-						if( $att_vals == 0 || ($att_vals > 0 && in_array($att_value, $location_available_attributes['values'][$att_key])) ){
-							$this->location_attributes[$att_key] = wp_unslash($att_value);
-						}elseif($att_vals > 0){
-							$this->location_attributes[$att_key] = wp_unslash(wp_kses($location_available_attributes['values'][$att_key][0], $allowedtags));
-						}
-					}
-				}
-			}
-		}
+		
 		//location language
 		if( EM_ML::$is_ml && !empty($_POST['location_language']) && array_key_exists($_POST['location_language'], EM_ML::$langs) ){
 			$this->location_language = $_POST['location_language'];
@@ -473,19 +460,7 @@ class EM_Location extends EM_Object {
 					delete_post_meta($this->post_id, '_'.$key);
 				}
 			}
-			//Update Post Custom Fields and attributes
-			if( get_option('dbem_location_attributes_enabled') ){
-				//attributes get saved as individual keys or deleted if non-existent anymore
-				$atts = em_get_attributes( true ); //get available attributes that EM manages
-				$this->location_attributes= maybe_unserialize($this->location_attributes);
-				foreach( $atts['names'] as $location_attribute_key ){
-					if( !empty($this->location_attributes[$location_attribute_key]) ){
-						update_post_meta($this->post_id, $location_attribute_key, $this->location_attributes[$location_attribute_key]);
-					}else{
-						delete_post_meta($this->post_id, $location_attribute_key);
-					}
-				}
-			}
+			
 			//refresh status
 			$this->get_status();
 			$this->location_status = (count($this->errors) == 0) ? $this->location_status:null; //set status at this point, it's either the current status, or if validation fails, null

@@ -131,7 +131,7 @@ class EM_Event_Post_Admin{
         		   if( key($wp_filter[$tag]) == $wp_filter_priority ) break; 
         		}while ( next($wp_filter[$tag]) !== false );
         		//save categories in case of default category
-        		if( get_option('dbem_categories_enabled') ) $EM_Event->get_categories()->save();
+        		$EM_Event->get_categories()->save();
 				//continue whether all went well or not
 				if( !$get_meta || !$validate_meta || !$save_meta ){
 					//failed somewhere, set to draft, don't publish
@@ -172,9 +172,7 @@ class EM_Event_Post_Admin{
 					$sql = $wpdb->prepare("UPDATE ".EM_EVENTS_TABLE." SET event_name=%s, event_owner=%d, event_slug=%s, event_status={$event_status}, event_private=%d WHERE event_id=%d", $where_array);
 					$wpdb->query($sql);
 					//If we're saving via quick-edit in MS Global mode, then the categories need to be pushed to the ms global index
-					if( EM_MS_GLOBAL && get_option('dbem_categories_enabled') && is_main_site() ){
-		    			$EM_Event->get_categories()->save_index(); //just save to index, WP should have saved the taxonomy data
-					}
+					
 					//deal with recurrences
 					if( $EM_Event->is_recurring() && ($EM_Event->is_published() || (defined('EM_FORCE_RECURRENCES_SAVE') && EM_FORCE_RECURRENCES_SAVE)) ){
 						//recurrences are (re)saved only if event is published
@@ -270,11 +268,9 @@ class EM_Event_Post_Admin{
 			add_meta_box('em-event-anonymous', __('Anonymous Submitter Info','events-manager'), array('EM_Event_Post_Admin','meta_box_anonymous'),EM_POST_TYPE_EVENT, 'side','high');
 		}
 		add_meta_box('em-event-when', __('When','events-manager'), array('EM_Event_Post_Admin','meta_box_date'),EM_POST_TYPE_EVENT, 'side','high');
+		add_meta_box('em-event-people', __('People','events-manager'), array('EM_Event_Post_Admin','meta_box_people'),EM_POST_TYPE_EVENT, 'side','high');
 		if(get_option('dbem_locations_enabled', true)){
 			add_meta_box('em-event-where', __('Where','events-manager'), array('EM_Event_Post_Admin','meta_box_location'),EM_POST_TYPE_EVENT, 'normal','high');
-		}
-		if( defined('WP_DEBUG') && WP_DEBUG && defined('WP_DEBUG_DISPLAY') && WP_DEBUG_DISPLAY  && (!defined('EM_DEBUG_DISPLAY') || EM_DEBUG_DISPLAY) ){
-			add_meta_box('em-event-meta', 'Event Meta (debugging only)', array('EM_Event_Post_Admin','meta_box_metadump'),EM_POST_TYPE_EVENT, 'normal','high');
 		}
 		if( get_option('dbem_rsvp_enabled', true) && $EM_Event->can_manage('manage_bookings','manage_others_bookings') ){
 			add_meta_box('em-event-bookings', __('Bookings/Registration','events-manager'), array('EM_Event_Post_Admin','meta_box_bookings'),EM_POST_TYPE_EVENT, 'normal','high');
@@ -282,12 +278,8 @@ class EM_Event_Post_Admin{
 				add_meta_box('em-event-bookings-stats', __('Bookings Stats','events-manager'), array('EM_Event_Post_Admin','meta_box_bookings_stats'),EM_POST_TYPE_EVENT, 'side','core');
 			}
 		}
-		if( get_option('dbem_attributes_enabled', true) ){
-			add_meta_box('em-event-attributes', __('Attributes','events-manager'), array('EM_Event_Post_Admin','meta_box_attributes'),EM_POST_TYPE_EVENT, 'normal','default');
-		}
-		if( EM_MS_GLOBAL && !is_main_site() && get_option('dbem_categories_enabled') ){
-			add_meta_box('em-event-categories', __('Site Categories','events-manager'), array('EM_Event_Post_Admin','meta_box_ms_categories'),EM_POST_TYPE_EVENT, 'side','low');
-		}
+
+		
 		add_action('post_submitbox_misc_actions', 'EM_Event_Post_Admin::meta_box_action_post_submitbox_start');
 	}
 	
@@ -319,6 +311,11 @@ class EM_Event_Post_Admin{
 		?><input type="hidden" name="_emnonce" value="<?php echo wp_create_nonce('edit_event'); ?>" /><?php
 		em_locate_template('forms/event/when.php', true);
 	}
+
+	public static function meta_box_people(){
+		//create meta box check of date nonce
+		em_locate_template('forms/event/people.php', true);
+	}
 	
 	public static function meta_box_bookings_stats(){
 		em_locate_template('forms/event/booking-stats.php',true);
@@ -331,10 +328,6 @@ class EM_Event_Post_Admin{
 	
 	public static function meta_box_bookings_overlay(){
 		em_locate_template('forms/tickets-form.php', true); //put here as it can't be in the add event form
-	}
-	
-	public static function meta_box_attributes(){
-		em_locate_template('forms/event/attributes.php',true);
 	}
 	
 	public static function meta_box_location(){
@@ -509,12 +502,8 @@ class EM_Event_Recurring_Post_Admin{
 		if( get_option('dbem_rsvp_enabled') && $EM_Event->can_manage('manage_bookings','manage_others_bookings') ){
 			add_meta_box('em-event-bookings', __('Bookings/Registration','events-manager'), array('EM_Event_Post_Admin','meta_box_bookings'),'event-recurring', 'normal','high');
 		}
-		if( get_option('dbem_attributes_enabled') ){
-			add_meta_box('em-event-attributes', __('Attributes','events-manager'), array('EM_Event_Post_Admin','meta_box_attributes'),'event-recurring', 'normal','default');
-		}
-		if( EM_MS_GLOBAL && !is_main_site() && get_option('dbem_categories_enabled') ){
-			add_meta_box('em-event-categories', __('Site Categories','events-manager'), array('EM_Event_Post_Admin','meta_box_ms_categories'),'event-recurring', 'side','low');
-		}
+		
+		
 		if( defined('WP_DEBUG') && WP_DEBUG && defined('WP_DEBUG_DISPLAY') && WP_DEBUG_DISPLAY ){
 		    add_meta_box('em-event-meta', 'Event Meta (debugging only)', array('EM_Event_Post_Admin','meta_box_metadump'),'event-recurring', 'normal','high');
 		}

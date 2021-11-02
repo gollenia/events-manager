@@ -6,7 +6,7 @@ $required = apply_filters('em_required_html','<i>*</i>');
 <p class="em-location-data-maps-tip"><?php _e("If you're using the Google Maps, the more detail you provide, the more accurate Google can be at finding your location. If your address isn't being found, please <a href='http://maps.google.com'>try it on maps.google.com</a> by adding all the fields below separated by commas.",'events-manager')?></p>
 <?php endif; ?>
 <div id="em-location-data" class="em-location-data">
-	<table class="em-location-data">
+	<table class="em-location-data form-table">
 		<tr class="em-location-data-address">
 			<th><?php _e ( 'Address:', 'events-manager')?>&nbsp;</th>
 			<td>
@@ -48,11 +48,11 @@ $required = apply_filters('em_required_html','<i>*</i>');
 				</select> <?php echo $required; ?>
 			</td>
 		</tr>
+		<tr class="em-location-data-url">
+			<th><?php _e ( 'URL:', 'events-manager')?>&nbsp;</th>
+			<td>
+				<input id="location-url" type="text" name="location_url" value="<?php echo esc_attr($EM_Location->location_url, ENT_QUOTES); ?>" />
+			</td>
+		</tr>
 	</table>
-	<?php if ( get_option( 'dbem_gmap_is_active' ) ) em_locate_template('forms/map-container.php',true); ?>
-	<br style="clear:both; " />
-	<div id="location_coordinates" style='display: none;'>
-		<input id='location-latitude' name='location_latitude' type='text' value='<?php echo $EM_Location->location_latitude; ?>' size='15' />
-		<input id='location-longitude' name='location_longitude' type='text' value='<?php echo $EM_Location->location_longitude; ?>' size='15' />
-	</div>
 </div>

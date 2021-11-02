@@ -266,7 +266,7 @@ function em_init_actions() {
 	}
 	
 	//Booking Actions
-	if( !empty($_REQUEST['action']) && substr($_REQUEST['action'],0,7) == 'booking' && (is_user_logged_in() || ($_REQUEST['action'] == 'booking_add' && get_option('dbem_bookings_anonymous'))) ){
+	if( !empty($_REQUEST['action']) && substr($_REQUEST['action'],0,7) == 'booking' && (is_user_logged_in() || ($_REQUEST['action'] == 'booking_add')) ){
 
 		global $EM_Event, $EM_Booking, $EM_Person;
 		//Load the booking object, with saved booking if requested
@@ -284,7 +284,7 @@ function em_init_actions() {
 			//ADD/EDIT Booking
 			ob_start();
 			if( (!defined('WP_CACHE') || !WP_CACHE) && !isset($GLOBALS["wp_fastest_cache"]) ) em_verify_nonce('booking_add');
-			if( !is_user_logged_in() || get_option('dbem_bookings_double') || !$EM_Event->get_bookings()->has_booking(get_current_user_id()) ){
+			if( !is_user_logged_in() || !$EM_Event->get_bookings()->has_booking(get_current_user_id()) ){
 			    $EM_Booking->get_post();
 				$post_validation = $EM_Booking->validate();
 				do_action('em_booking_add', $EM_Event, $EM_Booking, $post_validation);
@@ -320,45 +320,10 @@ function em_init_actions() {
 				$EM_Notices->add_error( $feedback );
 			}
 			ob_clean();
-	  	}elseif ( $_REQUEST['action'] == 'booking_add_one' && is_object($EM_Event) && is_user_logged_in() ) {
-			//ADD/EDIT Booking
-			em_verify_nonce('booking_add_one');
-			if( get_option('dbem_bookings_double') || !$EM_Event->get_bookings()->has_booking(get_current_user_id()) ){
-				$EM_Booking = em_get_booking(array('person_id'=>get_current_user_id(), 'event_id'=>$EM_Event->event_id, 'booking_spaces'=>1)); //new booking
-				$EM_Ticket = $EM_Event->get_bookings()->get_tickets()->get_first();	
-				//get first ticket in this event and book one place there. similar to getting the form values in EM_Booking::get_post_values()
-				$EM_Ticket_Booking = new EM_Ticket_Booking(array('ticket_id'=>$EM_Ticket->ticket_id, 'ticket_booking_spaces'=>1));
-				$EM_Booking->tickets_bookings = new EM_Tickets_Bookings();
-				$EM_Booking->tickets_bookings->booking = $EM_Ticket_Booking->booking = $EM_Booking;
-				$EM_Booking->tickets_bookings->add( $EM_Ticket_Booking );
-				$post_validation = $EM_Booking->validate();
-				do_action('em_booking_add', $EM_Event, $EM_Booking, $post_validation);
-				if( $post_validation ){
-					//Now save booking
-					if( $EM_Event->get_bookings()->add($EM_Booking) ){
-						$result = true;
-						$EM_Notices->add_confirm( $EM_Event->get_bookings()->feedback_message );		
-						$feedback = $EM_Event->get_bookings()->feedback_message;	
-					}else{
-						$result = false;
-						$EM_Notices->add_error( $EM_Event->get_bookings()->get_errors() );			
-						$feedback = $EM_Event->get_bookings()->feedback_message;
-						if( empty($feedback) ) $feedback = implode("\r\n", $EM_Event->get_bookings()->get_errors());
-					}
-				}else{
-					$result = false;
-					$EM_Notices->add_error( $EM_Booking->get_errors() );
-					$feedback = $EM_Event->get_bookings()->feedback_message;
-				}
-			}else{
-				$result = false;
-				$feedback = get_option('dbem_booking_feedback_already_booked');
-				$EM_Notices->add_error( $feedback );
-			}
 	  	}elseif ( $_REQUEST['action'] == 'booking_cancel') {
 	  		//Cancel Booking
 			em_verify_nonce('booking_cancel');
-	  		if( $EM_Booking->can_manage() || ($EM_Booking->person->ID == get_current_user_id() && get_option('dbem_bookings_user_cancellation')) ){
+	  		if( $EM_Booking->can_manage() ){
 				if( $EM_Booking->cancel() ){
 					$result = true;
 					if( !defined('DOING_AJAX') ){
@@ -514,13 +479,6 @@ function em_init_actions() {
 			echo EM_Object::json_encode(apply_filters('em_action_'.$_REQUEST['action'], $return, $EM_Booking));
 			die();
 		}
-	}elseif( !empty($_REQUEST['action']) && $_REQUEST['action'] == 'booking_add' && !is_user_logged_in() && !get_option('dbem_bookings_anonymous')){
-		$EM_Notices->add_error( get_option('dbem_booking_feedback_log_in') );
-		if( !$result && defined('DOING_AJAX') ){
-			$return = array('result'=>false, 'message'=>$EM_Booking->feedback_message, 'errors'=>$EM_Notices->get_errors());
-			echo EM_Object::json_encode(apply_filters('em_action_'.$_REQUEST['action'], $return, $EM_Booking));
-		}
-		die();
 	}
 	
 	//AJAX call for searches

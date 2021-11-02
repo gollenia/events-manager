@@ -310,12 +310,9 @@ function em_get_wp_users( $args = array(), $extra_users = array() ) {
 
 function em_get_attributes($lattributes = false){
 	$attributes = array('names'=>array(), 'values'=>array());
-	if( !$lattributes && !get_option('dbem_attributes_enabled') ) return $attributes;
-	if( $lattributes && !get_option('dbem_location_attributes_enabled') ) return $attributes;
+	if( !$lattributes ) return $attributes;
 	//We also get a list of attribute names and create a ddm list (since placeholders are fixed)
 	$formats =
-		get_option ( 'dbem_placeholders_custom' ).
-		get_option ( 'dbem_location_placeholders_custom' ).
 		get_option ( 'dbem_full_calendar_event_format' ).
 		get_option ( 'dbem_rss_description_format' ).
 		get_option ( 'dbem_rss_title_format' ).
@@ -325,7 +322,6 @@ function em_get_attributes($lattributes = false){
 		get_option ( 'dbem_location_page_title_format' ).
 		get_option ( 'dbem_event_list_item_format' ).
 		get_option ( 'dbem_event_page_title_format' ).
-		get_option ( 'dbem_single_event_format' ).
 		get_option ( 'dbem_single_location_format' );
 	//We now have one long string of formats, get all the attribute placeholders
 	if( $lattributes ){
@@ -358,55 +354,7 @@ function em_get_attributes($lattributes = false){
  * @param EM_Booking $EM_Booking 
  */
 function em_booking_add_registration( $EM_Booking ){
-    global $EM_Notices;
-    //Does this user need to be registered first?
-    $registration = true;
-    if( ((!is_user_logged_in() && get_option('dbem_bookings_anonymous')) || EM_Bookings::is_registration_forced()) && !get_option('dbem_bookings_registration_disable') ){
-    	//find random username - less options for user, less things go wrong
-    	$user_email = trim(wp_unslash($_REQUEST['user_email'])); //otherwise may fail validation
-    	$username_root = explode('@', wp_kses_data($user_email));
-    	$username_root = $username_rand = sanitize_user($username_root[0], true);
-    	while( username_exists($username_rand) ) {
-    		$username_rand = $username_root.rand(1,1000);
-    	}
-    	$_REQUEST['dbem_phone'] = (!empty($_REQUEST['dbem_phone'])) ? wp_kses_data($_REQUEST['dbem_phone']):''; //fix to prevent warnings
-    	$_REQUEST['user_name'] = (!empty($_REQUEST['user_name'])) ? wp_kses_data($_REQUEST['user_name']):''; //fix to prevent warnings
-    	$user_data = array('user_login' => $username_rand, 'user_email'=> $user_email, 'user_name'=> $_REQUEST['user_name'], 'dbem_phone'=> $_REQUEST['dbem_phone']);
-    	$id = em_register_new_user($user_data);
-    	if( is_numeric($id) ){
-    		$EM_Person = new EM_Person($id);
-    		$EM_Booking->person_id = $id;
-    		$feedback = get_option('dbem_booking_feedback_new_user');
-    		$EM_Notices->add_confirm( $feedback );
-    		add_action('em_bookings_added', 'em_new_user_notification');
-    	}else{
-    		$registration = false;
-    		if( is_object($id) && get_class($id) == 'WP_Error'){
-    			/* @var $id WP_Error */
-    			if( $id->get_error_code() == 'email_exists' ){
-    				$EM_Notices->add_error( get_option('dbem_booking_feedback_email_exists') );
-    			}else{
-    				$EM_Notices->add_error( $id->get_error_messages() );
-    			}
-    		}else{
-    			$EM_Notices->add_error( get_option('dbem_booking_feedback_reg_error') );
-    		}
-    	}
-    }elseif( (!is_user_logged_in() || EM_Bookings::is_registration_forced()) && get_option('dbem_bookings_registration_disable') ){
-    	//Validate name, phone and email
-    	if( $EM_Booking->get_person_post() ){
-	    	//Save default person to booking
-	    	$EM_Booking->person_id = 0;
-    	}else{
-    	    $registration = false;
-    	}
-    }elseif( !is_user_logged_in() ){
-    	$registration = false;
-    	$EM_Notices->add_error( get_option('dbem_booking_feedback_log_in') );
-    }elseif( empty($EM_Booking->person_id) ){ //user must be logged in, so we make this person the current user id
-    	$EM_Booking->person_id = get_current_user_id();
-    }
-    return apply_filters('em_booking_add_registration_result', $registration, $EM_Booking, $EM_Notices);
+    return false;
 }
 
 /**

@@ -11,7 +11,7 @@ $dbem_event_format = str_replace('"', "'", file_get_contents(WP_PLUGIN_DIR.'/eve
 $dbem_debug_options = array(
 	//Event Formatting
 	'dbem_event_list_item_format' => '<li>#j #M #Y - #H:#i<br/> #_EVENTLINK<br/>#_LOCATIONTOWN </li>',
-	'dbem_single_event_format' => $dbem_event_format,
+	
 	//Location Formatting
 	'dbem_location_event_list_item_format' => "<li>#_LOCATIONNAME - #j #M #Y - #H:#i</li>",
 	'dbem_location_list_item_format' => '#_LOCATIONLINK<ul><li>#_LOCATIONADDRESS</li><li>#_LOCATIONTOWN</li></ul>',

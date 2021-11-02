@@ -60,8 +60,7 @@ class Event_Locations {
 	 * @return bool
 	 */
 	public static function is_enabled( $type ){
-		$location_types = get_option('dbem_location_types', array());
-		return !empty($location_types[$type]) && !empty(self::$types[$type]) && class_exists(self::$types[$type]);
+		return true;
 	}
 	
 }

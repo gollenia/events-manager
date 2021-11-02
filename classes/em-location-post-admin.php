@@ -179,9 +179,7 @@ class EM_Location_Post_Admin{
 		}
 		add_meta_box('em-location-where', __('Where','events-manager'), array('EM_Location_Post_Admin','meta_box_where'),EM_POST_TYPE_LOCATION, 'normal','high');
 		//add_meta_box('em-location-metadump', __('EM_Location Meta Dump','events-manager'), array('EM_Location_Post_Admin','meta_box_metadump'),EM_POST_TYPE_LOCATION, 'normal','high');
-		if( get_option('dbem_location_attributes_enabled') ){
-			add_meta_box('em-location-attributes', __('Attributes','events-manager'), array('EM_Location_Post_Admin','meta_box_attributes'),EM_POST_TYPE_LOCATION, 'normal','default');
-		}
+		
 		//anonymous submission meta
 		if( !empty($EM_Location->owner_anonymous) ){
 			add_meta_box('em-location-anonymous', __('Anonymous Submitter Info','events-manager'), array('EM_Location_Post_Admin','meta_box_anonymous'),EM_POST_TYPE_LOCATION, 'side','high');

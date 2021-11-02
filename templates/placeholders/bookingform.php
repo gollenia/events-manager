@@ -15,14 +15,14 @@ global $EM_Notices;
 $tickets_count = count($EM_Event->get_bookings()->get_tickets()->tickets);
 $available_tickets_count = count($EM_Event->get_bookings()->get_available_tickets());
 //decide whether user can book, event is open for bookings etc.
-$can_book = is_user_logged_in() || (get_option('dbem_bookings_anonymous') && !is_user_logged_in());
+$can_book = true;
 $is_open = $EM_Event->get_bookings()->is_open(); //whether there are any available tickets right now
 $show_tickets = true;
 //if user is logged out, check for member tickets that might be available, since we should ask them to log in instead of saying 'bookings closed'
 if( !$is_open && !is_user_logged_in() && $EM_Event->get_bookings()->is_open(true) ){
     $is_open = true;
     $can_book = false;
-	$show_tickets = get_option('dbem_bookings_tickets_show_unavailable') && get_option('dbem_bookings_tickets_show_member_tickets');
+	$show_tickets = get_option('dbem_bookings_tickets_show_member_tickets');
 }
 ?>
 <div id="em-booking" class="em-booking <?php if( get_option('dbem_css_rsvp') ) echo 'css-booking'; ?>">
@@ -31,12 +31,7 @@ if( !$is_open && !is_user_logged_in() && $EM_Event->get_bookings()->is_open(true
 		$EM_Booking = $EM_Event->get_bookings()->has_booking();
 		do_action('em_booking_form_top', $EM_Event);
 	?>
-	<?php if( is_object($EM_Booking) && !get_option('dbem_bookings_double') ): //Double bookings not allowed ?>
-		<p>
-			<?php echo get_option('dbem_bookings_form_msg_attending'); ?>
-			<a href="<?php echo em_get_my_bookings_url(); ?>"><?php echo get_option('dbem_bookings_form_msg_bookings_link'); ?></a>
-		</p>
-	<?php elseif( !$EM_Event->event_rsvp ): //bookings not enabled ?>
+	<?php if( !$EM_Event->event_rsvp ): //bookings not enabled ?>
 		<p><?php echo get_option('dbem_bookings_form_msg_disabled'); ?></p>
 	<?php elseif( $EM_Event->get_bookings()->get_available_spaces() <= 0 ): ?>
 		<p><?php echo get_option('dbem_bookings_form_msg_full'); ?></p>
@@ -53,7 +48,7 @@ if( !$is_open && !is_user_logged_in() && $EM_Event->get_bookings()->is_open(true
 			 	<input type='hidden' name='_wpnonce' value='<?php echo wp_create_nonce('booking_add'); ?>'/>
 				<?php 
 					// Tickets Form
-					if( $show_tickets && ($can_book || get_option('dbem_bookings_tickets_show_loggedout')) && ($tickets_count > 1 || get_option('dbem_bookings_tickets_single_form')) ){ //show if more than 1 ticket, or if in forced ticket list view mode
+					if( $show_tickets && ($can_book || get_option('dbem_bookings_tickets_single_form')) ){ //show if more than 1 ticket, or if in forced ticket list view mode
 						do_action('em_booking_form_before_tickets', $EM_Event); //do not delete
 						//Show multiple tickets form to user, or single ticket list if settings enable this
 						//If logged out, can be allowed to see this in settings witout the register form 
@@ -100,12 +95,7 @@ if( !$is_open && !is_user_logged_in() && $EM_Event->get_bookings()->is_open(true
 					<p class="em-booking-form-details"><?php echo get_option('dbem_booking_feedback_log_in'); ?></p>
 				<?php endif; ?>
 			</form>	
-			<?php 
-			if( !is_user_logged_in() && get_option('dbem_bookings_login_form') ){
-				//User is not logged in, show login form (enabled on settings page)
-				em_locate_template('forms/bookingform/login.php',true, array('EM_Event'=>$EM_Event));
-			}
-			?>
+			
 			<br class="clear" style="clear:left;" />  
 		<?php endif; ?>
 	<?php endif; ?>

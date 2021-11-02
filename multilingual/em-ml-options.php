@@ -23,7 +23,7 @@ class EM_ML_Options {
 				'dbem_event_list_item_format_footer',
 				'dbem_no_events_message',
 				'dbem_list_date_title',
-				'dbem_single_event_format',
+				
 		        'dbem_event_excerpt_format',
 		        'dbem_event_excerpt_alt_format',
 				//Search Form
@@ -121,8 +121,8 @@ class EM_ML_Options {
 				'dbem_bookings_form_msg_disabled',
 				'dbem_bookings_form_msg_closed',
 				'dbem_bookings_form_msg_full',
-				'dbem_bookings_form_msg_attending',
-				'dbem_bookings_form_msg_bookings_link',
+				
+				
 				'dbem_booking_feedback',
 				'dbem_booking_feedback_pending',
 				'dbem_booking_feedback_full',
@@ -136,14 +136,11 @@ class EM_ML_Options {
 				'dbem_booking_button_msg_book',
 				'dbem_booking_button_msg_booking',
 				'dbem_booking_button_msg_booked',
-				'dbem_booking_button_msg_already_booked',
+				
 				'dbem_booking_button_msg_error',
 				'dbem_booking_button_msg_full',
 				'dbem_booking_button_msg_closed',
-				'dbem_booking_button_msg_cancel',
-				'dbem_booking_button_msg_canceling',
-				'dbem_booking_button_msg_cancelled',
-				'dbem_booking_button_msg_cancel_error',
+
 				//booking form options
 				'dbem_bookings_submit_button',
 			//Emails

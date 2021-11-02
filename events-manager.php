@@ -102,7 +102,7 @@ if( is_admin() ){
 	require_once('admin/em-help.php');
 	require_once('admin/em-options.php');
 	require_once('admin/em-data-privacy.php');
-	require_once('admin/em-update.php');
+	require_once('em-update.php');
 
 	//post/taxonomy controllers
 	require_once('classes/em-event-post-admin.php');
@@ -334,10 +334,7 @@ class EM_Scripts_and_Styles {
 				'bb_booking' => get_option('dbem_booking_button_msg_booking'),
 				'bb_booked' => get_option('dbem_booking_button_msg_booked'),
 				'bb_error' => get_option('dbem_booking_button_msg_error'),
-				'bb_cancel' => get_option('dbem_booking_button_msg_cancel'),
-				'bb_canceling' => get_option('dbem_booking_button_msg_canceling'),
-				'bb_cancelled' => get_option('dbem_booking_button_msg_cancelled'),
-				'bb_cancel_error' => get_option('dbem_booking_button_msg_cancel_error')
+
 			));		
 		}
 		$em_localized_js['txt_search'] = get_option('dbem_search_form_text_label',__('Search','events-manager'));
@@ -541,10 +538,6 @@ if( is_multisite() ){
 				add_filter('pre_update_option_'.$global_option_name, array(&$this, 'pre_update_option_'.$global_option_name), 1,2);
 				add_action('add_option_'.$global_option_name, array(&$this, 'add_option_'.$global_option_name), 1,1);
 			}
-			//if we're in MS Global mode, the categories option currently resides in the main blog, consider moving this to a network setting in the future
-			if( EM_MS_GLOBAL ){
-			    add_filter('pre_option_dbem_categories_enabled', array(&$this, 'pre_option_dbem_categories_enabled'), 1,1);
-			}
 		}
 		function get_globals(){
 			$globals = array(
@@ -580,17 +573,7 @@ if( is_multisite() ){
 			}
 			return $value[0];
 		}
-		/**
-		 * Returns the option of the main site in this network, this function should only be fired if in MS Global mode.
-		 * @param int $value
-		 * @return int
-		 */
-		function pre_option_dbem_categories_enabled($value){
-		    if( !is_main_site() ){ //only alter value if not on main site already
-		        $value = get_blog_option(get_current_site()->blog_id, 'dbem_categories_enabled') ? 1:0; //return a number since false will not circumvent pre_option_ filter
-		    }
-		    return $value;
-		}
+		
 	}
 	global $EM_MS_Globals;
 	$EM_MS_Globals = new EM_MS_Globals();
@@ -724,4 +707,12 @@ function em_deactivate() {
 register_deactivation_hook( __FILE__,'em_deactivate');
 
 
+
+add_action( 'plugins_loaded', 'wpdocs_load_textdomain' );
+/**
+ * Load plugin textdomain.
+ */
+function wpdocs_load_textdomain() {
+	load_plugin_textdomain('events-manager', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' ); 
+}
 ?>

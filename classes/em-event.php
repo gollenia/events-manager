@@ -165,6 +165,10 @@ class EM_Event extends EM_Object{
 	var $event_owner_anonymous;
 	var $event_owner_name;
 	var $event_owner_email;
+
+	/* new attributes */
+	var $event_audience = "";
+	var int $speaker_id = 0;
 	/**
 	 * Previously used to give this object shorter property names for db values (each key has a name) but this is now deprecated, use the db field names as properties. This propertey provides extra info about the db fields.
 	 * @var array
@@ -408,13 +412,7 @@ class EM_Event extends EM_Object{
 		}
 		//set default timezone
 		if( empty($this->event_timezone) ){
-			if( get_option('dbem_timezone_enabled') ){
-				//get default timezone for event, and sanitize UTC variations
-				$this->event_timezone = get_option('dbem_timezone_default');
-				if( $this->event_timezone == 'UTC+0' || $this->event_timezone == 'UTC +0' ){ $this->event_timezone = 'UTC'; }
-			}else{
-				$this->event_timezone = EM_DateTimeZone::create()->getName(); //set a default timezone if none exists
-			}
+			$this->event_timezone = EM_DateTimeZone::create()->getName(); //set a default timezone if none exists
 		}
 		//set recurrence value already
 		$this->recurrence = $this->is_recurring() ? 1:0;
@@ -508,6 +506,7 @@ class EM_Event extends EM_Object{
 	
 	function load_postdata($event_post, $search_by = false){
 		//load event post object if it's an actual object and also a post type of our event CPT names
+
 		if( is_object($event_post) && ($event_post->post_type == 'event-recurring' || $event_post->post_type == EM_POST_TYPE_EVENT) ){
 			//load post data - regardless
 			$this->post_id = absint($event_post->ID);
@@ -525,6 +524,7 @@ class EM_Event extends EM_Object{
 			    $event_meta = $this->get_event_meta($search_by);
 			    if( !empty($event_meta['_event_location_type']) ) $this->event_location_type = $event_meta['_event_location_type']; //load this directly so we know further down whether this has an event location type to load
 				//Get custom fields and post meta
+				
 				foreach($event_meta as $event_meta_key => $event_meta_val){
 					$field_name = substr($event_meta_key, 1);
 					if($event_meta_key[0] != '_'){
@@ -532,11 +532,13 @@ class EM_Event extends EM_Object{
 					}elseif( is_string($field_name) && !in_array($field_name, $this->post_fields) ){
 						if( array_key_exists($field_name, $this->fields) ){
 							$this->$field_name = $event_meta_val[0];
-						}elseif( in_array($field_name, array('event_owner_name','event_owner_anonymous','event_owner_email')) ){
+						}elseif( in_array($field_name, array('event_owner_name','event_owner_anonymous','event_owner_email', 'event_audience')) ){
 							$this->$field_name = $event_meta_val[0];
 						}
 					}
 				}
+
+				$this->speaker_id = array_key_exists('speaker_id', $event_meta) ? intval($event_meta['speaker_id'][0]) : 0;
 				if( $this->has_event_location() ) $this->get_event_location()->load_postdata($event_meta);
 				//quick compatability fix in case _event_id isn't loaded or somehow got erased in post meta
 				if( empty($this->event_id) && !$this->is_recurring() ){
@@ -618,7 +620,7 @@ class EM_Event extends EM_Object{
 		$this->event_name = ( !empty($_POST['event_name']) ) ? sanitize_post_field('post_title', $_POST['event_name'], $this->post_id, 'db'):'';
 		$this->post_type = ($this->is_recurring() || !empty($_POST['recurring'])) ? 'event-recurring':EM_POST_TYPE_EVENT;
 		//don't forget categories!
-		if( get_option('dbem_categories_enabled') ) $this->get_categories()->get_post();
+		$this->get_categories()->get_post();
 		//get the rest and validate (optional)
 		$this->get_post_meta();
 		
@@ -760,28 +762,7 @@ class EM_Event extends EM_Object{
 			$this->event_rsvp_date = $this->event_rsvp_time = $this->rsvp_end = null;
 		}
 		
-		//Sort out event attributes - note that custom post meta now also gets inserted here automatically (and is overwritten by these attributes)
-		if(get_option('dbem_attributes_enabled')){
-			global $allowedtags;
-			if( !is_array($this->event_attributes) ){ $this->event_attributes = array(); }
-			$event_available_attributes = !empty($event_available_attributes) ? $event_available_attributes : em_get_attributes(); //we use this in locations, no need to repeat if needed
-			if( !empty($_POST['em_attributes']) && is_array($_POST['em_attributes']) ){
-				foreach($_POST['em_attributes'] as $att_key => $att_value ){
-					if( (in_array($att_key, $event_available_attributes['names']) || array_key_exists($att_key, $this->event_attributes) ) ){
-						$this->event_attributes[$att_key] = '';
-						$att_vals = isset($event_available_attributes['values'][$att_key]) ? count($event_available_attributes['values'][$att_key]) : 0;
-						if( $att_value != '' ){
-							if( $att_vals <= 1 || ($att_vals > 1 && in_array($att_value, $event_available_attributes['values'][$att_key])) ){
-								$this->event_attributes[$att_key] = wp_unslash($att_value);
-							}
-						}
-						if( $att_value == '' && $att_vals > 1){
-							$this->event_attributes[$att_key] = wp_unslash(wp_kses($event_available_attributes['values'][$att_key][0], $allowedtags));
-						}
-					}
-				}
-			}
-		}
+		
 		
 		//group id
 		$this->group_id = (!empty($_POST['group_id']) && is_numeric($_POST['group_id'])) ? absint($_POST['group_id']):0;
@@ -896,12 +877,14 @@ class EM_Event extends EM_Object{
 		if( EM_ML::$is_ml && !empty($_POST['event_language']) && array_key_exists($_POST['event_language'], EM_ML::$langs) ){
 			$this->event_language = $_POST['event_language'];
 		}
-		//categories in MS GLobal
-		if(EM_MS_GLOBAL && !is_main_site() && get_option('dbem_categories_enabled') ){
-			$this->get_categories()->get_post(); //it'll know what to do
-		}
+
 		$this->compat_keys(); //compatability
+
+		$this->event_audience = $_POST['event_audience'] ?? "";
+		$this->speaker_id = intval($_POST['speaker_id']) ?? 0;
+
 		return apply_filters('em_event_get_post_meta', count($this->errors) == 0, $this);
+
 	}
 	
 	function validate(){
@@ -993,7 +976,7 @@ class EM_Event extends EM_Object{
 	 * @return boolean
 	 */
 	function save(){
-		global $wpdb, $current_user, $blog_id, $EM_SAVING_EVENT;
+		global $blog_id, $EM_SAVING_EVENT;
 		$EM_SAVING_EVENT = true; //this flag prevents our dashboard save_post hooks from going further
 		if( !$this->can_manage('edit_events', 'edit_others_events') && empty($this->event_id) ){
 			//unless events can be submitted by an anonymous user (and this is a new event), user must have permissions.
@@ -1011,6 +994,7 @@ class EM_Event extends EM_Object{
 				$post_array = (array) get_post($this->post_id);
 			}
 		}
+
 		//Overwrite new post info
 		$post_array['post_type'] = ($this->recurrence && get_option('dbem_recurrence_enabled')) ? 'event-recurring':EM_POST_TYPE_EVENT;
 		$post_array['post_title'] = $this->event_name;
@@ -1041,12 +1025,10 @@ class EM_Event extends EM_Object{
 			$this->event_owner = $post_data->post_author;
 			$this->post_status = $post_data->post_status;
 			$this->get_status();
-			//Categories
-			if( get_option('dbem_categories_enabled') ){
-    			$this->get_categories()->event_id = $this->event_id;
-    			$this->categories->post_id = $this->post_id;
-    			$this->categories->save();
-			}
+			$this->get_categories()->event_id = $this->event_id;
+			$this->categories->post_id = $this->post_id;
+			$this->categories->save();
+		
 		
 			//save the image, errors here will surface during $this->save_meta()
 			$this->image_upload();
@@ -1063,6 +1045,7 @@ class EM_Event extends EM_Object{
 				$EM_Location->set_status(1, true);
 			}
 		}
+		
 		$return = apply_filters('em_event_save', $result, $this);
 		$EM_SAVING_EVENT = false;
 		//reload post data and add this event to the cache, after any other hooks have done their thing
@@ -1079,10 +1062,7 @@ class EM_Event extends EM_Object{
 	function save_meta(){
 		global $wpdb, $EM_SAVING_EVENT;
 		$EM_SAVING_EVENT = true;
-		//sort out multisite blog id if appliable
-		if( is_multisite() && empty($this->blog_id) ){
-			$this->blog_id = get_current_blog_id();
-		}
+
 		//trigger setting of event_end and event_start in case it hasn't been set already
 		$this->start();
 		$this->end();
@@ -1132,18 +1112,11 @@ class EM_Event extends EM_Object{
 					delete_post_meta($this->post_id, '_'.$key);
 				}
 			}
-			if( get_option('dbem_attributes_enabled') ){
-				//attributes get saved as individual keys
-				$atts = em_get_attributes(); //get available attributes that EM manages
-				$this->event_attributes = maybe_unserialize($this->event_attributes);
-				foreach( $atts['names'] as $event_attribute_key ){
-					if( array_key_exists($event_attribute_key, $this->event_attributes) && $this->event_attributes[$event_attribute_key] != '' ){
-						update_post_meta($this->post_id, $event_attribute_key, $this->event_attributes[$event_attribute_key]);
-					}else{
-						delete_post_meta($this->post_id, $event_attribute_key);
-					}
-				}
-			}
+			$this->speaker_id = intval($_POST['speaker_id']) ?? 0;
+			update_post_meta($this->post_id, 'event_audience', $this->event_audience);
+			update_post_meta($this->post_id, 'speaker_id', $this->speaker_id);
+			
+		
 			//update timestamps, dates and times
 			update_post_meta($this->post_id, '_event_start_local', $this->start()->getDateTime());
 			update_post_meta($this->post_id, '_event_end_local', $this->end()->getDateTime());
@@ -1233,21 +1206,9 @@ class EM_Event extends EM_Object{
 			}
 			$result = count($this->errors) == 0;
 			//deal with categories
-			if( get_option('dbem_categories_enabled') ){
-				if( EM_MS_GLOBAL ){ //EM_MS_Globals should look up original blog
-					//If we're saving event categories in MS Global mode, we'll add them here, saving by term id (cat ids are gone now)
-	                if( !is_main_site() ){
-	                    $this->get_categories()->save(); //it'll know what to do
-	                }else{
-	                    $this->get_categories()->save_index(); //just save to index, we assume cats are saved in $this->save();
-	                }
-				}elseif( get_option('dbem_default_category') > 0 ){
-					//double-check for default category in other instances
-					if( count($this->get_categories()) == 0 ){
-						$this->get_categories()->save(); //let the object deal with this...
-					}
-				}
-			}
+			
+		
+			
 		    $this->compat_keys(); //compatability keys, loaded before saving recurrences
 			//build recurrences if needed
 			if( $this->is_recurring() && $result && ($this->is_published() || $this->post_status == 'future' || (defined('EM_FORCE_RECURRENCES_SAVE') && EM_FORCE_RECURRENCES_SAVE)) ){ //only save events if recurring event validates and is published or set for future
@@ -1277,7 +1238,7 @@ class EM_Event extends EM_Object{
 		//First, duplicate.
 		if( $this->can_manage('edit_events','edit_others_events') ){
 			$EM_Event = clone $this;
-			if( get_option('dbem_categories_enabled') ) $EM_Event->get_categories(); //before we remove event/post ids
+			$EM_Event->get_categories(); //before we remove event/post ids
 			$EM_Event->get_bookings()->get_tickets(); //in case this wasn't loaded and before we reset ids
 			$EM_Event->event_id = null;
 			$EM_Event->post_id = null;
@@ -1297,12 +1258,12 @@ class EM_Event extends EM_Object{
 			if( $EM_Event->save() ){
 				$EM_Event->feedback_message = sprintf(__("%s successfully duplicated.", 'events-manager'), __('Event','events-manager'));
 				//save tags here - eventually will be moved into part of $this->save();
-				if( get_option('dbem_tags_enabled') ){
-					$EM_Tags = new EM_Tags($this);
-					$EM_Tags->event_id = $EM_Event->event_id;
-					$EM_Tags->post_id = $EM_Event->post_id;
-					$EM_Tags->save();
-				}
+				
+				$EM_Tags = new EM_Tags($this);
+				$EM_Tags->event_id = $EM_Event->event_id;
+				$EM_Tags->post_id = $EM_Event->post_id;
+				$EM_Tags->save();
+			
 			 	//other non-EM post meta inc. featured image
 				$event_meta = $this->get_event_meta($this->blog_id);
 				$new_event_meta = $EM_Event->get_event_meta($EM_Event->blog_id);
@@ -1865,13 +1826,12 @@ class EM_Event extends EM_Object{
 	
 	/**
 	 * Will output a single event format of this event. 
-	 * Equivalent of calling EM_Event::output( get_option ( 'dbem_single_event_format' ) )
+	 * 
 	 * @param string $target
 	 * @return string
 	 */
 	function output_single($target='html'){
-		$format = get_option ( 'dbem_single_event_format' );
-		return apply_filters('em_event_output_single', $this->output($format, $target), $this, $target);
+		return "";
 	}
 	
 	/**
@@ -2376,7 +2336,7 @@ class EM_Event extends EM_Object{
 					if( $this->get_bookings()->is_open() || !empty($show_all_ticket_prices) ){
 						foreach( $this->get_tickets()->tickets as $EM_Ticket ){
 							/* @var $EM_Ticket EM_Ticket */
-							if( $EM_Ticket->is_available() || get_option('dbem_bookings_tickets_show_unavailable') || !empty($show_all_ticket_prices) ){
+							if( $EM_Ticket->is_available() || !empty($show_all_ticket_prices) ){
 								if($EM_Ticket->get_price() > $max ){
 									$max = $EM_Ticket->get_price();
 								}
@@ -2531,28 +2491,24 @@ class EM_Event extends EM_Object{
 				//Categories and Tags
 				case '#_EVENTCATEGORIESIMAGES':
 				    $replace = '';
-				    if( get_option('dbem_categories_enabled') ){
-    					ob_start();
-    					$template = em_locate_template('placeholders/eventcategoriesimages.php', true, array('EM_Event'=>$this));
-    					$replace = ob_get_clean();
-				    }
+					ob_start();
+					$template = em_locate_template('placeholders/eventcategoriesimages.php', true, array('EM_Event'=>$this));
+					$replace = ob_get_clean();
 					break;
 				case '#_EVENTTAGS':
 				    $replace = '';
-                    if( get_option('dbem_tags_enabled') ){
-    					ob_start();
-    					$template = em_locate_template('placeholders/eventtags.php', true, array('EM_Event'=>$this));
-    					$replace = ob_get_clean();
-                    }
+                    
+					ob_start();
+					$template = em_locate_template('placeholders/eventtags.php', true, array('EM_Event'=>$this));
+					$replace = ob_get_clean();
+				
 					break;
 				case '#_CATEGORIES': //deprecated
 				case '#_EVENTCATEGORIES':
 				    $replace = '';
-				    if( get_option('dbem_categories_enabled') ){
-    					ob_start();
-    					$template = em_locate_template('placeholders/categories.php', true, array('EM_Event'=>$this));
-    					$replace = ob_get_clean();
-				    }
+				    ob_start();
+    				$template = em_locate_template('placeholders/categories.php', true, array('EM_Event'=>$this));
+    				$replace = ob_get_clean();
 					break;
 				//Ical Stuff
 				case '#_EVENTICALURL':
@@ -2660,23 +2616,23 @@ class EM_Event extends EM_Object{
 			}
 		}
 		
-		if( get_option('dbem_categories_enabled') ){
-    		//for backwards compat and easy use, take over the individual category placeholders with the frirst cat in th elist.
-    		if( count($this->get_categories()) > 0 ){
-    			$EM_Category = $this->get_categories()->get_first();
-    		}
-    		if( empty($EM_Category) ) $EM_Category = new EM_Category();
-    		$event_string = $EM_Category->output($event_string, $target);
+	
+		//for backwards compat and easy use, take over the individual category placeholders with the frirst cat in th elist.
+		if( count($this->get_categories()) > 0 ){
+			$EM_Category = $this->get_categories()->get_first();
 		}
+		if( empty($EM_Category) ) $EM_Category = new EM_Category();
+		$event_string = $EM_Category->output($event_string, $target);
 		
-		if( get_option('dbem_tags_enabled') ){
-			$EM_Tags = new EM_Tags($this);
-			if( count($EM_Tags) > 0 ){
-				$EM_Tag = $EM_Tags->get_first();
-			}
-			if( empty($EM_Tag) ) $EM_Tag = new EM_Tag();
-			$event_string = $EM_Tag->output($event_string, $target);
+		
+		
+		$EM_Tags = new EM_Tags($this);
+		if( count($EM_Tags) > 0 ){
+			$EM_Tag = $EM_Tags->get_first();
 		}
+		if( empty($EM_Tag) ) $EM_Tag = new EM_Tag();
+		$event_string = $EM_Tag->output($event_string, $target);
+	
 		
 		//Finally, do the event notes, so that previous placeholders don't get replaced within the content, which may use shortcodes
 		if( !empty($desc_replace) ){
