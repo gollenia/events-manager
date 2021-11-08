@@ -354,7 +354,7 @@ function em_get_attributes($lattributes = false){
  * @param EM_Booking $EM_Booking 
  */
 function em_booking_add_registration( $EM_Booking ){
-    return false;
+    return true;
 }
 
 /**
