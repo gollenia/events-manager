@@ -64,7 +64,7 @@ function em_ms_admin_options_page() {
 		em_admin_options_reset_page();
 		return;
 	}
-	em_pro_update_notice();
+
 	//TODO place all options into an array
 	$tabs_enabled = defined('EM_SETTINGS_TABS') && EM_SETTINGS_TABS;
 	$events_placeholders = '<a href="'.EM_ADMIN_URL .'&amp;events-manager-help#event-placeholders">'. __('Event Related Placeholders','events-manager') .'</a>';

@@ -456,7 +456,6 @@ function em_admin_options_page() {
 	global $save_button;
 	$save_button = '<tr><th>&nbsp;</th><td><p class="submit" style="margin:0px; padding:0px; text-align:right;"><input type="submit" class="button-primary" name="Submit" value="'. __( 'Save Changes', 'events-manager') .' ('. __('All','events-manager') .')" /></p></td></tr>';
 	
-	if( !is_multisite() ) em_pro_update_notice();
 	
 	if( defined('EM_SETTINGS_TABS') && EM_SETTINGS_TABS ){
 	    $tabs_enabled = true;

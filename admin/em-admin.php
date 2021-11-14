@@ -236,19 +236,5 @@ function em_user_action_links( $actions, $user ){
 }
 add_filter('user_row_actions','em_user_action_links',10,2);
 
-function em_pro_update_notice(){
-	// Check EM Pro update min
-	if( defined('EMP_VERSION') && EMP_VERSION < EM_PRO_MIN_VERSION && !defined('EMP_DISABLE_WARNINGS') ) {
-		$data = get_site_option('dbem_data');
-		$possible_notices = is_array($data) && !empty($data['admin_notices']) ? $data['admin_notices'] : array();
-		//we may have something to show, so we make sure that there's something to show right now
-		if( !isset($possible_notices['em-pro-updates']) ) {
-			?>
-			<div id="em_page_error" class="notice notice-warning">
-				<p><?php _e('There is a newer version of Events Manager Pro which is recommended for this current version of Events Manager as new features have been added. Please go to the plugin website and download the latest update.','events-manager'); ?></p>
-			</div>
-			<?php
-		}
-	}
-}
+
 ?>
