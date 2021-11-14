@@ -828,15 +828,6 @@ function em_add_options() {
 function em_upgrade_current_installation(){
 	global $wpdb, $wp_locale, $EM_Notices;
 	
-	// Check EM Pro update min
-	if( defined('EMP_VERSION') && EMP_VERSION < EM_PRO_MIN_VERSION && !defined('EMP_DISABLE_WARNINGS') ) {
-		$message = esc_html__('There is a newer version of Events Manager Pro which is recommended for this current version of Events Manager as new features have been added. Please go to the plugin website and download the latest update.','events-manager');
-		$EM_Admin_Notice = new EM_Admin_Notice(array('name' => 'em-pro-updates', 'who' => 'admin', 'where' => 'all', 'message' => "$message"));
-		EM_Admin_Notices::add($EM_Admin_Notice, is_multisite());
-	}
-	
-	
-	
 	if( get_option('dbem_version') != '' && get_option('dbem_version') < 5 ){
 		//make events, cats and locs pages
 		update_option('dbem_cp_events_template_page',1);
