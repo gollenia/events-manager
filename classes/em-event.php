@@ -2429,8 +2429,8 @@ class EM_Event extends EM_Object{
 				case '#_BOOKINGSCUTOFFTIME':
 					$replace = '';
 					if ($this->event_rsvp && get_option('dbem_rsvp_enabled') ) {
-						$replace_format = em_get_date_format() .' '. em_get_hour_format();
-						if( $result == '#_BOOKINGSCUTOFFDATE' ) $replace_format = em_get_date_format();
+						$replace_format = get_option('dbem_date_format') .' '. em_get_hour_format();
+						if( $result == '#_BOOKINGSCUTOFFDATE' ) $replace_format = get_option('dbem_date_format');
 						if( $result == '#_BOOKINGSCUTOFFTIME' ) $replace_format = em_get_hour_format();
 						$replace = $this->rsvp_end()->i18n($replace_format);
 					}

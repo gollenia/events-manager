@@ -734,10 +734,10 @@ class EM_Ticket extends EM_Object{
 	function output_property($property){
 		switch($property){
 			case 'start':
-				$value = ( $this->start()->valid ) ? $this->start()->i18n( em_get_date_format() ) : '';
+				$value = ( $this->start()->valid ) ? $this->start()->i18n( get_option('dbem_date_format') ) : '';
 				break;
 			case 'end':
-				$value = ( $this->end()->valid ) ? $this->end()->i18n( em_get_date_format() ) : '';
+				$value = ( $this->end()->valid ) ? $this->end()->i18n( get_option('dbem_date_format') ) : '';
 				break;
 			default:
 				$value = $this->$property;

@@ -1072,13 +1072,13 @@ class EM_Booking extends EM_Object{
 					$replace = $this->get_spaces();
 					break;
 				case '#_BOOKINGDATE':
-					$replace = ( $this->date() !== false ) ? $this->date()->i18n( em_get_date_format() ):'n/a';
+					$replace = ( $this->date() !== false ) ? $this->date()->i18n( get_option('dbem_date_format') ):'n/a';
 					break;
 				case '#_BOOKINGTIME':
 					$replace = ( $this->date() !== false ) ?  $this->date()->i18n( em_get_hour_format() ):'n/a';
 					break;
 				case '#_BOOKINGDATETIME':
-					$replace = ( $this->date() !== false ) ? $this->date()->i18n( em_get_date_format().' '.em_get_hour_format()):'n/a';
+					$replace = ( $this->date() !== false ) ? $this->date()->i18n( get_option('dbem_date_format').' '.em_get_hour_format()):'n/a';
 					break;
 				case '#_BOOKINGLISTURL':
 					$replace = em_get_my_bookings_url();

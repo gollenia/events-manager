@@ -67,7 +67,7 @@ class EM_DateTime extends DateTime {
 	 * @see DateTime::format()
 	 */
 	public function format( $format = 'Y-m-d H:i:s'){
-		if( !$this->valid && ($format == 'Y-m-d' || $format == em_get_date_format())) return '';
+		if( !$this->valid && ($format == 'Y-m-d' || $format == get_option('dbem_date_format'))) return '';
 		if( $format !== 'Y-m-d H:i:s' ) $format = $this->formatTimezones($format); // format UTC timezones
 		return parent::format($format);
 	}
@@ -97,7 +97,7 @@ class EM_DateTime extends DateTime {
 	 * @return string
 	 */
 	public function formatDefault( $include_hour = true ){
-		$format = $include_hour ? em_get_date_format() . ' ' . em_get_hour_format() : em_get_date_format();
+		$format = $include_hour ? get_option('dbem_date_format') . ' ' . em_get_hour_format() : get_option('dbem_date_format');
 		$format = apply_filters( 'em_datetime_format_default', $format, $include_hour );
 		return $this->i18n( $format );
 	}
@@ -109,7 +109,7 @@ class EM_DateTime extends DateTime {
 	 * @return string
 	 */
 	public function i18n( $format = 'Y-m-d H:i:s' ){
-		if( !$this->valid && $format == em_get_date_format()) return '';
+		if( !$this->valid && $format == get_option('dbem_date_format')) return '';
 		// since we use WP's date functions which don't use DateTime (and if so, don't inherit our timezones), we need to preformat timezone related formats, adapted from date_i18n
 		$format = $this->formatTimezones( $format );
 		// support for < WP 5.3.0
