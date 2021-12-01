@@ -322,7 +322,7 @@ class EM_Scripts_and_Styles {
 		    $em_localized_js = array_merge($em_localized_js, array(
 				'bookingInProgress' => __('Please wait while the booking is being submitted.','events-manager'),
 				'tickets_save' => __('Save Ticket','events-manager'),
-				'bookingajaxurl' => admin_url('admin-ajax.php'),
+				
 				'bookings_export_save' => __('Export Bookings','events-manager'),
 				'bookings_settings_save' => __('Save Settings','events-manager'),
 				'booking_delete' => __("Are you sure you want to delete?",'events-manager'),
