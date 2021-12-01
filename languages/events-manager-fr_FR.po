@@ -6736,3 +6736,42 @@ msgstr "Sammelaktionen"
 #: events-manager.php:387 templates/templates/events-search.php:28
 msgid "Search"
 msgstr "Suche"
+
+msgid "Speakers"
+msgstr "Referenten"
+
+msgid "Speaker"
+msgstr "Conférencier"
+
+msgid "Add Speaker"
+msgstr "Nouveau Conférencier"
+
+msgid "Edit Speaker"
+msgstr "changer de Conférencier"
+
+msgid "Delete Speaker"
+msgstr "supprimer le référent"
+
+msgid "Audience"
+msgstr "Groupe ciblé"
+
+msgid "People"
+msgstr "Personnes"
+
+msgid "France"
+msgstr "France"
+
+msgid "Germany"
+msgstr "Allemagne"
+
+msgid "Austria"
+msgstr "Autriche"
+
+msgid "Switzerland"
+msgstr "Suisse"
+
+msgid "England"
+msgstr "Angleterre"
+
+msgid "Netherlands"
+msgstr "Hollande"

@@ -6757,3 +6757,21 @@ msgstr "Zielgruppe"
 
 msgid "People"
 msgstr "Personen"
+
+msgid "France"
+msgstr "Frankreich"
+
+msgid "Germany"
+msgstr "Deutschland"
+
+msgid "Austria"
+msgstr "Österreich"
+
+msgid "Switzerland"
+msgstr "Schweiz"
+
+msgid "England"
+msgstr "England"
+
+msgid "Netherlands"
+msgstr "Holland"
