@@ -98,7 +98,7 @@ function wp_events_plugin_init(){
 		'exclude_from_search' => !get_option('dbem_cp_events_search_results'),
 		'publicly_queryable' => true,
 		'rewrite' => ['slug' => EM_POST_TYPE_EVENT_SLUG,'with_front'=>false],
-		'has_archive' => get_option('dbem_cp_events_has_archive', false) == true,
+		'has_archive' => false,
 		'supports' => $event_post_type_supports,
 		'capability_type' => 'event',
 		'capabilities' => [
