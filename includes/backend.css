@@ -1,0 +1,240 @@
+/*!*******************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[3].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[3].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[3].use[3]!./add-ons/blocks/blocks/upcoming/editor.scss ***!
+  \*******************************************************************************************************************************************************************************************************************************************************************/
+.posts {
+  display: -ms-grid;
+  display: grid;
+  gap: 10px;
+}
+
+.cols-large-1 {
+  -ms-grid-columns: auto;
+  grid-template-columns: auto;
+}
+
+.cols-large-2 {
+  -ms-grid-columns: auto auto;
+  grid-template-columns: auto auto;
+}
+
+.cols-large-3 {
+  -ms-grid-columns: auto auto auto;
+  grid-template-columns: auto auto auto;
+}
+
+.cols-large-4 {
+  -ms-grid-columns: auto auto auto auto;
+  grid-template-columns: auto auto auto auto;
+}
+
+.cols-large-5 {
+  -ms-grid-columns: auto auto auto auto auto;
+  grid-template-columns: auto auto auto auto auto;
+}
+
+.cols-large-6 .ctx-post {
+  -ms-grid-column: 1;
+  -ms-grid-column-span: 5;
+  grid-column: 1/6;
+}
+
+.ctx-post {
+  display: flex;
+  background: #fff;
+}
+.style-list h4 {
+  margin-left: 10px;
+  margin-top: 0px !important;
+  margin-bottom: 0px !important;
+}
+.style-list .ctx-post-image {
+  flex-shrink: 0;
+  margin-right: 20px;
+}
+.style-list img {
+  width: 30%;
+}
+.style-list .post-card {
+  align-items: center;
+}
+.style-list span {
+  color: #999;
+  font-size: 14px;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+.style-cards p, .style-cards span {
+  margin: 0px !important;
+  padding: 0px 10px;
+}
+.style-cards h4 {
+  margin: 5px 0px !important;
+  padding: 0px 10px;
+}
+.style-cards span {
+  color: #999;
+  font-size: 14px;
+}
+
+.ctx-round-image img {
+  border-radius: 100%;
+  width: 70%;
+}
+
+.ctx-text-align-center {
+  text-align: center;
+}
+.ctx-text-align-center .ctx-post-image {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.ctx-text-align-right {
+  text-align: right;
+}
+.ctx-text-align-right .ctx-post-image {
+  margin-left: auto;
+}
+
+.styleSelector Button {
+  flex-direction: column;
+  height: 70px;
+  background: #eee;
+  width: 70px;
+  border: 2px solid #eee;
+  margin-right: 5px;
+}
+.styleSelector Button.active {
+  border: 2px solid #007cba;
+}
+
+.styleSelector {
+  padding-top: 5px;
+  padding-bottom: 10px;
+}
+
+.wp-block-ctx-blocks-posts.columns-1 {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: (minmax(0, 1fr))[1];
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+
+.wp-block-ctx-blocks-posts.columns-2 {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: (minmax(0, 1fr))[2];
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.wp-block-ctx-blocks-posts.columns-3 {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: (minmax(0, 1fr))[3];
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.wp-block-ctx-blocks-posts.columns-4 {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: (minmax(0, 1fr))[4];
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.wp-block-ctx-blocks-posts.columns-5 {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: (minmax(0, 1fr))[5];
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.wp-block-ctx-blocks-posts.columns-6 {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: (minmax(0, 1fr))[6];
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+.wp-block-ctx-blocks-posts.columns-7 {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: (minmax(0, 1fr))[7];
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+
+.wp-block-ctx-blocks-posts.columns-8 {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: (minmax(0, 1fr))[8];
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+}
+
+.wp-block-ctx-blocks-posts.columns-9 {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: (minmax(0, 1fr))[9];
+  grid-template-columns: repeat(9, minmax(0, 1fr));
+}
+
+.wp-block-ctx-blocks-posts.columns-10 {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: (minmax(0, 1fr))[10];
+  grid-template-columns: repeat(10, minmax(0, 1fr));
+}
+
+.wp-block-ctx-blocks-posts.columns-11 {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: (minmax(0, 1fr))[11];
+  grid-template-columns: repeat(11, minmax(0, 1fr));
+}
+
+.wp-block-ctx-blocks-posts.columns-12 {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: (minmax(0, 1fr))[12];
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+}
+
+.wp-block-ctx-blocks-posts {
+  grid-gap: 1em;
+}
+.wp-block-ctx-blocks-posts div.post-card {
+  background-color: #fff;
+}
+.wp-block-ctx-blocks-posts div.post-card h3, .wp-block-ctx-blocks-posts div.post-card p {
+  padding: 10px;
+}
+.wp-block-ctx-blocks-posts.hover div.post-card:hover {
+  box-shadow: 0px 1px 16px #999;
+}
+.wp-block-ctx-blocks-posts.style-cards.round-images div.post-card {
+  padding: 10px;
+  text-align: center;
+}
+.wp-block-ctx-blocks-posts.style-cards.round-images img {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  border-radius: 50%;
+}
+.wp-block-ctx-blocks-posts.style-cards.round-images h3, .wp-block-ctx-blocks-posts.style-cards.round-images p {
+  margin: -10px;
+}
+.wp-block-ctx-blocks-posts.style-list div.post-card {
+  display: flex;
+  flex-direction: row;
+}
+.wp-block-ctx-blocks-posts.style-list div.post-card img {
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+.wp-block-ctx-blocks-posts.style-list.round-images img {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-left: 10px;
+  border-radius: 50%;
+}
+
+/*# sourceMappingURL=backend.css.map*/
