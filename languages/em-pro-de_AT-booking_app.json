@@ -1,0 +1,64 @@
+{
+	"domain": "em-pro",
+	"locale_data": {
+		"messages": {
+			"": {
+				"domain": "messages",
+				"plural_forms": "nplurals=2; plural=(n != 1);",
+				"lang": "de_AT"
+			},
+			"Next": [
+				"Weiter"
+			],
+			"Back": [
+				"Zurück"
+			],
+			"Close": [
+				"Schließen"
+			],
+			"Full price": [
+				"Gesamtpreis"
+			],
+			"Base price:": [
+				"Grundpreis:"
+			],
+			"Coupon": [
+				"Gutschein"
+			],
+			"Payment": [
+				"Bezahlung"
+			],
+            "Coupon code": [
+				"Gutschein-Code"
+			],
+			"Choose your Tickets first": [
+				"Wähle deine Tickets aus"
+			],
+			"Please give us some more data": [
+				"Ein paar Daten von dir brauchen wir noch"
+			],
+			"How do you want to pay?": [
+				"Wie möchtest du bezahlen?"
+			],
+            "Thank you for your order!": [
+				"Vielen Dank für deine Buchung!"
+			],
+			"Attendee": [
+				"Teilnehmer"
+			],
+			"for": [
+				"für"
+			],
+			"An error occured in our ordering system.": [
+				"In unserem Buchungsformular ist ein Fehler aufgetreten."
+			],
+			"Error: No connection to server.": [
+				"Es ist eine Fehler aufgerteten: Die Verbindung zu unserem Server wurde unterbrochen."
+			],
+			"You may try it later again. However our admin has been informed and will take care of the problem.": [
+				"Du kannst es später nocheinmal probieren. Unser Administrator wurde jedenfalls darüber informiert und kümmert sich schnellstmöglich um das Problem"
+			]
+
+		}
+	}
+}
