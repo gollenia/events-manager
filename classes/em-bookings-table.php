@@ -285,8 +285,9 @@ class EM_Bookings_Table{
 			<form id="em-bookings-table-export-form" class="em-bookings-table-form" action="" method="post">
 				<p><?php esc_html_e('Select the options below and export all the bookings you have currently filtered (all pages) into a CSV spreadsheet format.','events-manager') ?></p>
 				<?php if( !get_option('dbem_bookings_tickets_single') ): //single ticket mode means no splitting by ticket type ?>
-					<p><?php esc_html_e('Split bookings by ticket type','events-manager')?> <input type="checkbox" name="show_tickets" value="1" />
-					<a href="#" title="<?php esc_attr_e('If your events have multiple tickets, enabling this will show a separate row for each ticket within a booking.','events-manager'); ?>">?</a>
+					<p>
+					<input type="checkbox" name="show_tickets" value="1" />
+					<label><?php esc_html_e('Split bookings by ticket type','events-manager')?> </label>
 				<?php endif; ?>
 				<?php do_action('em_bookings_table_export_options'); ?>
 				<div id="em-bookings-table-settings-form-cols">
@@ -367,8 +368,8 @@ class EM_Bookings_Table{
 				
 				<div class='tablenav'>
 					<div class="alignleft actions">
-						<a href="#" class="em-bookings-table-export" id="em-bookings-table-export-trigger" rel="#em-bookings-table-export" title="<?php _e('Export these bookings.','events-manager'); ?>"></a>
-						<a href="#" class="em-bookings-table-settings" id="em-bookings-table-settings-trigger" rel="#em-bookings-table-settings"></a>
+						<a href="#" class="em-bookings-table-export button-secondary" id="em-bookings-table-export-trigger" rel="#em-bookings-table-export" title="<?php _e('Export these bookings.','events-manager'); ?>"><span class="dashicons dashicons-database-export"></span></a>
+						<a href="#" class="em-bookings-table-settings button-secondary" id="em-bookings-table-settings-trigger" rel="#em-bookings-table-settings"><span class="dashicons dashicons-editor-table"></a>
 						<?php if( $EM_Event === false ): ?>
 						<select name="scope">
 							<?php
@@ -401,11 +402,7 @@ class EM_Bookings_Table{
 						</select>
 						<input name="pno" type="hidden" value="1" />
 						<input id="post-query-submit" class="button-secondary" type="submit" value="<?php esc_attr_e( 'Filter' )?>" />
-						<?php if( $EM_Event !== false ): ?>
-						<?php esc_html_e('Displaying Event','events-manager'); ?> : <?php echo esc_html($EM_Event->event_name); ?>
-						<?php elseif( $EM_Person !== false ): ?>
-						<?php esc_html_e('Displaying User','events-manager'); echo ' : '.esc_html($EM_Person->get_name()); ?>
-						<?php endif; ?>
+						
 					</div>
 					<?php 
 					if ( $this->bookings_count >= $this->limit ) {
