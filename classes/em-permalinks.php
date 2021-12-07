@@ -139,9 +139,7 @@ if( !class_exists('EM_Permalinks') ){
 				$em_rules[$events_slug.'/(\d{4}-\d{2}-\d{2})$'] = 'index.php?post_type='.EM_POST_TYPE_EVENT.'&calendar_day=$matches[1]'; //event calendar date search
 				$em_rules[$events_slug.'/(\d{4}-\d{2}-\d{2})/page/?([0-9]{1,})/?$'] = 'index.php?post_type='.EM_POST_TYPE_EVENT.'&calendar_day=$matches[1]&paged=$matches[2]'; //event calendar date search paged
 				if( get_option('dbem_rsvp_enabled') ){
-					if( !get_option( 'dbem_my_bookings_page') || !is_object(get_post(get_option( 'dbem_my_bookings_page'))) ){ //only added if bookings page isn't assigned
-						$em_rules[$events_slug.'/my\-bookings$'] = 'index.php?post_type='.EM_POST_TYPE_EVENT.'&bookings_page=1'; //page for users to manage bookings
-					}
+					$em_rules[$events_slug.'/my\-bookings$'] = 'index.php?post_type='.EM_POST_TYPE_EVENT.'&bookings_page=1'; //page for users to manage bookings
 				}
 				//check for potentially conflicting posts with the same slug as events
 				$conflicting_posts = get_posts(array('name'=>EM_POST_TYPE_EVENT_SLUG, 'post_type'=>'any', 'numberposts'=>0));
@@ -293,20 +291,7 @@ if( !class_exists('EM_Permalinks') ){
  * @return string
  */
 function em_get_my_bookings_url(){
-	global $bp, $wp_rewrite;
-	// @todo add filter for bookings url, remove bp condition and add it to bp-em-core.php
-	if( !empty($bp->events->link) ){
-		//get member url
-		return $bp->events->link.'attending/';
-	}elseif( get_option('dbem_my_bookings_page') ){
-		return get_permalink(get_option('dbem_my_bookings_page'));
-	}else{
-		if( $wp_rewrite->using_permalinks() && !defined('EM_DISABLE_PERMALINKS') ){
-			return trailingslashit(EM_URI)."my-bookings/";
-		}else{
-			return preg_match('/\?/',EM_URI) ? EM_URI.'&bookings_page=1':EM_URI.'?bookings_page=1';
-		}
-	}
+	return "";
 }
 
 /**

@@ -190,7 +190,7 @@ class EM_ML_Options {
         add_filter('option_dbem_edit_events_page','EM_ML_Options::get_translated_page');
         add_filter('option_dbem_edit_locations_page','EM_ML_Options::get_translated_page');
         add_filter('option_dbem_edit_bookings_page','EM_ML_Options::get_translated_page');
-        add_filter('option_dbem_my_bookings_page','EM_ML_Options::get_translated_page');
+        
     }
 	
 	/**
