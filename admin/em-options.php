@@ -468,7 +468,7 @@ function em_admin_options_page() {
 	    $general_tab_link = $pages_tab_link = $formats_tab_link = $bookings_tab_link = $emails_tab_link = '';
 	}
 	?>
-	<script type="text/javascript" charset="utf-8"><?php include(EM_DIR.'/includes/js/admin-settings.js'); ?></script>
+	<script type="text/javascript" charset="utf-8"><?php include(EM_DIR.'/includes/admin-settings.js'); ?></script>
 	<style type="text/css">.postbox h3 { cursor:pointer; }</style>
 	<div class="wrap <?php if(empty($tabs_enabled)) echo 'tabs-active' ?>">
 		<h1 id="em-options-title"><?php _e ( 'Event Manager Options', 'events-manager'); ?></h1>
