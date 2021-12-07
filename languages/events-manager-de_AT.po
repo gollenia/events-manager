@@ -281,10 +281,6 @@ msgstr "Google Map Typ"
 msgid "Google offers different map displays, each with varying prices and free usage allowance. See our %s page for more information on these display options."
 msgstr "Google bietet verschiedene Kartenanzeigetypen zu variierenden Preisen und kostenlosen Optionen an. Für weitere Informationen über diese Anzeigetypen, sieh dir unsere %s Seite an."
 
-#: admin/settings/tabs/general.php:164
-msgid "Upgrade to %s for more options!"
-msgstr "Upgrade auf %s für mehr Optionen!"
-
 #: admin/settings/tabs/general.php:162
 msgctxt "Google Map Type"
 msgid "Embedded"
@@ -5274,16 +5270,16 @@ msgid "Booking already made"
 msgstr "Buchung bereits durchgeführt"
 
 #: admin/settings/tabs/bookings.php:77
-msgid "Booking complete"
-msgstr "Buchung durchgeführt"
+msgid "Stay tuned"
+msgstr "Bitte warten"
 
 #: admin/settings/tabs/bookings.php:76
 msgid "Booking in progress"
 msgstr "Buchung in Bearbeitung"
 
 #: admin/settings/tabs/bookings.php:75
-msgid "User can book"
-msgstr "Benutzer kann buchen"
+msgid "Button to open booking modal"
+msgstr "Button, um das Buchungsfenster zu öffnen"
 
 #: admin/settings/tabs/bookings.php:73
 msgid "With the %s placeholder, the below texts will be used."
