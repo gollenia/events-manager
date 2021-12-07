@@ -725,13 +725,16 @@ function em_ascii_encode($e){
     return $output;
 }
 
-/*
-if( !function_exists( 'is_main_query' ) ){
-	/**
-	 * Substitutes the original function in 3.3 onwards, for backwards compatability (only created if not previously defined)
-	 * @return bool
-	 
-	function is_main_query(){ global $wp_query; return $wp_query->in_the_loop == true; }
-}*/
+function get_twig_template($name) : string {
+	$filename = substr($name, strpos($name, "/")+1) . ".twig";
+	
+	if(file_exists(get_theme_file_path() . "/plugins/events/" . $filename)) {
+		return get_theme_file_path() . '/plugins/events/' . $filename;
+	}
 
-?>
+	if(file_exists(get_template_directory() . "/plugins/events/" . $filename)) {
+		return get_template_directory() . 'events/' . $filename;
+	}
+
+	return plugin_dir_path( __FILE__ ) . 'templates/' . $filename;
+}
