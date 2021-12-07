@@ -71,9 +71,9 @@
 			<tr class="em-header"><td colspan='2'><h4><?php _e('Booking button feedback messages','events-manager') ?></h4></td></tr>
 			<tr><td colspan='2'><?php echo sprintf(__('With the %s placeholder, the below texts will be used.','events-manager'),'<code>#_BOOKINGBUTTON</code>'); ?></td></tr>
 			<?php			
-			em_options_input_text ( __( 'User can book', 'events-manager'), 'dbem_booking_button_msg_book', '');
+			em_options_input_text ( __( 'Button to open booking modal', 'events-manager'), 'dbem_booking_button_msg_book', '');
 			em_options_input_text ( __( 'Booking in progress', 'events-manager'), 'dbem_booking_button_msg_booking', '');
-			em_options_input_text ( __( 'Booking complete', 'events-manager'), 'dbem_booking_button_msg_booked', '');
+			em_options_input_text ( __( 'Stay tuned', 'events-manager'), 'dbem_booking_button_msg_booked', '');
 			
 			em_options_input_text ( __( 'Booking error', 'events-manager'), 'dbem_booking_button_msg_error', '');
 			em_options_input_text ( __( 'Event fully booked', 'events-manager'), 'dbem_booking_button_msg_full', '');
