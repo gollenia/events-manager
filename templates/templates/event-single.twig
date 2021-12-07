@@ -1,0 +1,168 @@
+
+<article class="bg-gray-100">
+    <div class="content grid grid--columns-1 xl:grid--columns-3 grid--gap-12 py-16">
+        <div class="xl:grid__column--span-2">        
+            {% if post.post_excerpt %}<div class="pb-16">{{post.post_excerpt}}</div><hr>{% endif %}
+            <div class="pb-16 border-b-4 border-gray-400 border-dotted">{{ content }}</div>
+            {% if has_tickets %}
+           
+ 
+                {{ booking }}
+              
+            {% endif %}   
+        </div> 
+        <aside>
+           <div class="description p-8 bg-gray-200 rounded-xl">
+                <!-- AUDIENCE -->
+                {% if post.event_audience %}
+                <div class="description__item">
+                    <div class="description__image">
+                        <i class="description__icon material-icons">face</i>
+                    </div>
+                    <div class="description__text">
+                        <div class="description__title">{{ __("Audience", "em-pro")}}</div>
+                        <div class="description__data">{{post.event_audience}}</div>
+                    </div>
+                </div> 
+                {% endif %}
+                <!-- End AUDIENCE -->
+                <!-- DATE -->
+                <div class="description__item">
+                    <div class="description__image">
+                        <i class="description__icon material-icons">event</i>
+                    </div>
+                    <div class="description__text">
+                        <div class="description__title">{{ __("Date", "em-pro")}}</div>
+                        <div class="description__data">
+                        
+                            {% if post._event_start_date == post._event_end_date %}
+                            {{ post._event_start_date|date("j. F Y") }} 
+                            {% else %}
+                                {% if post._event_start_date|date("F") == post._event_end_date|date("F") %}
+                                    {{ post._event_start_date|date("j.") }} {{ __("to", "em-pro") }} {{ post._event_end|date("j. F Y") }}
+                                {% else %}
+                                    {{ post._event_start_date|date("j. F") }} {{ __("to", "em-pro") }} {{ post._event_end|date("j. F Y") }}
+                                {% endif %}
+                            {% endif %}
+
+                        </div>
+                    </div>                        
+                </div>
+                <!-- End DATE -->
+                <!-- TIME will only be shown, if the event is NOT an all-day event -->
+                {% if event.event_all_day != 1 %}
+                <div class="description__item">
+                    <div class="description__image">
+                        <i class="description__icon material-icons">schedule</i>
+                    </div>
+                    <div class="description__text">
+                        <div class="description__title">{{ __("Time", "em-pro")}}</div>
+                        <div class="description__data">
+                            {% if post._event_start_date == post._event_end_date %}
+                            {{ __("from", "em-pro") }} {{ post._event_start_time|date(site.option("dbem_time_format"), false) }} {{ __("to", "em-pro") }} {{ post._event_end_time|date(site.option("dbem_time_format"), false) }} {{ __("o'clock", "em-pro") }}
+                            {% else %}
+                                {{ __("Starts at", "em-pro") }} {{ post._event_start_time|date(site.option("dbem_time_format"), false) }} {{ __("o'clock", "em-pro") }}<br>{{ __("Ends at", "em-pro") }} {{ post._event_end_time|date(site.option("dbem_time_format"), false) }} {{ __("o'clock", "em-pro") }}
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+                <!-- End TIME -->
+                <!-- LOCATION -->
+                {% if location %}
+                <div class="description__item">  
+                    <div class="description__image">
+                        <i class="description__icon material-icons">place</i>
+                    </div>
+                    <div class="description__text">
+                        <div class="description__title">{{ __("Location", "events-manager")}}</div>
+                        <address class="description__data">{{location.location_name}}<br>{{location.address}}<br>{{location.postcode}} {{location.town}}</address>
+                    </div>
+                    
+                    {% if location.url %}
+                    <div class="description__action">
+                        <a target="_blank" href="{{location.url}}"><i class="material-icons">navigation</i></a>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endif %}
+                <!-- End LOCATION -->
+                <!-- SPACE WARNING -->
+                {% if bookings and bookings < 5 and bookings > 0 %}
+                <div class="description__item">
+                    <div class="description__image">
+                        <i class="description__icon material-icons">warning</i>
+                    </div>
+                    <div class="description__text">
+                        <div class="description__title">{{ __("Caution", "em-pro")}}</div>
+                        <div class="description__data">{{ __("Only few spaces left", "em-pro") }}</div>
+                    </div>
+                </div>
+                {% endif %}
+                {% if bookings and not bookings %}
+                <div class="description__item">
+                    <div class="description__image">
+                        <i class="description__icon material-icons">warning</i>
+                    </div>
+                    <div class="description__text">
+                        <div class="description__title">{{ __("Caution", "em-pro")}}</div>
+                        <div class="description__data">{{ __("No spaces left", "em-pro") }}</div>
+                    </div>
+                </div>
+                {% endif %}
+                <!-- End SPACE WARNING -->
+                <!-- PRICE -->
+                {% if bookings and price == 0 %}
+                <div class="description__item">
+                    <div class="description__image">
+                        <i class="description__icon material-icons">savings</i>
+                    </div>
+                    <div class="description__text">
+                        <div class="description__title">{{ __("Price", "em-pro")}}</div>
+                        <div class="description__data"> {{ __("Free", "em-pro")}} </div>
+                    </div>
+                </div>
+                {% elseif bookings and price != 0 %}
+                <div class="description__item">
+                    <div class="description__image">
+                        <i class="description__icon material-icons">payments</i>
+                    </div>
+                    <div class="description__text">
+                        <div class="description__title">{{ __("Price", "em-pro")}}</div>
+                        <div class="description__data"> {{price}} {{currency}} </div>
+                    </div>
+                </div>
+                {% endif %}
+                <!-- End PRICE -->
+                <!-- SPEAKER -->
+                {% if speaker %}
+                <div class="description__item">  
+                    <div class="description__image">
+                        <img src="{{speaker.thumbnail.src}}">
+                    </div>
+                    <div class="description__text">
+                        <div class="description__title">{{ __("Speaker", "em-pro")}}</div>
+                        <div class="description__data">{{speaker.post_title}}</div>
+                    </div>
+
+                    {% if speaker.email %}
+                    <div class="description__action">
+                        <a target="_blank" href="mailto:{{speaker.email}}"><i class="material-icons">mail</i></a>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endif %}
+                <!-- End SPEAKER -->
+                  
+            </div>
+            {% if events %}
+            <div class="mt-20">
+                <h3 class="mb-6 text-bold core-block">{{ __("Similar events", "em-pro")}}</h3>
+                {% include "partials/similar-events.twig" with {'events': events} %}
+            </div>
+            {% endif %}
+            
+        </aside>
+    </div>
+</article>
+

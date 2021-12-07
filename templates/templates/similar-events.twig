@@ -1,0 +1,23 @@
+
+    {% for item in events %}
+        <a class="card bg-white card--image-left card--hover card--shadow {{ loop.first ? "card--first" }} {{ loop.last ? "card--last" }}" href="{{item.link}}">
+            
+            <img src="{{ item.thumbnail.src('qmedium') }}" class="card__image">
+            
+            <div class="card__content">
+                <h5 class="card__title">{{item.title}}</h5>
+                <div class="card__subtitle">
+                {% if item._event_start_date == item._event_end_date %}
+                                {{ item._event_start_date|date("j. F Y") }} 
+                            {% else %}
+                                {% if item._event_start_date|date("F") == item._event_end_date|date("F") %}
+                                    {{ item._event_start_date|date("j.") }} {{ __("to", "ctx-theme") }} {{ item._event_end|date("j. F Y") }}
+                                {% else %}
+                                    {{ item._event_start_date|date("j. D.") }} {{ __("to", "ctx-theme") }} {{ item._event_end|date("j. F Y") }}
+                                {% endif %}
+                            {% endif %}
+                </div>
+                                
+            </div>
+    </a>
+    {% endfor %}
