@@ -637,7 +637,7 @@ function em_add_options() {
 		'dbem_calendar_direct_links' => 1,
 		//General Settings
 	
-		'dbem_require_location' => 0,
+		
 		'dbem_locations_enabled' => 1,
 		
 		'dbem_use_select_for_locations' => 0,
@@ -747,16 +747,11 @@ function em_add_options() {
 		'dbem_taxonomy_category_slug' => 'events/categories',
 		'dbem_taxonomy_tag_slug' => 'events/tags',
 		//event cp options
-		'dbem_cp_events_template' => '',
-		//'dbem_cp_events_template_page' => 0, DEPREICATED
-		'dbem_cp_events_body_class' => '',
-		'dbem_cp_events_post_class' => '',
 		
-		'dbem_cp_events_has_archive' => 1,
-		'dbem_events_default_archive_orderby' => '_event_start',
+
 		'dbem_events_default_archive_order' => 'ASC',
-		'dbem_events_archive_scope' => 'past',
-		'dbem_cp_events_archive_formats' => 1,
+
+		
 	    'dbem_cp_events_excerpt_formats' => 1,
 		'dbem_cp_events_search_results' => 0,
 		//location cp options
@@ -830,7 +825,7 @@ function em_upgrade_current_installation(){
 	
 	if( get_option('dbem_version') != '' && get_option('dbem_version') < 5 ){
 		//make events, cats and locs pages
-		update_option('dbem_cp_events_template_page',1);
+
 		update_option('dbem_cp_locations_template_page',1);
 		//reset orderby, or convert fields to new fieldnames
 		$EM_Event = new EM_Event();
@@ -864,15 +859,12 @@ function em_upgrade_current_installation(){
 		$wpdb->query("UPDATE ".EM_EVENTS_TABLE." SET event_rsvp_time = NULL, event_rsvp_date = NULL WHERE recurrence_id > 0");
 	}
 	if( get_option('dbem_version') != '' && get_option('dbem_version') < 5.364 ){
-		if( get_option('dbem_cp_events_template_page') ){
-			update_option('dbem_cp_events_template', 'page');
-			delete_option('dbem_cp_events_template_page');
-		}
+		
 		if( get_option('dbem_cp_locations_template_page') ){
 			update_option('dbem_cp_locations_template', 'page');
 			delete_option('dbem_cp_locations_template_page');
 		}
-		update_option('dbem_events_archive_scope', get_option('dbem_events_page_scope'));
+		
 		update_option('em_last_modified', current_time('timestamp', true));
 		update_option('dbem_category_event_single_format',get_option('dbem_category_event_list_item_header_format').get_option('dbem_category_event_list_item_format').get_option('dbem_category_event_list_item_footer_format'));
 		update_option('dbem_category_no_event_message',get_option('dbem_category_event_list_item_header_format').get_option('dbem_category_no_events_message').get_option('dbem_category_event_list_item_footer_format'));
@@ -961,10 +953,7 @@ function em_upgrade_current_installation(){
 	if( get_option('dbem_version') != '' && get_option('dbem_version') < 5.66 ){
 		if( get_option('dbem_ical_description_format') == "#_EVENTNAME - #_LOCATIONNAME - #_EVENTDATES - #_EVENTTIMES" ) update_option('dbem_ical_description_format',"#_EVENTNAME");
 		if( get_option('dbem_ical_location_format') == "#_LOCATION" ) update_option('dbem_ical_location_format', "#_LOCATIONNAME, #_LOCATIONFULLLINE, #_LOCATIONCOUNTRY");
-		$old_values = array(
-				'dbem_ical_description_format' => "#_EVENTNAME - #_LOCATIONNAME - #_EVENTDATES - #_EVENTTIMES",
-				'dbem_ical_location_format' => "#_LOCATION",
-		);
+		
 	}
 	if( get_option('dbem_version') != '' && get_option('dbem_version') < 5.6636 ){
 		$sql = $wpdb->prepare("DELETE FROM {$wpdb->postmeta} WHERE meta_key='_post_id' AND post_id IN (SELECT ID FROM {$wpdb->posts} WHERE post_type=%s OR post_type=%s)", array(EM_POST_TYPE_EVENT, 'event-recurring'));
@@ -979,13 +968,7 @@ function em_upgrade_current_installation(){
 			if( $migration_result !== true ){
 				$EM_Notices->add_error($migration_result);
 			}
-			//migrate certain options
-			$opt = get_option('dbem_tags_default_archive_orderby');
-			if( $opt == '_start_ts' ) update_option('dbem_tags_default_archive_orderby', '_event_start');
-			$opt = get_option('dbem_categories_default_archive_orderby');
-			if( $opt == '_start_ts' ) update_option('dbem_categories_default_archive_orderby', '_event_start');
-			$opt = get_option('dbem_events_default_archive_orderby');
-			if( $opt == '_start_ts' ) update_option('dbem_events_default_archive_orderby', '_event_start');
+
 		}else{
 			//we're doing this at multisite level instead within dev versions, so fix this for dev versions
 			unset( $admin_data['datetime_backcompat'] );
@@ -996,54 +979,13 @@ function em_upgrade_current_installation(){
 		if( empty($admin_data['updates']) ) $admin_data['updates'] = array(); 
 		$admin_data['updates']['timezone-backcompat'] = true;
 		update_site_option('dbem_data', $admin_data);
-		if( !is_multisite() || em_wp_is_super_admin() ){
-			$message = __('Events Manager now supports multiple timezones for your events! Your events will initially match your blog timezone.','events-manager');
-			if( is_multisite() ){
-				$url = network_admin_url('admin.php?page=events-manager-options#general+admin-tools');
-				$admin_tools_link = '<a href="'.$url.'">'.__('Network Admin').' &gt; '.__('Events Manager','events-manager').' &gt; '.__('Admin Tools','events-manager').'</a>';
-				$options_link = '<a href="'.network_admin_url('admin.php?page=events-manager-update').'">'.__('Update Network','events-manager').'</a>';
-				$message .= '</p><p>' . sprintf(__("Please update your network and when you're happy with the changes you can also finalize the migration by deleting unecessary data in the %s page.", 'events-manager'), $options_link);
-				$message .= '</p><p>' . sprintf(__('You can also reset all events of a blog to a new timezone in %s', 'events-manager'), $admin_tools_link);
-			}else{
-				$options_link = get_admin_url(null, 'edit.php?post_type=event&page=events-manager-options#general+admin-tools');
-				$options_link = '<a href="'.$options_link.'">'.__('Settings','events-manager').' &gt; '.__('General','events-manager').' &gt; '.__('Admin Tools','events-manager').'</a>';
-				$message .= '</p><p>' . sprintf(__('You can reset your events to a new timezone and also complete the final migration step by deleting unecessary data in %s', 'events-manager'), $options_link);
-			}
-			$EM_Admin_Notice = new EM_Admin_Notice(array(
-				'name' => 'date_time_migration',
-				'who' => 'admin',
-				'where' => 'all',
-				'message' => $message
-			));
-			EM_Admin_Notices::add($EM_Admin_Notice, is_multisite());
-		}
+		
 	}
-	if( get_option('dbem_version') != '' && get_option('dbem_version') == 5.9 && is_multisite() && !EM_MS_GLOBAL && (is_network_admin() || is_main_site()) ){
-		//warning just for users who upgraded to 5.9 on multisite without global tables enabled
-		$message = 'Due to a bug in 5.9 when updating to new timezones in MultiSite installations, you may notice some of your events are missing from lists.<br><br>To fix this problem, visit %s choose your timezone, select %s and click %s to update all your blogs to the desired timezone.';
-		$url = network_admin_url('admin.php?page=events-manager-options#general+admin-tools');
-		$admin_tools_link = '<a href="'.$url.'">'.esc_html(__('Network Admin').' &gt; '.__('Events Manager','events-manager').' &gt; '.__('Admin Tools','events-manager')).'</a>';
-		$message = sprintf($message, $admin_tools_link, '<em><strong>'.esc_html__('All Blogs', 'events-manager').'</strong></em>', '<em><strong>'.esc_html__('Reset Event Timezones','events-manager').'</strong></em>');
-		$EM_Admin_Notice = new EM_Admin_Notice(array(
-		'name' => 'date_time_migration_5.9_multisite',
-		'who' => 'admin',
-		'what' => 'warning',
-		'where' => 'all',
-		'message' => $message
-		));
-		EM_Admin_Notices::add($EM_Admin_Notice, is_multisite());
-	}
+	
 	if( get_option('dbem_version') != '' && get_option('dbem_version') < 5.93 ){
 		$message = __('Events Manager has introduced new privacy tools to help you comply with international laws such as the GDPR, <a href="%s">see our documentation</a> for more information.','events-manager');
 		$message = sprintf( $message, 'https://wp-events-plugin.com/documentation/data-privacy-gdpr-compliance/?utm_source=plugin&utm_campaign=gdpr_update');
 		$EM_Admin_Notice = new EM_Admin_Notice(array( 'name' => 'gdpr_update', 'who' => 'admin', 'where' => 'all', 'message' => $message ));
-		EM_Admin_Notices::add($EM_Admin_Notice, is_multisite());
-	}
-	if( get_option('dbem_version') != '' && get_option('dbem_version') < 5.95 ){
-		$message = esc_html__('Google has introduced new pricing for displaying maps on your site. If you have moderate traffic levels, this may likely affect you with surprise and unexpected costs!', 'events-manager');
-		$message2 = esc_html__('Events Manager has implemented multiple ways to help prevent or reduce these costs drastically, please check our %s page for more information.', 'events-manager');
-		$message2 = sprintf($message2, '<a href="https://wp-events-plugin.com/documentation/google-maps/api-usage/?utm_source=plugin&utm_source=medium=settings&utm_campaign=gmaps-update">'.esc_html__('documentation', 'events-manager') .'</a>');
-		$EM_Admin_Notice = new EM_Admin_Notice(array( 'name' => 'gdpr_update', 'who' => 'admin', 'where' => 'all', 'message' => "<p>$message</p><p>$message2</p>" ));
 		EM_Admin_Notices::add($EM_Admin_Notice, is_multisite());
 	}
 	if( get_option('dbem_version') != '' && get_option('dbem_version') < 5.9618 ){
@@ -1217,7 +1159,7 @@ function em_create_events_page(){
 		   		'post_slug' => 'my-bookings'
 			);
 			$bookings_post_id = wp_insert_post($post_data, false);
-	   		update_option('dbem_my_bookings_page', $bookings_post_id);
+	   		
 	   	}
 	}
 }
@@ -1257,21 +1199,7 @@ function em_migrate_v4(){
 			$cat_post_id = wp_insert_post($post_data, false);
 	   		update_option('dbem_categories_page', $cat_post_id);
 		}
-		if( !get_option('dbem_my_bookings_page') ){
-		   	//Now Categories Page
-		   	$post_data = array(
-				'post_status' => 'publish',
-		   		'post_parent' => $event_page_id,
-				'post_type' => 'page',
-				'ping_status' => get_option('default_ping_status'),
-				'post_content' => 'CONTENTS',
-				'post_excerpt' => '',
-				'post_title' => __('My Bookings','events-manager'),
-		   		'post_slug' => 'my-bookings'
-			);
-			$bookings_post_id = wp_insert_post($post_data, false);
-	   		update_option('dbem_my_bookings_page', $bookings_post_id);
-		}
+		
 	}
 	//set shared vars
 	$limit = 100;
