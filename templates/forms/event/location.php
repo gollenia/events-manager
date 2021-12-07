@@ -4,12 +4,12 @@ $required = apply_filters('em_required_html','required');
 
 //determine location types (if neexed)
 $location_types = array();
-if( !get_option('dbem_require_location') ){
-	$location_types[0] = array(
-		'selected' =>  $EM_Event->location_id === '0' || $EM_Event->location_id === 0,
-		'description' => esc_html__('No Location','events-manager'),
-	);
-}
+
+$location_types[0] = array(
+	'selected' =>  $EM_Event->location_id === '0' || $EM_Event->location_id === 0,
+	'description' => esc_html__('No Location','events-manager'),
+);
+
 if( EM_Locations::is_enabled() ){
 	$location_types['location'] = array(
 		'selected' =>  !empty($EM_Event->location_id),
@@ -67,7 +67,7 @@ foreach( EM_Event_Locations\Event_Locations::get_types() as $event_location_type
 				<td>
 					<select name="location_id" id='location-select-id' size="1">
 						<?php
-						if ( count($location_types) == 1 && !get_option('dbem_require_location') ){ // we don't consider optional locations as a type for ddm
+						if ( count($location_types) == 1 ){ // we don't consider optional locations as a type for ddm
 							?>
 							<option value="0"><?php esc_html_e('No Location','events-manager'); ?></option>
 							<?php
