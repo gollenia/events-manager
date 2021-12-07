@@ -1,3 +1,3 @@
-# Test Readme
+# Events
 
-Here, we have some readme stuff
+Based on Events Manager. Some of the features have been removed, some added. 
