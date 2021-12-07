@@ -31,22 +31,7 @@
         	</table>
 		</div> <!-- . inside --> 
 		</div> <!-- .postbox -->	
-
-		<div  class="postbox " id="em-opt-event-pages" >
-		<div class="handlediv" title="<?php __('Click to toggle', 'events-manager'); ?>"><br /></div><h3><span><?php echo sprintf(__('%s Pages','events-manager'),__('Event','events-manager')); ?></span></h3>
-		<div class="inside">
-        	<table class="form-table">
-        	<?php
-        	//em_options_radio_binary ( sprintf(__( 'Display %s as', 'events-manager'),__('events','events-manager')), 'dbem_cp_events_template_page', sprintf($template_page_tip, EM_POST_TYPE_EVENT), array(__('Posts'),__('Pages')) );
-        	em_options_select( sprintf(__( 'Display %s as', 'events-manager'),__('events','events-manager')), 'dbem_cp_events_template', $page_templates, sprintf($template_page_tip, __('events','events-manager'), EM_POST_TYPE_EVENT) );
-        	em_options_input_text( __('Body Classes','events-manager'), 'dbem_cp_events_body_class', sprintf($body_class_tip, __('event','events-manager')) );
-        	em_options_input_text( __('Post Classes','events-manager'), 'dbem_cp_events_post_class', $post_class_tip );
-        	
-			echo $save_button;
-        	?>
-        	</table>
-		</div> <!-- . inside --> 
-		</div> <!-- .postbox -->	
+	
     		
 		<div  class="postbox " id="em-opt-event-archives" >
 		<div class="handlediv" title="<?php __('Click to toggle', 'events-manager'); ?>"><br /></div><h3><span><?php echo sprintf(__('%s List/Archives','events-manager'),__('Event','events-manager')); ?></span></h3>
@@ -68,65 +53,14 @@
 				em_options_input_text ( __( 'Event Manager titles', 'events-manager'), 'dbem_title_html', __( "This only setting only matters if you selected 'Yes' to above. You will notice the events page titles aren't being rewritten, and you have a new title underneath the default page name. This is where you control the HTML of this title. Make sure you keep the #_PAGETITLE placeholder here, as that's what is rewritten by events manager. To control what's rewritten in this title, see settings further down for page titles.", 'events-manager') );
 				?>				
 			</tbody>
-			<tr class="em-header">
-				<td colspan="2">
-					<h4><?php echo sprintf(__('WordPress %s Archives','events-manager'), __('Event','events-manager')); ?></h4>
-					<p><?php echo sprintf(__('%s custom post types can have archives, just like normal WordPress posts. If enabled, should you visit your base slug url %s and you will see an post-formatted archive of previous %s', 'events-manager'), __('Event','events-manager'), '<code>'.home_url().'/'.esc_html(get_option('dbem_cp_events_slug',EM_POST_TYPE_EVENT_SLUG)).'/</code>', __('events','events-manager')); ?></p>
-					<p><?php echo sprintf(__('Note that assigning a %s page above will override this archive if the URLs collide (which is the default setting, and is recommended for maximum plugin compatibility). You can have both at the same time, but you must ensure that your page and %s slugs are different.','events-manager'), __('events','events-manager'), __('event','events-manager')); ?></p>
-				</td>
-			</tr>
-			<tbody class="em-event-archive-options">
-				<?php
-				em_options_radio_binary ( __( 'Enable Archives?', 'events-manager'), 'dbem_cp_events_has_archive', __( "Allow WordPress post-style archives.", 'events-manager') );
-				?>
-			</tbody>
-			<tbody class="em-event-archive-options em-event-archive-sub-options">
-				<tr valign="top">
-			   		<th scope="row"><?php _e('Default event archive ordering','events-manager'); ?></th>
-			   		<td>   
-						<select name="dbem_events_default_archive_orderby" >
-							<?php 
-								$event_archive_orderby_options = apply_filters('em_settings_events_default_archive_orderby_ddm', array(
-									'_event_start' => __('Order by start date, start time','events-manager'),
-									'title' => __('Order by name','events-manager')
-								));
-							?>
-							<?php foreach($event_archive_orderby_options as $key => $value) : ?>   
-			 				<option value='<?php echo esc_attr($key) ?>' <?php echo ($key == get_option('dbem_events_default_archive_orderby')) ? "selected='selected'" : ''; ?>>
-			 					<?php echo esc_html($value); ?>
-			 				</option>
-							<?php endforeach; ?>
-						</select> 
-						<select name="dbem_events_default_archive_order" >
-							<?php 
-							$ascending = __('Ascending','events-manager');
-							$descending = __('Descending','events-manager');
-							$event_archive_order_options = apply_filters('em_settings_events_default_archive_order_ddm', array(
-								'ASC' => __('Ascending','events-manager'),
-								'DESC' => __('Descending','events-manager')
-							)); 
-							?>
-							<?php foreach( $event_archive_order_options as $key => $value) : ?>   
-			 				<option value='<?php echo esc_attr($key) ?>' <?php echo ($key == get_option('dbem_events_default_archive_order')) ? "selected='selected'" : ''; ?>>
-			 					<?php echo esc_html($value); ?>
-			 				</option>
-							<?php endforeach; ?>
-						</select>
-						<br/>
-						<em><?php _e('When Events Manager displays lists of events the default behavior is ordering by start date in ascending order. To change this, modify the values above.','events-manager'); ?></em>
-					</td>
-			   	</tr>
-			   	<?php 
-			   	em_options_select( __('Event archives scope','events-manager'), 'dbem_events_archive_scope', em_get_scopes() );
-			   	?>
-			</tbody>
+
 			<tr class="em-header">
 				<td colspan="2">
 					<h4><?php echo _e('General settings','events-manager'); ?></h4>
 				</td>
 			</tr>	
 			<?php
-			em_options_radio_binary ( __( 'Override with Formats?', 'events-manager'), 'dbem_cp_events_archive_formats', sprintf($format_override_tip,__('events','events-manager')));
+			
 			em_options_radio_binary ( __( 'Override Excerpts with Formats?', 'events-manager'), 'dbem_cp_events_excerpt_formats', sprintf($format_override_tip,__('events','events-manager')));
 			em_options_radio_binary ( __( 'Are current events past events?', 'events-manager'), 'dbem_events_current_are_past', __( "By default, events that have an end date later than today will be included in searches, set this to yes to consider events that started 'yesterday' as past.", 'events-manager') );
 			em_options_radio_binary ( __( 'Include in WordPress Searches?', 'events-manager'), 'dbem_cp_events_search_results', sprintf(__( "Allow %s to appear in the built-in search results.", 'events-manager'),__('events','events-manager')) );
@@ -639,15 +573,7 @@
 					<p><?php _e('This page is where people that have made bookings for an event can go and view their previous bookings.','events-manager'); ?>
 				</td>
 			</tr>
-			<tr>
-				<th><?php echo sprintf(__( '%s page', 'events-manager'),__('My bookings','events-manager')); ?>
-				</th>
-				<td>
-					<?php wp_dropdown_pages(array('name'=>'dbem_my_bookings_page', 'selected'=>get_option('dbem_my_bookings_page'), 'show_option_none'=>'['.__('None', 'events-manager').']' )); ?>
-					<br />
-					<em><?php echo sprintf(__('Users can view their bookings for other events on this page.','events-manager'),'<code>[my_bookings]</code>',__('bookings','events-manager')); ?></em>
-				</td>
-			</tr>	
+			
 			<tr valign="top" id='dbem_bookings_default_orderby_row'>
 		   		<th scope="row"><?php _e('Default list ordering','events-manager'); ?></th>
 		   		<td>   
