@@ -1,0 +1,18 @@
+{
+	"scripts": {
+		"build": "wp-scripts build classes/events-manager.js admin/admin-settings.js admin/taxonomies-admin.js add-ons/blocks/backend.js add-ons/bookings-form/booking-form.js add-ons/bookings-form/form-editor.js add-ons/bookings-form/events-manager-pro.js --output-path='./includes'",
+		"start": "wp-scripts start classes/events-manager.js admin/admin-settings.js admin/taxonomies-admin.js add-ons/blocks/backend.js add-ons/bookings-form/booking-form.js add-ons/bookings-form/form-editor.js add-ons/bookings-form/events-manager-pro.js --output-path='./includes'",
+		"lang": "node lang.js"
+	},
+	"dependencies": {
+		"@wordpress/block-editor": "^5.3.0",
+		"@wordpress/blocks": "^8.0.0",
+		"@wordpress/core-data": "^4.0.7",
+		"@wordpress/i18n": "^3.20.0",
+		"qs": "^6.10.1",
+		"react-error-boundary": "^3.1.4"
+	},
+	"devDependencies": {
+		"@wordpress/scripts": "^19.2.2"
+	}
+}
