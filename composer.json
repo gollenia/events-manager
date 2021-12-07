@@ -1,0 +1,40 @@
+{
+    "name": "contexis/event-manager-pro",
+    "version": "1.0.0",
+    "description": "Event manager Pro",
+    "type": "project",
+    "homepage": "http://www.kids-team.at",
+    "readme": "readme.md",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Thomas Gollenia",
+            "email": "thomas@gollenia.at",
+            "homepage": "http://www.gollenia.at",
+            "role": "Developer"
+        },
+        {
+            "name": "Laura Emeder",
+            "email": "laura@kids-team.at",
+            "role": "Designer"
+        },
+        {
+            "name": "Matthias Demmin",
+            "email": "matthias@kids-team.at",
+            "role": "Manager"
+        }
+    ],
+    "config": {
+        "platform":{
+            "php":"7.4"
+        }
+    },
+    "require": {
+        "timber/timber": "^2.0.0-alpha.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Schedule\\Addons\\": ["add-ons/blocks", "add-ons/coupons"]
+        }
+    }
+}
