@@ -12,6 +12,7 @@ class EM_Event_Post {
 
 			//Override post template tags
 			add_filter('get_the_date',array('EM_Event_Post','the_date'),10,3);
+			add_filter('the_content',array('EM_Event_Post','the_content'),10,3);
 			add_filter('get_the_time',array('EM_Event_Post','the_time'),10,3);
 			add_filter('the_category',array('EM_Event_Post','the_category'),10,3);
 		}
@@ -36,23 +37,103 @@ class EM_Event_Post {
 	 * @return string
 	 */
 	public static function single_template($template){
-		global $post;
-		if( !locate_template('single-'.EM_POST_TYPE_EVENT.'.php') && $post->post_type == EM_POST_TYPE_EVENT ){
-			//do we have a default template to choose for events?
-			if( get_option('dbem_cp_events_template') == 'page' ){
-				$post_templates = array('page.php','index.php');
-			}else{
-			    $post_templates = array(get_option('dbem_cp_events_template'));
-			}
-			if( !empty($post_templates) ){
-			    $post_template = locate_template($post_templates,false);
-			    if( !empty($post_template) ) $template = $post_template;
-			}
-		}
 		return $template;
 	}
-	
 
+	public static function get_speaker($EM_Event) {
+
+        if($EM_Event->speaker_id == 0) return false;
+
+        $args = [
+            'p' => $EM_Event->speaker_id,
+            'post_type' => 'event-speaker'
+        ];
+
+        $speakers = Timber::get_posts( $args );
+        
+        if ($speakers) return $speakers[0];
+
+        return false;
+    }
+
+	public static function lowest_price($booking) {
+	
+        $tickets = $booking->get_tickets();
+        if(empty($tickets->tickets)) {
+            return 0;
+        }
+
+        $price_array = [];
+        foreach($tickets as $ticket) {
+            array_push($price_array, floatval($ticket->ticket_price));
+        }
+        if(max($price_array) == 0) {
+            return 0;
+        }
+        return min($price_array);
+    }
+
+	public static function get_related_events($EM_Event, int $limit = 5) {
+		global $post;
+        $categories = get_the_terms($post, 'event-categories');
+
+        if(empty($categories)) {
+            return false;
+        }
+
+        $args = [
+            'post_type' => 'event',
+            'orderby' => '_event_start_date',
+            'order' => 'ASC',
+            'posts_per_page' => $limit,
+            'post__not_in' => [$EM_Event],
+            'tax_query' => [
+                [
+                    'taxonomy' => 'event-categories',
+                    'field' => 'slug',
+                    'terms' => $categories[0]->slug,
+                ]
+            ],
+            'meta_query' => [
+                [
+                  'key' => '_event_start_date',
+                  'value' => date('Y-m-d'),
+                  'compare' => '>=',
+                ]
+            ]
+        ];
+
+        return Timber::get_posts( $args );
+        
+    }
+	
+	public static function the_content($content) {
+		global $post;
+
+		if($post->post_type !== "event") return $content;
+
+		$EM_Event = em_get_event($post);
+		$booking = new \EM_Bookings($EM_Event);
+
+
+		$attributes = [
+			"post" => $post,
+			"event" => $EM_Event,
+			"location" => $EM_Event->location_id != 0 ? \EM_Locations::get($EM_Event->location_id)[0] : false,
+			'currency' => em_get_currency_symbol(true,get_option("dbem_bookings_currency")),   
+			"bookings" => $booking->get_available_spaces(),
+			"has_tickets" => $booking->get_bookings()->get_available_tickets(),
+			"booking" => \EM_Booking_Api::get_booking_form($EM_Event),
+			"speaker" => self::get_speaker($EM_Event),
+			"price" => self::lowest_price($booking),
+			"events" => self::get_related_events($EM_Event->ID),
+			"content" => $content,
+			"formatting" => ["time" => get_option("dbem_time_format")]
+		];
+		$template = get_twig_template('templates/templates/event-single');
+	
+		return \Timber\Timber::compile($template, $attributes);
+	}
 	
 	public static function enable_the_content( $content ){
 		add_filter('the_content', array('EM_Event_Post','the_content'));
@@ -166,11 +247,9 @@ class EM_Event_Post {
 			}else{
 				if( !empty($wp_query->query_vars['calendar_day']) ) $wp_query->query_vars['scope'] = $wp_query->query_vars['calendar_day'];
 				if( empty($wp_query->query_vars['scope']) ){
-					if( is_archive() ){
-						$scope = $wp_query->query_vars['scope'] = get_option('dbem_events_archive_scope');
-					}else{
+					
 						$scope = $wp_query->query_vars['scope'] = 'all'; //otherwise we'll get 404s for past events
-					}
+					
 				}else{
 					$scope = $wp_query->query_vars['scope'];
 				}
@@ -239,16 +318,6 @@ class EM_Event_Post {
 				  	$wp_query->query_vars['meta_type'] = 'DATETIME';
 		  		}
 				$wp_query->query_vars['order'] = (!empty($_REQUEST['order']) && preg_match('/^(ASC|DESC)$/i', $_REQUEST['order'])) ? $_REQUEST['order']:'ASC';
-		  	}else{
-			  	if( get_option('dbem_events_default_archive_orderby') == 'title'){
-			  		$wp_query->query_vars['orderby'] = 'title';
-					$wp_query->query_vars['order'] = get_option('dbem_events_default_archive_order','ASC');
-			  	}else{
-				  	$wp_query->query_vars['orderby'] = 'meta_value';
-				  	$wp_query->query_vars['meta_key'] = '_event_start_local';
-				  	$wp_query->query_vars['meta_type'] = 'DATETIME';		
-			  	}
-			  	$wp_query->query_vars['order'] = get_option('dbem_events_default_archive_order','ASC');
 		  	}
 		}elseif( !empty($wp_query->query_vars['post_type']) && $wp_query->query_vars['post_type'] == EM_POST_TYPE_EVENT ){
 			$wp_query->query_vars['scope'] = 'all';
