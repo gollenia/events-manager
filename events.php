@@ -34,7 +34,6 @@ use Timber\Twig;
 define('EM_VERSION', 6.0); //self expanatory, although version currently may not correspond directly with published version number
 define('EM_DIR', dirname( __FILE__ )); //an absolute path to this directory
 define('EM_DIR_URI', trailingslashit(plugins_url('',__FILE__))); //an absolute path to this directory
-define('EM_SLUG', plugin_basename( __FILE__ )); //for updates
 define('EM_MS_GLOBAL',false);
 
 //temporarily disable AJAX by default, future updates will eventually have this turned on as we work out some kinks
@@ -42,15 +41,20 @@ if( !defined('EM_AJAX') ){
 	define( 'EM_AJAX', get_option('dbem_events_page_ajax', (defined('EM_AJAX_SEARCH') && EM_AJAX_SEARCH)) );
 }
 
-if( !defined('EM_CONDITIONAL_RECURSIONS') ) define('EM_CONDITIONAL_RECURSIONS', get_option('dbem_conditional_recursions', 1)); //allows for conditional recursios to be nested
-
 
 //add_action('plugins_loaded', 'dbem_debug_mode');
 require_once('vendor/autoload.php');
 
 require_once('classes/em-twig.php');
 
-$EM_Twig = new EM_Twig();
+$EM_Twig = EM_Twig::init();
+
+add_filter( 'timber/locations', function($paths) use ($EM_Twig) {
+	$paths[] = $EM_Twig->locations;
+	return $paths;
+});
+
+
 // INCLUDES
 //Base classes
 require_once('classes/em-exception.php');
