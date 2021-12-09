@@ -1,31 +1,34 @@
-<div class="posts gap-12 {% if style != "mini" %} grid grid-cols-{{columnsSmall}} md:grid-cols-{{columnsMedium}} lg:grid-cols-{{columnsLarge}} {% endif %}">
+<div class="posts grid--gap-12 {% if style != "mini" %} grid grid--columns-{{columnsSmall}} md:grid--columns-{{columnsMedium}} lg:grid--columns-{{columnsLarge}} {% endif %}">
     {% for item in events %}
             <a 
                 class="
-                    flex
-                    {% if dropShadow %}hover {% endif %}
+                    card--primary
+                    card--shadow
+                    {% if dropShadow %}card--hover {% endif %}
                     {% if function("get_the_ID") == item.ID %}text-blue{% endif %} 
-                    items-center
-                    {{ style == "list" ? "image-left card bg-white" }}
-                    {{ style == "cards" ? "image-top card bg-white" }}
+                    {{ style == "list" ? "card--image-left card bg-white" }}
+                    {{ style == "cards" ? "cars--image-top card bg-white" }}
                     {{ style == "mini" ? "flex-row"}}
-                    {{loop.first ? "first"}}
-                    {{loop.last ? "last"}}
+                    {{loop.first ? "card--first"}}
+                    {{loop.last ? "card--last"}}
                     overflow-visible
                 "            
                 href="{{ function("get_permalink", item.ID) }}"
             >
             {% if showCategory %}
                         {% set terms = item.terms({query:{taxonomy:'event-categories'}})%}
-                        <span class="inline-block absolute bg-primary text-primary-contrast rounded-tl-lg rounded-br-lg top-0 right-0 px-2  mr-4 text-sm -mt-2">{% for term in terms %}{{term.name}}{% endfor %}</span>
+                        <span class="card__label">{% for term in terms %}{{term.name}}{% endfor %}</span>
                     {% endif %}
             {% if style != "mini" %}
-                <img class="card-image" src="{{ item.thumbnail.src('large') }}">
+                <div class="card__image">
+                    <img src="{{ item.thumbnail.src('large') }}" alt="item.thumbnail">
+                </div>
+                
             {% else %}
                 <div class="block text-gray-500 w-24 flex flex-col items-center align-center"><div class="text-2xl font-bold">{{item._event_start_date|date("j")}}</div><div class="text-sm">{{item._event_start_date|date("M")}}</div></div>
             {% endif %}
-                <div class="{{ style != "mini" ? "card-content" }}" {{ style == "mini" ? "style='border-style: dotted !important; border-left-width: 4px !important; border-color: var(--primary) !important;'" }}>
-                    {% if style != "mini" %}<span class="block text-gray-500 text-sm">
+                <div class="{{ style != "mini" ? "card__content" }}" {{ style == "mini" ? "style='border-style: dotted !important; border-left-width: 4px !important; border-color: var(--primary) !important;'" }}>
+                    {% if style != "mini" %}<span class="card__subtitle">
                     {% if item._event_start_date == item._event_end_date %}
                         {{ item._event_start_date|date("j. F Y") }} von {{ item._event_start_time|date("G:i", false) }} bis {{ item._event_end_time|date("G:i", false) }} Uhr
                     {% else %}
@@ -35,10 +38,10 @@
         
                     </span>{% endif %}
                     
-                    <h5 class="block font-bold text-primary inline-block">{{item.post_title}}</h5>
+                    <span class="catd__title">{{item.post_title}}</span>
                     
                     
-                    <p class="text-gray-400 text-xs">
+                    <p class="card__text">
                     
                     {{ showCategory and showTags ? "|" }}
                     {% if showTags %}
@@ -48,7 +51,7 @@
                     {{ showTags and showLocation ? "|" }}
                     {% if showLocation %}
                         {% set location = get_event_location(item.custom._location_id) %}
-                        <i class="material-icons text-xs absolute" style="margin-top: 1px;">place</i><span class="ml-4"> {{ showLocation == "city" ? location.location_town : location.location_name }}</span>
+                        <i class="material-icons text-xs absolute" style="margin-top: 1px;">place</i><span class=""> {{ showLocation == "city" ? location.location_town : location.location_name }}</span>
                     {% endif %}
                     </p>
                     
