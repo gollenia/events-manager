@@ -113,7 +113,6 @@ const Booking = () => {
   const addTicket = id => {
     let ticket = { ...eventData.tickets[id]
     };
-    console.log("Adding ticket...", eventData.tickets);
     ticket.uid = Math.round(Math.random() * 1000);
     setTicketSelection(data => [...data, ticket]);
   };
@@ -134,11 +133,8 @@ const Booking = () => {
   };
 
   const updateForm = (field, value) => {
-    console.log(field, value);
-    setFormData(prevFormData => {
-      return { ...prevFormData,
-        [field]: value
-      };
+    setFormData({ ...formData,
+      [field]: value
     });
   };
 
@@ -448,7 +444,6 @@ const Gateway = props => {
     };
   }
 
-  console.log(props);
   return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h5", null, (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)("Payment", "em-pro")), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("h3", null, title), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("p", {
     dangerouslySetInnerHTML: createMarkup()
   }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", null, id == "mollie" && Object.keys(methods).map(method => {
@@ -498,8 +493,10 @@ const InputField = props => {
     min,
     max
   } = props;
+  console.log(value);
 
   const handleChange = event => {
+    console.log("state:", event.target.value);
     props.onChange(event.target.value);
   };
 
@@ -508,8 +505,8 @@ const InputField = props => {
   };
 
   const handleCheckboxChange = event => {
-    console.log("check", event.target.value);
-    props.onChange(event.target.value);
+    let result = event.target.checked ? "on" : "off";
+    props.onChange(result);
   };
 
   const selectOptions = () => {
@@ -520,7 +517,6 @@ const InputField = props => {
       const result = [];
       Object.entries(options).forEach(entry => {
         const [key, label] = entry;
-        console.log(entry);
         result.push((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("option", {
           selected: value == key,
           key: key,
@@ -539,8 +535,6 @@ const InputField = props => {
   };
 
   const radioOptions = () => {
-    console.log("options", options);
-    console.log("value", value);
     if (type !== "radio") return [];
     if (options.length === 0) return [];
     return options.map((option, index) => {
@@ -602,13 +596,12 @@ const InputField = props => {
       InputTag = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
         className: "checkbox"
       }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
-        onChange: event => {
+        onChange: () => {
           handleCheckboxChange(event);
         },
         type: "checkbox",
         name: name,
-        required: required,
-        checked: value == "on"
+        required: required
       }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", null, label)));
       break;
 
@@ -649,7 +642,6 @@ const InputField = props => {
         },
         type: type,
         name: name,
-        value: value,
         required: required,
         pattern: pattern
       }));
@@ -4716,9 +4708,12 @@ document.addEventListener('click', event => {
   if (!event.target.classList.contains("open--booking")) return;
   (0,_Booking_jsx__WEBPACK_IMPORTED_MODULE_3__.openBookingModal)();
 });
-document.addEventListener('DOMContentLoaded', () => {
-  react_dom__WEBPACK_IMPORTED_MODULE_2___default().render((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Booking_jsx__WEBPACK_IMPORTED_MODULE_3__["default"], null), root);
-});
+
+if (root) {
+  document.addEventListener('DOMContentLoaded', () => {
+    react_dom__WEBPACK_IMPORTED_MODULE_2___default().render((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_Booking_jsx__WEBPACK_IMPORTED_MODULE_3__["default"], null), root);
+  });
+}
 }();
 /******/ })()
 ;
