@@ -1903,179 +1903,178 @@ class EM_Event extends EM_Object{
 			$attString = apply_filters('em_event_output_placeholder', $attString, $this, $result, $target, $placeholder_atts);
 			$event_string = str_replace($result, $attString ,$event_string );
 		}
-	 	//First let's do some conditional placeholder removals
-	 	for ($i = 0 ; $i < EM_CONDITIONAL_RECURSIONS; $i++){ //you can add nested recursions by modifying this setting in your wp_options table
-			preg_match_all('/\{([a-zA-Z0-9_\-,]+)\}(.+?)\{\/\1\}/s', $event_string, $conditionals);
-			if( count($conditionals[0]) > 0 ){
-				//Check if the language we want exists, if not we take the first language there
-				foreach($conditionals[1] as $key => $condition){
-					$show_condition = false;
-					if ($condition == 'has_bookings') {
-						//check if there's a booking, if not, remove this section of code.
-						$show_condition = ($this->event_rsvp && get_option('dbem_rsvp_enabled'));
-					}elseif ($condition == 'no_bookings') {
-						//check if there's a booking, if not, remove this section of code.
-						$show_condition = (!$this->event_rsvp && get_option('dbem_rsvp_enabled'));
-					}elseif ($condition == 'no_location'){
-						//does this event have a valid location?
-						$show_condition = !$this->has_event_location() && !$this->has_location();
-					}elseif ($condition == 'has_location'){
-						//does this event have a valid location?
-						$show_condition = ( $this->has_location() && $this->get_location()->location_status ) || $this->has_event_location();
-					}elseif ($condition == 'has_location_venue'){
-						//does this event have a valid physical location?
-						$show_condition = ( $this->has_location() && $this->get_location()->location_status ) || $this->has_event_location();
-					}elseif ($condition == 'no_location_venue'){
-						//does this event NOT have a valid physical location?
-						$show_condition = !$this->has_location();
-					}elseif ($condition == 'has_event_location'){
-						//does this event have a valid event location?
-						$show_condition = $this->has_event_location();
-					}elseif ( preg_match('/^has_event_location_([a-zA-Z0-9_\-]+)$/', $condition, $type_match)){
-						//event has a specific category
-						$show_condition = $this->has_event_location($type_match[1]);
-					}elseif ($condition == 'no_event_location'){
-						//does this event not have a valid event location?
-						$show_condition = !$this->has_event_location();
-					}elseif ( preg_match('/^no_event_location_([a-zA-Z0-9_\-]+)$/', $condition, $type_match)){
-						//does this event NOT have a specific event location?
-						$show_condition = !$this->has_event_location($type_match[1]);
-					}elseif ($condition == 'has_image'){
-						//does this event have an image?
-						$show_condition = ( $this->get_image_url() != '' );
-					}elseif ($condition == 'no_image'){
-						//does this event have an image?
-						$show_condition = ( $this->get_image_url() == '' );
-					}elseif ($condition == 'has_time'){
-						//are the booking times different and not an all-day event
-						$show_condition = ( $this->event_start_time != $this->event_end_time && !$this->event_all_day );
-					}elseif ($condition == 'no_time'){
-						//are the booking times exactly the same and it's not an all-day event.
-						$show_condition = ( $this->event_start_time == $this->event_end_time && !$this->event_all_day );
-					}elseif ($condition == 'different_timezone'){
-						//current event timezone is different to blog timezone
-						$show_condition = $this->event_timezone != EM_DateTimeZone::create()->getName();
-					}elseif ($condition == 'same_timezone'){
-						//current event timezone is different to blog timezone
-						$show_condition = $this->event_timezone == EM_DateTimeZone::create()->getName();
-					}elseif ($condition == 'all_day'){
-						//is it an all day event
-						$show_condition = !empty($this->event_all_day);
-					}elseif ($condition == 'not_all_day'){
-						//is not an all day event
-						$show_condition = !empty($this->event_all_day);
-					}elseif ($condition == 'logged_in'){
-						//user is logged in
-						$show_condition = is_user_logged_in();
-					}elseif ($condition == 'not_logged_in'){
-						//not logged in
-						$show_condition = !is_user_logged_in();
-					}elseif ($condition == 'has_spaces'){
-						//there are still empty spaces
-						$show_condition = $this->event_rsvp && $this->get_bookings()->get_available_spaces() > 0;
-					}elseif ($condition == 'fully_booked'){
-						//event is fully booked
-						$show_condition = $this->event_rsvp && $this->get_bookings()->get_available_spaces() <= 0;
-					}elseif ($condition == 'bookings_open'){
-						//bookings are still open
-						$show_condition = $this->event_rsvp && $this->get_bookings()->is_open();
-					}elseif ($condition == 'bookings_closed'){
-						//bookings are still closed
-						$show_condition = $this->event_rsvp && !$this->get_bookings()->is_open();
-					}elseif ($condition == 'is_free' || $condition == 'is_free_now'){
-						//is it a free day event, if _now then free right now
-						$show_condition = !$this->event_rsvp || $this->is_free( $condition == 'is_free_now' );
-					}elseif ($condition == 'not_free' || $condition == 'not_free_now'){
-						//is it a paid event, if _now then paid right now
-						$show_condition = $this->event_rsvp && !$this->is_free( $condition == 'not_free_now' );
-					}elseif ($condition == 'is_long'){
-						//is it an all day event
-						$show_condition = $this->event_start_date != $this->event_end_date;
-					}elseif ($condition == 'not_long'){
-						//is it an all day event
-						$show_condition = $this->event_start_date == $this->event_end_date;
-					}elseif ($condition == 'is_past'){
-						//if event is past
-						if( get_option('dbem_events_current_are_past') ){
-						    $show_condition = $this->start()->getTimestamp() <= time();
-						}else{
-							$show_condition = $this->end()->getTimestamp() <= time();
-						}
-					}elseif ($condition == 'is_future'){
-						//if event is upcoming
-						$show_condition = $this->start()->getTimestamp() > time();
-					}elseif ($condition == 'is_current'){
-						//if event is currently happening
-						$show_condition = $this->start()->getTimestamp() <= time() && $this->end()->getTimestamp() >= time();
-					}elseif ($condition == 'is_recurrence'){
-						//if event is a recurrence
-						$show_condition = $this->is_recurrence();
-					}elseif ($condition == 'not_recurrence'){
-						//if event is not a recurrence
-						$show_condition = !$this->is_recurrence();
-					}elseif ($condition == 'is_private'){
-						//if event is a recurrence
-						$show_condition = $this->event_private == 1;
-					}elseif ($condition == 'not_private'){
-						//if event is not a recurrence
-						$show_condition = $this->event_private == 0;
-					}elseif ( strpos($condition, 'is_user_attendee') !== false || strpos($condition, 'not_user_attendee') !== false ){
-						//if current user has a booking at this event
-						$show_condition = false;
-						if( is_user_logged_in() ){
-							//we only need a user id, booking id and booking status so we do a direct SQL lookup and once for the loop
-							if( !isset($user_bookings) || !is_array($user_bookings) ){
-								$sql = $wpdb->prepare('SELECT booking_status FROM '.EM_BOOKINGS_TABLE.' WHERE person_id=%d AND event_id=%d', array(get_current_user_id(), $this->event_id));
-								$user_bookings = $wpdb->get_col($sql);
-							}
-							if( $condition == 'is_user_attendee' && count($user_bookings) > 0 ){
-								//user has a booking for this event, could be any booking status
-								$show_condition = true;
-							}elseif( $condition == 'not_user_attendee' && count($user_bookings) == 0 ){
-								//user has no bookings to this event
-								$show_condition = true;
-							}elseif( strpos($condition, 'is_user_attendee_') !== false ){
-								//user has a booking for this event, and we'll now look for a specific status
-								$attendee_booking_status = str_replace('is_user_attendee_', '', $condition);
-								$show_condition = in_array($attendee_booking_status, $user_bookings);
-							}elseif( strpos($condition, 'not_user_attendee_') !== false ){
-								//user has a booking for this event, and we'll now look for a specific status
-								$attendee_booking_status = str_replace('not_user_attendee_', '', $condition);
-								$show_condition = !in_array($attendee_booking_status, $user_bookings);
-							}
-						}
-					}elseif ( preg_match('/^has_category_([a-zA-Z0-9_\-,]+)$/', $condition, $category_match)){
-					    //event is in this category
-						$show_condition = has_term(explode(',', $category_match[1]), EM_TAXONOMY_CATEGORY, $this->post_id);
-					}elseif ( preg_match('/^no_category_([a-zA-Z0-9_\-,]+)$/', $condition, $category_match)){
-					    //event is NOT in this category
-						$show_condition = !has_term(explode(',', $category_match[1]), EM_TAXONOMY_CATEGORY, $this->post_id);
-					}elseif ( preg_match('/^has_tag_([a-zA-Z0-9_\-,]+)$/', $condition, $tag_match)){
-					    //event has this tag
-						$show_condition = has_term(explode(',', $tag_match[1]), EM_TAXONOMY_TAG, $this->post_id);
-					}elseif ( preg_match('/^no_tag_([a-zA-Z0-9_\-,]+)$/', $condition, $tag_match)){
-					   //event doesn't have this tag
-						$show_condition = !has_term(explode(',', $tag_match[1]), EM_TAXONOMY_TAG, $this->post_id);
-					}elseif ( preg_match('/^has_att_([a-zA-Z0-9_\-,]+)$/', $condition, $att_match)){
-						//event has a specific custom field
-						$show_condition = !empty($this->event_attributes[$att_match[1]]) || !empty($this->event_attributes[str_replace('_', ' ', $att_match[1])]);
-					}elseif ( preg_match('/^no_att_([a-zA-Z0-9_\-,]+)$/', $condition, $att_match)){
-						//event has a specific custom field
-						$show_condition = empty($this->event_attributes[$att_match[1]]) && empty($this->event_attributes[str_replace('_', ' ', $att_match[1])]);
-					}
-					//other potential ones - has_attribute_... no_attribute_... has_categories_...
-					$show_condition = apply_filters('em_event_output_show_condition', $show_condition, $condition, $conditionals[0][$key], $this);
-					if($show_condition){
-						//calculate lengths to delete placeholders
-						$placeholder_length = strlen($condition)+2;
-						$replacement = substr($conditionals[0][$key], $placeholder_length, strlen($conditionals[0][$key])-($placeholder_length *2 +1));
+	 	
+		preg_match_all('/\{([a-zA-Z0-9_\-,]+)\}(.+?)\{\/\1\}/s', $event_string, $conditionals);
+		if( count($conditionals[0]) > 0 ){
+			//Check if the language we want exists, if not we take the first language there
+			foreach($conditionals[1] as $key => $condition){
+				$show_condition = false;
+				if ($condition == 'has_bookings') {
+					//check if there's a booking, if not, remove this section of code.
+					$show_condition = ($this->event_rsvp && get_option('dbem_rsvp_enabled'));
+				}elseif ($condition == 'no_bookings') {
+					//check if there's a booking, if not, remove this section of code.
+					$show_condition = (!$this->event_rsvp && get_option('dbem_rsvp_enabled'));
+				}elseif ($condition == 'no_location'){
+					//does this event have a valid location?
+					$show_condition = !$this->has_event_location() && !$this->has_location();
+				}elseif ($condition == 'has_location'){
+					//does this event have a valid location?
+					$show_condition = ( $this->has_location() && $this->get_location()->location_status ) || $this->has_event_location();
+				}elseif ($condition == 'has_location_venue'){
+					//does this event have a valid physical location?
+					$show_condition = ( $this->has_location() && $this->get_location()->location_status ) || $this->has_event_location();
+				}elseif ($condition == 'no_location_venue'){
+					//does this event NOT have a valid physical location?
+					$show_condition = !$this->has_location();
+				}elseif ($condition == 'has_event_location'){
+					//does this event have a valid event location?
+					$show_condition = $this->has_event_location();
+				}elseif ( preg_match('/^has_event_location_([a-zA-Z0-9_\-]+)$/', $condition, $type_match)){
+					//event has a specific category
+					$show_condition = $this->has_event_location($type_match[1]);
+				}elseif ($condition == 'no_event_location'){
+					//does this event not have a valid event location?
+					$show_condition = !$this->has_event_location();
+				}elseif ( preg_match('/^no_event_location_([a-zA-Z0-9_\-]+)$/', $condition, $type_match)){
+					//does this event NOT have a specific event location?
+					$show_condition = !$this->has_event_location($type_match[1]);
+				}elseif ($condition == 'has_image'){
+					//does this event have an image?
+					$show_condition = ( $this->get_image_url() != '' );
+				}elseif ($condition == 'no_image'){
+					//does this event have an image?
+					$show_condition = ( $this->get_image_url() == '' );
+				}elseif ($condition == 'has_time'){
+					//are the booking times different and not an all-day event
+					$show_condition = ( $this->event_start_time != $this->event_end_time && !$this->event_all_day );
+				}elseif ($condition == 'no_time'){
+					//are the booking times exactly the same and it's not an all-day event.
+					$show_condition = ( $this->event_start_time == $this->event_end_time && !$this->event_all_day );
+				}elseif ($condition == 'different_timezone'){
+					//current event timezone is different to blog timezone
+					$show_condition = $this->event_timezone != EM_DateTimeZone::create()->getName();
+				}elseif ($condition == 'same_timezone'){
+					//current event timezone is different to blog timezone
+					$show_condition = $this->event_timezone == EM_DateTimeZone::create()->getName();
+				}elseif ($condition == 'all_day'){
+					//is it an all day event
+					$show_condition = !empty($this->event_all_day);
+				}elseif ($condition == 'not_all_day'){
+					//is not an all day event
+					$show_condition = !empty($this->event_all_day);
+				}elseif ($condition == 'logged_in'){
+					//user is logged in
+					$show_condition = is_user_logged_in();
+				}elseif ($condition == 'not_logged_in'){
+					//not logged in
+					$show_condition = !is_user_logged_in();
+				}elseif ($condition == 'has_spaces'){
+					//there are still empty spaces
+					$show_condition = $this->event_rsvp && $this->get_bookings()->get_available_spaces() > 0;
+				}elseif ($condition == 'fully_booked'){
+					//event is fully booked
+					$show_condition = $this->event_rsvp && $this->get_bookings()->get_available_spaces() <= 0;
+				}elseif ($condition == 'bookings_open'){
+					//bookings are still open
+					$show_condition = $this->event_rsvp && $this->get_bookings()->is_open();
+				}elseif ($condition == 'bookings_closed'){
+					//bookings are still closed
+					$show_condition = $this->event_rsvp && !$this->get_bookings()->is_open();
+				}elseif ($condition == 'is_free' || $condition == 'is_free_now'){
+					//is it a free day event, if _now then free right now
+					$show_condition = !$this->event_rsvp || $this->is_free( $condition == 'is_free_now' );
+				}elseif ($condition == 'not_free' || $condition == 'not_free_now'){
+					//is it a paid event, if _now then paid right now
+					$show_condition = $this->event_rsvp && !$this->is_free( $condition == 'not_free_now' );
+				}elseif ($condition == 'is_long'){
+					//is it an all day event
+					$show_condition = $this->event_start_date != $this->event_end_date;
+				}elseif ($condition == 'not_long'){
+					//is it an all day event
+					$show_condition = $this->event_start_date == $this->event_end_date;
+				}elseif ($condition == 'is_past'){
+					//if event is past
+					if( get_option('dbem_events_current_are_past') ){
+						$show_condition = $this->start()->getTimestamp() <= time();
 					}else{
-						$replacement = '';
+						$show_condition = $this->end()->getTimestamp() <= time();
 					}
-					$event_string = str_replace($conditionals[0][$key], apply_filters('em_event_output_condition', $replacement, $condition, $conditionals[0][$key], $this), $event_string);
+				}elseif ($condition == 'is_future'){
+					//if event is upcoming
+					$show_condition = $this->start()->getTimestamp() > time();
+				}elseif ($condition == 'is_current'){
+					//if event is currently happening
+					$show_condition = $this->start()->getTimestamp() <= time() && $this->end()->getTimestamp() >= time();
+				}elseif ($condition == 'is_recurrence'){
+					//if event is a recurrence
+					$show_condition = $this->is_recurrence();
+				}elseif ($condition == 'not_recurrence'){
+					//if event is not a recurrence
+					$show_condition = !$this->is_recurrence();
+				}elseif ($condition == 'is_private'){
+					//if event is a recurrence
+					$show_condition = $this->event_private == 1;
+				}elseif ($condition == 'not_private'){
+					//if event is not a recurrence
+					$show_condition = $this->event_private == 0;
+				}elseif ( strpos($condition, 'is_user_attendee') !== false || strpos($condition, 'not_user_attendee') !== false ){
+					//if current user has a booking at this event
+					$show_condition = false;
+					if( is_user_logged_in() ){
+						//we only need a user id, booking id and booking status so we do a direct SQL lookup and once for the loop
+						if( !isset($user_bookings) || !is_array($user_bookings) ){
+							$sql = $wpdb->prepare('SELECT booking_status FROM '.EM_BOOKINGS_TABLE.' WHERE person_id=%d AND event_id=%d', array(get_current_user_id(), $this->event_id));
+							$user_bookings = $wpdb->get_col($sql);
+						}
+						if( $condition == 'is_user_attendee' && count($user_bookings) > 0 ){
+							//user has a booking for this event, could be any booking status
+							$show_condition = true;
+						}elseif( $condition == 'not_user_attendee' && count($user_bookings) == 0 ){
+							//user has no bookings to this event
+							$show_condition = true;
+						}elseif( strpos($condition, 'is_user_attendee_') !== false ){
+							//user has a booking for this event, and we'll now look for a specific status
+							$attendee_booking_status = str_replace('is_user_attendee_', '', $condition);
+							$show_condition = in_array($attendee_booking_status, $user_bookings);
+						}elseif( strpos($condition, 'not_user_attendee_') !== false ){
+							//user has a booking for this event, and we'll now look for a specific status
+							$attendee_booking_status = str_replace('not_user_attendee_', '', $condition);
+							$show_condition = !in_array($attendee_booking_status, $user_bookings);
+						}
+					}
+				}elseif ( preg_match('/^has_category_([a-zA-Z0-9_\-,]+)$/', $condition, $category_match)){
+					//event is in this category
+					$show_condition = has_term(explode(',', $category_match[1]), EM_TAXONOMY_CATEGORY, $this->post_id);
+				}elseif ( preg_match('/^no_category_([a-zA-Z0-9_\-,]+)$/', $condition, $category_match)){
+					//event is NOT in this category
+					$show_condition = !has_term(explode(',', $category_match[1]), EM_TAXONOMY_CATEGORY, $this->post_id);
+				}elseif ( preg_match('/^has_tag_([a-zA-Z0-9_\-,]+)$/', $condition, $tag_match)){
+					//event has this tag
+					$show_condition = has_term(explode(',', $tag_match[1]), EM_TAXONOMY_TAG, $this->post_id);
+				}elseif ( preg_match('/^no_tag_([a-zA-Z0-9_\-,]+)$/', $condition, $tag_match)){
+					//event doesn't have this tag
+					$show_condition = !has_term(explode(',', $tag_match[1]), EM_TAXONOMY_TAG, $this->post_id);
+				}elseif ( preg_match('/^has_att_([a-zA-Z0-9_\-,]+)$/', $condition, $att_match)){
+					//event has a specific custom field
+					$show_condition = !empty($this->event_attributes[$att_match[1]]) || !empty($this->event_attributes[str_replace('_', ' ', $att_match[1])]);
+				}elseif ( preg_match('/^no_att_([a-zA-Z0-9_\-,]+)$/', $condition, $att_match)){
+					//event has a specific custom field
+					$show_condition = empty($this->event_attributes[$att_match[1]]) && empty($this->event_attributes[str_replace('_', ' ', $att_match[1])]);
 				}
+				//other potential ones - has_attribute_... no_attribute_... has_categories_...
+				$show_condition = apply_filters('em_event_output_show_condition', $show_condition, $condition, $conditionals[0][$key], $this);
+				if($show_condition){
+					//calculate lengths to delete placeholders
+					$placeholder_length = strlen($condition)+2;
+					$replacement = substr($conditionals[0][$key], $placeholder_length, strlen($conditionals[0][$key])-($placeholder_length *2 +1));
+				}else{
+					$replacement = '';
+				}
+				$event_string = str_replace($conditionals[0][$key], apply_filters('em_event_output_condition', $replacement, $condition, $conditionals[0][$key], $this), $event_string);
 			}
-	 	}
+		}
+	 	
 		//Now let's check out the placeholders.
 	 	preg_match_all("/(#@?_?[A-Za-z0-9_]+)({([^}]+)})?/", $event_string, $placeholders);
 	 	$replaces = array();
