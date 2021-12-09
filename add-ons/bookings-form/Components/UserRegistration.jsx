@@ -97,7 +97,7 @@ const UserRegistration = (props) => {
                 onChange={(event) => {updateFormField(field.name, event)} }
               />
           ) }
-          { fullPrice() == 0 && 
+          { fullPrice() == 0 &&  
             <InputField
               onChange={(event) => { updateFormField("data_privacy_consent", event)}}
               name="data_privacy_consent"
