@@ -130,7 +130,7 @@ function wp_events_plugin_init(){
 			'not_found_in_trash' => __('No Events Found in Trash','events-manager'),
 			'parent' => __('Parent Event','events-manager'),
 		],
-		'menu_icon' => 'dashicons-calendar'
+		'menu_icon' => 'dashicons-calendar-alt'
 	]);
 	if ( get_option('dbem_recurrence_enabled') ){
 		$event_recurring_post_type = apply_filters('em_cpt_event_recurring', [	
