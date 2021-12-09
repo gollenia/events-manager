@@ -284,18 +284,16 @@ function em_init_actions() {
 			//ADD/EDIT Booking
 			ob_start();
 			if( (!defined('WP_CACHE') || !WP_CACHE) && !isset($GLOBALS["wp_fastest_cache"]) ) em_verify_nonce('booking_add');
-			if( !is_user_logged_in() || !$EM_Event->get_bookings()->has_booking(get_current_user_id()) ){
+		
 			    $EM_Booking->get_post();
 				$post_validation = $EM_Booking->validate();
 				do_action('em_booking_add', $EM_Event, $EM_Booking, $post_validation);
 				if( $post_validation ){
 				    //register the user - or not depending - according to the booking
-				    $registration = em_booking_add_registration($EM_Booking);
+				    $registration = true;
 					$EM_Bookings = $EM_Event->get_bookings();
 					if( $registration && $EM_Bookings->add($EM_Booking) ){
-					    if( is_user_logged_in() && is_multisite() && !is_user_member_of_blog(get_current_user_id(), get_current_blog_id()) ){
-					        add_user_to_blog(get_current_blog_id(), get_current_user_id(), get_option('default_role'));
-					    }
+					    
 						$result = true;
 						$EM_Notices->add_confirm( $EM_Bookings->feedback_message );		
 						$feedback = $EM_Bookings->feedback_message;
@@ -314,11 +312,7 @@ function em_init_actions() {
 					$result = false;
 					$EM_Notices->add_error( $EM_Booking->get_errors() );
 				}
-			}else{
-				$result = false;
-				$feedback = get_option('dbem_booking_feedback_already_booked');
-				$EM_Notices->add_error( $feedback );
-			}
+			
 			ob_clean();
 	  	}elseif ( $_REQUEST['action'] == 'booking_cancel') {
 	  		//Cancel Booking
