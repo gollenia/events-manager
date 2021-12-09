@@ -73,14 +73,14 @@ class Upcoming extends Block {
         $args = [
             'post_type' => 'event',
             'orderby' => '_event_start_date',
-            'order' => 'ASC',
+            'order' => $attributes['order'],
             'post_status' => ['publish'],
             'meta_query' => $meta_query,
             'tax_query' => !empty($tax_query) ? $tax_query : null, 
             'posts_per_page' => $attributes['limit'],
-            'orderby' => $attributes['orderBy'],
-            'order'   => $attributes['order']
+
         ];
+
         return \Timber\Timber::get_posts( $args );
 
     }
