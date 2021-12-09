@@ -1,0 +1,100 @@
+{
+	"domain": "events",
+	"locale_data": {
+		"messages": {
+			"": {
+				"domain": "messages",
+				"plural_forms": "nplurals=2; plural=(n != 1);",
+				"lang": "de_AT"
+			},
+			"Upcoming Events": [
+				"Zukünftige Veranstaltungen"
+			],
+			"Shows a list or cards of upcoming events": [
+				"Zeigt eine Liste oder Karten mit Veranstaltungen"
+			],
+			"See for settings in the inspector. The result can be seen in the frontend": [
+				"Einstellungen im Inspektor vornehmen. Das Ergebnis erscheint nur auf der Webseite."
+			],
+			"City": [
+				"Stadt"
+			],
+			"Name": [
+				"Name"
+			],
+			"Ascending": [
+				"Aufsteigend"
+			],
+			"Descending": [
+				"Absteigend"
+			],
+			"Data": [
+				"Daten"
+			],
+			"Category": [
+				"Kategorie"
+			],
+			"Tags": [
+				"Schlagworte"
+			],
+            "From:": [
+				"Von:"
+			],
+			"To:": [
+				"Bis"
+			],
+			"Location": [
+				"Veranstaltungsort"
+			],
+			"Sorting": [
+				"Sortierung"
+			],
+            "Appearance": [
+				"Darstellung"
+			],
+			"Columns on small screens": [
+				"Spalten auf kleinen Bildschirmen"
+			],
+			"ex. Smartphones": [
+				"z.B. Smartphones"
+			],
+			"Columns on medium screens": [
+				"Spalten auf mittleren Bildschirmen"
+			],
+			"Tablets and smaller screens": [
+				"z.B. Tablets oder Laptops"
+			],
+			"Columns on large screens": [
+				"Spalten auf großen Bildschirmen"
+			],
+            "Desktop screens": [
+                "z.B. Desktoprechner"
+            ],
+            "Events": [
+                "Veranstaltungen"
+            ],
+            "Hover-effect": [
+                "Hover-Effekt"
+            ],
+            "Minimal": [
+                "Minimal"
+            ],
+            "List": [
+                "Liste"
+            ],
+            "Cards": [
+                "Karten"
+            ],
+            "Round images": [
+                "Runde Bilder"
+            ],
+            "Show category": [
+                "Kategorie anzeigen"
+            ],
+            "Length of preview text": [
+                "Länge des Vorschautextes"
+            ]
+
+		}
+	}
+}
