@@ -158,7 +158,7 @@ function em_add_get_params($url, $params=array(), $html=true, $encode=true){
 }
 
 /**
- * Get a array of countries, translated. Keys are 2 character country iso codes. If you supply a string or array that will be the first value in the array (if array, the array key is the first key in the returned array)
+ * Get a array of countries, __d. Keys are 2 character country iso codes. If you supply a string or array that will be the first value in the array (if array, the array key is the first key in the returned array)
  * @param mixed $add_blank
  * @return array
  */
@@ -241,7 +241,7 @@ function em_get_hour_format(){
 }
 
 function em_get_days_names(){
-	return array (1 => translate( 'Mon' ), 2 => translate( 'Tue' ), 3 => translate( 'Wed' ), 4 => translate( 'Thu' ), 5 => translate( 'Fri' ), 6 => translate( 'Sat' ), 0 => translate( 'Sun' ) );
+	return array (1 => __( 'Mon' ), 2 => __( 'Tue' ), 3 => __( 'Wed' ), 4 => __( 'Thu' ), 5 => __( 'Fri' ), 6 => __( 'Sat' ), 0 => __( 'Sun' ) );
 }
 
 /**
@@ -327,6 +327,7 @@ function em_get_attributes($lattributes = false){
 		    }
 		}
 	}
+	var_dump($attributes);
 	return apply_filters('em_get_attributes', $attributes, $matches, $lattributes);
 }
 
@@ -548,7 +549,7 @@ function em_checkbox_items($name, $array, $saved_values, $horizontal = true) {
 
 }
 function em_options_input_text($title, $name, $description ='', $default='') {
-    $translate = EM_ML::is_option_translatable($name);
+    $__ = EM_ML::is_option_translatable($name);
     if( preg_match('/^(.+)\[(.+)?\]$/', $name, $matches) ){
     	$value = EM_Options::get($matches[2], $default, $matches[1]);
     }else{
@@ -559,10 +560,10 @@ function em_options_input_text($title, $name, $description ='', $default='') {
 		<th scope="row"><?php echo esc_html($title); ?></th>
 	    <td>
 			<input name="<?php echo esc_attr($name) ?>" type="text" id="<?php echo esc_attr($name) ?>" value="<?php echo esc_attr($value, ENT_QUOTES); ?>" size="45" />
-	    	<?php if( $translate ): ?><span class="em-translatable dashicons dashicons-admin-site"></span><?php endif; ?>
+	    	<?php if( $__ ): ?><span class="em-translatable dashicons dashicons-admin-site"></span><?php endif; ?>
 	    	<br />
 			<?php 
-				if( $translate ){
+				if( $__ ){
 					echo '<div class="em-ml-options"><table class="form-table">';
 					foreach( EM_ML::get_langs() as $lang => $lang_name ){
 						if( $lang != EM_ML::$wplang ){
@@ -600,17 +601,17 @@ function em_options_input_password($title, $name, $description ='') {
 }
 
 function em_options_textarea($title, $name, $description ='') {
-	$translate = EM_ML::is_option_translatable($name);
+	$__ = EM_ML::is_option_translatable($name);
 	?>
 	<tr valign="top" id='<?php echo esc_attr($name);?>_row'>
 		<th scope="row"><?php echo esc_html($title); ?></th>
 			<td><fieldset>
 				<?php if($description) { ?><p><label for="<?php echo esc_attr($name) ?>"><?php echo $description; ?></label></p><?php } ?>
 				<p><textarea name="<?php echo esc_attr($name) ?>" id="<?php echo esc_attr($name) ?>" rows="6"><?php echo esc_attr(get_option($name), ENT_QUOTES);?></textarea></p>
-		    	<?php if( $translate ): ?><span class="em-translatable  dashicons dashicons-admin-site"></span><?php endif; ?>
+		    	<?php if( $__ ): ?><span class="em-translatable  dashicons dashicons-admin-site"></span><?php endif; ?>
 		    	<br />
 				<?php 
-					if( $translate ){
+					if( $__ ){
 						echo '<div class="em-ml-options"><table class="form-table">';
 						foreach( EM_ML::get_langs() as $lang => $lang_name ){
 							if( $lang != EM_ML::$wplang ){
