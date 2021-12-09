@@ -1,38 +1,23 @@
 /**
- * Internal dependencies
- */
-
-
-import { InspectorControls, AlignmentToolbar, BlockControls, useBlockProps } from '@wordpress/block-editor';
-import { TextControl, ToggleControl, RangeControl, PanelBody, PanelRow, SelectControl, FormTokenField  } from '@wordpress/components';
-import { Icon, Button} from '@wordpress/components'
-import { format } from '@wordpress/date'
-import icons from './icons.js'
-import { withState } from '@wordpress/compose';
-import ServerSideRender from '@wordpress/server-side-render';
-
-import { get } from 'lodash';
-
-/**
  * Wordpress dependencies
  */
+import { InspectorControls, AlignmentToolbar, BlockControls, useBlockProps } from '@wordpress/block-editor';
+import { TextControl, ToggleControl, RangeControl, PanelBody, PanelRow, SelectControl, FormTokenField, Dashicon, Icon, Button } from '@wordpress/components';
+import { __experimentalNumberControl as NumberControl } from '@wordpress/components'
 import { __ } from '@wordpress/i18n'; 
 import { useSelect } from '@wordpress/data';
-
-
 import { store as coreStore } from '@wordpress/core-data';
-import { boolean } from 'joi';
 
+/**
+ * Internal dependencies
+ */
+import icons from './icons.js'
 
-const CATEGORIES_LIST_QUERY = {
-	per_page: -1,
-};
-const USERS_LIST_QUERY = {
-	per_page: -1,
-};
-
-
-export default function Edit({ attributes, setAttributes }) {
+/**
+ * @param {Props} props
+ * @return {JSX.Element} Element
+ */
+const EditUpcoming = ({ attributes, setAttributes }) => {
 
 	const {
 		limit,
@@ -41,7 +26,6 @@ export default function Edit({ attributes, setAttributes }) {
 		columnsLarge,
 		showImages,
 		dropShadow,
-		imageSize,
 		style,
 		textAlignment,
 		showCategory,
@@ -54,7 +38,6 @@ export default function Edit({ attributes, setAttributes }) {
 		fromDate,
 		toDate, 
 		order,
-		orderBy
 	} = attributes;
 
 	const categoryList = useSelect( ( select ) => {
@@ -84,7 +67,6 @@ export default function Edit({ attributes, setAttributes }) {
 		
 	}, [] );
 
-
 	const locationList = useSelect( ( select ) => {
 		const { getEntityRecords } = select( coreStore );
 		const query = { per_page: -1 };
@@ -102,8 +84,6 @@ export default function Edit({ attributes, setAttributes }) {
 		
 	}, [] );
 
-	
-	 
 	let tagNames = [];
 	let tagsFieldValue = [];
 	if ( tagList !== null ) {
@@ -132,27 +112,30 @@ export default function Edit({ attributes, setAttributes }) {
 	});
 
 	const locationViewOptions = [
-		{ value: "", label: __("", "events-manager") },
-		{ value: "city", label: __("City", "events-manager") },
-		{ value: "name", label: __("Name", "events-manager") },
+		{ value: "", label: __("", 'events') },
+		{ value: "city", label: __("City", 'events') },
+		{ value: "name", label: __("Name", 'events') },
 	]
 
-	
+	const orderListViewOptions = [
+		{ value: "ASC", label: __("Ascending", 'events')},
+		{ value: "DESC", label: __("Descending", 'events')}
+	]
 
 	const inspectorControls = (
 		<InspectorControls>
 				<PanelBody
-					title={__('Data', 'events-manager')}
+					title={__('Data', 'events')}
 					initialOpen={true}
 				>
 					<SelectControl
-						label={__('Category', 'events-manager')}
+						label={__('Category', 'events')}
 						value={ selectedCategory }
 						options={ categoryList }
 						onChange={ (value) => { setAttributes( { selectedCategory: value } ); } }
 					/>
 					<FormTokenField
-						label={__('Tags', 'events-manager')}
+						label={__('Tags', 'events')}
 						value={ tagsFieldValue }
 						suggestions={ tagNames }
 						onChange={ (selectedTags) => {
@@ -175,56 +158,73 @@ export default function Edit({ attributes, setAttributes }) {
 						__experimentalExpandOnFocus={true}
 					/>
 					<TextControl
-						label={__("From:", "events-manager")}
+						label={__("From:", 'events')}
 						value={ fromDate }
 						type="date"
 						onChange={(value) => { setAttributes( { fromDate: value } ) }}
 					/>
 					<TextControl
-						label={__("To:", "events-manager")}
+						label={__("To:", 'events')}
 						value={ toDate }
 						type="date"
 						onChange={(value) => { setAttributes( { toDate: value } ) }}
 					/>
 					<SelectControl
-						label={__('Location', 'events-manager')}
+						label={__('Location', 'events')}
 						value={ selectedLocation }
 						options={ locationList }
 						onChange={ ( value ) => {
 							setAttributes( { selectedLocation: value } );
 						} }
 					/>
+
+					<SelectControl
+						label={__('Sorting', 'events')}
+						value={ order }
+						options={ orderListViewOptions }
+						onChange={ ( value ) => {
+							setAttributes( { order: value } );
+						} }
+					/>
+
+					<NumberControl
+						label={__('Limit', 'events')}
+						value={ limit }
+						onChange={ ( value ) => {
+							setAttributes( { limit: value } );
+						} }
+					/>
 					
 				</PanelBody>
 				<PanelBody
-					title={__('Appearance', 'events-manager')}
+					title={__('Appearance', 'events')}
 					initialOpen={true}
 				>
 					
 					<RangeControl
-						label={__("Columns on small screens", 'events-manager')}
+						label={__("Columns on small screens", 'events')}
 						max={ 6 }
 						min={ 1 }
-						help={__("ex. Smartphones", 'events-manager')}
+						help={__("ex. Smartphones", 'events')}
 						onChange={(value) => {setAttributes( { columnsSmall: value })}}
 						value={ columnsSmall }
 					/>
 				
 			
 					<RangeControl
-						label={__("Columns on medium screens", 'events-manager')}
+						label={__("Columns on medium screens", 'events')}
 						max={ 6 }
 						min={ 1 }
-						help={__("Tablets and smaller screens", 'events-manager')}
+						help={__("Tablets and smaller screens", 'events')}
 						onChange={(value) => {setAttributes( { columnsMedium: value })}}
 						value={ columnsMedium }
 					/>
 		
 					<RangeControl
-						label={__("Columns on large screens", 'events-manager')}
+						label={__("Columns on large screens", 'events')}
 						max={ 6 }
 						min={ 1 }
-						help={__("Desktop screens", 'events-manager')}
+						help={__("Desktop screens", 'events')}
 						onChange={(value) => {setAttributes( { columnsLarge: value })}}
 						value={ columnsLarge }
 					/>
@@ -232,54 +232,54 @@ export default function Edit({ attributes, setAttributes }) {
 				</PanelBody>
 
 				<PanelBody
-					title={__('Events', 'events-manager')}
+					title={__('Events', 'events')}
 					initialOpen={true}
 				>
 					<PanelRow>
 						<ToggleControl
-							label={ __("Hover-effect", 'events-manager')}
+							label={ __("Hover-effect", 'events')}
 							checked={ dropShadow }
 							onChange={ (value) => setAttributes({ dropShadow: value }) }
 						/>
 					</PanelRow>
 					
 					
-						<label className="components-base-control__label" htmlFor="inspector-range-control-4">{__("Style", "events-manager")}</label><br />
+						<label className="components-base-control__label" htmlFor="inspector-range-control-4">{__("Style", 'events')}</label><br />
 						<div className="styleSelector">
 								<Button onClick={ () => setAttributes({ style: "mini" }) } className={style == "mini" ? "active" : ""}>
 									<Icon size="64" className="icon" icon={icons.mini}/>
-									<div>{__("Minimal", "events-manager")}</div>
+									<div>{__("Minimal", 'events')}</div>
 								</Button>
 								<Button onClick={ () => setAttributes({ style: "list" }) } className={style == "list" ? "active" : ""}>
 									<Icon size="64" className="icon" icon={icons.list}/>
-									<div>{__("List", "events-manager")}</div>
+									<div>{__("List", 'events')}</div>
 								</Button>
 								<Button onClick={ () => setAttributes({ style: "cards" }) } className={style == "cards" ? "active" : ""}>
 									<Icon size="64" className="icon" icon={icons.cards}/>
-									<div>{__("Cards", "events-manager")}</div>
+									<div>{__("Cards", 'events')}</div>
 								</Button>
 						</div>
 						
 					
 					{ showImages &&
-					<Fragment>
+					<>
 						<PanelRow>
 							<ToggleControl
-								label={ __("Round images", 'events-manager')}
+								label={ __("Round images", 'events')}
 								checked={ roundImages }
 								onChange={ (value) => setAttributes({ roundImages: value }) }
 							/>
 						</PanelRow>
 						<PanelRow>
 							<ToggleControl
-								label={ __("Show category", 'events-manager')}
+								label={ __("Show category", 'events')}
 								checked={ showCategory }
 								onChange={ (value) => setAttributes({ showCategory: value }) }
 							/>
 						</PanelRow>
 						<PanelRow>
 						<SelectControl
-							label={__('Location', 'events-manager')}
+							label={__('Location', 'events')}
 							value={ showLocation }
 							options={ locationViewOptions }
 							onChange={ ( value ) => {
@@ -289,13 +289,13 @@ export default function Edit({ attributes, setAttributes }) {
 						</PanelRow>
 						
 						
-					</Fragment>
+					</>
 					}
 					<RangeControl
-						label={__("Length of preview text", 'events-manager')}
+						label={__("Length of preview text", 'events')}
 						max={ 200 }
 						min={ 0 }
-						help={__("Number of words", 'events-manager')}
+						help={__("Number of words", 'events')}
 						onChange={(value) => {setAttributes( { excerptLength: value })}}
 						value={ excerptLength }
 					/>
@@ -304,7 +304,6 @@ export default function Edit({ attributes, setAttributes }) {
 	)
 
 	return (
-		
 		<>
 			{ inspectorControls }
 			<BlockControls>
@@ -315,12 +314,19 @@ export default function Edit({ attributes, setAttributes }) {
 			</BlockControls>
 			<div { ...blockProps }>
 				
-			<ServerSideRender
-        		block="events-manager/upcoming"
-    		/>
+			<div className="components-placeholder is-large">
+                <div className="components-placeholder__label">
+                    <span className="block-editor-block-icon has-colors">
+					<Dashicon icon="calendar-alt" />
+			
+                    </span>{__("Upcoming Events", "events")}</div>
+                <div className="components-placeholder__instructions">{__("See for settings in the inspector. The result can be seen in the frontend", "events")}</div>
+            </div>
 				
 			</div>
 		</>
 	);
 
 }
+
+export default EditUpcoming;
