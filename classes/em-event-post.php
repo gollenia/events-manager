@@ -76,17 +76,19 @@ class EM_Event_Post {
 	public static function get_related_events($EM_Event, int $limit = 5) {
 		global $post;
         $categories = get_the_terms($post, 'event-categories');
-
+	
         if(empty($categories)) {
             return false;
         }
+
+		
 
         $args = [
             'post_type' => 'event',
             'orderby' => '_event_start_date',
             'order' => 'ASC',
             'posts_per_page' => $limit,
-            'post__not_in' => [$EM_Event],
+            'post__not_in' => [$post->id],
             'tax_query' => [
                 [
                     'taxonomy' => 'event-categories',
@@ -102,13 +104,12 @@ class EM_Event_Post {
                 ]
             ]
         ];
-
-        return Timber::get_posts( $args );
-        
+        return \Timber::get_posts( $args );
     }
 	
 	public static function the_content($content) {
 		global $post;
+		global $EM_Twig;
 
 		if($post->post_type !== "event") return $content;
 
@@ -131,7 +132,8 @@ class EM_Event_Post {
 			"formatting" => ["time" => get_option("dbem_time_format")]
 		];
 		$template = get_twig_template('templates/templates/event-single');
-	
+		//var_dump(\Timber::$locations);
+		//return $EM_Twig::compile($template, $attributes);
 		return \Timber\Timber::compile($template, $attributes);
 	}
 	
