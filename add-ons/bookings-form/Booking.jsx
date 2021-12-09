@@ -77,8 +77,6 @@ const Booking = () => {
 
     const addTicket = (id) => {
       let ticket = {...eventData.tickets[id]}
-
-      console.log("Adding ticket...", eventData.tickets)
       ticket.uid = Math.round(Math.random() * 1000)
       setTicketSelection(data => [...data, ticket])
     }
@@ -97,8 +95,8 @@ const Booking = () => {
     }
 
     const updateForm = (field, value) => {
-      console.log(field, value)
-      setFormData(prevFormData => { return {...prevFormData, [field]: value}})
+      setFormData({...formData, [field]: value})
+  
     }
 
     const {booking_nonce, rest_nonce, rest_url, booking_url, wp_debug, event_id} = window.bookingAppData
@@ -178,9 +176,20 @@ const Booking = () => {
 
       const cleanUp = () => {
         setModalVisible(false)
-        setFormData({})
-        setTicketSelection([])
-        setWizzardStep(eventData.attendee_fields.length === 0 ? 1 : 0)
+        if(eventData.attendee_fields.length === 0) setWizzardStep(1)
+        let tempForm = {}
+        for(let field of eventData.fields) {
+          tempForm[field.name] = field.value
+        }
+        tempForm["data_privacy_consent"] = ""
+        setFormData(tempForm);
+        for(let ticketKey in eventData.tickets) {
+          for(let i = 0; i < eventData.tickets[ticketKey].min; i++) {
+            let ticket = {...eventData.tickets[ticketKey]}
+            ticket.uid = Math.floor(Math.random() * 1000)
+            setTicketSelection([...ticketSelection, ticket])
+          }
+        }
       }
 
       const pageTitles = [
