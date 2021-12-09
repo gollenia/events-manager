@@ -21,8 +21,6 @@ const Gateway = (props) => {
         return {__html: html};
     }
 
-    console.log(props)
-
     return (
         <div>
             <h5>{__("Payment", "em-pro")}</h5>
