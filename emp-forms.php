@@ -655,18 +655,37 @@ class EM_Form extends EM_Object {
 						$result = false;
 					}				
 					break;			
-				case 'date':		    				    
-				    if( !empty($value) ){
-						if( !preg_match('/\d{4}-\d{2}-\d{2}/', $value) ){
-							$this_err = (!empty($field['options_date_min_error'])) ? $field['options_date_min_error']:__('Dates must have correct formatting. Please use the date picker provided.','events-manager');
+				case 'date':
+					if( empty($value) && !empty($field['required']) ){
+						$this_err = (!empty($field['options_date_max'])) ? $field['options_date_max']:$err;
+						$this->add_error($this_err);
+						$result = false;
+					}		    				    
+				    
+					if( !preg_match('/\d{4}-\d{2}-\d{2}/', $value) ){
+						$this_err = (!empty($field['options_date_min_error'])) ? $field['options_date_error']:__('Dates must have correct formatting. Please use the date picker provided.','events-manager');
+						$this->add_error($this_err);
+						$result = false;
+					}
+					
+					if( $field['options_date_min'] ) {
+						$current = strtotime($value);
+						$min = strtotime($field['options_date_min']);
+						if($current < $min) {
+							$this_err = (!empty($field['options_date_min_error'])) ? $field['options_date_min_error']:__('Too mini','events-manager');
 							$this->add_error($this_err);
 							$result = false;
 						}
 					}
-					if( empty($value) && !empty($field['required']) ){
-							$this_err = (!empty($field['options_date_max'])) ? $field['options_date_max']:$err;
+
+					if( $field['options_date_max'] ) {
+						$current = strtotime($value);
+						$max = strtotime($field['options_date_max']);
+						if($current > $max) {
+							$this_err = (!empty($field['options_date_min_error'])) ? $field['options_date_max_error']:__('Too maxi','events-manager');
 							$this->add_error($this_err);
 							$result = false;
+						}
 					}
 					break;			
 				case 'time':
