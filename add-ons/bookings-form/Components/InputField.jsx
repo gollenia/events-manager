@@ -7,7 +7,10 @@ const InputField = (props) => {
 
     const {type, name, label, required = false, pattern, defaultValue, options, selectHint, value, min, max} = props
 
+    console.log(value)
+
     const handleChange = event => {
+        console.log("state:", event.target.value)
         props.onChange(event.target.value)
     }
 
@@ -15,9 +18,9 @@ const InputField = (props) => {
         props.onChange(value)
     }
 
-    const handleCheckboxChange = (event) => {
-        console.log("check", event.target.value)
-        props.onChange(event.target.value)
+    const handleCheckboxChange = (event) => {  
+        let result = event.target.checked ? "on" : "off"
+        props.onChange(result)
     }
 
     const selectOptions = () => {
@@ -28,7 +31,7 @@ const InputField = (props) => {
             const result = []
             Object.entries(options).forEach(entry => {
                 const [key, label] = entry;
-                console.log(entry)
+            
                 result.push(<option selected={value == key} key={key} value={key}>{label}</option>)
             });
             return result;
@@ -40,8 +43,7 @@ const InputField = (props) => {
     }
 
     const radioOptions = () => {
-        console.log("options", options)
-        console.log("value", value)
+
         if (type !== "radio") return []
         if (options.length === 0) return []
         return options.map((option, index) => {
@@ -89,7 +91,7 @@ const InputField = (props) => {
             InputTag = (
                 <div className="checkbox">
                     <label>
-                    <input onChange={(event) => {handleCheckboxChange(event)}} type="checkbox" name={name} required={required} checked={value == "on"}/>
+                    <input onChange={() => {handleCheckboxChange(event)}} type="checkbox" name={name} required={required} />
                     <span>{label}</span>
                     </label>
                 </div>
@@ -115,7 +117,7 @@ const InputField = (props) => {
             InputTag = (
                 <div className="input">
                     <label>{label}</label>
-                    <input onChange= {event => {handleChange(event)}} type={type} name={name} value={value} required={required} pattern={pattern}/>
+                    <input onChange= {event => {handleChange(event)}} type={type} name={name} required={required} pattern={pattern}/>
                 </div>
             )
     }
