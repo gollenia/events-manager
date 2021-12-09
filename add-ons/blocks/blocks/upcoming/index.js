@@ -19,7 +19,7 @@ import './editor.scss';
 const { name, category, attributes } = metadata;
 
 const settings = {
-	title: __( 'Upcoming events', 'events-manager' ),
+	title: __( 'Upcoming Events', 'events-manager' ),
 	description: __( 'Shows a list or cards of upcoming events', 'events-manager' ),
 	icon: icons.posts,
 	apiVersion: 2,
