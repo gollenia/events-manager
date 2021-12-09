@@ -50,10 +50,6 @@
 			"type": "string",
 			"default": "desc"
 		},
-		"orderBy": {
-			"type": "string",
-			"default": "date"
-		},
 		"selectedCategory": {
 			"type": "string",
 			"default": "0"
