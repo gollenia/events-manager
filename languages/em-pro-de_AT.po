@@ -2267,7 +2267,13 @@ msgstr "Keine Plätze mehr frei"
 msgid "Price"
 msgstr "Kosten"
 
+msgid "Free"
+msgstr "Gratis"
+
 msgid "Speaker"
 msgstr "Referent"
+
+msgid "Similar events"
+msgstr "Ähnliche Veranstaltungen"
 
 
