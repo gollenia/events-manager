@@ -3,8 +3,6 @@ import { BlockControls, AlignmentToolbar } from '@wordpress/block-editor';
 
 class Toolbar extends Component {
 	render() {
-
-
 		return (
 			<Fragment>
 				<BlockControls>
