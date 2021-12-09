@@ -9,9 +9,11 @@ document.addEventListener('click', (event) => {
   openBookingModal();
 })
 
+if(root) {
 document.addEventListener('DOMContentLoaded', () => {
   ReactDOM.render(
     <Booking />,
      root
     );
   })
+}
