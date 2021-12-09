@@ -23,7 +23,9 @@ class EM_Booking_Api {
     public function post_object_created() {
         global $post;
         $event = em_get_event($post->id, 'post_id');
-        if (!$event) return;
+        
+        if (!$event->event_id ) return;
+
         add_action( 'wp_enqueue_scripts', function () use ($event){
             $script_asset = require( __DIR__ . "/../../includes/booking-form.asset.php" );
             wp_enqueue_script( 
