@@ -21,12 +21,12 @@ const Booking = () => {
     const [error, setError] = useState("");
     const [modalVisible, setModalVisible] = useState(false);
     const [message, setMessage] = useState("");
+    const [originalDocumentTitle, setOriginalDocumentTitle] = useState("");
     const [loading, setLoading] = useState(false);
     const [wizzardStep, setWizzardStep] = useState(() => 0);
     const [ticketSelection, setTicketSelection] = useState(() => []);
     const [coupon, setCoupon] = useState(() => { return {}});
     const [gateway, setGateway] = useState(() => { return "offline"});
-    
 
     const [formData, setFormData] = useState({});
 
@@ -99,7 +99,7 @@ const Booking = () => {
   
     }
 
-    const {booking_nonce, rest_nonce, rest_url, booking_url, wp_debug, event_id} = window.bookingAppData
+    const {booking_nonce, rest_url, booking_url, wp_debug} = window.bookingAppData
     const eventData = {
       event: window.bookingAppData.event,
       coupons: window.bookingAppData.coupons,
@@ -110,9 +110,18 @@ const Booking = () => {
       strings: window.bookingAppData.strings
     }
     
+    const openModal = () => {
+      document.title = `${__('Registration', 'em-pro')} ${eventData.event.event_name}`;
+      setModalVisible(true);
+    }
+
+    const closeModal = () => {
+      document.title = originalDocumentTitle;
+      setModalVisible(false);
+    }
    
     useEffect(() => {
-       document.title = "Anmeldung " + eventData.event.event_name;
+      setOriginalDocumentTitle(document.title)
       if(eventData.attendee_fields.length === 0) setWizzardStep(1)
       let tempForm = {}
       for(let field of eventData.fields) {
@@ -175,7 +184,7 @@ const Booking = () => {
       }
 
       const cleanUp = () => {
-        setModalVisible(false)
+        closeModal()
         if(eventData.attendee_fields.length === 0) setWizzardStep(1)
         let tempForm = {}
         for(let field of eventData.fields) {
@@ -204,7 +213,7 @@ const Booking = () => {
       return (
         <div>
           <ErrorBoundary FallbackComponent={ErrorFallback}>
-          <button className="button button--primary" onClick={() => {setModalVisible (true)}}>{ eventData?.strings?.modal_button }</button>
+          <button className="button button--primary" onClick={() => {openModal()}}>{ eventData?.strings?.modal_button }</button>
           
           <div className={`modal modal--fullscreen ${wizzardStep == 3 ? " modal--success" : ""} ${modalVisible ? "modal--open" : ""}`}>
             { loading && <div className="modal__overlay">
@@ -217,7 +226,7 @@ const Booking = () => {
             <div className="modal__dialog">
               <div className="modal__header">
                   <div className="modal__title"><h2>{pageTitles[wizzardStep]}</h2></div>
-                  <button className="modal__close" onClick={() => {setModalVisible (false)}}></button>
+                  <button className="modal__close" onClick={() => {closeModal()}}></button>
               </div>
               
                 <div className="modal__content">
