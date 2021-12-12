@@ -19,8 +19,8 @@ const InputField = (props) => {
     }
 
     const handleCheckboxChange = (event) => {  
-        let result = event.target.checked ? "on" : "off"
-        props.onChange(result)
+		console.log(event)
+        props.onChange(event.target.checked)
     }
 
     const selectOptions = () => {
@@ -91,7 +91,7 @@ const InputField = (props) => {
             InputTag = (
                 <div className="checkbox">
                     <label>
-                    <input onChange={() => {handleCheckboxChange(event)}} type="checkbox" name={name} required={required} />
+                    <input onChange={(event) => {handleCheckboxChange(event)}} type="checkbox" name={name} required={required} />
                     <span>{label}</span>
                     </label>
                 </div>
