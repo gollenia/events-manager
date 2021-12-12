@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3615089cbe2a0413cc7da9e0ddc7c578",
+    "content-hash": "2aa387ff8630ebfb67ca528223b6c074",
     "packages": [
         {
             "name": "composer/installers",
@@ -156,6 +156,57 @@
                 }
             ],
             "time": "2021-09-13T08:19:44+00:00"
+        },
+        {
+            "name": "shuchkin/simplexlsxgen",
+            "version": "1.0.22",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/shuchkin/simplexlsxgen.git",
+                "reference": "9a555eef9b922ec5a7b6893e8cc40cbbe68de999"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/shuchkin/simplexlsxgen/zipball/9a555eef9b922ec5a7b6893e8cc40cbbe68de999",
+                "reference": "9a555eef9b922ec5a7b6893e8cc40cbbe68de999",
+                "shasum": ""
+            },
+            "require": {
+                "ext-mbstring": "*",
+                "ext-zlib": "*"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "src/SimpleXLSXGen.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Sergey Shuchkin (SMSPILOT)",
+                    "email": "sergey.shuchkin@gmail.com",
+                    "homepage": "https://shuchkin.ru/"
+                }
+            ],
+            "description": "Export data to Excel XLSx file. PHP XLSX generator.",
+            "homepage": "https://github.com/shuchkin/simplexlsxgen",
+            "keywords": [
+                "backend",
+                "creator",
+                "excel",
+                "generator",
+                "php",
+                "xlsx"
+            ],
+            "support": {
+                "issues": "https://github.com/shuchkin/simplexlsxgen/issues",
+                "source": "https://github.com/shuchkin/simplexlsxgen/tree/1.0.22"
+            },
+            "time": "2021-10-28T21:37:04+00:00"
         },
         {
             "name": "symfony/polyfill-ctype",
@@ -459,16 +510,16 @@
         },
         {
             "name": "twig/twig",
-            "version": "v3.3.3",
+            "version": "v3.3.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "a27fa056df8a6384316288ca8b0fa3a35fdeb569"
+                "reference": "65cb6f0b956485e1664f13d023c55298a4bb59ca"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/a27fa056df8a6384316288ca8b0fa3a35fdeb569",
-                "reference": "a27fa056df8a6384316288ca8b0fa3a35fdeb569",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/65cb6f0b956485e1664f13d023c55298a4bb59ca",
+                "reference": "65cb6f0b956485e1664f13d023c55298a4bb59ca",
                 "shasum": ""
             },
             "require": {
@@ -519,7 +570,7 @@
             ],
             "support": {
                 "issues": "https://github.com/twigphp/Twig/issues",
-                "source": "https://github.com/twigphp/Twig/tree/v3.3.3"
+                "source": "https://github.com/twigphp/Twig/tree/v3.3.4"
             },
             "funding": [
                 {
@@ -531,7 +582,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2021-09-17T08:44:23+00:00"
+            "time": "2021-11-25T13:46:55+00:00"
         }
     ],
     "packages-dev": [],

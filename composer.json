@@ -30,7 +30,8 @@
         }
     },
     "require": {
-        "timber/timber": "^2.0.0-alpha.2"
+        "timber/timber": "^2.0.0-alpha.2",
+        "shuchkin/simplexlsxgen": "^1.0"
     },
     "autoload": {
         "psr-4": {
