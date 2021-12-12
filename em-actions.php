@@ -591,45 +591,34 @@ function em_init_actions() {
 		//generate bookings export according to search request
 		$show_tickets = !empty($_REQUEST['show_tickets']);
 		$EM_Bookings_Table = new EM_Bookings_Table($show_tickets);
-		header("Content-Type: application/octet-stream; charset=utf-8");
-		$file_name = !empty($EM_Event->event_slug) ? $EM_Event->event_slug:get_bloginfo();
-		header("Content-Disposition: Attachment; filename=".sanitize_title($file_name)."-bookings-export.csv");
-		do_action('em_csv_header_output');
-		echo "\xEF\xBB\xBF"; // UTF-8 for MS Excel (a little hacky... but does the job)
-		if( !defined('EM_CSV_DISABLE_HEADERS') || !EM_CSV_DISABLE_HEADERS ){
-			if( !empty($_REQUEST['event_id']) ){
-				echo __('Event','events-manager') . ' : ' . $EM_Event->event_name .  "\n";
-				if( $EM_Event->location_id > 0 ) echo __('Where','events-manager') . ' - ' . $EM_Event->get_location()->location_name .  "\n";
-				echo __('When','events-manager') . ' : ' . $EM_Event->output('#_EVENTDATES - #_EVENTTIMES') .  "\n";
-			}
-			$EM_DateTime = new EM_DateTime(current_time('timestamp'));
-			echo sprintf(__('Exported booking on %s','events-manager'), $EM_DateTime->format('D d M Y h:i')) .  "\n";
-		}
-		$delimiter = !defined('EM_CSV_DELIMITER') ? ',' : EM_CSV_DELIMITER;
-		$delimiter = apply_filters('em_csv_delimiter', $delimiter);
-		//Rows
+	
+	
+		
 		$EM_Bookings_Table->limit = 150; //if you're having server memory issues, try messing with this number
 		$EM_Bookings = $EM_Bookings_Table->get_bookings();
-		$handle = fopen("php://output", "w");
-		fputcsv($handle, $EM_Bookings_Table->get_headers(true), $delimiter);
+		
+		$excel_sheet = [$EM_Bookings_Table->get_headers(true)];
+		
 		while( !empty($EM_Bookings->bookings) ){
 			foreach( $EM_Bookings->bookings as $EM_Booking ) { /* @var EM_Booking $EM_Booking */
 				//Display all values
 				if( $show_tickets ){
 					foreach($EM_Booking->get_tickets_bookings()->tickets_bookings as $EM_Ticket_Booking){ /* @var EM_Ticket_Booking $EM_Ticket_Booking */
 						$row = $EM_Bookings_Table->get_row_csv($EM_Ticket_Booking);
-						fputcsv($handle, $row, $delimiter);
+						array_push($excel_sheet, $row);
 					}
 				}else{
 					$row = $EM_Bookings_Table->get_row_csv($EM_Booking);
-					fputcsv($handle, $row, $delimiter);
+					array_push($excel_sheet, $row);
 				}
 			}
 			//reiterate loop
 			$EM_Bookings_Table->offset += $EM_Bookings_Table->limit;
 			$EM_Bookings = $EM_Bookings_Table->get_bookings();
 		}
-		fclose($handle);
+		$xlsx = \SimpleXLSXGen::fromArray( $excel_sheet );
+		$xlsx->downloadAs($EM_Event->slug . '-bookings.xlsx');
+		
 		exit();
 	}
 }
