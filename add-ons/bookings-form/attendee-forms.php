@@ -373,7 +373,12 @@ class EM_Attendees_Form {
 	 */
 	public static function intercept_csv_export(){
 		if( !empty($_REQUEST['action']) && $_REQUEST['action'] == 'export_bookings_csv' && !empty($_REQUEST['show_attendees']) && wp_verify_nonce($_REQUEST['_wpnonce'], 'export_bookings_csv')){
-			//sort out cols
+			$EM_Event = false;
+			if( !empty($_REQUEST['event_id']) ){
+				$EM_Event = em_get_event( absint($_REQUEST['event_id']) );
+			}
+			$title = $EM_Event ? $EM_Event->slug : "all";
+
 			if( !empty($_REQUEST['cols']) && is_array($_REQUEST['cols']) ){
 				$cols = array();
 				foreach($_REQUEST['cols'] as $col => $active){
@@ -385,25 +390,11 @@ class EM_Attendees_Form {
 		
 			//generate bookings export according to search request
 			$EM_Bookings_Table = new EM_Bookings_Table(true);
-			header("Content-Type: application/octet-stream; charset=utf-8");
-			header("Content-Disposition: Attachment; filename=".sanitize_title(get_bloginfo())."-bookings-export.csv");
-			do_action('em_csv_header_output');
-			echo "\xEF\xBB\xBF"; // UTF-8 for MS Excel (a little hacky... but does the job)
-			if( !defined('EM_CSV_DISABLE_HEADERS') || !EM_CSV_DISABLE_HEADERS ){
-				if( !empty($_REQUEST['event_id']) ){
-					$EM_Event = em_get_event($_REQUEST['event_id']);
-					_e('Event','events-manager') . ' : ' . $EM_Event->event_name .  "\n";
-					if( $EM_Event->location_id > 0 ) _e('Where','events-manager') . ' - ' . $EM_Event->get_location()->location_name .  "\n";
-					_e('When','events-manager') . ' : ' . $EM_Event->output('#_EVENTDATES - #_EVENTTIMES') .  "\n";
-				}
-				echo sprintf(__('Exported bookings on %s','events-manager'), date_i18n('D d M Y h:i', current_time('timestamp'))) .  "\n";
-			}
+			
 			//Rows
-			$EM_Bookings_Table->limit = 150; //if you're having server memory issues, try messing with this number
+			$EM_Bookings_Table->limit = 250; //if you're having server memory issues, try messing with this number
 			$EM_Bookings = $EM_Bookings_Table->get_bookings();
-			$handle = fopen("php://output", "w");
-			$delimiter = !defined('EM_CSV_DELIMITER') ? ',' : EM_CSV_DELIMITER;
-			$delimiter = apply_filters('em_csv_delimiter', $delimiter);
+			
 			$headers = $EM_Bookings_Table->get_headers(true);
 			if( !empty($_REQUEST['event_id']) ){
 				foreach(self::get_form($_REQUEST['event_id'])->form_fields as $field ){
@@ -412,7 +403,7 @@ class EM_Attendees_Form {
 					}
 				}
 			}
-			fputcsv($handle, $headers, $delimiter);
+			$excel_sheet = [$EM_Bookings_Table->get_headers(true)];
 			while(!empty($EM_Bookings->bookings)){
 				foreach( $EM_Bookings->bookings as $EM_Booking ) {
 					/* @var EM_Booking $EM_Booking */
@@ -426,7 +417,7 @@ class EM_Attendees_Form {
 								foreach( $attendee_data as $field_value){
 									$row[] = EM_Bookings_Table::sanitize_spreadsheet_cell($field_value);
 								}
-								fputcsv($handle, $row, $delimiter);
+								array_push($excel_sheet, $row);
 							}
 						}
 					}
@@ -435,7 +426,8 @@ class EM_Attendees_Form {
 				$EM_Bookings_Table->offset += $EM_Bookings_Table->limit;
 				$EM_Bookings = $EM_Bookings_Table->get_bookings();
 			}
-			fclose($handle);
+			$xlsx = \SimpleXLSXGen::fromArray( $excel_sheet );
+			$xlsx->downloadAs($title . '-bookings.xlsx');
 			exit();
 		}
 	}

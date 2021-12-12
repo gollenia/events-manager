@@ -182,107 +182,6 @@ class EM_Scripts_and_Styles {
 		if( is_admin() ){
 			//Scripts and Styles
 			add_action('admin_enqueue_scripts', array('EM_Scripts_and_Styles','admin_enqueue'));
-		}else{
-			add_action('wp_enqueue_scripts', array('EM_Scripts_and_Styles','public_enqueue'));
-		}
-	}
-
-	/**
-	 * Enqueuing public scripts and styles
-	 */
-	public static function public_enqueue() {
-	    global $wp_query;
-		$pages = array( //pages which EM needs CSS or JS
-           	'events' => get_option('dbem_events_page'),
-           	'edit-events' => get_option('dbem_edit_events_page'),
-           	'edit-locations' => get_option('dbem_edit_locations_page'),
-           	'edit-bookings' => get_option('dbem_edit_bookings_page'),
-        );
-		$pages = apply_filters('em_scripts_and_styles_public_enqueue_pages', $pages);
-		$obj = $wp_query->get_queried_object();
-		$obj_id = 0;
-		if( is_home() ){
-		    $obj_id = '-1';
-		}elseif( !empty( $obj->ID ) ){
-			$obj_id = $obj->ID;
-		}
-		
-	    //Decide whether or not to require_once certain JS files and dependencies
-	    $script_deps = array();
-        if( get_option('dbem_js_limit') ){
-            //determine what script dependencies to require_once, and which to not require_once
-            if( is_page($pages) ){
-                $script_deps['jquery'] = 'jquery';
-            }
-            if( (!empty($pages['events']) && is_page($pages['events']) && ( get_option('dbem_events_page_search_form') || (EM_MS_GLOBAL && !get_site_option('dbem_ms_global_events_links', true)) )) || get_option('dbem_js_limit_search') === '0' || in_array($obj_id, explode(',', get_option('dbem_js_limit_search')))  ){ 
-                //events page only needs datepickers
-                $script_deps['jquery-ui-core'] = 'jquery-ui-core';
-                $script_deps['jquery-ui-datepicker'] = 'jquery-ui-datepicker';
-                if( get_option('dbem_search_form_geo') ){
-                	$script_deps['jquery-ui-autocomplete'] = 'jquery-ui-autocomplete';
-                }
-            }
-            if( (!empty($pages['edit-events']) && is_page($pages['edit-events'])) || get_option('dbem_js_limit_events_form') === '0' || in_array($obj_id, explode(',', get_option('dbem_js_limit_events_form'))) ){
-                //submit/edit event pages require
-                $script_deps['jquery-ui-core'] = 'jquery-ui-core';
-                $script_deps['jquery-ui-datepicker'] = 'jquery-ui-datepicker';
-	            if( !get_option('dbem_use_select_for_locations') ){
-					$script_deps['jquery-ui-autocomplete'] = 'jquery-ui-autocomplete';
-		        }
-			}
-            if( (!empty($pages['edit-bookings']) && is_page($pages['edit-bookings'])) || get_option('dbem_js_limit_edit_bookings') === '0' || in_array($obj_id, explode(',', get_option('dbem_js_limit_edit_bookings'))) ){
-                //edit booking pages require a few more ui scripts
-                $script_deps['jquery-ui-core'] = 'jquery-ui-core';
-                $script_deps['jquery-ui-widget'] = 'jquery-ui-widget';
-                $script_deps['jquery-ui-position'] = 'jquery-ui-position';
-                $script_deps['jquery-ui-sortable'] = 'jquery-ui-sortable';
-                $script_deps['jquery-ui-dialog'] = 'jquery-ui-dialog';
-            }
-			if( !empty($obj->post_type) && ($obj->post_type == EM_POST_TYPE_EVENT || $obj->post_type == EM_POST_TYPE_LOCATION) ){
-			    $script_deps['jquery'] = 'jquery';
-			}
-			//check whether to load our general script or not
-			if( empty($script_deps) ){
-				if( get_option('dbem_js_limit_general') === "0" || in_array($obj_id, explode(',', get_option('dbem_js_limit_general'))) ){
-				    $script_deps['jquery'] = 'jquery';
-				}
-			}
-        }else{
-            $script_deps = array(
-            	'jquery'=>'jquery',
-	        	'jquery-ui-core'=>'jquery-ui-core',
-	        	'jquery-ui-widget'=>'jquery-ui-widget',
-	        	'jquery-ui-position'=>'jquery-ui-position',
-	        	'jquery-ui-sortable'=>'jquery-ui-sortable',
-	        	'jquery-ui-datepicker'=>'jquery-ui-datepicker',
-	        	'jquery-ui-autocomplete'=>'jquery-ui-autocomplete',
-	        	'jquery-ui-dialog'=>'jquery-ui-dialog'
-            );
-        }
-        $script_deps = apply_filters('em_public_script_deps', $script_deps);
-        if( !empty($script_deps) ){ //given we depend on jQuery, there must be at least a jQuery dep for our file to be loaded
-			wp_enqueue_script('events-manager', plugins_url('includes/events-manager.js',__FILE__), array_values($script_deps), EM_VERSION); //jQuery will load as dependency
-			self::localize_script();
-    		do_action('em_enqueue_scripts');
-        }
-        
-		//Now decide on showing the CSS file
-		if( get_option('dbem_css_limit') ){
-			$includes = get_option('dbem_css_limit_require_once');
-			$excludes = get_option('dbem_css_limit_exclude');
-			if( (!empty($pages) && is_page($pages)) || (!empty($obj->post_type) && in_array($obj->post_type, array(EM_POST_TYPE_EVENT, EM_POST_TYPE_LOCATION))) || $includes === "0" || in_array($obj_id, explode(',', $includes)) ){
-			    $require_once = true;
-			}
-			if( $excludes === '0' || (!empty($obj_id) && in_array($obj_id, explode(',', $excludes))) ){
-				$exclude = true;
-			}
-			if( !empty($require_once) && empty($exclude) ){
-			    wp_enqueue_style('events-manager', plugins_url('includes/events-manager.css',__FILE__), array(), EM_VERSION); //main css
-	    		do_action('em_enqueue_styles');
-			}
-		}else{
-			wp_enqueue_style('events-manager', plugins_url('includes/events-manager.css',__FILE__), array(), EM_VERSION); //main css
-	    	do_action('em_enqueue_styles');
 		}
 	}
 	
@@ -315,24 +214,13 @@ class EM_Scripts_and_Styles {
 			'show24hours' => get_option('dbem_time_24h'),
 			'is_ssl' => is_ssl(),
 		);
-		//maps api key
-		if( get_option('dbem_gmap_is_active') ){
-			if( get_option('dbem_google_maps_browser_key') ){
-				$em_localized_js['google_maps_api'] = get_option('dbem_google_maps_browser_key');
-			}
-			if( get_option('dbem_google_maps_styles') ){
-				$em_localized_js['google_maps_styles'] = json_decode(get_option('dbem_google_maps_styles'));
-			}
-		}
-		//debug mode
-		//if( defined('WP_DEBUG') && WP_DEBUG ) $em_localized_js['ui_css'] = plugins_url('includes/jquery-ui.css', __FILE__);
+	
 		//booking-specific stuff
 		if( get_option('dbem_rsvp_enabled') ){
 			$offset = defined('EM_BOOKING_MSG_JS_OFFSET') ? EM_BOOKING_MSG_JS_OFFSET : 30;
 		    $em_localized_js = array_merge($em_localized_js, array(
 				'bookingInProgress' => __('Please wait while the booking is being submitted.','events-manager'),
 				'tickets_save' => __('Save Ticket','events-manager'),
-				
 				'bookings_export_save' => __('Export Bookings','events-manager'),
 				'bookings_settings_save' => __('Save Settings','events-manager'),
 				'booking_delete' => __("Are you sure you want to delete?",'events-manager'),
