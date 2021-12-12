@@ -85,7 +85,7 @@ class EM_Pro {
 	 * Enqueue scripts when fired by em_enqueue_scripts action.
 	 */
 	public static function em_enqueue_scripts(){
-		wp_enqueue_script('events-manager-pro', plugins_url('includes/events-manager-pro.js',__FILE__), array('jquery'), 5); //jQuery will load as dependency
+		//wp_enqueue_script('events-manager-pro', plugins_url('includes/events-manager-pro.js',__FILE__), array('jquery'), 5); //jQuery will load as dependency
 	}
 
 	/**
