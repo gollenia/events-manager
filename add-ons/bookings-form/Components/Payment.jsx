@@ -1,13 +1,13 @@
-const React = require('react')
+const { useState, React } = require('react');
 import { __ } from '@wordpress/i18n';
 import PropTypes from "prop-types"
 import Gateway from './Gateway.jsx';
 
 import InputField from './InputField.jsx'
 
-
-
 const Payment = (props) => {
+
+	const [couponCode, setCouponCode] = useState("");
 
     const {
         eventData: {
@@ -47,15 +47,14 @@ const Payment = (props) => {
     }
 
     const updateFormField = (field, value) => {
-        
         updateForm(field, value)
       }
 
-    const  checkCoupon = async (code) => {
+    const checkCouponCode = async (code) => {
         const params = {
             event_id: event.event_id,
             code
-          }
+        }
   
         const url = new URL(rest_url + "events-manager/v2/check_coupon")
         url.search = new URLSearchParams(params).toString();
@@ -112,15 +111,19 @@ const Payment = (props) => {
             </div>
         <form>
             { coupons.available && 
+			<div className='input-row'>
                 <div className="input-group">
                 <label>{__('Coupon code','em-pro')}</label>
                 <input 
+					value={couponCode}
+					onChange={(event) => {setCouponCode(event.target.value)}}
                     type="text"
                     label="coupon"
                     name="coupon_code"
-                    onBlur={(event) => {checkCoupon(event.target.value)}}
                 />
                 </div>
+				<span onClick={() => {checkCouponCode(couponCode)}} className='button button--secondary'>{__("Check coupon", "em-pro")}</span>
+			</div>
             }
             { gateways.length > 1 &&
             <InputField
