@@ -7,10 +7,18 @@ const InputField = (props) => {
 
     const {type, name, label, required = false, pattern, defaultValue, options, selectHint, value, min, max} = props
 
-    console.log(value)
+	const createMarkup = () => {
+        return {__html: value};
+    }
+
+	if (type === "html") {
+		const content = createMarkup();
+
+		if(!content.__html) return (<div>{value}</div>);
+		return (<div dangerouslySetInnerHTML={content}></div>);
+	}
 
     const handleChange = event => {
-        console.log("state:", event.target.value)
         props.onChange(event.target.value)
     }
 
@@ -19,7 +27,6 @@ const InputField = (props) => {
     }
 
     const handleCheckboxChange = (event) => {  
-		console.log(event)
         props.onChange(event.target.checked)
     }
 
