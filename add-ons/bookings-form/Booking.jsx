@@ -109,7 +109,7 @@ const Booking = () => {
       gateways: window.bookingAppData.gateways,
       strings: window.bookingAppData.strings
     }
-    
+
     const openModal = () => {
       document.title = `${__('Registration', 'em-pro')} ${eventData.event.event_name}`;
       setModalVisible(true);
