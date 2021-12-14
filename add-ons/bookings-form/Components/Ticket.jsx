@@ -31,7 +31,7 @@ const Ticket = ({ticket, fields, ticketKey, removeTicket, updateTicket}) => {
                     name={field.name}
                     label={field.label}
                     required={field.required}
-                    value={ticket['fields'][field.name]}
+                    value={field.value}
                     pattern={field.pattern}
                     min={field.min}
                     max={field.max}
