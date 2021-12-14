@@ -2276,4 +2276,33 @@ msgstr "Referent"
 msgid "Similar events"
 msgstr "Ähnliche Veranstaltungen"
 
+msgid "Info text"
+msgstr "Informationstext"
+
+msgid "Text field"
+msgstr "Textfeld"
+
+msgid "Checkbox"
+msgstr "Ankreuzfeld"
+
+msgid "Select"
+msgstr "Auswahlbox"
+
+msgid "Textarea"
+msgstr "Nachricht"
+
+msgid "Radio"
+msgstr "Auswahl"
+
+msgid "Multiselect"
+msgstr "Mehrfachauswahl"
+
+msgid "Telephone"
+msgstr "Telefonnummer"
+
+msgid "Number"
+msgstr "Zahl"
+
+msgid "E-Mail (required)"
+msgstr "E-Mail (benötigt)"
 

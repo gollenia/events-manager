@@ -2325,17 +2325,46 @@ msgstr "Événement"
 msgid "Payment Gateways"
 msgstr "Passerelles de paiement"
 
-msgid "Booking for"
-msgstr "Réservation pour"
+#: templates/templates/event-single.twig
+msgid "Audience"
+msgstr "Groupe ciblé"
 
-msgid "Select your tickets first"
-msgstr "Sélectionnez d'abord vos billets"
+msgid "to"
+msgstr "jusqu'à"
 
-msgid "Tell us, who you are"
-msgstr "Il nous faut encore quelques dates"
+msgid "Time"
+msgstr "Temps"
 
-msgid "How do you want to pay?"
-msgstr "Comment voulez-vous payer??"
+msgid "from"
+msgstr "à"
 
-msgid "Looks good?"
-msgstr "Est-ce que ça a l'air bien?"
+msgid "Starts at"
+msgstr "Commence à"
+
+msgid "Ends at"
+msgstr "Fini à"
+
+msgid "%s o'clock"
+msgstr "%s heures"
+
+msgid "Caution"
+msgstr "Danger"
+
+msgid "Only few spaces left"
+msgstr "Il ne reste que quelques places"
+
+msgid "No spaces left"
+msgstr "Plus de places disponibles"
+
+msgid "Price"
+msgstr "Frais"
+
+msgid "Free"
+msgstr "Libérer"
+
+msgid "Speaker"
+msgstr "Conférencier"
+
+msgid "Similar events"
+msgstr "Événements similaires"
+

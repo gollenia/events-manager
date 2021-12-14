@@ -5,62 +5,62 @@
 			"": {
 				"domain": "messages",
 				"plural_forms": "nplurals=2; plural=(n != 1);",
-				"lang": "de_AT"
+				"lang": "de_DE"
 			},
 			"Next": [
-				"Weiter"
+				"Continuez"
 			],
 			"Back": [
-				"Zurück"
+				"Retour"
 			],
 			"Close": [
-				"Schließen"
+				"Conclure"
 			],
 			"Full price": [
-				"Gesamtpreis"
+				"Prix total"
 			],
 			"Base price:": [
-				"Grundpreis:"
+				"Prix de base:"
 			],
 			"Coupon": [
-				"Gutschein"
+				"Coupon"
 			],
 			"Payment": [
-				"Bezahlung"
+				"Payer"
 			],
             "Coupon code": [
-				"Gutschein-Code"
+				"Code de réduction"
 			],
 			"Choose your Tickets first": [
-				"Wähle deine Tickets aus"
+				"Sélectionnez vos billets"
 			],
 			"Please give us some more data": [
-				"Ein paar Daten von dir brauchen wir noch"
+				"Nous avons encore besoin de vos données"
 			],
 			"How do you want to pay?": [
-				"Wie möchtest du bezahlen?"
+				"Comment voulez-vous payer?"
 			],
             "Thank you for your order!": [
-				"Vielen Dank für deine Buchung!"
+				"Merci pour votre réservation!"
 			],
 			"Attendee": [
-				"Teilnehmer"
+				"Abonné"
 			],
 			"for": [
-				"für"
+				"pour"
 			],
 			"An error occured in our ordering system.": [
-				"In unserem Buchungsformular ist ein Fehler aufgetreten."
+				"Il y a eu une erreur dans notre formulaire de réservation."
 			],
 			"Error: No connection to server.": [
-				"Es ist eine Fehler aufgerteten: Die Verbindung zu unserem Server wurde unterbrochen."
+				"Une erreur s'est produite : La connexion à notre serveur a été interrompue."
 			],
 			"You may try it later again. However our admin has been informed and will take care of the problem.": [
-				"Du kannst es später nocheinmal probieren. Unser Administrator wurde jedenfalls darüber informiert und kümmert sich schnellstmöglich um das Problem"
+				"Vous pouvez réessayer plus tard. Notre administrateur a été informé et traitera le problème dans les plus brefs délais"
 			],
 			"Check coupon":
 			[
-				"Gutschein überprüfen"
+				"Chèque bon d'achat"
 			]
 
 		}

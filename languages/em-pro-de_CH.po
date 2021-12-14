@@ -27,54 +27,6 @@ msgstr "Standard Fehlermeldung für benötigtes Feld"
 msgid "Total Paid"
 msgstr "Gesamtsumme (bezahlt)"
 
-#: add-ons/gateways/gateway.paypal.php:635
-msgid "Reserved unconfirmed spaces?"
-msgstr "Unbestätigte reservierte Plätze?"
-
-#: add-ons/gateways/gateway.paypal.php:550
-msgid "API Signature"
-msgstr "API Signatur"
-
-#: add-ons/gateways/gateway.paypal.php:544
-msgid "API Password"
-msgstr "API Passwort"
-
-#: add-ons/gateways/gateway.paypal.php:538
-msgid "API Username"
-msgstr "API Benutzername"
-
-#: add-ons/gateways/gateway.paypal.php:528
-msgid "Show API Keys"
-msgstr "API Schlüssel zeigen"
-
-#: add-ons/gateways/gateway.paypal.php:527
-msgid "If you are only using testing credentials, you can display and save them safely."
-msgstr "Bei Verwendung von Test-Anmeldedaten kannst du sie anzeigen und sicher abspeichern."
-
-#: add-ons/gateways/gateway.paypal.php:523
-msgid "Your site is not using SSL! Whilst not a requirement, if you're going to submit API information for a live PayPal account, we recommend you do so over a secure connection. If this is not possible, consider an alternative option of submitting your API information as covered in our %s."
-msgstr "Deine Website verwendet kein SSL! Obwohl das keine Voraussetzung ist, empfehlen wir, API Informationen für ein Online PayPal Konto nur über eine sichere Verbindung zu übertragen. Wenn das nicht möglich ist, verwende eine andere Option, deine API Informationen zu übertragen, wie beschrieben in %s."
-
-#: add-ons/gateways/gateway.paypal.php:519
-msgid "These credentials are required if you enable deleting bookings that remain unpaid after x minutes."
-msgstr "Diese Anmeldeinformationen werden benötigt, wenn unbezahlte Buchungen nach x Minuten gelöscht werden sollen."
-
-#: add-ons/gateways/gateway.paypal.php:518
-msgid "The following API credentials are optional, but recommended. They will allow us to check whether payments have gone through in the event that IPN notifications fail to reach us."
-msgstr "Die folgenden API Anmeldeinformationen sind optional, aber empfohlen. Darüber können wir - für den Fall, dass IPN Benachrichtigungen fehlschlagen - überprüfen, ob Zahlungen erfolgreich waren."
-
-#: add-ons/gateways/gateway.paypal.php:506
-msgid "%s Credentials"
-msgstr "%s Anmeldeinformationen"
-
-#: add-ons/gateways/gateway.paypal.php:494
-#: add-ons/gateways/gateway.paypal.php:524
-msgid "documentation"
-msgstr "Dokumentation"
-
-#: add-ons/gateways/gateway.paypal.php:494
-msgid "API credentials are now required to auto-delete unpaid bookings after a certain period of time, to avoid any potential accidental deletions. For more information please see our %s page."
-msgstr "API Anmeldeinformationen werden jetzt benötigt, um unbezahlte Buchungen nach einer bestimmten Zeit automatisch zu löschen und mögliche versehentliche Löschungen zu vermeiden. Siehe %s Seite für weitere Informationen."
 
 #: add-ons/gateways/gateway.authorize.aim.php:339
 #: add-ons/gateways/gateway.authorize.aim.php:343
@@ -109,9 +61,6 @@ msgstr "Zusätzlich kannst du diese Emails auf Veranstaltungsebene überschreibe
 msgid "These settings are applied when making a booking on %s languge pages. The email template settings here will override those for the default language."
 msgstr "Diese Einstellungen werden angewendet, wenn eine Buchung auf der %s Sprachseite vorgenommen wird. Die Emailvorlagen-Einstellungen hier überschreiben die für die Standardsprache."
 
-#: add-ons/gateways/gateway.paypal.php:576
-msgid "If set to yes, taxes are not included in individual item prices and total tax is shown at the bottom. If set to no, taxes are included within the individual prices."
-msgstr "Bei Ja werden die Steuern nicht in den einzelnen Preispositionen ausgewiesen, sondern nur als Summe unten. Bei Nein werden die Steuern in den einzelnen Preispositionen ausgewiesen."
 
 #: events-manager-pro.php:185
 msgid "Until it is updated, Events Manager Pro will remain inactive to prevent further errors."
@@ -133,9 +82,6 @@ msgstr "Benutzerprofil-Felder anzeigen?"
 msgid "When logged in, users usually don't see their profile fields, with this enabled, users will be able to update their profile fields alongside their booking. This is particularly useful if the user is missing key information."
 msgstr "Angemeldete Benutzer sehen gewöhnlich ihre Profilinformationen nicht. Mit dieser Einstellung können Benutzer ihre Profilinformationen zusammen mit ihrer Buchung ändern. Dies ist besonders hilfreich, wenn dem Benutzer Schlüsselinformationen fehlen."
 
-#: add-ons/gateways/gateway.paypal.php:576
-msgid "Click here for more information."
-msgstr "Hier klicken für weitere Informationen."
 
 #: templates/placeholders/bookingsummary-multiple.php:36
 msgid "Overall Spaces"
@@ -149,17 +95,11 @@ msgstr "Diese Änderungen auf alle Buchungen anwenden?"
 msgid "This booking makes part of multiple bookings made at once."
 msgstr "Diese Buchung ist Teil einer Mehrfachbuchung."
 
-#: add-ons/gateways/gateway.paypal.php:576
-msgid "We strongly recommend setting this to No."
-msgstr "Wir empfehlen stark, diese Einstellung auf Nein zu setzen."
 
 #: add-ons/multiple-bookings/multiple-bookings.php:492
 msgid "Since this is part of multiple booking, you can also change these values for all individual bookings."
 msgstr "Da es sich um eine Mehrfachbuchung handelt, können all diese Werte für die einzelnen Buchungen geändert werden."
 
-#: add-ons/gateways/gateway.paypal.php:576
-msgid "Include Taxes In Itemized Prices"
-msgstr "Steuern zu Preispositionen hinzufügen"
 
 #: add-ons/multiple-bookings/multiple-bookings.php:496
 msgid "You can sync this modification with all other related bookings."
@@ -265,9 +205,6 @@ msgstr "Du hast in der %s Sektion unten die Option aktiviert, dass die Veranstal
 msgid "Since you are in Multiple Booking Mode, these emails will only be sent in these specific circumstances :"
 msgstr "Da Du Dich im Mehrfachbuchungsmodus befindest, werden diese Emails nur unter bestimmten Umständen versandt:"
 
-#: add-ons/gateways/gateway.paypal.php:507
-msgid "In order to connect PayPal with your site, you need to enable IPN on your account."
-msgstr "Um die Seite mit PayPal zu verbinden, musst Du auf Deinem Konto IPN aktivieren."
 
 #: add-ons/emails/emails-admin.php:86
 msgid "Allow administrators of this blog to add additional admin email addresses for gateways inside each %s settings page."
@@ -361,11 +298,6 @@ msgstr "Eine ungültige Email Admin-Emailadresse wurde für Deine individuellen 
 #: add-ons/emails/custom-emails-admin.php:289
 msgid "You are in Multiple Booking Mode. These emails will only be used when individually modifying bookings which trigger these individual event booking emails."
 msgstr "Du bist im Mehrfachbuchungsmodus. Diese Emails werden nur verwendet, wenn Buchungen einzeln modifiziert werden. Diese Modifizierungen lösen den Versand der einzelnen Buchungsemails aus."
-
-#: add-ons/emails/custom-emails-admin.php:289
-#: add-ons/gateways/gateway.paypal.php:507
-msgid "Important:"
-msgstr "Wichtig:"
 
 #: add-ons/emails/custom-emails-admin.php:287
 #: add-ons/emails/custom-emails-admin.php:296
@@ -2278,6 +2210,7 @@ msgid "Amount"
 msgstr "Betrag"
 
 #: add-ons/gateways/gateways.transactions.php:124
+#: templates/templates/event-single.twig
 msgid "Date"
 msgstr "Datum"
 
@@ -2300,18 +2233,76 @@ msgstr "Zahlungs-Gateways"
 msgid "Attendee"
 msgstr "Teilnehmer"
 
+#: templates/templates/event-single.twig
+msgid "Audience"
+msgstr "Zielgruppe"
 
-msgid "Booking for"
-msgstr "Buchung für"
+msgid "to"
+msgstr "bis"
 
-msgid "Select your tickets first"
-msgstr "Wähle zuerst deine Tickets aus"
+msgid "Time"
+msgstr "Zeit"
 
-msgid "Tell us, who you are"
-msgstr "Ein paar Daten von dir brauchen wir noch"
+msgid "from"
+msgstr "von"
 
-msgid "How do you want to pay?"
-msgstr "Wie möchtest du bezahlen?"
+msgid "Starts at"
+msgstr "Beginnt um"
 
-msgid "Looks good?"
-msgstr "Looks good?"
+msgid "Ends at"
+msgstr "Endet um"
+
+msgid "%s o'clock"
+msgstr "%s Uhr"
+
+msgid "Caution"
+msgstr "Achtung"
+
+msgid "Only few spaces left"
+msgstr "Nur noch wenige Plätze frei"
+
+msgid "No spaces left"
+msgstr "Keine Plätze mehr frei"
+
+msgid "Price"
+msgstr "Kosten"
+
+msgid "Free"
+msgstr "Gratis"
+
+msgid "Speaker"
+msgstr "Referent"
+
+msgid "Similar events"
+msgstr "Ähnliche Veranstaltungen"
+
+msgid "Info text"
+msgstr "Informationstext"
+
+msgid "Text field"
+msgstr "Textfeld"
+
+msgid "Checkbox"
+msgstr "Ankreuzfeld"
+
+msgid "Select"
+msgstr "Auswahlbox"
+
+msgid "Textarea"
+msgstr "Nachricht"
+
+msgid "Radio"
+msgstr "Auswahl"
+
+msgid "Multiselect"
+msgstr "Mehrfachauswahl"
+
+msgid "Telephone"
+msgstr "Telefonnummer"
+
+msgid "Number"
+msgstr "Zahl"
+
+msgid "E-Mail (required)"
+msgstr "E-Mail (benötigt)"
+
