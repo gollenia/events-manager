@@ -169,6 +169,9 @@ class EM_Booking_Api {
             ];
             // This is very unfancy.
             switch ($field['type']) {
+				case 'html':
+					$input_field['value'] = $field['options_html_content'];
+					break;
                 case 'checkbox':
                     $input_field['value'] = $field['options_checkbox_checked'];
                     $input_field['error'] = $field['options_checkbox_error'];
