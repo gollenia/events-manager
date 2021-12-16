@@ -6743,6 +6743,9 @@ msgstr "Referenten"
 msgid "Speaker"
 msgstr "Conférencier"
 
+msgid "Female Speaker"
+msgstr "Conférencier"
+
 msgid "Add Speaker"
 msgstr "Nouveau Conférencier"
 
@@ -6775,3 +6778,12 @@ msgstr "Angleterre"
 
 msgid "Netherlands"
 msgstr "Hollande"
+
+msgid "Gender"
+msgstr "Genre"
+
+msgid "Male"
+msgstr "Masculin"
+
+msgid "Female"
+msgstr "Femelle"

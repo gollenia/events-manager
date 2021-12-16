@@ -6622,6 +6622,9 @@ msgstr "Referenten"
 msgid "Speaker"
 msgstr "Referent"
 
+msgid "Female Speaker"
+msgstr "Referentin"
+
 msgid "Add Speaker"
 msgstr "Neuer Referent"
 
@@ -6654,3 +6657,12 @@ msgstr "England"
 
 msgid "Netherlands"
 msgstr "Holland"
+
+msgid "Gender"
+msgstr "Geschlecht"
+
+msgid "Male"
+msgstr "Männlich"
+
+msgid "Female"
+msgstr "Weiblich"
