@@ -43,7 +43,7 @@ if( !defined('EM_AJAX') ){
 
 
 //add_action('plugins_loaded', 'dbem_debug_mode');
-require_once('vendor/autoload.php');
+require_once( __DIR__ . '/vendor/autoload.php');
 
 require_once('classes/em-twig.php');
 
