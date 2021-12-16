@@ -294,9 +294,12 @@ const Booking = () => {
                   <div className={`wizzard__step ${wizzardStep == 3 ? " wizzard__step--active" : ""} ${wizzardStep == 2 ? " " : ""}` }>
                   <div className="container">
                         {message}
-                        <Gateway 
-                          currentGateway={currentGateway()}
-                        />
+						{ fullPrice() !== 0 &&
+							<Gateway 
+								currentGateway={currentGateway()}
+						  	/>
+						}
+                        
                   </div>
                     
                   </div>

@@ -7,12 +7,12 @@ const InputField = (props) => {
 
     const {type, name, label, required = false, pattern, defaultValue, options, selectHint, value, min, max} = props
 
-	const createMarkup = () => {
-        return {__html: value};
+	const createMarkup = (textString) => {
+        return {__html: textString};
     }
 
 	if (type === "html") {
-		const content = createMarkup();
+		const content = createMarkup(value);
 
 		if(!content.__html) return (<div>{value}</div>);
 		return (<div dangerouslySetInnerHTML={content}></div>);
@@ -99,7 +99,7 @@ const InputField = (props) => {
                 <div className="checkbox">
                     <label>
                     <input onChange={(event) => {handleCheckboxChange(event)}} type="checkbox" name={name} required={required} />
-                    <span>{label}</span>
+                    <span dangerouslySetInnerHTML={createMarkup(label)}></span>
                     </label>
                 </div>
             )
@@ -108,7 +108,7 @@ const InputField = (props) => {
             InputTag = (
                 <div className="input">
                     <label>{label}</label>
-                    <input onChange= {event => {handleChange(event)}} type={type} name={name} min={min} max={max} value={value} required={required} pattern={pattern}/>
+                    <input onChange= {event => {handleChange(event)}} type={type} name={name} min={min} max={max} required={required} pattern={pattern}/>
                 </div>
             )
             break;
