@@ -63,13 +63,14 @@ class EM_Speakers {
 
     public function metabox_callback() {
         global $post;
-        
         $email = get_post_meta( $post->ID, 'email', true );
-
+		$gender = get_post_meta( $post->ID, 'gender', true );
         wp_nonce_field( basename( __FILE__ ), 'person_details' );
         echo '<table class="form-table"><tbody>';
-        echo '<tr><th>' . __( 'E-Mail', 'event-manager' ) . '</th><td><input name="email" type="email" value="' . $email . '"></td></tr>';
+        echo '<tr><th>' . __( 'E-Mail', 'events-manager' ) . '</th><td><input name="email" type="email" value="' . $email . '"></td></tr>';
+		echo '<tr><th>' . __( 'Gender', 'events-manager' ) . '</th><td><select name="gender"><option value="male" ' . ($gender == 'male' ? 'selected' : '') . '>' . __('Male', 'events-manager') . '</option><option value="female" ' . ($gender == 'female' ? 'selected' : '') . '>' . __('Female', 'events-manager') . '</option></select></td></tr>';
         echo '</tbody></table>';
+
     }
 
     public function save( $post_id, $post ) {
@@ -83,7 +84,8 @@ class EM_Speakers {
         }
         
         $meta = [
-            "email" => sanitize_text_field( $_POST['email'] )
+            "email" => sanitize_text_field( $_POST['email'] ),
+			"gender" => sanitize_text_field( $_POST['gender'] )
         ];
     
         foreach ( $meta as $key => $value ) {    
