@@ -185,7 +185,7 @@ jQuery(document).ready( function($){
 			}else{
 				let warning_text = EM.event_recurrence_overwrite;
 			}
-			confirmation = confirm(warning_text);
+			let confirmation = confirm(warning_text);
 			if( confirmation == false ){
 				event.preventDefault();
 			}
@@ -210,7 +210,7 @@ jQuery(document).ready( function($){
 		//Enable/Disable Bookings
 		$('#event-rsvp').on('click', function(event){
 			if( !this.checked ){
-				confirmation = confirm(EM.disable_bookings_warning);
+				let confirmation = confirm(EM.disable_bookings_warning);
 				if( confirmation == false ){
 					event.preventDefault();
 				}else{
@@ -730,7 +730,7 @@ jQuery(document).ready( function($){
 				return false;
 			}
 		}).data( "ui-autocomplete" )._renderItem = function( ul, item ) {
-			html_val = "<a>" + em_esc_attr(item.label) + '<br><span style="font-size:11px"><em>'+ em_esc_attr(item.address) + ', ' + em_esc_attr(item.town)+"</em></span></a>";
+			let html_val = "<a>" + em_esc_attr(item.label) + '<br><span style="font-size:11px"><em>'+ em_esc_attr(item.address) + ', ' + em_esc_attr(item.town)+"</em></span></a>";
 			return jQuery( "<li></li>" ).data( "item.autocomplete", item ).append(html_val).appendTo( ul );
 		};
 		jQuery('#em-location-reset a').on('click', function(){
@@ -837,15 +837,6 @@ let em_ajaxify = function(url){
 };
 
 
-  
-function em_map_infobox(marker, message, map) {
-  let iw = new google.maps.InfoWindow({ content: message });
-  google.maps.event.addListener(marker, 'click', function() {
-	if( infoWindow ) infoWindow.close();
-	infoWindow = iw;
-    iw.open(map,marker);
-  });
-}
 
 function em_esc_attr( str ){
 	if( typeof str !== 'string' ) return '';
