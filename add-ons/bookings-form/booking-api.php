@@ -198,7 +198,7 @@ class EM_Booking_Api {
                 case 'user_email':
                     $input_field['type'] = "email";
                     break;
-                case 'dbem_country':
+                case 'country':
                     $input_field['type'] = "select";
                     $input_field['options'] = em_get_countries();
                     $input_field['value'] = substr(get_locale(), -2);
