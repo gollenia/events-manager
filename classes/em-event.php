@@ -539,6 +539,7 @@ class EM_Event extends EM_Object{
 				}
 
 				$this->speaker_id = array_key_exists('speaker_id', $event_meta) ? intval($event_meta['speaker_id'][0]) : 0;
+				
 				if( $this->has_event_location() ) $this->get_event_location()->load_postdata($event_meta);
 				//quick compatability fix in case _event_id isn't loaded or somehow got erased in post meta
 				if( empty($this->event_id) && !$this->is_recurring() ){
@@ -882,6 +883,7 @@ class EM_Event extends EM_Object{
 
 		$this->event_audience = $_POST['event_audience'] ?? "";
 		$this->speaker_id = intval($_POST['speaker_id']) ?? 0;
+		
 
 		return apply_filters('em_event_get_post_meta', count($this->errors) == 0, $this);
 
