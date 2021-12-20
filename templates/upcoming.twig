@@ -32,7 +32,7 @@
 
 					<span class="card__subtitle">
 						{% if item._event_start_date == item._event_end_date %}
-							{{ item._event_start_date|date("j. F Y") }} {{ __("from", "events-manager")}} {{ item._event_start_time|date("G:i", false) }} {{ __("to", "events-manager")}} {{ item._event_end_time|date("G:i", false) }} Uhr
+							{{ item._event_start_date|date("j. F Y") }} {{ __("from", "em-pro")}} {{ item._event_start_time|date("G:i", false) }} {{ __("to", "events-manager")}} {{ item._event_end_time|date("G:i", false) }} Uhr
 						{% else %}
 							{{ item._event_start_date|date("j. F") }} {{ __("to", "events-manager")}} {{ item._event_end|date("j. F Y") }}    
 						{% endif %}
