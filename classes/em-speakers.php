@@ -65,10 +65,12 @@ class EM_Speakers {
         global $post;
         $email = get_post_meta( $post->ID, 'email', true );
 		$gender = get_post_meta( $post->ID, 'gender', true );
+		$role = get_post_meta( $post->ID, 'role', true );
         wp_nonce_field( basename( __FILE__ ), 'person_details' );
         echo '<table class="form-table"><tbody>';
         echo '<tr><th>' . __( 'E-Mail', 'events-manager' ) . '</th><td><input name="email" type="email" value="' . $email . '"></td></tr>';
-		echo '<tr><th>' . __( 'Gender', 'events-manager' ) . '</th><td><select name="gender"><option value="male" ' . ($gender == 'male' ? 'selected' : '') . '>' . __('Male', 'events-manager') . '</option><option value="female" ' . ($gender == 'female' ? 'selected' : '') . '>' . __('Female', 'events-manager') . '</option></select></td></tr>';
+		echo '<tr><th>' . __( 'Role', 'events-manager' ) . '</th><td><input name="role" type="text" value="' . $role . '"></td><p>' . __("If the speaker has a special Role (e.g. Organizator, Leder, etc), type in here, else leave blank", 'events-manager') . '</p></tr>';
+		echo '<tr><th>' . __( 'Gender', 'events-manager' ) . '</th><td><select name="gender"><option value="male" ' . ($gen	der == 'male' ? 'selected' : '') . '>' . __('Male', 'events-manager') . '</option><option value="female" ' . ($gender == 'female' ? 'selected' : '') . '>' . __('Female', 'events-manager') . '</option></select></td></tr>';
         echo '</tbody></table>';
 
     }
@@ -85,7 +87,8 @@ class EM_Speakers {
         
         $meta = [
             "email" => sanitize_text_field( $_POST['email'] ),
-			"gender" => sanitize_text_field( $_POST['gender'] )
+			"gender" => sanitize_text_field( $_POST['gender'] ),
+			"role" => sanitize_text_field( $_POST['role'] )
         ];
     
         foreach ( $meta as $key => $value ) {    
