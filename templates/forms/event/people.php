@@ -10,12 +10,14 @@ $args = array(
 $query = new WP_Query( $args );
 $speakers = $query->posts;
 
+
 ?>
+
 
 <div class="event-form-when" id="em-form-when">
 	<div class="components-panel__row">
 		<label class="components-base-control__label"><?php _e ( 'Audience', 'events-manager'); ?></label>
-		<input class="em-audience-input" type="text" name="event_audience" value="<?php echo $EM_Event->event_audience; ?>" />
+		<input class="em-audience-input" type="text" name="event_audience" value="<?php echo $EM_Event->event_attributes['event_audience']; ?>" />
 	</div>
 	<div class="components-panel__row">
 		<label class="components-base-control__label"><?php _e ( 'Speaker', 'events-manager'); ?></label>
