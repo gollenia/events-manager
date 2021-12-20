@@ -169,15 +169,18 @@ const Booking = () => {
         const url = new URL(booking_url)
         url.search = qs.stringify(request)
         fetch(url).then((response) => response.json()).then((response) => {
-          console.log(response)
-          if(response.result) {
-            setMessage(response.message);
-            setWizzardStep(3)
-            setLoading(false)
-            return;
-          }
-          setError(response.errors)
-          setLoading(false)
+			console.log(response)
+			if(!response.result) {
+				return;
+			}
+			if(response.gateway === "mollie") {
+				window.location.replace(result.mollie_url);
+			}
+		  	setMessage(response.message);
+			setWizzardStep(3)
+			setLoading(false)
+			return;
+	
         })
 
         // Show warning 
@@ -312,6 +315,7 @@ const Booking = () => {
                     { wizzardStep < (fullPrice() == 0 ? 1 : 2) && <button className="button button--primary" onClick={() => {setWizzardStep(wizzardStep+1)}} >{__('Next', 'em-pro')}</button> }
                     { wizzardStep == (fullPrice() == 0 ? 1 : 2) && <button className="button button--primary" onClick={() => {order()}}>{eventData.strings.book_now}</button> }
                     { wizzardStep == 3 && <button className="button button--success" onClick={() => {cleanUp()}}>{__("Close", "em-pro")}</button> }
+					{ wizzardStep == 3 && <button className="button button--success" onClick={() => {cleanUp()}}>{__("Close", "em-pro")}</button> }
                   </div>
                 </div>
               </div>
