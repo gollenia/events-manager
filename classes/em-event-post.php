@@ -104,7 +104,7 @@ class EM_Event_Post {
                 ]
             ]
         ];
-        return \Timber::get_posts( $args );
+        return \Timber\Timber::get_posts( $args );
     }
 	
 	public static function the_content($content) {
