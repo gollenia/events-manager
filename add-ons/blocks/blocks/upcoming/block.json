@@ -77,6 +77,14 @@
 		"textAlignment": {
 			"type": "string",
 			"default": "left"
+		},
+		"showAudience": {
+			"type": "boolean",
+			"default": false
+		},
+		"showSpeaker": {
+			"type": "boolean",
+			"default": false
 		}
 	}
 }

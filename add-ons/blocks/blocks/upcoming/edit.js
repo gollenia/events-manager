@@ -2,7 +2,7 @@
  * Wordpress dependencies
  */
 import { InspectorControls, AlignmentToolbar, BlockControls, useBlockProps } from '@wordpress/block-editor';
-import { TextControl, ToggleControl, RangeControl, PanelBody, PanelRow, SelectControl, FormTokenField, Dashicon, Icon, Button } from '@wordpress/components';
+import { CheckboxControl, TextControl, ToggleControl, RangeControl, PanelBody, PanelRow, SelectControl, FormTokenField, Dashicon, Icon, Button } from '@wordpress/components';
 import { __experimentalNumberControl as NumberControl } from '@wordpress/components'
 import { __ } from '@wordpress/i18n'; 
 import { useSelect } from '@wordpress/data';
@@ -38,6 +38,8 @@ const EditUpcoming = ({ attributes, setAttributes }) => {
 		fromDate,
 		toDate, 
 		order,
+		showAudience,
+		showSpeaker
 	} = attributes;
 
 	const categoryList = useSelect( ( select ) => {
@@ -197,7 +199,7 @@ const EditUpcoming = ({ attributes, setAttributes }) => {
 					
 				</PanelBody>
 				<PanelBody
-					title={__('Appearance', 'events')}
+					title={__('Design', 'events')}
 					initialOpen={true}
 				>
 					
@@ -232,7 +234,7 @@ const EditUpcoming = ({ attributes, setAttributes }) => {
 				</PanelBody>
 
 				<PanelBody
-					title={__('Events', 'events')}
+					title={__('Appearance', 'events')}
 					initialOpen={true}
 				>
 					<PanelRow>
@@ -244,53 +246,44 @@ const EditUpcoming = ({ attributes, setAttributes }) => {
 					</PanelRow>
 					
 					
-						<label className="components-base-control__label" htmlFor="inspector-range-control-4">{__("Style", 'events')}</label><br />
-						<div className="styleSelector">
-								<Button onClick={ () => setAttributes({ style: "mini" }) } className={style == "mini" ? "active" : ""}>
-									<Icon size="64" className="icon" icon={icons.mini}/>
-									<div>{__("Minimal", 'events')}</div>
-								</Button>
-								<Button onClick={ () => setAttributes({ style: "list" }) } className={style == "list" ? "active" : ""}>
-									<Icon size="64" className="icon" icon={icons.list}/>
-									<div>{__("List", 'events')}</div>
-								</Button>
-								<Button onClick={ () => setAttributes({ style: "cards" }) } className={style == "cards" ? "active" : ""}>
-									<Icon size="64" className="icon" icon={icons.cards}/>
-									<div>{__("Cards", 'events')}</div>
-								</Button>
-						</div>
+					<label className="components-base-control__label" htmlFor="inspector-range-control-4">{__("Style", 'events')}</label><br />
+					<div className="styleSelector">
+							<Button onClick={ () => setAttributes({ style: "mini" }) } className={style == "mini" ? "active" : ""}>
+								<Icon size="64" className="icon" icon={icons.mini}/>
+								<div>{__("Minimal", 'events')}</div>
+							</Button>
+							<Button onClick={ () => setAttributes({ style: "list" }) } className={style == "list" ? "active" : ""}>
+								<Icon size="64" className="icon" icon={icons.list}/>
+								<div>{__("List", 'events')}</div>
+							</Button>
+							<Button onClick={ () => setAttributes({ style: "cards" }) } className={style == "cards" ? "active" : ""}>
+								<Icon size="64" className="icon" icon={icons.cards}/>
+								<div>{__("Cards", 'events')}</div>
+							</Button>
+					</div>
 						
 					
 					{ showImages &&
-					<>
+						
 						<PanelRow>
-							<ToggleControl
+							<CheckboxControl
 								label={ __("Round images", 'events')}
 								checked={ roundImages }
 								onChange={ (value) => setAttributes({ roundImages: value }) }
 							/>
 						</PanelRow>
-						<PanelRow>
-							<ToggleControl
-								label={ __("Show category", 'events')}
-								checked={ showCategory }
-								onChange={ (value) => setAttributes({ showCategory: value }) }
-							/>
-						</PanelRow>
-						<PanelRow>
-						<SelectControl
-							label={__('Location', 'events')}
-							value={ showLocation }
-							options={ locationViewOptions }
-							onChange={ ( value ) => {
-								setAttributes( { showLocation: value } );
-							} }
-						/>
-						</PanelRow>
-						
-						
-					</>
+
 					}
+					<PanelRow>	
+						<SelectControl
+								label={__('Location', 'events')}
+								value={ showLocation }
+								options={ locationViewOptions }
+								onChange={ ( value ) => {
+									setAttributes( { showLocation: value } );
+								} }
+						/>
+					</PanelRow>
 					<RangeControl
 						label={__("Length of preview text", 'events')}
 						max={ 200 }
@@ -299,6 +292,28 @@ const EditUpcoming = ({ attributes, setAttributes }) => {
 						onChange={(value) => {setAttributes( { excerptLength: value })}}
 						value={ excerptLength }
 					/>
+					<PanelRow>
+						<CheckboxControl
+							label={ __("Show Audience", 'events')}
+							checked={ showAudience }
+							onChange={ (value) => setAttributes({ showAudience: value }) }
+						/>
+					</PanelRow>
+					<PanelRow>
+						<CheckboxControl
+							label={ __("Show Speaker", 'events')}
+							checked={ showSpeaker }
+							onChange={ (value) => setAttributes({ showSpeaker: value }) }
+						/>
+					</PanelRow>
+					
+					<PanelRow>
+						<CheckboxControl
+							label={ __("Show category", 'events')}
+							checked={ showCategory }
+							onChange={ (value) => setAttributes({ showCategory: value }) }
+						/>
+					</PanelRow>
 				</PanelBody>
 			</InspectorControls>
 	)

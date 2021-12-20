@@ -9,8 +9,9 @@ class Upcoming extends Block {
 
     public function render($attributes, $content, $full_data) : string {
         $attributes['events'] = $this->get_events($attributes);
-        $attributes['locations'] = $this->get_locations();
 
+        $attributes['locations'] = $this->get_locations();
+		var_dump($attributes);
         $template = $this->get_template($full_data->name);
         
         return \Timber\Timber::compile($template, $attributes);
