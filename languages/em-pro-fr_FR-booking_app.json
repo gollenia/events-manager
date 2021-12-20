@@ -14,7 +14,7 @@
 				"Retour"
 			],
 			"Close": [
-				"Conclure"
+				"Fermer"
 			],
 			"Full price": [
 				"Prix total"
@@ -32,7 +32,7 @@
 				"Code de réduction"
 			],
 			"Choose your Tickets first": [
-				"Sélectionnez vos billets"
+				"Choisis d'abord tes billets"
 			],
 			"Please give us some more data": [
 				"Nous avons encore besoin de vos données"
@@ -41,26 +41,26 @@
 				"Comment voulez-vous payer?"
 			],
             "Thank you for your order!": [
-				"Merci pour votre réservation!"
+				"Merci pour votre commande!"
 			],
 			"Attendee": [
-				"Abonné"
+				"Participant"
 			],
 			"for": [
 				"pour"
 			],
 			"An error occured in our ordering system.": [
-				"Il y a eu une erreur dans notre formulaire de réservation."
+				"Une erreur s'est produite dans notre système de commande"
 			],
 			"Error: No connection to server.": [
-				"Une erreur s'est produite : La connexion à notre serveur a été interrompue."
+				"Erreur : Pas de connexion au serveur."
 			],
 			"You may try it later again. However our admin has been informed and will take care of the problem.": [
-				"Vous pouvez réessayer plus tard. Notre administrateur a été informé et traitera le problème dans les plus brefs délais"
+				"Vous pouvez réessayer plus tard. Cependant, notre administrateur a été informé et s'occupera du problème."
 			],
 			"Check coupon":
 			[
-				"Chèque bon d'achat"
+				"Vérifier le coupon"
 			]
 
 		}
