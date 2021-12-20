@@ -6787,3 +6787,9 @@ msgstr "Masculin"
 
 msgid "Female"
 msgstr "Femelle"
+
+msgid "Role"
+msgstr "Rôle"
+
+msgid "If the speaker has a special Role (e.g. Organizator, Leder, etc), type in here, else leave blank"
+msgstr "Si l'orateur a un rôle particulier (par exemple, organisateur, cuir, etc.), saisissez ici, sinon laissez vide."
