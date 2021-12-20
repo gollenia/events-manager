@@ -49,7 +49,7 @@ class EM_Event_Post {
             'post_type' => 'event-speaker'
         ];
 
-        $speakers = Timber::get_posts( $args );
+        $speakers = \Timber\Timber::get_posts( $args );
         
         if ($speakers) return $speakers[0];
 
