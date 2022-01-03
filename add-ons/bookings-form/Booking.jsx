@@ -169,12 +169,12 @@ const Booking = () => {
         const url = new URL(booking_url)
         url.search = qs.stringify(request)
         fetch(url).then((response) => response.json()).then((response) => {
-			
+			//console.log(response)
 			if(!response.result) {
 				return;
 			}
 			if(response.gateway === "mollie") {
-				window.location.replace(response.result.mollie_url);
+				window.location.replace(response.mollie_url);
 			}
 		  	setMessage(response.message);
 			setWizzardStep(3)
