@@ -656,3 +656,4 @@ class EM_Booking_Form {
 EM_Booking_Form::init();
 include('attendee-forms.php');
 include('booking-api.php');
+include('booking-qr-code.php');
