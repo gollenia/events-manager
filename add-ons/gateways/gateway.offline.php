@@ -90,6 +90,7 @@ class EM_Gateway_Offline extends EM_Gateway {
 				if( !empty($EM_Booking->email_not_sent) ){
 					$return['message'] .=  ' '.get_option('dbem_booking_feedback_nomail');
 				}
+				$return['booking_id'] = $EM_Booking->id;
 				return apply_filters('em_gateway_offline_booking_add', $return, $EM_Booking->get_event(), $EM_Booking);
 			}
 		}						
@@ -420,7 +421,14 @@ class EM_Gateway_Offline extends EM_Gateway {
 		?>
 		<table class="form-table">
 		<tbody>
-		  <?php em_options_input_text( esc_html__('Success Message', 'em-pro'), 'em_'. $this->gateway . '_booking_feedback', esc_html__('The message that is shown to a user when a booking with offline payments is successful.','em-pro') )?>
+		  <?php 
+		  	em_options_input_text( esc_html__('Success Message', 'em-pro'), 'em_'. $this->gateway . '_booking_feedback', esc_html__('The message that is shown to a user when a booking with offline payments is successful.','em-pro') );
+			em_options_input_text( esc_html__('IBAN', 'em-pro'), 'em_'. $this->gateway . '_iban', esc_html__('In order to generate a QR Code for payment, you have to provide a valid IBAN','em-pro') );
+			em_options_input_text( esc_html__('BIC', 'em-pro'), 'em_'. $this->gateway . '_bic', esc_html__('Though not needed, some banks are only happy if you provide a BIC','em-pro') );
+			em_options_input_text( esc_html__('Bank', 'em-pro'), 'em_'. $this->gateway . '_bank', esc_html__('Same goes with Bank name.','em-pro') );
+			em_options_input_text( esc_html__('Beneficiary', 'em-pro'), 'em_'. $this->gateway . '_beneficiary', esc_html__('In some countries you need to specify a beneficiary. This Data is added to the QR Code.','em-pro') );
+			
+		  ?>
 		</tbody>
 		</table>
 		<?php
@@ -430,7 +438,13 @@ class EM_Gateway_Offline extends EM_Gateway {
 	 * Run when saving  settings, saves the settings available in EM_Gateway_Mollie::mysettings()
 	 */
 	function update() {
-	    $gateway_options = array('em_'. $this->gateway . '_booking_feedback');
+	    $gateway_options = [
+			'em_'. $this->gateway . '_booking_feedback',
+			'em_'. $this->gateway . '_iban',
+			'em_'. $this->gateway . '_bic',
+			'em_'. $this->gateway . '_bank',
+			'em_'. $this->gateway . '_beneficiary'
+		];
 		foreach( $gateway_options as $option_wpkses ) add_filter('gateway_update_'.$option_wpkses,'wp_kses_post');
 		return parent::update($gateway_options);
 	}	
