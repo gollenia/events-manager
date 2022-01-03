@@ -2,7 +2,6 @@ const testFolder = './languages/';
 const fs = require('fs');
 const { exec } = require("child_process");
 
-
 fs.readdir(testFolder, (err, files) => {
   files.forEach(file => {
 	if(file.slice(-2) === "po") {
@@ -12,7 +11,6 @@ fs.readdir(testFolder, (err, files) => {
 			console.log("error", error)
 			console.log("stderr", stderr)
 			console.log("stdout", stdout)
-
 		})
 	}
   });
