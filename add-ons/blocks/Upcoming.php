@@ -11,7 +11,7 @@ class Upcoming extends Block {
         $attributes['events'] = $this->get_events($attributes);
 
         $attributes['locations'] = $this->get_locations();
-		var_dump($attributes);
+		
         $template = $this->get_template($full_data->name);
         
         return \Timber\Timber::compile($template, $attributes);
