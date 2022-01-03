@@ -717,9 +717,7 @@ function em_add_options() {
 			'dbem_bookings_tickets_ordering' => 1,
 			'dbem_bookings_tickets_orderby' => 'ticket_price DESC, ticket_name ASC',
 			'dbem_bookings_tickets_priority' => 0,
-			
-			'dbem_bookings_tickets_single' => 0,
-			'dbem_bookings_tickets_single_form' => 0,
+	
 			//My Bookings Page
 			'dbem_bookings_my_title_format' => __('My Bookings','events-manager'),
 		//Flags
