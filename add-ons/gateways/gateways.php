@@ -212,10 +212,7 @@ class EM_Gateways {
 	static function booking_form_footer(){
 		global $EM_Gateways;
 		//Check if we can user quick pay buttons
-		if( get_option('dbem_gateway_use_buttons', 1) ){ //backward compatability
-			echo EM_Gateways::booking_form_buttons();
-			return;
-		}
+		
 		//Continue with payment gateway selection
 		$active_gateways = self::active_gateways();
 		$active_gateways = array_reverse($active_gateways);
@@ -404,11 +401,11 @@ class EM_Gateways {
 				$EM_Notices->add_confirm(__('Changes Saved','em-pro'));
 			}
 		}
-		//enable dbem_bookings_tickets_single_form if enabled
+		
 	}
 	
 	static function customer_fields_admin() {
-		//enable dbem_bookings_tickets_single_form if enabled
+		
 		$EM_Form = EM_User_Fields::get_form();
 		$current_values = get_option('emp_gateway_customer_fields');
 		?>
