@@ -13,6 +13,7 @@ import TicketList from "./Components/TicketList.jsx"
 import Payment from "./Components/Payment.jsx"
 import ErrorFallback from './Components/Error.jsx';
 import Gateway from './Components/Gateway.jsx';
+import OfflinePayment from './Components/OfflinePayment.jsx';
 
 let openBookingModal = () => {}
 
@@ -27,6 +28,7 @@ const Booking = () => {
     const [ticketSelection, setTicketSelection] = useState(() => []);
     const [coupon, setCoupon] = useState(() => { return {}});
     const [gateway, setGateway] = useState(() => { return "offline"});
+	const [bookingId, setBookingId] = useState(0);
 
     const [formData, setFormData] = useState({});
 
@@ -169,12 +171,17 @@ const Booking = () => {
         const url = new URL(booking_url)
         url.search = qs.stringify(request)
         fetch(url).then((response) => response.json()).then((response) => {
-			//console.log(response)
+			console.log(response)
 			if(!response.result) {
+				setLoading(false)
+				setError(response.errors)
 				return;
 			}
 			if(response.gateway === "mollie") {
 				window.location.replace(response.mollie_url);
+			}
+			if(response.gateway === "offline") {
+				setBookingId(response.booking_id)
 			}
 		  	setMessage(response.message);
 			setWizzardStep(3)
@@ -298,8 +305,9 @@ const Booking = () => {
                   <div className="container">
                         {message}
 						{ fullPrice() !== 0 &&
-							<Gateway 
+							<OfflinePayment 
 								currentGateway={currentGateway()}
+								bookingId={bookingId}
 						  	/>
 						}
                         
