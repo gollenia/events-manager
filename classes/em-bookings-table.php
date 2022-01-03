@@ -284,11 +284,11 @@ class EM_Bookings_Table{
 		<div id="em-bookings-table-export" class="em-bookings-table-overlay" style="display:none;" title="<?php esc_attr_e('Export Bookings','events-manager'); ?>">
 			<form id="em-bookings-table-export-form" class="em-bookings-table-form" action="" method="post">
 				<p><?php esc_html_e('Select the options below and export all the bookings you have currently filtered (all pages) into a CSV spreadsheet format.','events-manager') ?></p>
-				<?php if( !get_option('dbem_bookings_tickets_single') ): //single ticket mode means no splitting by ticket type ?>
-					<p>
-					<input type="checkbox" name="show_tickets" value="1" />
-					<label><?php esc_html_e('Split bookings by ticket type','events-manager')?> </label>
-				<?php endif; ?>
+				
+				<p>
+				<input type="checkbox" name="show_tickets" value="1" />
+				<label><?php esc_html_e('Split bookings by ticket type','events-manager')?> </label>
+				
 				<?php do_action('em_bookings_table_export_options'); ?>
 				<div id="em-bookings-table-settings-form-cols">
 					<p><strong><?php esc_html_e('Columns to export','events-manager')?></strong></p>

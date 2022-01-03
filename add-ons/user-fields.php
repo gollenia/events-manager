@@ -299,12 +299,12 @@ class EM_User_Fields {
 				}
 			}
 		}
-		//enable dbem_bookings_tickets_single_form if enabled
+		
 	}
 	
 	public static function admin_page() {
 		$EM_Form = self::get_form();
-		//enable dbem_bookings_tickets_single_form if enabled
+		
 		?>
 		<a id="user_fields"></a>
 					<div id="em-booking-form-editor" class="postbox">

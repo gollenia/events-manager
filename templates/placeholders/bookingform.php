@@ -48,7 +48,7 @@ if( !$is_open && !is_user_logged_in() && $EM_Event->get_bookings()->is_open(true
 			 	<input type='hidden' name='_wpnonce' value='<?php echo wp_create_nonce('booking_add'); ?>'/>
 				<?php 
 					// Tickets Form
-					if( $show_tickets && ($can_book || get_option('dbem_bookings_tickets_single_form')) ){ //show if more than 1 ticket, or if in forced ticket list view mode
+					if( $show_tickets && $can_book ){ //show if more than 1 ticket, or if in forced ticket list view mode
 						do_action('em_booking_form_before_tickets', $EM_Event); //do not delete
 						//Show multiple tickets form to user, or single ticket list if settings enable this
 						//If logged out, can be allowed to see this in settings witout the register form 
@@ -60,7 +60,7 @@ if( !$is_open && !is_user_logged_in() && $EM_Event->get_bookings()->is_open(true
 				<?php if( $can_book ): ?>
 					<div class='em-booking-form-details'>
 						<?php 
-							if( $show_tickets && $available_tickets_count == 1 && !get_option('dbem_bookings_tickets_single_form') ){
+							if( $show_tickets && $available_tickets_count == 1 ){
 								do_action('em_booking_form_before_tickets', $EM_Event); //do not delete
 								//show single ticket form, only necessary to show to users able to book (or guests if enabled)
 								$EM_Ticket = $EM_Event->get_bookings()->get_available_tickets()->get_first();

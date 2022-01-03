@@ -734,27 +734,14 @@ class EM_Event extends EM_Object{
 			$this->event_rsvp = 1;
 			$this->rsvp_end = null;
 			//RSVP cuttoff TIME is set up above where start/end times are as well
-				if( get_option('dbem_bookings_tickets_single') && count($this->get_tickets()->tickets) == 1 ){
-					//single ticket mode will use the ticket end date/time as cut-off date/time
-			    	$EM_Ticket = $this->get_tickets()->get_first();
-			    	$this->event_rsvp_date = null;
-			    	if( !empty($EM_Ticket->ticket_end) ){
-			    		$this->event_rsvp_date = $EM_Ticket->end()->getDate();
-			    		$this->event_rsvp_time = $EM_Ticket->end()->getTime();
-			    	}else{
-			    		//no default ticket end time, so make it default to event start date/time
-			    		$this->event_rsvp_date = $this->event_start_date;
-			    		$this->event_rsvp_time = $this->event_start_time;
-			    		if( $this->event_all_day && empty($_POST['event_rsvp_date']) ){ $this->event_rsvp_time = '00:00:00'; } //all-day events start at 0 hour
-			    	}
-			    }else{
-			    	//if no rsvp cut-off date supplied, make it the event start date
-			    	$this->event_rsvp_date = ( !empty($_POST['event_rsvp_date']) ) ? wp_kses_data($_POST['event_rsvp_date']) : $this->event_start_date;
-					//if no specificed time, default to event start time
-			    	if ( empty($_POST['event_rsvp_time']) ) $this->event_rsvp_time = $this->event_start_time;
-			    }
+				
+			//if no rsvp cut-off date supplied, make it the event start date
+			$this->event_rsvp_date = ( !empty($_POST['event_rsvp_date']) ) ? wp_kses_data($_POST['event_rsvp_date']) : $this->event_start_date;
+			//if no specificed time, default to event start time
+			if ( empty($_POST['event_rsvp_time']) ) $this->event_rsvp_time = $this->event_start_time;
+			    
 			    //reset EM_DateTime object
-				$this->rsvp_end = null;
+			$this->rsvp_end = null;
 			$this->event_spaces = ( isset($_POST['event_spaces']) ) ? absint($_POST['event_spaces']):0;
 			$this->event_rsvp_spaces = ( isset($_POST['event_rsvp_spaces']) ) ? absint($_POST['event_rsvp_spaces']):0;
 		}elseif( !$preview_autosave && ($can_manage_bookings || !$this->event_rsvp) ){
@@ -845,22 +832,15 @@ class EM_Event extends EM_Object{
 			}
 			//recurring events may have a cut-off date x days before or after the recurrence start dates
 			$this->recurrence_rsvp_days = null;
-			if( get_option('dbem_bookings_tickets_single') && count($this->get_tickets()->tickets) == 1 ){
-				//if in single ticket mode then ticket cut-off date determines event cut-off date
-				$EM_Ticket = $this->get_tickets()->get_first();
-				if( !empty($EM_Ticket->ticket_meta['recurrences']) ){
-					$this->recurrence_rsvp_days = $EM_Ticket->ticket_meta['recurrences']['end_days'];
-					$this->event_rsvp_time = $EM_Ticket->ticket_meta['recurrences']['end_time'];
-				}
-			}else{
-				if( array_key_exists('recurrence_rsvp_days', $_POST) ){
-					if( !empty($_POST['recurrence_rsvp_days_when']) && $_POST['recurrence_rsvp_days_when'] == 'after' ){
-						$this->recurrence_rsvp_days = absint($_POST['recurrence_rsvp_days']);
-					}else{ //by default the start date is the point of reference
-						$this->recurrence_rsvp_days = absint($_POST['recurrence_rsvp_days']) * -1;
-					}
+			
+			if( array_key_exists('recurrence_rsvp_days', $_POST) ){
+				if( !empty($_POST['recurrence_rsvp_days_when']) && $_POST['recurrence_rsvp_days_when'] == 'after' ){
+					$this->recurrence_rsvp_days = absint($_POST['recurrence_rsvp_days']);
+				}else{ //by default the start date is the point of reference
+					$this->recurrence_rsvp_days = absint($_POST['recurrence_rsvp_days']) * -1;
 				}
 			}
+			
 			//create timestamps and set rsvp date/time for a normal event
 			if( !is_numeric($this->recurrence_rsvp_days) ){
 				//falback in case nothing gets set for rsvp cut-off

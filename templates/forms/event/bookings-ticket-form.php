@@ -72,7 +72,7 @@ $col_count = absint($col_count); //now we know it's a number
 				<input class="em-time-input em-time-end ticket-times-to-normal" type="time" size="8" maxlength="8" name="em_tickets[<?php echo $col_count; ?>][ticket_end_time]" value="<?php echo ( !empty($EM_Ticket->ticket_end) ) ? $EM_Ticket->end()->format( em_get_hour_format() ):''; ?>" />
 			</div>
 		</div>
-		<?php if( !get_option('dbem_bookings_tickets_single') || count($EM_Ticket->get_event()->get_tickets()->tickets) > 1 ): ?>
+		<?php if( count($EM_Ticket->get_event()->get_tickets()->tickets) > 1 ): ?>
 		<div class="ticket-required">
 			<label title="<?php esc_attr_e('If checked every booking must select one or the minimum number of this ticket.','events-manager'); ?>"><?php esc_html_e('Required?','events-manager') ?></label>
 			<input type="checkbox" value="1" name="em_tickets[<?php echo $col_count; ?>][ticket_required]" <?php if($EM_Ticket->ticket_required) echo 'checked="checked"'; ?> class="ticket_required" />

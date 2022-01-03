@@ -18,20 +18,12 @@ $reschedule_warnings = !empty($EM_Event->event_id) && $EM_Event->is_recurring() 
 	}
 	?>
 	<div class="event-rsvp-options-tickets <?php if( $reschedule_warnings ) echo 'em-recurrence-reschedule'; ?>">
-		<?php
-		//output title
-		if( get_option('dbem_bookings_tickets_single') && count($EM_Tickets->tickets) == 1 ){
-			?>
-			<h3><?php esc_html_e('Ticket Options','events-manager'); ?></h3>
-			<?php
-		}else{
-			?>
+		
 			<h3><?php esc_html_e('Tickets','events-manager'); ?></h3>
-			<?php
-		}
-		//If this event is a recurring template, we need to warn the user that editing tickets will delete previous bookings
+			
+		<?php //If this event is a recurring template, we need to warn the user that editing tickets will delete previous bookings
 		if( $reschedule_warnings ){ 
-			?>
+		?>
 			<div class="recurrence-reschedule-warning">
 			    <p><?php esc_html_e( 'Modifications to event tickets will cause all bookings to individual recurrences of this event to be deleted.', 'events-manager'); ?></p>
 	    		<p>			
@@ -40,21 +32,14 @@ $reschedule_warnings = !empty($EM_Event->event_id) && $EM_Event->is_recurring() 
 					</a>
                 </p>
 	    	</div>
-			<?php 
+		<?php 
 		}
 		$container_classes = array();
 		if( $reschedule_warnings && empty($_REQUEST['recreate_tickets']) ) $container_classes[] = 'reschedule-hidden';
 		if( get_option('dbem_bookings_tickets_ordering') ) $container_classes[] = 'em-tickets-sortable';
 		?>
 		<div id="em-tickets-form" class="em-tickets-form <?php echo implode(' ', $container_classes); ?>">
-		<?php
-		//output ticket options
-		if( get_option('dbem_bookings_tickets_single') && count($EM_Tickets->tickets) == 1 ){
-			$col_count = 1;	
-			$EM_Ticket = $EM_Tickets->get_first();				
-			include( em_locate_template('forms/ticket-form.php') ); //in future we'll be accessing forms/event/bookings-ticket-form.php directly
-		}else{
-			?>
+		
 			<p><em><?php esc_html_e('You can have single or multiple tickets, where certain tickets become available under certain conditions, e.g. early bookings, group discounts, maximum bookings per ticket, etc.', 'events-manager'); ?> <?php esc_html_e('Basic HTML is allowed in ticket labels and descriptions.','events-manager'); ?></em></p>					
 			<table class="wp-list-table widefat  striped table-view-list">
 				<thead>
@@ -144,9 +129,7 @@ $reschedule_warnings = !empty($EM_Event->event_id) && $EM_Event->is_recurring() 
 					array_shift($EM_Tickets->tickets);
 				?>
 			</table>
-		<?php 
-		}
-		?>
+	
 		</div>
 		<?php if( $reschedule_warnings ): //If this event is a recurring template, we need to warn the user that editing tickets will delete previous bookings ?>
 		<div class="recurrence-reschedule-buttons">
@@ -164,7 +147,7 @@ $reschedule_warnings = !empty($EM_Event->event_id) && $EM_Event->is_recurring() 
 	<h3 class="title"><?php esc_html_e('Event Options','events-manager'); ?></h3>
 	<table id="em-booking-options" class="form-table">
 	<tbody>
-	<?php if( !get_option('dbem_bookings_tickets_single') || count($EM_Ticket->get_event()->get_tickets()->tickets) > 1 ): ?>
+	<?php if( count($EM_Ticket->get_event()->get_tickets()->tickets) > 1 ): ?>
 	
 	<tr>
 		<th><?php esc_html_e('Total Spaces','events-manager'); ?></th>

@@ -452,9 +452,7 @@ class EM_Attendees_Form {
 			});
 		</script>
 		<?php
-		if( !get_option('dbem_bookings_tickets_single') ){ //single ticket mode means no splitting by ticket type 
-			
-		}
+		
 	}
 	
 	/*

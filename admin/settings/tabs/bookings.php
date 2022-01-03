@@ -105,8 +105,6 @@
 	<div class="inside">
 		<table class='form-table'>
 			<?php
-			em_options_radio_binary ( __( 'Single ticket mode?', 'events-manager'), 'dbem_bookings_tickets_single', __( 'In single ticket mode, users can only create one ticket per event (and will not see options to add more tickets).', 'events-manager') );
-			em_options_radio_binary ( __( 'Show ticket table in single ticket mode?', 'events-manager'), 'dbem_bookings_tickets_single_form', __( 'If you prefer a ticket table like with multiple tickets, even for single ticket events, enable this.', 'events-manager') );
 			
 			em_options_radio_binary ( __( 'Show member-only tickets?', 'events-manager'), 'dbem_bookings_tickets_show_member_tickets', sprintf(__('%s must be set to yes for this to work.', 'events-manager'), '<strong>'.__( 'Show unavailable tickets?', 'events-manager').'</strong>').' '.__( 'If there are member-only tickets, you can choose whether or not to show these tickets to guests.','events-manager') );
 			

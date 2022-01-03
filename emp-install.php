@@ -203,7 +203,6 @@ function emp_add_options() {
 	//Gateway Stuff
     
     add_option('dbem_emp_booking_form_reg_show', 1);
-	add_option('dbem_gateway_use_buttons', 0);
 	add_option('dbem_gateway_label', __('Pay With','em-pro'));
 	
 	//offline
