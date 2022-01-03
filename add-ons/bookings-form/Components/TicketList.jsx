@@ -23,7 +23,7 @@ const TicketList = (props) => {
     const form = useRef(null)
 
     const checkValidity = () => {
-        console.log("formValid", form.current?.checkValidity())
+        
     }
 
     useEffect(() => {
@@ -52,7 +52,7 @@ const TicketList = (props) => {
                 <div className="list__item" key={key}>
                     <div className="list__content">
                         <div className="list__title">{ticket.name}</div>    
-                        <div className="list__subtitle">{tickets.description}</div>
+                        <div className="list__subtitle">{ticket.description}</div>
                         <div className="list__subtitle">{__("Base price:", "em-pro")} {ticket.price} {strings.currency}</div>
                     </div>
                     <div className="list__actions">
