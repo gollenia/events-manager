@@ -31,7 +31,7 @@
         <div className="alert bg-error" role="alert">
           <h4>{__("An error occured in our ordering system.", "em-pro")}</h4>
           <p>{__("You may try it later again.", "em-pro")} { errorSent && __("However our admin has been informed and will take care of the problem.", "em-pro") }</p>
-          <button class="button button--white" onClick={resetErrorBoundary}>__{"Try again", "em-pro"}</button>
+          
         </div>
       )
   }
