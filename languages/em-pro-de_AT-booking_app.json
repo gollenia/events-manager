@@ -61,6 +61,21 @@
 			"Check coupon":
 			[
 				"Gutschein überprüfen"
+			],
+			"IBAN": [
+				"IBAN"
+			],
+			"BIC": [
+				"BIC"
+			],
+			"Bank": [
+				"Kreditinstitut"
+			],
+			"Beneficial": [
+				"Begünstigter"
+			],
+			"Purpose": [
+				"Verwendungszweck"
 			]
 
 		}

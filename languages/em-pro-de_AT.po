@@ -2306,3 +2306,26 @@ msgstr "Zahl"
 msgid "E-Mail (required)"
 msgstr "E-Mail (benötigt)"
 
+msgid "IBAN"
+msgstr "IBAN"
+
+msgid "BIC"
+msgstr "BIC"
+
+msgid "Bank"
+msgstr "Kreditinstitut"
+
+msgid "In order to generate a QR Code for payment, you have to provide a valid IBAN"
+msgstr "Um einen QR-Code für die Bezahlung zu generieren, muss eine gültige IBAN angegeben werden"
+
+msgid "Beneficiary"
+msgstr "Begünstigter"
+
+msgid "In some countries you need to specify a beneficiary. This Data is added to the QR Code."
+msgstr "In manchen Ländern muss ein Begünstigter angegeben werden. Dieser wird dem QR-Code hinzugefügt."
+
+msgid "Though not needed, some banks are only happy if you provide a BIC"
+msgstr "Obwohl sie nicht benötigt wird, bestehen manche Banken auf Angabe einer BIC"
+
+msgid "Same goes with Bank name."
+msgstr "Selbiges gilt für den Namen der Bank"

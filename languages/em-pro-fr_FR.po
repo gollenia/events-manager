@@ -2368,3 +2368,44 @@ msgstr "Conférencier"
 msgid "Similar events"
 msgstr "Événements similaires"
 
+msgid "Info text"
+msgstr "Texte d'information"
+
+msgid "Text field"
+msgstr "Champ de texte"
+
+msgid "Checkbox"
+msgstr "Case à cocher"
+
+msgid "Select"
+msgstr "Sélectionner"
+
+msgid "Textarea"
+msgstr "Nouvelles"
+
+msgid "Radio"
+msgstr "Choix"
+
+msgid "Multiselect"
+msgstr "Choix multiple"
+
+msgid "Telephone"
+msgstr "Téléphone"
+
+msgid "Number"
+msgstr "Numéro"
+
+msgid "E-Mail (required)"
+msgstr "E-Mail (avait besoin)"
+
+msgid "IBAN"
+msgstr "IBAN"
+
+msgid "In order to generate a QR Code for payment, you have to provide a valid IBAN"
+msgstr "Un IBAN valide doit être saisi afin de générer un code QR pour le paiement"
+
+msgid "Beneficiary"
+msgstr "Bénéficiaire"
+
+msgid "In some countries you need to specify a beneficiary. This Data is added to the QR Code."
+msgstr "Dans certains pays, un bénéficiaire doit être spécifié. Celui-ci sera ajouté au code QR."
