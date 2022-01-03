@@ -34,6 +34,7 @@ const Payment = (props) => {
         return result   
     }
 
+
     const currentGateway = () => {
         if(gateways == undefined) return null
         const index = gateways.findIndex((element) => { return element.id === currentGatewayId });
