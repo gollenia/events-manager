@@ -323,7 +323,6 @@ const Booking = () => {
                     { wizzardStep < (fullPrice() == 0 ? 1 : 2) && <button className="button button--primary" onClick={() => {setWizzardStep(wizzardStep+1)}} >{__('Next', 'em-pro')}</button> }
                     { wizzardStep == (fullPrice() == 0 ? 1 : 2) && <button className="button button--primary" onClick={() => {order()}}>{eventData.strings.book_now}</button> }
                     { wizzardStep == 3 && <button className="button button--success" onClick={() => {cleanUp()}}>{__("Close", "em-pro")}</button> }
-					{ wizzardStep == 3 && <button className="button button--success" onClick={() => {cleanUp()}}>{__("Close", "em-pro")}</button> }
                   </div>
                 </div>
               </div>
