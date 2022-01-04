@@ -67,6 +67,7 @@ class EM_QR_Code_Generator {
 			"beneficiary" => get_option("em_offline_beneficiary", true),
 			"bic" => get_option("em_offline_bic", true),
 			"bank" => get_option("em_offline_bank", true),
+			"amount" => number_format((float)$booking->booking_price, 2, ',', '.')
 		];
 
 		header('Content-Type: application/json');

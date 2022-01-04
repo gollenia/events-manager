@@ -5,6 +5,9 @@ import SVG, { Props as SVGProps } from 'react-inlinesvg';
 const OfflinePayment = (props) => {
 
 	const {
+		eventData: {
+            strings
+        },
         currentGateway: {
             id, title, methods, html
         },
@@ -17,7 +20,6 @@ const OfflinePayment = (props) => {
 
 	useEffect(() => {
 		fetch(`/wp-admin/admin-ajax.php?action=em_payment_info&booking_id=${bookingId}`).then((response) => response.json()).then((response) => {
-			console.log(response)
 			if(!response) {
 				return;
 			}
@@ -47,6 +49,7 @@ const OfflinePayment = (props) => {
 						<tr><th className='text-left'>{__('BIC', 'em-pro')}</th><td>{paymentInfo.bic}</td></tr>
 						<tr><th className='text-left'>{__('Beneficial', 'em-pro')}</th><td>{paymentInfo.beneficiary}</td></tr>
 						<tr><th className='text-left'>{__('Purpose', 'em-pro')}</th><td>{paymentInfo.purpose}</td></tr>
+						<tr><th className='text-left'>{__('Amount', 'em-pro')}</th><td>{paymentInfo.amount} {strings.currency}</td></tr>
 					</table>
 				</div>
 			</div>
