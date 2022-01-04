@@ -33,7 +33,7 @@
         "timber/timber": "^2.0.0-alpha.2",
         "shuchkin/simplexlsxgen": "^1.0",
         "smhg/sepa-qr-data": "^1.1",
-        "endroid/qr-code": "^4.4"
+        "chillerlan/php-qrcode": "dev-main#06730361508c283a02bbf9cbc9e4b55e7b3bc88b"
     },
     "autoload": {
         "psr-4": {
