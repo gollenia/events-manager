@@ -427,6 +427,7 @@ class EM_Gateway_Offline extends EM_Gateway {
 			em_options_input_text( esc_html__('BIC', 'em-pro'), 'em_'. $this->gateway . '_bic', esc_html__('Though not needed, some banks are only happy if you provide a BIC','em-pro') );
 			em_options_input_text( esc_html__('Bank', 'em-pro'), 'em_'. $this->gateway . '_bank', esc_html__('Same goes with Bank name.','em-pro') );
 			em_options_input_text( esc_html__('Beneficiary', 'em-pro'), 'em_'. $this->gateway . '_beneficiary', esc_html__('In some countries you need to specify a beneficiary. This Data is added to the QR Code.','em-pro') );
+			em_options_input_text( esc_html__('Logo ID', 'em-pro'), 'em_'. $this->gateway . '_logo', esc_html__('Add the Media ID of an SVG file to render it into the QR Code','em-pro') );
 			
 		  ?>
 		</tbody>
@@ -443,7 +444,8 @@ class EM_Gateway_Offline extends EM_Gateway {
 			'em_'. $this->gateway . '_iban',
 			'em_'. $this->gateway . '_bic',
 			'em_'. $this->gateway . '_bank',
-			'em_'. $this->gateway . '_beneficiary'
+			'em_'. $this->gateway . '_beneficiary',
+			'em_'. $this->gateway . '_logo'
 		];
 		foreach( $gateway_options as $option_wpkses ) add_filter('gateway_update_'.$option_wpkses,'wp_kses_post');
 		return parent::update($gateway_options);
