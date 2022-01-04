@@ -171,7 +171,7 @@ const Booking = () => {
         const url = new URL(booking_url)
         url.search = qs.stringify(request)
         fetch(url).then((response) => response.json()).then((response) => {
-			console.log(response)
+			
 			if(!response.result) {
 				setLoading(false)
 				setError(response.errors)
@@ -308,6 +308,7 @@ const Booking = () => {
 							<OfflinePayment 
 								currentGateway={currentGateway()}
 								bookingId={bookingId}
+								eventData={eventData}
 						  	/>
 						}
                         
