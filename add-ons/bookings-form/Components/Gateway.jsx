@@ -28,7 +28,7 @@ const Gateway = (props) => {
             <p dangerouslySetInnerHTML={createMarkup()}></p>
             <div>
                 { id=="mollie" && Object.keys(methods).map((method) => {
-                    return (<li className={`${method}`} key={method}><img src={"/wp-content/plugins/events-manager-pro/add-ons/bookings-form/Components/PaymentIcons/" + method + ".svg"}/> {methods[method]}</li>)
+                    return (<li className={`${method}`} key={method}><img src={"/wp-content/plugins/events-mollie/assets/methods/" + method + ".svg"}/> {methods[method]}</li>)
                 }) }
             </div>
         </div>
