@@ -79,6 +79,9 @@
 			],
 			"Scan to pay": [
 				"Mit Bank-App scannen"
+			],
+			"Amount": [
+				"Betrag"
 			]
 
 		}
