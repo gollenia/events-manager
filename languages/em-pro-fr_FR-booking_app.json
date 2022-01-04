@@ -61,6 +61,24 @@
 			"Check coupon":
 			[
 				"Vérifier le coupon"
+			],
+			"IBAN": [
+				"IBAN"
+			],
+			"BIC": [
+				"BIC"
+			],
+			"Bank": [
+				"Banque"
+			],
+			"Beneficial": [
+				"Bénéficiaire"
+			],
+			"Purpose": [
+				"but d'utilisation"
+			],
+			"Scan to pay": [
+				"scanner avec app"
 			]
 
 		}

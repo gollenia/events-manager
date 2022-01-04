@@ -76,6 +76,9 @@
 			],
 			"Purpose": [
 				"Verwendungszweck"
+			],
+			"Scan to pay": [
+				"Mit Bank-App scannen"
 			]
 
 		}
