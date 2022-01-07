@@ -24,6 +24,8 @@ class EM_QR_Code_Generator {
 
 	/**
 	 * return an image containing the qr code
+	 * 
+	 * @todo change purpose
 	 *
 	 * @return void
 	 */
@@ -36,7 +38,7 @@ class EM_QR_Code_Generator {
 		$paymentData = Data::create()
 			->setName(get_option("em_offline_beneficiary", true))
 			->setIban(get_option("em_offline_iban", true))
-			->setPurpose($_REQUEST['booking_id'] . "/" . $event->post_title . "/" . $booking->booking_meta['registration']['user_email'])
+			->setPurpose($_REQUEST['booking_id'] . "-" . $event->post_title . "-" . $booking->booking_meta['registration']['user_name'])
 			->setAmount($booking->booking_price);
 		$qrOptions = new QROptions([
 			'version' => 7,
@@ -56,13 +58,20 @@ class EM_QR_Code_Generator {
 		wp_die();
     }
 
+	/**
+	 * Return an array with payment information
+	 * 
+	 * @todo: change purpose
+	 *
+	 * @return array
+	 */
 	public function get_payment_info() {
 		if(empty($_REQUEST['booking_id'])) return;
 		$booking = em_get_booking($_REQUEST['booking_id']);
 		$event = em_get_event($booking->event_id);
 
 		$result = [
-			"purpose" => $_REQUEST['booking_id'] . "/" . $event->post_title . "/" . $booking->booking_meta['registration']['user_email'],
+			"purpose" => $_REQUEST['booking_id'] . "-" . $event->post_title . "-" . $booking->booking_meta['registration']['user_name'],
 			"iban" => get_option("em_offline_iban", true),
 			"beneficiary" => get_option("em_offline_beneficiary", true),
 			"bic" => get_option("em_offline_bic", true),
