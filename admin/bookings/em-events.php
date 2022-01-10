@@ -91,6 +91,8 @@ function em_bookings_events_table() {
 				<thead>
 					<tr>
 						<th><?php esc_html_e( 'Event', 'events-manager'); ?></th>
+						<th><?php esc_html_e( 'Available', 'events-manager'); ?></th>
+						<th><?php esc_html_e( 'Booked', 'events-manager'); ?></th>
 						<th><?php esc_html_e( 'Date and time', 'events-manager'); ?></th>
 					</tr>
 				</thead>
@@ -102,6 +104,8 @@ function em_bookings_events_table() {
 						$rowno++;
 						$class = ($rowno % 2) ? ' class="alternate"' : '';
 						$style = "";
+						$booked_percent = $EM_Event->get_spaces() / 100 * $EM_Event->get_bookings()->get_booked_spaces();
+						$pending_percent = $EM_Event->get_spaces() / 100 * $EM_Event->get_bookings()->get_pending_spaces();
 						
 						if ($EM_Event->start()->getTimestamp() < time() && $EM_Event->end()->getTimestamp() < time()){
 							$style = "style ='background-color: #FADDB7;'";
@@ -112,13 +116,20 @@ function em_bookings_events_table() {
 								<strong>
 									<?php echo $EM_Event->output('#_BOOKINGSLINK'); ?>
 								</strong>
-								&ndash; 
-								<?php esc_html_e("Booked Spaces",'events-manager') ?>: <?php echo $EM_Event->get_bookings()->get_booked_spaces()."/".$EM_Event->get_spaces() ?>
-								<?php if( get_option('dbem_bookings_approval') == 1 ) : ?>
-									| <?php esc_html_e("Pending",'events-manager') ?>: <?php echo $EM_Event->get_bookings()->get_pending_spaces(); ?>
-								<?php endif; ?>
 							</td>
+							<td>
+								
+					<b><?php echo $EM_Event->get_bookings()->get_available_spaces(); echo " "; echo __("Free", "events-manager") ?> </b><br> <?php echo __("Off", "events-manager"); echo " "; echo $EM_Event->get_spaces(); ?>
 					
+							</td>
+							<td>
+								<b><?php echo $EM_Event->get_bookings()->get_booked_spaces(); echo " ";  ?></b> /
+								<b><?php echo $EM_Event->get_bookings()->get_pending_spaces(); echo " "; echo __("Pending", "events-manager") ?></b>
+								<div style="margin-top: 6px; border-radius: 999px; display: flex; width:100px; position: relative; height: 8px; background: #dddddd">
+									<div style="width:<?php echo $booked_percent ?>%; border-radius: 999px; position: relative; height: 8px; background: #8bc34a"></div>
+									<div style="width:<?php echo $pending_percent ?>%; border-radius: 999px; position: relative; height: 8px; background: #ff9800"></div>
+								</div>
+							</td>
 							<td>
 								<?php echo $EM_Event->output_dates(false, " - "). ' @ ' . $EM_Event->output_times(false, ' - '); ?>
 							</td>
