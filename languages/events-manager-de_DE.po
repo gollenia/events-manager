@@ -6793,3 +6793,6 @@ msgstr "Funktion"
 
 msgid "If the speaker has a special Role (e.g. Organizator, Leder, etc), type in here, else leave blank"
 msgstr "Hier eintragen, wenn der Referent eoine spezielle Funktion hat (Leiter, Organisator, etc). Ansonsten leer lassen."
+
+msgid "Off"
+msgstr "von"

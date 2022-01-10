@@ -2329,3 +2329,9 @@ msgstr "Obwohl sie nicht benötigt wird, bestehen manche Banken auf Angabe einer
 
 msgid "Same goes with Bank name."
 msgstr "Selbiges gilt für den Namen der Bank"
+
+msgid "Automatically approve booking, even if no payment is made"
+msgstr "Buchung automatisch genehmigen, auch wenn keine Bezahlung gemacht wurde"
+
+msgid "Approval"
+msgstr "Genehmigung"

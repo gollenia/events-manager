@@ -2409,3 +2409,9 @@ msgstr "Bénéficiaire"
 
 msgid "In some countries you need to specify a beneficiary. This Data is added to the QR Code."
 msgstr "Dans certains pays, un bénéficiaire doit être spécifié. Celui-ci sera ajouté au code QR."
+
+msgid "Automatically approve booking, even if no payment is made"
+msgstr "Approuver automatiquement la réservation, même si aucun paiement n'est effectué"
+
+msgid "Approval"
+msgstr "Genehmigung"
