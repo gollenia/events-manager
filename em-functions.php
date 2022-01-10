@@ -682,6 +682,21 @@ function em_options_radio_binary($title, $name, $description='', $option_names =
 	<?php
 }
 
+function em_options_checkbox($title, $name, $description='') {
+	if( empty($option_names) ) $option_names = array(0 => __('No','events-manager'), 1 => __('Yes','events-manager'));
+	?>
+   	<tr valign="top" id='<?php echo $name;?>_row'>
+   		<th scope="row"><?php echo esc_html($title); ?></th>
+   		<td>
+			<label for="<?php esc_attr($name) ?>">
+   			<input id="<?php echo esc_attr($name) ?>_yes" name="<?php echo esc_attr($name) ?>" type="checkbox" <?php echo get_option($name) ? 'checked="checked"' : "" ?> />
+			<?php echo $description; ?>
+			</label>
+		</td>
+   	</tr>
+	<?php
+}
+
 function em_options_select($title, $name, $list, $description='', $default='') {
 	$option_value = get_option($name, $default);
 	if( $name == 'dbem_events_page' && !is_object(get_page($option_value)) ){
