@@ -189,7 +189,10 @@ class EM_Event_Posts_Admin{
 	    	'location' => __('Location','events-manager'),
 	    	'date-time' => __('Date and Time','events-manager'),
 	    	'author' => __('Owner','events-manager'),
-	    	'extra' => ''
+	    	'extra' => '',
+			'spaces' => __('Available','events-manager'),
+			'booked' => __('Booked','events-manager'),
+			'actions' => __('Actions', 'events-manager')
 	    ));
 	    if( !get_option('dbem_locations_enabled') ){
 	    	unset($columns['location']);
@@ -238,15 +241,6 @@ class EM_Event_Posts_Admin{
 				if( $EM_Event->get_timezone()->getName() != EM_DateTimeZone::create()->getName() ) echo '<span class="dashicons dashicons-info" style="font-size:16px; color:#ccc; padding-top:2px;" title="'.esc_attr(str_replace('_', ' ', $EM_Event->event_timezone)).'"></span>';
 				break;
 			case 'extra':
-				if( get_option('dbem_rsvp_enabled') == 1 && !empty($EM_Event->event_rsvp) && $EM_Event->can_manage('manage_bookings','manage_others_bookings')){
-					?>
-					<a href="<?php echo $EM_Event->get_bookings_url(); ?>"><?php echo __("Bookings",'events-manager'); ?></a> &ndash;
-					<?php _e("Booked",'events-manager'); ?>: <?php echo $EM_Event->get_bookings()->get_booked_spaces()."/".$EM_Event->get_spaces(); ?>
-					<?php if( get_option('dbem_bookings_approval') == 1 ): ?>
-						| <?php _e("Pending",'events-manager') ?>: <?php echo $EM_Event->get_bookings()->get_pending_spaces(); ?>
-					<?php endif;
-					echo ($EM_Event->is_recurrence()) ? '<br />':'';
-				}
 				if ( $EM_Event->is_recurrence() && current_user_can('edit_recurring_events','edit_others_recurring_events') ) {
 					$actions = array();
 					if( $EM_Event->get_event_recurrence()->can_manage('edit_recurring_events', 'edit_others_recurring_events') ){
@@ -269,6 +263,35 @@ class EM_Event_Posts_Admin{
 				}
 				
 				break;
+			case 'spaces':
+				if( get_option('dbem_rsvp_enabled') == 1 && !empty($EM_Event->event_rsvp) && $EM_Event->can_manage('manage_bookings','manage_others_bookings')){
+					?>
+					
+					<b><?php echo $EM_Event->get_bookings()->get_available_spaces(); echo " "; echo __("Free", "events-manager") ?> </b><br> <?php echo __("Off", "events-manager"); echo " "; echo $EM_Event->get_spaces(); ?>
+					
+				
+					<?php
+				}
+				break;
+			case 'booked':
+				if( get_option('dbem_rsvp_enabled') == 1 && !empty($EM_Event->event_rsvp) && $EM_Event->can_manage('manage_bookings','manage_others_bookings')){
+
+					$booked_percent = $EM_Event->get_spaces() / 100 * $EM_Event->get_bookings()->get_booked_spaces();
+					$pending_percent = $EM_Event->get_spaces() / 100 * $EM_Event->get_bookings()->get_pending_spaces();
+					?>
+					
+					<b><?php echo $EM_Event->get_bookings()->get_booked_spaces(); echo " ";  ?></b> /
+					<b><?php echo $EM_Event->get_bookings()->get_pending_spaces(); echo " "; echo __("Pending", "events-manager") ?></b>
+					<div style="margin-top: 6px; border-radius: 999px; display: flex; width:100px; position: relative; height: 8px; background: #dddddd">
+						<div style="width:<?php echo $booked_percent ?>%; border-radius: 999px; position: relative; height: 8px; background: #8bc34a"></div>
+						<div style="width:<?php echo $pending_percent ?>%; border-radius: 999px; position: relative; height: 8px; background: #ff9800"></div>
+					</div>
+					<?php
+
+				}
+				break;
+			case 'actions':
+				echo '<a href="' . $EM_Event->get_bookings_url() . '">'. __("Bookings",'events-manager') . '</a>'; 
 		}
 	}
 	
