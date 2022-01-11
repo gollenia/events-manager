@@ -2457,6 +2457,7 @@ class EM_Event extends EM_Object{
 				case '#_ATTENDEES':
 					ob_start();
 					$template = em_locate_template('placeholders/attendees.php', true, array('EM_Event'=>$this));
+					
 					$replace = ob_get_clean();
 					break;
 				case '#_ATTENDEESLIST':
