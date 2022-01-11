@@ -217,6 +217,29 @@ class EM_Booking extends EM_Object{
 			$EM_Ticket_Booking->booking = $this;
 		}
 	}
+
+	public function get_attendees() {
+		$result = [];
+		foreach($this->booking_meta['attendees'] as $ticket_id => $attendees){
+			foreach($attendees as $attendee) {
+				array_push($result, ["ticket_id" => $ticket_id, "fields" => $attendee]);
+			}
+		}
+
+		return $result;
+	}
+
+	public function get_attendee_data($attendee_data) {
+		$form = EM_Attendees_Form::get_form($this->event_id)->form_fields;
+		$attendee = [];
+		foreach($attendee_data as $key => $value) {
+			$attendee[$key] = [
+				"value" => $value,
+				"label" => $form[$key]['label']
+			];
+		}
+		return $attendee;
+	}
 	
 	function get_notes(){
 		global $wpdb;
@@ -1053,6 +1076,17 @@ class EM_Booking extends EM_Object{
 			$placeholder_atts = array($result);
 			if( !empty($placeholders[3][$key]) ) $placeholder_atts[] = $placeholders[3][$key];
 			switch( $result ){
+				case '#_BOOKINGFORMCUSTOM':
+					if(!$placeholder_atts[1]) break;
+					$replace = $this->meta['booking'][$placeholder_atts[1]];
+					break;
+				case '#_BOOKINGFORMCUSTOMFIELDS':
+					ob_start();
+					foreach($this->meta['booking'] as $key => $value) {
+						echo "<li><b>" . $key . ":</b> " . $value . "</li>";
+					}
+					$replace = ob_get_clean();
+					break;
 				case '#_BOOKINGID':
 					$replace = $this->booking_id;
 					break;
@@ -1133,6 +1167,11 @@ class EM_Booking extends EM_Object{
 					}else{
 						$replace = $bookings_link;
 					}
+					break;
+				case '#_BOOKINGATTENDEES':
+					ob_start();
+					em_locate_template('emails/attendees.php', true, array('EM_Booking'=>$this));
+					$replace = ob_get_clean();
 					break;
 				default:
 					$replace = $full_result;
