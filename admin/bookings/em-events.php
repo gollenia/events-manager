@@ -104,8 +104,8 @@ function em_bookings_events_table() {
 						$rowno++;
 						$class = ($rowno % 2) ? ' class="alternate"' : '';
 						$style = "";
-						$booked_percent = $EM_Event->get_spaces() / 100 * $EM_Event->get_bookings()->get_booked_spaces();
-						$pending_percent = $EM_Event->get_spaces() / 100 * $EM_Event->get_bookings()->get_pending_spaces();
+						$booked_percent = $EM_Event->get_bookings()->get_booked_spaces() / ($EM_Event->get_spaces() / 100);
+						$pending_percent = $EM_Event->get_bookings()->get_pending_spaces() / ($EM_Event->get_spaces() / 100);
 						
 						if ($EM_Event->start()->getTimestamp() < time() && $EM_Event->end()->getTimestamp() < time()){
 							$style = "style ='background-color: #FADDB7;'";

@@ -276,8 +276,8 @@ class EM_Event_Posts_Admin{
 			case 'booked':
 				if( get_option('dbem_rsvp_enabled') == 1 && !empty($EM_Event->event_rsvp) && $EM_Event->can_manage('manage_bookings','manage_others_bookings')){
 
-					$booked_percent = $EM_Event->get_spaces() / 100 * $EM_Event->get_bookings()->get_booked_spaces();
-					$pending_percent = $EM_Event->get_spaces() / 100 * $EM_Event->get_bookings()->get_pending_spaces();
+					$booked_percent = $EM_Event->get_bookings()->get_booked_spaces() / ($EM_Event->get_spaces() / 100);
+					$pending_percent = $EM_Event->get_bookings()->get_pending_spaces() / ($EM_Event->get_spaces() / 100);
 					?>
 					
 					<b><?php echo $EM_Event->get_bookings()->get_booked_spaces(); echo " ";  ?></b> /
