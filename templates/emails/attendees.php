@@ -30,7 +30,7 @@ $data = $EM_Booking->get_attendees();
 			echo "<td>" . $ticket['fields'][$name] . "</td>";
 			
 		}
-		echo "<td>" . $ticket_data->ticket_price . "</td>";
+		echo "<td>" . number_format((float)$ticket_data->ticket_price, 2, ',', '.') . "</td>";
 		echo "</tr>";
 	}
 	?>
