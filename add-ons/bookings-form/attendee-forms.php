@@ -637,7 +637,7 @@ class EM_Attendees_Form {
 	 * @return string
 	 */
 	public static function placeholders($replace, $EM_Booking, $full_result){
-		return $replace; //no need for a filter, use the em_booking_email_placeholders filter
+		return $replace;
 	}
 	
 	/*
