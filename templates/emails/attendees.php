@@ -27,8 +27,11 @@ $data = $EM_Booking->get_attendees();
 		
 		foreach($form_fields as $name => $field) {
 			if($name == "info") continue;
+			if(!array_key_exists($name, $ticket['fields'])) {
+				echo "<td></td>";
+				continue;
+			}
 			echo "<td>" . $ticket['fields'][$name] . "</td>";
-			
 		}
 		echo "<td>" . number_format((float)$ticket_data->ticket_price, 2, ',', '.') . "</td>";
 		echo "</tr>";
