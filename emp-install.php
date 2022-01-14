@@ -199,7 +199,6 @@ function emp_add_options() {
 	add_option('em_user_fields', $new_fields);
 	$customer_fields = array('address' => 'dbem_address','address_2' => 'dbem_address_2','city' => 'dbem_city','state' => 'dbem_state','zip' => 'dbem_zip','country' => 'dbem_country','phone' => 'dbem_phone','fax' => 'dbem_fax','company' => 'dbem_company');
     add_option('emp_gateway_customer_fields', $customer_fields);
-    add_option('em_attendee_fields_enabled', defined('EM_ATTENDEES') && EM_ATTENDEES );
 	//Gateway Stuff
     
     add_option('dbem_emp_booking_form_reg_show', 1);

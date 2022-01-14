@@ -15,29 +15,29 @@ class EM_Attendees_Form {
 		if( is_admin() ){
 			add_action('admin_init',array('EM_Attendees_Form', 'admin_init'), 10);
 		}
-		if( get_option('em_attendee_fields_enabled') ){
-			//Booking Admin Pages
-			//add_action('em_bookings_single_custom', array('EM_Attendees_Form', 'em_bookings_single_custom'),1,1); //show booking form and ticket summary
-			add_action('em_bookings_single_footer', array('EM_Attendees_Form', 'em_bookings_single_footer'),1,1); //show booking form and ticket summary
-			add_action('em_bookings_admin_ticket_row', array('EM_Attendees_Form', 'em_bookings_admin_ticket'),1,2); //show booking form and ticket summary
-			//Exporting
-			add_action('init', array('EM_Attendees_Form', 'intercept_csv_export'),10); //show booking form and ticket summary
-			add_action('em_bookings_table_export_options', array('EM_Attendees_Form', 'em_bookings_table_export_options')); //show booking form and ticket summary
-			// Actions and Filters
-			add_action('em_gateway_js', array('EM_Attendees_Form','js'),10,2);
-			add_action('em_booking_form_ticket_spaces', array('EM_Attendees_Form','ticket_form'),1,1);
-			add_action('em_booking_form_tickets_loop_footer', array('EM_Attendees_Form','tickets_form'),1,1); 
-			//Booking interception - will not trigger on multi-booking checkout
-			add_filter('em_booking_get_post', array('EM_Attendees_Form', 'em_booking_get_post'), 2, 2); //get post data + validate
-			add_filter('em_booking_validate', array('EM_Attendees_Form', 'em_booking_validate'), 2, 2); //validate object
-			//Placeholder overriding	
-			add_filter('em_booking_output_placeholder',array('EM_Attendees_Form','placeholders'),1,3); //for emails
-			//custom form chooser in event bookings meta box:
-			add_action('emp_bookings_form_select_footer',array('EM_Attendees_Form', 'event_attendee_custom_form'),20,1);
-			add_action('em_event_save_meta_pre',array('EM_Attendees_Form', 'em_event_save_meta_pre'),10,1);
-			//data privacy
-			add_filter('em_data_privacy_export_bookings_item', 'EM_Attendees_Form::data_privacy_export', 10, 2);
-		}
+		
+		//Booking Admin Pages
+		//add_action('em_bookings_single_custom', array('EM_Attendees_Form', 'em_bookings_single_custom'),1,1); //show booking form and ticket summary
+		add_action('em_bookings_single_footer', array('EM_Attendees_Form', 'em_bookings_single_footer'),1,1); //show booking form and ticket summary
+		add_action('em_bookings_admin_ticket_row', array('EM_Attendees_Form', 'em_bookings_admin_ticket'),1,2); //show booking form and ticket summary
+		//Exporting
+		add_action('init', array('EM_Attendees_Form', 'intercept_csv_export'),10); //show booking form and ticket summary
+		add_action('em_bookings_table_export_options', array('EM_Attendees_Form', 'em_bookings_table_export_options')); //show booking form and ticket summary
+		// Actions and Filters
+		add_action('em_gateway_js', array('EM_Attendees_Form','js'),10,2);
+		add_action('em_booking_form_ticket_spaces', array('EM_Attendees_Form','ticket_form'),1,1);
+		add_action('em_booking_form_tickets_loop_footer', array('EM_Attendees_Form','tickets_form'),1,1); 
+		//Booking interception - will not trigger on multi-booking checkout
+		add_filter('em_booking_get_post', array('EM_Attendees_Form', 'em_booking_get_post'), 2, 2); //get post data + validate
+		add_filter('em_booking_validate', array('EM_Attendees_Form', 'em_booking_validate'), 2, 2); //validate object
+		//Placeholder overriding	
+		add_filter('em_booking_output_placeholder',array('EM_Attendees_Form','placeholders'),1,3); //for emails
+		//custom form chooser in event bookings meta box:
+		add_action('emp_bookings_form_select_footer',array('EM_Attendees_Form', 'event_attendee_custom_form'),20,1);
+		add_action('em_event_save_meta_pre',array('EM_Attendees_Form', 'em_event_save_meta_pre'),10,1);
+		//data privacy
+		add_filter('em_data_privacy_export_bookings_item', 'EM_Attendees_Form::data_privacy_export', 10, 2);
+		
 	}
 	
 	public static function admin_init(){
@@ -653,84 +653,80 @@ class EM_Attendees_Form {
 		global $EM_Notices, $wpdb;
 		if( !empty($_REQUEST['page']) && $_REQUEST['page'] == 'events-manager-forms-editor' ){
 			//Load the right form
-			if( isset($_REQUEST['em_attendee_fields_enabled']) && wp_verify_nonce($_REQUEST['_wpnonce'], 'em_attendee_fields_enabled') ){
-				update_option('em_attendee_fields_enabled', $_REQUEST['em_attendee_fields_enabled']);
+			if( isset($_REQUEST['att_form_id']) ){
+				$sql = $wpdb->prepare("SELECT meta_value FROM ".EM_META_TABLE." WHERE meta_key = 'attendee-form' AND meta_id=%d", $_REQUEST['att_form_id']);
+				$form_data = unserialize($wpdb->get_var($sql));
+				$EM_Form = self::$form =  new EM_Form($form_data['form'], 'em_attendee_form');
+				self::$form_name = $form_data['name'];
+				self::$form_id = $_REQUEST['att_form_id'];
+			}else{
+				$EM_Form = self::get_form();
+				if( !self::$form_id ){
+					update_option('em_attendee_form_fields',0);
+				}
 			}
-			if( get_option('em_attendee_fields_enabled') ){
-				if( isset($_REQUEST['att_form_id']) ){
-					$sql = $wpdb->prepare("SELECT meta_value FROM ".EM_META_TABLE." WHERE meta_key = 'attendee-form' AND meta_id=%d", $_REQUEST['att_form_id']);
-					$form_data = unserialize($wpdb->get_var($sql));
-					$EM_Form = self::$form =  new EM_Form($form_data['form'], 'em_attendee_form');
-					self::$form_name = $form_data['name'];
-					self::$form_id = $_REQUEST['att_form_id'];
-				}else{
-					$EM_Form = self::get_form();
-					if( !self::$form_id ){
-						update_option('em_attendee_form_fields',0);
+			if( !empty($_REQUEST['form_name']) && $EM_Form->form_name == $_REQUEST['form_name'] && empty($_REQUEST['attendee_form_action']) ){
+				//set up booking form field map and save/retreive previous data
+				if( $EM_Form->editor_get_post() ){
+					//Save into DB rather than as an option
+					$booking_form_data = array( 'name'=> self::$form_name, 'form'=> $EM_Form->form_fields );
+					$saved = $wpdb->update(EM_META_TABLE, array('meta_value'=>serialize($booking_form_data)), array('meta_id' => self::$form_id));
+					//Update Values
+					if( $saved !== false ){
+						$EM_Notices->add_confirm(__('Changes Saved','em-pro'));
+					}elseif( count($EM_Form->get_errors()) > 0 ){
+						$EM_Notices->add_error($EM_Form->get_errors());
 					}
 				}
-				if( !empty($_REQUEST['form_name']) && $EM_Form->form_name == $_REQUEST['form_name'] && empty($_REQUEST['attendee_form_action']) ){
-					//set up booking form field map and save/retreive previous data
-					if( $EM_Form->editor_get_post() ){
-						//Save into DB rather than as an option
-						$booking_form_data = array( 'name'=> self::$form_name, 'form'=> $EM_Form->form_fields );
-						$saved = $wpdb->update(EM_META_TABLE, array('meta_value'=>serialize($booking_form_data)), array('meta_id' => self::$form_id));
-						//Update Values
-						if( $saved !== false ){
-							$EM_Notices->add_confirm(__('Changes Saved','em-pro'));
-						}elseif( count($EM_Form->get_errors()) > 0 ){
-							$EM_Notices->add_error($EM_Form->get_errors());
-						}
+			}elseif( !empty($_REQUEST['attendee_form_action']) ){
+				if( $_REQUEST['attendee_form_action'] == 'default' && wp_verify_nonce($_REQUEST['_wpnonce'], 'attendee_form_default') ){
+					//make this booking form the default
+					update_option('em_attendee_form_fields', $_REQUEST['att_form_id']);
+					$EM_Notices->add_confirm(sprintf(__('The form <em>%s</em> is now the default booking form. All events without a pre-defined booking form will start using this form from now on.','em-pro'), self::$form_name));
+				}elseif( $_REQUEST['attendee_form_action'] == 'delete' && wp_verify_nonce($_REQUEST['_wpnonce'], 'attendee_form_delete') ){
+					//load and save booking form object with new name
+					$saved = $wpdb->query($wpdb->prepare("DELETE FROM ".EM_META_TABLE." WHERE meta_id='%s'", $_REQUEST['att_form_id']));
+					if( $saved ){
+						self::$form = false;
+						$EM_Notices->add_confirm(sprintf(__('%s Deleted','em-pro'), __( 'Attendee Form', 'em-pro' )), 1);
+						
 					}
-				}elseif( !empty($_REQUEST['attendee_form_action']) ){
-					if( $_REQUEST['attendee_form_action'] == 'default' && wp_verify_nonce($_REQUEST['_wpnonce'], 'attendee_form_default') ){
-						//make this booking form the default
-						update_option('em_attendee_form_fields', $_REQUEST['att_form_id']);
-						$EM_Notices->add_confirm(sprintf(__('The form <em>%s</em> is now the default booking form. All events without a pre-defined booking form will start using this form from now on.','em-pro'), self::$form_name));
-					}elseif( $_REQUEST['attendee_form_action'] == 'delete' && wp_verify_nonce($_REQUEST['_wpnonce'], 'attendee_form_delete') ){
-						//load and save booking form object with new name
-						$saved = $wpdb->query($wpdb->prepare("DELETE FROM ".EM_META_TABLE." WHERE meta_id='%s'", $_REQUEST['att_form_id']));
-						if( $saved ){
-							self::$form = false;
-							$EM_Notices->add_confirm(sprintf(__('%s Deleted','em-pro'), __( 'Attendee Form', 'em-pro' )), 1);
-							
-						}
-					}elseif( $_REQUEST['attendee_form_action'] == 'rename' && wp_verify_nonce($_REQUEST['_wpnonce'], 'attendee_form_rename') ){
-						//load and save booking form object with new name
-						$booking_form_data = array( 'name'=> wp_kses_data($_REQUEST['form_name']), 'form'=>$EM_Form->form_fields );
-						self::$form = $EM_Form;
-						self::$form_name = $booking_form_data['name'];
-						$saved = $wpdb->update(EM_META_TABLE, array('meta_value'=>serialize($booking_form_data)), array('meta_id' => self::$form_id));
-						$EM_Notices->add_confirm( sprintf(__('Form renamed to <em>%s</em>.', 'em-pro'), self::$form_name));
-					}elseif( $_REQUEST['attendee_form_action'] == 'add' && wp_verify_nonce($_REQUEST['_wpnonce'], 'attendee_form_add') ){
-						//create new form with this name and save first off
-						$EM_Form = new EM_Form(self::get_form_template(), 'em_attendee_form');
-						$booking_form_data = array( 'name'=> wp_kses_data($_REQUEST['form_name']), 'form'=> $EM_Form->form_fields );
-						self::$form = $EM_Form;
-						self::$form_name = $booking_form_data['name'];
+				}elseif( $_REQUEST['attendee_form_action'] == 'rename' && wp_verify_nonce($_REQUEST['_wpnonce'], 'attendee_form_rename') ){
+					//load and save booking form object with new name
+					$booking_form_data = array( 'name'=> wp_kses_data($_REQUEST['form_name']), 'form'=>$EM_Form->form_fields );
+					self::$form = $EM_Form;
+					self::$form_name = $booking_form_data['name'];
+					$saved = $wpdb->update(EM_META_TABLE, array('meta_value'=>serialize($booking_form_data)), array('meta_id' => self::$form_id));
+					$EM_Notices->add_confirm( sprintf(__('Form renamed to <em>%s</em>.', 'em-pro'), self::$form_name));
+				}elseif( $_REQUEST['attendee_form_action'] == 'add' && wp_verify_nonce($_REQUEST['_wpnonce'], 'attendee_form_add') ){
+					//create new form with this name and save first off
+					$EM_Form = new EM_Form(self::get_form_template(), 'em_attendee_form');
+					$booking_form_data = array( 'name'=> wp_kses_data($_REQUEST['form_name']), 'form'=> $EM_Form->form_fields );
+					self::$form = $EM_Form;
+					self::$form_name = $booking_form_data['name'];
+					$saved = $wpdb->insert(EM_META_TABLE, array('meta_value'=>serialize($booking_form_data), 'meta_key'=>'attendee-form','object_id'=>0));
+					self::$form_id = $wpdb->insert_id;
+					if( !get_option('em_attendee_form_fields') ){
+						update_option('em_attendee_form_fields', self::$form_id);
+					}
+					$EM_Notices->add_confirm(__('New form created. You are now editing your new form.', 'em-pro'), true);
+					wp_redirect( add_query_arg(array('att_form_id'=>self::$form_id), em_wp_get_referer()) );
+					exit();
+				}elseif( $_REQUEST['attendee_form_action'] == 'duplicate' && wp_verify_nonce($_REQUEST['_wpnonce'], 'attendee_form_duplicate') ){
+					$sql = $wpdb->prepare("SELECT meta_id, meta_value FROM ".EM_META_TABLE." WHERE meta_key = 'attendee-form' AND meta_id=%d", $_REQUEST['att_form_id']);
+					$form_data_row = $wpdb->get_row($sql, ARRAY_A);
+					if( !empty($form_data_row) ){
+						$booking_form_data = unserialize($form_data_row['meta_value']);
+						$booking_form_data['name'] .= ' ('.esc_html__('Duplicate', 'em-pro').')';
 						$saved = $wpdb->insert(EM_META_TABLE, array('meta_value'=>serialize($booking_form_data), 'meta_key'=>'attendee-form','object_id'=>0));
-						self::$form_id = $wpdb->insert_id;
-						if( !get_option('em_attendee_form_fields') ){
-							update_option('em_attendee_form_fields', self::$form_id);
-						}
+						$duplicate_form_id = $wpdb->insert_id;
 						$EM_Notices->add_confirm(__('New form created. You are now editing your new form.', 'em-pro'), true);
-						wp_redirect( add_query_arg(array('att_form_id'=>self::$form_id), em_wp_get_referer()) );
+						wp_redirect( add_query_arg(array('att_form_id'=>$duplicate_form_id), em_wp_get_referer()) );
 						exit();
-					}elseif( $_REQUEST['attendee_form_action'] == 'duplicate' && wp_verify_nonce($_REQUEST['_wpnonce'], 'attendee_form_duplicate') ){
-						$sql = $wpdb->prepare("SELECT meta_id, meta_value FROM ".EM_META_TABLE." WHERE meta_key = 'attendee-form' AND meta_id=%d", $_REQUEST['att_form_id']);
-						$form_data_row = $wpdb->get_row($sql, ARRAY_A);
-						if( !empty($form_data_row) ){
-							$booking_form_data = unserialize($form_data_row['meta_value']);
-							$booking_form_data['name'] .= ' ('.esc_html__('Duplicate', 'em-pro').')';
-							$saved = $wpdb->insert(EM_META_TABLE, array('meta_value'=>serialize($booking_form_data), 'meta_key'=>'attendee-form','object_id'=>0));
-							$duplicate_form_id = $wpdb->insert_id;
-							$EM_Notices->add_confirm(__('New form created. You are now editing your new form.', 'em-pro'), true);
-							wp_redirect( add_query_arg(array('att_form_id'=>$duplicate_form_id), em_wp_get_referer()) );
-							exit();
-						}
 					}
 				}
 			}
+			
 		}	
 	}
 	
@@ -747,18 +743,23 @@ class EM_Attendees_Form {
 							<span><?php _e ( 'Attendee Form', 'em-pro' ); ?></span>
 						</h3>
 						<div class="inside">
-							<p><?php _e ( "If enabled, this form will be shown and required for every space booked.", 'em-pro' )?></p>
-							<form method="post" action="#attendee-form"> 
-								<p>
-								<?php _e('Enable Attendee Forms','em-pro'); ?> :
-								<input type="radio" name="em_attendee_fields_enabled" value="1" class="attendee-enable" <?php if(get_option('em_attendee_fields_enabled')){ echo 'checked="checked"'; } ?> /> <?php esc_html_e('Yes','events-manager'); ?>
-								<input type="radio" name="em_attendee_fields_enabled" value="0" class="attendee-enable" <?php if(!get_option('em_attendee_fields_enabled')){ echo 'checked="checked"'; } ?> /> <?php esc_html_e('No','events-manager'); ?>
-								<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce('em_attendee_fields_enabled'); ?>" />
-								<input type="submit" class="button-secondary" value="<?php esc_attr_e('Save Changes','events-manager'); ?>" />
-								</p>
-							</form>
-							<?php if(get_option('em_attendee_fields_enabled')): ?>
+
 							<div id="em-attendee-form-editor">
+								<div>
+								<h3 id="attendee-form">
+									<span><?php _e ( 'New attendee form', 'em-pro' ); ?></span>
+								</h3>
+								<form method="post" action="<?php echo add_query_arg(array('att_form_id'=>null)); ?>#attendee-form" id="attendee-form-add">
+									<input type="hidden" name="attendee_form_action" value="add" />
+									<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce('attendee_form_add'); ?>" />
+										
+									<table class="form-table"><tbody><tr>
+										<td><?php echo __("Form name", "events-manager") ?></td><td><input type="text" name="form_name"/></td>
+									</tr></tbody></table>
+									<input type="submit"  value="<?php _e ( 'Add New', 'em-pro' ); ?> &raquo;" class="button-secondary" />
+									
+								</form>
+								</div>
 								<form method="get" action="#attendee-form"> 
 									<?php _e('Selected Attendee Form','em-pro'); ?> :
 									<select name="att_form_id" onchange="this.parentNode.submit()">
@@ -778,12 +779,7 @@ class EM_Attendees_Form {
 									<input type="submit" value="<?php _e ( 'Make Default', 'em-pro' ); ?> &raquo;" class="button-secondary" onclick="return confirm('<?php _e('You are about to make this your default booking form. All events without an existing specifically chosen booking form will use this new default form from now on.\n\n Are you sure you want to do this?') ?>');" />
 								</form>
 								<?php endif; ?> | 
-								<form method="post" action="<?php echo add_query_arg(array('att_form_id'=>null)); ?>#attendee-form" id="attendee-form-add">
-									<input type="text" name="form_name" />
-									<input type="hidden" name="attendee_form_action" value="add" />
-									<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce('attendee_form_add'); ?>" />
-									<input type="submit"  value="<?php _e ( 'Add New', 'em-pro' ); ?> &raquo;" class="button-secondary" />
-								</form>
+								
 								<?php do_action('em_attendees_form_admin_page_actions', $EM_Form); ?>
 								<?php if( self::$form_id == get_option('em_attendee_form_fields') && self::$form_id > 0 ): ?>
 								<br /><em><?php _e('This is the default attendee form and will be used for any event where you have not chosen a specific form to use.','em-pro'); ?></em>
@@ -820,7 +816,6 @@ class EM_Attendees_Form {
 									<p><em><?php if( self::$form_id == get_option('em_attendee_form_fields')  ) echo __('Default Value','em-pro').' - '; ?> <?php _e('No attendee form selected. Choose a form, or create a new one above.','em-pro'); ?></em></p>
 								<?php endif; ?>
 							</div>
-							<?php endif; ?>
 						</div>
 					</div>
 		<?php
