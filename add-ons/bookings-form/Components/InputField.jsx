@@ -5,8 +5,8 @@ import PropTypes from "prop-types"
 const InputField = (props) => {
     let InputTag
 
-    const {type, name, label, required = false, pattern, defaultValue, options, selectHint, value, min, max} = props
-
+    const {type, name, label, required = false, pattern, defaultValue, options, selectHint, value, min, max, half} = props
+	
 	const createMarkup = (textString) => {
         return {__html: textString};
     }
@@ -15,7 +15,7 @@ const InputField = (props) => {
 		const content = createMarkup(value);
 
 		if(!content.__html) return (<div>{value}</div>);
-		return (<div dangerouslySetInnerHTML={content}></div>);
+		return (<div className="help" dangerouslySetInnerHTML={content}></div>);
 	}
 
     const handleChange = event => {
@@ -74,7 +74,7 @@ const InputField = (props) => {
     switch (type) {
         case "select":
             InputTag = (
-                <div className="input">
+                <div className={"select" + (half ? " select--half" : "")}>
                     <label>{label}</label>
                     <select onChange= {handleChange} name={name} required={required}>
                         { defaultValue && <option value="">{defaultValue}</option>}
@@ -106,7 +106,7 @@ const InputField = (props) => {
             break;
         case "date":
             InputTag = (
-                <div className="input">
+                <div className={"input" + (half ? " input--half" : "")}>
                     <label>{label}</label>
                     <input onChange= {event => {handleChange(event)}} type={type} name={name} min={min} max={max} required={required} pattern={pattern}/>
                 </div>
@@ -122,7 +122,7 @@ const InputField = (props) => {
             break;
         default:
             InputTag = (
-                <div className="input">
+                <div className={"input" + (half ? " input--half" : "")}>
                     <label>{label}</label>
                     <input onChange= {event => {handleChange(event)}} type={type} name={name} required={required} pattern={pattern}/>
                 </div>
@@ -130,9 +130,9 @@ const InputField = (props) => {
     }
 
     return (
-        <div>
+        <>
             { InputTag }
-        </div>
+        </>
         
     )
 }

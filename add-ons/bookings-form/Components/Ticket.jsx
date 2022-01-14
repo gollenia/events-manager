@@ -24,13 +24,14 @@ const Ticket = ({ticket, fields, ticketKey, removeTicket, updateTicket}) => {
         <div className="card card--no-image bg-white my-8 card--shadow">
             <div className="card__content">
             <div className="card__title mb-8">{ticket.name} {attendeeName.length > 0 ? "Für" : ""} {attendeeName}</div>
-        
+			<div className="form">
             { fields.map((field, key) => 
                 <InputField
                     key={key}
                     name={field.name}
                     label={field.label}
                     required={field.required}
+					half={field.half}
                     value={field.value}
                     pattern={field.pattern}
                     min={field.min}
@@ -42,7 +43,7 @@ const Ticket = ({ticket, fields, ticketKey, removeTicket, updateTicket}) => {
                     onChange={(value) => modifyTicket(field.name, value)}
                 />
             ) }
-          
+          	</div>
             <div className="card__footer mt-8">
                 <div className="card__actions">
                     

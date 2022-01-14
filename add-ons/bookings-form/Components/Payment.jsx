@@ -68,7 +68,7 @@ const Payment = (props) => {
 
     
     return (
-        <div className="grid grid--columns-2 grid--gap-12">
+        <div className="grid lg:grid--columns-2 grid--gap-12">
             <div>
                 <div className="list ">
                 { Object.keys(tickets).map((id, key) =>
@@ -110,10 +110,10 @@ const Payment = (props) => {
                     <Gateway currentGateway={currentGateway()}/>
                 </div>
             </div>
-        <form>
+        <form className="form">
             { coupons.available && 
-			<div className='input-row'>
-                <div className="input-group">
+			<>
+                <div className="input">
                 <label>{__('Coupon code','em-pro')}</label>
                 <input 
 					value={couponCode}
@@ -124,7 +124,7 @@ const Payment = (props) => {
                 />
                 </div>
 				<span onClick={() => {checkCouponCode(couponCode)}} className='button button--secondary'>{__("Check coupon", "em-pro")}</span>
-			</div>
+			</>
             }
             { gateways.length > 1 &&
             <InputField

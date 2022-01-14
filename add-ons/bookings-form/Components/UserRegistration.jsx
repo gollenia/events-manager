@@ -25,9 +25,8 @@ const UserRegistration = (props) => {
   }
 
 
-
     return (
-        <div className="grid grid--columns-2 grid--gap-12">
+        <div className="grid lg:grid--columns-2 grid--gap-12">
           <div>
           <div className="list ">
             { Object.keys(tickets).map((id, key) =>
@@ -80,13 +79,14 @@ const UserRegistration = (props) => {
                 </div>
             </div>
           </div>
-            <form>
+            <form className="form">
             { fields.map((field, key) => 
               
               <InputField
                 key={key}
                 type={field.type}
                 name={field.name}
+				half={field.half}
                 label={field.label}
                 required={field.required}
                 pattern={field.pattern}
