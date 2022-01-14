@@ -90,10 +90,10 @@ EM_Forms::init();
 
 class EM_Form extends EM_Object {
 	
-	public $form_fields = array();
+	public $form_fields = [];
 	public $form_name = 'Default';
-	public $field_values = array();
-	public $user_fields = array();
+	public $field_values = [];
+	public $user_fields = [];
 	public $core_user_fields = array(
 		'name' => 'Name',
 		'user_login' => 'Username Login',
@@ -103,7 +103,7 @@ class EM_Form extends EM_Object {
 		'last_name' => 'Last Name',
 		'user_url' => 'Website',
 	);
-	protected $custom_user_fields = array();
+	protected $custom_user_fields = [];
 	public $form_required_error = '';
 	static $validate;
 	/**
@@ -142,7 +142,7 @@ class EM_Form extends EM_Object {
 			if( !is_array($_REQUEST[$fieldid])){
 				$this->field_values[$fieldid] = wp_kses_data(stripslashes($_REQUEST[$fieldid]));
 			}elseif( is_array($_REQUEST[$fieldid])){
-			    $array = array();
+			    $array = [];
 			    foreach( $_REQUEST[$fieldid] as $key => $array_value ){
 			        $array[$key] = wp_kses_data(stripslashes($array_value));
 			    }
@@ -438,7 +438,7 @@ class EM_Form extends EM_Object {
 				break;
 			case 'checkboxes':
 				echo "<span class=\"input-group\">";
-				if(!is_array($default)) $default = array();
+				if(!is_array($default)) $default = [];
 				$values = explode("\r\n",$field['options_selection_values']);
 				foreach($values as $value){ 
 					$value = trim($value); 
@@ -459,7 +459,7 @@ class EM_Form extends EM_Object {
 			case 'multiselect':
 				$values = explode("\r\n",$field['options_select_values']);
 				$multi = $field['type'] == 'multiselect';
-				if($multi && !is_array($default)) $default = (empty($default)) ? array():array($default);
+				if($multi && !is_array($default)) $default = (empty($default)) ? []:array($default);
 				
 				echo '<select name="' . $field['name'] . (($multi) ? '[]':'') . '" class="' . $field['fieldid'] . '" ' . (($multi) ? 'multiple':'') . ($required ? "required " : "") . '>';
 
@@ -603,7 +603,7 @@ class EM_Form extends EM_Object {
 				    //decode and trim both submitted and available values
 					$values = explode("\r\n",$field['options_selection_values']);
 					foreach($values as $k => $v) $values[$k] = html_entity_decode(trim($v));
-					if( !is_array($value) ) $value = array();
+					if( !is_array($value) ) $value = [];
 					foreach( $value as $k => $v ) $value[$k] = html_entity_decode(trim($v));
 					//in-values
 					if( (empty($value) && !empty($field['required'])) || count(array_diff($value, $values)) > 0 ){
@@ -627,7 +627,7 @@ class EM_Form extends EM_Object {
 				    //decode and trim both submitted and available values
 					$values = explode("\r\n",$field['options_select_values']);
 					foreach($values as $k => $v) $values[$k] = html_entity_decode(trim($v));
-					if( !is_array($value) ) $value = array();
+					if( !is_array($value) ) $value = [];
 					foreach( $value as $k => $v ) $value[$k] = html_entity_decode(trim($v));
 					//in_values
 					if( (empty($value) && !empty($field['required'])) || count(array_diff($value, $values)) > 0 ){
@@ -755,19 +755,19 @@ class EM_Form extends EM_Object {
 	/**
 	 * Gets an array of field keys accepted by the booking form 
 	 */
-	function get_fields_map(){
+	static function get_fields_map(){
 		$map = array (
-			'fieldid','label','type','required',
+			'fieldid','label','type','required','options_text_half_size','options_select_half_size','options_date_half_size',
 			'options_select_values','options_select_default','options_select_default_text','options_select_error','options_select_tip',
 			'options_selection_values','options_selection_default','options_selection_error','options_selection_tip',
 			'options_checkbox_error','options_checkbox_checked','options_checkbox_tip',
 			'options_text_regex','options_text_error','options_text_tip',
-			'options_reg_regex', 'options_reg_error','options_reg_tip',
+			'options_reg_regex', 'options_reg_error','options_reg_tip','options_reg_half_size',
 			'options_captcha_theme','options_captcha_key_priv','options_captcha_key_pub', 'options_captcha_error', 'options_captcha_tip',
 			'options_date_max','options_date_min','options_date_max','options_date_max_error','options_date_min_error','options_date_tip',
 			'options_html_content'
 		);
-		return apply_filters('em_form_get_fields_map', $map);
+		return $map;
 	}
 	
 	function translate_field( $field_data ){
@@ -787,7 +787,7 @@ class EM_Form extends EM_Object {
 	 * --------------------------------------------------------
 	 */
 	
-	function get_input_default($key, $field_values, $type='text', $value=""){
+	static function get_input_default($key, $field_values, $type='text', $value=""){
 		$return = '';
 		if(is_array($field_values)){
 			switch ($type){
@@ -810,7 +810,8 @@ class EM_Form extends EM_Object {
 		}
 		return apply_filters('emp_form_get_input_default',$return, $key, $field_values, $type, $value);
 	}
-	function input_default($key, $fields, $type = 'text', $value=""){ echo self::get_input_default($key, $fields, $type, $value); }
+
+	static function input_default($key, $fields, $type = 'text', $value=""){ echo self::get_input_default($key, $fields, $type, $value); }
 
 	
 	/**
@@ -847,6 +848,7 @@ class EM_Form extends EM_Object {
 				</div>
 				<ul class="booking-custom-body">
 					<?php foreach($fields as $field_key => $field_values): ?>
+			
 					<li class="booking-custom-item" <?php if( $field_key === 'blank_em_template' ){ echo 'id="booking-custom-item-template"'; }; ?>>
 						<div class='bc-col-sort bc-col'><span class="dashicons dashicons-menu"></span></div>
 						<div class='bc-col-label bc-col'>
@@ -870,7 +872,6 @@ class EM_Form extends EM_Object {
 									<option <?php self::input_default('type',$field_values,'select','country'); ?>>country</option>
 									<option <?php self::input_default('type',$field_values,'select','date'); ?>>date</option>
 									<option <?php self::input_default('type',$field_values,'select','email'); ?>>email</option>
-									<option <?php self::input_default('type',$field_values,'select','tel'); ?>>tel</option>
 									<option <?php self::input_default('type',$field_values,'select','number'); ?>>number</option>
 									<?php if($captcha_fields): ?>
 									<option <?php self::input_default('type',$field_values,'select','captcha'); ?>>captcha</option>
@@ -924,7 +925,7 @@ class EM_Form extends EM_Object {
 									<div class="bct-input">
 										<input type="checkbox" <?php self::input_default('options_select_default',$field_values,'checkbox'); ?> value="1" />
 										<input type="hidden" name="options_select_default[]" <?php self::input_default('options_select_default',$field_values); ?> /> 
-										<p><?php _e('If checked, the first value above will be used.','em-pro'); ?></p>
+										<label><?php _e('If checked, the first value above will be used.','em-pro'); ?></label>
 									</div>
 								</div>
 								<div class="bct-field">
@@ -957,6 +958,14 @@ class EM_Form extends EM_Object {
 									</div>
 									<?php if( EM_ML::$is_ml ) $this->editor_ml_fields('options_select_error', $field_values); ?>
 								</div>
+								<div class="bct-field">
+									<div class="bct-label"><?php _e('Half size','em-pro'); ?></div>
+									<div class="bct-input">
+										<input type="checkbox" <?php self::input_default('options_select_half_size',$field_values,'checkbox'); ?> value="1" />
+										<input type="hidden" name="options_select_half_size[]" <?php self::input_default('options_select_half_size',$field_values); ?> /> 
+										<label><?php _e('If checked, the input filed is only half of the width','em-pro'); ?></label>
+									</div>
+								</div>
 								<?php do_action('emp_forms_editor_select_multiselect_options', $this, $field_values); ?>
 							</div>
 							<!-- html -->
@@ -970,6 +979,7 @@ class EM_Form extends EM_Object {
 									</div>
 									<?php if( EM_ML::$is_ml ) $this->editor_ml_fields('options_html_content', $field_values, 'textarea'); ?>
 								</div>
+								
 								<?php do_action('emp_forms_editor_html_options', $this, $field_values); ?>
 							</div>
 							<!-- country -->
@@ -995,6 +1005,7 @@ class EM_Form extends EM_Object {
 									</div>
 									<?php if( EM_ML::$is_ml ) $this->editor_ml_fields('options_country_tip', $field_values); ?>
 								</div>
+								
 								<?php do_action('emp_forms_editor_country_options', $this, $field_values); ?>
 							</div>
 							<!-- date -->
@@ -1054,6 +1065,14 @@ class EM_Form extends EM_Object {
 									</div>
 									<?php if( EM_ML::$is_ml ) $this->editor_ml_fields('options_date_max_error', $field_values); ?>
 								</div>
+								<div class="bct-field">
+									<div class="bct-label"><?php _e('Half size','em-pro'); ?></div>
+									<div class="bct-input">
+										<input type="checkbox" <?php self::input_default('options_date_half_size',$field_values,'checkbox'); ?> value="1" />
+										<input type="hidden" name="options_date_half_size[]" <?php self::input_default('options_date_half_size',$field_values); ?> /> 
+										<label><?php _e('If checked, the input filed is only half of the width','em-pro'); ?></label>
+									</div>
+								</div>
 								<?php do_action('emp_forms_editor_date_options', $this, $field_values); ?>
 							</div>
 							<!-- checkboxes,radio -->
@@ -1088,6 +1107,7 @@ class EM_Form extends EM_Object {
 									</div>
 									<?php if( EM_ML::$is_ml ) $this->editor_ml_fields('options_selection_error', $field_values); ?>
 								</div>
+								
 								<?php do_action('emp_forms_editor_selection_radio_options', $this, $field_values); ?>
 							</div>
 							<!-- checkbox -->
@@ -1120,6 +1140,7 @@ class EM_Form extends EM_Object {
 									</div>
 									<?php if( EM_ML::$is_ml ) $this->editor_ml_fields('options_checkbox_error', $field_values); ?>
 								</div>
+								
 								<?php do_action('emp_forms_editor_checkbox_options', $this, $field_values); ?>
 							</div>
 							<!-- text,textarea,email,name -->
@@ -1151,6 +1172,14 @@ class EM_Form extends EM_Object {
 										</p>
 									</div>
 									<?php if( EM_ML::$is_ml ) $this->editor_ml_fields('options_text_error', $field_values); ?>
+								</div>
+								<div class="bct-field">
+									<div class="bct-label"><?php _e('Half size','em-pro'); ?></div>
+									<div class="bct-input">
+										<input type="checkbox" <?php self::input_default('options_text_half_size',$field_values,'checkbox'); ?> value="1" />
+										<input type="hidden" name="options_text_half_size[]" <?php self::input_default('options_text_half_size',$field_values); ?> /> 
+										<label><?php _e('If checked, the input filed is only half of the width','em-pro'); ?></label>
+									</div>
 								</div>
 								<?php do_action('emp_forms_editor_text_options', $this, $field_values); ?>
 							</div>	
@@ -1185,6 +1214,14 @@ class EM_Form extends EM_Object {
 										</p>
 									</div>
 									<?php if( EM_ML::$is_ml ) $this->editor_ml_fields('options_reg_error', $field_values); ?>
+								</div>
+								<div class="bct-field">
+									<div class="bct-label"><?php _e('Half size','em-pro'); ?></div>
+									<div class="bct-input">
+										<input type="checkbox" <?php self::input_default('options_reg_half_size',$field_values,'checkbox'); ?> value="1" />
+										<input type="hidden" name="options_reg_half_size[]" <?php self::input_default('options_reg_half_size',$field_values); ?> /> 
+										<label><?php _e('If checked, the input filed is only half of the width','em-pro'); ?></label>
+									</div>
 								</div>
 							</div>
 							<?php endif; ?>
@@ -1279,7 +1316,7 @@ class EM_Form extends EM_Object {
 			//Booking form fields
 			$fields_map = self::get_fields_map();
 			//extract request info back into item lists, but first assign fieldids to new items and sanitize old ones
-			$field_ids = array();
+			$field_ids = [];
 			foreach( $_REQUEST['fieldid'] as $fieldid_key => $fieldid ){
 				if( !$this->is_user_form && $_REQUEST['type'][$fieldid_key] == 'name' ){ //name field
 					$_REQUEST['fieldid'][$fieldid_key] = 'user_name';
@@ -1305,7 +1342,7 @@ class EM_Form extends EM_Object {
 			}
 			//get field values
 			global $allowedposttags;
-			$this->form_fields = array();
+			$this->form_fields = [];
 			foreach( $_REQUEST as $key => $value){
 				if( is_array($value) && in_array($key,$fields_map) ){
 					foreach($value as $item_index => $item_value){
