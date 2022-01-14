@@ -2335,3 +2335,9 @@ msgstr "Buchung automatisch genehmigen, auch wenn keine Bezahlung gemacht wurde"
 
 msgid "Approval"
 msgstr "Genehmigung"
+
+msgid "Half size"
+msgstr "Halbe Größe"
+
+msgid "If checked, the input filed is only half of the width"
+msgstr "Wenn aktiviert, wird das Feld nur halb so breit dargestellt"
