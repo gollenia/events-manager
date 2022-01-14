@@ -165,7 +165,7 @@ class EM_Booking_Api {
                 "tip" => array_key_exists('options_text_tip', $field) ? $field['options_text_tip'] : "",
                 "select_hint" => array_key_exists('options_select_default_text', $field) ? $field['options_select_default_text'] : "",
                 "options" => [],
-                "_full" => $field
+				"half" => array_key_exists('options_text_half_size', $field) && $field['options_text_half_size'] == 1  ? true : false
             ];
             // This is very unfancy.
             switch ($field['type']) {
@@ -179,7 +179,7 @@ class EM_Booking_Api {
                     break;
                 case 'date':
                     $input_field['value'] = $field['options_checkbox_checked'];
-                    //$input_field['error'] = $field['options_date_min_error'] ?: $field['options_date_max_error'];
+                    $input_field['half'] = array_key_exists('options_date_half_size', $field) && $field['options_date_half_size'] == 1  ? true : false;
                     $input_field['tip'] = $field['options_date_tip'];
                     $input_field['min'] = $field['options_date_min'];
                     $input_field['max'] = $field['options_date_max'];
@@ -187,6 +187,7 @@ class EM_Booking_Api {
                 case 'select':
                     $input_field['value'] = $field['options_select_default'];
                     $input_field['error'] = $field['options_select_error'];
+					$input_field['half'] = array_key_exists('options_select_half_size', $field) && $field['options_select_half_size'] == 1  ? true : false;
                     $input_field['tip'] = $field['options_select_tip'];
                     $input_field['options'] = explode("\r\n", $field['options_select_values']);
                     break;
@@ -203,8 +204,14 @@ class EM_Booking_Api {
                     $input_field['type'] = "select";
                     $input_field['options'] = em_get_countries();
                     $input_field['value'] = substr(get_locale(), -2);
-
+					break;
+				case 'registration':
+					$input_field['half'] = array_key_exists('options_reg_half_size', $field) && $field['options_reg_half_size'] == 1  ? true : false;
                 }
+
+				if(array_key_exists('options_reg_half_size', $field) && $field['options_reg_half_size'] == 1) {
+					$input_field['half'] = true;
+				}
 
             array_push($fieldset, $input_field);
         }
