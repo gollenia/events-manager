@@ -26,7 +26,7 @@ const UserRegistration = (props) => {
 
 
     return (
-        <div className="grid lg:grid--columns-2 grid--gap-12">
+        <div className="grid xl:grid--columns-2 grid--gap-12">
           <div>
           <div className="list ">
             { Object.keys(tickets).map((id, key) =>
