@@ -110,10 +110,11 @@ const Payment = (props) => {
                     <Gateway currentGateway={currentGateway()}/>
                 </div>
             </div>
+			<div>
         <form className="form">
             { coupons.available && 
-			<>
-                <div className="input">
+			<div className="input-group">
+                <div className="input input-group__main">
                 <label>{__('Coupon code','em-pro')}</label>
                 <input 
 					value={couponCode}
@@ -124,7 +125,7 @@ const Payment = (props) => {
                 />
                 </div>
 				<span onClick={() => {checkCouponCode(couponCode)}} className='button button--secondary'>{__("Check coupon", "em-pro")}</span>
-			</>
+			</div>
             }
             { gateways.length > 1 &&
             <InputField
@@ -149,6 +150,7 @@ const Payment = (props) => {
                 <div class="alert bg-error text-white" dangerouslySetInnerHTML={{__html: error}}></div>
             }
         </form>
+		</div>
         </div>
     )
 }

@@ -79,6 +79,7 @@ const UserRegistration = (props) => {
                 </div>
             </div>
           </div>
+		  <div>
             <form className="form">
             { fields.map((field, key) => 
               
@@ -111,6 +112,7 @@ const UserRegistration = (props) => {
                 <div class="alert bg-error text-white" dangerouslySetInnerHTML={{__html: error}}></div>
           }
           </form>
+		  </div>
         </div>
     )
 }
