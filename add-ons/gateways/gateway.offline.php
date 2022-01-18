@@ -161,10 +161,10 @@ class EM_Gateway_Offline extends EM_Gateway {
 	 */
 	function add_payment_form() {
 		?>
-		<div id="em-gateway-payment" class="stuffbox">
-			<h3>
+		<div id="em-gateway-payment" class="">
+			<h2 class="title">
 				<?php _e('Add Offline Payment', 'em-pro'); ?>
-			</h3>
+			</h2>
 			<div class="inside">
 				<div>
 					<form method="post" action="" style="padding:5px;">

@@ -195,18 +195,18 @@ function em_bookings_single(){
   		<?php if( !is_admin() ) echo $EM_Notices; ?>
   		<div class="metabox-holder">
 	  		<div class="postbox-container" style="width:99.5%">
-				<div class="postbox">
-					<h3>
+				<div class="">
+					<h2 class="title">
 						<?php esc_html_e( 'Event Details', 'events-manager'); ?>
-					</h3>
+					</h2>
 					<div class="inside">
 						<?php
 						$EM_Event = $EM_Booking->get_event();
 						?>
-						<table>
-							<tr><td><strong><?php esc_html_e('Name','events-manager'); ?></strong></td><td><a class="row-title" href="<?php echo $EM_Event->get_bookings_url(); ?>"><?php echo ($EM_Event->event_name); ?></a></td></tr>
+						<table class="form-table">
+							<tr><th><strong><?php esc_html_e('Name','events-manager'); ?></strong></th><td><a class="row-title" href="<?php echo $EM_Event->get_bookings_url(); ?>"><?php echo ($EM_Event->event_name); ?></a></td></tr>
 							<tr>
-								<td><strong><?php esc_html_e('Date/Time','events-manager'); ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong></td>
+								<th><strong><?php esc_html_e('Date/Time','events-manager'); ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong></th>
 								<td>
 									<?php echo $EM_Event->output('#_EVENTDATES @ #_EVENTTIMES'); ?>
 								</td>
@@ -215,13 +215,23 @@ function em_bookings_single(){
 						<?php do_action('em_bookings_admin_booking_event', $EM_Event); ?>
 					</div>
 				</div>
-				<div class="postbox">
-					<h3>
+				<div class="">
+					<h2 class="title">
 						<?php esc_html_e( 'Personal Details', 'events-manager'); ?>
-					</h3>
+					</h2>
 					<div class="inside">
-						<div class="em-booking-person-details">
-							<?php echo $EM_Booking->get_person()->display_summary(); ?>
+						<div class="em-booking-person-details"><table class="form-table"><tbody></tbody>
+						<?php $form_fields = EM_Booking_Form::get_form($EM_Event)->form_fields; ?>
+							<?php foreach($EM_Booking->booking_meta["registration"] as $key => $value) {
+								if(!array_key_exists($key, $form_fields)) continue;
+								if( $form_fields[$key]['type'] == "html" ) continue;
+								echo "<tr><th>" . $form_fields[$key]['label'] . "</th><td>" . $value . "</td></tr>";
+							}?>
+							<?php foreach($EM_Booking->booking_meta["booking"] as $key => $value) {
+								if( $form_fields[$key]['type'] == "html" ) continue;
+								echo "<tr><th>" . $form_fields[$key]['label'] . "</th><td>" . $value . "</td></tr>";
+							}?>
+							</tbody></table>
 							<?php if( $EM_Booking->is_no_user() ): ?>
 							<input type="button" class="button-secondary" id="em-booking-person-modify" value="<?php esc_attr_e('Edit Details','events-manager'); ?>" />
 							<?php endif; ?>
@@ -254,17 +264,17 @@ function em_bookings_single(){
 						<?php do_action('em_bookings_admin_booking_person', $EM_Booking); ?>
 					</div>
 				</div>
-				<div class="postbox">
-					<h3>
+				<div class="">
+					<h2 class="title">
 						<?php esc_html_e( 'Booking Details', 'events-manager'); ?>
-					</h3>
+					</h2>
 					<div class="inside">
 						<?php
 						$EM_Event = $EM_Booking->get_event();
 						$shown_tickets = array();
 						?>
 						<div>
-							<form action="" method="post" class="em-booking-single-status-info">
+							<form action="" method="post" class="tablenav top">
 								<strong><?php esc_html_e('Status','events-manager'); ?> : </strong>
 								<?php echo $EM_Booking->get_status(); ?>
 								<input type="button" class="button-secondary em-button em-booking-submit-status-modify" id="em-booking-submit-status-modify" value="<?php esc_attr_e('Change', 'events-manager'); ?>" />
@@ -292,8 +302,8 @@ function em_bookings_single(){
 								<br /><em><?php echo wp_kses_data(__('<strong>Notes:</strong> Ticket availability not taken into account when approving new bookings (i.e. you can overbook).','events-manager')); ?></em>
 							</form>
 						</div>
-						<form action="" method="post" class="em-booking-form">
-							<table class="em-tickets-bookings-table" cellpadding="0" cellspacing="0">
+						<form action="" method="post" class="">
+							<table class="widefat" cellpadding="0" cellspacing="0">
 								<thead>
 								<tr>
 									<th><?php esc_html_e('Ticket Type','events-manager'); ?></th>
@@ -339,9 +349,9 @@ function em_bookings_single(){
 										//we should now have an array of information including base price, taxes and post/pre tax discounts
 									?>
 									<tr>
-										<th><?php esc_html_e('Price','events-manager'); ?></th>
-										<th><?php echo sprintf(__('%d Spaces','events-manager'), $EM_Booking->get_spaces()); ?></th>
-										<th><?php echo $EM_Booking->get_price_base(true); ?></th>
+										<th><strong><?php esc_html_e('Price','events-manager'); ?></strong></th>
+										<th><strong><?php echo sprintf(__('%d Spaces','events-manager'), $EM_Booking->get_spaces()); ?></strong></th>
+										<th><strong><?php echo $EM_Booking->get_price_base(true); ?></strong></th>
 									</tr>
 									<?php if( count($price_summary['discounts_pre_tax']) > 0 ): ?>
 										<?php foreach( $price_summary['discounts_pre_tax'] as $discount_summary ): ?>
@@ -397,18 +407,7 @@ function em_bookings_single(){
 									<?php do_action('em_bookings_admin_ticket_totals_footer', $EM_Booking); ?>
 								</tfoot>
 							</table>
-							<table class="em-form-fields" cellspacing="0" cellpadding="0">
-								<?php if( !has_action('em_bookings_single_custom') ): //default behavior ?>
-								<tr>
-									<th><?php esc_html_e('Comment','events-manager'); ?></th>
-									<td>
-										<span class="em-booking-single-info"><?php echo esc_html($EM_Booking->booking_comment); ?></span>
-										<div class="em-booking-single-edit"><textarea name="booking_comment"><?php echo esc_html($EM_Booking->booking_comment); ?></textarea></div>
-									</td>
-								</tr>
-								<?php else: do_action('em_bookings_single_custom',$EM_Booking); //do your own thing, e.g. pro ?>
-								<?php endif; ?>
-							</table>
+							
 							<p class="em-booking-single-info">
 								<input type="button" class="button-secondary em-button em-booking-submit-modify" id="em-booking-submit-modify" value="<?php esc_attr_e('Modify Booking', 'events-manager'); ?>" />
 							</p>
@@ -451,10 +450,10 @@ function em_bookings_single(){
 						<?php do_action('em_bookings_single_details_footer', $EM_Booking); ?>
 					</div>
 				</div>
-				<div id="em-booking-notes" class="postbox">
-					<h3>
+				<div id="em-booking-notes" class="">
+					<h2 class="title">
 						<?php esc_html_e( 'Booking Notes', 'events-manager'); ?>
-					</h3>
+					</h2>
 					<div class="inside">
 						<p><?php esc_html_e('You can add private notes below for internal reference that only event managers will see.','events-manager'); ?></p>
 						<?php foreach( $EM_Booking->get_notes() as $note ):
