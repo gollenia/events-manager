@@ -85,7 +85,6 @@ div.em-location-data .em-location-map-404 { vertical-align:middle; text-align: c
 
 /* Booking Form */
 .em-booking { margin:15px 0px 10px 0px; position:relative; }
-.em-booking-form  { position:relative; clear:left; max-width:1200px; }
 .em-booking-form-details  { padding:10px; width:360px; float:left; }
 .em-booking-form-details input.input, .em-booking-form-details textarea { width:250px; }
 .em-booking-form p { clear:left; }
