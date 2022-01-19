@@ -169,6 +169,7 @@ const Booking = () => {
         request['event_id'] = eventData.event.event_id
         const url = new URL(booking_url)
         url.search = qs.stringify(request)
+		
         fetch(url).then((response) => response.json()).then((response) => {
 			
 			if(!response.result) {
