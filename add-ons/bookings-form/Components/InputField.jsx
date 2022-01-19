@@ -6,6 +6,12 @@ const InputField = (props) => {
     let InputTag
 
     const {type, name, label, required = false, pattern, defaultValue, options, selectHint, value, min, max, half} = props
+
+	const getLabel = () => {
+		const parser = new DOMParser();
+		return parser.parseFromString(`<!doctype html><body>${label}`, 'text/html').body.textContent;
+
+	}
 	
 	const createMarkup = (textString) => {
         return {__html: textString};
@@ -75,7 +81,7 @@ const InputField = (props) => {
         case "select":
             InputTag = (
                 <div className={"select" + (half ? " select--half" : "")}>
-                    <label>{label}</label>
+                    <label>{getLabel()}</label>
                     <select onChange= {handleChange} name={name} required={required}>
                         { defaultValue && <option value="">{defaultValue}</option>}
                         { !defaultValue && <option value="">{selectHint}</option>}
@@ -87,7 +93,7 @@ const InputField = (props) => {
         case "radio":
             InputTag = (
                 <div className="radio">
-                    <label>{label}</label>
+                    <label>{getLabel()}</label>
                     <fieldset className="radio">
                         { radioOptions() }
                     </fieldset>
@@ -107,7 +113,7 @@ const InputField = (props) => {
         case "date":
             InputTag = (
                 <div className={"input" + (half ? " input--half" : "")}>
-                    <label>{label}</label>
+                    <label>{getLabel()}</label>
                     <input onChange= {event => {handleChange(event)}} type={type} name={name} min={min} max={max} required={required} pattern={pattern}/>
                 </div>
             )
@@ -115,7 +121,7 @@ const InputField = (props) => {
         case "textarea":
             InputTag = (
                 <div className="textarea">
-                    <label>{label}</label>
+                    <label>{getLabel()}</label>
                     <textarea onChange= {handleChange} name={name} value={value} required={required}></textarea>
                 </div>
             )
@@ -123,7 +129,7 @@ const InputField = (props) => {
         default:
             InputTag = (
                 <div className={"input" + (half ? " input--half" : "")}>
-                    <label>{label}</label>
+                    <label>{getLabel()}</label>
                     <input onChange= {event => {handleChange(event)}} type={type} name={name} required={required} pattern={pattern}/>
                 </div>
             )
