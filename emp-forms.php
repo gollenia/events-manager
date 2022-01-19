@@ -153,16 +153,7 @@ class EM_Form extends EM_Object {
 	    	    $field = $custom_user_fields[$field['fieldid']];
 	    	}
 			//dates and time are special
-			if( in_array( $field['type'], array('date','time')) ){
-				if( !empty($_REQUEST[$fieldid]['start']) ){
-					$this->field_values[$fieldid] = wp_kses_data($_REQUEST[$fieldid]['start']);
-					if( $field['options_'.$field['type'].'_range'] && !empty($_REQUEST[$fieldid]['end']) ){
-						$this->field_values[$fieldid] .= ','. wp_kses_data($_REQUEST[$fieldid]['end']);
-					}
-				}else{
-				    $this->field_values[$fieldid] = '';
-				}
-			}
+			
 			//check that user fields were indeed submitted for validation by logged in users, or were not editable, in which case we populate form with previously saved data 
 			if( array_key_exists($field['type'], $this->user_fields) && !self::validate_reg_fields($field) ){
 				$this->field_values[$fieldid] = EM_User_Fields::get_user_meta(get_current_user_id(), $field['type']);
@@ -177,36 +168,13 @@ class EM_Form extends EM_Object {
 	
 	function get_formatted_value( $field, $field_value ){
 		//FIX FOR BUG IN 2.2.5.4 and earlier for bookings using use no-user-mode
-		if( in_array($field['type'], array('time','date')) ){
-			if( is_array($field_value) && !empty($field_value['start']) ){
-				$temp_val = $field_value['start'];
-				if( !empty($field_value['end']) ){
-					$temp_val .= ','.$field_value['start'];
-				}
-				$field_value = $temp_val;
-			}elseif( is_array($field_value) && empty($field_value['start']) ){
-			    $field_value = 'n/a'; //fix for empty value saves in 2.2.8
-			}
-		}
+		
 		//output formatted value for special fields
 		switch( $field['type'] ){
 			case 'checkbox':
 				$field_value = ($field_value && $field_value != 'n/a') ? __('Yes','events-manager'):__('No','events-manager');
 				break;
-			case 'date':
-			    //split ranges (or create single array) and format, then re-implode
-			    if( $field_value != 'n/a' ){
-					$date_format = ( get_option('dbem_date_format') ) ? get_option('dbem_date_format'):get_option('date_format');
-				    $field_values = explode(',', $field_value);
-				    foreach($field_values as $key => $value){
-						$field_values[$key] = date($date_format, strtotime($value));
-					}
-				    $field_value = implode(',', $field_values);
-				    //set seperator and replace the comma
-					$seperator = empty($field['options_date_range_seperator']) ? ' - ': $field['options_date_range_seperator'];
-					$field_value = str_replace(',',' '.$seperator.' ', $field_value);
-			    }
-				break;
+			
 			case 'time':
 			    //split ranges (or create single array) and format, then re-implode
 			    if( $field_value != 'n/a' ){
@@ -664,7 +632,7 @@ class EM_Form extends EM_Object {
 				    
 					if( !preg_match('/\d{4}-\d{2}-\d{2}/', $value) ){
 						$this_err = (!empty($field['options_date_min_error'])) ? $field['options_date_error']:__('Dates must have correct formatting. Please use the date picker provided.','events-manager');
-						$this->add_error($this_err);
+						$this->add_error($this_err . "value: " .print_r($this->field_values, true));
 						$result = false;
 					}
 					
