@@ -57,20 +57,17 @@ class EM_Event_Post {
     }
 
 	public static function lowest_price($booking) {
-	
-        $tickets = $booking->get_tickets();
-        if(empty($tickets->tickets)) {
+        $tickets = $booking->get_tickets()->tickets;
+        if(empty($tickets)) {
             return 0;
         }
 
-        $price_array = [];
-        foreach($tickets as $ticket) {
-            array_push($price_array, floatval($ticket->ticket_price));
-        }
-        if(max($price_array) == 0) {
-            return 0;
-        }
-        return min($price_array);
+		$first_ticket = key($tickets);
+
+		
+
+		return floatval($tickets[$first_ticket]->ticket_price);
+        
     }
 
 	public static function get_related_events($EM_Event, int $limit = 5) {
