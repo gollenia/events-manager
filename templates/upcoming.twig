@@ -47,6 +47,7 @@
 					{% endif %}
 					{% endif %}
 					</div>
+					{% if style == "cards" %}
                     <div class="card__footer">
 						{% if showTags %}
 							{% set terms = item.terms({query:{taxonomy:'event-tags'}})%}
@@ -62,7 +63,7 @@
 							<i class="material-icons material-icons--bubble material-icons--micro-bubble text-xs mr-1" style="margin-top: 1px;">family_restroom</i><span class="text-xs"> {{ item.meta.event_audience  }}</span>
 						{% endif %}
                     </div>
-                    
+                    {% endif %}
                 </div>
             </a>
         
