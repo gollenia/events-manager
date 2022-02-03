@@ -53,6 +53,14 @@ add_filter( 'timber/locations', function($paths) use ($EM_Twig) {
 	return $paths;
 });
 
+add_action('init', function() {
+	register_rest_field( 'event', 'meta', array(
+		'get_callback' => function ( $data ) {
+			return get_post_meta( $data['id'], '', '' );
+		}, ));
+});
+
+
 
 // INCLUDES
 //Base classes

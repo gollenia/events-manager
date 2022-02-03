@@ -1,13 +1,13 @@
 function em_geo_search_init(){
 	jQuery('input.em-search-geo').each(function(i){
-		var input = /** @type {HTMLInputElement} */ jQuery(this);
-		var wrapper = input.closest('div.em-search-geo'); 
-		var autocomplete = new google.maps.places.Autocomplete(input[0]);
-		var geo_coords = wrapper.find("input.em-search-geo-coords");
+		let input = /** @type {HTMLInputElement} */ jQuery(this);
+		let wrapper = input.closest('div.em-search-geo'); 
+		let autocomplete = new google.maps.places.Autocomplete(input[0]);
+		let geo_coords = wrapper.find("input.em-search-geo-coords");
 
-		var geo_field_status = function( status ){
+		let geo_field_status = function( status ){
 			wrapper.data('status',status);
-			var em_search = wrapper.closest('.em-search');
+			let em_search = wrapper.closest('.em-search');
 			if( status == 'on' ){
 				wrapper.css('background-image', wrapper.css('background-image').replace('search-geo.png', 'search-geo-on.png').replace('search-geo-off.png', 'search-geo-on.png'));
 				em_search.find('select.em-search-country option:first-child').prop('selected','selected').trigger('change');
@@ -25,8 +25,8 @@ function em_geo_search_init(){
 			}
 		};
 
-		var ac_listener = function( place ) {
-			var place = autocomplete.getPlace();
+		let ac_listener = function( place ) {
+			let place = autocomplete.getPlace();
 			if( !place || !place.geometry ){ //place not found
 				if( input.val() == '' || input.val() == EM.geo_placeholder ){ 
 					geo_field_status(false);

@@ -3,7 +3,7 @@ jQuery(document).ready(function($) {
 	$('.term-color').wpColorPicker();
 
 	//Event Taxonomy Image Picker
-	var frame;	
+	let frame;	
 	// ADD IMAGE LINK
 	$('.term-image-wrap .upload-img-button').on( 'click', function( event ){
 		event.preventDefault();
@@ -23,7 +23,7 @@ jQuery(document).ready(function($) {
 		// When an image is selected in the media frame...
 		frame.on( 'select', function() {
 			// Get media attachment details from the frame state
-			var attachment = frame.state().get('selection').first().toJSON();
+			let attachment = frame.state().get('selection').first().toJSON();
 			// Send the attachment URL to our custom image input field.
 			$( '.term-image-wrap .img-container').empty().append( '<img src="'+attachment.url+'" alt="" style="max-width:100%;"/>' );
 			// Send the attachment id to our hidden input

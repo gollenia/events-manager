@@ -168,3 +168,6 @@ add_filter( 'timber/twig', ["\\Schedule\\Addons\\TwigExtend", "add_to_twig"] );
 
 $upcoming_block = new \Schedule\Addons\Upcoming($args);
 $upcoming_block->register();
+
+$featured_block = new \Schedule\Addons\Featured($args);
+$featured_block->register();

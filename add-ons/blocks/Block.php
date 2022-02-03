@@ -56,6 +56,7 @@ class Block implements BlockInterface {
         add_action( 'init', function() use(&$blocks, &$args){
             for($i = 0; $i < count($blocks); $i++) {
                 $args['attributes'] = $blocks[$i]['attributes'];
+				$args['api_version'] = 2;
                 register_block_type(
                     $blocks[$i]["name"], $args
                 );

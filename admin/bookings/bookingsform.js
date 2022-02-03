@@ -1,12 +1,12 @@
 /**
  * @deprecated
  */
-var em_booking_doing_ajax = false;
+let em_booking_doing_ajax = false;
 $('#em-booking-form').addClass('em-booking-form'); //backward compatability
 $(document).on('submit', '.em-booking-form', function(e){
 	e.preventDefault();
-	var em_booking_form = $(this);
-	var event = new CustomEvent('bookingpending', {
+	let em_booking_form = $(this);
+	let event = new CustomEvent('bookingpending', {
 		bubbles: true,
 		cancelable: true
 	});
@@ -40,7 +40,7 @@ $(document).on('submit', '.em-booking-form', function(e){
 			}else{
 				if( response.errors != null ){
 					if( $.isArray(response.errors) && response.errors.length > 0 ){
-						var error_msg;
+						let error_msg;
 						response.errors.each(function(i, el){
 							error_msg = error_msg + el;
 						});

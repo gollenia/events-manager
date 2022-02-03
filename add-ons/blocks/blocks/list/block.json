@@ -1,9 +1,5 @@
 {
-	"name": "events-manager/upcoming",
-	"title": "Upcoming Events",
-	"description": "Shows a list or cards of upcoming events",
-	"text-domain": "events-manager",
-	"apiVersion": 2,
+	"name": "events-manager/list",
 	"category": "widgets", 
 	"attributes": {
 		"columnsSmall": {
@@ -26,10 +22,6 @@
 			"type": "boolean",
 			"default": false
 		},
-		"dropShadow": {
-			"type": "boolean",
-			"default": false
-		},
 		"imageSize": {
 			"type": "number",
 			"default": 100
@@ -41,10 +33,6 @@
 		"showLocation": {
 			"type": "string",
 			"default": ""
-		},
-		"style": {
-			"type": "string",
-			"default": "list"
 		},
 		"limit": {
 			"type": "number",
@@ -66,21 +54,17 @@
 			"type": "array",
 			"default": []
 		},
-		"fromDate": {
+		"range": {
 			"type": "string",
-			"default": ""
+			"default": "month"
 		},
-		"toDate": {
-			"type": "string",
-			"default": ""
+		"scope": {
+			"type": "number",
+			"default": 0
 		},
 		"excerptLength": {
 			"type": "number",
 			"default": 20
-		},
-		"textAlignment": {
-			"type": "string",
-			"default": "left"
 		},
 		"showAudience": {
 			"type": "boolean",

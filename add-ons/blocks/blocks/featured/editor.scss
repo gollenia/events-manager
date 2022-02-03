@@ -1,0 +1,17 @@
+.ctx-featured-event {
+	aspect-ratio: 16/9;
+	background-size: cover;
+	display: flex;
+	align-items: flex-end;
+	> div {
+		padding: 1rem;
+		flex: 1;
+		background: rgba(255,255,255,0.7);
+		
+
+		h1, p {
+			margin: 0;
+			padding: 0;
+		}
+	}
+}

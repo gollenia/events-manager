@@ -5,6 +5,7 @@ import React, { useEffect, useState } from 'react'
 import { __ } from '@wordpress/i18n';
 import qs from "qs";
 import {ErrorBoundary} from 'react-error-boundary'
+
 /*
 *   Internal dependecies
 */
@@ -12,7 +13,6 @@ import UserRegistration from './Components/UserRegistration.jsx'
 import TicketList from "./Components/TicketList.jsx"
 import Payment from "./Components/Payment.jsx"
 import ErrorFallback from './Components/Error.jsx';
-import Gateway from './Components/Gateway.jsx';
 import OfflinePayment from './Components/OfflinePayment.jsx';
 
 let openBookingModal = () => {}
