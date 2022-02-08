@@ -14,4 +14,11 @@
 			padding: 0;
 		}
 	}
+
+	&.is-root {
+		margin-left: 0;
+		margin-right: 0;
+		max-width: 100%;
+    	aspect-ratio: 16/5;
+	}
 }
