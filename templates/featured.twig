@@ -2,13 +2,24 @@
 {% if event %}
 
 {% if isRootElement %}
-<div style="background: url('{{ event.thumbnail.src('original') }}');" >
+<div class="section hero" style="background-image: url('{{ event.thumbnail.src('original') }}');" >
+	{% if showSpeaker and speaker %}
+	<div class="card__label card__label--image">
+		<img src="{{speaker.thumbnail.src('thumbnail')}}">
+		<span>{{ speaker.title }}</span>
+	</div>
+	{% endif %}
+
 	<div class="{{isRootElement ? 'container' : ''}}">
+	
+		<div class="hero__title">
 		<h1>{{ event.post_title }}</h1>
 		<span class="tag">{{event.audience}}</span>
 		<p>
 			{{ event.post_excerpt }}
 		</P>
+		<a class="button button--primary" href="{{ function("get_permalink", event.ID) }}">{{ __("Details", "events-manager") }}</a>
+		</div>
 	</div>
 <div>
 {% else %}
