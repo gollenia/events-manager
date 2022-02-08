@@ -39,11 +39,6 @@
 	const parentClientId = select( 'core/block-editor' ).getBlockHierarchyRootClientId( props.clientId );
 		
 	setAttributes({isRootElement: parentClientId == props.clientId})
-	
-	console.log("parent", parentClientId)
-	console.log('self', props.clientId)
-	console.log("isRoot", isRootElement)
-	
  
 	 const categoryList = useSelect( ( select ) => {
 		 const { getEntityRecords } = select( coreStore );
@@ -120,7 +115,7 @@
 		if(img) {
 			mostRecent.image = img[0].media_details.sizes.large.source_url;
 		}
-		console.log(mostRecent)
+
 		return mostRecent
 	}, [selectedCategory, selectedTags] );
 
@@ -145,6 +140,7 @@
 	 const blockProps = useBlockProps({
 		 className: [
 			 "ctx-featured-event",
+			 isRootElement ? "is-root" : false,
 			 dropShadow ? "hover" : false,
 			 "style-" + style,
 			 "text-" + textAlignment,
