@@ -6,7 +6,7 @@ class EM_Update {
     public static function init()
     {
         $self = new self();
-        add_filter( 'admin_init', ["EM_Update", 'update_location_table'], 10, 3);
+        add_filter( 'init', ["EM_Update", 'update_location_table'], 10, 3);
     }
 
     public static function update_location_table(){
