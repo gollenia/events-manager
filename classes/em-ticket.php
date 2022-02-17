@@ -26,6 +26,7 @@ class EM_Ticket extends EM_Object{
 	var $ticket_guests = false;
 	var $ticket_required = false;
 	var $ticket_parent;
+	var int $ticket_primary = 0;
 	var $ticket_meta = array();
 	var $ticket_order;
     var $count = 0;
@@ -94,6 +95,7 @@ class EM_Ticket extends EM_Object{
 			$this->to_object($ticket);
 			//serialized arrays
 			$this->ticket_meta = (!empty($ticket['ticket_meta'])) ? maybe_unserialize($ticket['ticket_meta']):array();
+			$this->ticket_primary = array_key_exists('primary', $this->ticket_meta) ? $this->ticket_meta['primary'] : 0;
 			$this->ticket_members_roles = maybe_unserialize($this->ticket_members_roles);
 			if( !is_array($this->ticket_members_roles) ) $this->ticket_members_roles = array();
 			//sort out recurrence meta to save extra empty() checks, the 'true' cut-off info is here for the ticket if part of a recurring event
@@ -269,6 +271,7 @@ class EM_Ticket extends EM_Object{
 		}else{
 			$this->ticket_price = str_replace( array( get_option('dbem_bookings_currency_thousands_sep'), get_option('dbem_bookings_currency_decimal_point') ), array('','.'), $price );
 		}
+		
 		//Sort out date/time limits
 		$this->ticket_start = ( !empty($post['ticket_start']) ) ? wp_kses_data($post['ticket_start']):'';
 		$this->ticket_end = ( !empty($post['ticket_end']) ) ? wp_kses_data($post['ticket_end']):'';
@@ -289,6 +292,7 @@ class EM_Ticket extends EM_Object{
 			}
 		}
 		$this->ticket_required = ( !empty($post['ticket_required']) ) ? 1:0;
+		$this->ticket_meta['primary'] = ( !empty($post['ticket_primary']) ) ? 1:0;
 		//if event is recurring, store start/end restrictions of this ticket, which are determined by number of days before (negative number) or after (positive number) the event start date
 		if($this->get_event()->is_recurring()){
 			if( empty($this->ticket_meta['recurrences']) ){

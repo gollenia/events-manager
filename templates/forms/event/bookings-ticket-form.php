@@ -4,6 +4,7 @@
  * This form should have $EM_Ticket and $col_count available globally. 
  */
 global $col_count, $EM_Ticket; /* @var EM_Ticket $EM_Ticket */
+var_dump($EM_Ticket->ticket_primary);
 $col_count = absint($col_count); //now we know it's a number
 ?>
 <div class="em-ticket-form">
@@ -18,6 +19,10 @@ $col_count = absint($col_count); //now we know it's a number
 			<textarea name="em_tickets[<?php echo $col_count; ?>][ticket_description]" class="ticket_description"><?php echo esc_html(wp_unslash($EM_Ticket->ticket_description)) ?></textarea>
 		</div>
 		<div class="ticket-price"><label><?php esc_html_e('Price','events-manager') ?></label><input type="text" name="em_tickets[<?php echo $col_count; ?>][ticket_price]" class="ticket_price" value="<?php echo esc_attr($EM_Ticket->get_price_precise(true)) ?>" /></div>
+		<div class="ticket-primary">
+			<label title="<?php esc_attr_e('If checked, the price label will show the price of this ticket.','events-manager'); ?>"><?php esc_html_e('Primary Ticket','events-manager') ?></label>
+			<input type="checkbox" value="1" name="em_tickets[<?php echo $col_count; ?>][ticket_primary]" <?php if($EM_Ticket->ticket_primary) echo 'checked="checked"'; ?> class="ticket_primary" />
+		</div>
 		<div class="ticket-spaces">
 			<label title="<?php esc_attr_e('Enter a maximum number of spaces (required).','events-manager'); ?>"><?php esc_html_e('Spaces','events-manager') ?></label>
 			<input type="text" name="em_tickets[<?php echo $col_count; ?>][ticket_spaces]" value="<?php echo esc_attr($EM_Ticket->ticket_spaces) ?>" class="ticket_spaces" />
