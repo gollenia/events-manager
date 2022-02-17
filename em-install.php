@@ -232,6 +232,7 @@ function em_create_locations_table() {
 		location_country CHAR( 2 ) NULL DEFAULT NULL,
 		location_latitude DECIMAL( 9, 6 ) NULL DEFAULT NULL,
 		location_longitude DECIMAL( 9, 6 ) NULL DEFAULT NULL,
+		location_url VARCHAR( 400 ) NULL DEFAULT NULL,
 		post_content longtext NULL DEFAULT NULL,
 		location_status int(1) NULL DEFAULT NULL,
 		location_private tinyint(1) unsigned NOT NULL DEFAULT 0,
