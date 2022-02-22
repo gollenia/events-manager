@@ -1351,4 +1351,3 @@ class EM_Booking extends EM_Object{
 		return $booking;
 	}
 }
-?>
