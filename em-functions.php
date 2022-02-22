@@ -436,6 +436,7 @@ function em_wp_is_super_admin( $user_id = false ){
 /**
  * Returns an array of flags that are used in search forms.
  * @return array
+ * @deprecated
  */
 function em_get_search_form_defaults($args = array()){
 	if( !is_array($args) ) $args = array();
