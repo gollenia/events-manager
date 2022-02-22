@@ -7,17 +7,18 @@
 class EM_Event_Post {
 	
 	public static function init(){
+
+		$instance = new self;
 		//Front Side Modifiers
 		if( !is_admin() ){
-
 			//Override post template tags
 			add_filter('get_the_date',array('EM_Event_Post','the_date'),10,3);
 			add_filter('the_content',array('EM_Event_Post','the_content'),10,3);
 			add_filter('get_the_time',array('EM_Event_Post','the_time'),10,3);
-			add_filter('the_category',array('EM_Event_Post','the_category'),10,3);
 		}
 		add_action('parse_query', array('EM_Event_Post','parse_query'));
 		add_action('publish_future_post',array('EM_Event_Post','publish_future_post'),10,1);
+		add_action('rest_api_init',array($instance,'register_rest'),10,1);
 	}
 	
 	public static function publish_future_post($post_id){
@@ -63,9 +64,6 @@ class EM_Event_Post {
         }
 
 		$first_ticket = key($tickets);
-
-		
-
 		return floatval($tickets[$first_ticket]->ticket_price);
         
     }
@@ -77,8 +75,6 @@ class EM_Event_Post {
         if(empty($categories)) {
             return false;
         }
-
-		
 
         $args = [
             'post_type' => 'event',
@@ -113,12 +109,12 @@ class EM_Event_Post {
 		$EM_Event = em_get_event($post);
 		$booking = new \EM_Bookings($EM_Event);
 
-
 		$attributes = [
 			"post" => $post,
 			"event" => $EM_Event,
 			"location" => $EM_Event->location_id != 0 ? \EM_Locations::get($EM_Event->location_id)[0] : false,
-			'currency' => em_get_currency_symbol(true,get_option("dbem_bookings_currency")),   
+			'currency' => em_get_currency_symbol(true,get_option("dbem_bookings_currency")),
+			"currency_format" => get_option("dbem_bookings_currency_format"),
 			"bookings" => $booking->get_available_spaces(),
 			"has_tickets" => $booking->get_bookings()->get_available_tickets(),
 			"booking" => \EM_Booking_Api::get_booking_form($EM_Event),
@@ -167,60 +163,6 @@ class EM_Event_Post {
 			}
 		}
 		return $the_time;
-	}
-	
-	public static function the_category( $thelist, $separator = '', $parents='' ){
-		global $post, $wp_rewrite;
-		if( $post->post_type == EM_POST_TYPE_EVENT ){
-			$EM_Event = em_get_event($post);
-			$categories = $EM_Event->get_categories();
-			if( empty($categories) ) return '';
-			
-			/* Copied from get_the_category_list function, with a few minor edits to make urls work, and removing parent stuff (for now) */
-			$rel = ( is_object( $wp_rewrite ) && $wp_rewrite->using_permalinks() ) ? 'rel="category tag"' : 'rel="category"';
-
-			$thelist = '';
-			if ( '' == $separator ) {
-				$thelist .= '<ul class="post-categories">';
-				foreach ( $categories as $category ) {
-					$thelist .= "\n\t<li>";
-					switch ( strtolower( $parents ) ) {
-						case 'multiple':
-							$thelist .= '<a href="' . $category->get_url() . '" title="' . esc_attr( sprintf( __( "View all posts in %s", 'events-manager'), $category->name ) ) . '" ' . $rel . '>' . $category->name.'</a></li>';
-							break;
-						case 'single':
-							$thelist .= '<a href="' . $category->get_url() . '" title="' . esc_attr( sprintf( __( "View all posts in %s", 'events-manager'), $category->name ) ) . '" ' . $rel . '>';
-							$thelist .= $category->name.'</a></li>';
-							break;
-						case '':
-						default:
-							$thelist .= '<a href="' . $category->get_url() . '" title="' . esc_attr( sprintf( __( "View all posts in %s", 'events-manager'), $category->name ) ) . '" ' . $rel . '>' . $category->name.'</a></li>';
-					}
-				}
-				$thelist .= '</ul>';
-			} else {
-				$i = 0;
-				foreach ( $categories as $category ) {
-					if ( 0 < $i )
-						$thelist .= $separator;
-					switch ( strtolower( $parents ) ) {
-						case 'multiple':
-							$thelist .= '<a href="' . $category->get_url() . '" title="' . esc_attr( sprintf( __( "View all posts in %s", 'events-manager'), $category->name ) ) . '" ' . $rel . '>' . $category->name.'</a>';
-							break;
-						case 'single':
-							$thelist .= '<a href="' . $category->get_url() . '" title="' . esc_attr( sprintf( __( "View all posts in %s", 'events-manager'), $category->name ) ) . '" ' . $rel . '>';
-							$thelist .= "$category->name</a>";
-							break;
-						case '':
-						default:
-							$thelist .= '<a href="' . $category->get_url() . '" title="' . esc_attr( sprintf( __( "View all posts in %s", 'events-manager'), $category->name ) ) . '" ' . $rel . '>' . $category->name.'</a>';
-					}
-					++$i;
-				}
-			}
-			/* End copying */
-		}
-		return $thelist;
 	}
 	
 	public static function parse_query(){
@@ -290,17 +232,6 @@ class EM_Event_Post {
 					$query[] = array( 'key' => '_event_start_date', 'value' => $end_date, 'compare' => '<=', 'type' => 'DATE' );
 					$query[] = array( 'key' => '_event_end_date', 'value' => $start_date, 'compare' => '>=', 'type' => 'DATE' );
 				}
-			}elseif( preg_match('/(\d\d?)\-months/',$scope,$matches) ){ // next x months means this month (what's left of it), plus the following x months until the end of that month.
-				$EM_DateTime = new EM_DateTime(); //create default time in blog timezone
-				$months_to_add = $matches[1];
-				$start_month = $EM_DateTime->getDate();
-				$end_month = $EM_DateTime->add('P'.$months_to_add.'M')->format('Y-m-t');
-				if( get_option('dbem_events_current_are_past') && $wp_query->query_vars['post_type'] != 'event-recurring' ){
-					$query[] = array( 'key' => '_event_start_date', 'value' => array($start_month,$end_month), 'type' => 'DATE', 'compare' => 'BETWEEN');
-				}else{
-					$query[] = array( 'key' => '_event_start_date', 'value' => $end_month, 'compare' => '<=', 'type' => 'DATE' );
-					$query[] = array( 'key' => '_event_end_date', 'value' => $start_month, 'compare' => '>=', 'type' => 'DATE' );
-				}
 			}elseif( !empty($scope) ){
 				$query = apply_filters('em_event_post_scope_meta_query', $query, $scope);
 			}
@@ -327,6 +258,64 @@ class EM_Event_Post {
 			  	$wp_query->query_vars['meta_type'] = 'DATETIME';	
 			}
 		}
+	}
+
+	public function register_rest() {
+		register_rest_route( 'events/v2', '/events/', ['method' => 'GET', 'callback' => [$this, 'get_rest_data'], 'permission_callback' => '__return_true'], true );
+	}
+
+	
+	public function get_rest_data() {
+
+		$args = [
+            'category' => array_key_exists('category', $_REQUEST) ? $_REQUEST['category'] : null,
+			'tag' => array_key_exists('tag', $_REQUEST) ? $_REQUEST['tag'] : null,
+			'scope' => array_key_exists('scope', $_REQUEST) ? $_REQUEST['scope'] : null,
+			'event' => array_key_exists('event', $_REQUEST) ? $_REQUEST['event'] : null,
+			'limit' => array_key_exists('limit', $_REQUEST) ? $_REQUEST['limit'] : 0,
+			'location' => array_key_exists('location', $_REQUEST) ? $_REQUEST['location'] : null,
+        ];
+
+		$result = [];
+		
+		$data = EM_Events::get($args);
+		if (!$data) return $result;
+		foreach($data as $event) {
+			$location = $event->get_location();
+			$category = $event->get_categories()->get_first();
+			$speaker = EM_Speakers::get($event->speaker_id);
+			array_push($result, [
+				'ID' => $event->ID,
+				'event_id' => $event->event_id,
+				'guid' => $event->guid,
+				'image' => $event->event_image,
+				'category' => [ 
+					'id' => $category->id,
+					'color' => $category->color, 
+					'name' => $category->name,
+					'slug' => $category->slug
+				],
+				'location' => [ 
+					'ID' => $location->ID,
+					'location_id' => $location->location_id, 
+					'address' => $location->location_address,
+					'city' => $location->location_town,
+					'title' => $location->location_name,
+					'url' => $location->location_url,
+					'excerpt' => $location->location_excerpt,
+				],
+				'start_date' => $event->start_date,
+				'start_time' => $event->start_time,
+				'end_date' => $event->end_date,
+				'end_time' => $event->end_time,
+				'audience' => $event->event_audience,
+				'excerpt' => $event->post_excerpt,
+				'title' => $event->post_title,
+				'speaker' => $speaker
+
+			]);
+		}
+		return $result;
 	}
 }
 EM_Event_Post::init();
