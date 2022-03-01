@@ -398,13 +398,16 @@ jQuery(document).ready( function($){
 		});
 		let check_ticket_sortability = function(){
 			let em_tickets = $('#em-tickets-form table tbody.em-ticket');
+			console.log(em_tickets)
 			if( em_tickets.length == 1 ){
 				em_tickets.find('.ticket-status').addClass('single');
 				$('#em-tickets-form.em-tickets-sortable table').sortable( "option", "disabled", true );
-			}else{
-				em_tickets.find('.ticket-status').removeClass('single');
-				$('#em-tickets-form.em-tickets-sortable table').sortable( "option", "disabled", false );
+				return;
 			}
+
+			em_tickets.find('.ticket-status').removeClass('single');
+			$('#em-tickets-form.em-tickets-sortable table').sortable( "option", "disabled", false );
+			
 		};
 		check_ticket_sortability();
 	}
