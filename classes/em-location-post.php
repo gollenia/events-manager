@@ -5,6 +5,7 @@ class EM_Location_Post {
 		if( !is_admin() ){
 			//override single page with formats? 
 			add_filter('the_content', array('EM_Location_Post','the_content'));
+			add_filter('rest_api_init', ['EM_Location_Post','register_rest_fields']);
 			//override excerpts?
 			if( get_option('dbem_cp_locations_excerpt_formats') ){
 			    add_filter('get_the_excerpt', array('EM_Location_Post','the_excerpt'), 9);
@@ -47,6 +48,19 @@ class EM_Location_Post {
 			}
 		}
 		return $template;
+	}
+
+	public static function register_rest_fields() {
+		register_rest_field(
+			'location', 
+			'location_id', //New Field Name in JSON RESPONSEs
+			['get_callback' => ['EM_Location_Post','add_id_to_rest']]
+		);
+	}
+
+	public static function add_id_to_rest($object) {
+		$EM_Location = em_get_location($object["id"], 'post_id');
+		return $EM_Location->location_id;
 	}
 	
 	public static function post_class( $classes, $class, $post_id ){
