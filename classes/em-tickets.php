@@ -252,9 +252,9 @@ class EM_Tickets extends EM_Object implements Iterator, Countable {
 	 */
 	function get_ticket_columns($EM_Event = false){
 		if( !$EM_Event ) $EM_Event = $this->get_event();
-		$collumns = array( 'type' => __('Ticket Type','events-manager'), 'price' => __('Price','events-manager'), 'spaces' => __('Spaces','events-manager'));
-		if( $EM_Event->is_free() ) unset($collumns['price']); //add event price
-		return apply_filters('em_booking_form_tickets_cols', $collumns, $EM_Event );
+		$columns = array( 'type' => __('Ticket Type','events-manager'), 'price' => __('Price','events-manager'), 'spaces' => __('Spaces','events-manager'));
+		if( $EM_Event->is_free() ) unset($columns['price']); //add event price
+		return apply_filters('em_booking_form_tickets_cols', $columns, $EM_Event );
 	}
 	
 	//Iterator Implementation
