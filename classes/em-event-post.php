@@ -283,35 +283,39 @@ class EM_Event_Post {
 		foreach($data as $event) {
 			$location = $event->get_location();
 			$category = $event->get_categories()->get_first();
-			$speaker = EM_Speakers::get($event->speaker_id);
+			$tags = new EM_Tags($event);
+			$speaker = \Contexis\Events\Speaker::get($event->speaker_id);
+
 			array_push($result, [
 				'ID' => $event->ID,
 				'event_id' => $event->event_id,
-				'guid' => $event->guid,
+				'link' => get_permalink($event->ID),
 				'image' => $event->event_image,
-				'category' => [ 
+				'category' => $category ? [ 
 					'id' => $category->id,
 					'color' => $category->color, 
 					'name' => $category->name,
 					'slug' => $category->slug
-				],
+				] : false,
 				'location' => [ 
 					'ID' => $location->ID,
 					'location_id' => $location->location_id, 
 					'address' => $location->location_address,
 					'city' => $location->location_town,
-					'title' => $location->location_name,
+					'name' => $location->location_name,
 					'url' => $location->location_url,
 					'excerpt' => $location->location_excerpt,
+					'country' => $location->location_country,
+					'state' => $location->location_state,
 				],
-				'start_date' => $event->start_date,
-				'start_time' => $event->start_time,
-				'end_date' => $event->end_date,
-				'end_time' => $event->end_time,
+				'start' => $event->start()->getTimestamp() * 1000,
+				'end' => $event->end()->getTimestamp() * 1000,
+				'single_day' => $event->event_start_date == $event->event_end_date,
 				'audience' => $event->event_audience,
 				'excerpt' => $event->post_excerpt,
 				'title' => $event->post_title,
-				'speaker' => $speaker
+				'speaker' => $speaker,
+				'tags' => $tags->terms
 
 			]);
 		}
