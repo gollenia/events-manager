@@ -466,6 +466,10 @@ class EM_Location extends EM_Object {
 			$this->location_status = (count($this->errors) == 0) ? $this->location_status:null; //set status at this point, it's either the current status, or if validation fails, null
 			//Save to em_locations table
 			$location_array = $this->to_array(true);
+
+					
+			file_put_contents('/var/www/vhosts/kids-team.internal/log/dumpling.txt', print_r($location_array, true), FILE_APPEND);
+        
 			unset($location_array['location_id']);
 			//decide whether or not event is private at this point
 			$location_array['location_private'] = ( $this->post_status == 'private' ) ? 1:0;
@@ -1024,32 +1028,6 @@ class EM_Location extends EM_Object {
 				case '#_LOCATIONPASTEVENTS':
 				case '#_NEXTEVENTS': //Depricated
 				case '#_LOCATIONNEXTEVENTS':
-				case '#_ALLEVENTS': //Depricated
-				case '#_LOCATIONALLEVENTS':
-					//TODO: add limit to lists of events
-					//convert deprecated placeholders for compatability
-					$result = ($result == '#_PASTEVENTS') ? '#_LOCATIONPASTEVENTS':$result; 
-					$result = ($result == '#_NEXTEVENTS') ? '#_LOCATIONNEXTEVENTS':$result;
-					$result = ($result == '#_ALLEVENTS') ? '#_LOCATIONALLEVENTS':$result;
-					//forget it ever happened? :/
-					if ( $result == '#_LOCATIONPASTEVENTS'){ $scope = 'past'; }
-					elseif ( $result == '#_LOCATIONNEXTEVENTS' ){ $scope = 'future'; }
-					else{ $scope = 'all'; }
-				    $args = array('location'=>$this->location_id, 'scope'=>$scope, 'pagination'=>1, 'ajax'=>0);
-				    $args['format_header'] = get_option('dbem_location_event_list_item_header_format');
-				    $args['format_footer'] = get_option('dbem_location_event_list_item_footer_format');
-				    $args['format'] = get_option('dbem_location_event_list_item_format');
-				    $args['no_results_msg'] = get_option('dbem_location_no_events_message');
-					$args['limit'] = get_option('dbem_location_event_list_limit');
-					$args['orderby'] = get_option('dbem_location_event_list_orderby');
-					$args['order'] = get_option('dbem_location_event_list_order');
-					$args['page'] = (!empty($_REQUEST['pno']) && is_numeric($_REQUEST['pno']) )? $_REQUEST['pno'] : 1;
-					if( $target == 'email' ){
-						$args['pagination'] = 0;
-						$args['page'] = 1;
-					}
-				    $replace = EM_Events::output($args);
-					break;
 				case '#_LOCATIONNEXTEVENT':
 					$events = EM_Events::get( array('location'=>$this->location_id, 'scope'=>'future', 'limit'=>1, 'orderby'=>'event_start_date,event_start_time') );
 					$replace = get_option('dbem_location_no_event_message');
