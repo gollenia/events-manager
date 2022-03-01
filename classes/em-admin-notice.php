@@ -58,6 +58,8 @@ class EM_Admin_Notice {
 	
 	public function __construct( $key, $type = false, $message = false, $where = false ){
 		//process the supplied data
+		// This is ridiculous! 
+		// @todo remove ifelses
 		if( empty($message) ){
 			if( empty($type) && is_array($key) ){
 				$notice = $key;
@@ -101,10 +103,7 @@ class EM_Admin_Notice {
 	 * @return boolean
 	 */
 	public function is_user_notice(){
-		if( $this->who != 'admin' && $this->user_notice === null ){
-			//user_notice was not specifically set, so if notice is dismissible and not targetted at admins we assume it's dismissed at per-user basis
-			return $this->dismissible;
-		}
+		if( $this->who != 'admin' && $this->user_notice === null ) return $this->dismissible;
 		return $this->user_notice;
 	}
 	
@@ -171,7 +170,7 @@ class EM_Admin_Notice {
 		if( empty($this->message) ) return false;
 		$action = $this->network ? 'em_dismiss_network_admin_notice':'em_dismiss_admin_notice';
 		?>
-		<div class="em-admin-notice notice notice-<?php echo esc_attr($this->what); ?> <?php if($this->dismissible) echo 'is-dismissible'?>" id="notice-<?php echo esc_attr($this->name); ?>" data-dismiss-action="<?php echo $action; ?>" data-dismiss-key="<?php echo esc_attr($this->name); ?>">
+		<div class="notice notice-<?php echo esc_attr($this->what); ?> <?php if($this->dismissible) echo 'is-dismissible'?>" id="notice-<?php echo esc_attr($this->name); ?>" data-dismiss-action="<?php echo $action; ?>" data-dismiss-key="<?php echo esc_attr($this->name); ?>">
 			<p><?php echo $this->message; ?></p>
 		</div>
 		<?php
