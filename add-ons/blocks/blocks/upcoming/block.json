@@ -26,10 +26,6 @@
 			"type": "boolean",
 			"default": false
 		},
-		"dropShadow": {
-			"type": "boolean",
-			"default": false
-		},
 		"imageSize": {
 			"type": "number",
 			"default": 100
@@ -44,7 +40,7 @@
 		},
 		"style": {
 			"type": "string",
-			"default": "list"
+			"default": "cards"
 		},
 		"limit": {
 			"type": "number",
@@ -52,27 +48,19 @@
 		},
 		"order": {
 			"type": "string",
-			"default": "desc"
+			"default": "ASC"
 		},
 		"selectedCategory": {
-			"type": "string",
-			"default": "0"
+			"type": "array",
+			"default": []
 		},
 		"selectedLocation": {
-			"type": "string",
-			"default": "0"
+			"type": "number",
+			"default": 0
 		},
 		"selectedTags": {
 			"type": "array",
 			"default": []
-		},
-		"fromDate": {
-			"type": "string",
-			"default": ""
-		},
-		"toDate": {
-			"type": "string",
-			"default": ""
 		},
 		"excerptLength": {
 			"type": "number",
@@ -87,8 +75,32 @@
 			"default": false
 		},
 		"showSpeaker": {
+			"type": "string",
+			"default": ""
+		},
+		"showCategoryFilter": {
 			"type": "boolean",
 			"default": false
+		},
+		"showTagFilter": {
+			"type": "boolean",
+			"default": false
+		},
+		"showSearch": {
+			"type": "boolean",
+			"default": false
+		},
+		"filterStyle": {
+			"type": "string",
+			"default": "pills"
+		},
+		"filterPosition": {
+			"type": "string",
+			"default": "top"
+		},
+		"scope": {
+			"type": "string",
+			"default": "future"
 		}
 	}
 }
