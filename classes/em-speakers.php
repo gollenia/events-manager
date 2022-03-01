@@ -106,6 +106,25 @@ class EM_Speakers {
         }
     
     }
+
+	private function get_image($id) {
+
+		$thumbnail = get_post_thumbnail_id($id);
+
+		if(!$thumbnail) return false;
+
+		$attachment = [
+			'attachment_id' => $thumbnail,
+			'sizes' => []
+		];
+		
+		foreach(get_intermediate_image_sizes($thumbnail) as $size) {
+			$attachment['sizes'][$size] = array_combine(['url', 'width',  'height', 'resized'], wp_get_attachment_image_src( $thumbnail, $size) );
+		}
+		
+		return $attachment;
+		
+	}
     
     
     public function set_custom_columns($columns) {
@@ -120,6 +139,20 @@ class EM_Speakers {
             echo $email;
         }
     }
+
+	public static function get($id) {
+		if($id == 0) return false;
+		$args = array(
+			'p'         => $id, // ID of a page, post, or custom type
+			'post_type' => 'event-speaker'
+		  );
+		$query = new WP_Query($args);
+		$result = $query->get_posts();
+		if(empty($result)) return false;
+		$speaker = $result[0];
+		
+		return $speaker;
+	}
 
     public function add_back_button( $post ) {
         if( $post->post_type == 'ctx-color-palette' )
