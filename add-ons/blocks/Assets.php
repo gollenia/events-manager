@@ -36,6 +36,9 @@ class Assets {
 		);
 		wp_set_script_translations( 'events-block-frontend', 'events', plugin_dir_path( __FILE__ ) . '../../languages' );
 
+		wp_localize_script('events-block-frontend', 'eventBlockLocale', [
+			'lang' => str_replace('_', '-',get_locale()),
+		]);
 	}
 
 	public function backend_script() {
