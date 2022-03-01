@@ -1395,11 +1395,13 @@ class EM_Object {
 	 */
 	public static function array_is_numeric($array){
 		$results = array();
-		if(is_array($array)){
-			foreach($array as $key => $item){
-				$results[] = (is_numeric($item)&&is_numeric($key));
-			}
+
+		if(!is_array($array)) return;
+
+		foreach($array as $key => $item){
+			$results[] = (is_numeric($item)&&is_numeric($key));
 		}
+		
 		return (!in_array(false, $results) && count($results) > 0);
 	}	
 	
@@ -1408,11 +1410,8 @@ class EM_Object {
 	 * @return array 
 	 */
 	function get_errors(){
-		if(is_array($this->errors)){
-			return $this->errors;
-		}else{
-			return array();
-		}
+		if(is_array($this->errors)) return $this->errors;
+		return [];
 	}
 	
 	/**
