@@ -257,30 +257,6 @@ class EM_Taxonomy_Term extends EM_Object {
 				case '#_'. $ph .'EVENTSALL': //deprecated, erroneous documentation, left for compatability
 				case '#_'. $ph .'PASTEVENTS':
 				case '#_'. $ph .'NEXTEVENTS':
-				case '#_'. $ph .'ALLEVENTS':
-					//convert deprecated placeholders for compatability
-					$result = ($result == '#_'. $ph .'EVENTSPAST') ? '#_'. $ph .'PASTEVENTS':$result; 
-					$result = ($result == '#_'. $ph .'EVENTSNEXT') ? '#_'. $ph .'NEXTEVENTS':$result;
-					$result = ($result == '#_'. $ph .'EVENTSALL') ? '#_'. $ph .'ALLEVENTS':$result;
-					//forget it ever happened? :/
-					if ($result == '#_'. $ph .'PASTEVENTS'){ $scope = 'past'; }
-					elseif ( $result == '#_'. $ph .'NEXTEVENTS' ){ $scope = 'future'; }
-					else{ $scope = 'all'; }
-				    $args = array($this->option_name=>$this->term_id, 'scope'=>$scope, 'pagination'=>1, 'ajax'=>0);
-				    $args['format_header'] = get_option('dbem_'. $this->option_name .'_event_list_item_header_format');
-				    $args['format_footer'] = get_option('dbem_'. $this->option_name .'_event_list_item_footer_format');
-				    $args['format'] = get_option('dbem_'. $this->option_name .'_event_list_item_format');
-				    $args['no_results_msg'] = get_option('dbem_'. $this->option_name .'_no_events_message'); 
-					$args['limit'] = get_option('dbem_'. $this->option_name .'_event_list_limit');
-					$args['orderby'] = get_option('dbem_'. $this->option_name .'_event_list_orderby');
-					$args['order'] = get_option('dbem_'. $this->option_name .'_event_list_order');
-					$args['page'] = (!empty($_REQUEST['pno']) && is_numeric($_REQUEST['pno']) )? $_REQUEST['pno'] : 1;
-					if( $target == 'email' ){
-						$args['pagination'] = 0;
-						$args['page'] = 1;
-					}
-				    $replace = EM_Events::output($args);
-					break;
 				case '#_'. $ph .'NEXTEVENT':
 					$events = EM_Events::get( array($this->option_name=>$this->term_id, 'scope'=>'future', 'limit'=>1, 'orderby'=>'event_start_date,event_start_time') );
 					$replace = get_option('dbem_'. $this->option_name .'_no_event_message');
