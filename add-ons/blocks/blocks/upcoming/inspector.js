@@ -1,5 +1,5 @@
 import { InspectorControls } from '@wordpress/block-editor';
-import { CheckboxControl, TextControl, ToggleControl, RangeControl, PanelBody, PanelRow, SelectControl, FormTokenField, Icon, Button } from '@wordpress/components';
+import { CheckboxControl, TextControl, ToggleControl, RangeControl, PanelBody, PanelRow, SelectControl, FormTokenField, Icon, Button, RadioControl } from '@wordpress/components';
 import { __experimentalNumberControl as NumberControl } from '@wordpress/components'
 import { __ } from '@wordpress/i18n'; 
 import icons from './icons.js'
@@ -14,19 +14,21 @@ const Inspector = (props) => {
 			columnsMedium,
 			columnsLarge,
 			showImages,
-			dropShadow,
 			style,
+			scope,
 			showCategory,
 			showLocation,
-			roundImages,
 			excerptLength,
 			selectedCategory,
 			selectedLocation,
-			fromDate,
-			toDate, 
 			order,
 			showAudience,
-			showSpeaker
+			showSpeaker,
+			showTagFilter,
+			showCategoryFilter,
+			showSearch,
+			filterStyle,
+			filterPosition,
 		},
 		tagList,
 		categoryList,
@@ -37,10 +39,27 @@ const Inspector = (props) => {
 	} = props;
 
 	const locationViewOptions = [
-		{ value: "", label: __("", 'events') },
-		{ value: "city", label: __("City", 'events') },
+		{ value: "", label: __("Don't show", 'events') },
 		{ value: "name", label: __("Name", 'events') },
+		{ value: "city", label: __("City", 'events') },
+		{ value: "country", label: __("Country", 'events') },
+		{ value: "state", label: __("State", 'events') },
 	]
+
+	const speakerViewOptions = [
+		{ value: "", label: __("Don't show", 'events') },
+		{ value: "name", label: __("Name only", 'events') },
+		{ value: "image", label: __("Name and image", 'events') },
+	]
+
+	const scopeOptions = [
+		{ value: "future", label: __("Future", 'events') },
+		{ value: "past", label: __("Past", 'events') },
+		{ value: "today", label: __("Today", 'events') },
+		{ value: "tomorrow", label: __("Tomorrow", 'events') },
+		{ value: "month", label: __("This month", 'events') },
+		{ value: "next-month", label: __("Next month", 'events') }
+	];
 
 	const orderListViewOptions = [
 		{ value: "ASC", label: __("Ascending", 'events')},
@@ -54,6 +73,7 @@ const Inspector = (props) => {
 			initialOpen={true}
 		>
 			<SelectControl
+				multiple
 				label={__('Category', 'events')}
 				value={ selectedCategory }
 				options={ categoryList }
@@ -82,24 +102,22 @@ const Inspector = (props) => {
 				} }
 				__experimentalExpandOnFocus={true}
 			/>
-			<TextControl
-				label={__("From:", 'events')}
-				value={ fromDate }
-				type="date"
-				onChange={(value) => { setAttributes( { fromDate: value } ) }}
-			/>
-			<TextControl
-				label={__("To:", 'events')}
-				value={ toDate }
-				type="date"
-				onChange={(value) => { setAttributes( { toDate: value } ) }}
-			/>
+			
 			<SelectControl
 				label={__('Location', 'events')}
 				value={ selectedLocation }
 				options={ locationList }
 				onChange={ ( value ) => {
-					setAttributes( { selectedLocation: value } );
+					setAttributes( { selectedLocation: parseInt(value) } );
+				} }
+			/>
+
+			<SelectControl
+				label={__('Scope', 'events')}
+				value={ scope }
+				options={ scopeOptions }
+				onChange={ ( value ) => {
+					setAttributes( { scope: value } );
 				} }
 			/>
 
@@ -122,8 +140,38 @@ const Inspector = (props) => {
 			
 		</PanelBody>
 		<PanelBody
+			title={__('Filter', 'events')}
+		>
+			<CheckboxControl
+				label={ __("Show category filter", 'events')}
+				checked={ showCategoryFilter }
+				onChange={ (value) => setAttributes({ showCategoryFilter: value }) }
+			/>
+			<CheckboxControl
+				label={ __("Show tag filter", 'events')}
+				checked={ showTagFilter }
+				onChange={ (value) => setAttributes({ showTagFilter: value }) }
+			/>
+			<CheckboxControl
+				label={ __("Show search bar", 'events')}
+				checked={ showSearch }
+				onChange={ (value) => setAttributes({ showSearch: value }) }
+			/>
+			<RadioControl 
+				label={ __('Position', 'events')}
+				help={ __('May not apply on mobile phones', 'events') }
+				options={[
+					{ label: __("Top", "events"), value: "top"},
+					{ label: __("Side", "events"), value: "side"}
+				]}
+				selected={filterPosition}
+				onChange={ (value) => setAttributes({ filterPosition: value }) }
+
+			/>
+		</PanelBody>
+		<PanelBody
 			title={__('Design', 'events')}
-			initialOpen={true}
+			initialOpen={false}
 		>
 			
 			<RangeControl
@@ -160,15 +208,7 @@ const Inspector = (props) => {
 			title={__('Appearance', 'events')}
 			initialOpen={true}
 		>
-			<PanelRow>
-				<ToggleControl
-					label={ __("Hover-effect", 'events')}
-					checked={ dropShadow }
-					onChange={ (value) => setAttributes({ dropShadow: value }) }
-				/>
-			</PanelRow>
-			
-			
+
 			<label className="components-base-control__label" htmlFor="inspector-range-control-4">{__("Style", 'events')}</label><br />
 			<div className="styleSelector">
 					<Button onClick={ () => setAttributes({ style: "mini" }) } className={style == "mini" ? "active" : ""}>
@@ -185,28 +225,25 @@ const Inspector = (props) => {
 					</Button>
 			</div>
 				
-			
-			{ showImages &&
-				
-				<PanelRow>
-					<CheckboxControl
-						label={ __("Round images", 'events')}
-						checked={ roundImages }
-						onChange={ (value) => setAttributes({ roundImages: value }) }
-					/>
-				</PanelRow>
+		
+			<SelectControl
+					label={__('Location', 'events')}
+					value={ showLocation }
+					options={ locationViewOptions }
+					onChange={ ( value ) => {
+						setAttributes( { showLocation: value } );
+					} }
+			/>
 
-			}
-			<PanelRow>	
-				<SelectControl
-						label={__('Location', 'events')}
-						value={ showLocation }
-						options={ locationViewOptions }
-						onChange={ ( value ) => {
-							setAttributes( { showLocation: value } );
-						} }
-				/>
-			</PanelRow>
+			<SelectControl
+				label={__('Show Speaker', 'events')}
+				value={ showSpeaker }
+				options={ speakerViewOptions }
+				onChange={ ( value ) => {
+					setAttributes( { showSpeaker: value } );
+				} }
+			/>
+			
 			<RangeControl
 				label={__("Length of preview text", 'events')}
 				max={ 200 }
@@ -217,16 +254,17 @@ const Inspector = (props) => {
 			/>
 			<PanelRow>
 				<CheckboxControl
-					label={ __("Show Audience", 'events')}
+					label={ __("Show audience", 'events')}
 					checked={ showAudience }
 					onChange={ (value) => setAttributes({ showAudience: value }) }
 				/>
 			</PanelRow>
+
 			<PanelRow>
 				<CheckboxControl
-					label={ __("Show Speaker", 'events')}
-					checked={ showSpeaker }
-					onChange={ (value) => setAttributes({ showSpeaker: value }) }
+					label={ __("Show image", 'events')}
+					checked={ showImages }
+					onChange={ (value) => setAttributes({ showImages: value }) }
 				/>
 			</PanelRow>
 			
