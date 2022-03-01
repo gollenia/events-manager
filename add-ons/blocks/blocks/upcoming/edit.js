@@ -21,7 +21,6 @@ const EditUpcoming = (props) => {
 		attributes: {
 			columnsLarge,
 			showImages,
-			dropShadow,
 			style,
 			textAlignment,
 			selectedCategory,
@@ -37,7 +36,7 @@ const EditUpcoming = (props) => {
 		const { getEntityRecords } = select( coreStore );
 		const query = { hide_empty: true };
 		const list = getEntityRecords( 'taxonomy', 'event-categories', query );
-		console.log('i am running')
+		
 		let categoryOptionsArray = [{value: 0, label: ""}];
 		if (!list) {
 			return categoryOptionsArray;
@@ -74,8 +73,9 @@ const EditUpcoming = (props) => {
 		}
 		
 		list.map( ( location ) => {
-			locationOptionsArray.push( { value: location.id, label: location.title.raw } );
+			locationOptionsArray.push( { value: location.location_id, label: location.title.raw } );
 		})
+		
 		return locationOptionsArray	
 		
 	}, [] );
@@ -100,7 +100,6 @@ const EditUpcoming = (props) => {
 		className: [
 			"columns-" + columnsLarge,
 			showImages ? "hasImage" : false,
-			dropShadow ? "hover" : false,
 			"style-" + style,
 			"text-" + textAlignment,
 			roundImages ? "round-images" : false
