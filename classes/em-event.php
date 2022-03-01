@@ -80,6 +80,7 @@ class EM_Event extends EM_Object{
 	var $event_slug;
 	var $event_owner;
 	var $event_name;
+	var $event_image;
 	/**
 	 * The event start time in local time, represented by a mysql TIME format or 00:00:00 default.
 	 * Protected so when set in PHP it will reset the EM_Event->start property (EM_DateTime object) so it will have the correct UTC time according to timezone.
@@ -503,6 +504,25 @@ class EM_Event extends EM_Object{
 			$this->event_location->event = $this;
 		}
 	}
+
+	private function get_image() {
+
+		$thumbnail = get_post_thumbnail_id($this->post_id);
+
+		if(!$thumbnail) return false;
+
+		$attachment = [
+			'attachment_id' => $thumbnail,
+			'sizes' => []
+		];
+		
+		foreach(get_intermediate_image_sizes($thumbnail) as $size) {
+			$attachment['sizes'][$size] = array_combine(['url', 'width',  'height', 'resized'], wp_get_attachment_image_src( $thumbnail, $size) );
+		}
+		
+		return $attachment;
+		
+	}
 	
 	function load_postdata($event_post, $search_by = false){
 		//load event post object if it's an actual object and also a post type of our event CPT names
@@ -515,9 +535,12 @@ class EM_Event extends EM_Object{
 			$this->post_content = $event_post->post_content;
 			$this->post_excerpt = $event_post->post_excerpt;
 			$this->event_slug = $event_post->post_name;
+			$this->event_image = $this->get_image();
+
 			foreach( $event_post as $key => $value ){ //merge post object into this object
 				$this->$key = $value;
 			}
+
 			$this->recurrence = $this->is_recurring() ? 1:0;
 			//load meta data and other related information
 			if( $event_post->post_status != 'auto-draft' ){
