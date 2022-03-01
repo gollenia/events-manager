@@ -106,7 +106,15 @@
 }
 
 .styleSelector {
-    padding-top: 5px;
-    padding-bottom: 10px;
+    padding-top: 10px;
+    padding-bottom: 22px;
 }
 
+select[multiple] { 
+	height: auto !important;
+	padding: 0 !important;
+
+	+ .components-input-control__suffix {
+		display: none;
+	}
+}
