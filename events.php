@@ -103,6 +103,7 @@ require_once('classes/em-people.php');
 require_once('classes/em-person.php');
 require_once('classes/em-permalinks.php');
 require_once('classes/em-speakers.php');
+
 require_once('classes/em-tag.php');
 require_once('classes/em-tags.php');
 require_once('classes/em-tags-frontend.php');
@@ -137,6 +138,9 @@ if( is_admin() ){
 	require_once('admin/bookings/em-pending.php');
 	require_once('admin/bookings/em-person.php');
 }
+
+// new namespaced classes
+require_once('classes/speaker.php');
 
 
 //Table names
