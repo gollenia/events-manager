@@ -5,142 +5,142 @@
 			"": {
 				"domain": "messages",
 				"plural_forms": "nplurals=2; plural=(n != 1);",
-				"lang": "de_AT"
+				"lang": "fr_FR"
 			},
 			"Upcoming Events": [
-				"Zukünftige Veranstaltungen"
+				"Événements à venir"
 			],
 			"Shows a list or cards of upcoming events": [
-				"Zeigt eine Liste oder Karten mit Veranstaltungen"
+				"Affiche une liste ou des cartes d'événements"
 			],
 			"See for settings in the inspector. The result can be seen in the frontend": [
-				"Einstellungen im Inspektor vornehmen. Das Ergebnis erscheint nur auf der Webseite."
+				"Effectuez les réglages dans l'inspecteur. Le résultat apparaît uniquement sur le site."
 			],
 			"Design": [
-				"Aufteilung"
+				"Division"
 			],
 			"Don't show": [
-				"Nicht anzeigen"
+				"Ne montre pas"
 			],
 			"City": [
-				"Stadt"
+				"Ville"
 			],
 			"Name": [
-				"Name"
+				"Nom"
 			],
 			"State": [
-				"Bundesland"
+				"Etat fédéral"
 			],
 			"Country": [
-				"Land"
+				"Campagne"
 			],
 			"Ascending": [
-				"Aufsteigend"
+				"Ascendante"
 			],
 			"Descending": [
-				"Absteigend"
+				"Descendante"
 			],
 			"Data": [
-				"Daten"
+				"Données"
 			],
 			"Category": [
-				"Kategorie"
+				"Catégorie"
 			],
 			"Tags": [
-				"Schlagworte"
+				"Étiqueters"
 			],
-            "From:": [
+            "À:": [
 				"Von:"
 			],
-			"To:": [
+			"Pour:": [
 				"Bis"
 			],
 			"Location": [
-				"Veranstaltungsort anzeigen"
+				"Afficher l'emplacement"
 			],
 			"Sorting": [
-				"Sortierung"
+				"Tri"
 			],
             "Appearance": [
-				"Darstellung"
+				"Apparence"
 			],
-			"Columns on small screens": [
+			"Colonnes sur petits écrans": [
 				"Spalten auf kleinen Bildschirmen"
 			],
 			"ex. Smartphones": [
-				"z.B. Smartphones"
+				"smartphone par exemple"
 			],
 			"Columns on medium screens": [
-				"Spalten auf mittleren Bildschirmen"
+				"Colonnes sur écrans moyens"
 			],
 			"Tablets and smaller screens": [
-				"z.B. Tablets oder Laptops"
+				"Tablettes et petits écrans"
 			],
 			"Columns on large screens": [
-				"Spalten auf großen Bildschirmen"
+				"Chroniques sur grands écrans"
 			],
             "Desktop screens": [
-                "z.B. Desktoprechner"
+                "Écrans de bureau"
             ],
             "Events": [
-                "Veranstaltungen"
+                "Événements"
             ],
             "Style": [
-                "Stil auswählen"
+                "Conception"
             ],
             "Minimal": [
-                "Minimal"
+                "Minimale"
             ],
             "List": [
                 "Liste"
             ],
             "Cards": [
-                "Karten"
+                "Cartes"
             ],
             "Round images": [
-                "Runde Bilder"
+                "Images rondes"
             ],
             "Show category": [
-                "Kategorie anzeigen"
+                "Afficher la catégorie"
             ],
             "Length of preview text": [
-                "Länge des Vorschautextes"
+                "Longueur du texte d'aperçu"
             ],
 			"Number of words": [
-				"Anzahl der Wörter"
+				"Nombre de mots"
 			],
 			"Scope": [
-				"Zeitraum"
+				"Portée"
 			],
 			"Future": [
-                "Zukunft"
+                "Contrats à terme"
             ],
 			"Past": [
-                "Vergangenheit"
+                "Passé"
             ],
 			"Today": [
-                "Heute"
+                "Aujourd'hui"
             ],
-			"Tomorrow": [
+			"Demain": [
                 "Morgen"
             ],
-			"This month": [
+			"Ce mois-ci": [
                 "Dieser Monat"
             ],
 			"Next month": [
-                "Nächster Monat"
+                "Le mois prochain"
             ],
 			"Show audience": [
-                "Zielgruppe anzeigen"
+                "Voir le public"
             ],
 			"Show Speaker": [
-                "Referent zeigen"
+                "Afficher le haut-parleur"
             ],
 			"Name only": [
-                "Nur Name"
+                "nom seulement"
             ],
 			"Name and image": [
-                "Name und Bild"
+                "Nom et photo"
             ],
 			"Show image": [
 				"Bilder anzeigen"
@@ -149,25 +149,25 @@
 				"Filter"
 			],
 			"Show category filter": [
-				"Kategorieauswahl anzeigen"
+				"Afficher le filtre de catégorie"
 			],
 			"Show tag filter": [
-				"Tags anzeigen"
+				"Afficher le filtre de balises"
 			],
 			"Show search bar": [
-				"Suchleiste anzeigen"
+				"Afficher la barre de recherche"
 			],
 			"Position": [
 				"Position"
 			],
 			"Top": [
-				"Oben"
+				"Haut"
 			],
 			"Side": [
-				"Seitlich"
+				"Coté"
 			],
 			"May not apply on mobile phones": [
-				"Kann auf Smartphones abweichen"
+				"Peut ne pas s'appliquer aux téléphones mobiles"
 			]
 
 		}

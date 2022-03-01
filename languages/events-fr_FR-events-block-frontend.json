@@ -1,0 +1,28 @@
+{
+	"domain": "events",
+	"locale_data": {
+		"messages": {
+			"": {
+				"domain": "messages",
+				"plural_forms": "nplurals=2; plural=(n != 1);",
+				"lang": "fr_FR"
+			},
+			"All": [
+				"Toute"
+			],
+			"Category": [
+				"Catégorie"
+			],
+			"Select category": [
+				"Choisissez la catégorie"
+			],
+			"Select tags": [
+				"sélectionner le Étiqueter"
+			],
+			"Search": [
+				"Chercher"
+			]
+
+		}
+	}
+}

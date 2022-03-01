@@ -5,7 +5,7 @@
 			"": {
 				"domain": "messages",
 				"plural_forms": "nplurals=2; plural=(n != 1);",
-				"lang": "de_AT"
+				"lang": "de_CH"
 			},
 			"Upcoming Events": [
 				"Zukünftige Veranstaltungen"
@@ -77,7 +77,7 @@
 				"z.B. Tablets oder Laptops"
 			],
 			"Columns on large screens": [
-				"Spalten auf großen Bildschirmen"
+				"Spalten auf grossen Bildschirmen"
 			],
             "Desktop screens": [
                 "z.B. Desktoprechner"
