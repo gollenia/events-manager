@@ -426,7 +426,7 @@ class EM_Attendees_Form {
 				$EM_Bookings_Table->offset += $EM_Bookings_Table->limit;
 				$EM_Bookings = $EM_Bookings_Table->get_bookings();
 			}
-			$xlsx = \SimpleXLSXGen::fromArray( $excel_sheet );
+			$xlsx = Shuchkin\SimpleXLSXGen::fromArray( $excel_sheet );
 			$xlsx->downloadAs($title . '-bookings.xlsx');
 			exit();
 		}
