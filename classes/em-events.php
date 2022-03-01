@@ -119,91 +119,13 @@ class EM_Events extends EM_Object {
 		$orderby = self::build_sql_orderby($args, $accepted_fields, get_option('dbem_events_default_order'));
 		$orderby_sql = ( count($orderby) > 0 ) ? 'ORDER BY '. implode(', ', $orderby) : '';
 		
-		//Build GROUP BY SQL statement, which will be very different if we group things due to how we need to filter out by event date
-		if( !empty($args['groupby']) ){
-			//get groupby field(s)
-			$groupby_fields = self::build_sql_groupby($args, $accepted_fields);
-			if( !empty($groupby_fields[0]) ){
-				//we can safely assume we've been passed at least one array item with index of 0 containing a valid field due to build_sql_groupby()
-				$groupby_field = $groupby_fields[0]; //we only support one field for events
-				$groupby_orderby = self::build_sql_groupby_orderby($args, $accepted_fields);
-				$groupby_orderby_sql = !empty($groupby_orderby) ? ', '. implode(', ', $groupby_orderby) : '';
-				//get minimum required selectors within the inner query to shorten query length as much as possible
-				$inner_selectors = $events_table . '.*';
-				if( $location_optional_join ){
-					//we're selecting all fields from events table so add only location fields required in the outer ORDER BY statement
-					foreach( $args['orderby'] as $orderby_field ){
-						if( in_array($orderby_field, $location_fields) ){
-							$inner_selectors .= ', '. $locations_table .'.'. $orderby_field;
-						}
-					}
-				}
-				
-				//THE Query - Grouped
-				if( in_array($groupby_field, $location_fields) || count(array_intersect($location_fields, $args['groupby_orderby'])) || defined('EM_FORCE_GROUPED_DATASET_SQL') ){
-					//if we're grouping by any fields in the locations table, we run a different (slightly slower) query to provide reliable results
-					if( in_array($groupby_field, $location_fields) && !in_array($groupby_field, $args['orderby']) ){
-						//we may not have included the grouped field if it's not in the outer ORDER BY clause, so we add it for this specific query
-						$inner_selectors .= ', '. $locations_table .'.'. $groupby_field;
-					}
-					$sql = "
-SELECT $selectors
-FROM (
-	SELECT *,
-		@cur := IF($groupby_field = @id, @cur+1, 1) AS RowNumber,
-		@id := $groupby_field AS IdCache
-	FROM (
-		SELECT {$inner_selectors} FROM {$events_table}
-		$location_optional_join
-		$where
-		ORDER BY $groupby_field $groupby_orderby_sql
-	) {$events_table}
-	INNER JOIN (
-		SELECT @id:=0, @cur:=0
-	) AS lookup
-) {$events_table}
-WHERE RowNumber = 1
-$orderby_sql
-$limit $offset";
-				}else{
-					//we'll keep this query simply because it's a little faster and still seems reliable when not grouping or group-sorting any fields in the locations table
-					$sql = "
-SELECT $selectors
-FROM (
-	SELECT {$inner_selectors},
-		@cur := IF($groupby_field = @id, @cur+1, 1) AS RowNumber,
-		@id := $groupby_field AS IdCache
-	FROM {$events_table}
-	INNER JOIN (
-		SELECT @id:=0, @cur:=0
-	) AS lookup
-	$location_optional_join
-	$where
-	ORDER BY {$groupby_field} $groupby_orderby_sql
-) {$events_table}
-WHERE RowNumber = 1
-$orderby_sql
-$limit $offset";
-				}
-			}
-		}
-		
-		//Build THE Query SQL statement if not already built for a grouped query
 		if( empty($sql) ){
 			//THE Query
-			$sql = "
-SELECT $selectors FROM $events_table
-$location_optional_join
-$where
-$orderby_sql
-$limit $offset";
+			$sql = "SELECT $selectors FROM $events_table $location_optional_join $where $orderby_sql $limit $offset";
 		}
 	
-		//THE Query filter
 		$sql = apply_filters('em_events_get_sql', $sql, $args);
-		//if( em_wp_is_super_admin() && WP_DEBUG_DISPLAY ){ echo "<pre>"; print_r($sql); echo '</pre>'; }
 				
-		//If we're only counting results, return the number of results and go no further
 		if( $count ){
 			self::$num_rows_found = self::$num_rows = $wpdb->get_var($sql);
 			return apply_filters('em_events_get_count', self::$num_rows, $args);		
@@ -227,14 +149,8 @@ $limit $offset";
 		$results = (is_array($results)) ? $results:array();
 		$events = array();
 		
-		if( EM_MS_GLOBAL ){
-			foreach ( $results as $event ){
-				$events[] = em_get_event($event['post_id'], $event['blog_id']);
-			}
-		}else{
-			foreach ( $results as $event ){
-				$events[] = em_get_event($event['post_id'], 'post_id');
-			}
+		foreach ( $results as $event ){
+			$events[] = em_get_event($event['post_id'], 'post_id');
 		}
 		
 		return apply_filters('em_events_get', $events, $args);
@@ -276,209 +192,6 @@ $limit $offset";
 		}
 		//TODO add better error feedback on events delete fails
 		return apply_filters('em_events_delete',  in_array(false, $results), $event_ids);
-	}
-	
-	
-	/**
-	 * Output a set of matched of events. You can pass on an array of EM_Events as well, in this event you can pass args in second param.
-	 * Note that you can pass a 'pagination' boolean attribute to enable pagination, default is enabled (true). 
-	 * @param array $args
-	 * @param array $secondary_args
-	 * @return string
-	 */
-	public static function output( $args ){
-		global $EM_Event;
-		$EM_Event_old = $EM_Event; //When looping, we can replace EM_Event global with the current event in the loop
-		//get page number if passed on by request (still needs pagination enabled to have effect)
-		$page_queryvar = !empty($args['page_queryvar']) ? $args['page_queryvar'] : 'pno';
-		if( !empty($args['pagination']) && !array_key_exists('page',$args) && !empty($_REQUEST[$page_queryvar]) && is_numeric($_REQUEST[$page_queryvar]) ){
-			$args['page'] = $_REQUEST[$page_queryvar];
-		}
-		//Can be either an array for the get search or an array of EM_Event objects
-		if( is_object(current($args)) && get_class((current($args))) == 'EM_Event' ){
-			$func_args = func_get_args();
-			$events = $func_args[0];
-			$args = (!empty($func_args[1]) && is_array($func_args[1])) ? $func_args[1] : array();
-			$args = apply_filters('em_events_output_args', self::get_default_search($args), $events);
-			$limit = ( !empty($args['limit']) && is_numeric($args['limit']) ) ? $args['limit']:false;
-			$events_count = count($events);
-		}else{
-			//Firstly, let's check for a limit/offset here, because if there is we need to remove it and manually do this
-			$args = apply_filters('em_events_output_args', self::get_default_search($args));
-			$limit = ( !empty($args['limit']) && is_numeric($args['limit']) ) ? $args['limit']:false;
-			$events = self::get( $args );
-			$events_count = self::$num_rows_found;
-		}
-		//What format shall we output this to, or use default
-		$format = ( empty($args['format']) ) ? get_option( 'dbem_event_list_item_format' ) : $args['format'] ;
-		
-		$output = "";
-		
-		if ( $events_count > 0 ) {
-			$events = apply_filters('em_events_output_events', $events);
-			foreach ( $events as $EM_Event ) {
-				$output .= $EM_Event->output($format);
-			} 
-			//Add headers and footers to output
-			if( $format == get_option( 'dbem_event_list_item_format' ) ){
-			    //we're using the default format, so if a custom format header or footer is supplied, we can override it, if not use the default
-			    $format_header = empty($args['format_header']) ? get_option('dbem_event_list_item_format_header') : $args['format_header'];
-			    $format_footer = empty($args['format_footer']) ? get_option('dbem_event_list_item_format_footer') : $args['format_footer'];
-			}else{
-			    //we're using a custom format, so if a header or footer isn't specifically supplied we assume it's blank
-			    $format_header = !empty($args['format_header']) ? $args['format_header'] : '' ;
-			    $format_footer = !empty($args['format_footer']) ? $args['format_footer'] : '' ;
-			}
-			$output = $format_header .  $output . $format_footer;
-			//Pagination (if needed/requested)
-			if( !empty($args['pagination']) && !empty($limit) && $events_count > $limit ){
-				$output .= self::get_pagination_links($args, $events_count);
-			}
-		}elseif( $args['no_results_msg'] !== false ){
-			$output = !empty($args['no_results_msg']) ? $args['no_results_msg'] : get_option('dbem_no_events_message');
-		}
-		
-		//TODO check if reference is ok when restoring object, due to changes in php5 v 4
-		$EM_Event = $EM_Event_old;
-		$output = apply_filters('em_events_output', $output, $events, $args);
-		return $output;		
-	}
-	
-	/**
-	 * Generate a grouped list of events by year, month, week or day.
-	 * 
-	 * There is a nuance with this function, long_events won't work unless you add a limit of 0. The reason is because this won't work with pagination, due to the fact
-	 * that you need to alter the event total count to reflect each time an event is displayed in a time range. e.g. if an event lasts 2 days and it's daily grouping,
-	 * then that event would count as 2 events for pagination purposes. For that you need to count every single event and calculate date range etc. which is too resource
-	 * heavy and not scalabale, therefore we've added this limitation.
-	 * 
-	 * @since 5.4.4.2
-	 * @param array $args
-	 * @return string
-	 */
-	public static function output_grouped( $args = array() ){
-		//Reset some args to include pagination for if pagination is requested.
-		$args['limit'] = isset($args['limit']) ? $args['limit'] : get_option('dbem_events_default_limit');
-		$args['page'] = (!empty($args['page']) && is_numeric($args['page']) )? $args['page'] : 1;
-		$args['page'] = (!empty($args['pagination']) && !empty($_REQUEST['pno']) && is_numeric($_REQUEST['pno']) )? $_REQUEST['pno'] : $args['page'];
-		$args['offset'] = ($args['page']-1) * $args['limit'];
-		$args['orderby'] = 'event_start_date,event_start_time,event_name'; // must override this to display events in right cronology.
-		$long_events = !empty($args['long_events']);
-
-		$args['mode'] = !empty($args['mode']) ? $args['mode'] : get_option('dbem_event_list_groupby');
-		$args['header_format'] = !empty($args['header_format']) ? $args['header_format'] :  get_option('dbem_event_list_groupby_header_format', '<h2>#s</h2>');
-		$args['date_format'] = !empty($args['date_format']) ? $args['date_format'] :  get_option('dbem_event_list_groupby_format','');
-		$args = apply_filters('em_events_output_grouped_args', self::get_default_search($args));
-		//Reset some vars for counting events and displaying set arrays of events
-		$atts = (array) $args;
-		$atts['pagination'] = $atts['limit'] = $atts['page'] = $atts['offset'] = false;
-		//decide what form of dates to show
-		$EM_Events = self::get( $args );
-		$events_count = self::$num_rows_found;
-		ob_start();
-		if( $events_count > 0 ){
-			switch ( $args['mode'] ){
-				case 'yearly':
-					//go through the events and put them into a monthly array
-					$format = (!empty($args['date_format'])) ? $args['date_format']:'Y';
-					$events_dates = array();
-					foreach($EM_Events as $EM_Event){ /* @var $EM_Event EM_Event */
-						$year = $EM_Event->start()->format('Y');
-						$events_dates[$year][] = $EM_Event;
-						//if long events requested, add event to other dates too
-						if( empty($args['limit']) && $long_events && $EM_Event->end()->getDate() != $EM_Event->start()->getDate() ) {
-							$next_year = $year + 1;
-							$year_end = $EM_Event->end()->format('Y');
-							while( $next_year <= $year_end ){
-								$events_dates[$next_year][] = $EM_Event;
-								$next_year = $next_year + 1;
-							}
-						}
-					}
-					foreach ($events_dates as $year => $events){
-						$EM_DateTime = new EM_DateTime($year.'-01-01');
-						echo str_replace('#s', $EM_DateTime->i18n($format), $args['header_format']);
-						echo self::output($events, $atts);
-					}
-					break;
-				case 'monthly':
-					//go through the events and put them into a monthly array
-					$format = (!empty($args['date_format'])) ? $args['date_format']:'M Y';
-					$events_dates = array();
-					foreach($EM_Events as $EM_Event){
-						$events_dates[$EM_Event->start()->format('Y-m-01')][] = $EM_Event;
-						//if long events requested, add event to other dates too
-						if( empty($args['limit']) && $long_events && $EM_Event->end()->getDate() != $EM_Event->start()->getDate() ) {
-							///$EM_DateTime is synoymous with the next month here
-							$EM_DateTime = $EM_Event->start()->copy()->add('P1M');
-							while( $EM_DateTime <= $EM_Event->end() ){
-								$events_dates[$EM_DateTime->format('Y-m-01')][] = $EM_Event;
-								$EM_DateTime = $EM_DateTime->add('P1M');
-							}
-						}
-					}
-					foreach ($events_dates as $month => $events){
-						$EM_DateTime = new EM_DateTime($month);
-						echo str_replace('#s', $EM_DateTime->i18n($format), $args['header_format']);
-						echo self::output($events, $atts);
-					}
-					break;
-				case 'weekly':
-					$format = (!empty($args['date_format'])) ? $args['date_format']:get_option('date_format');
-					$events_dates = array();
-					foreach($EM_Events as $EM_Event){
-						//obtain start of the week as per WordPress general settings
-			   			$start_of_week = get_option('start_of_week');
-						$day_of_week = $EM_Event->start()->format('w');
-						$offset = $day_of_week - $start_of_week;
-						if($offset<0){ $offset += 7; }
-						$EM_DateTime = $EM_Event->start()->copy()->sub('P'.$offset.'D');
-						//save event to date representing start of week for this WP install based on general settings
-						$events_dates[$EM_DateTime->getDate()][] = $EM_Event;
-						//if long events requested, add event to other dates too
-						if( empty($args['limit']) && $long_events && $EM_Event->end()->getDate() != $EM_Event->start()->getDate() ) {
-							do{
-								$EM_DateTime->add('P1W');
-								$events_dates[$EM_DateTime->getDate()][] = $EM_Event;
-							}while( $EM_DateTime <= $EM_Event->end() );
-						}
-					}
-					foreach ($events_dates as $date => $events){
-						$dates_formatted = $EM_DateTime->modify($date)->i18n($format). get_option('dbem_dates_separator') . $EM_DateTime->add('P6D')->i18n($format);
-						echo str_replace('#s', $dates_formatted, $args['header_format']);
-						echo self::output($events, $atts);
-					}
-					break;
-				default: //daily
-					//go through the events and put them into a daily array
-					$format = (!empty($args['date_format'])) ? $args['date_format']:get_option('date_format');
-					$events_dates = array();
-					foreach($EM_Events as $EM_Event){
-						$EM_DateTime = $EM_Event->start()->copy()->setTime(0,0,0); /* @var EM_DateTime $EM_DateTime */
-						$events_dates[$EM_DateTime->getDate()][] = $EM_Event;
-						//if long events requested, add event to other dates too
-						if( empty($args['limit']) && $long_events && $EM_Event->end()->getDate() != $EM_Event->start()->getDate() ) {
-							do{
-								$EM_DateTime->add('P1D');
-								//store indexes as Y-m-d format so we become timezone independent
-								$events_dates[$EM_DateTime->getDate()][] = $EM_Event;
-							}while( $EM_DateTime <= $EM_Event->end() );
-						}
-					}
-					foreach ($events_dates as $date => $events){
-						echo str_replace('#s', $EM_DateTime->modify($date)->i18n($format), $args['header_format']);
-						echo self::output($events, $atts);
-					}
-					break;
-			}
-			//Show the pagination links (unless there's less than $limit events)
-			if( !empty($args['pagination']) && !empty($args['limit']) && $events_count > $args['limit'] ){
-				echo self::get_pagination_links($args, $events_count, 'search_events_grouped');
-			}
-		}elseif( $args['no_results_msg'] !== false ){
-			echo !empty($args['no_results_msg']) ? $args['no_results_msg'] : get_option('dbem_no_events_message');
-		}
-		return ob_get_clean();
 	}
 	
 	public static function get_pagination_links($args, $count, $search_action = 'search_events', $default_args = array()){
@@ -626,6 +339,7 @@ $limit $offset";
 	/**
 	 * Overrides EM_Object method to clean ambiguous fields and apply a filter to result.
 	 * @see EM_Object::build_sql_groupby()
+	 * @deprecated
 	 */
 	public static function build_sql_groupby( $args, $accepted_fields, $groupby_order = false, $default_order = 'ASC' ){
 	    $accepted_fields[] = 'event_date_modified';
@@ -639,6 +353,7 @@ $limit $offset";
 	/**
 	 * Overrides EM_Object method to clean ambiguous fields and apply a filter to result.
 	 * @see EM_Object::build_sql_groupby_orderby()
+	 * @deprecated
 	 */
 	public static function build_sql_groupby_orderby($args, $accepted_fields, $default_order = 'ASC' ){
 	    $accepted_fields[] = 'event_date_modified';
