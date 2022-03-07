@@ -44,7 +44,7 @@
 		},
 		"limit": {
 			"type": "number",
-			"default": 6
+			"default": 12
 		},
 		"order": {
 			"type": "string",
