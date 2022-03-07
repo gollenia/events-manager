@@ -11,6 +11,8 @@ class EM_Tickets extends EM_Object implements Iterator, Countable {
 	 * @var array
 	 */
 	var $tickets = array();
+
+	var $index = 0;
 	/**
 	 * @var int
 	 */
@@ -258,13 +260,13 @@ class EM_Tickets extends EM_Object implements Iterator, Countable {
 	}
 	
 	//Iterator Implementation
-    public function rewind(){
+    public function rewind() : void {
         reset($this->tickets);
     }
 	/**
 	 * @return EM_Ticket
 	 */
-    public function current(){
+    public function current() : EM_Ticket {
         $var = current($this->tickets);
         return $var;
     }  
@@ -275,17 +277,16 @@ class EM_Tickets extends EM_Object implements Iterator, Countable {
 	/**
 	 * @return EM_Ticket
 	 */
-    public function next(){
-        $var = next($this->tickets);
-        return $var;
+    public function next() : void {
+        next($this->tickets);
     }  
-    public function valid(){
+    public function valid() : bool {
         $key = key($this->tickets);
         $var = ($key !== NULL && $key !== FALSE);
         return $var;
     }
     //Countable Implementation
-    public function count(){
+    public function count() : int {
     	return count($this->tickets);
     }
 }
