@@ -136,7 +136,7 @@ function Upcoming(props) {
 	].filter(Boolean).join(" ");
 	
 	return (
-		<div className={filterPosition == 'side' ? 'grid grid--columns-4 grid--gap-12' : ''}>
+		<div className={filterPosition == 'side' ? 'grid xl:grid--columns-4 grid--gap-12' : ''}>
 			<aside className='filters'>
 			{ showSearch && <div class="filter__search"><div class="input"><label>{__('Search', 'events')}</label><input type="text" onChange={(event) => {changeFilter('string',event.target.value)} }/></div></div>}
 			{ showCategoryFilter && 
