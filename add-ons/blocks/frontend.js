@@ -6,7 +6,7 @@ import ReactDOM from "react-dom";
 document.addEventListener('DOMContentLoaded', () => {
 	const rootElements = document.getElementsByClassName('events-upcoming-block');
 	if(!rootElements) return
-	rootElements.forEach(element => {
+	Array.from(rootElements).forEach(element => {
 		ReactDOM.render( <Upcoming block={element.dataset.id}/>, element );
 	});
 	

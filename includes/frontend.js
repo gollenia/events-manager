@@ -696,7 +696,7 @@ __webpack_require__.r(__webpack_exports__);
 document.addEventListener('DOMContentLoaded', () => {
   const rootElements = document.getElementsByClassName('events-upcoming-block');
   if (!rootElements) return;
-  rootElements.forEach(element => {
+  Array.from(rootElements).forEach(element => {
     react_dom__WEBPACK_IMPORTED_MODULE_3___default().render((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_blocks_upcoming_frontend__WEBPACK_IMPORTED_MODULE_1__["default"], {
       block: element.dataset.id
     }), element);

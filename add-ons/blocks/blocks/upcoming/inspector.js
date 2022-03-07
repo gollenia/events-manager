@@ -1,6 +1,5 @@
 import { InspectorControls } from '@wordpress/block-editor';
 import { CheckboxControl, TextControl, ToggleControl, RangeControl, PanelBody, PanelRow, SelectControl, FormTokenField, Icon, Button, RadioControl } from '@wordpress/components';
-import { __experimentalNumberControl as NumberControl } from '@wordpress/components'
 import { __ } from '@wordpress/i18n'; 
 import icons from './icons.js'
 
@@ -130,8 +129,10 @@ const Inspector = (props) => {
 				} }
 			/>
 
-			<NumberControl
+			<RangeControl
 				label={__('Limit', 'events')}
+				max={ 100 }
+				min={ 1 }
 				value={ limit }
 				onChange={ ( value ) => {
 					setAttributes( { limit: value } );

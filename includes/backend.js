@@ -831,7 +831,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
 const Inspector = props => {
   const {
     attributes: {
@@ -975,8 +974,10 @@ const Inspector = props => {
         order: value
       });
     }
-  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.__experimentalNumberControl, {
+  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.RangeControl, {
     label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__)('Limit', 'events'),
+    max: 100,
+    min: 1,
     value: limit,
     onChange: value => {
       setAttributes({
