@@ -69,7 +69,7 @@ function Upcoming(props) {
 			limit > 0 ? `limit=${limit}` : false,
 			'order=' + order,
 			selectedCategory != 0 ? `category=${selectedCategory.join(',')}` : false,
-			selectedTags.length ? `tags=${selectedTags.join(',')}` : false,
+			selectedTags.length ? `tag=${selectedTags.join(',')}` : false,
 			scope != '' ? `scope=${scope}` : false,
 			selectedLocation ? `location=${selectedLocation}` : false
 		].filter(Boolean).join("&");
