@@ -62,7 +62,7 @@ class EM_DateTimeZone extends DateTimeZone {
 	 * {@inheritDoc}
 	 * @see DateTimeZone::getName()
 	 */
-	public function getName(){
+	public function getName() : string {
 		if( $this->utc_offset !== false ){
 			return $this->utc_offset;
 		}
@@ -74,7 +74,7 @@ class EM_DateTimeZone extends DateTimeZone {
 	 * {@inheritDoc}
 	 * @see DateTimeZone::getTransitions()
 	 */
-	public function getTransitions( $timestamp_begin = null, $timestamp_end = null ){
+	public function getTransitions( $timestamp_begin = null, $timestamp_end = null ) : array {
 		if( $this->utc_offset !== false ){
 			return array();
 		}
