@@ -155,8 +155,8 @@ class EM_Speakers {
 	}
 
     public function add_back_button( $post ) {
-        if( $post->post_type == 'ctx-color-palette' )
-            echo "<a class='button button-primary button-large' href='edit.php?post_type=ctx-color-palette' id='my-custom-header-link'>" . __('Back', 'ctx-theme') . "</a>";
+        if( $post->post_type == 'event-speaker' )
+            echo "<a class='button button-primary button-large' href='edit.php?post_type=event-speaker' id='my-custom-header-link'>" . __('Back', 'ctx-theme') . "</a>";
     }
 
     
