@@ -40,10 +40,7 @@ function em_admin_menu(){
 	$plugin_pages['options'] = add_submenu_page('edit.php?post_type='.EM_POST_TYPE_EVENT, __('Events Manager Settings','events-manager'),__('Settings','events-manager'), 'manage_options', "events-manager-options", 'em_admin_options_page');
 	$plugin_pages['help'] = add_submenu_page('edit.php?post_type='.EM_POST_TYPE_EVENT, __('Getting Help for Events Manager','events-manager'),__('Help','events-manager'), 'manage_options', "events-manager-help", 'em_admin_help_page');
 	//If multisite global with locations set to be saved in main blogs we can force locations to be created on the main blog only
-	if( EM_MS_GLOBAL && !is_main_site() && get_site_option('dbem_ms_mainblog_locations') ){
-		include( dirname(__FILE__)."/em-ms-locations.php" );
-		$plugin_pages['locations'] = add_submenu_page('edit.php?post_type='.EM_POST_TYPE_EVENT, __('Locations','events-manager'),__('Locations','events-manager'), 'read_others_locations', "locations", 'em_admin_ms_locations');
-	}
+	
 	$plugin_pages = apply_filters('em_create_events_submenu',$plugin_pages);
 	//We have to modify the menus manually
 	if( !empty($both_num) ){ //Main Event Menu
@@ -86,27 +83,6 @@ function em_admin_menu(){
 }
 add_action('admin_menu','em_admin_menu');
 
-
-
-function em_ms_admin_menu(){
-	add_menu_page( __('Events Manager','events-manager'), __('Events Manager','events-manager'), 'activate_plugins', 'events-manager-options', 'em_ms_admin_options_page', 'dashicons-calendar' );
-	add_submenu_page('events-manager-options', __('Update Blogs','events-manager'),__('Update Blogs','events-manager'), 'activate_plugins', "events-manager-update", 'em_ms_upgrade');
-}
-add_action('network_admin_menu','em_ms_admin_menu');
-
-function em_admin_init(){
-	//in MS global mode and locations are stored in the main blog, then a user must have at least a subscriber role
-	if( EM_MS_GLOBAL && is_user_logged_in() && !is_main_site() && get_site_option('dbem_ms_mainblog_locations') ){
-		EM_Object::ms_global_switch();
-		$user = new WP_User(get_current_user_id());
-		if( count($user->roles) == 0 ){
-			$user->set_role('subscriber');
-		}
-		EM_Object::ms_global_switch_back();
-	}
-}
-add_action('admin_init','em_admin_init');
-
 /**
  * Generate warnings and notices in the admin area
  */
@@ -143,30 +119,6 @@ function em_admin_warnings() {
 				<?php
 			}
 		}
-	
-		if( is_multisite() && !empty($_REQUEST['page']) && $_REQUEST['page']=='events-manager-options' && em_wp_is_super_admin() && get_option('dbem_ms_update_nag') ){
-			if( !empty($_GET['disable_dbem_ms_update_nag']) ){
-				delete_site_option('dbem_ms_update_nag');
-			}else{
-				?>
-				<div id="em_page_error" class="updated">
-					<p><?php echo sprintf(__('MultiSite options have moved <a href="%s">here</a>. <a href="%s">Dismiss message</a>','events-manager'),admin_url().'network/admin.php?page=events-manager-options', esc_url($_SERVER['REQUEST_URI'].'&amp;disable_dbem_ms_update_nag=1')); ?></p>
-				</div>
-				<?php
-			}
-		}
-		
-		if( em_wp_is_super_admin() && get_option('dbem_migrate_images_nag') ){
-			if( !empty($_GET['disable_dbem_migrate_images_nag']) ){
-				delete_site_option('dbem_migrate_images_nag');
-			}else{
-				?>
-				<div id="em_page_error" class="updated">
-					<p><?php echo sprintf(__('Whilst they will still appear using placeholders, you need to <a href="%s">migrate your location and event images</a> in order for them to appear in your edit forms and media library. <a href="%s">Dismiss message</a>','events-manager'),admin_url().'edit.php?post_type=event&page=events-manager-options&em_migrate_images=1&_wpnonce='.wp_create_nonce('em_migrate_images'), em_add_get_params($_SERVER['REQUEST_URI'], array('disable_dbem_migrate_images_nag' => 1))); ?></p>
-				</div>
-				<?php
-			}
-		}
 
 		
 		
@@ -191,11 +143,7 @@ function em_plugin_action_links($actions, $file, $plugin_data) {
 	$new_actions = array();
 	$new_actions[] = sprintf( '<a href="'.EM_ADMIN_URL.'&amp;page=events-manager-options">%s</a>', __('Settings', 'events-manager') );
 	$new_actions = array_merge($new_actions, $actions);
-	if( is_multisite() ){
-		$uninstall_url = admin_url().'network/admin.php?page=events-manager-options&amp;action=uninstall&amp;_wpnonce='.wp_create_nonce('em_uninstall_'.get_current_user_id().'_wpnonce');
-	}else{
-		$uninstall_url = EM_ADMIN_URL.'&amp;page=events-manager-options&amp;action=uninstall&amp;_wpnonce='.wp_create_nonce('em_uninstall_'.get_current_user_id().'_wpnonce');
-	}
+	$uninstall_url = EM_ADMIN_URL.'&amp;page=events-manager-options&amp;action=uninstall&amp;_wpnonce='.wp_create_nonce('em_uninstall_'.get_current_user_id().'_wpnonce');
 	$new_actions[] = '<span class="delete"><a href="'.$uninstall_url.'" class="delete">'.__('Uninstall','events-manager').'</a></span>';
 	return $new_actions;
 }

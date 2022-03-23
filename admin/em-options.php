@@ -45,27 +45,9 @@ function em_options_save(){
 			}
 		}
 		//set capabilities
-		if( !empty($_POST['em_capabilities']) && is_array($_POST['em_capabilities']) && (!is_multisite() || is_multisite() && em_wp_is_super_admin()) ){
+		if( !empty($_POST['em_capabilities']) && is_array($_POST['em_capabilities']) ){
 			global $em_capabilities_array, $wp_roles;
-			if( is_multisite() && is_network_admin() && $_POST['dbem_ms_global_caps'] == 1 ){
-			    //apply_caps_to_blog
-				global $current_site,$wpdb;
-				$blog_ids = $wpdb->get_col('SELECT blog_id FROM '.$wpdb->blogs.' WHERE site_id='.$current_site->id);
-				foreach($blog_ids as $blog_id){
-					switch_to_blog($blog_id);
-				    //normal blog role application
-					foreach( $wp_roles->role_objects as $role_name => $role ){
-						foreach( array_keys($em_capabilities_array) as $capability){
-							if( !empty($_POST['em_capabilities'][$role_name][$capability]) ){
-								$role->add_cap($capability);
-							}else{
-								$role->remove_cap($capability);
-							}
-						}
-					}
-					restore_current_blog();
-				}
-			}elseif( !is_network_admin() ){
+			if( !is_network_admin() ){
 			    //normal blog role application
 				foreach( $wp_roles->role_objects as $role_name => $role ){
 					foreach( array_keys($em_capabilities_array) as $capability){
@@ -167,13 +149,7 @@ function em_options_save(){
 		//Firstly, get all orphans
 		global $wpdb;
 		$sql = 'SELECT event_id FROM '.EM_EVENTS_TABLE.' WHERE post_id NOT IN (SELECT ID FROM ' .$wpdb->posts. ' WHERE post_type="'. EM_POST_TYPE_EVENT .'" OR post_type="event-recurring")';
-		if( EM_MS_GLOBAL ){
-			if( is_main_site() ){
-				$sql .= $wpdb->prepare(' AND (blog_id=%d or blog_id IS NULL)', get_current_blog_id());
-			}else{
-				$sql .= $wpdb->prepare(' AND blog_id=%d', get_current_blog_id());
-			}
-		}
+	
 		$results = $wpdb->get_col($sql);
 		$deleted_events = 0;
 		foreach( $results as $event_id ){
@@ -206,130 +182,28 @@ function em_options_save(){
 		wp_safe_redirect(em_wp_get_referer());
 		exit();
 	}
-	//import EM settings
-	if( !empty($_REQUEST['action']) && ( ($_REQUEST['action'] == 'import_em_settings' && check_admin_referer('import_em_settings')) || (is_multisite() && $_REQUEST['action'] == 'import_em_ms_settings' && check_admin_referer('import_em_ms_settings')) ) && em_wp_is_super_admin() ){
-		//upload uniquely named file to system for usage later
-		if( !empty($_FILES['import_settings_file']['size']) && is_uploaded_file($_FILES['import_settings_file']['tmp_name']) ){
-			$settings = file_get_contents($_FILES['import_settings_file']['tmp_name']);
-			$settings = json_decode($settings, true);
-			if( is_array($settings) ){
-				if( is_multisite() && $_REQUEST['action'] == 'import_em_ms_settings' ){
-					global $EM_MS_Globals, $wpdb;
-					$sitewide_options = $EM_MS_Globals->get_globals();
-					foreach( $settings as $k => $v ){
-						if( in_array($k, $sitewide_options) ) update_site_option($k, $v);
-					}
-				}else{
-					foreach( $settings as $k => $v ){
-						if( preg_match('/^(?:db)emp?_/', $k) ){
-							update_option($k, $v);
-						}
-					}
-				}
-				$EM_Notices->add_confirm(__('Settings imported.','events-manager'), true);
-				wp_safe_redirect(em_wp_get_referer());
-				exit();
-			}
-		}
-		$EM_Notices->add_error(__('Please upload a valid txt file containing Events Manager import settings.','events-manager'), true);
-		wp_safe_redirect(em_wp_get_referer());
-		exit();
-	}
-	//export EM settings
-	if( !empty($_REQUEST['action']) && $_REQUEST['action'] == 'export_em_settings' && check_admin_referer('export_em_settings') && em_wp_is_super_admin() ){
-		global $wpdb;
-		$results = $wpdb->get_results('SELECT option_name, option_value FROM '.$wpdb->options ." WHERE option_name LIKE 'dbem_%' OR option_name LIKE 'emp_%' OR option_name LIKE 'em_%'", ARRAY_A);
-		$options = array();
-		foreach( $results as $result ) $options[$result['option_name']] = $result['option_value'];
-		header('Content-Type: text/plain; charset=utf-8');
-		header('Content-Disposition: attachment; filename="events-manager-settings.txt"');
-		echo json_encode($options);
-		exit();
-	}elseif( !empty($_REQUEST['action']) && $_REQUEST['action'] == 'export_em_ms_settings' && check_admin_referer('export_em_ms_settings') && is_multisite() && em_wp_is_super_admin() ){
-		//delete transients, and add a flag to recheck dev version next time round
-		global $EM_MS_Globals, $wpdb;
-		$options = array();
-		$sitewide_options = $EM_MS_Globals->get_globals();
-		foreach( $sitewide_options as $option ) $options[$option] = get_site_option($option);
-		header('Content-Type: text/plain; charset=utf-8');
-		header('Content-Disposition: attachment; filename="events-manager-settings.txt"');
-		echo json_encode($options);
-		exit();
-	}
 	
 	//reset timezones
 	if( !empty($_REQUEST['action']) && $_REQUEST['action'] == 'reset_timezones' && check_admin_referer('reset_timezones') && em_wp_is_super_admin() ){
 		include(EM_DIR.'/em-install.php');
 		if( empty($_REQUEST['timezone_reset_value']) ) return;
 		$timezone = str_replace('UTC ', '', $_REQUEST['timezone_reset_value']);
-		if( is_multisite() ){
-			if( !empty($_REQUEST['timezone_reset_blog']) && is_numeric($_REQUEST['timezone_reset_blog']) ){
-				$blog_id = $_REQUEST['timezone_reset_blog'];
-				switch_to_blog($blog_id);
-				if( $timezone == 'default' ){
-					$timezone = str_replace(' ', EM_DateTimeZone::create()->getName());
-				}
-				$blog_name = get_bloginfo('name');
-				$result = em_migrate_datetime_timezones(true, true, $timezone);
-				restore_current_blog();
-			}elseif( !empty($_REQUEST['timezone_reset_blog']) && ($_REQUEST['timezone_reset_blog'] == 'all' || $_REQUEST['timezone_reset_blog'] == 'all-resume') ){
-				global $wpdb, $current_site;
-				$blog_ids = $blog_ids_progress = get_site_option('dbem_reset_timezone_multisite_progress', false);
-				if( !is_array($blog_ids) || $_REQUEST['timezone_reset_blog'] == 'all' ){
-					$blog_ids = $blog_ids_progress = $wpdb->get_col('SELECT blog_id FROM '.$wpdb->blogs.' WHERE site_id='.$current_site->id);
-					update_site_option('dbem_reset_timezone_multisite_progress', $blog_ids_progress);
-				}
-				foreach($blog_ids as $k => $blog_id){
-					$result = true;
-					$plugin_basename = plugin_basename(dirname(dirname(__FILE__)).'/events-manager.php');
-					if( in_array( $plugin_basename, (array) get_blog_option($blog_id, 'active_plugins', array() ) ) || is_plugin_active_for_network($plugin_basename) ){
-						switch_to_blog($blog_id);
-						$blog_timezone = $timezone == 'default' ? str_replace(' ', '', EM_DateTimeZone::create()->getName()) : $timezone;
-						$blog_name = get_bloginfo('name');
-						$blog_result = em_migrate_datetime_timezones(true, true, $blog_timezone);
-						if( !$blog_result ){
-							$fails[$blog_id] = $blog_name;
-						}else{
-							unset($blog_ids_progress[$k]);
-							update_site_option('dbem_reset_timezone_multisite_progress', $blog_ids_progress);
-						}
-					}
-				}
-				if( !empty($fails) ){
-					$result = __('The following blog timezones could not be successfully reset:', 'events-manager');
-					$result .= '<ul>';
-					foreach( $fails as $fail ) $result .= '<li>'.$fail.'</li>';
-					$result .= '</ul>';
-				}else{
-					delete_site_option('dbem_reset_timezone_multisite_progress');
-					EM_Admin_Notices::remove('date_time_migration_5.9_multisite', true);
-				}
-				restore_current_blog();
-			}else{
-				$result = __('A valid blog ID must be provided, you can only reset one blog at a time.','events-manager');
-			}
-		}else{
-			$result = em_migrate_datetime_timezones(true, true, $timezone);
-		}
+		
+		$result = em_migrate_datetime_timezones(true, true, $timezone);
+		
 		if( $result !== true ){
 			$EM_Notices->add_error($result, true);
 		}else{
-			if( is_multisite() ){
-				if( $_REQUEST['timezone_reset_blog'] == 'all' || $_REQUEST['timezone_reset_blog'] == 'all-resume' ){
-					$EM_Notices->add_confirm(sprintf(__('Event timezones on all blogs have been reset to %s.','events-manager'), '<code>'.$timezone.'</code>'), true);
-				}else{
-					$EM_Notices->add_confirm(sprintf(__('Event timezones for blog %s have been reset to %s.','events-manager'), '<code>'.$blog_name.'</code>', '<code>'.$timezone.'</code>'), true);
-				}
-			}else{
-				$EM_Notices->add_confirm(sprintf(__('Event timezones have been reset to %s.','events-manager'), '<code>'.$timezone.'</code>'), true);
-			}
+			
+			$EM_Notices->add_confirm(sprintf(__('Event timezones have been reset to %s.','events-manager'), '<code>'.$timezone.'</code>'), true);
+			
 		}
 		wp_safe_redirect(em_wp_get_referer());
 		exit();
 	}
 	
 	//update scripts that may need to run
-	$blog_updates = is_multisite() ? array_merge(EM_Options::get('updates'), EM_Options::site_get('updates')) : EM_Options::get('updates');
+	$blog_updates = EM_Options::get('updates');
 	if( is_array($blog_updates) ) {
 		foreach ( $blog_updates as $update => $update_data ) {
 			$filename = EM_DIR . '/admin/settings/updates/' . $update . '.php';
@@ -719,11 +593,7 @@ function em_admin_option_box_caps(){
 				)
 			);
             ?>
-            <?php 
-        	if( is_multisite() && is_network_admin() ){
-	            echo em_options_radio_binary(__('Apply global capabilities?','events-manager'), 'dbem_ms_global_caps', __('If set to yes the capabilities will be applied all your network blogs and you will not be able to set custom capabilities each blog. You can select no later and visit specific blog settings pages to add/remove capabilities.','events-manager') );
-	        }
-	        ?>
+        	
             <tr><td colspan="2">
 	            <table class="em-caps-table" style="width:auto;" cellspacing="0" cellpadding="0">
 					<thead>
