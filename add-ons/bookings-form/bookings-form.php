@@ -143,6 +143,77 @@ class EM_Booking_Form {
         $event = empty($event) ? $EM_Event : $event;
         return self::get_form($event)->form_fields;
 	}
+
+	public static function get_fields($event) {
+		
+		$fieldset = [];
+		$fields = \EM_Booking_Form::get_form($event)->form_fields;
+		foreach ($fields as $key => $field) {
+            $input_field = [
+                "name" => $field['fieldid'],
+                "type" => $field['type'],
+                "label" => $field['label'],
+                "value" => "",
+                "min" => false,
+                "max" => false,
+                "regex" => array_key_exists('options_text_regex', $field) ? $field['options_text_regex'] : "",
+                "required" => array_key_exists('required', $field) && $field['required'] == 1 ? true : false,
+                "error" => array_key_exists('options_text_error', $field) ? $field['options_text_error'] : "",
+                "tip" => array_key_exists('options_text_tip', $field) ? $field['options_text_tip'] : "",
+                "select_hint" => array_key_exists('options_select_default_text', $field) ? $field['options_select_default_text'] : "",
+                "options" => [],
+				"half" => array_key_exists('options_text_half_size', $field) && $field['options_text_half_size'] == 1  ? true : false
+            ];
+            // This is very unfancy.
+            switch ($field['type']) {
+				case 'html':
+					$input_field['value'] = $field['options_html_content'];
+					break;
+                case 'checkbox':
+                    $input_field['value'] = $field['options_checkbox_checked'];
+                    $input_field['error'] = $field['options_checkbox_error'];
+                    $input_field['tip'] = $field['options_checkbox_tip'];
+                    break;
+                case 'date':
+                    $input_field['value'] = $field['options_checkbox_checked'];
+                    $input_field['half'] = array_key_exists('options_date_half_size', $field) && $field['options_date_half_size'] == 1  ? true : false;
+                    $input_field['tip'] = $field['options_date_tip'];
+                    $input_field['min'] = $field['options_date_min'];
+                    $input_field['max'] = $field['options_date_max'];
+                    break;
+                case 'select':
+                    $input_field['value'] = $field['options_select_default'];
+                    $input_field['error'] = $field['options_select_error'];
+					$input_field['half'] = array_key_exists('options_select_half_size', $field) && $field['options_select_half_size'] == 1  ? true : false;
+                    $input_field['tip'] = $field['options_select_tip'];
+                    $input_field['options'] = explode("\r\n", $field['options_select_values']);
+                    break;
+                case 'radio':
+                    $input_field['error'] = $field['options_selection_error'];
+                    $input_field['tip'] = $field['options_selection_tip'];
+                    $input_field['options'] = explode("\r\n", $field['options_selection_values']);
+                    break;
+                case 'user_email':
+                    $input_field['type'] = "email";
+                    break;
+                case 'country':
+				case 'dbem_country':
+                    $input_field['type'] = "select";
+                    $input_field['options'] = em_get_countries();
+                    $input_field['value'] = substr(get_locale(), -2);
+					break;
+				case 'registration':
+					$input_field['half'] = array_key_exists('options_reg_half_size', $field) && $field['options_reg_half_size'] == 1  ? true : false;
+                }
+
+				if(array_key_exists('options_reg_half_size', $field) && $field['options_reg_half_size'] == 1) {
+					$input_field['half'] = true;
+				}
+
+            array_push($fieldset, $input_field);
+        }
+        return $fieldset;
+	}
 	
 	public static function em_register_new_user_pre($user_array){
 		global $EM_Booking;
@@ -655,5 +726,5 @@ class EM_Booking_Form {
 }
 EM_Booking_Form::init();
 include('attendee-forms.php');
-include('booking-api.php');
-include('booking-qr-code.php');
+//include('booking-api.php');
+//include('booking-qr-code.php');
