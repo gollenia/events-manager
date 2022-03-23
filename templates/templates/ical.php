@@ -108,7 +108,7 @@ while ( count($EM_Events) > 0 ){
 		
 		//create a UID, make it unique and update independent
 		$UID = $EM_Event->event_id . '@' . $site_domain;
-		if( is_multisite() ) $UID = absint($EM_Event->blog_id) . '-' . $UID;
+		
 		$UID = wordwrap("UID:".$UID, 74, "\r\n ", true);
 		
 //output ical item		
