@@ -366,11 +366,7 @@ class EM_Gateways_Transactions{
 				return new stdClass();
 			}			
 		}
-		if( EM_MS_GLOBAL && (!is_main_site() || is_admin()) ){ //if not main blog, we show only blog specific booking info
-			global $blog_id;
-			$join = " JOIN $table ON $table.booking_id=tx.booking_id";
-			$conditions[] = "$table.booking_id IN (SELECT $table.booking_id FROM $table, ".EM_EVENTS_TABLE." e WHERE $table.event_id=e.event_id AND e.blog_id=".$blog_id.")";
-		}
+		
 		//filter by gateway
 		if( !empty($this->gateway) ){
 			$conditions[] = $wpdb->prepare('transaction_gateway = %s',$this->gateway);

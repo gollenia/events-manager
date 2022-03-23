@@ -496,10 +496,7 @@ class EM_Gateway {
 			$existing = $wpdb->get_row( $wpdb->prepare( "SELECT transaction_id, transaction_status, transaction_gateway_id, transaction_total_amount FROM ".EM_TRANSACTIONS_TABLE." WHERE transaction_gateway = %s AND transaction_gateway_id = %s AND transaction_status=%s", $this->gateway, $txn_id, $payment_status ) );
 		}
 		$table = EM_TRANSACTIONS_TABLE;
-		if( is_multisite() && !EM_MS_GLOBAL && !empty($EM_Booking->get_event()->blog_id) && !is_main_site($EM_Booking->get_event()->blog_id) ){
-			//we must get the prefix of the transaction table for this event's blog if it is not the root blog
-			$table = $wpdb->get_blog_prefix($EM_Booking->get_event()->blog_id).'em_transactions';
-		}
+		
 		if( !empty($existing->transaction_gateway_id) && $amount == $existing->transaction_total_amount ) {
 			return;
 			

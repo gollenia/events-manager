@@ -1,12 +1,12 @@
 <?php
 if(!class_exists('EM_Gateways')) {
 class EM_Gateways {
+
+	var $plugin_name = "Gateways";
+	
     static $customer_fields = array();
-	/*
-	 * --------------------------------------------------
-	 * STATIC Functions - functions that don't need to be overriden
-	 * --------------------------------------------------
-	 */
+	
+
 	
 	static function init(){
 	    add_filter('em_wp_localize_script', array('EM_Gateways','em_wp_localize_script'),10,1);
@@ -25,7 +25,6 @@ class EM_Gateways {
 			add_filter('em_multiple_booking_get_post',array('EM_Gateways', 'em_booking_get_post'), 10, 2);
 			add_filter('em_action_emp_checkout', array('EM_Gateways','em_action_booking_add'),10,2); //adds gateway var to feedback
 			//Booking Form Modifications
-			add_action('em_checkout_form_footer', array('EM_Gateways','mb_booking_form_footer'),10,2);
 		}else{
 		    //Normal Bookings mode, or manual booking
 			add_action('em_booking_add', array('EM_Gateways', 'em_booking_add'), 10, 3);
@@ -107,6 +106,23 @@ class EM_Gateways {
 			}
 		}
 		return $gateways;
+	}
+
+	static function get_gateways_rest() {
+		global $EM_Gateways;
+		$gateways = array();
+		foreach($EM_Gateways as $EM_Gateway){
+			if($EM_Gateway->is_active()){
+				array_push($gateways, [
+                    "name" => $EM_Gateway->title,
+                    "id" => $EM_Gateway->gateway,
+                    "title" => get_option('em_'.$EM_Gateway->gateway.'_option_name'),
+                    "html" => get_option('em_'.$EM_Gateway->gateway.'_form'),
+                    "methods" => $EM_Gateway->gateway == "mollie" ? get_option('mollie_activated_methods') : []
+                ]);
+			}
+		}
+		return $gateways; 
 	}
 	
 	/**
@@ -192,12 +208,7 @@ class EM_Gateways {
 		}
 	}
 	
-	static function mb_booking_form_footer(){
-	    $EM_Multiple_Booking = EM_Multiple_Bookings::get_multiple_booking();
-	    if( $EM_Multiple_Booking->get_price() > 0 ){
-	        self::booking_form_footer();
-	    }
-	}
+
 	
 	/**
 	 * Gets called at the bottom of the form before the submit button. 
@@ -545,3 +556,4 @@ include('gateway.php');
 include('gateways.transactions.php');
 do_action('em_gateways_init');
 include('gateway.offline.php');
+include('gateway-qr-code.php');
