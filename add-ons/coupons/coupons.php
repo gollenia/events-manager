@@ -695,14 +695,7 @@ class EM_Coupons extends EM_Object {
 			$conditions['event'] = '('.$conditions['event'].')';
 		}else{
 			//blog ownership
-			if( EM_MS_GLOBAL ){
-                $blog = (array_key_exists('blog',$args) && is_numeric($args['blog'])) ? $args['blog']:get_current_blog_id();
-				if( is_main_site($blog) ){
-					$conditions['blog'] = "(".EM_COUPONS_TABLE.".blog_id={$blog} OR ".EM_COUPONS_TABLE.".blog_id IS NULL)";
-				}else{
-					$conditions['blog'] = "(".EM_COUPONS_TABLE.".blog_id={$blog})";
-				}
-			}
+			
 			//if in MB mode, every coupon is considered sitewide.
             if( !get_option('dbem_multiple_bookings') ){ 
     			//owner lookup

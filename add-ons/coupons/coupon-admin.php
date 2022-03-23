@@ -71,10 +71,7 @@ class EM_Coupon_Admin extends EM_Coupon {
 		if( get_option('dbem_multiple_bookings') ){
 		    $this->coupon_sitewide = $this->coupon_eventwide = 1;
 		}
-		//Set Blog ID
-		if( is_multisite() && empty($this->blog_id) ){
-			$this->blog_id = get_current_blog_id();
-		}
+
 		if( empty($this->coupon_owner) ){ $this->coupon_owner = get_current_user_id(); }
 		do_action('em_coupon_save_pre', $this);
 		$coupon_array = $this->to_array(true);

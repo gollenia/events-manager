@@ -154,14 +154,14 @@ class EM_Emails {
 	
 	public static function process_queue(){
 		//check that this isn't doing cron already - if this is MultiSite Global, then we place a lock at Network level
-		$doing_emails = EM_MS_GLOBAL ? get_site_option('em_cron_doing_emails') : get_option('em_cron_doing_emails');
+		$doing_emails = get_option('em_cron_doing_emails');
 		if( $doing_emails ){
 			//if process has been running for over 15 minutes or 900 seconds (e.g. likely due to a php error or timeout), let it proceed
 			if( $doing_emails > (time() - 900 ) ){
 				return false;
 			}
 		}
-		EM_MS_GLOBAL ? update_site_option('em_cron_doing_emails', time()) : update_option('em_cron_doing_emails', time());
+		update_option('em_cron_doing_emails', time());
 	    //init phpmailer
 		global $EM_Mailer, $wpdb;
 		if( !is_object($EM_Mailer) ){
@@ -178,7 +178,7 @@ class EM_Emails {
 			foreach($results as $email){
 				//if we reach a limit (provided limit is > 0, remove lock and exit this function
 				if( $count >= $limit && $limit > 0 ){
-					EM_MS_GLOBAL ? update_site_option('em_cron_doing_emails', 0) : update_option('em_cron_doing_emails', 0);
+					update_option('em_cron_doing_emails', 0);
 					return true;
 				}
 				//send email, immediately delete after from queue
@@ -192,7 +192,7 @@ class EM_Emails {
 			$results = $wpdb->get_results($sql);
 		}
 		//remove the lock on this cron
-		EM_MS_GLOBAL ? update_site_option('em_cron_doing_emails', 0) : update_option('em_cron_doing_emails', 0);
+		update_option('em_cron_doing_emails', 0);
 	}
 
 	/**
