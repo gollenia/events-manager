@@ -117,7 +117,7 @@ class EM_Event_Post {
 			"currency_format" => get_option("dbem_bookings_currency_format"),
 			"bookings" => $booking->get_available_spaces(),
 			"has_tickets" => $booking->get_bookings()->get_available_tickets(),
-			"booking" => \EM_Booking_Api::get_booking_form($EM_Event),
+			//"booking" => \EM_Booking_Api::get_booking_form($EM_Event),
 			"speaker" => self::get_speaker($EM_Event),
 			"price" => self::lowest_price($booking),
 			"events" => self::get_related_events($EM_Event->ID),
@@ -271,55 +271,16 @@ class EM_Event_Post {
             'category' => array_key_exists('category', $_REQUEST) ? $_REQUEST['category'] : null,
 			'tag' => array_key_exists('tag', $_REQUEST) ? $_REQUEST['tag'] : null,
 			'scope' => array_key_exists('scope', $_REQUEST) ? $_REQUEST['scope'] : null,
-			'event' => array_key_exists('event', $_REQUEST) ? $_REQUEST['event'] : null,
+			'event' => array_key_exists('event', $_REQUEST) ? $_REQUEST['event'] : null, 
 			'limit' => array_key_exists('limit', $_REQUEST) ? $_REQUEST['limit'] : 0,
 			'location' => array_key_exists('location', $_REQUEST) ? $_REQUEST['location'] : null,
+			'post_id' => array_key_exists('post_id', $_REQUEST) ? $_REQUEST['post_id'] : null,
+			'event' => array_key_exists('event', $_REQUEST) ? $_REQUEST['event'] : null,
         ];
-
-		$result = [];
 		
-		$data = EM_Events::get($args);
-		if (!$data) return $result;
-		foreach($data as $event) {
-			$location = $event->get_location();
-			$category = $event->get_categories()->get_first();
-			$tags = new EM_Tags($event);
-			$speaker = \Contexis\Events\Speaker::get($event->speaker_id);
-
-			array_push($result, [
-				'ID' => $event->ID,
-				'event_id' => $event->event_id,
-				'link' => get_permalink($event->ID),
-				'image' => $event->event_image,
-				'category' => $category ? [ 
-					'id' => $category->id,
-					'color' => $category->color, 
-					'name' => $category->name,
-					'slug' => $category->slug
-				] : false,
-				'location' => [ 
-					'ID' => $location->ID,
-					'location_id' => $location->location_id, 
-					'address' => $location->location_address,
-					'city' => $location->location_town,
-					'name' => $location->location_name,
-					'url' => $location->location_url,
-					'excerpt' => $location->location_excerpt,
-					'country' => $location->location_country,
-					'state' => $location->location_state,
-				],
-				'start' => $event->start()->getTimestamp() * 1000,
-				'end' => $event->end()->getTimestamp() * 1000,
-				'single_day' => $event->event_start_date == $event->event_end_date,
-				'audience' => $event->event_audience,
-				'excerpt' => $event->post_excerpt,
-				'title' => $event->post_title,
-				'speaker' => $speaker,
-				'tags' => $tags->terms
-
-			]);
-		}
-		return $result;
+		return EM_Events::get_rest($args);
+		
+		
 	}
 }
 EM_Event_Post::init();

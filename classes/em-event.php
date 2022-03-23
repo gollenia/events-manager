@@ -363,7 +363,9 @@ class EM_Event extends EM_Object{
 		global $wpdb;
 		if( is_array($id) ){
 			//deal with the old array style, but we can't supply arrays anymore
-			$id = (!empty($id['event_id'])) ? absint($id['event_id']) : absint($id['post_id']);
+			$id = (!empty($id['event_id'])) 
+			? absint($id['event_id']) 
+			: absint($id['post_id']);
 			$search_by = (!empty($id['event_id'])) ? 'event_id':'post_id';
 		}
 		$is_post = !empty($id->ID) && ($id->post_type == EM_POST_TYPE_EVENT || $id->post_type == 'event-recurring');
@@ -379,7 +381,7 @@ class EM_Event extends EM_Object{
 				//search by event_id, get post_id and blog_id (if in ms mode) and load the post
 				$results = $wpdb->get_row($wpdb->prepare("SELECT post_id, blog_id FROM ".EM_EVENTS_TABLE." WHERE event_id=%d",$id), ARRAY_A);
 				if( !empty($results['post_id']) ){ $this->post_id = $results['post_id']; $this->event_id = $id; }
-				if( is_multisite() && (is_numeric($results['blog_id']) || $results['blog_id']=='' ) ){
+				if( $results['blog_id']=='' ){
 				    if( $results['blog_id']=='' )  $results['blog_id'] = get_current_site()->blog_id;
 					$event_post = get_blog_post($results['blog_id'], $results['post_id']);
 					$search_by = $this->blog_id = $results['blog_id'];
@@ -387,11 +389,9 @@ class EM_Event extends EM_Object{
 					$event_post = get_post($results['post_id']);	
 				}
 			}else{
-				//if searching specifically by post_id and in MS Global mode, then assume we're looking in the current blog we're in
-				if( $search_by == 'post_id' && EM_MS_GLOBAL ) $search_by = get_current_blog_id();
 				//get post data based on ID and search context
 				if(!$is_post){
-					if( is_multisite() && (is_numeric($search_by) || $search_by == '') ){
+					if( $search_by == '' ){
 					    if( $search_by == '' ) $search_by = get_current_site()->blog_id;
 						//we've been given a blog_id, so we're searching for a post id
 						$event_post = get_blog_post($search_by, $id);
@@ -402,10 +402,6 @@ class EM_Event extends EM_Object{
 					}
 				}else{
 					$event_post = $id;
-					//if we're in MS Global mode, then unless a blog id was specified, we assume the current post object belongs to the current blog
-					if( EM_MS_GLOBAL && !is_numeric($search_by) ){
-						$this->blog_id = get_current_blog_id();
-					}
 				}
 				$this->post_id = !empty($id->ID) ? $id->ID : $id;
 			}
@@ -505,6 +501,25 @@ class EM_Event extends EM_Object{
 		}
 	}
 
+	public function get_tickets_rest() {
+		$tickets = (array)$this->get_bookings()->get_available_tickets()->tickets;
+		$ticket_collection = [];
+        foreach($tickets as $id => $ticket) {
+            array_push($ticket_collection, [
+                "id" => $id,
+                "event_id" => $ticket->event_id,
+                "is_available" => $ticket->is_available,
+                "max" => intval($ticket->ticket_max ? min( $ticket->ticket_spaces, $ticket->ticket_max ) : $ticket->ticket_spaces),
+                "price" => floatval($ticket->ticket_price),
+                "min" => $ticket->ticket_min ?: 0,
+                "name" => $ticket->ticket_name,
+                "description" => $ticket->ticket_description,
+                "fields" => []
+            ]);
+        }
+        return $ticket_collection;
+	}
+
 	private function get_image() {
 
 		$thumbnail = get_post_thumbnail_id($this->post_id);
@@ -567,11 +582,9 @@ class EM_Event extends EM_Object{
 				//quick compatability fix in case _event_id isn't loaded or somehow got erased in post meta
 				if( empty($this->event_id) && !$this->is_recurring() ){
 					global $wpdb;
-					if( EM_MS_GLOBAL ){
-						$event_array = $wpdb->get_row($wpdb->prepare("SELECT * FROM ".EM_EVENTS_TABLE." WHERE post_id=%d && blog_id=%d",$this->post_id, $this->blog_id), ARRAY_A);
-					}else{
-						$event_array = $wpdb->get_row('SELECT * FROM '.EM_EVENTS_TABLE. ' WHERE post_id='.$this->post_id, ARRAY_A);	
-					}
+					
+					$event_array = $wpdb->get_row('SELECT * FROM '.EM_EVENTS_TABLE. ' WHERE post_id='.$this->post_id, ARRAY_A);	
+					
 					if( !empty($event_array['event_id']) ){
 						foreach($event_array as $key => $value){
 							if( !empty($value) && empty($this->$key) ){
@@ -587,19 +600,9 @@ class EM_Event extends EM_Object{
 		}elseif( !empty($this->post_id) ){
 			//we have an orphan... show it, so that we can at least remove it on the front-end
 			global $wpdb;
-			if( EM_MS_GLOBAL ){ //if MS Global mode enabled, make sure we search by blog too so there's no cross-post confusion
-				if( !empty($this->event_id) ){
-					$event_array = $wpdb->get_row($wpdb->prepare("SELECT * FROM ".EM_EVENTS_TABLE." WHERE event_id=%d",$this->event_id), ARRAY_A);
-				}else{
-					if( $this->blog_id == get_current_blog_id() || empty($this->blog_id) ){
-						$event_array = $wpdb->get_row($wpdb->prepare("SELECT * FROM ".EM_EVENTS_TABLE." WHERE post_id=%d AND (blog_id=%d OR blog_id IS NULL)",$this->post_id, $this->blog_id), ARRAY_A);
-					}else{
-						$event_array = $wpdb->get_row($wpdb->prepare("SELECT * FROM ".EM_EVENTS_TABLE." WHERE post_id=%d AND blog_id=%d",$this->post_id, $this->blog_id), ARRAY_A);
-					}
-				}
-			}else{
-				$event_array = $wpdb->get_row($wpdb->prepare("SELECT * FROM ".EM_EVENTS_TABLE." WHERE post_id=%d",$this->post_id), ARRAY_A);
-			}
+			
+			$event_array = $wpdb->get_row($wpdb->prepare("SELECT * FROM ".EM_EVENTS_TABLE." WHERE post_id=%d",$this->post_id), ARRAY_A);
+			
 		    if( is_array($event_array) ){
 				$this->orphaned_event = true;
 				$this->post_id = $this->ID = $event_array['post_id'] = null; //reset post_id because it doesn't really exist
@@ -607,26 +610,14 @@ class EM_Event extends EM_Object{
 		    }
 		}
 		if( empty($this->location_id) && !empty($this->event_id) ) $this->location_id = 0; //just set location_id to 0 and avoid any doubt
-		if( EM_MS_GLOBAL && empty($this->blog_id) ) $this->blog_id = get_current_site()->blog_id; //events created before going multisite may have null values, so we set it to main site id
 	}
 	
 	function get_event_meta($blog_id = false){
 		if( !empty($this->blog_id) ) $blog_id = $this->blog_id; //if there's a blog id already, there's no doubt where to look for
 		if( empty($this->post_id) ) return array();
-		if( is_numeric($blog_id) && $blog_id > 0 && is_multisite() ){
-			// if in multisite mode, switch blogs quickly to get the right post meta.
-			switch_to_blog($blog_id);
-			$event_meta = get_post_meta($this->post_id);
-			restore_current_blog();
-			$this->blog_id = $blog_id;
-		}elseif( EM_MS_GLOBAL ){
-			// if a blog ID wasn't defined then we'll check the main blog, in case the event was created in the past
-			$this->ms_global_switch();
-			$event_meta = get_post_meta($this->post_id);
-			$this->ms_global_switch_back();
-		}else{
-			$event_meta = get_post_meta($this->post_id);
-		}
+		
+		$event_meta = get_post_meta($this->post_id);
+		
 		if( !is_array($event_meta) ) $event_meta = array();
 		return apply_filters('em_event_get_event_meta', $event_meta);
 	}
@@ -710,7 +701,7 @@ class EM_Event extends EM_Object{
 			// determine location type, with backward compatibility considerations for those overriding the location forms
 			$location_type = isset($_POST['location_type']) ? sanitize_key($_POST['location_type']) : 'location';
 			
-			if( $location_type == 'location' && empty($_POST['location_id']) && get_option('dbem_use_select_for_locations')) $location_type = 0; //backward compat
+			if( $location_type == 'location' && empty($_POST['location_id']) ) $location_type = 0; //backward compat
 			// assign location data
 			if( $location_type === 0 || $location_type === '0' ){
 				// no location
@@ -993,11 +984,8 @@ class EM_Event extends EM_Object{
 		//Deal with updates to an event
 		if( !empty($this->post_id) ){
 			//get the full array of post data so we don't overwrite anything.
-			if( !empty($this->blog_id) && is_multisite() ){
-				$post_array = (array) get_blog_post($this->blog_id, $this->post_id);
-			}else{
-				$post_array = (array) get_post($this->post_id);
-			}
+			$post_array = (array) get_post($this->post_id);
+			
 		}
 
 		//Overwrite new post info
@@ -1147,13 +1135,6 @@ class EM_Event extends EM_Object{
 				    //we're dealing with an orphaned event in wp_em_events table, so we want to update the post_id and give it a post parent 
 				    $event_truly_exists = true;
 				}else{
-					if( EM_MS_GLOBAL ){
-					    if( is_main_site() ){
-					        $blog_condition = " AND (blog_id='".get_current_blog_id()."' OR blog_id IS NULL)";
-					    }else{
-							$blog_condition = " AND blog_id='".get_current_blog_id()."' ";
-					    }
-					}
 					$event_truly_exists = $wpdb->get_var('SELECT post_id FROM '.EM_EVENTS_TABLE." WHERE event_id={$this->event_id}".$blog_condition) == $this->post_id;
 				}
 			}else{
@@ -1358,10 +1339,6 @@ class EM_Event extends EM_Object{
 				if( $this->is_recurring() ){
 					$result = $this->delete_events(); //was true at this point, so false if fails
 				}
-				//Delete categories from meta if in MS global mode
-				if( EM_MS_GLOBAL ){
-					$wpdb->query('DELETE FROM '.EM_META_TABLE.' WHERE object_id='.$this->event_id." AND meta_key='event-category'");
-				} 
 			}
 		}
 		return apply_filters('em_event_delete_meta', $result !== false, $this);
@@ -1736,10 +1713,6 @@ class EM_Event extends EM_Object{
 	 * @see EM_Object::get_image_url()
 	 */
 	function get_image_url($size = 'full'){
-	    if( EM_MS_GLOBAL && get_current_blog_id() != $this->blog_id ){
-	        switch_to_blog($this->blog_id);
-	        $switch_back = true;
-	    }
 		$return = parent::get_image_url($size);
 		if( !empty($switch_back) ){ restore_current_blog(); }
 		return $return;
@@ -1754,19 +1727,13 @@ class EM_Event extends EM_Object{
 	
 	function get_edit_url(){
 		if( $this->can_manage('edit_events','edit_others_events') ){
-			if( EM_MS_GLOBAL && get_site_option('dbem_ms_global_events_links') && !empty($this->blog_id) && is_main_site() && $this->blog_id != get_current_blog_id() ){
-				if( get_blog_option($this->blog_id, 'dbem_edit_events_page') ){
-					$link = em_add_get_params(get_permalink(get_blog_option($this->blog_id, 'dbem_edit_events_page')), array('action'=>'edit','event_id'=>$this->event_id), false);
-				}
-				if( empty($link))
-					$link = get_admin_url($this->blog_id, "post.php?post={$this->post_id}&action=edit");
-			}else{
-				if( get_option('dbem_edit_events_page') && !is_admin() ){
-					$link = em_add_get_params(get_permalink(get_option('dbem_edit_events_page')), array('action'=>'edit','event_id'=>$this->event_id), false);
-				}
-				if( empty($link))
-					$link = admin_url()."post.php?post={$this->post_id}&action=edit";
+			
+			if( get_option('dbem_edit_events_page') && !is_admin() ){
+				$link = em_add_get_params(get_permalink(get_option('dbem_edit_events_page')), array('action'=>'edit','event_id'=>$this->event_id), false);
 			}
+			if( empty($link))
+				$link = admin_url()."post.php?post={$this->post_id}&action=edit";
+			
 			return apply_filters('em_event_get_edit_url', $link, $this);
 		}
 	}
@@ -1776,30 +1743,12 @@ class EM_Event extends EM_Object{
 			$my_bookings_page = get_permalink(get_option('dbem_edit_bookings_page'));
 			$bookings_link = em_add_get_params($my_bookings_page, array('event_id'=>$this->event_id), false);
 		}else{
-			if( is_multisite() && $this->blog_id != get_current_blog_id() ){
-				$bookings_link = get_admin_url($this->blog_id, 'edit.php?post_type='.EM_POST_TYPE_EVENT."&page=events-manager-bookings&event_id=".$this->event_id);
-			}else{
-				$bookings_link = EM_ADMIN_URL. "&page=events-manager-bookings&event_id=".$this->event_id;
-			}
+			$bookings_link = EM_ADMIN_URL. "&page=events-manager-bookings&event_id=".$this->event_id;
 		}
 		return apply_filters('em_event_get_bookings_url', $bookings_link, $this);
 	}
 	
 	function get_permalink(){
-		if( EM_MS_GLOBAL ){
-			//if no blog id defined, assume it's the main blog
-			$blog_id = empty($this->blog_id) ? get_current_site()->blog_id:$this->blog_id;
-			//if we're not on the same blog as this event then decide whether to link to main blog or to source blog 
-			if( $blog_id != get_current_blog_id() ){
-				if( !get_site_option('dbem_ms_global_events_links') && is_main_site() &&  get_option('dbem_events_page') ){
-					//if on main site, and events page exists and direct links are disabled then show link to main site
-					$event_link = trailingslashit(get_permalink(get_option('dbem_events_page')).get_site_option('dbem_ms_events_slug',EM_EVENT_SLUG).'/'.$this->event_slug.'-'.$this->event_id);					
-				}else{
-					//linking directly to the source blog by default
-					$event_link = get_blog_permalink( $blog_id, $this->post_id);
-				}
-			}
-		}
 		if( empty($event_link) ){
 			$event_link = get_post_permalink($this->post_id);
 		}
@@ -1827,16 +1776,6 @@ class EM_Event extends EM_Object{
 			}
 		}
 		return apply_filters('em_event_is_free',$free, $this, $now);
-	}
-	
-	/**
-	 * Will output a single event format of this event. 
-	 * 
-	 * @param string $target
-	 * @return string
-	 */
-	function output_single($target='html'){
-		return "";
 	}
 	
 	/**
@@ -1913,169 +1852,33 @@ class EM_Event extends EM_Object{
 		if( count($conditionals[0]) > 0 ){
 			//Check if the language we want exists, if not we take the first language there
 			foreach($conditionals[1] as $key => $condition){
-				$show_condition = false;
-				if ($condition == 'has_bookings') {
-					//check if there's a booking, if not, remove this section of code.
-					$show_condition = ($this->event_rsvp && get_option('dbem_rsvp_enabled'));
-				}elseif ($condition == 'no_bookings') {
-					//check if there's a booking, if not, remove this section of code.
-					$show_condition = (!$this->event_rsvp && get_option('dbem_rsvp_enabled'));
-				}elseif ($condition == 'no_location'){
-					//does this event have a valid location?
-					$show_condition = !$this->has_event_location() && !$this->has_location();
-				}elseif ($condition == 'has_location'){
-					//does this event have a valid location?
-					$show_condition = ( $this->has_location() && $this->get_location()->location_status ) || $this->has_event_location();
-				}elseif ($condition == 'has_location_venue'){
-					//does this event have a valid physical location?
-					$show_condition = ( $this->has_location() && $this->get_location()->location_status ) || $this->has_event_location();
-				}elseif ($condition == 'no_location_venue'){
-					//does this event NOT have a valid physical location?
-					$show_condition = !$this->has_location();
-				}elseif ($condition == 'has_event_location'){
-					//does this event have a valid event location?
-					$show_condition = $this->has_event_location();
-				}elseif ( preg_match('/^has_event_location_([a-zA-Z0-9_\-]+)$/', $condition, $type_match)){
-					//event has a specific category
-					$show_condition = $this->has_event_location($type_match[1]);
-				}elseif ($condition == 'no_event_location'){
-					//does this event not have a valid event location?
-					$show_condition = !$this->has_event_location();
-				}elseif ( preg_match('/^no_event_location_([a-zA-Z0-9_\-]+)$/', $condition, $type_match)){
-					//does this event NOT have a specific event location?
-					$show_condition = !$this->has_event_location($type_match[1]);
-				}elseif ($condition == 'has_image'){
-					//does this event have an image?
-					$show_condition = ( $this->get_image_url() != '' );
-				}elseif ($condition == 'no_image'){
-					//does this event have an image?
-					$show_condition = ( $this->get_image_url() == '' );
-				}elseif ($condition == 'has_time'){
-					//are the booking times different and not an all-day event
-					$show_condition = ( $this->event_start_time != $this->event_end_time && !$this->event_all_day );
-				}elseif ($condition == 'no_time'){
-					//are the booking times exactly the same and it's not an all-day event.
-					$show_condition = ( $this->event_start_time == $this->event_end_time && !$this->event_all_day );
-				}elseif ($condition == 'different_timezone'){
-					//current event timezone is different to blog timezone
-					$show_condition = $this->event_timezone != EM_DateTimeZone::create()->getName();
-				}elseif ($condition == 'same_timezone'){
-					//current event timezone is different to blog timezone
-					$show_condition = $this->event_timezone == EM_DateTimeZone::create()->getName();
-				}elseif ($condition == 'all_day'){
-					//is it an all day event
-					$show_condition = !empty($this->event_all_day);
-				}elseif ($condition == 'not_all_day'){
-					//is not an all day event
-					$show_condition = !empty($this->event_all_day);
-				}elseif ($condition == 'logged_in'){
-					//user is logged in
-					$show_condition = is_user_logged_in();
-				}elseif ($condition == 'not_logged_in'){
-					//not logged in
-					$show_condition = !is_user_logged_in();
-				}elseif ($condition == 'has_spaces'){
-					//there are still empty spaces
-					$show_condition = $this->event_rsvp && $this->get_bookings()->get_available_spaces() > 0;
-				}elseif ($condition == 'fully_booked'){
-					//event is fully booked
-					$show_condition = $this->event_rsvp && $this->get_bookings()->get_available_spaces() <= 0;
-				}elseif ($condition == 'bookings_open'){
-					//bookings are still open
-					$show_condition = $this->event_rsvp && $this->get_bookings()->is_open();
-				}elseif ($condition == 'bookings_closed'){
-					//bookings are still closed
-					$show_condition = $this->event_rsvp && !$this->get_bookings()->is_open();
-				}elseif ($condition == 'is_free' || $condition == 'is_free_now'){
-					//is it a free day event, if _now then free right now
-					$show_condition = !$this->event_rsvp || $this->is_free( $condition == 'is_free_now' );
-				}elseif ($condition == 'not_free' || $condition == 'not_free_now'){
-					//is it a paid event, if _now then paid right now
-					$show_condition = $this->event_rsvp && !$this->is_free( $condition == 'not_free_now' );
-				}elseif ($condition == 'is_long'){
-					//is it an all day event
-					$show_condition = $this->event_start_date != $this->event_end_date;
-				}elseif ($condition == 'not_long'){
-					//is it an all day event
-					$show_condition = $this->event_start_date == $this->event_end_date;
-				}elseif ($condition == 'is_past'){
-					//if event is past
-					if( get_option('dbem_events_current_are_past') ){
-						$show_condition = $this->start()->getTimestamp() <= time();
-					}else{
-						$show_condition = $this->end()->getTimestamp() <= time();
-					}
-				}elseif ($condition == 'is_future'){
-					//if event is upcoming
-					$show_condition = $this->start()->getTimestamp() > time();
-				}elseif ($condition == 'is_current'){
-					//if event is currently happening
-					$show_condition = $this->start()->getTimestamp() <= time() && $this->end()->getTimestamp() >= time();
-				}elseif ($condition == 'is_recurrence'){
-					//if event is a recurrence
-					$show_condition = $this->is_recurrence();
-				}elseif ($condition == 'not_recurrence'){
-					//if event is not a recurrence
-					$show_condition = !$this->is_recurrence();
-				}elseif ($condition == 'is_private'){
-					//if event is a recurrence
-					$show_condition = $this->event_private == 1;
-				}elseif ($condition == 'not_private'){
-					//if event is not a recurrence
-					$show_condition = $this->event_private == 0;
-				}elseif ( strpos($condition, 'is_user_attendee') !== false || strpos($condition, 'not_user_attendee') !== false ){
-					//if current user has a booking at this event
-					$show_condition = false;
-					if( is_user_logged_in() ){
-						//we only need a user id, booking id and booking status so we do a direct SQL lookup and once for the loop
-						if( !isset($user_bookings) || !is_array($user_bookings) ){
-							$sql = $wpdb->prepare('SELECT booking_status FROM '.EM_BOOKINGS_TABLE.' WHERE person_id=%d AND event_id=%d', array(get_current_user_id(), $this->event_id));
-							$user_bookings = $wpdb->get_col($sql);
-						}
-						if( $condition == 'is_user_attendee' && count($user_bookings) > 0 ){
-							//user has a booking for this event, could be any booking status
-							$show_condition = true;
-						}elseif( $condition == 'not_user_attendee' && count($user_bookings) == 0 ){
-							//user has no bookings to this event
-							$show_condition = true;
-						}elseif( strpos($condition, 'is_user_attendee_') !== false ){
-							//user has a booking for this event, and we'll now look for a specific status
-							$attendee_booking_status = str_replace('is_user_attendee_', '', $condition);
-							$show_condition = in_array($attendee_booking_status, $user_bookings);
-						}elseif( strpos($condition, 'not_user_attendee_') !== false ){
-							//user has a booking for this event, and we'll now look for a specific status
-							$attendee_booking_status = str_replace('not_user_attendee_', '', $condition);
-							$show_condition = !in_array($attendee_booking_status, $user_bookings);
-						}
-					}
-				}elseif ( preg_match('/^has_category_([a-zA-Z0-9_\-,]+)$/', $condition, $category_match)){
-					//event is in this category
-					$show_condition = has_term(explode(',', $category_match[1]), EM_TAXONOMY_CATEGORY, $this->post_id);
-				}elseif ( preg_match('/^no_category_([a-zA-Z0-9_\-,]+)$/', $condition, $category_match)){
-					//event is NOT in this category
-					$show_condition = !has_term(explode(',', $category_match[1]), EM_TAXONOMY_CATEGORY, $this->post_id);
-				}elseif ( preg_match('/^has_tag_([a-zA-Z0-9_\-,]+)$/', $condition, $tag_match)){
-					//event has this tag
-					$show_condition = has_term(explode(',', $tag_match[1]), EM_TAXONOMY_TAG, $this->post_id);
-				}elseif ( preg_match('/^no_tag_([a-zA-Z0-9_\-,]+)$/', $condition, $tag_match)){
-					//event doesn't have this tag
-					$show_condition = !has_term(explode(',', $tag_match[1]), EM_TAXONOMY_TAG, $this->post_id);
-				}elseif ( preg_match('/^has_att_([a-zA-Z0-9_\-,]+)$/', $condition, $att_match)){
-					//event has a specific custom field
-					$show_condition = !empty($this->event_attributes[$att_match[1]]) || !empty($this->event_attributes[str_replace('_', ' ', $att_match[1])]);
-				}elseif ( preg_match('/^no_att_([a-zA-Z0-9_\-,]+)$/', $condition, $att_match)){
-					//event has a specific custom field
-					$show_condition = empty($this->event_attributes[$att_match[1]]) && empty($this->event_attributes[str_replace('_', ' ', $att_match[1])]);
-				}
-				//other potential ones - has_attribute_... no_attribute_... has_categories_...
+
+				$show_condition = match($condition) {
+					'has_bookings' => $this->event_rsvp && get_option('dbem_rsvp_enabled'),
+					'no_bookings' => (!$this->event_rsvp && get_option('dbem_rsvp_enabled')),
+					'no_location' => !$this->has_event_location() && !$this->has_location(),
+					'has_location' => ( $this->has_location() && $this->get_location()->location_status ) || $this->has_event_location(),
+					'has_event_location' => $this->has_event_location(),
+					'has_image' => $this->get_image_url() != '',
+					'has_time' => ( $this->event_start_time != $this->event_end_time && !$this->event_all_day ),
+					'all_day' => ($condition == 'all_day'),
+					'has_spaces' => $this->event_rsvp && $this->get_bookings()->get_available_spaces() > 0,
+					'fully_booked' => $this->event_rsvp && $this->get_bookings()->get_available_spaces() <= 0,
+					'is_free' => !$this->event_rsvp || $this->is_free( $condition == 'is_free_now' ),
+					'is_recurrence' => $this->is_recurrence(),
+					'is_private' => $this->event_private == 1,
+					default => false
+				};
+
 				$show_condition = apply_filters('em_event_output_show_condition', $show_condition, $condition, $conditionals[0][$key], $this);
+
+				$replacement = '';
+				
 				if($show_condition){
-					//calculate lengths to delete placeholders
 					$placeholder_length = strlen($condition)+2;
 					$replacement = substr($conditionals[0][$key], $placeholder_length, strlen($conditionals[0][$key])-($placeholder_length *2 +1));
-				}else{
-					$replacement = '';
 				}
+
 				$event_string = str_replace($conditionals[0][$key], apply_filters('em_event_output_condition', $replacement, $condition, $conditionals[0][$key], $this), $event_string);
 			}
 		}
@@ -2097,15 +1900,12 @@ class EM_Event extends EM_Object{
 				case '#_EVENTPOSTID':
 					$replace = $this->post_id;
 					break;
-				case '#_NAME': //deprecated
 				case '#_EVENTNAME':
 					$replace = $this->event_name;
 					break;
-				case '#_NOTES': //deprecated
 				case '#_EVENTNOTES':
 					$replace = $this->post_content;
 					break;
-				case '#_EXCERPT': //deprecated
 				case '#_EVENTEXCERPT':
 				case '#_EVENTEXCERPTCUT':
 					if( !empty($this->post_excerpt) && $result != "#_EVENTEXCERPTCUT" ){
@@ -2122,157 +1922,52 @@ class EM_Event extends EM_Object{
 					}
 					break;
 				case '#_EVENTIMAGEURL':
+					$replace =  esc_url($this->image_url);
+					break;
 				case '#_EVENTIMAGE':
-	        		if($this->get_image_url() != ''){
-						if($result == '#_EVENTIMAGEURL'){
-		        			$replace =  esc_url($this->image_url);
-						}else{
-							if( empty($placeholders[3][$key]) ){
-								$replace = "<img src='".esc_url($this->image_url)."' alt='".esc_attr($this->event_name)."'/>";
-							}else{
-								$image_size = explode(',', $placeholders[3][$key]);
-								$image_url = $this->image_url;
-								if( self::array_is_numeric($image_size) && count($image_size) > 1 ){
-								    //get a thumbnail
-								    if( get_option('dbem_disable_thumbnails') ){
-    								    $image_attr = '';
-    								    $image_args = array();
-    								    if( empty($image_size[1]) && !empty($image_size[0]) ){    
-    								        $image_attr = 'width="'.$image_size[0].'"';
-    								        $image_args['w'] = $image_size[0];
-    								    }elseif( empty($image_size[0]) && !empty($image_size[1]) ){
-    								        $image_attr = 'height="'.$image_size[1].'"';
-    								        $image_args['h'] = $image_size[1];
-    								    }elseif( !empty($image_size[0]) && !empty($image_size[1]) ){
-    								        $image_attr = 'width="'.$image_size[0].'" height="'.$image_size[1].'"';
-    								        $image_args = array('w'=>$image_size[0], 'h'=>$image_size[1]);
-    								    }
-								        $replace = "<img src='".esc_url(em_add_get_params($image_url, $image_args))."' alt='".esc_attr($this->event_name)."' $image_attr />";
-								    }else{
-    								    if( EM_MS_GLOBAL && get_current_blog_id() != $this->blog_id ){
-    								        switch_to_blog($this->blog_id);
-    								        $switch_back = true;
-    								    }
-								        $replace = get_the_post_thumbnail($this->ID, $image_size, array('alt' => esc_attr($this->event_name)) );
-								        if( !empty($switch_back) ){ restore_current_blog(); }
-								    }
-								}else{
-									$replace = "<img src='".esc_url($image_url)."' alt='".esc_attr($this->event_name)."'/>";
-								}
-							}
-						}
-	        		}
+	        		if($this->get_image_url() == '') break;
+
+					$replace = "<img src='".esc_url($this->image_url)."' alt='".esc_attr($this->event_name)."'/>";
+
+					if( empty($placeholders[3][$key])) break;
+
+					$image_size = explode(',', $placeholders[3][$key]);
+					
+					if( !(self::array_is_numeric($image_size) && count($image_size) > 1) ) break;
+
+					if( !get_option('dbem_disable_thumbnails') ) {
+						$replace = get_the_post_thumbnail($this->ID, $image_size, array('alt' => esc_attr($this->event_name)) );
+						break;
+					}
+					
+					$image_attr = '';
+					$image_args = array();
+					if( empty($image_size[1]) && !empty($image_size[0]) ){    
+						$image_attr = 'width="'.$image_size[0].'"';
+						$image_args['w'] = $image_size[0];
+					}elseif( empty($image_size[0]) && !empty($image_size[1]) ){
+						$image_attr = 'height="'.$image_size[1].'"';
+						$image_args['h'] = $image_size[1];
+					}elseif( !empty($image_size[0]) && !empty($image_size[1]) ){
+						$image_attr = 'width="'.$image_size[0].'" height="'.$image_size[1].'"';
+						$image_args = array('w'=>$image_size[0], 'h'=>$image_size[1]);
+					}
+					$replace = "<img src='".esc_url(em_add_get_params($this->image_url, $image_args))."' alt='".esc_attr($this->event_name)."' $image_attr />";
+				
 					break;
 				//Times & Dates
-				case '#_24HSTARTTIME':
-				case '#_24HENDTIME':
+				case '#_STARTTIME':
+				case '#_ENDTIME':
 					$replace = ($result == '#_24HSTARTTIME') ? $this->start()->format('H:i'):$this->end()->format('H:i');
-					break;
-				case '#_24HSTARTTIME_SITE':
-				case '#_24HENDTIME_SITE':
-					$replace = ($result == '#_24HSTARTTIME_SITE') ? $this->start()->copy()->setTimezone(false)->format('H:i'):$this->end()->copy()->setTimezone(false)->format('H:i');
-					break;
-				case '#_24HSTARTTIME_LOCAL':
-				case '#_24HENDTIME_LOCAL':
-				case '#_24HTIMES_LOCAL':
-					$ts = ($result == '#_24HENDTIME_LOCAL') ? $this->end()->getTimestamp():$this->start()->getTimestamp();
-					$date_end = ($result == '#_24HTIMES_LOCAL' && $this->end()->getTimestamp() !== $ts) ? 'data-time-end="'. esc_attr($this->end()->getTimestamp()) .'" data-separator="'. esc_attr(get_option('dbem_times_separator')) . '"' : '';
-					$replace = '<span class="em-time-localjs" data-time-format="24"  data-time="'. esc_attr($ts) .'" '. $date_end .'>JavaScript Disabled</span>';
-					break;
-				case '#_12HSTARTTIME':
-				case '#_12HENDTIME':
-					$replace = ($result == '#_12HSTARTTIME') ? $this->start()->format('g:i A'):$this->end()->format('g:i A');
-					break;
-				case '#_12HSTARTTIME_SITE':
-				case '#_12HENDTIME_SITE':
-					$replace = ($result == '#_12HSTARTTIME_SITE') ? $this->start()->copy()->setTimezone(false)->format('g:i A'):$this->end()->copy()->setTimezone(false)->format('g:i A');
-					break;
-				case '#_12HSTARTTIME_LOCAL':
-				case '#_12HENDTIME_LOCAL':
-				case '#_12HTIMES_LOCAL':
-					$ts = ($result == '#_12HENDTIME_LOCAL') ? $this->end()->getTimestamp():$this->start()->getTimestamp();
-					$date_end = ($result == '#_24HTIMES_LOCAL' && $this->end()->getTimestamp() !== $ts) ? 'data-time-end="'. esc_attr($this->end()->getTimestamp()) .'" data-separator="'. esc_attr(get_option('dbem_times_separator')) . '"' : '';
-					$replace = '<span class="em-time-localjs" data-time-format="12"  data-time="'. esc_attr($ts) .'" '. $date_end .'>JavaScript Disabled</span>';
 					break;
 				case '#_EVENTTIMES':
 					//get format of time to show
 					$replace = $this->output_times();
 					break;
-				case '#_EVENTTIMES_SITE':
-					//get format of time to show but show timezone of site rather than local time
-					$replace = $this->output_times(false, false, false, true);
-					break;
-				case '#_EVENTTIMES_LOCAL':
-				case '#_EVENTDATES_LOCAL':
-					if( !defined('EM_JS_MOMENTJS_PH') || EM_JS_MOMENTJS_PH ){
-						// check for passed parameters, in which case we skip replacements entirely and use pure moment formats
-						$time_format = $separator = null;
-						if( !empty($placeholder_atts[1]) ){
-							$params = explode(',', $placeholder_atts[1]);
-							if( !empty($params[0]) ) $time_format = $params[0];
-							if( !empty($params[1]) ) $separator = $params[1];
-						}
-						if( empty($separator) ) $separator = get_option('dbem_times_separator');
-						// if no moment format provided, we convert the one stored for times in php
-						if( empty($time_format) ){
-							// convert EM format setting to moment formatting, adapted from https://stackoverflow.com/questions/30186611/php-dateformat-to-moment-js-format
-							$replacements = array(
-								/* Day */ 'jS' => 'Do', /*o doesn't exist on its own, so we find/replase jS only*/ 'd' => 'DD', 'D' => 'ddd', 'j' => 'D', 'l' => 'dddd', 'N' => 'E', /*'S' => 'o' - see jS*/ 'w' => 'e', 'z' => 'DDD',
-								/* Week */ 'W' => 'W',
-								/* Month */ 'F' => 'MMMM', 'm' => 'MM', 'M' => 'MMM', 'n' => 'M', 't' => '#t', /* days in the month => moment().daysInMonth(); */
-								/* Year */ 'L' => '#L', /* Leap year? => moment().isLeapYear(); */ 'o' => 'YYYY', 'Y' => 'YYYY', 'y' => 'YY',
-								/* Time */ 'a' => 'a', 'A' => 'A', 'B' => '', /* Swatch internet time (.beats), no equivalent */ 'g' => 'h', 'G' => 'H', 'h' => 'hh', 'H' => 'HH', 'i' => 'mm', 's' => 'ss', 'u' => 'SSSSSS', /* microseconds */ 'v' => 'SSS',    /* milliseconds (from PHP 7.0.0) */
-								/* Timezone */ 'e' => '##T', /* Timezone - deprecated since version 1.6.0 of moment.js, we'll use Intl.DateTimeFromat().resolvedOptions().timeZone instead. */ 'I' => '##t',       /* Daylight Saving Time? => moment().isDST(); */ 'O' => 'ZZ', 'P' => 'Z', 'T' => '#T', /* deprecated since version 1.6.0 of moment.js, using GMT difference with colon to keep it shorter than full timezone */ 'Z' => '###t',    /* time zone offset in seconds => moment().zone() * -60 : the negative is because moment flips that around; */
-								/* Full Date/Time */ 'c' => 'YYYY-MM-DD[T]HH:mm:ssZ', /* ISO 8601 */ 'r' => 'ddd, DD MMM YYYY HH:mm:ss ZZ', /* RFC 2822 */ 'U' => 'X',
-							);
-							// Converts escaped characters.
-							foreach ($replacements as $from => $to) {
-								$replacements['\\' . $from] = '[' . $from . ']';
-							}
-							if( $result === '#_EVENTDATES_LOCAL' ){
-								$time_format = ( get_option('dbem_date_format') ) ? get_option('dbem_date_format'):get_option('date_format');
-								if( empty($separator) ) $separator = get_option('dbem_dates_separator');
-							}else{
-								$time_format = ( get_option('dbem_time_format') ) ? get_option('dbem_time_format'):get_option('time_format');
-								if( empty($separator) ) $separator = get_option('dbem_times_separator');
-							}
-							$time_format = strtr($time_format, $replacements);
-						}
-						wp_enqueue_script('moment', '', array(), false, true); //add to footer if not already
-						// start output
-						ob_start();
-						?>
-						<span class="em-date-momentjs" data-date-format="<?php echo esc_attr($time_format); ?>" data-date-start="<?php echo $this->start()->getTimestamp() ?>" data-date-end="<?php echo $this->end()->getTimestamp() ?>" data-date-separator="<?php echo esc_attr($separator); ?>">JavaScript Disabled</span>
-						<?php
-						$replace = ob_get_clean();
-					}
-					break;
 				case '#_EVENTDATES':
 					//get format of time to show
 					$replace = $this->output_dates();
 					break;
-				case '#_EVENTDATES_SITE':
-					//get format of time to show but use timezone of site rather than event
-					$replace = $this->output_dates(false, false, true);
-					break;
-				case '#_EVENTTIMEZONE':
-					$replace = str_replace('_', ' ', $this->event_timezone);
-					break;
-				case '#_EVENTTIMEZONERAW':
-					$replace = $this->event_timezone;
-					break;
-				case '#_EVENTTIMEZONE_LOCAL':
-					$rand = rand();
-					ob_start();
-					?>
-					<span id="em-start-local-timezone-<?php echo $rand ?>">JavaScript Disabled</span>
-					<script>
-						document.getElementById("em-start-local-timezone-<?php echo $rand ?>").innerHTML = Intl.DateTimeFormat().resolvedOptions().timeZone;
-					</script>
-					<?php
-					$replace = ob_get_clean();
-					break;
-				//Recurring Placeholders
 				case '#_RECURRINGDATERANGE': //Outputs the #_EVENTDATES equivalent of the recurring event template pattern.
 					$replace = $this->get_event_recurrence()->output_dates(); //if not a recurrence, we're running output_dates on $this
 					break;
@@ -2308,31 +2003,6 @@ class EM_Event extends EM_Object{
 						}
 					}	 
 					break;
-				//Bookings
-				case '#_ADDBOOKINGFORM': //deprecated
-				case '#_REMOVEBOOKINGFORM': //deprecated
-				case '#_BOOKINGFORM':
-					if( get_option('dbem_rsvp_enabled')){
-						if( !defined('EM_XSS_BOOKINGFORM_FILTER') && locate_template('plugins/events-manager/placeholders/bookingform.php') ){
-							//xss fix for old overridden booking forms
-							add_filter('em_booking_form_action_url','esc_url');
-							define('EM_XSS_BOOKINGFORM_FILTER',true);
-						}
-						ob_start();
-						$template = em_locate_template('placeholders/bookingform.php', true, array('EM_Event'=>$this));
-						EM_Bookings::enqueue_js();
-						$replace = ob_get_clean();
-					}
-					break;
-				case '#_BOOKINGBUTTON':
-					if( get_option('dbem_rsvp_enabled') && $this->event_rsvp ){
-						ob_start();
-						$template = em_locate_template('placeholders/bookingbutton.php', true, array('EM_Event'=>$this));
-						$replace = ob_get_clean();
-					}
-					break;
-				case '#_EVENTPRICERANGEALL':				    
-				    $show_all_ticket_prices = true; //continues below
 				case '#_EVENTPRICERANGE':
 					//get the range of prices
 					$min = false;
@@ -2460,18 +2130,6 @@ class EM_Event extends EM_Object{
 				case '#_CONTACTPHONE':
 		      		$replace = ( $this->get_contact()->phone != '') ? $this->get_contact()->phone : __('N/A', 'events-manager');
 					break;
-				case '#_CONTACTAVATAR': 
-					$replace = get_avatar( $this->get_contact()->ID, $size = '50' ); 
-					break;
-				case '#_CONTACTPROFILELINK':
-				case '#_CONTACTPROFILEURL':
-					if( function_exists('bp_core_get_user_domain') ){
-						$replace = bp_core_get_user_domain($this->get_contact()->ID);
-						if( $result == '#_CONTACTPROFILELINK' ){
-							$replace = '<a href="'.esc_url($replace).'">'.__('Profile', 'events-manager').'</a>';
-						}
-					}
-					break;
 				case '#_CONTACTMETA':
 					if( !empty($placeholders[3][$key]) ){
 						$replace = get_user_meta($this->event_owner, $placeholders[3][$key], true);
@@ -2493,13 +2151,6 @@ class EM_Event extends EM_Object{
 					$template = em_locate_template('placeholders/attendeespendinglist.php', true, array('EM_Event'=>$this));
 					$replace = ob_get_clean();
 					break;
-				//Categories and Tags
-				case '#_EVENTCATEGORIESIMAGES':
-				    $replace = '';
-					ob_start();
-					$template = em_locate_template('placeholders/eventcategoriesimages.php', true, array('EM_Event'=>$this));
-					$replace = ob_get_clean();
-					break;
 				case '#_EVENTTAGS':
 				    $replace = '';
                     
@@ -2508,7 +2159,6 @@ class EM_Event extends EM_Object{
 					$replace = ob_get_clean();
 				
 					break;
-				case '#_CATEGORIES': //deprecated
 				case '#_EVENTCATEGORIES':
 				    $replace = '';
 				    ob_start();
@@ -2529,44 +2179,6 @@ class EM_Event extends EM_Object{
 					$replace = str_replace(array('http://','https://'), 'webcal://', $replace);
 					if( $result == '#_EVENTWEBCALLINK' ){
 						$replace = '<a href="'.esc_url($replace).'">webcal</a>';
-					}
-					break;
-				case '#_EVENTGCALURL':
-				case '#_EVENTGCALLINK':
-					//get dates in UTC/GMT time
-					if($this->event_all_day && $this->event_start_date == $this->event_end_date){
-						$dateStart	= $this->start()->format('Ymd');
-						$dateEnd	= $this->end()->copy()->add('P1D')->format('Ymd');
-					}else{
-						$dateStart	= $this->start()->format('Ymd\THis');
-						$dateEnd = $this->end()->format('Ymd\THis');
-					}
-					//build url
-					$gcal_url = 'https://www.google.com/calendar/event?action=TEMPLATE&text=event_name&dates=start_date/end_date&details=post_content&location=location_name&trp=false&sprop=event_url&sprop=name:blog_name&ctz=event_timezone';
-					$gcal_url = str_replace('event_name', urlencode($this->event_name), $gcal_url);
-					$gcal_url = str_replace('start_date', urlencode($dateStart), $gcal_url);
-					$gcal_url = str_replace('end_date', urlencode($dateEnd), $gcal_url);
-					$gcal_url = str_replace('location_name', urlencode($this->get_location()->get_full_address(', ', true)), $gcal_url);
-					$gcal_url = str_replace('blog_name', urlencode(get_bloginfo()), $gcal_url);
-					$gcal_url = str_replace('event_url', urlencode($this->get_permalink()), $gcal_url);
-					$gcal_url = str_replace('event_timezone', urlencode($this->event_timezone), $gcal_url);
-					//calculate URL length so we know how much we can work with to make a description.
-					if( !empty($this->post_excerpt) ){
-						$gcal_url_description = $this->post_excerpt;
-					}else{
-						$matches = explode('<!--more', $this->post_content);
-						$gcal_url_description = wp_kses_data($matches[0]);
-					}
-					$gcal_url_length = strlen($gcal_url) - 9;
-					if( strlen($gcal_url_description) + $gcal_url_length > 1350 ){
-						$gcal_url_description = substr($gcal_url_description, 0, 1380 - $gcal_url_length - 3 ).'...';
-					}
-					$gcal_url = str_replace('post_content', urlencode($gcal_url_description), $gcal_url);
-					//get the final url
-					$replace = $gcal_url;
-					if( $result == '#_EVENTGCALLINK' ){
-						$img_url = 'https://www.google.com/calendar/images/ext/gc_button2.gif';
-						$replace = '<a href="'.esc_url($replace).'" target="_blank"><img src="'.esc_url($img_url).'" alt="0" border="0"></a>';
 					}
 					break;
 				//Event location (not physical location)
@@ -3304,7 +2916,7 @@ class EM_Event extends EM_Object{
 				$set_status = $status ? 1:0; //published or pending post
 				$post_status = $set_status ? 'publish':'pending';
 			}
-			if( EM_MS_GLOBAL ) switch_to_blog( $this->blog_id );
+
 			$result = $wpdb->query( $wpdb->prepare("UPDATE ".$wpdb->posts." SET post_status=%s WHERE ID IN (". implode(',', $post_ids) .')', array($post_status)) );
 			restore_current_blog();
 			$result = $result && $wpdb->query( $wpdb->prepare("UPDATE ".EM_EVENTS_TABLE." SET event_status=%s WHERE event_id IN (". implode(',', $event_ids) .')', array($set_status)) );

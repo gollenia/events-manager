@@ -253,7 +253,7 @@ class EM_Calendar extends EM_Object {
 						$event_eventful_date = $event_start->getDate();
 						if( empty($eventful_days_count[$event_eventful_date]) || !$limit || $eventful_days_count[$event_eventful_date] < $limit ){
 							//now we know this is an event that'll be used, convert it to an object
-							$EM_Event = EM_MS_GLOBAL ? em_get_event($event['post_id'], $event['blog_id']) : $EM_Event = em_get_event($event['post_id'], 'post_id');
+							$EM_Event = em_get_event($event['post_id'], 'post_id');
 							if( empty($eventful_days[$event_eventful_date]) || !is_array($eventful_days[$event_eventful_date]) ) $eventful_days[$event_eventful_date] = array();
 							//add event to array with a corresponding timestamp for sorting of times including long and all-day events
 							$event_ts_marker = ($EM_Event->event_all_day) ? 0 : (int) $event_start->getTimestamp();
@@ -270,7 +270,7 @@ class EM_Calendar extends EM_Object {
 					//Only show events on the day that they start
 					$event_eventful_date = $event['event_start_date'];
 					if( empty($eventful_days_count[$event_eventful_date]) || !$limit || $eventful_days_count[$event_eventful_date] < $limit ){
-						$EM_Event = EM_MS_GLOBAL ? em_get_event($event['post_id'], $event['blog_id']) : em_get_event($event['post_id'], 'post_id');
+						$EM_Event = em_get_event($event['post_id'], 'post_id');
 						if( empty($eventful_days[$event_eventful_date]) || !is_array($eventful_days[$event_eventful_date]) ) $eventful_days[$event_eventful_date] = array();
 						//add event to array with a corresponding timestamp for sorting of times including long and all-day events
 						$event_ts_marker = ($EM_Event->event_all_day) ? 0 : (int) $EM_Event->start()->getTimestamp();
@@ -467,15 +467,7 @@ class EM_Calendar extends EM_Object {
 		}
 		$defaults['long_events'] = !empty($array['full']) ? get_option('dbem_full_calendar_long_events') : get_option('dbem_small_calendar_long_events');
 		//specific functionality
-		if(is_multisite()){
-			global $bp;
-			if( !is_main_site() && !array_key_exists('blog',$array) ){
-				//not the main blog, force single blog search
-				$array['blog'] = get_current_blog_id();
-			}elseif( empty($array['blog']) && get_site_option('dbem_ms_global_events') ) {
-				$array['blog'] = false;
-			}
-		}
+		
 		$atts = parent::get_default_search($defaults, $array);
 		$atts['full'] = ($atts['full']==true) ? 1:0;
 		$atts['long_events'] = ($atts['long_events']==true) ? 1:0;

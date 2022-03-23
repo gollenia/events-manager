@@ -336,7 +336,7 @@ class EM_Event_Post_Admin{
 	
 	public static function meta_box_ms_categories(){
 		global $EM_Event;
-		EM_Object::ms_global_switch();
+		
 		$categories = EM_Categories::get(array('hide_empty'=>false));
 		?>
 		<?php if( count($categories) > 0 ): ?>
@@ -351,7 +351,7 @@ class EM_Event_Post_Admin{
 		<?php endif; ?>
 		<!-- END Categories -->
 		<?php
-		EM_Object::ms_global_switch_back();
+		
 	}
 }
 add_action('admin_init',array('EM_Event_Post_Admin','init'));

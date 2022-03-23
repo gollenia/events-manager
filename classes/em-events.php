@@ -78,8 +78,6 @@ class EM_Events extends EM_Object {
 			if( $args['array'] ){
 				//get all fields from table, add events table prefix to avoid ambiguous fields from location
 				$selectors = $events_table . '.*';
-			}elseif( EM_MS_GLOBAL ){
-				$selectors = $events_table.'.post_id, '.$events_table.'.blog_id';
 			}else{
 				$selectors = $events_table.'.post_id';
 			}
@@ -154,6 +152,63 @@ class EM_Events extends EM_Object {
 		}
 		
 		return apply_filters('em_events_get', $events, $args);
+	}
+
+	/**
+	 * For REST Calls, we always need a similar type of data which is collected
+	 *  and returned here.
+	 *
+	 * @param array $args
+	 * @return array events
+	 */
+	public static function get_rest($args = []) {
+		$result = [];
+		if(empty($args)) {
+			global $post;
+			$args = ['post_id' => $post->id];
+		}
+		$data = self::get($args);
+		if (!$data) return $result;
+		foreach($data as $event) {
+			$location = $event->get_location();
+			$category = $event->get_categories()->get_first();
+			$tags = new EM_Tags($event);
+			$speaker = \Contexis\Events\Speaker::get($event->speaker_id);
+
+			array_push($result, [
+				'ID' => $event->ID,
+				'event_id' => $event->event_id,
+				'link' => get_permalink($event->ID),
+				'image' => $event->event_image,
+				'category' => $category ? [ 
+					'id' => $category->id,
+					'color' => $category->color, 
+					'name' => $category->name,
+					'slug' => $category->slug
+				] : false,
+				'location' => [ 
+					'ID' => $location->ID,
+					'location_id' => $location->location_id, 
+					'address' => $location->location_address,
+					'city' => $location->location_town,
+					'name' => $location->location_name,
+					'url' => $location->location_url,
+					'excerpt' => $location->location_excerpt,
+					'country' => $location->location_country,
+					'state' => $location->location_state,
+				],
+				'start' => $event->start()->getTimestamp(),
+				'end' => $event->end()->getTimestamp(),
+				'single_day' => $event->event_start_date == $event->event_end_date,
+				'audience' => $event->event_audience,
+				'excerpt' => $event->post_excerpt,
+				'title' => $event->post_title,
+				'speaker' => $speaker,
+				'tags' => $tags->terms
+
+			]);
+		}
+		return $result;
 	}
 	
 	/**
@@ -270,21 +325,7 @@ class EM_Events extends EM_Object {
 		}elseif( !empty($args['private_only']) ){
 			$conditions['private_only'] = "(`event_private`=1)";
 		}
-		if( EM_MS_GLOBAL && !empty($args['blog']) ){
-		    if( is_numeric($args['blog']) ){
-				if( is_main_site($args['blog']) ){
-					$conditions['blog'] = "(".EM_EVENTS_TABLE.".blog_id={$args['blog']} OR ".EM_EVENTS_TABLE.".blog_id IS NULL)";
-				}else{
-					$conditions['blog'] = "(".EM_EVENTS_TABLE.".blog_id={$args['blog']})";
-				}
-		    }else{
-		        if( !is_array($args['blog']) && preg_match('/^([\-0-9],?)+$/', $args['blog']) ){
-		            $conditions['blog'] = "(".EM_EVENTS_TABLE.".blog_id IN ({$args['blog']}) )";
-			    }elseif( is_array($args['blog']) && self::array_is_numeric($args['blog']) ){
-			        $conditions['blog'] = "(".EM_EVENTS_TABLE.".blog_id IN (".implode(',',$args['blog']).") )";
-			    }
-		    }
-		}
+		
 		//post search
 		if( !empty($args['post_id'])){
 			if( is_array($args['post_id']) ){
@@ -415,12 +456,7 @@ class EM_Events extends EM_Object {
 		}else{
 			$defaults = array_merge($defaults, $array_or_defaults);
 		}
-		//specific functionality
-		if( EM_MS_GLOBAL && (!is_admin() || defined('DOING_AJAX')) ){
-			if( empty($array['blog']) && is_main_site() && get_site_option('dbem_ms_global_events') ){
-			    $array['blog'] = false;
-			}
-		}
+		
 		//admin-area specific modifiers
 		if( is_admin() && !defined('DOING_AJAX') ){
 			//figure out default owning permissions

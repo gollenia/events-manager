@@ -123,11 +123,7 @@ if( !class_exists('EM_Permalinks') ){
 					    }
 					}
 				}
-				//global links hard-coded
-				if( EM_MS_GLOBAL && !get_site_option('dbem_ms_global_events_links', true) ){
-					//MS Mode has slug also for global links
-					$em_rules[$events_slug.get_site_option('dbem_ms_events_slug',EM_EVENT_SLUG).'/(.+)$'] = 'index.php?pagename='.$events_pagename.'&em_redirect=1&event_slug=$matches[1]'; //single event from subsite
-				}
+			
 				//add redirection for backwards compatability
 				$em_rules[$events_slug.EM_EVENT_SLUG.'/(.+)$'] = 'index.php?pagename='.$events_pagename.'&em_redirect=1&event_slug=$matches[1]'; //single event
 				$em_rules[$events_slug.EM_LOCATION_SLUG.'/(.+)$'] = 'index.php?pagename='.$events_pagename.'&em_redirect=1&location_slug=$matches[1]'; //single location page
@@ -188,15 +184,6 @@ if( !class_exists('EM_Permalinks') ){
 			if( $em_query->have_posts() ){
 				$em_rules[trim(EM_POST_TYPE_LOCATION_SLUG,'/').'/?$'] = 'index.php?pagename='.trim(EM_POST_TYPE_LOCATION_SLUG,'/') ;
 				wp_reset_postdata();
-			}
-			//If in MS global mode and locations are linked on same site
-			if( EM_MS_GLOBAL && !get_site_option('dbem_ms_global_locations_links', true) ){
-				$locations_page_id = get_option ( 'dbem_locations_page' );
-				$locations_page = get_post($locations_page_id);
-				if( is_object($locations_page) ){
-					$locations_slug = preg_replace('/\/$/', '', str_replace( trailingslashit(home_url()), '', get_permalink($locations_page_id) ));
-					$em_rules[$locations_slug.'/'.get_site_option('dbem_ms_locations_slug',EM_LOCATION_SLUG).'/(.+)$'] = 'index.php?pagename='.trim($locations_slug,'/').'&location_slug=$matches[1]'; //single event booking form with slug
-				}					
 			}
 			//add ical CPT endpoints
 			$em_rules[EM_POST_TYPE_EVENT_SLUG."/([^/]+)/ical/?$"] = 'index.php?'.EM_POST_TYPE_EVENT.'=$matches[1]&ical=1';

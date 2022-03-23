@@ -17,11 +17,6 @@ class EM_Admin_Notices {
 	public static function init(){
 		add_action('admin_notices', 'EM_Admin_Notices::admin_notices');
 		add_action('wp_ajax_em_dismiss_admin_notice', 'EM_Admin_Notices::dismiss_admin_notice');
-		if( is_multisite() ){
-			add_action('admin_notices', 'EM_Admin_Notices::network_admin_notices');
-			add_action('network_admin_notices', 'EM_Admin_Notices::network_admin_notices');
-			add_action('wp_ajax_em_dismiss_network_admin_notice', 'EM_Admin_Notices::dismiss_admin_notice');
-		}
 	}
 	
 	/**
@@ -34,7 +29,7 @@ class EM_Admin_Notices {
 	 * @return boolean Returns true if added successfully, false if not or if the exact same record exists.
 	 */
 	public static function add( $EM_Admin_Notice, $network = false ){
-		$network = $network && is_multisite(); //make sure we are actually in multisite!
+		
 		if( is_string($EM_Admin_Notice) ){
 		    $EM_Admin_Notice = new EM_Admin_Notice( $EM_Admin_Notice );
 		    $hook_notice = true;
@@ -53,16 +48,18 @@ class EM_Admin_Notices {
 		if( empty($hook_notice) ){ //we only skip this if simply a key is provided initially in $EM_Admin_Notice
             $notices_data[$EM_Admin_Notice->name] = $EM_Admin_Notice->to_array();
         }
-		if( !empty($notices) ){
-			$data['admin_notices'] = $notices;
-			$update_notices =  $network ? update_site_option('dbem_data', $data) : update_option('dbem_data', $data);
-			$update_notices_data = true;
-			if( !empty($notices_data) ){
-				$update_notices_data =  $network ? update_site_option('dbem_admin_notices', $notices_data) : update_option('dbem_admin_notices', $notices_data, false);
-			}
-			return $update_notices && $update_notices_data;
+
+		if(empty($notices)) return false;
+
+		$data['admin_notices'] = $notices;
+		$update_notices =  $network ? update_site_option('dbem_data', $data) : update_option('dbem_data', $data);
+		$update_notices_data = true;
+		if( !empty($notices_data) ){
+			$update_notices_data =  $network ? update_site_option('dbem_admin_notices', $notices_data) : update_option('dbem_admin_notices', $notices_data, false);
 		}
-		return false;
+		return $update_notices && $update_notices_data;
+		
+
 	}
 	
 	/**
@@ -72,19 +69,18 @@ class EM_Admin_Notices {
 	 * @return boolean Returns true if successfully deleted, false if there's an error or if there's nothing to delete. 
 	 */
 	public static function remove( $notice_key, $network = false ){
-		$network = $network && is_multisite(); //make sure we are actually in multisite!
-		$data = $network ? get_site_option('dbem_data') : get_option('dbem_data');
+		$data = get_option('dbem_data');
 		if( !empty($data['admin_notices']) && isset($data['admin_notices'][$notice_key])){
 			unset($data['admin_notices'][$notice_key]);
 			if( empty($data['admin_notices']) ) unset($data['admin_notices']);
-			$result = $update_notices_data = $network ? update_site_option('dbem_data', $data) : update_option('dbem_data', $data);
-			$notices_data = $network ? get_site_option('dbem_admin_notices') : get_option('dbem_admin_notices');
+			$result = $update_notices_data = update_option('dbem_data', $data);
+			$notices_data = get_option('dbem_admin_notices');
 			if( !empty($notices_data[$notice_key]) ){
 				unset($notices_data[$notice_key]);
 				if( empty($notices_data) ){
-					$update_notices_data =  $network ? delete_site_option('dbem_admin_notices') : delete_option('dbem_admin_notices');
+					$update_notices_data =  delete_option('dbem_admin_notices');
 				}else{
-					$update_notices_data =  $network ? update_site_option('dbem_admin_notices', $notices_data) : update_option('dbem_admin_notices', $notices_data, false);
+					$update_notices_data =  update_option('dbem_admin_notices', $notices_data, false);
 				}
 			}
 			return $result && $update_notices_data;
@@ -135,12 +131,7 @@ class EM_Admin_Notices {
 		return new EM_Admin_Notice($notice);
 	}
 	
-	/**
-	 * Outputs admin notices at network level, same as EM_Admin_Notices::admin_notices(true)
-	 * @see EM_Admin_Notices::admin_notices()
-	 */
-	public static function network_admin_notices(){ self::admin_notices(true); }
-	
+
 	/**
 	 * Outputs admin notices and calls the dismissable JS to be output at footer of admin page.
 	 * If $network is true, only MultiSite network-level notices will be shown.
@@ -200,5 +191,6 @@ class EM_Admin_Notices {
 		<?php
 	}
 }
+
 include('em-admin-notice.php');
 EM_Admin_Notices::init();

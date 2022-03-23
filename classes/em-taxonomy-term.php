@@ -6,7 +6,6 @@
 class EM_Taxonomy_Term extends EM_Object {
 	
 	//Class-overridable options
-	public $option_ms_global = false;
 	public $option_name = 'taxonomy';
 	
 	//Taxonomy Fields
@@ -30,7 +29,7 @@ class EM_Taxonomy_Term extends EM_Object {
 	 * @param mixed $taxonomy_data
 	 */
 	public function __construct( $taxonomy_data = false ){
-		if( $this->option_ms_global ) self::ms_global_switch();
+		
 		//Initialize
 		$this->taxonomy = constant($this->taxonomy);
 		$taxonomy = array();
@@ -53,7 +52,7 @@ class EM_Taxonomy_Term extends EM_Object {
 			}
 		}
 		$this->id = $this->term_id; //backward compatability
-		if( $this->option_ms_global ) self::ms_global_switch_back();
+		
 		do_action('em_'.$this->option_name, $this, $taxonomy_data);
 	}
 
@@ -85,9 +84,7 @@ class EM_Taxonomy_Term extends EM_Object {
 	
 	public function get_url(){
 		if( empty($this->link) ){
-			self::ms_global_switch();
 			$this->link = get_term_link($this->slug, $this->taxonomy);
-			self::ms_global_switch_back();
 			if ( is_wp_error($this->link) ) $this->link = '';
 		}
 		return apply_filters('em_'. $this->option_name .'_get_url', $this->link);
@@ -144,11 +141,6 @@ class EM_Taxonomy_Term extends EM_Object {
 			$this->image_id = ($image_id != '') ? $image_id:'';
 		}
 		return $this->image_id;
-	}
-	
-	public function output_single($target = 'html'){
-		$format = get_option ( 'dbem_'. $this->option_name .'_page_format' );
-		return apply_filters('em_'. $this->option_name .'_output_single', $this->output($format, $target), $this, $target);	
 	}
 	
 	public function output($format, $target="html") {
@@ -208,9 +200,7 @@ class EM_Taxonomy_Term extends EM_Object {
 										$replace = "<img src='".esc_url(em_add_get_params($image_url, $image_args))."' alt='".esc_attr($this->name)."' $image_attr />";
 									}else{
 										//since we previously didn't store image ids along with the url to the image (since taxonomies don't allow normal featured images), sometimes we won't be able to do this, which is why we check there's a valid image id first
-										if( $this->option_ms_global ) self::ms_global_switch();
 										$replace = wp_get_attachment_image($this->get_image_id(), $image_size);
-										if( $this->option_ms_global ) self::ms_global_switch_back();
 									}
 								}
 							}else{
@@ -303,9 +293,7 @@ class EM_Taxonomy_Term extends EM_Object {
 							$replace = "<img src='".esc_url(em_add_get_params($image_url, $image_args))."' alt='".esc_attr($this->name)."' $image_attr />";
 						}else{
 							//since we previously didn't store image ids along with the url to the image (since taxonomies don't allow normal featured images), sometimes we won't be able to do this, which is why we check there's a valid image id first
-							if( $this->option_ms_global ) self::ms_global_switch();
 							$replace = wp_get_attachment_image($this->get_image_id(), $image_size);
-							if( $this->option_ms_global ) self::ms_global_switch_back();
 						}
 					}
 				}else{
@@ -317,19 +305,7 @@ class EM_Taxonomy_Term extends EM_Object {
 	}
 	
 	public function can_manage( $capability_owner = 'edit_event_taxonomy', $capability_admin = false, $user_to_check = false ){
-		global $em_capabilities_array;
-		//Figure out if this is multisite and require an extra bit of validation
-		$multisite_check = true;
 		$can_manage = current_user_can($capability_owner);
-		//if multisite and supoer admin, just return true
-		if( is_multisite() && em_wp_is_super_admin() ){ return true; }
-		if( EM_MS_GLOBAL && !is_main_site() ){
-			//User can't admin this bit, as they're on a sub-blog
-			$can_manage = false;
-			if(array_key_exists($capability_owner, $em_capabilities_array) ){
-				$this->add_error( $em_capabilities_array[$capability_owner]);
-			}
-		}
 		return $can_manage;
 	}
 }

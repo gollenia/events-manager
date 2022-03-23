@@ -175,8 +175,5 @@ class EM_Taxonomy_Admin {
 		//delete taxonomy image and color
 		$wpdb->query('DELETE FROM '.EM_META_TABLE." WHERE object_id='$term_id' AND (meta_key='". self::$option_name ."-image' OR meta_key='". self::$option_name ."-image-id' OR meta_key='". self::$option_name ."-bgcolor')");
 		//delete all events taxonomy relations for MultiSite Global Mode
-		if( EM_MS_GLOBAL ){
-			$wpdb->query('DELETE FROM '.EM_META_TABLE." WHERE meta_value='{$term_id}' AND meta_key='event-". self::$option_name ."'");
-		}
 	}
 }

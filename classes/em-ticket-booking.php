@@ -152,14 +152,8 @@ class EM_Ticket_Booking extends EM_Object{
 		if( $this->ticket_booking_id > 0 ){
 		    $EM_Booking = $this->get_booking();
 		    if( !empty($EM_Booking->legacy_tax_rate) ){
-		        //check multisite nuances
-		        if( EM_MS_GLOBAL && $EM_Booking->get_event()->blog_id != get_current_blog_id() ){
-		            //MultiSite AND Global tables enabled - get settings for blog that published the event  
-		            $tax_auto_add = get_blog_option($EM_Booking->get_event()->blog_id, 'dbem_legacy_bookings_tax_auto_add');
-		        }else{
-		            //get booking from current site, whether or not we're in MultiSite
-		            $tax_auto_add = get_option('dbem_legacy_bookings_tax_auto_add');
-		        }
+		        $tax_auto_add = get_option('dbem_legacy_bookings_tax_auto_add');
+		        
 		        if( $tax_auto_add && $EM_Booking->get_tax_rate() > 0 ){
 				    //this booking never had a tax rate fixed to it (i.e. prior to v5.4), and according to legacy settings, taxes were applied to this price
 				    //we now calculate price of ticket bookings without taxes, so remove the tax

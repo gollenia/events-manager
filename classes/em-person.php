@@ -33,14 +33,7 @@ class EM_Person extends WP_User{
 	function get_bookings($ids_only = false, $status= false){
 		global $wpdb;
 		$status_condition = $blog_condition = '';
-		if( is_multisite() ){
-			if( !is_main_site() ){
-				//not the main blog, force single blog search
-				$blog_condition = "AND e.blog_id=".get_current_blog_id();
-			}elseif(is_main_site() && !get_option('dbem_ms_global_events')){
-				$blog_condition = "AND (e.blog_id=".get_current_blog_id().' OR e.blog_id IS NULL)';
-			}
-		}
+		
 		if( is_numeric($status) ){
 			$status_condition = " AND booking_status=$status";
 		}elseif( EM_Object::array_is_numeric($status) ){

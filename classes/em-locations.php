@@ -85,8 +85,6 @@ class EM_Locations extends EM_Object {
 			if( $args['array'] ){
 				//get all fields from table, add events table prefix to avoid ambiguous fields from location
 				$selectors = $locations_table . '.*';
-			}elseif( EM_MS_GLOBAL ){
-				$selectors = $locations_table.'.post_id, '.$locations_table.'.blog_id';
 			}else{
 				$selectors = $locations_table.'.post_id';
 			}
@@ -188,16 +186,10 @@ $limit $offset
 			return apply_filters('em_locations_get_array', $results, $args);
 		}
 		
-		if( EM_MS_GLOBAL ){
-			foreach ( $results as $location ){
-			    if( empty($location['blog_id']) ) $location['blog_id'] = get_current_site()->blog_id;
-				$locations[] = em_get_location($location['post_id'], $location['blog_id']);
-			}
-		}else{
-			foreach ( $results as $location ){
-				$locations[] = em_get_location($location['post_id'], 'post_id');
-			}
+		foreach ( $results as $location ){
+			$locations[] = em_get_location($location['post_id'], 'post_id');
 		}
+		
 		return apply_filters('em_locations_get', $locations, $args);
 	}	
 	
@@ -373,22 +365,7 @@ $limit $offset
 		}elseif( self::array_is_numeric($args['owner']) ){
 			$conditions['owner'] = 'location_owner IN ('.implode(',',$args['owner']).')';
 		}
-		//blog id in events table
-		if( EM_MS_GLOBAL && !empty($args['blog']) ){
-		    if( is_numeric($args['blog']) ){
-				if( is_main_site($args['blog']) ){
-					$conditions['blog'] = "(".$locations_table.".blog_id={$args['blog']} OR ".$locations_table.".blog_id IS NULL)";
-				}else{
-					$conditions['blog'] = "(".$locations_table.".blog_id={$args['blog']})";
-				}
-		    }else{
-		        if( !is_array($args['blog']) && preg_match('/^([\-0-9],?)+$/', $args['blog']) ){
-		            $conditions['blog'] = "(".$locations_table.".blog_id IN ({$args['blog']}) )";
-			    }elseif( is_array($args['blog']) && self::array_is_numeric($args['blog']) ){
-			        $conditions['blog'] = "(".$locations_table.".blog_id IN (".implode(',',$args['blog']).") )";
-			    }
-		    }
-		}
+
 		//private locations
 		if( empty($args['private']) ){
 			$conditions['private'] = "(`location_private`=0)";
@@ -482,16 +459,7 @@ $limit $offset
 		}else{
 			$defaults = array_merge($defaults, $array_or_defaults);
 		}
-		//specific functionality
-		if( EM_MS_GLOBAL ){
-			if( get_site_option('dbem_ms_mainblog_locations') ){
-			    //when searching in MS Global mode with all locations being stored on the main blog, blog_id becomes redundant as locations are stored in one blog table set
-			    $array['blog'] = false;
-			}elseif( (!is_admin() || defined('DOING_AJAX')) && empty($array['blog']) && is_main_site() && get_site_option('dbem_ms_global_locations') ){
-				//if enabled, by default we display all blog locations on main site
-			    $array['blog'] = false;
-			}
-		}
+
 		$array['eventful'] = ( !empty($array['eventful']) && $array['eventful'] == true );
 		$array['eventless'] = ( !empty($array['eventless']) && $array['eventless'] == true );
 		if( is_admin() && !defined('DOING_AJAX') ){

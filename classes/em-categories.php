@@ -2,7 +2,6 @@
 class EM_Categories extends EM_Taxonomy_Terms {
 	
 	//Overridable functions
-	protected $is_ms_global = true;
 	protected $taxonomy = 'event-categories';
 	protected $meta_key = 'event-category';
 	protected $terms_name = 'categories';

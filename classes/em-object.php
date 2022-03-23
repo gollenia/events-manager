@@ -31,7 +31,7 @@ class EM_Object {
 	 * @return array
 	 */
 	public static function get_default_search($defaults=array(), $array = array()){
-		global $wpdb;
+		
 		//TODO accept all objects as search options as well as ids (e.g. location vs. location_id, person vs. person_id)
 		//Create minimal defaults array, merge it with supplied defaults array
 		$super_defaults = array(
@@ -503,7 +503,7 @@ class EM_Object {
 		}
 		foreach($taxonomies as $tax_name => $tax_data){
 			if( !empty($args[$tax_name]) && is_array($args[$tax_name]) ){
-			    if( !empty($tax_data['ms']) ) self::ms_global_switch(); //if in ms global mode, switch here rather than on each EM_Category instance
+			    
 			    $tax_conds = array();
 			    //if a single array is supplied then we treat it as an OR type of query, if an array of arrays is supplied we condsider it to be many ANDs of ORs
 			    //so here we wrap a single array into another array and there is only one 'AND' condition (therefore no AND within this tax search) 
@@ -527,10 +527,8 @@ class EM_Object {
 						if( !empty($term->term_taxonomy_id) ){
 							if( !preg_match('/^-/', $tax_id) ){
 								$term_tax_ids[] = $term->term_taxonomy_id;
-								if( EM_MS_GLOBAL && !empty($tax_data['ms']) ) $term_ids[] = $term->term_id;
 							}else{
 								$term_tax_not_ids[] = $term->term_taxonomy_id;
-								if( EM_MS_GLOBAL && !empty($tax_data['ms']) ) $term_not_ids[] = $term->term_id;
 							}
 						}elseif( preg_match('/^-/', $tax_id) ){
 						    //if they supply a negative term for a nonexistent custom taxonomy e.g. -1, we should still  
@@ -548,23 +546,15 @@ class EM_Object {
 						    $ms_context = EM_LOCATIONS_TABLE.".event_id";
 					    }
 					    //build conditions
-						if( EM_MS_GLOBAL && !empty($tax_data['ms']) ){ //by default only applies to categories
-						    //we're directly looking for tax ids from within the em_meta table
-							if( count($term_ids) > 0 ){
-								$tax_conds[] = "$ms_context IN ( SELECT object_id FROM ".EM_META_TABLE." WHERE meta_value IN (".implode(',',$term_ids).") AND meta_key='{$tax_data['ms']}' )";
-							}
-							if( count($term_not_ids) > 0 ){
-								$tax_conds[] = "$ms_context NOT IN ( SELECT object_id FROM ".EM_META_TABLE." WHERE meta_value IN (".implode(',',$term_not_ids).") AND meta_key='{$tax_data['ms']}' )";			
-							} 
-						}else{
-					    	//normal taxonomy filtering
-							if( count($term_tax_ids) > 0 ){
-								$tax_conds[] = "$post_context IN ( SELECT object_id FROM ".$wpdb->term_relationships." WHERE term_taxonomy_id IN (".implode(',',$term_tax_ids).") )";
-							}
-							if( count($term_tax_not_ids) > 0 ){
-								$tax_conds[] = "$post_context NOT IN ( SELECT object_id FROM ".$wpdb->term_relationships." WHERE term_taxonomy_id IN (".implode(',',$term_tax_not_ids).") )";			
-							}
+						
+						//normal taxonomy filtering
+						if( count($term_tax_ids) > 0 ){
+							$tax_conds[] = "$post_context IN ( SELECT object_id FROM ".$wpdb->term_relationships." WHERE term_taxonomy_id IN (".implode(',',$term_tax_ids).") )";
 						}
+						if( count($term_tax_not_ids) > 0 ){
+							$tax_conds[] = "$post_context NOT IN ( SELECT object_id FROM ".$wpdb->term_relationships." WHERE term_taxonomy_id IN (".implode(',',$term_tax_not_ids).") )";			
+						}
+						
 					}elseif( empty($ignore_cancel_cond) ){
 					    $tax_conds[] = '2=1'; //force a false, supplied taxonomies don't exist
 					    break; //no point continuing this loop
@@ -573,7 +563,6 @@ class EM_Object {
 				if( count($tax_conds) > 0 ){
 					$conditions[$tax_name] = '('. implode(' AND ', $tax_conds) .')';
 				}
-			    if( !empty($tax_data['ms']) ) self::ms_global_switch_back(); //if in ms global mode, switch back from previous switch
 			}
 		}
 		//END TAXONOMY FILTERS
@@ -843,13 +832,8 @@ class EM_Object {
 			//get the term id directly
 			$term = new EM_Category($category);
 			if( !empty($term->term_id) ){
-				if( EM_MS_GLOBAL ){
-					$event_ids = $wpdb->get_col($wpdb->prepare("SELECT object_id FROM ".EM_META_TABLE." WHERE meta_value=%d AND meta_key='event-category'", $term->term_id));
-					$query[] = array( 'key' => '_event_id', 'value' => $event_ids, 'compare' => 'IN' );
-				}else{
-					if( !is_array($wp_query->query_vars['tax_query']) ) $wp_query->query_vars['tax_query'] = array();
-					$wp_query->query_vars['tax_query'] = array('taxonomy' => EM_TAXONOMY_CATEGORY, 'field'=>'id', 'terms'=>$term->term_id);
-				}
+				if( !is_array($wp_query->query_vars['tax_query']) ) $wp_query->query_vars['tax_query'] = array();
+				$wp_query->query_vars['tax_query'] = array('taxonomy' => EM_TAXONOMY_CATEGORY, 'field'=>'id', 'terms'=>$term->term_id);
 			} 
 		}elseif( self::array_is_numeric($category) ){
 			$term_ids = array();
@@ -860,13 +844,8 @@ class EM_Object {
 				}
 			}
 			if( count($term_ids) > 0 ){
-				if( EM_MS_GLOBAL ){
-					$event_ids = $wpdb->get_col("SELECT object_id FROM ".EM_META_TABLE." WHERE meta_value IN (".implode(',',$term_ids).") AND meta_name='event-category'");
-					$query[] = array( 'key' => '_event_id', 'value' => $event_ids, 'compare' => 'IN' );
-				}else{
-					if( !is_array($wp_query->query_vars['tax_query']) ) $wp_query->query_vars['tax_query'] = array();
-					$wp_query->query_vars['tax_query'] = array('taxonomy' => EM_TAXONOMY_CATEGORY, 'field'=>'id', 'terms'=>$term_ids);
-				}
+				if( !is_array($wp_query->query_vars['tax_query']) ) $wp_query->query_vars['tax_query'] = array();
+				$wp_query->query_vars['tax_query'] = array('taxonomy' => EM_TAXONOMY_CATEGORY, 'field'=>'id', 'terms'=>$term_ids);
 			}
 		}		
 		//Add conditions for tags
@@ -1190,8 +1169,7 @@ class EM_Object {
 	 */
 	function can_manage( $owner_capability = false, $admin_capability = false, $user_to_check = false ){
 		global $em_capabilities_array;
-		//if multisite and super admin, just return true
-		if( is_multisite() && em_wp_is_super_admin() ){ return true; }
+		
 		//set user to the desired user we're verifying, otherwise default to current user
 	    if( $user_to_check ){
 	    	$user = new WP_User($user_to_check);	
@@ -1221,21 +1199,6 @@ class EM_Object {
 			$this->add_error($error_msg);
 		}
 		return $can_manage;
-	}
-
-	
-	public static function ms_global_switch(){
-		if( EM_MS_GLOBAL ){
-			//If in multisite global, then get the main blog
-			global $current_site;
-			switch_to_blog($current_site->blog_id);
-		}
-	}
-	
-	public static function ms_global_switch_back(){
-		if( EM_MS_GLOBAL ){
-			restore_current_blog();
-		}
 	}
 	
 	/**

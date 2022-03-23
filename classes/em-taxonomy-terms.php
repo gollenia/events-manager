@@ -1,7 +1,5 @@
 <?php
 class EM_Taxonomy_Terms extends EM_Object implements Iterator, Countable{
-
-	protected $is_ms_global = false;
 	protected $meta_key = 'event-taxonomy';
 	protected $taxonomy = 'event-taxonomy';
 	protected $terms_name = 'taxonomies';
@@ -41,30 +39,24 @@ class EM_Taxonomy_Terms extends EM_Object implements Iterator, Countable{
 	 */
 	public function __construct( $data = false ){
 		global $wpdb;
-		if( $this->is_ms_global ) self::ms_global_switch();
 		if( is_object($data) && get_class($data) == "EM_Event" && !empty($data->post_id) ){ //Creates a blank taxonomies object if needed
 			$this->event_id = $data->event_id;
 			$this->post_id = $data->post_id;
-			if( EM_MS_GLOBAL && $this->is_ms_global && !is_main_site($data->blog_id) ){
-				$term_ids = $wpdb->get_col('SELECT meta_value FROM '.EM_META_TABLE." WHERE object_id='{$this->event_id}' AND meta_key='{$this->meta_key}'");
-				foreach($term_ids as $term_id){
-					$this->terms[$term_id] = new $this->term_class($term_id);
-				}
+			
+			if( !$data->blog_id && !is_main_site() ){
+				if( !$this->blog_id ) $this->blog_id = get_current_site()->blog_id;
+				switch_to_blog($this->blog_id);
+				$results = get_the_terms( $data->post_id, $this->taxonomy );
+				restore_current_blog();
 			}else{
-				if( EM_MS_GLOBAL && (get_current_blog_id() !== $data->blog_id || (!$data->blog_id && !is_main_site()) )  ){
-					if( !$this->blog_id ) $this->blog_id = get_current_site()->blog_id;
-			        switch_to_blog($this->blog_id);
-					$results = get_the_terms( $data->post_id, $this->taxonomy );
-					restore_current_blog();
-			    }else{
-					$results = get_the_terms( $data->post_id, $this->taxonomy );
-			    }
-				if( is_array($results) ){
-					foreach($results as $result){
-						$this->terms[$result->term_id] = new $this->term_class($result);
-					}
+				$results = get_the_terms( $data->post_id, $this->taxonomy );
+			}
+			if( is_array($results) ){
+				foreach($results as $result){
+					$this->terms[$result->term_id] = new $this->term_class($result);
 				}
 			}
+			
 		}elseif( is_array($data) && self::array_is_numeric($data) ){
 			foreach($data as $term_id){
 				$this->terms[$term_id] =  new $this->term_class($term_id);
@@ -76,19 +68,16 @@ class EM_Taxonomy_Terms extends EM_Object implements Iterator, Countable{
 				}
 			}
 		}
-		if( $this->is_ms_global ) self::ms_global_switch_back();
 		do_action('em_'.$this->terms_name, $this);
 	}
 	
 	public function get_post(){
-		self::ms_global_switch();
 		$this->terms = array();
 		if(!empty($_POST['event_'.$this->terms_name]) && self::array_is_numeric($_POST['event_'.$this->terms_name])){
 			foreach( $_POST['event_'.$this->terms_name] as $term ){
 				$this->terms[$term] = new $this->term_class($term);
 			}
 		}
-		self::ms_global_switch_back();
 		do_action('em_'. $this->terms_name .'_get_post', $this);
 	}
 	
@@ -96,7 +85,7 @@ class EM_Taxonomy_Terms extends EM_Object implements Iterator, Countable{
 		if( empty($this->terms) ){
 			$EM_Taxonomy_Term = new $this->term_class();
 			$opt = 'dbem_default_'.$EM_Taxonomy_Term->option_name;
-			$default_category = EM_MS_GLOBAL && $this->is_ms_global ? get_blog_option( get_current_site()->blog_id, $opt ) : get_option($opt);
+			$default_category = get_option($opt);
 			if( $default_category > 0 ){
 				$EM_Taxonomy_Term = new $this->term_class($default_category);
 				if( !empty($EM_Taxonomy_Term->slug) ){
@@ -104,18 +93,9 @@ class EM_Taxonomy_Terms extends EM_Object implements Iterator, Countable{
 				}
 			}
 		}
-		if( is_multisite() && $this->is_ms_global ){
-			//In MS Global mode, we also save taxonomy meta information for global lookups
-			if( EM_MS_GLOBAL && !empty($this->event_id) ){
-				//delete terms from event
-				$this->save_index();
-			}
-			if( !EM_MS_GLOBAL || is_main_site() ){
-				wp_set_object_terms($this->post_id, $this->get_slugs(), $this->taxonomy);
-			}
-		}else{
-			wp_set_object_terms($this->post_id, $this->get_slugs(), $this->taxonomy);
-		}
+		
+		wp_set_object_terms($this->post_id, $this->get_slugs(), $this->taxonomy);
+		
 		do_action('em_'. $this->terms_name .'_save', $this);
 	}
 	
@@ -179,7 +159,6 @@ class EM_Taxonomy_Terms extends EM_Object implements Iterator, Countable{
 		
 	public static function get( $args = array() ) {		
 		//Quick version, we can accept an array of IDs, which is easy to retrieve
-		self::ms_global_switch();
 		if( self::array_is_numeric($args) ){ //Array of numbers, assume they are taxonomy IDs to retreive
 			$term_args = self::get_default_search( array('include' => $args ));
 			$results = get_terms( $term_args );
@@ -199,7 +178,6 @@ class EM_Taxonomy_Terms extends EM_Object implements Iterator, Countable{
 		foreach ( $results as $term ){
 			$terms[$term->term_id] = new self::$instance->term_class($term);
 		}
-		self::ms_global_switch_back();	
 		return apply_filters('em_'. self::$instance->terms_name .'_get', $terms, $args);
 	}
 

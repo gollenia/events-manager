@@ -256,7 +256,6 @@
 	        $var = ($key !== NULL && $key !== FALSE);
 	        return $var;
 	    }
-     
     }
     function em_notices_init(){
 	    global $EM_Notices;

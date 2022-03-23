@@ -57,35 +57,32 @@ class EM_Admin_Notice {
 	public $network = false;
 	
 	public function __construct( $key, $type = false, $message = false, $where = false ){
-		//process the supplied data
-		// This is ridiculous! 
-		// @todo remove ifelses
-		if( empty($message) ){
-			if( empty($type) && is_array($key) ){
-				$notice = $key;
-			}elseif( is_array($type) ){
-				$this->name = $key;
-				$notice = $type;
-			}elseif( is_array($key) ){
-				$notice = $key;
-			}else{
-				//we may even have simply a key/name for this notice, for hooking later on
-				if( is_string($key) ) $this->name = $key;
-				$notice = array();
-			}
-		}else{
-			//here we expect a string for eveything
-			$notice = array('name'=> (string) $key, 'what' => (string) $type, 'message' => (string) $message) ;
-		}
-		//we should have an array to process at this point
-		foreach( $notice as $key => $value ){
+
+		foreach( $this->generate_notice($key, $type, $message) as $key => $value ){
 			$this->$key = $value;
 		}
 		//add where if defined
 		if( !empty($where) ) $this->where = $where;
 		//call a hook
 		do_action('em_admin_notice_'.$this->name, $this);
-		if( !is_multisite() && $this->where == 'network_admin' ) $this->where = 'settings';
+		if( $this->where == 'network_admin' ) $this->where = 'settings';
+	}
+
+	
+
+	public function generate_notice($key, $type, $message) {
+		if(!empty($message)) return array('name'=> (string) $key, 'what' => (string) $type, 'message' => (string) $message) ;
+		if( empty($type) && is_array($key)) return $key;
+		if(is_array($type)) {
+			$this->name = $key;
+			return $type;
+		}
+		if( is_array($key)) return $key;
+		if( is_string($key) ) {
+			$this->name = $key;
+			return array();
+		}
+
 	}
 	
 	public function __set( $prop, $val ){
@@ -123,8 +120,12 @@ class EM_Admin_Notice {
 	public function can_show(){
 		//check that we have at least a notice to show
 		if( empty($this->name) ) return false;
+
 		//can we display due to time?
 		$return = ( empty($this->when) || $this->when <= time() );
+
+		if(!$return) return false;
+
 		//who to display it to
 		if( $return && !empty($this->who) && $this->who != 'all' ){
 			$return = false; //unless this test passes, don't show it
@@ -137,21 +138,21 @@ class EM_Admin_Notice {
 			elseif( !$return && current_user_can($this->who) ) $return = true;
 		}
 		//can we display due to location?
-		if( $return ){
-			$return = false; //unless this test passes, don't show it
-			if( empty($this->where) || $this->where == 'all' ){
-				$return = true;
-			}elseif( !empty($_REQUEST['post_type']) && in_array($_REQUEST['post_type'], array(EM_POST_TYPE_EVENT, EM_POST_TYPE_LOCATION, 'event-recurring')) ){
-				if( $this->where == 'plugin' ) $return = true;
-				elseif( empty($_REQUEST['page']) && in_array($this->where, array(EM_POST_TYPE_EVENT, EM_POST_TYPE_LOCATION, 'event-recurring')) ) $return = true;
-				elseif( $this->where == 'settings' && !empty($_REQUEST['page']) && $_REQUEST['page'] == 'events-manager-options' ) $return = true;
-				elseif( !empty($_REQUEST['page']) && ($this->where == $_REQUEST['page'] || (is_array($this->where) && in_array($_REQUEST['page'], $this->where))) ) $return = true;
-			}elseif( is_network_admin() && !empty($_REQUEST['page']) && preg_match('/^events\-manager\-/', $_REQUEST['page']) ){
-				$return = $this->where == 'plugin' || $this->where == 'settings' || $this->where == 'network_admin';
-			}elseif( !empty($_REQUEST['page']) && ($this->where == $_REQUEST['page'] || (is_array($this->where) && in_array($_REQUEST['page'], $this->where))) ){
-				$return = true;
-			}
+		
+		$return = false; //unless this test passes, don't show it
+		if( empty($this->where) || $this->where == 'all' ){
+			$return = true;
+		}elseif( !empty($_REQUEST['post_type']) && in_array($_REQUEST['post_type'], array(EM_POST_TYPE_EVENT, EM_POST_TYPE_LOCATION, 'event-recurring')) ){
+			if( $this->where == 'plugin' ) $return = true;
+			elseif( empty($_REQUEST['page']) && in_array($this->where, array(EM_POST_TYPE_EVENT, EM_POST_TYPE_LOCATION, 'event-recurring')) ) $return = true;
+			elseif( $this->where == 'settings' && !empty($_REQUEST['page']) && $_REQUEST['page'] == 'events-manager-options' ) $return = true;
+			elseif( !empty($_REQUEST['page']) && ($this->where == $_REQUEST['page'] || (is_array($this->where) && in_array($_REQUEST['page'], $this->where))) ) $return = true;
+		}elseif( is_network_admin() && !empty($_REQUEST['page']) && preg_match('/^events\-manager\-/', $_REQUEST['page']) ){
+			$return = $this->where == 'plugin' || $this->where == 'settings' || $this->where == 'network_admin';
+		}elseif( !empty($_REQUEST['page']) && ($this->where == $_REQUEST['page'] || (is_array($this->where) && in_array($_REQUEST['page'], $this->where))) ){
+			$return = true;
 		}
+		
 		//does this even have a message we can display?
 		if( $return && empty($this->message)){
 			$this->message = apply_filters('em_admin_notice_'.$this->name .'_message', false, $this);

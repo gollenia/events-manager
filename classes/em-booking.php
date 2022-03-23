@@ -586,15 +586,9 @@ class EM_Booking extends EM_Object{
 	    if( $this->booking_tax_rate === null ){
 	        //booking not saved or tax never defined
 	        if( !empty($this->booking_id) && get_option('dbem_legacy_bookings_tax', 'x') !== 'x'){ //even if 0 if defined as tax rate we still use it, delete the option entirely to stop
-	            //no tax applied yet to an existing booking, or tax possibly applied (but handled separately in EM_Tickets_Bookings but in legacy < v5.4
-	            //sort out MultiSite nuances
-	            if( EM_MS_GLOBAL && $this->get_event()->blog_id != get_current_blog_id() ){
-	            	//MultiSite AND Global tables enabled AND this event belongs to another blog - get settings for blog that published the event
-					$this->booking_tax_rate = get_blog_option($this->get_event()->blog_id, 'dbem_legacy_bookings_tax');
-	            }else{
-	            	//get booking from current site, whether or not we're in MultiSite
-	            	$this->booking_tax_rate = get_option('dbem_legacy_bookings_tax');
-	            }
+	            //get booking from current site, whether or not we're in MultiSite
+	            $this->booking_tax_rate = get_option('dbem_legacy_bookings_tax');
+	            
 	            $this->legacy_tax_rate = true;
 	        }else{
 	            //first time we're applying tax rate

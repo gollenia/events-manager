@@ -2,7 +2,6 @@
 class EM_Category extends EM_Taxonomy_Term {
 	
 	//static options for EM_Category, but until PHP 5.3 is the WP minimum requirement we'll make them regular properties due to lack of late static binding
-	public $option_ms_global = true;
 	public $option_name = 'category'; //the singular name of this taxonomy which is used in option names consistent across EM taxonomies
 	public $taxonomy = 'EM_TAXONOMY_CATEGORY';
 		

@@ -213,6 +213,7 @@ class EM_Bookings extends EM_Object implements Iterator{
 	 */
 	function get_available_tickets( $include_member_tickets = false ){
 		$tickets = array();
+		
 		foreach ($this->get_tickets() as $EM_Ticket){
 			/* @var $EM_Ticket EM_Ticket */
 			if( $EM_Ticket->is_available($include_member_tickets) ){
@@ -689,13 +690,6 @@ class EM_Bookings extends EM_Object implements Iterator{
 		if( is_numeric($args['person']) ){
 			$conditions['person'] = EM_BOOKINGS_TABLE.'.person_id='.$args['person'];
 		}
-		if( EM_MS_GLOBAL && !empty($args['blog']) && is_numeric($args['blog']) ){
-			if( is_main_site($args['blog']) ){
-				$conditions['blog'] = "(".EM_EVENTS_TABLE.".blog_id={$args['blog']} OR ".EM_EVENTS_TABLE.".blog_id IS NULL)";
-			}else{
-				$conditions['blog'] = "(".EM_EVENTS_TABLE.".blog_id={$args['blog']})";
-			}
-		}
 		if( empty($conditions['event']) && $args['event'] === false ){
 		    $conditions['event'] = EM_BOOKINGS_TABLE.'.event_id != 0';
 		}
@@ -761,11 +755,7 @@ class EM_Bookings extends EM_Object implements Iterator{
 		}else{
 			$defaults['owner'] = false;
 		}
-		if( EM_MS_GLOBAL && !is_admin() ){
-			if( empty($array['blog']) && is_main_site() && get_site_option('dbem_ms_global_events') ){
-			    $array['blog'] = false;
-			}
-		}
+		
 		return apply_filters('em_bookings_get_default_search', parent::get_default_search($defaults,$array), $array, $defaults);
 	}
 
