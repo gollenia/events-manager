@@ -372,14 +372,14 @@ function em_admin_options_page() {
 			<?php
 			if( !empty($tabs_enabled) ){
 			    if( empty($_REQUEST['em_tab']) || $_REQUEST['em_tab'] == 'general' ){ 
-			        include('settings/tabs/general.php');
+			        include('settings/general.php');
 			    }else{
-        			if( $_REQUEST['em_tab'] == 'pages' ) include('settings/tabs/pages.php');
-        			if( $_REQUEST['em_tab'] == 'formats' ) include('settings/tabs/formats.php');
+        			if( $_REQUEST['em_tab'] == 'pages' ) include('settings/pages.php');
+        			if( $_REQUEST['em_tab'] == 'formats' ) include('settings/formats.php');
         			if( get_option('dbem_rsvp_enabled') && $_REQUEST['em_tab'] == 'bookings'  ){
-        			    include('settings/tabs/bookings.php');
+        			    include('settings/bookings.php');
         			}
-        			if( $_REQUEST['em_tab'] == 'emails' ) include('settings/tabs/emails.php');
+        			if( $_REQUEST['em_tab'] == 'emails' ) include('settings/emails.php');
 					if( array_key_exists($_REQUEST['em_tab'], $custom_tabs) ){
 						?>
 						<div class="em-menu-<?php echo esc_attr($_REQUEST['em_tab']) ?> em-menu-group">
@@ -389,13 +389,13 @@ function em_admin_options_page() {
 					}
 			    }
 			}else{
-    			include('settings/tabs/general.php');
-    			include('settings/tabs/pages.php');
-    			include('settings/tabs/formats.php');
+    			include('settings/general.php');
+    			include('settings/pages.php');
+    			include('settings/formats.php');
     			if( get_option('dbem_rsvp_enabled') ){
-    			    include('settings/tabs/bookings.php');
+    			    include('settings/bookings.php');
     			}
-    			include('settings/tabs/emails.php');
+    			include('settings/emails.php');
 				foreach( $custom_tabs as $tab_key => $tab_name ){
 					?>
 					<div class="em-menu-<?php echo esc_attr($tab_key) ?> em-menu-group" style="display:none;">
@@ -406,20 +406,7 @@ function em_admin_options_page() {
 			}
 			?>
 			
-			<?php /*
-			<div  class="postbox " >
-			<div class="handlediv" title="<?php __('Click to toggle', 'events-manager'); ?>"><br /></div><h3><span><?php _e ( 'Debug Modes', 'events-manager'); ?> </span></h3>
-			<div class="inside">
-				<table class='form-table'>
-					<?php
-					em_options_radio_binary ( __( 'EM Debug Mode?', 'events-manager'), 'dbem_debug', __( 'Setting this to yes will display different content to admins for event pages and emails so you can see all the available placeholders and their values.', 'events-manager') );
-					em_options_radio_binary ( __( 'WP Debug Mode?', 'events-manager'), 'dbem_wp_debug', __( 'This will turn WP_DEBUG mode on. Useful if you want to troubleshoot php errors without looking at your logs.', 'events-manager') );
-					?>
-				</table>
-			</div> <!-- . inside -->
-			</div> <!-- .postbox -->
-			*/ ?>
-
+			
 			<p class="submit">
 				<input type="submit" class="button-primary" name="Submit" value="<?php esc_attr_e( 'Save Changes', 'events-manager'); ?>" />
 				<input type="hidden" name="em-submitted" value="1" />
