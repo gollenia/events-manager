@@ -1,0 +1,17 @@
+{
+	"name": "events-manager/booking",
+	"apiVersion": 2,
+	"title": "Booking",
+	"category": "widgets", 
+	"attributes": {
+		"buttonTitle": {
+			"type": "string",
+			"default": ""
+		},
+		"buttonColor": {
+			"type": "string",
+			"default": "primary"
+		}
+
+	}
+}

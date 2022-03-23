@@ -1,0 +1,57 @@
+{
+	"name": "events-manager/details",
+	"apiVersion": 2,
+	"title": "Details",
+	"category": "widgets", 
+	"attributes": {
+		"title": {
+			"type": "string",
+			"default": ""
+		},
+		"showLocation": {
+			"type": "boolean",
+			"default": ""
+		},
+		"showAudience": {
+			"type": "boolean",
+			"default": true
+		},
+		"showSpeaker": {
+			"type": "boolean",
+			"default": true
+		},
+		"showDate": {
+			"type": "boolean",
+			"default": true
+		},
+		"showTime": {
+			"type": "boolean",
+			"default": true
+		},
+		"showPrice": {
+			"type": "boolean",
+			"default": true
+		},
+		"audienceDescription": {
+			"type": "string",
+			"default": ""
+		},
+		"audienceLink": {
+			"type": "boolean",
+			"default": true
+		},
+		"locationLink": {
+			"type": "boolean",
+			"default": true
+		},
+		"speakerDescription": {
+			"type": "string",
+			"default": ""
+		},
+		"priceOverwrite": {
+			"type": "string",
+			"default": ""
+		}
+
+	}
+}
