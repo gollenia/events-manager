@@ -11,7 +11,7 @@ class EM_Booking_Api {
         $instance = new self;
         add_action('rest_api_init', [$instance, 'register_rest_route']);
         add_action('rest_error', [$instance, 'register_rest_error']);
-        add_action( 'the_post', [$instance, 'post_object_created'] );
+        //add_action( 'the_post', [$instance, 'post_object_created'] );
         
     }
 
@@ -77,42 +77,6 @@ class EM_Booking_Api {
     public function register_rest_error() {
         register_rest_route('events-manager/v2', '/error', ['method' => 'GET', 'callback' => [$this, 'send_error'], 'permission_callback' => function() {return true;}]);
    }
-
-
-    /**
-     * Get all required data for booking. This can be used later for displaying the event with React aswell
-     *
-     * @param WP_REST_Request $request
-     * @return array JSON Response
-     */
-    public function get_booking_data(WP_REST_Request $request) {
-        
-        $EM_Event = em_get_event($request->get_param( 'event_id' ));
-        return [
-            'event' => array_filter((array)$EM_Event, [$this, 'filter_event'], ARRAY_FILTER_USE_KEY),
-            'coupons' => [
-                'available' => EM_Coupons::event_has_coupons($EM_Event),
-                'nonce' => wp_create_nonce('emp_checkout'),
-            ],
-            'fields' => $this->filter_fields(EM_Booking_Form::get_form($EM_Event)->form_fields),
-            'attendee_fields' => $this->filter_fields(EM_Attendees_Form::get_form($EM_Event)->form_fields),
-            'tickets' => $this->filter_tickets((array)$EM_Event->get_bookings()->get_available_tickets()->tickets),
-            'tickets_raw' => $EM_Event->get_bookings()->get_available_tickets()->tickets,
-            'gateways' => $this->get_gateways(),
-            'strings' => [ 
-                "consent" => function_exists('get_the_privacy_policy_link') ? sprintf(get_option("dbem_data_privacy_consent_text"), get_the_privacy_policy_link()) : get_option("dbem_data_privacy_consent_text"), 
-                "date_format" => get_option("dbem_date_format"),
-                "pay_with" => get_option('dbem_gateway_label'),
-                "book_now" => get_option("dbem_bookings_submit_button"),
-                "time_format" => get_option("dbem_time_format"),
-                "allday" => get_option("dbem_event_all_day_message"),
-                "currency" => em_get_currency_symbol(true,get_option("dbem_bookings_currency")),
-                "modal_button" => get_option("dbem_booking_button_msg_book"),
-                "loading" => get_option("dbem_booking_button_msg_booking"),
-                "dont_close" => get_option("dbem_booking_button_msg_booked")
-            ]
-        ];  
-    }
 
     public function send_error(WP_REST_Request $request) {
         wp_mail(get_option('admin_email'), "An error occured in the event booking form", $request->get_param('error'));
@@ -254,4 +218,4 @@ class EM_Booking_Api {
 
 }
 
-EM_Booking_Api::init();
+//EM_Booking_Api::init();
