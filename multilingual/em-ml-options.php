@@ -69,7 +69,6 @@ class EM_ML_Options {
 				'dbem_location_list_item_format_footer',
 				'dbem_no_locations_message',
 				'dbem_location_page_title_format',
-				'dbem_single_location_format',
 				'dbem_location_event_list_item_header_format',
 				'dbem_location_event_list_item_format',
 				'dbem_location_event_list_item_footer_format',

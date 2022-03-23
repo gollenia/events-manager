@@ -1,4 +1,6 @@
+{{ content }}
 
+{#
 <article class="bg-gray-100">
     <div class="content grid grid--columns-1 xl:grid--columns-3 grid--gap-12 py-16">
         <div class="xl:grid__column--span-2">        
@@ -36,7 +38,7 @@
                         <div class="description__data">
                         
                             {% if post._event_start_date == post._event_end_date %}
-                            {{ post._event_start_date|date("j. F Y") }} 
+                            {{ post._event_start_date|date(site.option("dbem_date_format")) }} 
                             {% else %}
                                 {% if post._event_start_date|date("F") == post._event_end_date|date("F") %}
                                     {{ post._event_start_date|date("j.") }} {{ __("to", "em-pro") }} {{ post._event_end|date("j. F Y") }}
@@ -166,3 +168,4 @@
     </div>
 </article>
 
+#}

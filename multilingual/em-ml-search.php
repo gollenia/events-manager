@@ -29,20 +29,15 @@ class EM_ML_Search {
     	$table = $what == 'location' ? EM_LOCATIONS_TABLE : EM_EVENTS_TABLE;
 	    $blog_id = get_current_blog_id(); // only useful for MS non-global tables mode
 	    // return cache if possible
-	    if( is_multisite() && !EM_MS_GLOBAL && !empty(static::$untranslated_cache[$blog_id][$language][$table]) ){
-	        return static::$untranslated_cache[$blog_id][$language][$table];
-	    }elseif( !empty(static::$untranslated_cache[$language][$table]) ){
+	    if( !empty(static::$untranslated_cache[$language][$table]) ){
 	        return static::$untranslated_cache[$language][$table];
 	    }
 	    // query once per script run
     	$sql = "SELECT {$prefix}_id FROM $table WHERE {$prefix}_translation=0 AND {$prefix}_id NOT IN (SELECT DISTINCT {$prefix}_parent FROM $table WHERE {$prefix}_language=%s AND {$prefix}_translation=1 AND {$prefix}_parent IS NOT NULL) AND {$prefix}_language!='%s';";
     	$results = $wpdb->get_col( $wpdb->prepare($sql, $language, $language) );
-    	if( is_multisite() && !EM_MS_GLOBAL){
-    		//each blog will have its own location/events table
-		    static::$untranslated_cache[$blog_id][$language][$table] = $results;
-	    }else{
-		    static::$untranslated_cache[$language][$table] = $results;
-	    }
+    	
+		static::$untranslated_cache[$language][$table] = $results;
+	    
     	return is_array($results) ? $results : array();
     }
 	

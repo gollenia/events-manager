@@ -181,12 +181,11 @@ class EM_ML_IO {
 				$wpdb->update(EM_BOOKINGS_TABLE, array('event_id'=>$event->event_id), array('event_id'=>$EM_Event->event_id));
 				//adjust the event_parent pointer
 				$wpdb->update(EM_EVENTS_TABLE, array('event_parent'=>$event->event_id), array('event_parent'=>$EM_Event->event_id));
-				$EM_Event->ms_global_switch();
+				
 				$wpdb->update(EM_EVENTS_TABLE, array('event_parent'=>null, 'event_translation'=>0), array('event_id'=>$event->event_id));
 				$wpdb->update($wpdb->postmeta, array('meta_value'=>$event->event_id), array('meta_key'=>'_event_parent', 'meta_value'=>$EM_Event->event_id));
 				delete_post_meta( $event->post_id, '_event_parent');
 				delete_post_meta( $event->post_id, '_event_translation');
-				$EM_Event->ms_global_switch_back();
 				do_action('em_ml_transfer_original_event', $event, $EM_Event); //other add-ons with tables with event_id foreign keys should hook here and change
 			}
 		}

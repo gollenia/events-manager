@@ -187,8 +187,6 @@ class EM_ML{
      */
     public static function get_translated_post_id($post_id, $post_type = null, $blog_id = null){
     	global $wpdb;
-    	// multisite support
-	    if( EM_MS_GLOBAL && $blog_id ) switch_to_blog( $blog_id );
     	// clean post_id and determine $post_type if not supplied
     	$translated_post_id = null;
     	$post_id = absint($post_id);
@@ -197,9 +195,6 @@ class EM_ML{
         if( em_is_event($post_type) || em_is_location($post_type) ){
 	        // account for multisite global events
 	        $ms_cond = '';
-	        if( EM_MS_GLOBAL ){
-		        $ms_cond = $blog_id ? ' AND blog_id='.absint($blog_id) : ' AND blog_id='.get_current_blog_id();
-	        }
 	        // search based on post type
 	        if( em_is_event($post_type) ){
 		        $post_meta = $wpdb->get_row('SELECT event_id AS parent, event_language AS language, event_parent AS real_parent FROM '.EM_EVENTS_TABLE.' WHERE post_id='.$post_id . $ms_cond);
@@ -223,8 +218,6 @@ class EM_ML{
         }
         // pass on $translated_post_id to translation plugin
 	    $translated_post_id = apply_filters('em_ml_get_translated_post_id', $translated_post_id, $post_id, $post_type, $blog_id);
-        // restore multisite blog if necessary
-	    if( EM_MS_GLOBAL && $blog_id ) restore_current_blog();
         // return translated post id
         return ( $translated_post_id === null ) ? $post_id : absint($translated_post_id);
     }
@@ -281,13 +274,8 @@ class EM_ML{
 	    $translated_id = self::get_translation_id($object, $language);
 	    $translated_object = $object; //return $object if the condition below isn't met
 	    if( $object->post_id != $translated_id ){
-	    	if( EM_MS_GLOBAL ){
-	            if( em_is_event($object) ) $translated_object = em_get_event($translated_id, $object->blog_id);
-	            if( em_is_location( $object ) ) $translated_object = em_get_location($translated_id, $object->blog_id);
-		    }else{
-			    if( em_is_event($object) ) $translated_object = em_get_event($translated_id,'post_id');
-			    if( em_is_location( $object ) ) $translated_object = em_get_location($translated_id,'post_id');
-		    }
+			if( em_is_event($object) ) $translated_object = em_get_event($translated_id,'post_id');
+			if( em_is_location( $object ) ) $translated_object = em_get_location($translated_id,'post_id');
 	    }
 	    return apply_filters('em_ml_get_translation', $translated_object, $object, $language);
 	}
@@ -446,11 +434,6 @@ class EM_ML{
 	public static function set_language_by_post_ids( $locale, $post_ids, $post_type, $blog_id = null, $update = false ){
 		global $wpdb;
 		if( !preg_match('/^[a-zA-Z_]{2,14}+$/', $locale) ) return false; //valid locale must be supplied
-		if( EM_MS_GLOBAL ){
-			if( !$blog_id ) $blog_id = get_current_blog_id();
-			$blog_id = absint($blog_id);
-			switch_to_blog($blog_id);
-		}
 		foreach( $post_ids as $k => $post_id ) $post_ids[$k] = absint($post_id); //sanitize post ids
 		if( em_is_event( $post_type ) || em_is_location( $post_type ) ){
 			$key_name = em_is_location( $post_type ) ? 'location_language' : 'event_language';
@@ -458,10 +441,6 @@ class EM_ML{
 			//save to events/location table - $update is irrelevant here as we must already have a saved event/location
 			$sql = "UPDATE $table_name SET $key_name=%s WHERE post_id IN (". implode(',', $post_ids) .')';
 			$sql_vars = array( $locale );
-			if( EM_MS_GLOBAL ){
-				$sql .= ' AND blog_id=%d';
-				$sql_vars[] = $blog_id;
-			}
 			$wpdb->query( $wpdb->prepare($sql, $sql_vars) );
 			//save to meta
 			if( $update ){
@@ -476,15 +455,12 @@ class EM_ML{
 			}
 			$wpdb->query( $sql );
 		}
-		if( EM_MS_GLOBAL ){
-			restore_current_blog();
-		}
 		return apply_filters('em_ml_set_language_by_post_ids', true, $locale, $post_ids, $post_type, $blog_id, $update);
 	}
 	
 	public static function attach_translations( $locale, $post_ids_map, $post_type, $blog_id = null ){
 		global $wpdb;
-		if( EM_MS_GLOBAL && !$blog_id ) $blog_id = get_current_blog_id();
+		
 		//set parents and languages for each post
 		if( em_is_event( $post_type ) || em_is_location( $post_type ) ){
 			//sanitize any sql vars
@@ -496,7 +472,7 @@ class EM_ML{
 			}
 			//get the event/location ids of both new and old event/locations so we can do a bulk update using their ids
 			$sql = "SELECT post_id, {$prefix}_id AS id FROM $table_name WHERE post_id IN (". implode(',', $post_ids + array_keys($post_ids)) .")";
-			if( EM_MS_GLOBAL ) $sql .= ' AND blog_id='.absint($blog_id);
+			
 			$object_ids = $wpdb->get_results( $sql, OBJECT_K );
 			//save to events/location table - $update is irrelevant here as we must already have a saved event/location
 			$inserts = array();

@@ -122,7 +122,7 @@ class EM_ML_IO_Locations {
 				//make that translation the master event by changing event ids of bookings, tickets etc. to the new master event
 				$wpdb->update(EM_EVENTS_TABLE, array('location_id'=>$location->location_id), array('location_id'=>$EM_Location->location_id));
 				//also change wp_postmeta
-				$EM_Location->ms_global_switch();
+				
 				$wpdb->update($wpdb->postmeta, array('meta_value'=>$location->location_id), array('meta_key'=>'_location_id', 'meta_value'=>$EM_Location->location_id));
 				// update the location parents of any translations
 				$wpdb->update(EM_LOCATIONS_TABLE, array('location_parent'=>$location->location_id), array('location_parent'=>$EM_Location->location_id));
@@ -130,7 +130,6 @@ class EM_ML_IO_Locations {
 				$wpdb->update($wpdb->postmeta, array('meta_value'=>$location->location_id), array('meta_key'=>'_location_parent', 'meta_value'=>$EM_Location->location_id));
 				delete_post_meta($location->post_id, '_location_parent');
 				delete_post_meta($location->post_id, '_location_translation');
-				$EM_Location->ms_global_switch_back();
 				do_action('em_ml_transfer_original_location', $location, $EM_Location); //other add-ons with tables with location_id foreign keys should hook here and change
 			}
 		}
