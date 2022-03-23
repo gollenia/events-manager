@@ -29,9 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Setting constants
 
-use Timber\Twig;
-
-define('EM_VERSION', 6.0); //self expanatory, although version currently may not correspond directly with published version number
+define('EM_VERSION', 6.2); //self expanatory, although version currently may not correspond directly with published version number
 define('EM_DIR', dirname( __FILE__ )); //an absolute path to this directory
 define('EM_DIR_URI', trailingslashit(plugins_url('',__FILE__))); //an absolute path to this directory
 define('EM_MS_GLOBAL',false);
@@ -47,6 +45,7 @@ require_once( __DIR__ . '/vendor/autoload.php');
 require_once('classes/em-twig.php');
 
 $EM_Twig = EM_Twig::init();
+
 
 add_filter( 'timber/locations', function($paths) use ($EM_Twig) {
 	$paths[] = $EM_Twig->locations;
@@ -68,6 +67,7 @@ require_once('classes/em-exception.php');
 require_once('classes/em-options.php');
 require_once('classes/em-object.php');
 require_once('classes/em-datetime.php');
+require_once('classes/em-dateformat.php');
 require_once('classes/em-datetimezone.php');
 require_once('classes/em-taxonomy-term.php');
 require_once('classes/em-taxonomy-terms.php');
@@ -141,6 +141,7 @@ if( is_admin() ){
 
 // new namespaced classes
 require_once('classes/speaker.php');
+require_once('add-ons/export/Export.php');
 
 
 //Table names

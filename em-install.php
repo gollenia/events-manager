@@ -6,39 +6,30 @@ function em_install() {
    	$wp_rewrite->flush_rules();
 	$old_version = get_option('dbem_version');
 	//Won't upgrade <4.300 anymore
-   	if( $old_version != '' && $old_version < 4.1 ){
-		function em_update_required_notification(){
-			global $EM_Booking;
-			?><div class="error"><p><strong>Events Manager upgrade not complete, please upgrade to the version 4.300 or higher first from <a href="http://wordpress.org/extend/plugins/events-manager/download/">here</a> before upgrading to this version.</strong></p></div><?php
-		}
-		add_action ( 'admin_notices', 'em_update_required_notification' );
-		return;
-   	}
-	if( EM_VERSION > $old_version || $old_version == '' || (is_multisite() && !EM_MS_GLOBAL && get_option('em_ms_global_install')) ){
+   	
+	if( EM_VERSION > $old_version || $old_version == '' ){
 		if( get_option('dbem_upgrade_throttle') <= time() || !get_option('dbem_upgrade_throttle') ){
 		 	// Creates the events table if necessary
-		 	if( !EM_MS_GLOBAL || (EM_MS_GLOBAL && is_main_site()) ){
-				em_create_events_table();
-				em_create_events_meta_table();
-				em_create_locations_table();
-			  	em_create_bookings_table();
-				em_create_tickets_table();
-				em_create_tickets_bookings_table();
-		 		delete_option('em_ms_global_install'); //in case for some reason the user changed global settings
-			    add_action('em_ml_init', 'EM_ML::toggle_languages_index');
-		 	}else{
-		 		update_option('em_ms_global_install',1); //in case for some reason the user changes global settings in the future
-		 	}	
+			em_create_events_table();
+			em_create_events_meta_table();
+			em_create_locations_table();
+			em_create_bookings_table();
+			em_create_tickets_table();
+			em_create_tickets_bookings_table();
+			
+			add_action('em_ml_init', 'EM_ML::toggle_languages_index');
+		 	
 			//New install, or Migrate?
 			if( $old_version < 5 && !empty($old_version) ){
 				update_option('dbem_upgrade_throttle', time()+300);
 				set_time_limit(300);
-				em_migrate_v4();
+				
 				update_site_option('dbem_ms_update_nag',1);
 			}elseif( empty($old_version) ){
 				em_create_events_page();
 				update_option('dbem_hello_to_user',1);
-			}			
+			}
+					
 			//set caps and options
 			em_set_capabilities();
 			em_add_options();
@@ -226,7 +217,7 @@ function em_create_locations_table() {
 		location_owner bigint(20) unsigned NOT NULL DEFAULT 0,
 		location_address VARCHAR( 200 ) NULL DEFAULT NULL,
 		location_town VARCHAR( 200 ) NULL DEFAULT NULL,
-		location_state VARCHAR( 200 ) NULL DEFAULT NULL,
+		location_state VARCHAR( 200 ) NULL DEFAULT NULL, 
 		location_postcode VARCHAR( 10 ) NULL DEFAULT NULL,
 		location_region VARCHAR( 200 ) NULL DEFAULT NULL,
 		location_country CHAR( 2 ) NULL DEFAULT NULL,
@@ -594,7 +585,6 @@ function em_add_options() {
 		'dbem_ical_real_description_format' => "#_EVENTEXCERPT",
 		'dbem_ical_location_format' => "#_LOCATIONNAME, #_LOCATIONFULLLINE, #_LOCATIONCOUNTRY",
 		//Google Maps
-		'dbem_gmap_is_active'=> 1,
 		'dbem_google_maps_browser_key'=> '',
 		'dbem_map_default_width'=> '400px', //eventually will use %
 		'dbem_map_default_height'=> '300px',
@@ -616,7 +606,7 @@ function em_add_options() {
 		'dbem_image_max_height' => 700,
 		'dbem_image_min_width' => 50,
 		'dbem_image_min_height' => 50,
-		'dbem_image_max_size' => 204800,
+		'dbem_image_max_size' => 2048,
 		//Calendar Options
 		'dbem_list_date_title' => __('Events', 'events-manager').' - #j #M #y',
 		'dbem_full_calendar_month_format' => 'M Y',
@@ -641,7 +631,7 @@ function em_add_options() {
 		
 		'dbem_locations_enabled' => 1,
 		
-		'dbem_use_select_for_locations' => 0,
+		
 		'dbem_recurrence_enabled'=> 1,
 		'dbem_rsvp_enabled'=> 1,
 		'dbem_placeholders_custom' => '',
@@ -821,7 +811,16 @@ function em_add_options() {
 
 function em_upgrade_current_installation(){
 	global $wpdb, $wp_locale, $EM_Notices;
-	
+	var_dump("updating");
+	if( get_option('dbem_version') != '' && get_option('dbem_version') < 6.2 ){
+		var_dump("sdkfjdsjf");
+		add_option('em_export_font_path', '');
+		add_option('em_export_font_regular', '');
+		add_option('em_export_font_italic', '');
+		add_option('em_export_font_bold', '');
+		add_option('em_export_logo', '');
+	}
+
 	if( get_option('dbem_version') != '' && get_option('dbem_version') < 5 ){
 		//make events, cats and locs pages
 
@@ -980,22 +979,10 @@ function em_upgrade_current_installation(){
 		update_site_option('dbem_data', $admin_data);
 		
 	}
-	
-	if( get_option('dbem_version') != '' && get_option('dbem_version') < 5.93 ){
-		$message = __('Events Manager has introduced new privacy tools to help you comply with international laws such as the GDPR, <a href="%s">see our documentation</a> for more information.','events-manager');
-		$message = sprintf( $message, 'https://wp-events-plugin.com/documentation/data-privacy-gdpr-compliance/?utm_source=plugin&utm_campaign=gdpr_update');
-		$EM_Admin_Notice = new EM_Admin_Notice(array( 'name' => 'gdpr_update', 'who' => 'admin', 'where' => 'all', 'message' => $message ));
-		EM_Admin_Notices::add($EM_Admin_Notice, is_multisite());
-	}
+
 	if( get_option('dbem_version') != '' && get_option('dbem_version') < 5.9618 ){
 		$multisite_cond = '';
-		if( EM_MS_GLOBAL ){
-			if( is_main_site() ){
-				$multisite_cond = ' AND (blog_id='.absint(get_current_blog_id()).' OR blog_id=0)';
-			}else{
-				$multisite_cond = ' AND blog_id='.absint(get_current_blog_id());
-			}
-		}
+		
 		$wpdb->query( $wpdb->prepare('UPDATE '.EM_EVENTS_TABLE.' SET event_language=%s WHERE event_language IS NULL'.$multisite_cond, EM_ML::$wplang) );
 		$wpdb->query( $wpdb->prepare('UPDATE '.EM_LOCATIONS_TABLE.' SET location_language=%s WHERE location_language IS NULL'.$multisite_cond, EM_ML::$wplang) );
 		$host = get_option('dbem_smtp_host');
@@ -1006,25 +993,13 @@ function em_upgrade_current_installation(){
 			update_option('dbem_smtp_encryption', 0);
 		}
 	}
-	if( get_option('dbem_version') != '' && get_option('dbem_version') < 5.975 ){
-		$message = esc_html__('Events Manager has introduced location types, which can include online locations such as a URL or integrations with webinar platforms such as Zoom! Enable different location types in your settings page, for more information see our %s.', 'events-manager');
-		$message = sprintf( $message, '<a href="http://wp-events-plugin.com/documentation/location-types/" target="_blank">'. esc_html__('documentation', 'events-manager')).'</a>';
-		$EM_Admin_Notice = new EM_Admin_Notice(array( 'name' => 'location-types-update', 'who' => 'admin', 'where' => 'all', 'message' => "$message" ));
-		EM_Admin_Notices::add($EM_Admin_Notice, is_multisite());
-	}
+	
 	if( get_option('dbem_version') != '' && get_option('dbem_version') < 5.9821 ){
 		// recreate all event_parent records in post meta
 		$sql = "DELETE FROM {$wpdb->postmeta} WHERE meta_key = '_event_parent' AND post_id IN (SELECT post_id FROM ".EM_EVENTS_TABLE.")";
 		$wpdb->query($sql);
 		$sql = "INSERT INTO {$wpdb->postmeta} (post_id, meta_key, meta_value) SELECT post_id, '_event_parent', event_parent FROM ".EM_EVENTS_TABLE." WHERE event_parent IS NOT NULL";
-		if( EM_MS_GLOBAL ){
-			// do just this blog, other blogs will update themselves when loaded
-			if( is_main_site() ){
-				$sql .= ' AND (blog_id='.absint(get_current_blog_id()).' OR blog_id=0)';
-			}else{
-				$sql .= ' AND blog_id='.absint(get_current_blog_id());
-			}
-		}
+		
 		$wpdb->query($sql);
 	}
 }
@@ -1163,121 +1138,6 @@ function em_create_events_page(){
 	}
 }
 
-// migrate old dbem tables to new em ones
-function em_migrate_v4(){
-	global $wpdb, $blog_id;
-	//before making any moves, let's create new pages for locations na dcats
-	$event_page_id = get_option('dbem_events_page');
-	if( !empty($event_page_id) ){
-		if( !get_option('dbem_locations_page') ){
-		   	$post_data = array(
-				'post_status' => 'publish',
-		   		'post_parent' => $event_page_id,
-				'post_type' => 'page',
-				'ping_status' => get_option('default_ping_status'),
-				'post_content' => 'CONTENTS',
-				'post_excerpt' => '',
-				'post_title' => get_option('dbem_locations_page_title', __('Locations','events-manager')),
-		   		'post_slug' => get_option('dbem_cp_locations_slug')
-			);
-			$loc_post_id = wp_insert_post($post_data, false);
-	   		update_option('dbem_locations_page', $loc_post_id);
-		}
-		if( !get_option('dbem_categories_page') ){
-		   	//Now Categories Page
-		   	$post_data = array(
-				'post_status' => 'publish',
-		   		'post_parent' => $event_page_id,
-				'post_type' => 'page',
-				'ping_status' => get_option('default_ping_status'),
-				'post_content' => 'CONTENTS',
-				'post_excerpt' => '',
-				'post_title' => get_option('dbem_categories_page_title', __('Categories','events-manager')),
-		   		'post_slug' => get_option('dbem_cp_categories_slug')
-			);
-			$cat_post_id = wp_insert_post($post_data, false);
-	   		update_option('dbem_categories_page', $cat_post_id);
-		}
-		
-	}
-	//set shared vars
-	$limit = 100;
-	//-- LOCATIONS --
-	if( !is_multisite() || (EM_MS_GLOBAL && is_main_site($blog_id)) || (!EM_MS_GLOBAL && is_multisite()) ){ //old locations will always belong to the main blog when migrated, since we didn't have previous blog ids
-		if( is_multisite() ){
-			$this_blog = $blog_id;
-		}else{
-			$this_blog = 0;
-		}
-		//set location statuses and blog id for all locations
-		$wpdb->query('UPDATE '.EM_LOCATIONS_TABLE.' SET location_status=1, blog_id='.$this_blog.' WHERE blog_id IS NULL');
-		//first create location posts
-		$sql = 'SELECT * FROM '.EM_LOCATIONS_TABLE.' WHERE post_id = 0 LIMIT '.$limit;
-		$locations = $wpdb->get_results($sql, ARRAY_A);
-		//get location image directory
-		$dir = (EM_IMAGE_DS == '/') ? 'locations/':'';
-		while( count($locations) > 0 ){
-			em_migrate_locations($locations);
-			$locations = $wpdb->get_results($sql, ARRAY_A); //get more locations and continue looping
-		}
-	}
-	//-- EVENTS & Recurrences --
-	if( is_multisite() ){
-		if(EM_MS_GLOBAL && is_main_site()){
-			$sql = "SELECT * FROM ".EM_EVENTS_TABLE." WHERE post_id=0 AND (blog_id=$blog_id OR blog_id=0 OR blog_id IS NULL) LIMIT $limit";
-		}elseif(EM_MS_GLOBAL){
-			$sql = "SELECT * FROM ".EM_EVENTS_TABLE." WHERE post_id=0 AND blog_id=$blog_id LIMIT $limit";
-		}else{
-			$sql = "SELECT * FROM ".EM_EVENTS_TABLE." WHERE post_id=0 LIMIT $limit";
-		}
-	}else{
-		$sql = "SELECT * FROM ".EM_EVENTS_TABLE." WHERE post_id=0 LIMIT $limit";
-	}
-	//create posts
-	$events = $wpdb->get_results($sql, ARRAY_A);
-	while( count($events) > 0 ){
-		em_migrate_events($events);
-		$events = $wpdb->get_results($sql, ARRAY_A); //get more locations and continue looping
-	}
-	//-- CATEGORIES --
-	//Create the terms according to category table, use the category owner for the term ids to store this
-	$categories = $wpdb->get_results("SELECT * FROM ".$wpdb->prefix.'em_categories', ARRAY_A); //taking a wild-hope guess that there aren't too many categories on one site/blog
-	foreach( $categories as $category ){
-		//get all events with this category before resetting ids
-		$sql = "SELECT post_id FROM ".EM_EVENTS_TABLE.", ".EM_META_TABLE." WHERE event_id=object_id AND meta_key='event-category' AND meta_value='{$category['category_id']}'";
-		$category_posts = $wpdb->get_col($sql);
-		//get or create new term
-		$term = get_term_by('slug', $category['category_slug'], EM_TAXONOMY_CATEGORY);
-		if( $term === false ){
-			//term not created yet, let's create it
-			$term_array = wp_insert_term($category['category_name'], EM_TAXONOMY_CATEGORY, array(
-				'description' => $category['category_description'],
-				'slug' => $category['category_slug']
-			));
-			if( is_array($term_array) ){
-				//update category bg-color if used before
-				$wpdb->query('UPDATE '.EM_META_TABLE." SET object_id='{$term_array['term_id']}' WHERE meta_key='category-bgcolor' AND object_id={$category['category_id']}");
-				$wpdb->query('UPDATE '.EM_META_TABLE." SET meta_value='{$term_array['term_id']}' WHERE meta_key='event-category' AND meta_value={$category['category_id']}");
-				// and assign category image url if file exists
-				$dir = (EM_IMAGE_DS == '/') ? 'categories/':'';
-			  	foreach(array(1 => 'gif', 2 => 'jpg', 3 => 'png') as $mime_type) {
-					$file_name = $dir."category-{$category['category_id']}.$mime_type";
-					if( file_exists( EM_IMAGE_UPLOAD_DIR.$file_name) ) {
-			  			$wpdb->insert(EM_META_TABLE, array('object_id'=>$term_array['term_id'],'meta_key'=>'category-image','meta_value'=>EM_IMAGE_UPLOAD_URI.$file_name));
-			  			break;
-					}
-				}
-			}
-		}
-		//set event terms in wp tables
-		foreach($category_posts as $post_id){
-			wp_set_object_terms($post_id, $category['category_slug'], EM_TAXONOMY_CATEGORY, true);
-		}
-	}
-	update_option('dbem_migrate_images_nag', 1);
-	update_option('dbem_migrate_images', 1);
-}
-
 function em_migrate_events($events){
 	global $wpdb;
 	//disable actions
@@ -1414,18 +1274,10 @@ function em_migrate_uploads(){
 function em_migrate_datetime_timezones( $reset_new_fields = true, $migrate_date_fields = true, $timezone = false ){
 	global $wpdb;
 	//Table names
-	$db = EM_MS_GLOBAL ? $wpdb->base_prefix : $wpdb->prefix;
+	$db = $wpdb->prefix;
 	//create AND and WHERE conditions for blog IDs if we're in Multisite Glboal Mode
 	$blog_id_where = $blog_id_and = '';
-	if( EM_MS_GLOBAL ){
-		if( is_main_site() ){
-			$blog_id_cond = $wpdb->prepare('(blog_id = %d OR blog_id IS NULL OR blog_id = 0)', get_current_blog_id());
-		}else{
-			$blog_id_cond = $wpdb->prepare('blog_id = %d', get_current_blog_id());
-		}
-		$blog_id_where = ' WHERE '.$blog_id_cond;
-		$blog_id_and = ' AND '.$blog_id_cond;
-	}
+	
 	//reset all the data for these purposes
 	if( $reset_new_fields || $migrate_date_fields ) $wpdb->query('UPDATE '. $db.'em_events' .' SET event_start = NULL, event_end = NULL, event_timezone = NULL'.$blog_id_where);
 	if( !$migrate_date_fields ) return true;
@@ -1535,7 +1387,7 @@ function em_migrate_datetime_timezones( $reset_new_fields = true, $migrate_date_
 
 function em_migrate_get_tz_transitions( $timezone, $blog_id_where = '' ){
 	global $wpdb;
-	$db = EM_MS_GLOBAL ? $wpdb->base_prefix : $wpdb->prefix;
+	$db = $wpdb->prefix;
 	$minmax_dates = $wpdb->get_row('SELECT MIN(event_start_date) AS mindate, MAX(event_end_date) AS maxdate FROM '. $db.'em_events' .$blog_id_where);
 	$DTZ = new EM_DateTimeZone( $timezone );
 	$start = strtotime($minmax_dates->mindate, current_time('timestamp')) - 60*60*24;

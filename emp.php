@@ -1,14 +1,6 @@
 <?php
 
 
-
-
-
-define('EM_MIN_VERSION', 6);
-define('EM_MIN_VERSION_CRITICAL', 2.377);
-define('EMP_SLUG', plugin_basename( __FILE__ ));
-
-
 class EM_Pro {
 
 	/**
@@ -44,10 +36,10 @@ class EM_Pro {
 		include('emp-forms.php'); //form editor
 		
 		include('emp-ml.php');
-		include('emp-update.php');
+		
 
 		//booking-specific features
-		include('add-ons/gateways/gateways.php'); //this may change in the future too e.g. for pay-per-post
+		include('add-ons/gateways/gateways.php'); 
 		include('add-ons/bookings-form/bookings-form.php');
 		
 		include('add-ons/coupons/coupons.php');
@@ -156,18 +148,4 @@ function emp_cron_schedules($schedules){
 }
 add_filter('cron_schedules','emp_cron_schedules',10,1);
 
-
-
-add_action( 'init', ['\\Schedule\\Addons\\Assets', 'register'] );
-$args = \Schedule\Addons\Assets::register();
-
-add_filter( 'timber/twig', ["\\Schedule\\Addons\\TwigExtend", "add_to_twig"] );
-// Add Twig functions
-// @todo Check if needed
-//add_filter( 'timber/twig', ["EMB\\Utils\\TwigExtend", "add_to_twig"] );
-
-$upcoming_block = new \Schedule\Addons\Upcoming($args);
-$upcoming_block->register();
-
-$featured_block = new \Schedule\Addons\Featured($args);
-$featured_block->register();
+require_once('blocks/Block.php');

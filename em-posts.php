@@ -192,7 +192,7 @@ function wp_events_plugin_init(){
 			'rewrite' => ['slug' => EM_POST_TYPE_LOCATION_SLUG, 'with_front'=>false],
 			'query_var' => true,
 			'has_archive' => get_option('dbem_cp_locations_has_archive', false) == true,
-			'supports' => apply_filters('em_cp_location_supports', ['title','editor','excerpt','custom-fields','comments','thumbnail','author']),
+			'supports' => apply_filters('em_cp_location_supports', ['title','excerpt','thumbnail','author']),
 			'capability_type' => 'location',
 			'capabilities' => [
 				'publish_posts' => 'publish_locations',

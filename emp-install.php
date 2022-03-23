@@ -3,13 +3,11 @@
 function emp_install() {
 	$old_version = get_option('em_pro_version');
 	if( $old_version == '' ){
-
 		emp_create_transactions_table();
 		emp_create_coupons_table(); 
 		emp_create_reminders_table();
 		emp_create_bookings_relationships_table();
-		delete_option('emp_ms_global_install'); //in case for some reason the user changed global settings
-	 	
+		
 		emp_add_options();
 		//trigger update action
 		do_action('events_manager_pro_updated');
@@ -231,7 +229,7 @@ function emp_add_options() {
 	add_option('dbem_custom_emails_events', 1);	
 	add_option('dbem_custom_emails_events_admins', 1);
 	add_option('dbem_custom_emails_gateways', 1);
-	add_option('dbem_custom_emails_gateways_admins', 1);	
+	add_option('dbem_custom_emails_gateways_admins', 1);
 	//multiple bookings
 	add_option('dbem_multiple_bookings_feedback_added', __('Your booking was added to your shopping cart.','em-pro'));
 	add_option('dbem_multiple_bookings_feedback_already_added', __('You have already booked a spot at this eventin your cart, please modify or delete your current booking.','em-pro'));
@@ -282,7 +280,7 @@ function emp_add_options() {
 		
 		
 		
-		if( get_option('em_pro_version') < 2.643 ){ //transition into new license, but don't deactivate their site immediately.
+		if( get_option('em_pro_version') < 2.643 ){
 			
 			
 		}

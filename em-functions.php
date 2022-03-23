@@ -302,8 +302,7 @@ function em_get_attributes($lattributes = false){
 		get_option ( 'dbem_location_event_list_item_format' ).
 		get_option ( 'dbem_location_page_title_format' ).
 		get_option ( 'dbem_event_list_item_format' ).
-		get_option ( 'dbem_event_page_title_format' ).
-		get_option ( 'dbem_single_location_format' );
+		get_option ( 'dbem_event_page_title_format' );
 	//We now have one long string of formats, get all the attribute placeholders
 	if( $lattributes ){
 		preg_match_all('/#_LATT\{([^}]+)\}(\{([^}]+)\})?/', $formats, $matches);
@@ -421,15 +420,6 @@ function em_new_user_notification() {
  * Transitional function to handle WP's eventual move away from the is_super_user() function 
  */
 function em_wp_is_super_admin( $user_id = false ){
-	$user = ( ! $user_id || $user_id == get_current_user_id() ) ? wp_get_current_user() : get_userdata( $user_id );
-
-	if ( ! $user || ! $user->exists() ) return false;
-
-	if ( is_multisite() ) {
-		if( $user->has_cap('manage_network_options') ) return true;
-	} else {
-		if ( $user->has_cap('delete_users') ) return true;
-	}
 	return false;
 }
 
