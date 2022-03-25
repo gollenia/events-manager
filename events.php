@@ -39,8 +39,7 @@ if( !defined('EM_AJAX') ){
 	define( 'EM_AJAX', get_option('dbem_events_page_ajax', (defined('EM_AJAX_SEARCH') && EM_AJAX_SEARCH)) );
 }
 
-
-require_once( __DIR__ . '/vendor/autoload.php');
+require_once( plugin_dir_path( __FILE__ ) . '/vendor/autoload.php');
 
 require_once('classes/em-twig.php');
 
@@ -63,11 +62,9 @@ add_action('init', function() {
 
 // INCLUDES
 //Base classes
-require_once('classes/em-exception.php');
 require_once('classes/em-options.php');
 require_once('classes/em-object.php');
 require_once('classes/em-datetime.php');
-require_once('classes/em-dateformat.php');
 require_once('classes/em-datetimezone.php');
 require_once('classes/em-taxonomy-term.php');
 require_once('classes/em-taxonomy-terms.php');
@@ -113,7 +110,7 @@ require_once('classes/em-tickets-bookings.php');
 require_once('classes/em-tickets.php');
 //Admin Files
 if( is_admin() ){
-	require_once('classes/em-admin-notices.php');
+	//require_once('classes/em-admin-notices.php');
 	require_once('admin/em-admin.php');
 	require_once('admin/em-bookings.php');
 	require_once('admin/em-docs.php');
