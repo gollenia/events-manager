@@ -27,17 +27,23 @@
     "config": {
         "platform":{
             "php":"7.4"
+        },
+        "allow-plugins": {
+            "composer/installers": true
         }
     },
     "require": {
         "timber/timber": "^2.0.0-alpha.2",
         "shuchkin/simplexlsxgen": "^1.0",
         "smhg/sepa-qr-data": "^1.1",
-        "chillerlan/php-qrcode": "dev-main#06730361508c283a02bbf9cbc9e4b55e7b3bc88b"
+        "chillerlan/php-qrcode": "dev-main#06730361508c283a02bbf9cbc9e4b55e7b3bc88b",
+        "mpdf/mpdf": "^8.0"
     },
     "autoload": {
         "psr-4": {
-            "Schedule\\Addons\\": ["add-ons/blocks", "add-ons/coupons"]
+            "Contexis\\Events\\Blocks\\": ["blocks"],
+			"Contexis\\Events\\Addons\\": ["add-ons/*"],
+			"Contexis\\Events\\Intl\\": "classes/Intl/"
         }
     }
 }
