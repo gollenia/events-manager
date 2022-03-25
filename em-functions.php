@@ -301,8 +301,8 @@ function em_get_attributes($lattributes = false){
 		get_option ( 'dbem_location_baloon_format' ).
 		get_option ( 'dbem_location_event_list_item_format' ).
 		get_option ( 'dbem_location_page_title_format' ).
-		get_option ( 'dbem_event_list_item_format' ).
-		get_option ( 'dbem_event_page_title_format' );
+		get_option ( 'dbem_event_list_item_format' );
+
 	//We now have one long string of formats, get all the attribute placeholders
 	if( $lattributes ){
 		preg_match_all('/#_LATT\{([^}]+)\}(\{([^}]+)\})?/', $formats, $matches);
@@ -690,9 +690,7 @@ function em_options_checkbox($title, $name, $description='') {
 
 function em_options_select($title, $name, $list, $description='', $default='') {
 	$option_value = get_option($name, $default);
-	if( $name == 'dbem_events_page' && !is_object(get_page($option_value)) ){
-		$option_value = 0; //Special value
-	}
+	
 	?>
    	<tr valign="top" id='<?php echo esc_attr($name);?>_row'>
    		<th scope="row"><?php echo esc_html($title); ?></th>
