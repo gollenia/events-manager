@@ -171,9 +171,18 @@ class EM_Events extends EM_Object {
 		if (!$data) return $result;
 		foreach($data as $event) {
 			$location = $event->get_location();
+
 			$category = $event->get_categories()->get_first();
 			$tags = new EM_Tags($event);
 			$speaker = \Contexis\Events\Speaker::get($event->speaker_id);
+			$price = 0;
+			$booking = new \EM_Bookings($event);
+			$tickets = $booking->get_tickets()->tickets;
+			if(!empty($tickets)) {
+				$first_ticket = key($tickets);
+				$price = floatval($tickets[$first_ticket]->ticket_price);
+			}
+
 
 			array_push($result, [
 				'ID' => $event->ID,
@@ -190,6 +199,7 @@ class EM_Events extends EM_Object {
 					'ID' => $location->ID,
 					'location_id' => $location->location_id, 
 					'address' => $location->location_address,
+					'zip' => $location->location_postcode,
 					'city' => $location->location_town,
 					'name' => $location->location_name,
 					'url' => $location->location_url,
@@ -197,6 +207,8 @@ class EM_Events extends EM_Object {
 					'country' => $location->location_country,
 					'state' => $location->location_state,
 				],
+				'date' => \Contexis\Events\Intl\DateFormatter::get_date($event->start()->getTimestamp(), $event->end()->getTimestamp()),
+				'price' => $price,
 				'start' => $event->start()->getTimestamp(),
 				'end' => $event->end()->getTimestamp(),
 				'single_day' => $event->event_start_date == $event->event_end_date,
@@ -207,6 +219,8 @@ class EM_Events extends EM_Object {
 				'tags' => $tags->terms
 
 			]);
+
+			
 		}
 		return $result;
 	}
