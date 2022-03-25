@@ -523,50 +523,6 @@ msgstr "Events Manager unterstützt jetzt multiple Zeitzonen für deine Veransta
 msgid "Ticket Total"
 msgstr "Tickets Gesamt"
 
-#: admin/settings/updates/timezone-backcompat.php:108
-msgid "An error has occurred, not all sites were upgraded successfully."
-msgstr "Ein Fehler ist aufgetreten. Nicht alle Sites wurden erfolgreich aktualisiert."
-
-#: admin/settings/updates/timezone-backcompat.php:95
-msgctxt "Multisite Blog Update"
-msgid "Failed to update %s."
-msgstr "Update von %s fehlgeschlagen."
-
-#: admin/settings/updates/timezone-backcompat.php:53
-#: admin/settings/updates/timezone-backcompat.php:70
-msgid "We recommend you back up your database! Once the upgrade is finalized, you cannot downgrade to an earlier version of the plugin. This cannot be undone."
-msgstr "Wir empfehlen ein Backup deiner Datenbank! Nach Fertigstellung des Upgrades kannst du nicht mehr auf eine frühere Version des Plugins downgraden. Dies kann nicht rückgängig gemacht werden."
-
-#: admin/settings/updates/timezone-backcompat.php:40
-#: admin/settings/updates/timezone-backcompat.php:52
-#: admin/settings/updates/timezone-backcompat.php:69
-msgid "This is not a required step to enable any extra functionality, and therefore is not urgent. Only until you are happy with the upgrade and are confident you don't need to downgrade, finalize your upgrade by deleting and discontinuing these fields."
-msgstr "Dieser Schritt wird nicht benötigt, um Zusatzfunktionalität zu aktivieren und ist daher nicht dringend. Lösche und verzichte auf diese Felder erst, wenn du mit dem Upgrade zufrieden und sicher bist, dass du nicht downgraden musst."
-
-#: admin/settings/updates/timezone-backcompat.php:39
-#: admin/settings/updates/timezone-backcompat.php:51
-#: admin/settings/updates/timezone-backcompat.php:68
-msgid "Events Manager 5.9 introduced timezone functionality, which does not require certain fields in your database. To maintain backwards compatibility with earlier versions, these fields will still be created."
-msgstr "Events Manager 5.9 führt Zeitzonenfunktionalität ein, die bestimmte Felder in deiner Datenbank nicht benötigt. Um Rückwärtskompatibilität mit früheren Versionen sicher zu stellen, werden diese Felder trotzdem noch kreiert."
-
-#: admin/settings/updates/timezone-backcompat.php:38
-#: admin/settings/updates/timezone-backcompat.php:41
-#: admin/settings/updates/timezone-backcompat.php:50
-#: admin/settings/updates/timezone-backcompat.php:55
-#: admin/settings/updates/timezone-backcompat.php:67
-#: admin/settings/updates/timezone-backcompat.php:73
-#: admin/settings/updates/timezone-backcompat.php:86
-msgid "Finalize Timezones Upgrade"
-msgstr "Finalisiere Zeitzonenupgrade"
-
-#: admin/settings/updates/timezone-backcompat.php:25
-msgid "There was an error upgrading your site, please try again or contact support."
-msgstr "Es gab einen Fehler beim Upgrade deiner Site. Versuche es erneut oder kontaktiere den Support."
-
-#: admin/settings/updates/timezone-backcompat.php:20
-msgid "You have successfully finalized upgrading your site."
-msgstr "Du hast deine Site erfolgreich aktualisiert."
-
 #: admin/settings/tabs/general.php:25
 msgid "When creating a new event, this timezone will be applied by default."
 msgstr "Diese Zeitzone wird standardmäßig verwendet, wenn du eine neue Veranstaltung erzeugst."
@@ -615,25 +571,7 @@ msgstr "Veranstaltung-Zeitzonen für Blog %s wurden auf %s zurückgesetzt."
 msgid "A valid blog ID must be provided, you can only reset one blog at a time."
 msgstr "Eine gültige Blog ID muss angegeben werden. Du kannst nur einen Blog nach dem anderen zurücksetzen."
 
-#: admin/em-ms-options.php:30
-#: admin/settings/updates/timezone-backcompat.php:106
-msgid "Update process has finished."
-msgstr "Aktualisierungsprozess beendet."
 
-#: admin/em-ms-options.php:26 admin/settings/updates/timezone-backcompat.php:99
-msgctxt "Multisite Blog Update"
-msgid "%s does not have Events Manager activated."
-msgstr "Events Manager ist nicht auf %s aktiviert."
-
-#: admin/em-ms-options.php:23
-msgctxt "Multisite Blog Update"
-msgid "%s is up to date."
-msgstr "%s ist aktuell."
-
-#: admin/em-ms-options.php:20 admin/settings/updates/timezone-backcompat.php:93
-msgctxt "Multisite Blog Update"
-msgid "Updated %s."
-msgstr "%s aktualisiert."
 
 #: admin/settings/tabs/pages.php:412 admin/settings/tabs/pages.php:546
 msgid "When listing event archives for a %s, this order is applied."
@@ -3017,50 +2955,6 @@ msgstr "Abgelehnt"
 #: classes/em-booking.php:152 classes/em-event.php:424
 msgid "Approved"
 msgstr "Freigegeben"
-
-#: admin/settings/wpfc-admin.php:31
-msgid "If you enable tips, this information will be shown, which can include HTML."
-msgstr "Diese Informationen werden bei Aktivierung von Tipps angezeigt. HTML ist zulässig."
-
-#: admin/settings/wpfc-admin.php:31
-msgid "Event tooltips format"
-msgstr "Format Veranstaltungs Tooltips"
-
-#: admin/settings/wpfc-admin.php:30
-msgid "HTML is not accepted."
-msgstr "HTML wird nicht akzeptiert."
-
-#: admin/settings/wpfc-admin.php:30
-msgid "Event title format"
-msgstr "Format Veranstaltungstitel"
-
-#: admin/settings/wpfc-admin.php:29
-msgid "Overrides the default calendar shortcode. You can also use [events_fullcalendar] instead."
-msgstr "Überstimmt den Standard-Platzhalter für den Kalender. Alternativ kann [events_fullcalendar] verwendet werden."
-
-#: admin/settings/wpfc-admin.php:29
-msgid "Override calendar shortcode?"
-msgstr "Kalender Platzhalter überstimmen?"
-
-#: admin/settings/wpfc-admin.php:28
-msgid "If set to yes, the FullCalendar will be used instead of the standard calendar on the events page."
-msgstr "Wenn aktiviert, wird statt des Standard-Kalenders der Komplett-Kalender auf der Veranstaltungsseite verwendet."
-
-#: admin/settings/wpfc-admin.php:28
-msgid "Override calendar on events page?"
-msgstr "Kalender auf Veranstaltungsseite überstimmen?"
-
-#: admin/settings/wpfc-admin.php:24
-msgid "Looking for the rest of the FullCalendar Options? They've moved <a href=\"%s\">here</a>, the options below are for overriding specific bits relevant to Events Manager."
-msgstr "Wo sind die restlichen Komplett-Kalenderoptionen? Sie wurden nach <a href=\"%s\">hier</a> verschoben. Die Optionen dienen dazu, für Events Manager relevante Spezifika zu überstimmen."
-
-#: admin/settings/wpfc-admin.php:22
-msgid "Full Calendar Options"
-msgstr "Alle Kalender Optionen"
-
-#: admin/settings/wpfc-admin.php:13
-msgid "If you choose the Event post type whilst Events Manager is activated, you can also visit the <a href=\"%s\">Events Manager settings page</a> for a few more options when displaying event information on your calendar."
-msgstr "Wenn Veranstaltungs-Eintragstyp gewählt wird während Events Manager aktiviert ist, siehe auch <a href=\"%s\">Events Manager Einstellungen</a> für weitere Optionen zur Anzeige von Veranstaltungsinformationen im Kalender."
 
 #: admin/settings/tabs/pages.php:714
 msgid "Users can manage bookings for their events on this page."
@@ -5819,7 +5713,6 @@ msgctxt "hex format"
 msgid "Colors must be in a valid %s format, such as #FF00EE."
 msgstr "Farben müssen ein gültiges %s Format haben, wie z.B. #FF00EE."
 
-#: admin/em-ms-options.php:192 admin/em-ms-options.php:193
 #: admin/settings/tabs/formats.php:252 admin/settings/tabs/formats.php:256
 #: admin/settings/tabs/formats.php:258 admin/settings/tabs/formats.php:263
 #: admin/settings/tabs/formats.php:282 admin/settings/tabs/general.php:98
@@ -5831,16 +5724,6 @@ msgstr "Farben müssen ein gültiges %s Format haben, wie z.B. #FF00EE."
 msgid "location"
 msgstr "Veranstaltungsort"
 
-#: admin/em-ms-options.php:191
-msgid "Display global %s on main blog?"
-msgstr "Globale %s auf dem Haupt-Blog anzeigen?"
-
-#: admin/em-ms-options.php:186
-msgid "If you would prefer all your locations to belong to your main blog, users in sub-sites will still be able to create locations, but the actual locations are created and reside in the main blog."
-msgstr "Wenn du willst, dass alle Veranstaltungsorte zu deinem Haupt-Blog gehören. Benutzer deiner Unter-Seiten werden Veranstaltungsorte anlegen können. Diese werden jedoch auf dem Haupt-Blog gespeichert."
-
-#: admin/em-ms-options.php:186 admin/em-ms-options.php:191
-#: admin/em-ms-options.php:192 admin/em-ms-options.php:193
 #: admin/em-options.php:703 admin/em-options.php:704 admin/em-options.php:705
 #: admin/em-options.php:706 admin/em-options.php:707 admin/em-options.php:708
 #: admin/settings/tabs/formats.php:244 admin/settings/tabs/formats.php:245
@@ -5857,19 +5740,6 @@ msgstr "Wenn du willst, dass alle Veranstaltungsorte zu deinem Haupt-Blog gehör
 msgid "locations"
 msgstr "Veranstaltungsorte"
 
-#: admin/em-ms-options.php:186
-msgid "Locations on main blog?"
-msgstr "Veranstaltungsorte dem Haupt-Blog zuordnen?"
-
-#: admin/em-ms-options.php:184 admin/em-ms-options.php:193
-msgid "Example:"
-msgstr "Beispiel:"
-
-#: admin/em-ms-options.php:184 admin/em-ms-options.php:193
-msgid "Global %s slug"
-msgstr "Globales %s Slug"
-
-#: admin/em-ms-options.php:183 admin/em-ms-options.php:184
 #: admin/em-options.php:714 admin/em-options.php:715
 #: admin/settings/tabs/formats.php:26 admin/settings/tabs/formats.php:30
 #: admin/settings/tabs/formats.php:32 admin/settings/tabs/formats.php:37
@@ -5883,12 +5753,6 @@ msgstr "Globales %s Slug"
 msgid "event"
 msgstr "Veranstaltung"
 
-#: admin/em-ms-options.php:183 admin/em-ms-options.php:192
-msgid "Link sub-site %s directly to sub-site?"
-msgstr "Verlinken der %s von Unterwebseiten direkt zu diesen Unterwebseiten?"
-
-#: admin/em-ms-options.php:182 admin/em-ms-options.php:183
-#: admin/em-ms-options.php:184 admin/em-options.php:685
 #: admin/em-options.php:686 admin/em-options.php:687 admin/em-options.php:688
 #: admin/em-options.php:689 admin/em-options.php:690
 #: admin/settings/tabs/formats.php:273 admin/settings/tabs/formats.php:275
@@ -5905,45 +5769,11 @@ msgstr "Verlinken der %s von Unterwebseiten direkt zu diesen Unterwebseiten?"
 msgid "events"
 msgstr "Veranstaltungen"
 
-#: admin/em-ms-options.php:182
-msgid "Display global events on main blog?"
-msgstr "Globale Veranstaltungen auf dem Haupt-Blog anzeigen?"
-
-#: admin/em-ms-options.php:181 admin/em-ms-options.php:185
 #: admin/settings/tabs/bookings.php:6 admin/settings/tabs/bookings.php:23
 #: admin/settings/tabs/bookings.php:94 admin/settings/tabs/bookings.php:108
 msgid "%s Options"
 msgstr "%s Optionen"
 
-#: admin/em-ms-options.php:179
-msgid "You <strong>must</strong> have assigned a %s page in your <a href=\"%s\">main blog settings</a> for this to work."
-msgstr "Du <strong>musst</strong> eine %s Seite in deinen <a href=\"%s\">Blog Einstellungen</a> zugewiesen haben, damit das funktioniert."
-
-#: admin/em-ms-options.php:178
-msgid "Displays %s from all sites on the network by default. You can still restrict %s by blog using shortcodes and template tags coupled with the <code>blog</code> attribute. Requires global tables to be turned on."
-msgstr "Zeigt standardmäßig %s von allen Seiten im Netzwerk an. Du kannst %s pro Blog immer noch einschränken, wenn du die Shortcodes und Template-Tags mit dem <code>Blog</ code>-Attribut gekoppelt verwendest. Globale Tabellen müssen dafür eingeschaltet werden."
-
-#: admin/em-ms-options.php:177
-msgid "When displaying global %s on the main site you have the option of users viewing the %s details on the main site or being directed to the sub-site."
-msgstr "Bei der Anzeige von global %s auf der Haupt-Seite hast du die Möglichkeit, Nutzer beim Betrachten der %s Details auf die Haupt-Seite oder an die Unter-Website weiterzuleiten."
-
-#: admin/em-ms-options.php:176
-msgid "%s belonging to other sub-sites will have an extra slug prepended to it so that your main site can differentiate between its own %s and those belonging to other sites in your network."
-msgstr "%s, die zu anderen Unter-Seiten gehören, bekommen einen extra Slug vorangestellt, so dass deine Haupt-Seite zwischen eigenen %s und denen deiner anderen Seiten im Netzwerk unterscheiden kann."
-
-#: admin/em-ms-options.php:171
-msgid "Setting this to yes will make all events save in the main site event tables (EM must also be activated). This allows you to share events across different blogs, such as showing events in your network whilst allowing users to display and manage their events within their own blog. Bear in mind that activating this will mean old events created on the sub-blogs will not be accessible anymore, and if you switch back they will be but new events created during global events mode will only remain on the main site."
-msgstr "Wird dies auf Ja gesetzt, werden alle Veranstaltungen in den Tabellen der Haupt-Seite speichern (EM muss dafür auch aktiviert sein). Dies ermöglicht dir, Ereignisse über verschiedene Blogs zu teilen, zum Beispiel deine Veranstaltungen in deinem Netzwerk während Nutzer ihre eigenen Veranstaltungen in ihrem eigenen Blog verwalten können. Denke daran, dass die Aktivierung dieser Option bedeutet, dass alte, in Unter-Blogs angelegte Veranstaltungen dann nicht mehr zugänglich sind. Und wenn du wieder zurückwechselst, sind sie zwar diese alten Veranstaltungen wieder zugänglich, aber die inzwischen neu angelegten Veranstaltungen sind dann nur noch auf der Haupt-Seite verfügbar."
-
-#: admin/em-ms-options.php:171
-msgid "Enable global tables mode?"
-msgstr "Globalen Tabellen-Modus aktivieren?"
-
-#: admin/em-ms-options.php:167
-msgid "Multi Site Options"
-msgstr "Multi Site Optionen"
-
-#: admin/em-ms-options.php:167 admin/em-options.php:572
 #: admin/em-options.php:598 admin/em-options.php:673 admin/em-options.php:796
 #: admin/em-options.php:984 admin/settings/tabs/bookings.php:6
 #: admin/settings/tabs/bookings.php:23 admin/settings/tabs/bookings.php:41
@@ -5961,64 +5791,42 @@ msgstr "Multi Site Optionen"
 #: admin/settings/tabs/pages.php:36 admin/settings/tabs/pages.php:53
 #: admin/settings/tabs/pages.php:195 admin/settings/tabs/pages.php:242
 #: admin/settings/tabs/pages.php:365 admin/settings/tabs/pages.php:499
-#: admin/settings/tabs/pages.php:631 admin/settings/wpfc-admin.php:22
+#: admin/settings/tabs/pages.php:631 
 #: classes/em-oauth/oauth-admin-settings.php:60
 msgid "Click to toggle"
 msgstr "Klicken zum Umschalten"
 
-#: admin/em-ms-options.php:139 admin/em-options.php:475
-msgid "Event Manager Options"
-msgstr "Event Manager Optionen"
-
-#: admin/em-ms-options.php:148 admin/em-options.php:477
 #: admin/settings/tabs/bookings.php:6 em-install.php:1063
 msgid "General"
 msgstr "Allgemein"
 
-#: admin/em-ms-options.php:80 admin/em-options.php:457
+#: admin/em-options.php:457
 #: classes/em-bookings-table.php:54
 msgid "All"
 msgstr "Alle"
 
-#: admin/em-ms-options.php:80 admin/em-ms-options.php:235
 #: admin/em-options.php:457 admin/em-options.php:551
 msgid "Save Changes"
 msgstr "Änderungen speichern"
 
-#: admin/em-ms-options.php:77 admin/em-options.php:454
+#: admin/em-options.php:454
 msgid "This accepts %s, %s and %s placeholders."
 msgstr "%s, %s und %s sind erlaubt."
 
-#: admin/em-ms-options.php:75 admin/em-ms-options.php:76
 #: admin/em-options.php:452 admin/em-options.php:453
 msgid "This accepts %s placeholders."
 msgstr " %s sind erlaubt."
 
-#: admin/em-ms-options.php:74 admin/em-options.php:451
+#: admin/em-options.php:451
 msgid "This accepts %s and %s placeholders."
 msgstr "%s und %s können verwendet werden."
 
-#: admin/em-ms-options.php:36
-msgid "To update your network blogs with the latest Events Manager automatically, click the update button below."
-msgstr "Um Events Manager automatisch auf allen Blogs des Netzwerks zu aktualisieren, klicke auf den Aktualisieren Knopf unten."
 
-#: admin/em-ms-options.php:6 admin/em-ms-options.php:39 em-install.php:1058
-msgid "Update Network"
-msgstr "Netzwerk aktualiseren"
-
-#: admin/em-ms-locations.php:39
-msgid "Edit location"
-msgstr "Standort bearbeiten"
-
-#: admin/em-ms-locations.php:36
-msgid "Add location"
-msgstr "Standort hinzufügen"
-
-#: admin/em-help.php:40 admin/em-ms-options.php:72 admin/em-options.php:449
+#: admin/em-help.php:40 admin/em-options.php:449
 msgid "Booking Related Placeholders"
 msgstr "Platzhalter für Buchungen"
 
-#: admin/em-help.php:37 admin/em-ms-options.php:71 admin/em-options.php:448
+#: admin/em-help.php:37 admin/em-options.php:448
 msgid "Location Related Placeholders"
 msgstr "Platzhalter für Veranstaltungsorte"
 
@@ -6026,11 +5834,11 @@ msgstr "Platzhalter für Veranstaltungsorte"
 msgid "Tag Related Placeholders"
 msgstr "Schlagwort-basierte Platzhalter"
 
-#: admin/em-help.php:32 admin/em-ms-options.php:73 admin/em-options.php:450
+#: admin/em-help.php:32 admin/em-options.php:450
 msgid "Category Related Placeholders"
 msgstr "Platzhalter für Kategorien"
 
-#: admin/em-help.php:27 admin/em-ms-options.php:70 admin/em-options.php:447
+#: admin/em-help.php:27 admin/em-options.php:447
 msgid "Event Related Placeholders"
 msgstr "Platzhalter für Veranstaltungen"
 
@@ -6124,7 +5932,7 @@ msgstr "Buchungsdetails"
 #: admin/em-bookings.php:238 admin/em-bookings.php:287
 #: admin/em-bookings.php:419 admin/em-options.php:401 admin/em-options.php:418
 #: admin/settings/tabs/bookings.php:82
-#: admin/settings/updates/timezone-backcompat.php:56 em-install.php:723
+#: em-install.php:723
 #: templates/templates/my-bookings.php:69
 msgid "Cancel"
 msgstr "Abbrechen"
@@ -6222,7 +6030,6 @@ msgstr "Du hast nicht die Rechte, dieses Ticket zu verwalten."
 #: admin/em-bookings.php:110 admin/em-data-privacy.php:380
 #: admin/em-data-privacy.php:392 admin/em-data-privacy.php:394
 #: admin/em-data-privacy.php:459 admin/em-data-privacy.php:461
-#: admin/em-ms-options.php:185 admin/em-options.php:701
 #: admin/settings/tabs/formats.php:251 admin/settings/tabs/formats.php:262
 #: admin/settings/tabs/formats.php:263 admin/settings/tabs/formats.php:267
 #: admin/settings/tabs/formats.php:268 admin/settings/tabs/general.php:56
@@ -6307,7 +6114,7 @@ msgstr "Deinstallieren"
 
 #: admin/em-admin.php:223 admin/em-data-privacy.php:48
 #: admin/em-data-privacy.php:199 admin/em-data-privacy.php:357
-#: admin/em-ms-options.php:184 admin/em-options.php:996
+#: admin/em-options.php:996
 #: admin/em-options.php:1006 admin/settings/tabs/formats.php:5
 #: admin/settings/tabs/formats.php:9 admin/settings/tabs/pages.php:19
 #: admin/settings/tabs/pages.php:59 buddypress/bp-em-activity.php:66
@@ -6372,7 +6179,7 @@ msgstr "Events Manager"
 #: admin/em-admin.php:45 admin/em-data-privacy.php:54
 #: admin/em-data-privacy.php:205 admin/em-data-privacy.php:344
 #: admin/em-data-privacy.php:443 admin/em-ms-locations.php:26
-#: admin/em-ms-options.php:193 admin/em-options.php:997
+#: admin/em-options.php:997
 #: admin/em-options.php:1007 admin/settings/tabs/formats.php:239
 #: admin/settings/tabs/formats.php:242 admin/settings/tabs/formats.php:244
 #: admin/settings/tabs/formats.php:245 admin/settings/tabs/formats.php:246
@@ -6448,7 +6255,7 @@ msgstr "Datum und Uhrzeit"
 #: admin/bookings/em-person.php:86 admin/em-bookings.php:88
 #: admin/em-bookings.php:89 admin/em-data-privacy.php:275
 #: admin/em-data-privacy.php:367 admin/em-data-privacy.php:369
-#: admin/em-ms-options.php:181 admin/em-options.php:683
+#: admin/em-options.php:683
 #: admin/settings/tabs/formats.php:25 admin/settings/tabs/formats.php:36
 #: admin/settings/tabs/formats.php:37 admin/settings/tabs/formats.php:41
 #: admin/settings/tabs/formats.php:42 admin/settings/tabs/formats.php:224
@@ -6675,3 +6482,9 @@ msgstr "Hier eintragen, wenn der Referent eoine spezielle Funktion hat (Leiter, 
 
 msgid "Off"
 msgstr "von"
+
+msgid "Begins at:"
+msgstr "Beginnt um:"
+
+msgid "Ends at:"
+msgstr "Endet um:"

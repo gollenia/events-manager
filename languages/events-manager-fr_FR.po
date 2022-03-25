@@ -527,50 +527,6 @@ msgstr "Events Manager unterstützt jetzt multiple Zeitzonen für deine Veransta
 msgid "Ticket Total"
 msgstr "Tickets Gesamt"
 
-#: admin/settings/updates/timezone-backcompat.php:108
-msgid "An error has occurred, not all sites were upgraded successfully."
-msgstr "Ein Fehler ist aufgetreten. Nicht alle Sites wurden erfolgreich aktualisiert."
-
-#: admin/settings/updates/timezone-backcompat.php:95
-msgctxt "Multisite Blog Update"
-msgid "Failed to update %s."
-msgstr "Update von %s fehlgeschlagen."
-
-#: admin/settings/updates/timezone-backcompat.php:53
-#: admin/settings/updates/timezone-backcompat.php:70
-msgid "We recommend you back up your database! Once the upgrade is finalized, you cannot downgrade to an earlier version of the plugin. This cannot be undone."
-msgstr "Wir empfehlen ein Backup deiner Datenbank! Nach Fertigstellung des Upgrades kannst du nicht mehr auf eine frühere Version des Plugins downgraden. Dies kann nicht rückgängig gemacht werden."
-
-#: admin/settings/updates/timezone-backcompat.php:40
-#: admin/settings/updates/timezone-backcompat.php:52
-#: admin/settings/updates/timezone-backcompat.php:69
-msgid "This is not a required step to enable any extra functionality, and therefore is not urgent. Only until you are happy with the upgrade and are confident you don't need to downgrade, finalize your upgrade by deleting and discontinuing these fields."
-msgstr "Dieser Schritt wird nicht benötigt, um Zusatzfunktionalität zu aktivieren und ist daher nicht dringend. Lösche und verzichte auf diese Felder erst, wenn du mit dem Upgrade zufrieden und sicher bist, dass du nicht downgraden musst."
-
-#: admin/settings/updates/timezone-backcompat.php:39
-#: admin/settings/updates/timezone-backcompat.php:51
-#: admin/settings/updates/timezone-backcompat.php:68
-msgid "Events Manager 5.9 introduced timezone functionality, which does not require certain fields in your database. To maintain backwards compatibility with earlier versions, these fields will still be created."
-msgstr "Events Manager 5.9 führt Zeitzonenfunktionalität ein, die bestimmte Felder in deiner Datenbank nicht benötigt. Um Rückwärtskompatibilität mit früheren Versionen sicher zu stellen, werden diese Felder trotzdem noch kreiert."
-
-#: admin/settings/updates/timezone-backcompat.php:38
-#: admin/settings/updates/timezone-backcompat.php:41
-#: admin/settings/updates/timezone-backcompat.php:50
-#: admin/settings/updates/timezone-backcompat.php:55
-#: admin/settings/updates/timezone-backcompat.php:67
-#: admin/settings/updates/timezone-backcompat.php:73
-#: admin/settings/updates/timezone-backcompat.php:86
-msgid "Finalize Timezones Upgrade"
-msgstr "Finalisiere Zeitzonenupgrade"
-
-#: admin/settings/updates/timezone-backcompat.php:25
-msgid "There was an error upgrading your site, please try again or contact support."
-msgstr "Es gab einen Fehler beim Upgrade deiner Site. Versuche es erneut oder kontaktiere den Support."
-
-#: admin/settings/updates/timezone-backcompat.php:20
-msgid "You have successfully finalized upgrading your site."
-msgstr "Du hast deine Site erfolgreich aktualisiert."
-
 #: admin/settings/tabs/general.php:25
 msgid "When creating a new event, this timezone will be applied by default."
 msgstr "Diese Zeitzone wird standardmäßig verwendet, wenn du eine neue Veranstaltung erzeugst."
@@ -620,11 +576,10 @@ msgid "A valid blog ID must be provided, you can only reset one blog at a time."
 msgstr "Eine gültige Blog ID muss angegeben werden. Du kannst nur einen Blog nach dem anderen zurücksetzen."
 
 #: admin/em-ms-options.php:30
-#: admin/settings/updates/timezone-backcompat.php:106
 msgid "Update process has finished."
 msgstr "Aktualisierungsprozess beendet."
 
-#: admin/em-ms-options.php:26 admin/settings/updates/timezone-backcompat.php:99
+#: admin/em-ms-options.php:26
 msgctxt "Multisite Blog Update"
 msgid "%s does not have Events Manager activated."
 msgstr "Events Manager ist nicht auf %s aktiviert."
@@ -634,7 +589,7 @@ msgctxt "Multisite Blog Update"
 msgid "%s is up to date."
 msgstr "%s ist aktuell."
 
-#: admin/em-ms-options.php:20 admin/settings/updates/timezone-backcompat.php:93
+#: admin/em-ms-options.php:20
 msgctxt "Multisite Blog Update"
 msgid "Updated %s."
 msgstr "%s aktualisiert."
@@ -3138,50 +3093,6 @@ msgstr "%s besucht %s der Gruppe %s."
 #: buddypress/bp-em-activity.php:64 em-posts.php:153
 msgid "New Event"
 msgstr "Neue Veranstaltung"
-
-#: admin/settings/wpfc-admin.php:31
-msgid "If you enable tips, this information will be shown, which can include HTML."
-msgstr "Diese Informationen werden bei Aktivierung von Tipps angezeigt. HTML ist zulässig."
-
-#: admin/settings/wpfc-admin.php:31
-msgid "Event tooltips format"
-msgstr "Format Veranstaltungs Tooltips"
-
-#: admin/settings/wpfc-admin.php:30
-msgid "HTML is not accepted."
-msgstr "HTML wird nicht akzeptiert."
-
-#: admin/settings/wpfc-admin.php:30
-msgid "Event title format"
-msgstr "Format Veranstaltungstitel"
-
-#: admin/settings/wpfc-admin.php:29
-msgid "Overrides the default calendar shortcode. You can also use [events_fullcalendar] instead."
-msgstr "Überstimmt den Standard-Platzhalter für den Kalender. Alternativ kann [events_fullcalendar] verwendet werden."
-
-#: admin/settings/wpfc-admin.php:29
-msgid "Override calendar shortcode?"
-msgstr "Kalender Platzhalter überstimmen?"
-
-#: admin/settings/wpfc-admin.php:28
-msgid "If set to yes, the FullCalendar will be used instead of the standard calendar on the events page."
-msgstr "Wenn aktiviert, wird statt des Standard-Kalenders der Komplett-Kalender auf der Veranstaltungsseite verwendet."
-
-#: admin/settings/wpfc-admin.php:28
-msgid "Override calendar on events page?"
-msgstr "Kalender auf Veranstaltungsseite überstimmen?"
-
-#: admin/settings/wpfc-admin.php:24
-msgid "Looking for the rest of the FullCalendar Options? They've moved <a href=\"%s\">here</a>, the options below are for overriding specific bits relevant to Events Manager."
-msgstr "Wo sind die restlichen Komplett-Kalenderoptionen? Sie wurden nach <a href=\"%s\">hier</a> verschoben. Die Optionen dienen dazu, für Events Manager relevante Spezifika zu überstimmen."
-
-#: admin/settings/wpfc-admin.php:22
-msgid "Full Calendar Options"
-msgstr "Alle Kalender Optionen"
-
-#: admin/settings/wpfc-admin.php:13
-msgid "If you choose the Event post type whilst Events Manager is activated, you can also visit the <a href=\"%s\">Events Manager settings page</a> for a few more options when displaying event information on your calendar."
-msgstr "Wenn Veranstaltungs-Eintragstyp gewählt wird während Events Manager aktiviert ist, siehe auch <a href=\"%s\">Events Manager Einstellungen</a> für weitere Optionen zur Anzeige von Veranstaltungsinformationen im Kalender."
 
 #: admin/settings/tabs/pages.php:714
 msgid "Users can manage bookings for their events on this page."
@@ -6082,7 +5993,7 @@ msgstr "Multi Site Optionen"
 #: admin/settings/tabs/pages.php:36 admin/settings/tabs/pages.php:53
 #: admin/settings/tabs/pages.php:195 admin/settings/tabs/pages.php:242
 #: admin/settings/tabs/pages.php:365 admin/settings/tabs/pages.php:499
-#: admin/settings/tabs/pages.php:631 admin/settings/wpfc-admin.php:22
+#: admin/settings/tabs/pages.php:631
 #: classes/em-oauth/oauth-admin-settings.php:60
 msgid "Click to toggle"
 msgstr "Klicken zum Umschalten"
@@ -6245,7 +6156,7 @@ msgstr "Buchungsdetails"
 #: admin/em-bookings.php:238 admin/em-bookings.php:287
 #: admin/em-bookings.php:419 admin/em-options.php:401 admin/em-options.php:418
 #: admin/settings/tabs/bookings.php:82
-#: admin/settings/updates/timezone-backcompat.php:56 em-install.php:723
+#: em-install.php:723
 #: templates/templates/my-bookings.php:69
 msgid "Cancel"
 msgstr "Abbrechen"
