@@ -40,7 +40,7 @@ class Booking {
 	}     
 
     /**
-     * Register Scripts for frontend
+     * Register Scripts for frontend and add the event data  for booking
      *
      * @return void
      */
@@ -52,13 +52,13 @@ class Booking {
 
 		$script_asset = require( EM_DIR . "/includes/booking.asset.php" );
 		wp_enqueue_script( 
-			'booking_app', 
+			'booking', 
 			plugins_url( '/../includes/booking.js', __FILE__ ),
 			$script_asset['dependencies'],
 			$script_asset['version'],
 			true 
 		);
-		wp_localize_script( 'booking_app', 'bookingAppData',
+		wp_localize_script( 'booking', 'bookingAppData',
 		array( 
 			'booking_nonce' => wp_create_nonce('booking_add'),
 			'rest_nonce' => wp_create_nonce( 'booking_rest' ),
@@ -88,7 +88,7 @@ class Booking {
 				"dont_close" => get_option("dbem_booking_button_msg_booked")
 			]
 		));
-		wp_set_script_translations( 'booking_app', 'em-pro', plugin_dir_path( EM_DIR ) . '/languages' );
+		wp_set_script_translations( 'booking', 'events', EM_DIR  . '/languages' );
     
     }
 
