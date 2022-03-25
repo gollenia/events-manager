@@ -6713,3 +6713,6 @@ msgstr "Beginnt um:"
 
 msgid "Ends at:"
 msgstr "Endet um:"
+
+msgid "o'clock"
+msgstr "Uhr"

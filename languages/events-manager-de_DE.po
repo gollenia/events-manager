@@ -6709,7 +6709,10 @@ msgid "Off"
 msgstr "von"
 
 msgid "Begins at:"
-msgstr "commence à:"
+msgstr "Beginnt um:"
 
 msgid "Ends at:"
-msgstr "fini à:"
+msgstr "Endet um:"
+
+msgid "o'clock"
+msgstr "Uhr"

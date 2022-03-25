@@ -6707,3 +6707,12 @@ msgstr "Si l'orateur a un rôle particulier (par exemple, organisateur, cuir, et
 
 msgid "Off"
 msgstr "á"
+
+msgid "Begins at:"
+msgstr "commence à:"
+
+msgid "Ends at:"
+msgstr "fini à:"
+
+msgid "o'clock"
+msgstr " "
