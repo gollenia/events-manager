@@ -1,0 +1,133 @@
+<div class="description">
+	<!-- AUDIENCE -->
+	{% if event.audience and showAudience %}
+	<div class="description__item">
+		<div class="description__image">
+			<i class="description__icon material-icons">{{audienceIcon}}</i>
+		</div>
+		<div class="description__text">
+			<div class="description__title">{{ audienceDescription ? audienceDescription : __("Audience", "em-pro")}}</div>
+			<div class="description__data">{{event.audience}}</div>
+		</div>
+	</div> 
+	{% endif %}
+	<!-- End AUDIENCE -->
+	<!-- DATE -->
+	{% if showDate %}
+	<div class="description__item">
+		<div class="description__image">
+			<i class="description__icon material-icons">{{ is_daterange ? "date_range" : "event" }}</i>
+		</div>
+		<div class="description__text">
+			<div class="description__title">{{ __("Date", "em-pro")}}</div>
+			<time class="description__data">
+			
+				{{ date }}
+
+			</time>
+		</div>                        
+	</div>
+	{% endif %}
+	<!-- End DATE -->
+	<!-- TIME will only be shown, if the event is NOT an all-day event -->
+	{% if event.event_all_day != 1 and showTime %}
+	<div class="description__item">
+		<div class="description__image">
+			<i class="description__icon material-icons">schedule</i>
+		</div>
+		<div class="description__text">
+			<div class="description__title">{{ __("Time", "em-pro")}}</div>
+			<time class="description__data">
+				{{ time }}
+			</time>
+		</div>
+	</div>
+	{% endif %}
+	<!-- End TIME -->
+	<!-- LOCATION -->
+	{% if showLocation and event.location %}
+	<div class="description__item">  
+		<div class="description__image">
+			<i class="description__icon material-icons">place</i>
+		</div>
+		<div class="description__text">
+			<div class="description__title">{{ __("Location", "events-manager")}}</div>
+			<address class="description__data">{{event.location.name}}<br>{{event.location.address}}<br>{{event.location.zip}} {{event.location.city}}</address>
+		</div>
+		
+		{% if locationLink and event.location.url %}
+		<div class="description__action">
+			<a target="_blank" href="{{event.location.url}}"><i class="material-icons">navigation</i></a>
+		</div>
+		{% endif %}
+	</div>
+	{% endif %}
+	<!-- End LOCATION -->
+	<!-- SPACE WARNING -->
+	{% if bookings and bookings < 5 and bookings > 0 %}
+	<div class="description__item">
+		<div class="description__image">
+			<i class="description__icon material-icons">warning</i>
+		</div>
+		<div class="description__text">
+			<div class="description__title">{{ __("Caution", "em-pro")}}</div>
+			<div class="description__data">{{ __("Only few spaces left", "em-pro") }}</div>
+		</div>
+	</div>
+	{% endif %}
+	{% if bookings and not bookings %}
+	<div class="description__item">
+		<div class="description__image">
+			<i class="description__icon material-icons">warning</i>
+		</div>
+		<div class="description__text">
+			<div class="description__title">{{ __("Caution", "em-pro")}}</div>
+			<div class="description__data">{{ __("No spaces left", "em-pro") }}</div>
+		</div>
+	</div>
+	{% endif %}
+	<!-- End SPACE WARNING -->
+	<!-- PRICE -->
+	{% if price.free and showPrice %}
+	<div class="description__item">
+		<div class="description__image">
+			<i class="description__icon material-icons">savings</i>
+		</div>
+		<div class="description__text">
+			<div class="description__title">{{ __("Price", "em-pro")}}</div>
+			<div class="description__data"> {{ __("Free", "em-pro")}} </div>
+		</div>
+	</div>
+	{% elseif not price.free and showPrice %}
+	<div class="description__item">
+		<div class="description__image">
+			<i class="description__icon material-icons">{{price.currency}}</i>
+		</div>
+		<div class="description__text">
+			<div class="description__title">{{ __("Price", "em-pro")}}</div>
+			<div class="description__data"> {{price.format}} </div>
+		</div> 
+	</div>
+	{% endif %}
+	<!-- End PRICE -->
+	<!-- SPEAKER -->
+	{% if event.speaker and showSpeaker %}
+	<div class="description__item">  
+		<div class="description__image">
+			<img src="{{event.speaker.image.sizes.thumbnail.url}}">
+		</div>
+		<div class="description__text">
+			<div class="description__title">{{ speakerDescription ? speakerDescription : __("Speaker", "em-pro")}}</div>
+			<div class="description__data">{{event.speaker.name}}</div>
+		</div>
+
+		{% if event.speaker.email and speakerLink %}
+		<div class="description__action">
+			<a target="_blank" href="mailto:{{event.speaker.email}}"><i class="material-icons">mail</i></a>
+		</div>
+		{% endif %}
+	</div>
+	{% endif %}
+	<!-- End SPEAKER -->
+		
+</div>
