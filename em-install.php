@@ -26,7 +26,7 @@ function em_install() {
 				
 				update_site_option('dbem_ms_update_nag',1);
 			}elseif( empty($old_version) ){
-				em_create_events_page();
+				
 				update_option('dbem_hello_to_user',1);
 			}
 					
@@ -455,8 +455,7 @@ function em_add_options() {
 		'dbem_event_reapproved_email_subject' => __("Event Approved",'events-manager'). " - #_EVENTNAME" ,
 		'dbem_event_reapproved_email_body' => str_replace("<br/>", "\n\r", $event_approved_email_body),
 		//Event Formatting
-		'dbem_events_page_title' => __('Events','events-manager'),
-		'dbem_events_page_scope' => 'future',
+		
 		'dbem_events_page_search_form' => 1,
 		'dbem_event_list_item_format_header' => '<table class="events-table" >
     <thead>
@@ -483,7 +482,6 @@ function em_add_options() {
 		'dbem_display_calendar_in_events_page' => 0,
 	    'dbem_event_excerpt_format' => '#_EVENTDATES @ #_EVENTTIMES - #_EVENTEXCERPT',
 	    'dbem_event_excerpt_alt_format' => '#_EVENTDATES @ #_EVENTTIMES - #_EVENTEXCERPT{55}',
-		'dbem_event_page_title_format' => '#_EVENTNAME',
 		'dbem_event_all_day_message' => __('All Day','events-manager'),
 		'dbem_no_events_message' => sprintf(__( 'No %s', 'events-manager'),__('Events','events-manager')),
 		//Location Formatting
@@ -768,7 +766,6 @@ function em_add_options() {
 	    'dbem_disable_thumbnails'=> false,
 	    //feedback reminder
 	    'dbem_feedback_reminder' => time(),
-	    'dbem_events_page_ajax' => 0,
 	    'dbem_conditional_recursions' => 1,
         //data privacy/protection
         'dbem_data_privacy_consent_text' => esc_html__('I consent to my submitted data being collected and stored as outlined by the site %s.','events-manager'),
@@ -1067,74 +1064,6 @@ function em_set_capabilities(){
 			}
 		}
 		em_set_mass_caps( array('administrator','editor','contributor','author','subscriber'), $default_caps);
-	}
-}
-
-function em_create_events_page(){
-	global $wpdb,$current_user;
-	$event_page_id = get_option('dbem_events_page');
-	if( empty($event_page_id) ){
-		$post_data = array(
-			'post_status' => 'publish',
-			'post_type' => 'page',
-			'ping_status' => get_option('default_ping_status'),
-			'post_content' => 'CONTENTS',
-			'post_excerpt' => 'CONTENTS',
-			'post_title' => __('Events','events-manager')
-		);
-		$post_id = wp_insert_post($post_data, false);
-	   	if( $post_id > 0 ){
-	   		update_option('dbem_events_page', $post_id);
-	   		//Now Locations Page
-	   		$post_data = array(
-				'post_status' => 'publish',
-	   			'post_parent' => $post_id,
-				'post_type' => 'page',
-				'ping_status' => get_option('default_ping_status'),
-				'post_content' => 'CONTENTS',
-				'post_excerpt' => '',
-				'post_title' => __('Locations','events-manager')
-			);
-			$loc_id = wp_insert_post($post_data, false);
-	   		update_option('dbem_locations_page', $loc_id);
-	   		//Now Categories Page
-	   		$post_data = array(
-				'post_status' => 'publish',
-	   			'post_parent' => $post_id,
-				'post_type' => 'page',
-				'ping_status' => get_option('default_ping_status'),
-				'post_content' => 'CONTENTS',
-				'post_excerpt' => '',
-				'post_title' => __('Categories','events-manager')
-			);
-			$cat_id = wp_insert_post($post_data, false);
-	   		update_option('dbem_categories_page', $cat_id);
-	   		//Now Tags Page
-	   		$post_data = array(
-				'post_status' => 'publish',
-	   			'post_parent' => $post_id,
-				'post_type' => 'page',
-				'ping_status' => get_option('default_ping_status'),
-				'post_content' => 'CONTENTS',
-				'post_excerpt' => '',
-				'post_title' => __('Tags','events-manager')
-			);
-			$tag_id = wp_insert_post($post_data, false);
-	   		update_option('dbem_tags_page', $tag_id);
-		   	//Now Bookings Page
-		   	$post_data = array(
-				'post_status' => 'publish',
-		   		'post_parent' => $post_id,
-				'post_type' => 'page',
-				'ping_status' => get_option('default_ping_status'),
-				'post_content' => 'CONTENTS',
-				'post_excerpt' => '',
-				'post_title' => __('My Bookings','events-manager'),
-		   		'post_slug' => 'my-bookings'
-			);
-			$bookings_post_id = wp_insert_post($post_data, false);
-	   		
-	   	}
 	}
 }
 
