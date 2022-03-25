@@ -48,9 +48,10 @@ const edit = (props) => {
 	}, [] );
 
 	useEffect(() => {
-		fetch("/wp-json/events/v2/events?post_id=" + currentEventId).then(response => response.json()).then(data => 
+		fetch("/wp-json/events/v2/events?post_id=" + currentEventId).then(response => response.json()).then(data => {
+			console.log(data);
 			setEvent(data[0])
-		)
+		})
 	}, [])
 
 
@@ -67,6 +68,7 @@ const edit = (props) => {
 		
 	}
 
+
 	console.log(event)
 
 	return (
@@ -76,14 +78,14 @@ const edit = (props) => {
 			/>
 
 			<div className='ctx:event-details__wrapper'>
-					{ showAudience && <div className='ctx:event-details__item'><i className="material-icons">{audienceIcon}</i><div><h5>{audienceDescription ?? __('Audience', 'events')}</h5>{event.audience ?? __('no data')}</div></div>}
+					{ showAudience && <div className='ctx:event-details__item'><i className="material-icons">{audienceIcon}</i><div><h5>{audienceDescription ?? __('Audience', 'events')}</h5>{event?.audience ?? __('no data')}</div></div>}
 					{ showLocation && <div className='ctx:event-details__item'><i className="material-icons">place</i><div><h5>{__('Location', 'events')}</h5>{event?.location?.address}</div></div>}
 					{ showDate && <div className='ctx:event-details__item'><i className="material-icons">today</i><div><h5>{__('Date', 'events')}</h5>{startFormatted()}</div></div>}
-					{ showTime && <div className='ctx:event-details__item'><i className="material-icons">schedule</i><div><h5>{__('Time', 'events')}</h5>{event.start}</div></div>}
+					{ showTime && <div className='ctx:event-details__item'><i className="material-icons">schedule</i><div><h5>{__('Time', 'events')}</h5>{event?.start}</div></div>}
 					{ showSpeaker && 
 						<div className='ctx:event-details__item'>
 							{ speakerIcon == '' && 
-								<img className="ctx:event-details__image" src={event.speaker?.image?.sizes?.thumbnail?.url}/>
+								<img className="ctx:event-details__image" src={event?.speaker?.image?.sizes?.thumbnail?.url}/>
 							} { !speakerIcon == '' && 
 								<i className="material-icons">{speakerIcon}</i>
 							}

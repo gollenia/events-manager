@@ -564,6 +564,7 @@ class EM_Event extends EM_Object{
 				//Get custom fields and post meta
 				
 				foreach($event_meta as $event_meta_key => $event_meta_val){
+					
 					$field_name = substr($event_meta_key, 1);
 					if($event_meta_key[0] != '_'){
 						$this->event_attributes[$event_meta_key] = ( is_array($event_meta_val) ) ? $event_meta_val[0]:$event_meta_val;
@@ -876,7 +877,9 @@ class EM_Event extends EM_Object{
 		$this->compat_keys(); //compatability
 
 		$this->event_audience = $_POST['event_audience'] ?? "";
+		
 		$this->speaker_id = intval($_POST['speaker_id']) ?? 0;
+
 		
 
 		return apply_filters('em_event_get_post_meta', count($this->errors) == 0, $this);
