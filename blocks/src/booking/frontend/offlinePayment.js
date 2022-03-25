@@ -45,7 +45,7 @@ const OfflinePayment = (props) => {
 					<div className="card card--no-image card--shadow bg-white card--center">
 						
 						<div className="card__content">
-							<div className="card__title">{__("Scan to pay", "em-pro")}</div>
+							<div className="card__title">{__("Scan to pay", "events")}</div>
 							<SVG className="w-full" src={`/wp-admin/admin-ajax.php?action=em_qr_code&booking_id=${bookingId}`}></SVG>
 						</div>
 					</div>
@@ -53,12 +53,12 @@ const OfflinePayment = (props) => {
 				<div className='md:grid__column--span-2 xl:grid__column--span-3'>
 					<p dangerouslySetInnerHTML={{__html: html}}></p>
 					<table className="table--dotted">
-						<tr><th className='text-left'>{__('Bank', 'em-pro')}</th><td>{paymentInfo.bank}</td></tr>
-						<tr><th className='text-left'>{__('IBAN', 'em-pro')}</th><td>{paymentInfo.iban}</td></tr>
-						<tr><th className='text-left'>{__('BIC', 'em-pro')}</th><td>{paymentInfo.bic}</td></tr>
-						<tr><th className='text-left'>{__('Beneficial', 'em-pro')}</th><td>{paymentInfo.beneficiary}</td></tr>
-						<tr><th className='text-left'>{__('Purpose', 'em-pro')}</th><td>{paymentInfo.purpose}</td></tr>
-						<tr><th className='text-left'>{__('Amount', 'em-pro')}</th><td>{paymentInfo.amount} {strings.currency}</td></tr>
+						<tr><th className='text-left'>{__('Bank', 'events')}</th><td>{paymentInfo.bank}</td></tr>
+						<tr><th className='text-left'>{__('IBAN', 'events')}</th><td>{paymentInfo.iban}</td></tr>
+						<tr><th className='text-left'>{__('BIC', 'events')}</th><td>{paymentInfo.bic}</td></tr>
+						<tr><th className='text-left'>{__('Beneficial', 'events')}</th><td>{paymentInfo.beneficiary}</td></tr>
+						<tr><th className='text-left'>{__('Purpose', 'events')}</th><td>{paymentInfo.purpose}</td></tr>
+						<tr><th className='text-left'>{__('Amount', 'events')}</th><td>{paymentInfo.amount} {strings.currency}</td></tr>
 					</table>
 				</div>
 			</div>
