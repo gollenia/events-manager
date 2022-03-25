@@ -53,7 +53,7 @@ const TicketList = (props) => {
                     <div className="list__content">
                         <div className="list__title">{ticket.name}</div>    
                         <div className="list__subtitle">{ticket.description}</div>
-                        <div className="list__subtitle">{__("Base price:", "em-pro")} {ticket.price} {strings.currency}</div>
+                        <div className="list__subtitle">{__("Base price:", "events")} {ticket.price} {strings.currency}</div>
                     </div>
                     <div className="list__actions">
                         <span className="button button--pseudo nowrap">{ticketPrice(key)} {strings.currency}</span>
@@ -64,7 +64,7 @@ const TicketList = (props) => {
                 { coupon.success &&
                 <div className="list__item" >
                     <div className="list__content">
-                        <div className="list__title">{coupon.description || __("Coupon", "em-pro")}</div>    
+                        <div className="list__title">{coupon.description || __("Coupon", "events")}</div>    
                         
                     </div>
                     <div className="list__actions">
@@ -75,7 +75,7 @@ const TicketList = (props) => {
                 }
                 <div className="list__item" >
                     <div className="list__content">
-                        <div className="list__title"><b>{__("Full price", "em-pro")} {strings.currency}</b></div>    
+                        <div className="list__title"><b>{__("Full price", "events")} {strings.currency}</b></div>    
                         
                     </div>
                     <div className="list__actions">

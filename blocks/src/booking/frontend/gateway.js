@@ -22,7 +22,7 @@ const Gateway = (props) => {
 
     return (
         <div>
-            <h5>{__("Payment", "em-pro")}</h5>
+            <h5>{__("Payment", "events")}</h5>
             <h3>{title}</h3>
             <p dangerouslySetInnerHTML={createMarkup()}></p>
             <div>

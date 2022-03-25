@@ -80,7 +80,7 @@ const Payment = (props) => {
                         <div className="list__content">
                             <div className="list__title">{tickets[id].name}</div>    
                             <div className="list__subtitle">{tickets[id].description}</div>
-                            <div className="list__subtitle">{__("Base price:", "em-pro")} {tickets[id].price} {strings.currency}</div>
+                            <div className="list__subtitle">{__("Base price:", "events")} {tickets[id].price} {strings.currency}</div>
                         </div>
                         <div className="list__actions">
                             <span className="button button--pseudo nowrap">{ticketPrice(id)} {strings.currency}</span>
@@ -91,7 +91,7 @@ const Payment = (props) => {
                 { coupon.success &&
                 <div className="list__item" >
                         <div className="list__content">
-                            <div className="list__title">{coupon.description || __("Coupon", "em-pro")}</div>    
+                            <div className="list__title">{coupon.description || __("Coupon", "events")}</div>    
                             
                         </div>
                         <div className="list__actions">
@@ -101,7 +101,7 @@ const Payment = (props) => {
                 }
                 <div className="list__item" >
                         <div className="list__content">
-                            <div className="list__title"><b>{__("Full price", "em-pro")}</b></div>    
+                            <div className="list__title"><b>{__("Full price", "events")}</b></div>    
                             
                         </div>
                         <div className="list__actions">
@@ -119,7 +119,7 @@ const Payment = (props) => {
             { coupons.available && 
 			<div className="input-group">
                 <div className="input input-group__main">
-                <label>{__('Coupon code','em-pro')}</label>
+                <label>{__('Coupon code','events')}</label>
                 <input 
 					value={couponCode}
 					onChange={(event) => {setCouponCode(event.target.value)}}
@@ -128,7 +128,7 @@ const Payment = (props) => {
                     name="coupon_code"
                 />
                 </div>
-				<span onClick={() => {checkCouponCode(couponCode)}} className='button button--secondary'>{__("Check coupon", "em-pro")}</span>
+				<span onClick={() => {checkCouponCode(couponCode)}} className='button button--secondary'>{__("Check coupon", "events")}</span>
 			</div>
             }
             { gateways.length > 1 &&

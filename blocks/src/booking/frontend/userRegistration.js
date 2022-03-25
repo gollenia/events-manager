@@ -34,7 +34,7 @@ const UserRegistration = (props) => {
                     <div className="list__content">
                         <div className="list__title">{tickets[id].name}</div>    
                         <div className="list__subtitle">{tickets[id].description}</div>
-                        <div className="list__subtitle">{__("Base price:", "em-pro")} {tickets[id].price} {strings.currency}</div>
+                        <div className="list__subtitle">{__("Base price:", "events")} {tickets[id].price} {strings.currency}</div>
                     </div>
                     
                     <div className="list__actions">
@@ -50,7 +50,7 @@ const UserRegistration = (props) => {
             { coupon.success &&
                 <div className="list__item" >
                     <div className="list__content">
-                        <div className="list__title">{coupon.description || __("Coupon", "em-pro")}</div>    
+                        <div className="list__title">{coupon.description || __("Coupon", "events")}</div>    
                         
                     </div>
                     <div className="list__actions">
@@ -65,7 +65,7 @@ const UserRegistration = (props) => {
                 }
             <div className="list__item" >
                     <div className="list__content">
-                        <div className="list__title"><b>{__("Full price", "em-pro")}</b></div>    
+                        <div className="list__title"><b>{__("Full price", "events")}</b></div>    
                         
                     </div>
                     <div className="list__actions">

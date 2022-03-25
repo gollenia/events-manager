@@ -113,7 +113,7 @@ const Booking = () => {
     }
 
     const openModal = () => {
-		document.title = `${__('Registration', 'em-pro')} ${eventData.event.event_name}`;
+		document.title = `${__('Registration', 'events')} ${eventData.event.event_name}`;
 		setModalVisible(true);
     }
 
@@ -141,7 +141,7 @@ const Booking = () => {
           
     }, [])
 
-    if(Object.keys(eventData).length == 0) return (<span className="button button--error button-pseudo">{__('Error: No connection to server.', 'em-pro')}</span>);
+    if(Object.keys(eventData).length == 0) return (<span className="button button--error button-pseudo">{__('Error: No connection to server.', 'events')}</span>);
 
     const order = () => {
 
@@ -212,13 +212,11 @@ const Booking = () => {
     }
 
 	const pageTitles = [
-		__("Choose your Tickets first", "em-pro"),
-		__("Please give us some more data", "em-pro"),
-		__("How do you want to pay?", "em-pro"),
-		__("Thank you for your order!", "em-pro"),
-	]
-
-    
+		__("Choose your Tickets first", "events"),
+		__("Please give us some more data", "events"),
+		__("How do you want to pay?", "events"),
+		__("Thank you for your order!", "events"),
+	];
       
 	return (
 		<div>
@@ -320,10 +318,10 @@ const Booking = () => {
 				<div className="modal__footer">
 				<div className="section">
 					<div className="container button-group button-group--right">
-					{ wizzardStep > (eventData?.attendee_fields?.length == 0 ? 1 : 0) && wizzardStep < 3 && <button className="button button--secondary" onClick={() => {setWizzardStep(wizzardStep-1)}}>{__('Back', 'em-pro')}</button> }
-					{ wizzardStep < (fullPrice() == 0 ? 1 : 2) && <button className="button button--primary" onClick={() => {setWizzardStep(wizzardStep+1)}} >{__('Next', 'em-pro')}</button> }
+					{ wizzardStep > (eventData?.attendee_fields?.length == 0 ? 1 : 0) && wizzardStep < 3 && <button className="button button--secondary" onClick={() => {setWizzardStep(wizzardStep-1)}}>{__('Back', 'events')}</button> }
+					{ wizzardStep < (fullPrice() == 0 ? 1 : 2) && <button className="button button--primary" onClick={() => {setWizzardStep(wizzardStep+1)}} >{__('Next', 'events')}</button> }
 					{ wizzardStep == (fullPrice() == 0 ? 1 : 2) && <button className="button button--primary" onClick={() => {order()}}>{eventData.strings.book_now}</button> }
-					{ wizzardStep == 3 && <button className="button button--success" onClick={() => {cleanUp()}}>{__("Close", "em-pro")}</button> }
+					{ wizzardStep == 3 && <button className="button button--success" onClick={() => {cleanUp()}}>{__("Close", "events")}</button> }
 					</div>
 				</div>
 				</div>
