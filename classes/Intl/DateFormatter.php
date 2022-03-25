@@ -52,7 +52,7 @@ class DateFormatter {
 		$instance = new self($start, $end, true);
 		
 		if($instance->is_same_day()) {
-			return $instance->fmt->format($start) . " " . __('to', 'events-manager') . $instance->fmt->format($end) . " " . __("o'clock", 'events-manager');
+			return $instance->fmt->format($start) . " " . __('to', 'events-manager') . " " . $instance->fmt->format($end) . " " . __("o'clock", 'events-manager');
 		}
 
 		return __('Begins at:', 'events-manager') . ' ' . $instance->fmt->format($start) . '<br>' . __('Ends at:', 'events-manager') . ' ' . $instance->fmt->format($end);
