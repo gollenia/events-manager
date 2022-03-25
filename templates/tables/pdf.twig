@@ -1,0 +1,72 @@
+<style>
+	table {
+		border-collapse: collapse; 
+		width:100%;
+	}
+	.datenumber {
+		width: 1px;
+		color: #555;
+		text-align: right;
+		white-space: nowrap;
+	}
+
+	
+	.border{
+		border-bottom: 1px solid #bbb;
+	}
+
+	.padding {
+		padding: 3px
+	}
+
+	.collapse {
+		width: 1px;
+		white-space: nowrap;
+	}
+
+	.event {
+		width: 100%
+	}
+
+	.right {
+		text-align: right;
+	}
+
+	td {
+		vertical-align: top;
+	}
+
+	.bold {
+		font-weight: bold;
+	}
+
+	.day-7 {
+		background: #dddddd;
+	}
+</style>
+<h2>Monatsprogramm {{start|date('F Y')}}</h2>
+<table cellspacing="0" cellpadding="0" class="table">
+	<tbody>
+		{% for day in month %}
+			<tr class="day {{"day-" ~ day.weekday}}">
+				<td class="padding border collapse right">{{day.count}}</td><td class="padding border collapse">{{day.name}}</td>
+				<td class="padding border" >
+					{% for event in day.events %}
+						<table cellspacing="0" cellpadding="0" class="event">
+							<tr><td class="event__title">{{ event.title }} {{ event.speaker.name ? " (" ~ event.speaker.name ~ ")" }}</td><td class="collapse">{{ event.start|date('G:i', false) }}</td></tr>
+						</table>
+					{% endfor %}
+				</td>
+			</tr>
+		{% endfor %}
+	</tbody>
+</table>
+
+{% if featured %}
+<h3>Weitere Termine</h3>
+<table cellpadding="0" class="table">
+{% for event in featured %}
+<tr><td class="bold padding collapse">{{event.date}}</td><td class="padding collapse">{{event.start|date('G:i')}}</td><td class="padding">{{event.title}}</td></tr>
+{% endfor %}
+</table>
+{% endif %}
