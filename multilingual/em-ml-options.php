@@ -181,14 +181,7 @@ class EM_ML_Options {
 	 	foreach( self::$translatable_options as $option ){
 	 	    add_filter('pre_option_'.$option, array(&$this, 'pre_option_'.$option), 1,1);
  		}
-		//Switch EM page IDs to translated versions if they exist, so e.g. the events page in another language grabs the right translated page format if available
-        add_filter('option_dbem_events_page','EM_ML_Options::get_translated_page');
-        add_filter('option_dbem_locations_page','EM_ML_Options::get_translated_page');
-        add_filter('option_dbem_categories_page','EM_ML_Options::get_translated_page');
-        add_filter('option_dbem_tags_page','EM_ML_Options::get_translated_page');
-        add_filter('option_dbem_edit_events_page','EM_ML_Options::get_translated_page');
-        add_filter('option_dbem_edit_locations_page','EM_ML_Options::get_translated_page');
-        add_filter('option_dbem_edit_bookings_page','EM_ML_Options::get_translated_page');
+		
         
     }
 	
@@ -241,17 +234,5 @@ class EM_ML_Options {
 		return count(EM_ML::$langs) > 0 && in_array($option, self::$translatable_options);
 	}
 	
-	/* END wp_options functions */
-
-    /**
-     * Takes a page post_id and returns the translated version post_id of the language currently being viewed by the user. 
-     * Used to detect whether we're on an events listing page for example, where we would normally override the content with our formats.
-     * @param int $post_id
-     * @return int
-     * @uses EM_ML::get_translated_post_id()
-     */
-    public static function get_translated_page($post_id){
-    	return EM_ML::get_translated_post_id($post_id, 'page');
-    }
 }
 $EM_ML_Options = new EM_ML_Options();
