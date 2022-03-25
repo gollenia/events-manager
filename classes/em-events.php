@@ -171,7 +171,7 @@ class EM_Events extends EM_Object {
 		if (!$data) return $result;
 		foreach($data as $event) {
 			$location = $event->get_location();
-
+			$audience = get_post_meta($event->post_id, 'event_audience', true);
 			$category = $event->get_categories()->get_first();
 			$tags = new EM_Tags($event);
 			$speaker = \Contexis\Events\Speaker::get($event->speaker_id);
@@ -212,11 +212,12 @@ class EM_Events extends EM_Object {
 				'start' => $event->start()->getTimestamp(),
 				'end' => $event->end()->getTimestamp(),
 				'single_day' => $event->event_start_date == $event->event_end_date,
-				'audience' => $event->event_audience,
+				'audience' => $audience,
 				'excerpt' => $event->post_excerpt,
 				'title' => $event->post_title,
 				'speaker' => $speaker,
-				'tags' => $tags->terms
+				'tags' => $tags->terms,
+				'orig' => $event
 
 			]);
 
