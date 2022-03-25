@@ -201,4 +201,4 @@ class Event_Location {
 }
 
 //include default Event Locations
-include('em-event-location-url.php');
+//include('em-event-location-url.php');
