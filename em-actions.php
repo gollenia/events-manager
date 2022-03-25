@@ -641,12 +641,12 @@ function em_ajax_search_and_pagination(){
 	echo '<div class="em-search-ajax">';
 	ob_start();
 	if( $_REQUEST['action'] == 'search_events' ){
-		$args['scope'] = get_option('dbem_events_page_scope');
+		$args['scope'] = 'future';
 		$args = EM_Events::get_post_search($args);
 		$args['limit'] = !empty($args['limit']) ? $args['limit'] : get_option('dbem_events_default_limit');
 		em_locate_template('templates/events-list.php', true, array('args'=>$args)); //if successful, this template overrides the settings and defaults, including search
 	}elseif( $_REQUEST['action'] == 'search_events_grouped' && defined('DOING_AJAX') ){
-		$args['scope'] = get_option('dbem_events_page_scope');
+		$args['scope'] = 'future';
 		$args = EM_Events::get_post_search($args);
 		$args['limit'] = !empty($args['limit']) ? $args['limit'] : get_option('dbem_events_default_limit');
 		em_locate_template('templates/events-list-grouped.php', true, array('args'=>$args)); //if successful, this template overrides the settings and defaults, including search
