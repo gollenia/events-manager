@@ -9,7 +9,7 @@ function formatDateRange(start, end = false, locale = false) {
 	if(!locale) {
 		let locale = window.eventBlockLocale?.lang;
 	}
-	console.log(start)
+	
 	start = new Date(start * 1000);
 	end = end ? end : start;
 	end = new Date(end * 1000);

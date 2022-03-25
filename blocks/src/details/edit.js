@@ -30,9 +30,11 @@ const edit = (props) => {
 			showTime,
 			showSpeaker,
 			showPrice,
-			title
-		},
-		setAttributes,
+			audienceIcon,
+			audienceDescription,
+			speakerIcon,
+			priceOverwrite
+		}
 		
 	} = props;
 
@@ -54,7 +56,7 @@ const edit = (props) => {
 
 	const blockProps = useBlockProps({
 		className: [
-			"ctx-event-details",
+			"ctx:event-details",
 		].filter(Boolean).join(" ")
 	});
 
@@ -65,27 +67,33 @@ const edit = (props) => {
 		
 	}
 
+	console.log(event)
+
 	return (
 		<div {...blockProps}>
 			<Inspector
 				{ ...props }
 			/>
 
-			<div >
-					<RichText
-						tagName="h3"
-						label={__("Details", 'events')}
-						value={ title }
-						onChange={ (value) => setAttributes({ title: value }) }
-						placeholder={__("Details", 'events')}
-						
-					/>
-					{ showAudience && <div className='item'><h5>{__('Audience', 'events')}</h5>{event ? event.audience : __('no data')}</div>}
-					{ showLocation && <div className='item'><h5>{__('Location', 'events')}</h5>{event?.location.address}</div>}
-					{ showDate && <div className='item'><h5>{__('Date', 'events')}</h5>{startFormatted()}</div>}
-					{ showTime && <div className='item'><h5>{__('Time', 'events')}</h5>{event.start}</div>}
-					{ showSpeaker && <div className='item'><h5>{__('Speaker', 'events')}</h5>{event?.speaker?.name}</div>}
-					{ showPrice && <div className='item'><h5>{__('Price', 'events')}</h5>{event?.price}</div>}
+			<div className='ctx:event-details__wrapper'>
+					{ showAudience && <div className='ctx:event-details__item'><i className="material-icons">{audienceIcon}</i><div><h5>{audienceDescription ?? __('Audience', 'events')}</h5>{event.audience ?? __('no data')}</div></div>}
+					{ showLocation && <div className='ctx:event-details__item'><i className="material-icons">place</i><div><h5>{__('Location', 'events')}</h5>{event?.location?.address}</div></div>}
+					{ showDate && <div className='ctx:event-details__item'><i className="material-icons">today</i><div><h5>{__('Date', 'events')}</h5>{startFormatted()}</div></div>}
+					{ showTime && <div className='ctx:event-details__item'><i className="material-icons">schedule</i><div><h5>{__('Time', 'events')}</h5>{event.start}</div></div>}
+					{ showSpeaker && 
+						<div className='ctx:event-details__item'>
+							{ speakerIcon == '' && 
+								<img className="ctx:event-details__image" src={event.speaker?.image?.sizes?.thumbnail?.url}/>
+							} { !speakerIcon == '' && 
+								<i className="material-icons">{speakerIcon}</i>
+							}
+							
+						<div><h5>{__('Speaker', 'events')}</h5>{event?.speaker?.name}</div></div>}
+					{ showPrice && 
+						<div className='ctx:event-details__item'>
+							<i className="material-icons">euro</i>
+							<div><h5>{__('Price', 'events')}</h5>{priceOverwrite ?? event?.price}</div>
+						</div>}
 			</div>
 		</div>
 	);

@@ -4,10 +4,6 @@
 	"title": "Details",
 	"category": "widgets", 
 	"attributes": {
-		"title": {
-			"type": "string",
-			"default": ""
-		},
 		"showLocation": {
 			"type": "boolean",
 			"default": ""
@@ -36,9 +32,9 @@
 			"type": "string",
 			"default": ""
 		},
-		"audienceLink": {
-			"type": "boolean",
-			"default": true
+		"audienceIcon": {
+			"type": "string",
+			"default": "groups"
 		},
 		"locationLink": {
 			"type": "boolean",
@@ -47,6 +43,14 @@
 		"speakerDescription": {
 			"type": "string",
 			"default": ""
+		},
+		"speakerIcon": {
+			"type": "string",
+			"default": ""
+		},
+		"speakerLink": {
+			"type": "boolean",
+			"default": true
 		},
 		"priceOverwrite": {
 			"type": "string",

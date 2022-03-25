@@ -15,10 +15,12 @@ const Inspector = (props) => {
 			showSpeaker,
 			showPrice,
 			audienceDescription,
-			audienceLink,
+			audienceIcon,
 			locationLink,
 			speakerDescription,
-			priceOverwrite
+			priceOverwrite,
+			speakerIcon,
+			speakerLink
 		},
 		setAttributes,
 		
@@ -42,11 +44,16 @@ const Inspector = (props) => {
 				value={ audienceDescription }
 				onChange={ (value) => setAttributes({ audienceDescription: value })}
 			/>
-			<CheckboxControl
+			<SelectControl
 				disabled={!showAudience}
-				label={ __("Add Link", 'events')}
-				checked={ audienceLink }
-				onChange={ (value) => setAttributes({ audienceLink: value }) }
+				label={ __("Icon", 'events')}
+				value={ audienceIcon }
+				options={ [
+					{ value: 'users', label: 'People' },
+					{ value: 'male', label: 'Male' },
+					{ value: 'female', label: 'Female' }
+				] }
+				onChange={ (value) => setAttributes({ audienceIcon: value }) }
 			/>
 		</PanelBody>
 		<PanelBody
@@ -70,7 +77,7 @@ const Inspector = (props) => {
 			initialOpen={true}
 		>
 			<ToggleControl
-				label={ __("Show Date", 'events')}
+				label={ __("Show Date", 'events')} 
 				checked={ showDate }
 				onChange={ (value) => setAttributes({ showDate: value }) }
 			/>
@@ -95,6 +102,23 @@ const Inspector = (props) => {
 				help={__("If empty, default description is shown")}
 				value={ speakerDescription }
 				onChange={ (value) => setAttributes({ speakerDescription: value })}
+			/>
+			<SelectControl
+				disabled={!showSpeaker}
+				label={ __("Icon", 'events')}
+				value={ speakerIcon }
+				options={ [
+					{ value: '', label: 'Photo of speaker' },
+					{ value: 'male', label: 'Male' },
+					{ value: 'female', label: 'Female' }
+				] }
+				onChange={ (value) => setAttributes({ speakerIcon: value }) }
+			/>
+			<CheckboxControl
+				disabled={!showSpeaker}
+				label={ __("Add email link", 'events')}
+				checked={ speakerLink }
+				onChange={ (value) => setAttributes({ speakerLink: value }) }
 			/>
 		</PanelBody>
 		<PanelBody

@@ -33,10 +33,11 @@ function card(props) {
 				{ showSpeaker == 'image' && item.speaker && <span className='card__image-label'><img src={item.speaker.image?.sizes?.thumbnail?.url}/>{item.speaker.name}</span>}
 			</a> }
 			<div className='card__content'>
+				<a href={item.link} className="card__hidden-link"></a>
 				{ item.category && showCategory && <span class="card__label">{item.category.name}</span> }
-				<a href={item.link} className="card__title">{item.title}</a>
-				<a href={item.link} class="card__subtitle text--primary">{formatDateRange(item.start, item.end)}</a>
-				<a href={item.link} className="card__text">{truncate(item.excerpt, excerptLength)}</a>
+				<h2 className="card__title">{item.title}</h2>
+				<h4 class="card__subtitle text--primary">{formatDateRange(item.start, item.end)}</h4>
+				<p className="card__text">{truncate(item.excerpt, excerptLength)}</p>
 				{ (showAudience || showSpeaker || showLocation) && 
 					<div class="card__footer card__subtitle card__pills">
 						{ showAudience && item.audience && <span className='card__pill event__audience'>{item.audience}</span>}
