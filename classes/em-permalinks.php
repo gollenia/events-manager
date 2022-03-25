@@ -15,7 +15,7 @@ if( !class_exists('EM_Permalinks') ){
 		);
 		
 		public static function init(){
-			add_filter('pre_update_option_dbem_events_page', array('EM_Permalinks','option_update'));
+			//add_filter('pre_update_option_dbem_events_page', array('EM_Permalinks','option_update'));
 			if( get_option('dbem_flush_needed') ){
 				add_filter('wp_loaded', array('EM_Permalinks','flush')); //flush after init, in case there are themes adding cpts etc.
 			}
@@ -247,14 +247,7 @@ if( !class_exists('EM_Permalinks') ){
 		 */
 		public static function init_objects(){
 			global $wp_rewrite, $wp_query;
-			//check some homepage conditions
-			$events_page_id = get_option ( 'dbem_events_page' );
-			if( is_object($wp_query) && $wp_query->is_home && !$wp_query->is_posts_page && 'page' == get_option('show_on_front') && get_option('page_on_front') == $events_page_id ){
-				// comment long after this is written - pretty sure this prevents seach query and pagination issues on the home page when an event page is set as the home static page removing this causes issues with searches and pagination
-				$wp_query->is_page = true;
-				$wp_query->is_home = false; // WP will not technically expect this to be the home page, but the front page only
-				$wp_query->query_vars['page_id'] = $events_page_id;
-			}
+			
 			if ( is_object($wp_query) && is_object($wp_rewrite) && $wp_rewrite->using_permalinks() ) {
 				foreach(self::$em_queryvars as $em_queryvar){
 					if( $wp_query->get($em_queryvar) ) {
