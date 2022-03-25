@@ -12,7 +12,8 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - uses: php-actions/composer@v6
-    - run: sudo composer update --ignore-platform-req=ext-gd
+      with:
+        args: --ignore-platform-reqs
     - name: rsync deployments
       uses: burnett01/rsync-deployments@5.1
       with:
