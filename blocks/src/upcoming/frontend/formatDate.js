@@ -49,7 +49,7 @@ function formatDateRange(start, end, locale = false) {
 function formatDate(date, format) {
 	const locale = window.eventBlockLocale.lang;
 	const dateFormatObject  = new Intl.DateTimeFormat(locale, format);
-	return dateFormatObject.format(date);
+	return dateFormatObject.format(date * 1000);
 }
 
 export { formatDateRange, formatDate };
