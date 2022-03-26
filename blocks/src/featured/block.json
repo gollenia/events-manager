@@ -21,8 +21,8 @@
 			"default": ""
 		},
 		"selectedCategory": {
-			"type": "number",
-			"default": 0
+			"type": "string",
+			"default": ""
 		},
 		"selectedTags": {
 			"type": "array",
