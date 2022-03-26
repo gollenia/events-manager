@@ -109,7 +109,7 @@ class Booking {
 		global $post;
 		
         $EM_Event = em_get_event($post->id, 'post_id');
-
+		
         if (count($EM_Event->get_bookings()->get_available_tickets()) == 0) return false;
 
         return "<div id='booking_app'></div>";
