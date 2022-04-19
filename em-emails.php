@@ -3,6 +3,8 @@
  * @param boolean $result
  * @param EM_Event $EM_Event
  * @return boolean
+ * @deprecated version 6.2.0
+ */
  */
 function em_event_submission_emails($result, $EM_Event){
     if( $result ){
