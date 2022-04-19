@@ -2,7 +2,6 @@
 
 class EM_Twig {
     
-    private $twig;
     public $locations = [];
 
     public static function init() {
