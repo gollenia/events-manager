@@ -104,7 +104,7 @@ function em_bookings_event(){
 			</p>
 			<p>
 				<strong><?php esc_html_e('Date','events-manager'); ?></strong> : 
-				<?php echo $EM_Event->output_dates(false, " - "). ' @ ' . $EM_Event->output_times(false, ' - '); ?>						
+				<?php echo $EM_Event->output_dates(). ' @ ' . $EM_Event->output_times(); ?>						
 			</p>
 			<p>
 				<strong><?php esc_html_e('Location','events-manager'); ?></strong> :
@@ -201,9 +201,11 @@ function em_bookings_single(){
 					</h2>
 					<div class="inside">
 						<?php
+						
 						$EM_Event = $EM_Booking->get_event();
 						?>
 						<table class="form-table">
+							<tr><th><strong><?php esc_html_e('Booking Date','events-manager') ?></strong></th><td><?php echo $EM_Booking->get_booking_date() ?></td></tr>
 							<tr><th><strong><?php esc_html_e('Name','events-manager'); ?></strong></th><td><a class="row-title" href="<?php echo $EM_Event->get_bookings_url(); ?>"><?php echo ($EM_Event->event_name); ?></a></td></tr>
 							<tr>
 								<th><strong><?php esc_html_e('Date/Time','events-manager'); ?>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</strong></th>
@@ -227,7 +229,10 @@ function em_bookings_single(){
 								if( $form_fields[$key]['type'] == "html" ) continue;
 								echo "<tr><th>" . $form_fields[$key]['label'] . "</th><td>" . $value . "</td></tr>";
 							}?>
-							<?php foreach($EM_Booking->booking_meta["booking"] as $key => $value) {
+
+							<?php 
+							foreach($EM_Booking->booking_meta["booking"] as $key => $value) {
+								if(!array_key_exists($key, $form_fields)) continue;
 								if( $form_fields[$key]['type'] == "html" ) continue;
 								echo "<tr><th>" . $form_fields[$key]['label'] . "</th><td>" . $value . "</td></tr>";
 							}?>
