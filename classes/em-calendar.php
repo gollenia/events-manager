@@ -1,9 +1,11 @@
 <?php
+
+/**
+ * @deprecated 6.2.4
+ */
 class EM_Calendar extends EM_Object {
 	
-	public static function init(){
-		//nothing to init anymore
-	}
+
 	
 	public static function get( $args ){
 	
@@ -287,16 +289,14 @@ class EM_Calendar extends EM_Object {
 		//generate a link argument string containing event search only
 		$day_link_args = self::get_query_args( array_intersect_key($original_args, EM_Events::get_post_search($args, true) ));
 		//get event link 
-		if( get_option("dbem_events_page") > 0 ){
-			$event_page_link = get_permalink(get_option("dbem_events_page")); //PAGE URI OF EM
+		
+		if( $wp_rewrite->using_permalinks() ){
+			$event_page_link = trailingslashit(home_url()).EM_POST_TYPE_EVENT_SLUG.'/'; //don't use EM_URI here, since ajax calls this before EM_URI is defined.
 		}else{
-			if( $wp_rewrite->using_permalinks() ){
-				$event_page_link = trailingslashit(home_url()).EM_POST_TYPE_EVENT_SLUG.'/'; //don't use EM_URI here, since ajax calls this before EM_URI is defined.
-			}else{
-			    //not needed atm anyway, but we use esc_url later on, in case you're wondering ;) 
-				$event_page_link = add_query_arg(array('post_type'=>EM_POST_TYPE_EVENT), home_url()); //don't use EM_URI here, since ajax calls this before EM_URI is defined.
-			}
+			//not needed atm anyway, but we use esc_url later on, in case you're wondering ;) 
+			$event_page_link = add_query_arg(array('post_type'=>EM_POST_TYPE_EVENT), home_url()); //don't use EM_URI here, since ajax calls this before EM_URI is defined.
 		}
+		
 		$event_page_link_parts = explode('?', $event_page_link); //in case we have other plugins (e.g. WPML) adding querystring params to the end 
 		foreach($eventful_days as $day_key => $events) {
 			if( array_key_exists($day_key, $calendar_array['cells']) ){
@@ -415,22 +415,7 @@ class EM_Calendar extends EM_Object {
 		return $args;
 	}
 	
-	/**
-	 * DEPRECATED - use EM_Calendar::get_query_args() instead and manipulate the array.
-	 * Left only to prevent 3rd party add-ons from potentially breaking if they use this
-	 * Helper function to create a link querystring from array which contains arguments with only values that aren't defuaults. 
-	 */
-	public static function get_link_args($args = array(), $html_entities=true){
-	    $args = self::get_query_args($args);
-		$qs_array = array();
-		foreach($args as $key => $value){
-			if(is_array($value)){
-				$value = implode(',',$value);
-			}
-			$qs_array[] = "$key=".urlencode($value);
-		}
-		return ($html_entities) ? implode('&amp;', $qs_array) : implode('&', $qs_array);
-	}
+
 		
 	
 	/* 
@@ -474,4 +459,3 @@ class EM_Calendar extends EM_Object {
 		return apply_filters('em_calendar_get_default_search', $atts, $array, $defaults);
 	}
 } 
-add_action('init', array('EM_Calendar', 'init'));
