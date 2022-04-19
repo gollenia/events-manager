@@ -119,19 +119,22 @@ function em_bookings_events_table() {
 							</td>
 							<td>
 								
-					<b><?php echo $EM_Event->get_bookings()->get_available_spaces(); echo " "; echo __("Free", "events-manager") ?> </b><br> <?php echo __("Off", "events-manager"); echo " "; echo $EM_Event->get_spaces(); ?>
+							<b><?php echo $EM_Event->get_bookings()->get_available_spaces(); echo " "; echo __("Free", "events-manager") ?> </b><br> <?php echo __("Off", "events-manager"); echo " "; echo $EM_Event->get_spaces(); ?>
 					
 							</td>
-							<td>
-								<b><?php echo $EM_Event->get_bookings()->get_booked_spaces(); echo " ";  ?></b> /
-								<b><?php echo $EM_Event->get_bookings()->get_pending_spaces(); echo " "; echo __("Pending", "events-manager") ?></b>
+							<td >
+								<b><?php echo $EM_Event->get_bookings()->get_booked_spaces(); echo " ";  ?> /
+								<?php echo $EM_Event->get_bookings()->get_pending_spaces(); echo " "; echo __("Pending", "events-manager") ?></b>
 								<div style="margin-top: 6px; border-radius: 999px; display: flex; width:100px; position: relative; height: 8px; background: #dddddd">
-									<div style="width:<?php echo $booked_percent ?>%; border-radius: 999px; position: relative; height: 8px; background: #8bc34a"></div>
-									<div style="width:<?php echo $pending_percent ?>%; border-radius: 999px; position: relative; height: 8px; background: #ff9800"></div>
+									<div style="width:<?php echo $booked_percent ?>%; border-radius: 999px; <?php if($pending_percent) echo "border-top-right-radius: 0; border-bottom-right-radius: 0;"; ?>
+									position: relative; height: 8px; background: #4caf50"></div>
+									<div style="width:<?php echo $pending_percent ?>%; border-radius: 999px; 
+									<?php if($booked_percent) echo "border-top-left-radius: 0; border-bottom-left-radius: 0;"; ?>
+									position: relative; height: 8px; background: #ffc107"></div>
 								</div>
 							</td>
 							<td>
-								<?php echo $EM_Event->output_dates(false, " - "). ' @ ' . $EM_Event->output_times(false, ' - '); ?>
+								<?php echo $EM_Event->output_dates(). '<br>' . $EM_Event->output_times(); ?>
 							</td>
 						</tr>
 						<?php
