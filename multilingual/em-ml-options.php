@@ -46,19 +46,13 @@ class EM_ML_Options {
 				'dbem_search_form_dates_label',
 				'dbem_search_form_dates_separator',
 				//Date/Time
-				'dbem_date_format',
-				'dbem_date_format_js',
+
 				'dbem_dates_separator',
 				'dbem_time_format',
 				'dbem_times_separator',
 				'dbem_event_all_day_message',
 				//Calendar
-				'dbem_small_calendar_month_format',
-				'dbem_small_calendar_event_title_format',
-				'dbem_small_calendar_event_title_separator',
-				'dbem_full_calendar_month_format',
-				'dbem_full_calendar_event_format',
-				'dbem_display_calendar_events_limit_msg',
+
 				//Ical
 				'dbem_ical_description_format',
 				'dbem_ical_real_description_format',
@@ -167,8 +161,6 @@ class EM_ML_Options {
 				'dbem_event_resubmitted_email_body',
 				'dbem_event_published_email_subject',
 				'dbem_event_published_email_body',
-				'dbem_event_approved_email_subject',
-				'dbem_event_approved_email_body',
 				'dbem_event_reapproved_email_subject',
 				'dbem_event_reapproved_email_body',
 				//Registration Emails
