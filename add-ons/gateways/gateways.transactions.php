@@ -251,7 +251,7 @@ class EM_Gateways_Transactions{
 					</td>
 					<td class="column-date">
 						<?php
-							echo mysql2date(get_option('dbem_date_format'), $transaction->transaction_timestamp);
+						echo $transaction->transaction_timestamp;
 						?>
 					</td>
 					<td class="column-amount">
