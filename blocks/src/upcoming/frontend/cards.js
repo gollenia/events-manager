@@ -20,7 +20,6 @@ function card(props) {
 		textAlignment,
 		showAudience,
 		showSpeaker,
-		//showBooking // for later usage
 		item
 	} = props;
 
