@@ -270,31 +270,11 @@ function em_wp_get_referer(){
 	}
 }
 
-/**
- * Gets all WP users
- * @return array
- */
-function em_get_wp_users( $args = array(), $extra_users = array() ) {
-	global $wpdb;
-	if( !empty($args) ){
-	    $users = get_users($args);
-	}else{
-	    //added as a temp fix for http://core.trac.wordpress.org/ticket/23609, we need to make some sort of autocompleter search for users instead
-	    $users = $wpdb->get_results("SELECT ID, display_name FROM {$wpdb->users} ORDER BY display_name");
-	}
-	$indexed_users = array();
-	foreach($users as $user){
-		$indexed_users[$user->ID] = $user->display_name;
-	}
- 	return $extra_users + $indexed_users;
-}
-
 function em_get_attributes($lattributes = false){
 	$attributes = array('names'=>array(), 'values'=>array());
 	if( !$lattributes ) return $attributes;
 	//We also get a list of attribute names and create a ddm list (since placeholders are fixed)
 	$formats =
-		get_option ( 'dbem_full_calendar_event_format' ).
 		get_option ( 'dbem_rss_description_format' ).
 		get_option ( 'dbem_rss_title_format' ).
 		get_option ( 'dbem_map_text_format' ).
@@ -326,7 +306,6 @@ function em_get_attributes($lattributes = false){
 		    }
 		}
 	}
-	var_dump($attributes);
 	return apply_filters('em_get_attributes', $attributes, $matches, $lattributes);
 }
 
@@ -345,7 +324,7 @@ function em_booking_add_registration( $EM_Booking ){
  * @param array associative array of user values to insert
  * @return int|WP_Error Either user's ID or error on failure.
  */
-function em_register_new_user( $user_data ) {
+/*function em_register_new_user( $user_data ) {
 	$user_data = apply_filters('em_register_new_user_pre',$user_data);
 	$errors = new WP_Error();
 	if( !empty($user_data['user_name']) ){
@@ -405,116 +384,13 @@ function em_register_new_user( $user_data ) {
 	$em_temp_user_data['user_id'] = $user_id;
 
 	return apply_filters('em_register_new_user',$user_id);
-}
-
-/**
- * Notify the blog admin of a new user, normally via email.
- *
- * @since 2.0
- */
-function em_new_user_notification() {
-	return true;
-}
-
-/**
- * Transitional function to handle WP's eventual move away from the is_super_user() function 
- */
-function em_wp_is_super_admin( $user_id = false ){
-	return false;
-}
-
-/**
- * Returns an array of flags that are used in search forms.
- * @return array
- * @deprecated
- */
-function em_get_search_form_defaults($args = array()){
-	if( !is_array($args) ) $args = array();
-	$search_args = array();
-	$search_args['css'] = get_option('dbem_css_search');
-	$search_args['search_action'] = get_option('dbem_event_list_groupby') ? 'search_events_grouped':'search_events';
-	$search_args['search_text_show'] = get_option('dbem_search_form_advanced_show');
-	$search_args['search_text_hide'] = get_option('dbem_search_form_advanced_hide');
-	$search_args['search_button'] = get_option('dbem_search_form_submit');
-	//search text
-	$search_args['search'] = ''; //default search term
-	$search_args['search_term'] = get_option('dbem_search_form_text');
-	$search_args['search_term_label'] = get_option('dbem_search_form_text_label'); //field label
-	//geo and units
-	$search_args['geo'] = '';  //default geo search term (requires 'near' as well for it to make sense)
-	$search_args['near'] = ''; //default near search params
-	$search_args['search_geo'] = get_option('dbem_search_form_geo');
-	$search_args['geo_label'] = get_option('dbem_search_form_geo_label'); //field label
-	$search_args['search_geo_units'] = get_option('dbem_search_form_geo_units'); //field label
-	$search_args['geo_units_label'] = get_option('dbem_search_form_geo_units_label'); //field label
-	$search_args['near_unit'] = get_option('dbem_search_form_geo_unit_default'); //default distance unit
-	$search_args['near_distance'] = get_option('dbem_search_form_geo_distance_default'); //default distance amount
-	$search_args['geo_distance_values'] =  explode(',', get_option('dbem_search_form_geo_distance_options')); //possible distance values
-	//scope
-	$search_args['scope'] = array('',''); //default scope term
-	$search_args['search_scope'] = get_option('dbem_search_form_dates');
-	$search_args['scope_label'] = get_option('dbem_search_form_dates_label'); //field label
-	$search_args['scope_seperator'] = get_option('dbem_search_form_dates_separator'); //field label
-	//categories
-	$search_args['category'] = 0; //default search term
-	$search_args['search_categories'] = get_option('dbem_search_form_categories');
-	$search_args['category_label'] = get_option('dbem_search_form_category_label'); //field label
-	$search_args['categories_label'] = get_option('dbem_search_form_categories_label'); //select default
-	//countries
-	$search_args['search_countries'] = get_option('dbem_search_form_countries');
-	$search_args['country'] = $search_args['search_countries'] ? get_option('dbem_search_form_default_country'):''; //default country
-	$search_args['country_label'] = get_option('dbem_search_form_country_label'); //field label
-	$search_args['countries_label'] = get_option('dbem_search_form_countries_label'); //select default
-	//regions
-	$search_args['region'] = ''; //default region
-	$search_args['search_regions'] = get_option('dbem_search_form_regions');
-	$search_args['region_label'] = get_option('dbem_search_form_region_label'); //field label
-	//states
-	$search_args['state'] = ''; //default state
-	$search_args['search_states'] = get_option('dbem_search_form_states');
-	$search_args['state_label'] = get_option('dbem_search_form_state_label'); //field label
-	//towns
-	$search_args['town'] = ''; //default state
-	$search_args['search_towns'] = get_option('dbem_search_form_towns');
-	$search_args['town_label'] = get_option('dbem_search_form_town_label'); //field label
-	//sections to show
-	$search_args['show_main'] = !empty($search_args['search_term']) || !empty($search_args['search_geo']); //decides whether or not to show main area and collapseable advanced search options
-	$search_args['show_advanced'] = get_option('dbem_search_form_advanced') && ($search_args['search_scope'] || $search_args['search_categories'] || $search_args['search_countries'] || $search_args['search_regions'] || $search_args['search_states'] || $search_args['search_towns']);
-	$search_args['advanced_hidden'] = $search_args['show_advanced'] && get_option('dbem_search_form_advanced_hidden');
-	//add specific classes for wrapper dependent on settings
-	$search_args['main_classes'] = array();
-	if( !empty($search_args['css']) ) $search_args['main_classes'][] = 'css-search';
-	if( !empty($search_args['search_term']) ) $search_args['main_classes'][] = 'has-search-term';
-	if( !empty($search_args['search_geo']) ) $search_args['main_classes'][] = 'has-search-geo';
-	$search_args['main_classes'][] = $search_args['show_main'] ? 'has-search-main':'no-search-main';
-	$search_args['main_classes'][] = $search_args['show_advanced'] ? 'has-advanced':'no-advanced';
-	$search_args['main_classes'][] = $search_args['advanced_hidden'] ? 'advanced-hidden':'advanced-visible';
-	//merge defaults with supplied arguments 
-	$args = array_merge($search_args, $args);
-	//overwrite with $_REQUEST defaults in event of a submitted search
-	if( isset($_REQUEST['geo']) ) $args['geo'] = $_REQUEST['geo']; //if geo search string requested, use that for search form
-	if( isset($_REQUEST['near']) ) $args['near'] = wp_unslash($_REQUEST['near']); //if geo search string requested, use that for search form
-	if( isset($_REQUEST['em_search']) ) $args['search'] = wp_unslash($_REQUEST['em_search']); //if geo search string requested, use that for search form
-	if( isset($_REQUEST['category']) ) $args['category'] = $_REQUEST['category']; //if state requested, use that for searching
-	if( isset($_REQUEST['country']) ) $args['country'] = wp_unslash($_REQUEST['country']); //if country requested, use that for searching
-	if( isset($_REQUEST['region']) ) $args['region'] = wp_unslash($_REQUEST['region']); //if region requested, use that for searching
-	if( isset($_REQUEST['state']) ) $args['state'] = wp_unslash($_REQUEST['state']); //if state requested, use that for searching
-	if( isset($_REQUEST['town']) ) $args['town'] = wp_unslash($_REQUEST['town']); //if state requested, use that for searching
-	if( isset($_REQUEST['near_unit']) ) $args['near_unit'] = $_REQUEST['near_unit']; //if state requested, use that for searching
-	if( isset($_REQUEST['near_distance']) ) $args['near_distance'] = $_REQUEST['near_distance']; //if state requested, use that for searching
-	if( !empty($_REQUEST['scope']) && !is_array($_REQUEST['scope'])){ 
-		$args['scope'] = explode(',',$_REQUEST['scope']); //convert scope to an array in event of pagination 
-	}elseif( !empty($_REQUEST['scope']) ){
-		$args['scope'] = $_REQUEST['scope'];
-	}
-	return $args;
-}
+}*/
 
 /*
  * UI Helpers
  * previously dbem_UI_helpers.php functions
+ * @todo deprecate and move to own (static?) Class
  */
-
 function em_option_items($array, $saved_value) {
 	$output = "";
 	foreach($array as $key => $item) {
@@ -543,6 +419,7 @@ function em_options_input_text($title, $name, $description ='', $default='') {
     $__ = EM_ML::is_option_translatable($name);
     if( preg_match('/^(.+)\[(.+)?\]$/', $name, $matches) ){
     	$value = EM_Options::get($matches[2], $default, $matches[1]);
+		var_dump($matches);
     }else{
         $value = get_option($name, $default);
     }
@@ -722,24 +599,4 @@ function em_options_select($title, $name, $list, $description='', $default='') {
 		</td>
    	</tr>
 	<?php
-}
-// got from http://davidwalsh.name/php-email-encode-prevent-spam
-function em_ascii_encode($e){
-	$output = '';
-    for ($i = 0; $i < strlen($e); $i++) { $output .= '&#'.ord($e[$i]).';'; }
-    return $output;
-}
-
-function get_twig_template($name) : string {
-	$filename = substr($name, strpos($name, "/")+1) . ".twig";
-	
-	if(file_exists(get_theme_file_path() . "/plugins/events/" . $filename)) {
-		return get_theme_file_path() . '/plugins/events/' . $filename;
-	}
-
-	if(file_exists(get_template_directory() . "/plugins/events/" . $filename)) {
-		return get_template_directory() . 'events/' . $filename;
-	}
-
-	return plugin_dir_path( __FILE__ ) . 'templates/' . $filename;
 }
