@@ -58,12 +58,6 @@ function em_init_actions() {
 			echo EM_Object::json_encode($json_locations);
 		 	die();   
 	 	}
-	
-		if(isset($_REQUEST['ajaxCalendar']) && $_REQUEST['ajaxCalendar']) {
-			//FIXME if long events enabled originally, this won't show up on ajax call
-			echo EM_Calendar::output($_REQUEST, false);
-			die();
-		}
 	}
 	
 	//Event Actions
@@ -162,7 +156,7 @@ function em_init_actions() {
 				$return = array('result'=>false, 'message'=>$EM_Event->feedback_message, 'errors'=>$EM_Event->errors);
 			}
 			echo EM_Object::json_encode($return);
-			edit();
+			exit();
 		}
 	}
 	
@@ -217,18 +211,11 @@ function em_init_actions() {
 			}
 		}elseif( !empty($_REQUEST['action']) && $_REQUEST['action'] == "locations_search" && (!empty($_REQUEST['term']) || !empty($_REQUEST['q'])) ){
 			$results = array();
-			if( is_user_logged_in() || ( get_option('dbem_events_anonymous_submissions') && user_can(get_option('dbem_events_anonymous_user'), 'read_others_locations') ) ){
+			if( is_user_logged_in() ){
 				$location_cond = (is_user_logged_in() && !current_user_can('read_others_locations')) ? "AND location_owner=".get_current_user_id() : '';
-				if( !is_user_logged_in() && get_option('dbem_events_anonymous_submissions') ){
-					if( !user_can(get_option('dbem_events_anonymous_user'),'read_private_locations') ){
-						$location_cond = " AND location_private=0";	
-					}
-				}elseif( is_user_logged_in() && !current_user_can('read_private_locations') ){
+				if( !current_user_can('read_private_locations') ){
 				    $location_cond = " AND location_private=0";
-				}elseif( !is_user_logged_in() ){
-					$location_cond = " AND location_private=0";		    
 				}
-				
 				$location_cond = apply_filters('em_actions_locations_search_cond', $location_cond);
 				$term = (isset($_REQUEST['term'])) ? '%'.$wpdb->esc_like(wp_unslash($_REQUEST['term'])).'%' : '%'.$wpdb->esc_like(wp_unslash($_REQUEST['q'])).'%';
 				$sql = $wpdb->prepare("
@@ -291,7 +278,6 @@ function em_init_actions() {
 				    $registration = true;
 					$EM_Bookings = $EM_Event->get_bookings();
 					if( $registration && $EM_Bookings->add($EM_Booking) ){
-					    
 						$result = true;
 						$EM_Notices->add_confirm( $EM_Bookings->feedback_message );		
 						$feedback = $EM_Bookings->feedback_message;
@@ -643,12 +629,12 @@ function em_ajax_search_and_pagination(){
 	if( $_REQUEST['action'] == 'search_events' ){
 		$args['scope'] = 'future';
 		$args = EM_Events::get_post_search($args);
-		$args['limit'] = !empty($args['limit']) ? $args['limit'] : get_option('dbem_events_default_limit');
+		$args['limit'] = !empty($args['limit']) ? $args['limit'] : 0;
 		em_locate_template('templates/events-list.php', true, array('args'=>$args)); //if successful, this template overrides the settings and defaults, including search
 	}elseif( $_REQUEST['action'] == 'search_events_grouped' && defined('DOING_AJAX') ){
 		$args['scope'] = 'future';
 		$args = EM_Events::get_post_search($args);
-		$args['limit'] = !empty($args['limit']) ? $args['limit'] : get_option('dbem_events_default_limit');
+		$args['limit'] = !empty($args['limit']) ? $args['limit'] : 0;
 		em_locate_template('templates/events-list-grouped.php', true, array('args'=>$args)); //if successful, this template overrides the settings and defaults, including search
 	}elseif( $_REQUEST['action'] == 'search_locations' && defined('DOING_AJAX') ){
 		$args = EM_Locations::get_post_search($args);
@@ -678,32 +664,5 @@ add_action('wp_ajax_search_tags','em_ajax_search_and_pagination');
 add_action('wp_ajax_nopriv_search_cats','em_ajax_search_and_pagination');
 add_action('wp_ajax_search_cats','em_ajax_search_and_pagination');
 
-/*
-Added in dev 5.4.4.2 but may delete in favour of Google autocomplete service
-function em_ajax_geocoding_search(){
-	//GeoNames
-	if( !empty($_REQUEST['q']) && get_option('dbem_geonames_username') ){
-		$url = 'http://api.geonames.org/searchJSON?username='.get_option('dbem_geonames_username').'&featureClass=p&style=full&maxRows=12&q=' . rawurlencode(utf8_encode($_REQUEST['q']));
-		if( !empty($_REQUEST['country']) ){
-			$url .= '&countryBias=' . rawurlencode(utf8_encode($_REQUEST['country']));	
-		}
-		if( !empty($_REQUEST['callback']) ){
-			$url .= '&callback=' . rawurlencode(utf8_encode($_REQUEST['callback']));
-		}
-	};
-	if( !empty($url) ){
-		$return = wp_remote_get($url);
-		if( !is_wp_error($return) ){
-			echo $return['body'];
-			die();
-		}
-	}
-	//If nothing is set up
-	$default = array('geonames'=>array(array('name'=>'No Information Available','lat'=>'', 'lng'=>'', 'adminName1'=> '', 'countryName'=>'')));
-	echo json_encode($default);
-	die();
-}
-add_action('wp_ajax_nopriv_geocoding_search','em_ajax_geocoding_search');
-add_action('wp_ajax_geocoding_search','em_ajax_geocoding_search');
-*/
+
 ?>
