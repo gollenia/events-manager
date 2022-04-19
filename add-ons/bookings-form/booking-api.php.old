@@ -55,7 +55,6 @@ class EM_Booking_Api {
                 'gateways' => $this->get_gateways(),
                 'strings' => [ 
                     "consent" => function_exists('get_the_privacy_policy_link') ? sprintf(get_option("dbem_data_privacy_consent_text"), get_the_privacy_policy_link()) : get_option("dbem_data_privacy_consent_text"), 
-                    "date_format" => get_option("dbem_date_format"),
                     "pay_with" => get_option('dbem_gateway_label'),
                     "book_now" => get_option("dbem_bookings_submit_button"),
                     "time_format" => get_option("dbem_time_format"),
@@ -213,7 +212,7 @@ class EM_Booking_Api {
 
         if (count($event->get_bookings()->get_available_tickets()) == 0) return false;
 
-        return "<div id='booking_app'></div>";
+        
     }
 
 }
