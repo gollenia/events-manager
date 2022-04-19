@@ -1,6 +1,7 @@
 <?php
 /**
  * Outputs a checkbox that can be used to obtain consent.
+ * Complete nonsense, change!
  * @param EM_Event|EM_Location|EM_Booking|bool $EM_Object
  */
 function em_data_privacy_consent_checkbox( $EM_Object = false ){
@@ -170,7 +171,7 @@ function em_data_privacy_cpt_validate( $result, $EM_Object ){
 function em_data_privacy_cpt_save( $result, $EM_Object ){
 	$attributes = get_class($EM_Object) == 'EM_Event' ? 'event_attributes':'location_attributes';
 	if( $result && !empty($EM_Object->{$attributes}['_consent_given'])){
-		if( !get_option('dbem_events_anonymous_submissions') || $EM_Object->post_author != get_option('dbem_events_anonymous_user') ){
+		if( $EM_Object->post_author != get_option('dbem_events_anonymous_user') ){
 			update_user_meta( $EM_Object->post_author, 'em_data_privacy_consent', current_time('mysql') );
 		}
 	}
