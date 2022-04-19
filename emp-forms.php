@@ -239,6 +239,12 @@ class EM_Form extends EM_Object {
 		return apply_filters('emp_form_output',$return, $this);
 	}
 	
+	/**
+	 * Outputs a single field according to this field structure.
+	 * @param array $field
+	 * @return string
+	 * @deprecated since version 6.2.0
+	 */
 	function output_field($field, $post=true){
 		ob_start();
 		$required = "";
