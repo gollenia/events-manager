@@ -49,11 +49,8 @@ class Details {
     public function render($attributes, $content, $full_data) : string {
         $attributes['event'] = $this->get_event();
 		//var_dump($attributes['event']);
-		$attributes['date'] = DateFormatter::get_date($attributes['event']['start'], $attributes['event']['end']);
-		$attributes['time'] = DateFormatter::get_time($attributes['event']['start'], $attributes['event']['end']);
-		$attributes['currency'] = get_option('dbem_bookings_currency');
 		
-		$attributes['price'] = new PriceFormatter($attributes['priceOverwrite'] !== "" ? $attributes['priceOverwrite'] : $attributes['event']['price']);
+		$attributes['currency'] = get_option('dbem_bookings_currency');
 		
 		$attributes['is_daterange'] = wp_date('jY', $attributes['event']['start']) !== wp_date('jY', $attributes['event']['end']);
 		$template = $this->get_template($full_data->name);
