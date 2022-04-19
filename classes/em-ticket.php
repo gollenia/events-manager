@@ -729,25 +729,5 @@ class EM_Ticket extends EM_Object{
 	function can_manage( $owner_capability = false, $admin_capability = false, $user_to_check = false ){
 		return $this->get_event()->can_manage('manage_bookings','manage_others_bookings', $user_to_check);
 	}
-	
-	/**
-	 * Deprecated since 5.8.2, just access properties directly or use relevant functions such as $this->start() for ticket_start time - Outputs properties with formatting
-	 * @param string $property
-	 * @return string
-	 */
-	function output_property($property){
-		switch($property){
-			case 'start':
-				$value = ( $this->start()->valid ) ? $this->start()->i18n( get_option('dbem_date_format') ) : '';
-				break;
-			case 'end':
-				$value = ( $this->end()->valid ) ? $this->end()->i18n( get_option('dbem_date_format') ) : '';
-				break;
-			default:
-				$value = $this->$property;
-				break;
-		}
-		return apply_filters('em_ticket_output_property',$value,$this, $property);
-	}
 }
 ?>
