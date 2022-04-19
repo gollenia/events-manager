@@ -49,11 +49,11 @@
 			"Tags": [
 				"Étiqueters"
 			],
-            "À:": [
-				"Von:"
+            "From:": [
+				"À:"
 			],
-			"Pour:": [
-				"Bis"
+			"To": [
+				"Pour"
 			],
 			"Location": [
 				"Afficher l'emplacement"
@@ -168,6 +168,75 @@
 			],
 			"May not apply on mobile phones": [
 				"Peut ne pas s'appliquer aux téléphones mobiles"
+			],
+			"Description": [
+				"Description"
+			],
+			"If empty, \"Audience\" is shown": [
+				"Si vide, \"Audience\" est affiché"
+			],
+			"If empty, \"Speaker\" is shown": [
+				"Si vide, \"Speaker\" est affiché"
+			],
+			"Icon": [
+				"Icône"
+			],
+			"Male": [
+				"Mâle"
+			],
+			"Female": [
+				"Femelle"
+			],
+			"People": [
+				"Grouper"
+			],
+			"Show location": [
+				"Afficher l'emplacement"
+			],
+			"Add link": [
+				"Ajouter un lien"
+			],
+			"Date and Time": [
+				"Date et l'heure"
+			],
+			"Show Date": [
+				"Afficher date"
+			],
+			"Show Time": [
+				"Afficher l'heure"
+			],
+			"Speaker": [
+				"Conférencière"
+			],
+			"Photo of speaker": [
+				"Photo du conférencier"
+			],
+			"Add email link": [
+				"Ajouter un lien e-mail"
+			],
+			"Show Price": [
+				"Afficher le prix"
+			],
+			"Overwrite Price": [
+				"Remplacer le prix"
+			],
+			"If empty, the first ticket's price is used": [
+				"Si vide, le prix du premier ticket est utilisé"
+			],
+			"Face": [
+				"Visage"
+			],
+			"Online Speaker": [
+				"Conférencier en ligne"
+			],
+			"Date": [
+				"Date"
+			],
+			"Time": [
+				"Heure"
+			],
+			"Price": [
+				"Prix"
 			]
 
 		}

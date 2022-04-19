@@ -13,28 +13,28 @@ msgstr ""
 
 #: emp-install.php:262 emp-install.php:273
 msgid "Cancelled"
-msgstr ""
+msgstr "Annulé"
 
 #: emp-install.php:261 emp-install.php:269
 msgid "Pending"
-msgstr ""
+msgstr "En attente"
 
 #: emp-install.php:260 emp-install.php:265
 msgid "Confirmed"
-msgstr ""
+msgstr "Confirmé"
 
 #: emp-install.php:260 emp-install.php:261 emp-install.php:262
 #: emp-install.php:265 emp-install.php:269 emp-install.php:273
 msgid "The following booking is %s :"
-msgstr ""
+msgstr "La réservation suivante est %s :"
 
 #: emp-forms.php:1362
 msgid "Secret Key"
-msgstr ""
+msgstr "Clé secrète"
 
 #: emp-forms.php:1355
 msgid "Site Key"
-msgstr ""
+msgstr "Clé du site"
 
 #: add-ons/multiple-bookings/multiple-bookings.php:522
 msgid "View Main Booking"
@@ -2414,4 +2414,4 @@ msgid "Automatically approve booking, even if no payment is made"
 msgstr "Approuver automatiquement la réservation, même si aucun paiement n'est effectué"
 
 msgid "Approval"
-msgstr "Genehmigung"
+msgstr "Approbation"

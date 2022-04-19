@@ -56,7 +56,7 @@
 				"Bis"
 			],
 			"Location": [
-				"Veranstaltungsort anzeigen"
+				"Veranstaltungsort"
 			],
 			"Sorting": [
 				"Sortierung"
@@ -168,6 +168,81 @@
 			],
 			"May not apply on mobile phones": [
 				"Kann auf Smartphones abweichen"
+			],
+			"Audience": [
+				"Zielgruppe"
+			],
+			"Show Audience": [
+				"Zielgruppe anzeigen"
+			],
+			"Description": [
+				"Beschreibung"
+			],
+			"If empty, \"Audience\" is shown": [
+				"Wenn leer, wird \"Zielgruppe\" angezeigt"
+			],
+			"If empty, \"Speaker\" is shown": [
+				"Wenn leer, wird \"Referent\" angezeigt"
+			],
+			"Icon": [
+				"Symbol"
+			],
+			"Male": [
+				"Männlich"
+			],
+			"Female": [
+				"Weiblich"
+			],
+			"People": [
+				"Gruppe"
+			],
+			"Show location": [
+				"Ort anzeigen"
+			],
+			"Add link": [
+				"Link anzeigen"
+			],
+			"Date and Time": [
+				"Datum und Uhrzeit"
+			],
+			"Show Date": [
+				"Datum anzeigen"
+			],
+			"Show Time": [
+				"Uhrzeit anzeigen"
+			],
+			"Speaker": [
+				"Referent"
+			],
+			"Photo of speaker": [
+				"Foto des Referenten"
+			],
+			"Add email link": [
+				"E-Mail-Link anzeigen"
+			],
+			"Show Price": [
+				"Preis anzeigen"
+			],
+			"Overwrite Price": [
+				"Preis überschreiben"
+			],
+			"If empty, the first ticket's price is used": [
+				"Wenn leer, wird der Preis des ersten Tickets verwendet"
+			],
+			"Face": [
+				"Gesicht"
+			],
+			"Online Speaker": [
+				"Online-Referent"
+			],
+			"Date": [
+				"Datum"
+			],
+			"Time": [
+				"Uhrzeit"
+			],
+			"Price": [
+				"Preis"
 			]
 
 		}

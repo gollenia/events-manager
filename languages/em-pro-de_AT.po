@@ -992,7 +992,7 @@ msgstr "PRO Buchungsformular Optionen"
 
 #: emp-forms.php:26
 msgid "On this page you can create/edit various forms used within Events Manager Pro."
-msgstr "Auf dieser Seite kannst Du diverse Formulare von Events Manager Pro erzeugen/bearbeiten."
+msgstr "Auf dieser Seite kannst Du diverse Formulare von Events Manager Pro erzeugen/bearbeiten. WICHTIG: Diese Seite wird irgendwann durhzc einen besseren Formular-Editor ersetzt."
 
 #: emp-forms.php:18 emp-forms.php:25
 msgid "Forms Editor"
