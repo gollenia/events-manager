@@ -7,17 +7,16 @@ function em_options_save(){
 	 * Here's the idea, we have an array of all options that need super admin approval if in multi-site mode
 	 * since options are only updated here, its one place fit all
 	 */
+
 	if( current_user_can('manage_options') && !empty($_POST['em-submitted']) && check_admin_referer('events-manager-options','_wpnonce') ){
 		//Build the array of options here
-		$post = $_POST;
+		
 		foreach ($_POST as $postKey => $postValue){
 			if( $postKey != 'dbem_data' && substr($postKey, 0, 5) == 'dbem_' ){
 				//TODO some more validation/reporting
-				$numeric_options = array('dbem_locations_default_limit','dbem_events_default_limit');
+				
 				if( in_array($postKey, array('dbem_bookings_notify_admin','dbem_event_submitted_email_admin','dbem_js_limit_events_form','dbem_js_limit_search','dbem_js_limit_general','dbem_css_limit_include','dbem_css_limit_exclude','dbem_search_form_geo_distance_options')) ){ $postValue = str_replace(' ', '', $postValue); } //clean up comma separated emails, no spaces needed
-				if( in_array($postKey,$numeric_options) && !is_numeric($postValue) ){
-					//Do nothing, keep old setting.
-				}elseif( ($postKey == 'dbem_category_default_color' || $postKey == 'dbem_tag_default_color') && !sanitize_hex_color($postValue) ){
+				if( ($postKey == 'dbem_category_default_color' || $postKey == 'dbem_tag_default_color') && !sanitize_hex_color($postValue) ){
 					$EM_Notices->add_error( sprintf(esc_html_x('Colors must be in a valid %s format, such as #FF00EE.', 'hex format', 'events-manager'), '<a href="http://en.wikipedia.org/wiki/Web_colors">hex</a>').' '. esc_html__('This setting was not changed.', 'events-manager'), true);					
 				}elseif( $postKey == 'dbem_oauth' && is_array($postValue) ){
 					foreach($postValue as $postValue_key=>$postValue_val){
@@ -86,7 +85,7 @@ function em_options_save(){
 		delete_option('dbem_migrate_images');
 	}
 	//Uninstall
-	if( !empty($_REQUEST['action']) && $_REQUEST['action'] == 'uninstall' && current_user_can('activate_plugins') && !empty($_REQUEST['confirmed']) && check_admin_referer('em_uninstall_'.get_current_user_id().'_wpnonce') && em_wp_is_super_admin() ){
+	if( !empty($_REQUEST['action']) && $_REQUEST['action'] == 'uninstall' && current_user_can('activate_plugins') && !empty($_REQUEST['confirmed']) && check_admin_referer('em_uninstall_'.get_current_user_id().'_wpnonce') && current_user_can('delete_users') ){
 		if( check_admin_referer('em_uninstall_'.get_current_user_id().'_confirmed','_wpnonce2') ){
 			//We have a go to uninstall
 			global $wpdb;
@@ -125,7 +124,7 @@ function em_options_save(){
 		}
 	}
 	//Reset
-	if( !empty($_REQUEST['action']) && $_REQUEST['action'] == 'reset' && !empty($_REQUEST['confirmed']) && check_admin_referer('em_reset_'.get_current_user_id().'_wpnonce') && em_wp_is_super_admin() ){
+	if( !empty($_REQUEST['action']) && $_REQUEST['action'] == 'reset' && !empty($_REQUEST['confirmed']) && check_admin_referer('em_reset_'.get_current_user_id().'_wpnonce') && current_user_can('delete_users') ){
 		if( check_admin_referer('em_reset_'.get_current_user_id().'_confirmed','_wpnonce2') ){
 			//We have a go to uninstall
 			global $wpdb;
@@ -145,7 +144,7 @@ function em_options_save(){
 		}
 	}
 	//Cleanup Event Orphans
-	if( !empty($_REQUEST['action']) && $_REQUEST['action'] == 'cleanup_event_orphans' && check_admin_referer('em_cleanup_event_orphans_'.get_current_user_id().'_wpnonce') && em_wp_is_super_admin() ){
+	if( !empty($_REQUEST['action']) && $_REQUEST['action'] == 'cleanup_event_orphans' && check_admin_referer('em_cleanup_event_orphans_'.get_current_user_id().'_wpnonce') && current_user_can('delete_users') ){
 		//Firstly, get all orphans
 		global $wpdb;
 		$sql = 'SELECT event_id FROM '.EM_EVENTS_TABLE.' WHERE post_id NOT IN (SELECT ID FROM ' .$wpdb->posts. ' WHERE post_type="'. EM_POST_TYPE_EVENT .'" OR post_type="event-recurring")';
@@ -164,7 +163,7 @@ function em_options_save(){
 		exit();
 	}
 	//Force Update Recheck - Workaround for now
-	if( !empty($_REQUEST['action']) && $_REQUEST['action'] == 'recheck_updates' && check_admin_referer('em_recheck_updates_'.get_current_user_id().'_wpnonce') && em_wp_is_super_admin() ){
+	if( !empty($_REQUEST['action']) && $_REQUEST['action'] == 'recheck_updates' && check_admin_referer('em_recheck_updates_'.get_current_user_id().'_wpnonce') && current_user_can('delete_users') ){
 		//force recheck of plugin updates, to refresh dl links
 		delete_transient('update_plugins');
 		delete_site_transient('update_plugins');
@@ -173,7 +172,7 @@ function em_options_save(){
 		exit();
 	}
 	//Flag version checking to look at trunk, not tag
-	if( !empty($_REQUEST['action']) && $_REQUEST['action'] == 'check_devs' && check_admin_referer('em_check_devs_wpnonce') && em_wp_is_super_admin() ){
+	if( !empty($_REQUEST['action']) && $_REQUEST['action'] == 'check_devs' && check_admin_referer('em_check_devs_wpnonce') && current_user_can('delete_users') ){
 		//delete transients, and add a flag to recheck dev version next time round
 		delete_transient('update_plugins');
 		delete_site_transient('update_plugins');
@@ -184,7 +183,7 @@ function em_options_save(){
 	}
 	
 	//reset timezones
-	if( !empty($_REQUEST['action']) && $_REQUEST['action'] == 'reset_timezones' && check_admin_referer('reset_timezones') && em_wp_is_super_admin() ){
+	if( !empty($_REQUEST['action']) && $_REQUEST['action'] == 'reset_timezones' && check_admin_referer('reset_timezones') && current_user_can('delete_users') ){
 		include(EM_DIR.'/em-install.php');
 		if( empty($_REQUEST['timezone_reset_value']) ) return;
 		$timezone = str_replace('UTC ', '', $_REQUEST['timezone_reset_value']);
@@ -263,7 +262,7 @@ function em_admin_email_test_ajax(){
 add_action('wp_ajax_em_admin_test_email','em_admin_email_test_ajax');
 
 function em_admin_options_reset_page(){
-	if( check_admin_referer('em_reset_'.get_current_user_id().'_wpnonce') && em_wp_is_super_admin() ){
+	if( check_admin_referer('em_reset_'.get_current_user_id().'_wpnonce') && current_user_can('delete_users') ){
 		?>
 		<div class="wrap">		
 			<div id='icon-options-general' class='icon32'><br /></div>
@@ -279,7 +278,7 @@ function em_admin_options_reset_page(){
 	}
 }
 function em_admin_options_uninstall_page(){
-	if( check_admin_referer('em_uninstall_'.get_current_user_id().'_wpnonce') && em_wp_is_super_admin() ){
+	if( check_admin_referer('em_uninstall_'.get_current_user_id().'_wpnonce') && current_user_can('delete_users') ){
 		?>
 		<div class="wrap">		
 			<div id='icon-options-general' class='icon32'><br /></div>

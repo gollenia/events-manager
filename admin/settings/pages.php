@@ -37,40 +37,13 @@
 		<div class="handlediv" title="<?php __('Click to toggle', 'events-manager'); ?>"><br /></div><h3><span><?php echo sprintf(__('%s List/Archives','events-manager'),__('Event','events-manager')); ?></span></h3>
 		<div class="inside">
         	<table class="form-table">
-			<tr>
-				<th><?php echo sprintf(__( 'Events page', 'events-manager')); ?></th>
-				<td>
-					<?php wp_dropdown_pages(array('name'=>'dbem_events_page', 'selected'=>get_option('dbem_events_page'), 'show_option_none'=>sprintf(__('[No %s Page]', 'events-manager'),__('Events','events-manager')) )); ?>
-					<br />
-					<em><?php echo __( 'This option allows you to select which page to use as an events page. If you do not select an events page, to display event lists you can enable event archives or use the appropriate shortcodes and/or template tags.','events-manager'); ?></em>
-				</td>
-			</tr>
-			<tbody class="em-event-page-options">
-				<?php 
-				em_options_radio_binary ( __( 'Show events search?', 'events-manager'), 'dbem_events_page_search_form', __( "If set to yes, a search form will appear just above your list of events.", 'events-manager') );
-				em_options_radio_binary ( __( 'Display calendar in events page?', 'events-manager'), 'dbem_display_calendar_in_events_page', __( 'This options allows to display the full-sized calendar on the events page, instead of the default list.','events-manager') );
-				em_options_radio_binary ( __( 'Disable title rewriting?', 'events-manager'), 'dbem_disable_title_rewrites', __( "Some WordPress themes don't follow best practices when generating navigation menus, and so the automatic title rewriting feature may cause problems, if your menus aren't working correctly on the event pages, try setting this to 'Yes', and provide an appropriate HTML title format below.",'events-manager') );
-				em_options_input_text ( __( 'Event Manager titles', 'events-manager'), 'dbem_title_html', __( "This only setting only matters if you selected 'Yes' to above. You will notice the events page titles aren't being rewritten, and you have a new title underneath the default page name. This is where you control the HTML of this title. Make sure you keep the #_PAGETITLE placeholder here, as that's what is rewritten by events manager. To control what's rewritten in this title, see settings further down for page titles.", 'events-manager') );
-				?>				
-			</tbody>
-
-			<tr class="em-header">
-				<td colspan="2">
-					<h4><?php echo _e('General settings','events-manager'); ?></h4>
-				</td>
-			</tr>	
-			<?php
 			
-			em_options_radio_binary ( __( 'Override Excerpts with Formats?', 'events-manager'), 'dbem_cp_events_excerpt_formats', sprintf($format_override_tip,__('events','events-manager')));
+
+			<?php
 			em_options_radio_binary ( __( 'Are current events past events?', 'events-manager'), 'dbem_events_current_are_past', __( "By default, events that have an end date later than today will be included in searches, set this to yes to consider events that started 'yesterday' as past.", 'events-manager') );
 			em_options_radio_binary ( __( 'Include in WordPress Searches?', 'events-manager'), 'dbem_cp_events_search_results', sprintf(__( "Allow %s to appear in the built-in search results.", 'events-manager'),__('events','events-manager')) );
 			?>
-			<tr class="em-header">
-				<td colspan="2">
-					<h4><?php echo sprintf(__('Default %s list options','events-manager'), __('event','events-manager')); ?></h4>
-					<p><?php _e('These can be overridden when using shortcode or template tags.','events-manager'); ?></p>
-				</td>
-			</tr>							
+								
 			<tr valign="top" id='dbem_events_default_orderby_row'>
 		   		<th scope="row"><?php _e('Default event list ordering','events-manager'); ?></th>
 		   		<td>   
@@ -115,8 +88,6 @@
 				</td>
 		   	</tr>
 			<?php
-			em_options_select( __('Event list scope','events-manager'), 'dbem_events_page_scope', em_get_scopes(), __('Only show events starting within a certain time limit on the events page. Default is future events with no end time limit.','events-manager') );
-			em_options_input_text ( __( 'Event List Limits', 'events-manager'), 'dbem_events_default_limit', __( "This will control how many events are shown on one list by default.", 'events-manager') );
 			echo $save_button;
         	?>
         	</table>
@@ -608,36 +579,10 @@
 					</select>
 				</td>
 		   	</tr>
-			<tr class="em-header">
-				<td colspan="2">
-					<h4><?php _e('Front-end management pages','events-manager'); ?></h4>
-					<p><?php _e('Users with the relevant permissions can manage their own events and bookings to these events on the following pages.','events-manager'); ?></p>
-				</td>
-			</tr>
-			<tr>
-				<th><?php echo sprintf(__( '%s page', 'events-manager'),__('Edit events','events-manager')); ?></th>
-				<td>
-					<?php wp_dropdown_pages(array('name'=>'dbem_edit_events_page', 'selected'=>get_option('dbem_edit_events_page'), 'show_option_none'=>'['.__('None', 'events-manager').']' )); ?>
-					<br />
-					<em><?php echo sprintf(__('Users can view, add and edit their %s on this page.','events-manager'),__('events','events-manager')); ?></em>
-				</td>
-			</tr>	            	
-			<tr>
-				<th><?php echo sprintf(__( '%s page', 'events-manager'),__('Edit locations','events-manager')); ?></th>
-				<td>
-					<?php wp_dropdown_pages(array('name'=>'dbem_edit_locations_page', 'selected'=>get_option('dbem_edit_locations_page'), 'show_option_none'=>'['.__('None', 'events-manager').']' )); ?>
-					<br />
-					<em><?php echo sprintf(__('Users can view, add and edit their %s on this page.','events-manager'),__('locations','events-manager')); ?></em>
-				</td>
-			</tr>	            	
-			<tr>
-				<th><?php echo sprintf(__( '%s page', 'events-manager'),__('Manage bookings','events-manager')); ?></th>
-				<td>
-					<?php wp_dropdown_pages(array('name'=>'dbem_edit_bookings_page', 'selected'=>get_option('dbem_edit_bookings_page'), 'show_option_none'=>'['.__('None', 'events-manager').']' )); ?>
-					<br />
-					<em><?php _e('Users can manage bookings for their events on this page.','events-manager'); ?></em>
-				</td>
-			</tr>
+			
+			         	
+			     	
+			
 			<?php echo $save_button; ?>
         	</table>
 		</div> <!-- . inside --> 

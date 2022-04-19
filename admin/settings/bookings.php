@@ -106,9 +106,6 @@
 		<table class='form-table'>
 			<?php
 			
-			em_options_radio_binary ( __( 'Show member-only tickets?', 'events-manager'), 'dbem_bookings_tickets_show_member_tickets', sprintf(__('%s must be set to yes for this to work.', 'events-manager'), '<strong>'.__( 'Show unavailable tickets?', 'events-manager').'</strong>').' '.__( 'If there are member-only tickets, you can choose whether or not to show these tickets to guests.','events-manager') );
-			
-			
 			em_options_radio_binary ( __( 'Enable custom ticket ordering?', 'events-manager'), 'dbem_bookings_tickets_ordering', __( 'When enabled, users can custom-order their tickets using drag and drop. If enabled, saved ordering supercedes the default ticket ordering below.', 'events-manager') );
 			$ticket_orders = apply_filters('em_tickets_orderby_options', array(
 				'ticket_price DESC, ticket_name ASC'=>__('Ticket Price (Descending)','events-manager'),

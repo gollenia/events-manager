@@ -375,18 +375,12 @@ function em_add_options() {
 	//registration email content
 	$blogname = wp_specialchars_decode(get_option('blogname'), ENT_QUOTES);
 	$booking_registration_email_subject = sprintf(__('[%s] Your username and password', 'events-manager'), $blogname);
-	$booking_registration_email_body = sprintf(__('You have successfully created an account at %s', 'events-manager'), $blogname).
-		'<br/>'.sprintf(__('You can log into our site here : %s', 'events-manager'), get_bloginfo('wpurl').'/wp-login.php').
-		'<br/>'.__('Username', 'events-manager').' : %username%'.
-		'<br/>'.__('Password', 'events-manager').' : %password%'.
-		'<br/>'.sprintf(__('To view your bookings, please visit %s after logging in.', 'events-manager'), em_get_my_bookings_url());
+	$booking_registration_email_body = "";
 	//all the options
 	$dbem_options = array(
 		'dbem_data' => array(), //used to store admin-related data such as notice flags and other row keys that may not always exist in the wp_options table
 		//time formats
 		'dbem_time_format' => get_option('time_format'),
-		'dbem_date_format' => get_option('date_format'),
-		'dbem_date_format_js' => 'dd/mm/yy',
 		'dbem_dates_separator' => ' - ',
 		'dbem_times_separator' => ' - ',
 		//defaults
@@ -394,7 +388,7 @@ function em_add_options() {
 		//Event List Options
 		'dbem_events_default_orderby' => 'event_start_date,event_start_time,event_name',
 		'dbem_events_default_order' => 'ASC',
-		'dbem_events_default_limit' => 10,
+		
 		//Event Search Options
 		'dbem_search_form_submit' => __('Search','events-manager'),
 		'dbem_search_form_advanced' => 1,
@@ -434,29 +428,9 @@ function em_add_options() {
 		'dbem_geo' => 1,
 		'dbem_geonames_username' => '',
 		*/
-		//Event Form and Anon Submissions
-		'dbem_events_form_editor' => 1,
-		'dbem_events_form_reshow' => 1,
-		'dbem_events_form_result_success' => __('You have successfully submitted your event, which will be published pending approval.','events-manager'),
-		'dbem_events_form_result_success_updated' => __('You have successfully updated your event, which will be republished pending approval.','events-manager'),
-        'dbem_events_anonymous_submissions' => 0,
-		'dbem_events_anonymous_user' => 0,
-		'dbem_events_anonymous_result_success' => __('You have successfully submitted your event, which will be published pending approval.','events-manager'),
-		//Event Emails
-		'dbem_event_submitted_email_admin' => '',
-		'dbem_event_submitted_email_subject' => __('Submitted Event Awaiting Approval', 'events-manager'),
-		'dbem_event_submitted_email_body' => str_replace("<br/>", "\n\r", $event_submitted_email_body),
-		'dbem_event_resubmitted_email_subject' => __('Re-Submitted Event Awaiting Approval', 'events-manager'),
-		'dbem_event_resubmitted_email_body' => str_replace("<br/>", "\n\r", $event_resubmitted_email_body),
-		'dbem_event_published_email_subject' => __('Published Event', 'events-manager').' - #_EVENTNAME',
-		'dbem_event_published_email_body' => str_replace("<br/>", "\n\r", $event_published_email_body),
-		'dbem_event_approved_email_subject' => __("Event Approved",'events-manager'). " - #_EVENTNAME" ,
-		'dbem_event_approved_email_body' => str_replace("<br/>", "\n\r", $event_approved_email_body),
-		'dbem_event_reapproved_email_subject' => __("Event Approved",'events-manager'). " - #_EVENTNAME" ,
-		'dbem_event_reapproved_email_body' => str_replace("<br/>", "\n\r", $event_approved_email_body),
+		
 		//Event Formatting
 		
-		'dbem_events_page_search_form' => 1,
 		'dbem_event_list_item_format_header' => '<table class="events-table" >
     <thead>
         <tr>
@@ -479,7 +453,7 @@ function em_add_options() {
 		'dbem_event_list_groupby' => 0,
 		'dbem_event_list_groupby_format' => '',
 		'dbem_event_list_groupby_header_format' => '<h2>#s</h2>',
-		'dbem_display_calendar_in_events_page' => 0,
+		
 	    'dbem_event_excerpt_format' => '#_EVENTDATES @ #_EVENTTIMES - #_EVENTEXCERPT',
 	    'dbem_event_excerpt_alt_format' => '#_EVENTDATES @ #_EVENTTIMES - #_EVENTEXCERPT{55}',
 		'dbem_event_all_day_message' => __('All Day','events-manager'),
@@ -607,23 +581,7 @@ function em_add_options() {
 		'dbem_image_max_size' => 2048,
 		//Calendar Options
 		'dbem_list_date_title' => __('Events', 'events-manager').' - #j #M #y',
-		'dbem_full_calendar_month_format' => 'M Y',
-		'dbem_full_calendar_event_format' => '<li>#_EVENTLINK</li>',
-		'dbem_full_calendar_long_events' => '0',
-		'dbem_full_calendar_initials_length' => 0,
-		'dbem_full_calendar_abbreviated_weekdays' => true,
-		'dbem_display_calendar_day_single_yes' => 1,
-		'dbem_small_calendar_month_format' => 'M Y',
-		'dbem_small_calendar_event_title_format' => "#_EVENTNAME",
-		'dbem_small_calendar_event_title_separator' => ", ",
-		'dbem_small_calendar_initials_length' => 1,
-		'dbem_small_calendar_abbreviated_weekdays' => false,
-		'dbem_small_calendar_long_events' => '0',
-		'dbem_display_calendar_order' => 'ASC',
-		'dbem_display_calendar_orderby' => 'event_name,event_start_time',
-		'dbem_display_calendar_events_limit' => get_option('dbem_full_calendar_events_limit',3),
-		'dbem_display_calendar_events_limit_msg' => __('more...','events-manager'),
-		'dbem_calendar_direct_links' => 1,
+
 		//General Settings
 	
 		
@@ -783,10 +741,6 @@ function em_add_options() {
 	
 	//do date js according to locale:
 	$locale_code = substr ( get_locale (), 0, 2 );
-	$locale_dates = array('nl' => 'dd/mm/yy', 'af' => 'dd/mm/yy', 'ar' => 'dd/mm/yy', 'az' => 'dd.mm.yy', 'bg' => 'dd.mm.yy', 'bs' => 'dd.mm.yy', 'cs' => 'dd.mm.yy', 'da' => 'dd-mm-yy', 'de' => 'dd.mm.yy', 'el' => 'dd/mm/yy', 'en-GB' => 'dd/mm/yy', 'eo' => 'dd/mm/yy', 'et' => 'dd.mm.yy', 'eu' => 'yy/mm/dd', 'fa' => 'yy/mm/dd', 'fo' => 'dd-mm-yy', 'fr' => 'dd.mm.yy', 'fr' => 'dd/mm/yy', 'he' => 'dd/mm/yy', 'hu' => 'yy.mm.dd.', 'hr' => 'dd.mm.yy.', 'ja' => 'yy/mm/dd', 'ro' => 'dd.mm.yy', 'sk' =>  'dd.mm.yy', 'sq' => 'dd.mm.yy', 'sr' => 'dd/mm/yy', 'sr' => 'dd/mm/yy', 'sv' => 'yy-mm-dd', 'ta' => 'dd/mm/yy', 'th' => 'dd/mm/yy', 'vi' => 'dd/mm/yy', 'zh' => 'yy/mm/dd', 'es' => 'dd/mm/yy', 'it' => 'dd/mm/yy');
-	if( array_key_exists($locale_code, $locale_dates) ){
-		$dbem_options['dbem_date_format_js'] = $locale_dates[$locale_code];
-	}
 	
 	//add new options
 	foreach($dbem_options as $key => $value){
@@ -837,12 +791,8 @@ function em_upgrade_current_installation(){
 		update_option('dbem_locations_default_orderby','location_name');
 		update_option('dbem_categories_default_orderby','name');
 		//Update the slugs if necessary
-		$events_page_id = get_option ( 'dbem_events_page' );
-		$events_page = get_post($events_page_id);
-		update_option('dbem_cp_events_slug', $events_page->post_name);
-		update_option('dbem_taxonomy_tag_slug', $events_page->post_name.'/tags');
 		if( defined('EM_LOCATIONS_SLUG') && EM_LOCATIONS_SLUG != 'locations' ) update_option('dbem_cp_locations_slug', EM_LOCATIONS_SLUG);
-		if( defined('EM_CATEGORIES_SLUG') && EM_CATEGORIES_SLUG != 'categories' ) update_option('dbem_taxonomy_category_slug', $events_page->post_name.'/'.EM_CATEGORIES_SLUG);
+		
 	}
 	if( get_option('dbem_version') != '' && get_option('dbem_version') < 5.19 ){
 		update_option('dbem_event_reapproved_email_subject',  get_option('dbem_event_approved_email_subject'));
@@ -899,9 +849,8 @@ function em_upgrade_current_installation(){
 			update_option('dbem_css_search', 0);
 			update_option('dbem_search_form_hide_advanced',0);
 		}
-		update_option('dbem_events_page_search_form',get_option('dbem_events_page_search'));
+		
 		update_option('dbem_search_form_dates_separator',get_option('dbem_dates_separator'));
-		delete_option('dbem_events_page_search'); //avoids the double search form on overridden templates
 		update_option('dbem_locations_page_search_form',0); //upgrades shouldn't get extra surprises
 	}
 	if( get_option('dbem_version') != '' && get_option('dbem_version') < 5.512 ){
