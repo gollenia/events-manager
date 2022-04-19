@@ -4,11 +4,11 @@
  * @param {Date} end 
  * @returns string formatted date
  */
-function formatDateRange(start, end, locale = false) {
+function formatDateRange(start, end) {
 
-	if(!locale) {
-		window.eventBlockLocale.lang;
-	}
+	
+	const locale = navigator.language || navigator.userLanguage;
+	
 
 	start = new Date(start * 1000);
 	end = new Date(end * 1000);
@@ -41,12 +41,13 @@ function formatDateRange(start, end, locale = false) {
 }
 
 /**
- * format date by goiven format object
+ * format date by given format object
  * @param {Date} date 
  * @param {object} format 
  * @returns string formated date
  */
 function formatDate(date, format) {
+	
 	const locale = window.eventBlockLocale.lang;
 	const dateFormatObject  = new Intl.DateTimeFormat(locale, format);
 	return dateFormatObject.format(date * 1000);
