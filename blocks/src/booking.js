@@ -10,6 +10,7 @@ document.addEventListener('click', (event) => {
 })
 
 if(root) {
+console.log(root)
 document.addEventListener('DOMContentLoaded', () => {
   ReactDOM.render(
     <Booking />,
@@ -17,3 +18,4 @@ document.addEventListener('DOMContentLoaded', () => {
     );
   })
 }
+
