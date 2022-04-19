@@ -40,7 +40,7 @@ const Inspector = (props) => {
 			<TextControl
 				disabled={!showAudience}
 				label={__("Description", "events")}
-				help={__("If empty, default description is shown")}
+				help={__("If empty, \"Audience\" is shown", 'events')}
 				value={ audienceDescription }
 				onChange={ (value) => setAttributes({ audienceDescription: value })}
 			/>
@@ -49,7 +49,7 @@ const Inspector = (props) => {
 				label={ __("Icon", 'events')}
 				value={ audienceIcon }
 				options={ [
-					{ value: 'users', label: 'People' },
+					{ value: 'groups', label: 'People' },
 					{ value: 'male', label: 'Male' },
 					{ value: 'female', label: 'Female' }
 				] }
@@ -99,7 +99,7 @@ const Inspector = (props) => {
 			<TextControl
 				disabled={!showSpeaker}
 				label={__("Description", "events")}
-				help={__("If empty, default description is shown")}
+				help={__("If empty, \"Speaker\" is shown", 'events')}
 				value={ speakerDescription }
 				onChange={ (value) => setAttributes({ speakerDescription: value })}
 			/>
@@ -108,9 +108,9 @@ const Inspector = (props) => {
 				label={ __("Icon", 'events')}
 				value={ speakerIcon }
 				options={ [
-					{ value: '', label: 'Photo of speaker' },
-					{ value: 'male', label: 'Male' },
-					{ value: 'female', label: 'Female' }
+					{ value: '', label: __('Photo of speaker', 'events') },
+					{ value: 'face', label: __('Face', 'events') },
+					{ value: 'support_agent', label: __('Online Speaker', 'events') }
 				] }
 				onChange={ (value) => setAttributes({ speakerIcon: value }) }
 			/>
@@ -133,7 +133,7 @@ const Inspector = (props) => {
 			<TextControl
 				disabled={!showPrice}
 				label={__("Overwrite Price", "events")}
-				help={__("If empty, the first ticket's price is used")}
+				help={__("If empty, the first ticket's price is used", 'events')}
 				value={ priceOverwrite }
 				onChange={ (value) => setAttributes({ priceOverwrite: value })}
 			/>
