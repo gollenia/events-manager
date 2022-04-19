@@ -14,7 +14,7 @@ import { select } from "@wordpress/data";
  * Internal dependencies
  */
 import Inspector from './inspector.js';
-import { formatDateRange } from './formatDate';
+import { formatDateRange, formatTime } from './formatDate';
 
 /**
  * @param {Props} props
@@ -41,19 +41,17 @@ const edit = (props) => {
 	
 	const [event, setEvent] = useState(false);
 
-	const currentEventId = useSelect( ( select ) => {
-		
-	return select("core/editor").getCurrentPostId()
-		
+	const post_id = useSelect( ( select ) => {
+		return select("core/editor").getCurrentPostId()
 	}, [] );
 
 	useEffect(() => {
-		fetch("/wp-json/events/v2/events?post_id=" + currentEventId).then(response => response.json()).then(data => {
-			console.log(data);
-			setEvent(data[0])
-		})
-	}, [])
+		fetch(`/wp-json/events/v2/events?post_id=${post_id}`)
+		.then(response => response.json())
+		.then(data => setEvent(data[0]))
+	}, []);
 
+	console.log(event);
 
 	const blockProps = useBlockProps({
 		className: [
@@ -65,11 +63,13 @@ const edit = (props) => {
 		if(event?.start) {
 			return formatDateRange(event.start, event.end)
 		}
-		
 	}
 
-
-	console.log(event)
+	const timeFormatted = () => {
+		if(event?.start) {
+			return formatTime(event.start)
+		}
+	}
 
 	return (
 		<div {...blockProps}>
@@ -78,10 +78,10 @@ const edit = (props) => {
 			/>
 
 			<div className='ctx:event-details__wrapper'>
-					{ showAudience && <div className='ctx:event-details__item'><i className="material-icons">{audienceIcon}</i><div><h5>{audienceDescription ?? __('Audience', 'events')}</h5>{event?.audience ?? __('no data')}</div></div>}
+					{ showAudience && <div className='ctx:event-details__item'><i className="material-icons">{audienceIcon}</i><div><h5>{audienceDescription != '' ? audienceDescription : __('Audience', 'events')}</h5>{event?.audience ?? __('no data')}</div></div>}
 					{ showLocation && <div className='ctx:event-details__item'><i className="material-icons">place</i><div><h5>{__('Location', 'events')}</h5>{event?.location?.address}</div></div>}
 					{ showDate && <div className='ctx:event-details__item'><i className="material-icons">today</i><div><h5>{__('Date', 'events')}</h5>{startFormatted()}</div></div>}
-					{ showTime && <div className='ctx:event-details__item'><i className="material-icons">schedule</i><div><h5>{__('Time', 'events')}</h5>{event?.start}</div></div>}
+					{ showTime && <div className='ctx:event-details__item'><i className="material-icons">schedule</i><div><h5>{__('Time', 'events')}</h5>{timeFormatted()}</div></div>}
 					{ showSpeaker && 
 						<div className='ctx:event-details__item'>
 							{ speakerIcon == '' && 
@@ -94,7 +94,7 @@ const edit = (props) => {
 					{ showPrice && 
 						<div className='ctx:event-details__item'>
 							<i className="material-icons">euro</i>
-							<div><h5>{__('Price', 'events')}</h5>{priceOverwrite ?? event?.price}</div>
+							<div><h5>{__('Price', 'events')}</h5>{priceOverwrite != '' ? priceOverwrite : event?.price?.format}</div>
 						</div>}
 			</div>
 		</div>
