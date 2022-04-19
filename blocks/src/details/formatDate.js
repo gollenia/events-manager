@@ -4,15 +4,13 @@
  * @param {Date} end 
  * @returns string formatted date
  */
-function formatDateRange(start, end = false, locale = false) {
+function formatDateRange(start, end = false) {
 
-	if(!locale) {
-		let locale = window.eventBlockLocale?.lang;
-	}
+
+	const locale = window.eventBlockLocale?.lang;
 	
 	start = new Date(start * 1000);
-	end = end ? end : start;
-	end = new Date(end * 1000);
+	end = end ? new Date(end * 1000) : start;
 
 	const sameDay = start.getFullYear() === end.getFullYear() &&
 		start.getMonth() === end.getMonth() &&
@@ -38,8 +36,6 @@ function formatDateRange(start, end = false, locale = false) {
 
 	const dateFormatObject  = new Intl.DateTimeFormat(locale, dateFormat);
 	
-	
-	
 	return dateFormatObject.formatRange(start, end);
 	
 	
@@ -57,4 +53,17 @@ function formatDate(date, format) {
 	return dateFormatObject.format(date);
 }
 
-export { formatDateRange, formatDate };
+
+function formatTime(time) {
+	const locale = window.eventBlockLocale.lang;
+
+	const timeFormat = {
+		hour: 'numeric',
+		minute: 'numeric'
+	};
+
+	const timeFormatObject  = new Intl.DateTimeFormat(locale, timeFormat);
+	return timeFormatObject.format(time * 1000);
+}
+
+export { formatDateRange, formatDate, formatTime };
