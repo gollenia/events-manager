@@ -1731,9 +1731,6 @@ class EM_Event extends EM_Object{
 	function get_edit_url(){
 		if( $this->can_manage('edit_events','edit_others_events') ){
 			
-			if( get_option('dbem_edit_events_page') && !is_admin() ){
-				$link = em_add_get_params(get_permalink(get_option('dbem_edit_events_page')), array('action'=>'edit','event_id'=>$this->event_id), false);
-			}
 			if( empty($link))
 				$link = admin_url()."post.php?post={$this->post_id}&action=edit";
 			
@@ -1742,13 +1739,7 @@ class EM_Event extends EM_Object{
 	}
 	
 	function get_bookings_url(){
-		if( get_option('dbem_edit_bookings_page') && (!is_admin() || !empty($_REQUEST['is_public'])) ){
-			$my_bookings_page = get_permalink(get_option('dbem_edit_bookings_page'));
-			$bookings_link = em_add_get_params($my_bookings_page, array('event_id'=>$this->event_id), false);
-		}else{
-			$bookings_link = EM_ADMIN_URL. "&page=events-manager-bookings&event_id=".$this->event_id;
-		}
-		return apply_filters('em_event_get_bookings_url', $bookings_link, $this);
+		return is_admin() ? EM_ADMIN_URL. "&page=events-manager-bookings&event_id=".$this->event_id : '';
 	}
 	
 	function get_permalink(){
@@ -2103,15 +2094,7 @@ class EM_Event extends EM_Object{
 					break;
 				case '#_BOOKINGSCUTOFF':
 				case '#_BOOKINGSCUTOFFDATE':
-				case '#_BOOKINGSCUTOFFTIME':
-					$replace = '';
-					if ($this->event_rsvp && get_option('dbem_rsvp_enabled') ) {
-						$replace_format = get_option('dbem_date_format') .' '. em_get_hour_format();
-						if( $result == '#_BOOKINGSCUTOFFDATE' ) $replace_format = get_option('dbem_date_format');
-						if( $result == '#_BOOKINGSCUTOFFTIME' ) $replace_format = em_get_hour_format();
-						$replace = $this->rsvp_end()->i18n($replace_format);
-					}
-					break;
+				
 				//Contact Person
 				case '#_CONTACTNAME':
 				case '#_CONTACTPERSON': //deprecated (your call, I think name is better)
@@ -2276,46 +2259,12 @@ class EM_Event extends EM_Object{
 		return apply_filters('em_event_output', $event_string, $this, $format, $target);
 	}
 	
-	function output_times( $time_format = false, $time_separator = false , $all_day_message = false, $use_site_timezone = false ){
-		if( !$this->event_all_day ){
-			if( empty($time_format) ) $time_format = ( get_option('dbem_time_format') ) ? get_option('dbem_time_format'):get_option('time_format');
-			if( empty($time_separator) ) $time_separator = get_option('dbem_times_separator');
-			if( $this->event_start_time != $this->event_end_time ){
-				if( $use_site_timezone ){
-					$replace = $this->start()->copy()->setTimezone()->i18n($time_format). $time_separator . $this->end()->copy()->setTimezone()->i18n($time_format);
-				}else{
-					$replace = $this->start()->i18n($time_format). $time_separator . $this->end()->i18n($time_format);
-				}
-			}else{
-				if( $use_site_timezone ){
-					$replace = $this->start()->copy()->setTimezone()->i18n($time_format);
-				}else{
-					$replace = $this->start()->i18n($time_format);
-				}
-			}
-		}else{
-			$replace = $all_day_message ? $all_day_message : get_option('dbem_event_all_day_message');
-		}
-		return $replace;
+	function output_times() {
+		return \Contexis\Events\Intl\DateFormatter::get_time($this->start()->getTimestamp(), $this->end()->getTimestamp());
 	}
 	
-	function output_dates( $date_format = false, $date_separator = false, $use_site_timezone = false ){
-		if( empty($date_format) ) $date_format = ( get_option('dbem_date_format') ) ? get_option('dbem_date_format'):get_option('date_format');
-		if( empty($date_separator) ) $date_separator = get_option('dbem_dates_separator');
-		if( $this->event_start_date != $this->event_end_date){
-			if( $use_site_timezone ){
-				$replace = $this->start()->copy()->setTimezone()->i18n($date_format). $date_separator . $this->end()->copy()->setTimezone()->i18n($date_format);
-			}else{
-				$replace = $this->start()->i18n($date_format). $date_separator . $this->end()->i18n($date_format);
-			}
-		}else{
-			if( $use_site_timezone ){
-				$replace = $this->start()->copy()->setTimezone()->i18n($date_format);
-			}else{
-				$replace = $this->start()->i18n($date_format);
-			}
-		}
-		return $replace;
+	function output_dates() {
+		return \Contexis\Events\Intl\DateFormatter::get_date($this->start()->getTimestamp(), $this->end()->getTimestamp());
 	}
 	
 	/**********************************************************
@@ -2519,7 +2468,7 @@ class EM_Event extends EM_Object{
 						}else{
 							$event_saves[] = false;
 						}
-						//if( EM_DEBUG ){ echo "Entering recurrence " . date("D d M Y", $day)."<br/>"; }
+						
 				 	}
 				 	//insert the metas in one go, faster than one by one
 				 	if( count($meta_inserts) > 0 ){
@@ -2995,6 +2944,12 @@ class EM_Event extends EM_Object{
 	function can_manage( $owner_capability = false, $admin_capability = false, $user_to_check = false ){
 		return apply_filters('em_event_can_manage', parent::can_manage($owner_capability, $admin_capability, $user_to_check), $this, $owner_capability, $admin_capability, $user_to_check);
 	}
+}
+
+function em_ascii_encode($e){
+	$output = '';
+    for ($i = 0; $i < strlen($e); $i++) { $output .= '&#'.ord($e[$i]).';'; }
+    return $output;
 }
 
 //TODO placeholder targets filtering could be streamlined better

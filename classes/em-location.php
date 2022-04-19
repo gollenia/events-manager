@@ -677,16 +677,8 @@ class EM_Location extends EM_Object {
 	}
 	
 	function get_edit_url(){
-		if( $this->can_manage('edit_locations','edit_others_locations') ){
-			
-			if( get_option('dbem_edit_locations_page') && !is_admin() ){
-				$link = em_add_get_params(get_permalink(get_option('dbem_edit_locations_page')), array('action'=>'edit','location_id'=>$this->location_id), false);
-			}
-			if( empty($link))
-				$link = admin_url()."post.php?post={$this->post_id}&action=edit";
-			
-			return apply_filters('em_location_get_edit_url', $link, $this);
-		}
+		if( !$this->can_manage('edit_locations','edit_others_locations') ) return "";
+		return apply_filters('em_location_get_edit_url', admin_url()."post.php?post={$this->post_id}&action=edit", $this);
 	}
 	
 	function output($format, $target="html") {
