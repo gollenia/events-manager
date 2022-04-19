@@ -208,7 +208,8 @@ class EM_Events extends EM_Object {
 					'state' => $location->location_state,
 				],
 				'date' => \Contexis\Events\Intl\DateFormatter::get_date($event->start()->getTimestamp(), $event->end()->getTimestamp()),
-				'price' => $price,
+				'time' => \Contexis\Events\Intl\DateFormatter::get_time($event->start()->getTimestamp(), $event->end()->getTimestamp()),
+				'price' => new Contexis\Events\Intl\PriceFormatter($price),
 				'start' => $event->start()->getTimestamp(),
 				'end' => $event->end()->getTimestamp(),
 				'single_day' => $event->event_start_date == $event->event_end_date,
@@ -216,9 +217,7 @@ class EM_Events extends EM_Object {
 				'excerpt' => $event->post_excerpt,
 				'title' => $event->post_title,
 				'speaker' => $speaker,
-				'tags' => $tags->terms,
-				'orig' => $event
-
+				'tags' => $tags->terms
 			]);
 
 			
@@ -268,7 +267,7 @@ class EM_Events extends EM_Object {
 		//get default args if we're in a search, supply to parent since we can't depend on late static binding until WP requires PHP 5.3 or later
 		if( empty($default_args) && (!empty($args['ajax']) || !empty($_REQUEST['action']) && $_REQUEST['action'] == $search_action) ){
 			$default_args = self::get_default_search();
-			$default_args['limit'] = get_option('dbem_events_default_limit');
+			$default_args['limit'] = 0;
 		}
 		return parent::get_pagination_links($args, $count, $search_action, $default_args);
 	}

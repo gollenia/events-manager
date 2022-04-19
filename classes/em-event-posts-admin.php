@@ -227,14 +227,11 @@ class EM_Event_Posts_Admin{
 				}
 				break;
 			case 'date-time':
-				//get meta value to see if post has location, otherwise
-				$localised_start_date = $EM_Event->start()->i18n(get_option('date_format'));
-				$localised_end_date = $EM_Event->end()->i18n(get_option('date_format'));
-				echo $localised_start_date;
-				echo ($localised_end_date != $localised_start_date) ? " - $localised_end_date":'';
+				
+				echo \Contexis\Events\Intl\DateFormatter::get_date($EM_Event->start()->getTimestamp(), $EM_Event->end()->getTimestamp());;
 				echo "<br />";
 				if(!$EM_Event->event_all_day){
-					echo $EM_Event->start()->i18n(get_option('time_format')) . " - " . $EM_Event->end()->i18n(get_option('time_format'));
+					echo \Contexis\Events\Intl\DateFormatter::get_time($EM_Event->start()->getTimestamp(), $EM_Event->end()->getTimestamp());
 				}else{
 					echo get_option('dbem_event_all_day_message');
 				}
@@ -280,11 +277,11 @@ class EM_Event_Posts_Admin{
 					$pending_percent = $EM_Event->get_bookings()->get_pending_spaces() / ($EM_Event->get_spaces() / 100);
 					?>
 					
-					<b><?php echo $EM_Event->get_bookings()->get_booked_spaces(); echo " ";  ?></b> /
-					<b><?php echo $EM_Event->get_bookings()->get_pending_spaces(); echo " "; echo __("Pending", "events-manager") ?></b>
+					<b style="white-space: nowrap;"><?php echo $EM_Event->get_bookings()->get_booked_spaces(); echo " ";  ?> /
+					<?php echo $EM_Event->get_bookings()->get_pending_spaces(); echo " "; echo __("Pending", "events-manager") ?></b>
 					<div style="margin-top: 6px; border-radius: 999px; display: flex; width:100px; position: relative; height: 8px; background: #dddddd">
-						<div style="width:<?php echo $booked_percent ?>%; border-radius: 999px; position: relative; height: 8px; background: #8bc34a"></div>
-						<div style="width:<?php echo $pending_percent ?>%; border-radius: 999px; position: relative; height: 8px; background: #ff9800"></div>
+						<div style="width:<?php echo $booked_percent ?>%; border-radius: 999px; <?php if($pending_percent) echo "border-top-right-radius: 0; border-bottom-right-radius: 0;"; ?> position: relative; height: 8px; background: #4caf50"></div>
+						<div style="width:<?php echo $pending_percent ?>%; border-radius: 999px; <?php if($booked_percent) echo "border-top-left-radius: 0; border-bottom-left-radius: 0;"; ?> position: relative; height: 8px; background: #ffc107"></div>
 					</div>
 					<?php
 
