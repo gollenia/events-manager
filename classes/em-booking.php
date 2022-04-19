@@ -254,6 +254,12 @@ class EM_Booking extends EM_Object{
 		}
 		return $this->notes;
 	}
+
+	function get_booking_date() {
+		return $this->booking_date;
+	}
+	
+	
 	
 	/**
 	 * Saves the booking into the database, whether a new or existing booking
@@ -1045,17 +1051,7 @@ class EM_Booking extends EM_Object{
 	}
 
 	function get_admin_url(){
-		if( get_option('dbem_edit_bookings_page') && (!is_admin() || !empty($_REQUEST['is_public'])) ){
-			$my_bookings_page = get_permalink(get_option('dbem_edit_bookings_page'));
-			$bookings_link = em_add_get_params($my_bookings_page, array('event_id'=>$this->event_id, 'booking_id'=>$this->booking_id), false);
-		}else{
-			if( $this->get_event()->blog_id != get_current_blog_id() ){
-				$bookings_link = get_admin_url($this->get_event()->blog_id, 'edit.php?post_type='.EM_POST_TYPE_EVENT."&page=events-manager-bookings&event_id=".$this->event_id."&booking_id=".$this->booking_id);
-			}else{
-				$bookings_link = EM_ADMIN_URL. "&page=events-manager-bookings&event_id=".$this->event_id."&booking_id=".$this->booking_id;
-			}
-		}
-		return apply_filters('em_booking_get_bookings_url', $bookings_link, $this);
+		return is_admin() ? EM_ADMIN_URL. "&page=events-manager-bookings&event_id=".$this->event_id."&booking_id=".$this->booking_id : "";
 	}
 	
 	function output($format, $target="html") {
@@ -1100,16 +1096,10 @@ class EM_Booking extends EM_Object{
 					$replace = $this->get_spaces();
 					break;
 				case '#_BOOKINGDATE':
-					$replace = ( $this->date() !== false ) ? $this->date()->i18n( get_option('dbem_date_format') ):'n/a';
+					$replace = ( $this->date() !== false ) ? \Contexis\Events\Intl\DateFormatter::get_date($this->date()->getTimestamp()) :'n/a';
 					break;
 				case '#_BOOKINGTIME':
-					$replace = ( $this->date() !== false ) ?  $this->date()->i18n( em_get_hour_format() ):'n/a';
-					break;
-				case '#_BOOKINGDATETIME':
-					$replace = ( $this->date() !== false ) ? $this->date()->i18n( get_option('dbem_date_format').' '.em_get_hour_format()):'n/a';
-					break;
-				case '#_BOOKINGLISTURL':
-					$replace = em_get_my_bookings_url();
+					$replace = ( $this->date() !== false ) ?  \Contexis\Events\Intl\DateFormatter::get_time($this->date()->getTimestamp()) :'n/a';
 					break;
 				case '#_COMMENT' : //deprecated
 				case '#_BOOKINGCOMMENT':
