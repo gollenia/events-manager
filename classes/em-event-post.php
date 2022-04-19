@@ -13,7 +13,6 @@ class EM_Event_Post {
 		if( !is_admin() ){
 			//Override post template tags
 			add_filter('get_the_date',array('EM_Event_Post','the_date'),10,3);
-			add_filter('the_content',array('EM_Event_Post','the_content'),10,3);
 			add_filter('get_the_time',array('EM_Event_Post','the_time'),10,3);
 		}
 		add_action('parse_query', array('EM_Event_Post','parse_query'));
@@ -100,35 +99,6 @@ class EM_Event_Post {
         return \Timber\Timber::get_posts( $args );
     }
 	
-	public static function the_content($content) {
-		global $post;
-		global $EM_Twig;
-
-		if($post->post_type !== "event") return $content;
-
-		$EM_Event = em_get_event($post);
-		$booking = new \EM_Bookings($EM_Event);
-
-		$attributes = [
-			"post" => $post,
-			"event" => $EM_Event,
-			"location" => $EM_Event->location_id != 0 ? \EM_Locations::get($EM_Event->location_id)[0] : false,
-			'currency' => em_get_currency_symbol(true,get_option("dbem_bookings_currency")),
-			"currency_format" => get_option("dbem_bookings_currency_format"),
-			"bookings" => $booking->get_available_spaces(),
-			"has_tickets" => $booking->get_bookings()->get_available_tickets(),
-			//"booking" => \EM_Booking_Api::get_booking_form($EM_Event),
-			"speaker" => self::get_speaker($EM_Event),
-			"price" => self::lowest_price($booking),
-			"events" => self::get_related_events($EM_Event->ID),
-			"content" => $content,
-			"formatting" => ["time" => get_option("dbem_time_format")]
-		];
-		$template = get_twig_template('templates/templates/event-single');
-		//var_dump(\Timber::$locations);
-		//return $EM_Twig::compile($template, $attributes);
-		return \Timber\Timber::compile($template, $attributes);
-	}
 	
 	public static function enable_the_content( $content ){
 		add_filter('the_content', array('EM_Event_Post','the_content'));
