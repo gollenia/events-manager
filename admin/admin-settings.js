@@ -64,13 +64,6 @@ jQuery(document).ready(function($){
 	});
 	//Page Options
 	
-	$('select[name="dbem_events_page"]').on('change', function(){
-		if( $('select[name="dbem_events_page"]').val() == 0 ){
-			$('tbody.em-event-page-options').hide();
-		}else{
-			$('tbody.em-event-page-options').show();
-		}
-	}).trigger('change');
 	$('input[name="dbem_cp_locations_has_archive"]').on('change', function(){ //location archives
 		if( $('input:radio[name="dbem_cp_locations_has_archive"]:checked').val() == 1 ){
 			$('tbody.em-location-archive-sub-options').show();
@@ -78,24 +71,7 @@ jQuery(document).ready(function($){
 			$('tbody.em-location-archive-sub-options').hide();
 		}
 	}).trigger('change');
-	//For rewrite titles
-	$('input:radio[name=dbem_disable_title_rewrites]').on('change',function(){
-		let checked_check = $('input:radio[name=dbem_disable_title_rewrites]:checked');
-		if( checked_check.val() == 1 ){
-			$('#dbem_title_html_row').show();
-		}else{
-			$('#dbem_title_html_row').hide();	
-		}
-	});
-	$('input:radio[name=dbem_disable_title_rewrites]').trigger('change');
-	//for event grouping
-	$('select[name="dbem_event_list_groupby"]').on('change', function(){
-		if( $('select[name="dbem_event_list_groupby"]').val() == 0 ){
-			$('tr#dbem_event_list_groupby_header_format_row, tr#dbem_event_list_groupby_format_row').hide();
-		}else{
-			$('tr#dbem_event_list_groupby_header_format_row, tr#dbem_event_list_groupby_format_row').show();
-		}
-	}).trigger('change');
+	
 	//ML Stuff
 	$('.em-translatable').on('click', function(){
 		$(this).nextAll('.em-ml-options').toggle();
