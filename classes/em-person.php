@@ -68,13 +68,7 @@ class EM_Person extends WP_User{
 	}
 	
 	function get_bookings_url(){
-		if( get_option('dbem_edit_bookings_page') && (!is_admin() || !empty($_REQUEST['is_public'])) ){
-			$my_bookings_page = get_permalink(get_option('dbem_edit_bookings_page'));
-			$bookings_link = em_add_get_params($my_bookings_page, array('person_id'=>$this->ID, 'event_id'=>null, 'ticket_id'=>null, 'booking_id'=>null), false);
-		}else{
-			$bookings_link = EM_ADMIN_URL. "&page=events-manager-bookings&person_id=".$this->ID;
-		}
-		return apply_filters('em_person_get_bookings_url', $bookings_link, $this);
+		return is_admin() ? EM_ADMIN_URL. "&page=events-manager-bookings&person_id=".$this->ID : '';
 	}
 	
 	function display_summary(){
