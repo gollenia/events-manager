@@ -227,8 +227,6 @@ class EM_Object {
 		$recurring = $args['recurring'];
 		$recurrence = $args['recurrence'];
 		$recurrences = $args['recurrences'];
-		$category = $args['category'];// - not used anymore, accesses the $args directly
-		$tag = $args['tag'];// - not used anymore, accesses the $args directly
 		$location = $args['location'];
 		$bookings = $args['rsvp'];
 		$bookings = $args['bookings'] !== false ? absint($args['bookings']):$bookings;
@@ -385,6 +383,14 @@ class EM_Object {
 				$conditions['scope'] = " (event_start_date BETWEEN CAST('$start_month' AS DATE) AND CAST('$end_month' AS DATE))";
 				if( !get_option('dbem_events_current_are_past') ){
 					$conditions['scope'] .= " OR (event_start_date < CAST('$start_month' AS DATE) AND event_end_date >= CAST('$start_month' AS DATE))";
+				}
+			}elseif ($scope == "week" || $scope == "next-week"){
+				if( $scope == 'next-week' ) $EM_DateTime->add('P7D');
+				$start_week = $EM_DateTime->modify('this week')->getDate();
+				$end_week = $EM_DateTime->modify('this week + 7 days')->getDate();
+				$conditions['scope'] = " (event_start_date BETWEEN CAST('$start_week' AS DATE) AND CAST('$end_week' AS DATE))";
+				if( !get_option('dbem_events_current_are_past') ){
+					$conditions['scope'] .= " OR (event_start_date < CAST('$start_week' AS DATE) AND event_end_date >= CAST('$start_week' AS DATE))";
 				}
 			}elseif( preg_match('/([0-9]+)\-months/',$scope,$matches) ){ // next x months means this month (what's left of it), plus the following x months until the end of that month.
 				$months_to_add = $matches[1];
@@ -638,253 +644,6 @@ class EM_Object {
 	        self::$taxonomies_array = apply_filters('em_object_taxonomies', $taxonomies_array);
 	    }
 	    return self::$taxonomies_array;
-	}
-	
-	/**
-	 * WORK IN PROGRESS - not recommended for production use due to lack of syncing with regular condition builder and timezones feature
-	 * Builds an array of SQL query conditions based on regularly used arguments
-	 * @param array $args
-	 * @return array
-	 */
-	public static function build_wpquery_conditions( $args, $wp_query ){
-		global $wpdb;
-		
-		$args = apply_filters('em_object_build_sql_conditions_args',$args);
-		
-		//Format the arguments passed on
-		$scope = $args['scope'];//undefined variable warnings in ZDE, could just delete this (but dont pls!)
-		$recurring = $args['recurring'];
-		$recurrence = $args['recurrence'];
-		$category = $args['category'];
-		$tag = $args['tag'];
-		$location = $args['location'];
-		$bookings = $args['rsvp'];
-		$bookings = !empty($args['bookings']) ? $args['bookings']:$bookings;
-		$owner = $args['owner'];
-		$event = $args['event'];
-		$month = $args['month'];
-		$year = $args['year'];
-		//Create the WHERE statement
-		
-		//Recurrences
-		$query = array();
-		if( $recurrence > 0 ){
-			$query[] = array( 'key' => '_recurrence_id', 'value' => $recurrence, 'compare' => '=' );
-		}
-		//Dates - first check 'month', and 'year', and adjust scope if needed
-		if( !($month=='' && $year=='') ){
-			//Sort out month range, if supplied an array of array(month,month), it'll check between these two months
-			if( self::array_is_numeric($month) ){
-				$date_month_start = $month[0];
-				$date_month_end = $month[1];
-			}else{
-				if( !empty($month) ){
-					$date_month_start = $date_month_end = $month;					
-				}else{
-					$date_month_start = 1;
-					$date_month_end = 12;				
-				}
-			}
-			//Sort out year range, if supplied an array of array(year,year), it'll check between these two years
-			if( self::array_is_numeric($year) ){
-				$date_year_start = $year[0];
-				$date_year_end = $year[1];
-			}else{
-				$date_year_start = $date_year_end = $year;
-			}
-			$date_start = $date_year_start."-".$date_month_start."-01";
-			$date_end = date('Y-m-t', mktime(0,0,0,$date_month_end,1,$date_year_end));
-			$scope = array($date_start,$date_end); //just modify the scope here
-		}
-		//No date requested, so let's look at scope
-		if ( is_array($scope) || preg_match( "/^[0-9]{4}-[0-9]{2}-[0-9]{2},[0-9]{4}-[0-9]{2}-[0-9]{2}$/", $scope ) ) {
-			if( !is_array($scope) ) $scope = explode(',',$scope);
-			if( !empty($scope[0]) ){
-				$EM_DateTime = new EM_DateTime($scope[0]); //create default time in blog timezone
-				$start_date = $EM_DateTime->getDate();
-				$end_date = $EM_DateTime->modify($scope[1])->getDate();
-				if( get_option('dbem_events_current_are_past') && $wp_query->query_vars['post_type'] != 'event-recurring' ){
-					$query[] = array( 'key' => '_event_start_date', 'value' => array($start_date,$end_date), 'type' => 'DATE', 'compare' => 'BETWEEN');
-				}else{
-					$query[] = array( 'key' => '_event_start_date', 'value' => $end_date, 'compare' => '<=', 'type' => 'DATE' );
-					$query[] = array( 'key' => '_event_end_date', 'value' => $start_date, 'compare' => '>=', 'type' => 'DATE' );
-				}
-			}
-		}elseif ( $scope == 'today' || $scope == 'tomorrow' || preg_match ( "/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/", $scope ) ) {
-			$EM_DateTime = new EM_DateTime($scope); //create default time in blog timezone
-			if( get_option('dbem_events_current_are_past') && $wp_query->query_vars['post_type'] != 'event-recurring' ){
-				$query[] = array( 'key' => '_event_start_date', 'value' => $EM_DateTime->getDate() );
-			}else{
-				$query[] = array( 'key' => '_event_start_date', 'value' => $EM_DateTime->getDate(), 'compare' => '<=', 'type' => 'DATE' );
-				$query[] = array( 'key' => '_event_end_date', 'value' => $EM_DateTime->getDate(), 'compare' => '>=', 'type' => 'DATE' );
-			}				
-		}elseif ($scope == "future" || $scope == 'past' ){
-			$EM_DateTime = new EM_DateTime(); //create default time in blog timezone
-			$EM_DateTime->setTimezone('UTC');
-			$compare = $scope == 'future' ? '>=' : '<';
-			if( get_option('dbem_events_current_are_past') && $wp_query->query_vars['post_type'] != 'event-recurring' ){
-				$query[] = array( 'key' => '_event_start', 'value' => $EM_DateTime->getDateTime(), 'compare' => $compare, 'type' => 'DATETIME' );
-			}else{
-				$query[] = array( 'key' => '_event_end', 'value' => $EM_DateTime->getDateTime(), 'compare' => $compare, 'type' => 'DATETIME' );
-			}
-		}elseif ($scope == "month" || $scope == "next-month" ){
-			$EM_DateTime = new EM_DateTime(); //create default time in blog timezone
-			if( $scope == 'next-month' ) $EM_DateTime->add('P1M');
-			$start_month = $EM_DateTime->modify('first day of this month')->getDate();
-			$end_month = $EM_DateTime->modify('last day of this month')->getDate();
-			if( get_option('dbem_events_current_are_past') && $wp_query->query_vars['post_type'] != 'event-recurring' ){
-				$query[] = array( 'key' => '_event_start_date', 'value' => array($start_month,$end_month), 'type' => 'DATE', 'compare' => 'BETWEEN');
-			}else{
-				$query[] = array( 'key' => '_event_start_date', 'value' => $end_month, 'compare' => '<=', 'type' => 'DATE' );
-				$query[] = array( 'key' => '_event_end_date', 'value' => $start_month, 'compare' => '>=', 'type' => 'DATE' );
-			}
-		}elseif( preg_match('/(\d\d?)\-months/',$scope,$matches) ){ // next x months means this month (what's left of it), plus the following x months until the end of that month.
-			$EM_DateTime = new EM_DateTime(); //create default time in blog timezone
-			$months_to_add = $matches[1];
-			$start_month = $EM_DateTime->getDate();
-			$end_month = $EM_DateTime->add('P'.$months_to_add.'M')->format('Y-m-t');
-			if( get_option('dbem_events_current_are_past') && $wp_query->query_vars['post_type'] != 'event-recurring' ){
-				$query[] = array( 'key' => '_event_start_date', 'value' => array($start_month,$end_month), 'type' => 'DATE', 'compare' => 'BETWEEN');
-			}else{
-				$query[] = array( 'key' => '_event_start_date', 'value' => $end_month, 'compare' => '<=', 'type' => 'DATE' );
-				$query[] = array( 'key' => '_event_end_date', 'value' => $start_month, 'compare' => '>=', 'type' => 'DATE' );
-			}
-		}
-		
-		//Filter by Location - can be object, array, or id
-		if ( is_numeric($location) && $location > 0 ) { //Location ID takes precedence
-			$query[] = array( 'key' => '_location_id', 'value' => $location, 'compare' => '=' );
-		}elseif ( self::array_is_numeric($location) ){
-			$query[] = array( 'key' => '_location_id', 'value' => $location, 'compare' => 'IN' );
-		}elseif ( is_object($location) && get_class($location)=='EM_Location' ){ //Now we deal with objects
-			$query[] = array( 'key' => '_location_id', 'value' => $location->location_id, 'compare' => '=' );
-		}elseif ( is_array($location) && @get_class(current($location)=='EM_Location') ){ //we can accept array of ids or EM_Location objects
-			foreach($location as $EM_Location){
-				$location_ids[] = $EM_Location->location_id;
-			}
-			$query[] = array( 'key' => '_location_id', 'value' => $location_ids, 'compare' => 'IN' );
-		}
-		
-		//Filter by Event - can be object, array, or id
-		if ( is_numeric($event) && $event > 0 ) { //event ID takes precedence
-			$query[] = array( 'key' => '_event_id', 'value' => $event, 'compare' => '=' );
-		}elseif ( self::array_is_numeric($event) ){ //array of ids
-			$query[] = array( 'key' => '_event_id', 'value' => $event, 'compare' => 'IN' );
-		}elseif ( is_object($event) && get_class($event)=='EM_Event' ){ //Now we deal with objects
-			$query[] = array( 'key' => '_event_id', 'value' => $event->event_id, 'compare' => '=' );
-		}elseif ( is_array($event) && @get_class(current($event)=='EM_Event') ){ //we can accept array of ids or EM_event objects
-			foreach($event as $EM_Event){
-				$event_ids[] = $EM_Event->event_id;
-			}
-			$query[] = array( 'key' => '_event_id', 'value' => $event_ids, 'compare' => 'IN' );
-		}
-		//country lookup
-		if( !empty($args['country']) ){
-			$countries = em_get_countries();
-			//we can accept country codes or names
-			if( in_array($args['country'], $countries) ){
-				//we have a country name, 
-				$country = $countries[$args['country']]."'";	
-			}elseif( array_key_exists($args['country'], $countries) ){
-				//we have a country code
-				$country = $args['country'];					
-			}
-			if(!empty($country)){
-				//get loc ids
-				$ids = $wpdb->get_col("SELECT post_id FROM ".$wpdb->postmeta." WHERE meta_key='_location_country' AND meta_value='$country'");
-				$query[] = array( 'key' => '_location_id', 'value' => $ids, 'compare' => 'IN' );
-			}
-		}
-		//state lookup
-		if( !empty($args['state']) ){
-			$ids = $wpdb->get_col($wpdb->prepare("SELECT post_id FROM ".$wpdb->postmeta." WHERE meta_key='_location_country' AND meta_value='%s'", $args['state']));
-			if( is_array($wp_query->query_vars['post__in']) ){
-				//remove values not in this array.
-				$wp_query->query_vars['post__in'] = array_intersect($wp_query->query_vars['post__in'], $ids);
-			}else{
-				$wp_query->query_vars['post__in'] = $ids;
-			}
-		}
-		//state lookup
-		if( !empty($args['town']) ){			
-			$ids = $wpdb->get_col($wpdb->prepare("SELECT post_id FROM ".$wpdb->postmeta." WHERE meta_key='_location_town' AND meta_value='%s'", $args['town']));
-			if( is_array($wp_query->query_vars['post__in']) ){
-				//remove values not in this array.
-				$wp_query->query_vars['post__in'] = array_intersect($wp_query->query_vars['post__in'], $ids);
-			}else{
-				$wp_query->query_vars['post__in'] = $ids;
-			}
-		}
-		//region lookup
-		if( !empty($args['region']) ){	
-			$ids = $wpdb->get_col($wpdb->prepare("SELECT post_id FROM ".$wpdb->postmeta." WHERE meta_key='_location_region' AND meta_value='%s'", $args['region']));
-			if( is_array($wp_query->query_vars['post__in']) ){
-				//remove values not in this array.
-				$wp_query->query_vars['post__in'] = array_intersect($wp_query->query_vars['post__in'], $ids);
-			}else{
-				$wp_query->query_vars['post__in'] = $ids;
-			}
-		}
-		//Add conditions for category selection
-		//Filter by category, can be id or comma separated ids
-		//TODO create an exclude category option
-		if ( is_numeric($category) && $category > 0 ){
-			//get the term id directly
-			$term = new EM_Category($category);
-			if( !empty($term->term_id) ){
-				if( !is_array($wp_query->query_vars['tax_query']) ) $wp_query->query_vars['tax_query'] = array();
-				$wp_query->query_vars['tax_query'] = array('taxonomy' => EM_TAXONOMY_CATEGORY, 'field'=>'id', 'terms'=>$term->term_id);
-			} 
-		}elseif( self::array_is_numeric($category) ){
-			$term_ids = array();
-			foreach($category as $category_id){
-				$term = new EM_Category($category_id);
-				if( !empty($term->term_id) ){
-					$term_ids[] = $term->term_taxonomy_id;
-				}
-			}
-			if( count($term_ids) > 0 ){
-				if( !is_array($wp_query->query_vars['tax_query']) ) $wp_query->query_vars['tax_query'] = array();
-				$wp_query->query_vars['tax_query'] = array('taxonomy' => EM_TAXONOMY_CATEGORY, 'field'=>'id', 'terms'=>$term_ids);
-			}
-		}		
-		//Add conditions for tags
-		//Filter by tag, can be id or comma separated ids
-		if ( !empty($tag) && !is_array($tag) ){
-			//get the term id directly
-			$term = new EM_Tag($tag);
-			if( !empty($term->term_id) ){
-				if( !is_array($wp_query->query_vars['tax_query']) ) $wp_query->query_vars['tax_query'] = array();
-				$wp_query->query_vars['tax_query'] = array('taxonomy' => EM_TAXONOMY_TAXONOMY, 'field'=>'id', 'terms'=>$term->term_taxonomy_id);
-			} 
-		}elseif( is_array($tag) ){
-			$term_ids = array();
-			foreach($tag as $tag_data){
-				$term = new EM_Tag($tag_data);
-				if( !empty($term->term_id) ){
-					$term_ids[] = $term->term_taxonomy_id;
-				}
-			}
-			if( count($term_ids) > 0 ){
-				if( !is_array($wp_query->query_vars['tax_query']) ) $wp_query->query_vars['tax_query'] = array();
-				$wp_query->query_vars['tax_query'] = array('taxonomy' => EM_TAXONOMY_TAXONOMY, 'field'=>'id', 'terms'=>$term_ids);
-			}
-		}
-	
-		//If we want rsvped items, we usually check the event
-		if( $bookings == 1 ){
-			$query[] = array( 'key' => '_event_rsvp', 'value' => 1, 'compare' => '=' );
-		}
-		//Default ownership belongs to an event, child objects can just overwrite this if needed.
-		if( is_numeric($owner) ){
-			$wp_query->query_vars['author'] = $owner;
-		}elseif( $owner == 'me' && is_user_logged_in() ){
-			$wp_query->query_vars['author'] = get_current_user_id();
-		}
-	  	if( !empty($query) && is_array($query) ){
-			$wp_query->query_vars['meta_query'] = $query;
-	  	}
-		return apply_filters('em_object_build_wp_query_conditions', $wp_query);
 	}
 	
 	/**
