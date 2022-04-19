@@ -89,7 +89,7 @@ add_action('admin_menu','em_admin_menu');
 function em_admin_warnings() {
 	global $EM_Notices;
 	//If we're editing the events page show hello to new user
-	$events_page_id = get_option ( 'dbem_events_page' );
+	
 	$dismiss_link_joiner = ( count($_GET) > 0 ) ? '&amp;':'?';
 	
 	if( current_user_can('activate_plugins') ){
@@ -106,29 +106,12 @@ function em_admin_warnings() {
 			</div>
 			<?php
 		}
-	
-		//If events page couldn't be created or is missing
-		if( !empty($_GET['em_dismiss_events_page']) ){
-			update_option('dbem_dismiss_events_page',1);
-		}else{
-			if ( !get_post($events_page_id) && !get_option('dbem_dismiss_events_page') ){
-				?>
-				<div id="em_page_error" class="updated">
-					<p><?php echo sprintf ( __( 'Uh Oh! For some reason WordPress could not create an events page for you (or you just deleted it). Not to worry though, all you have to do is create an empty page, name it whatever you want, and select it as your events page in your <a href="%s">settings page</a>. Sorry for the extra step! If you know what you are doing, you may have done this on purpose, if so <a href="%s">ignore this message</a>', 'events-manager'), EM_ADMIN_URL .'&amp;page=events-manager-options', esc_url($_SERVER['REQUEST_URI'].$dismiss_link_joiner.'em_dismiss_events_page=1') ); ?></p>
-				</div>
-				<?php
-			}
-		}
 
 		
 		
 	}
 	//Warn about EM page edit
-	if ( preg_match( '/(post|page).php/', $_SERVER ['SCRIPT_NAME']) && isset ( $_GET ['action'] ) && $_GET ['action'] == 'edit' && isset ( $_GET ['post'] ) && $_GET ['post'] == "$events_page_id") {
-		$message = sprintf ( __ ( "This page corresponds to the <strong>Events Manager</strong> %s page. Its content will be overridden by Events Manager, although if you include the word CONTENTS (exactly in capitals) and surround it with other text, only CONTENTS will be overwritten. If you want to change the way your events look, go to the <a href='%s'>settings</a> page. ", 'events-manager'), __('Events','events-manager'), EM_ADMIN_URL .'&amp;page=events-manager-options' );
-		$notice = "<div class='error'><p>$message</p></div>";
-		echo $notice;
-	}
+	
 	echo $EM_Notices;		
 }
 add_action ( 'admin_notices', 'em_admin_warnings', 100 );
@@ -150,17 +133,14 @@ function em_plugin_action_links($actions, $file, $plugin_data) {
 add_filter( 'plugin_action_links_events-manager/events-manager.php', 'em_plugin_action_links', 10, 3 );
 
 function em_user_action_links( $actions, $user ){
-	if ( !is_network_admin() && current_user_can( 'manage_others_bookings' ) ){
-		if( get_option('dbem_edit_bookings_page') && (!is_admin() || !empty($_REQUEST['is_public'])) ){
-			$my_bookings_page = get_permalink(get_option('dbem_edit_bookings_page'));
-			$bookings_link = em_add_get_params($my_bookings_page, array('person_id'=>$user->ID), false);
-		}else{
-			$bookings_link = EM_ADMIN_URL. "&page=events-manager-bookings&person_id=".$user->ID;
-		}
-		$actions['bookings'] = "<a href='$bookings_link'>" . __( 'Bookings','events-manager') . "</a>";
-	}
+	if (!is_admin() && !current_user_can( 'manage_others_bookings')) return $actions;
+	
+	$bookings_link = EM_ADMIN_URL. "&page=events-manager-bookings&person_id=".$user->ID;
+	$actions['bookings'] = "<a href='$bookings_link'>" . __( 'Bookings','events-manager') . "</a>";
+	
 	return $actions;
 }
+
 add_filter('user_row_actions','em_user_action_links',10,2);
 
 
