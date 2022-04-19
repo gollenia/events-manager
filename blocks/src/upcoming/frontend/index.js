@@ -15,8 +15,6 @@ function Upcoming(props) {
 			columnsMedium,
 			columnsLarge,
 			showImages,
-			roundImages,
-			imageSize,
 			showCategory,
 			showLocation,
 			style,
@@ -33,7 +31,6 @@ function Upcoming(props) {
 			showCategoryFilter,
 			showTagFilter,
 			showSearch,
-			filterStyle,
 			filterPosition,
 		
 	} = document.event_block_data[props.block]
