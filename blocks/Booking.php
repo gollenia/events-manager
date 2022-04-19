@@ -77,7 +77,6 @@ class Booking {
 			'gateways' => \EM_Gateways::get_gateways_rest(),
 			'strings' => [ 
 				"consent" => function_exists('get_the_privacy_policy_link') ? sprintf(get_option("dbem_data_privacy_consent_text"), get_the_privacy_policy_link()) : get_option("dbem_data_privacy_consent_text"), 
-				"date_format" => get_option("dbem_date_format"),
 				"pay_with" => get_option('dbem_gateway_label'),
 				"book_now" => get_option("dbem_bookings_submit_button"),
 				"time_format" => get_option("dbem_time_format"),
