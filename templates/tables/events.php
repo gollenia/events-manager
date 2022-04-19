@@ -141,7 +141,7 @@
 							<?php endif; ?>
 							<td>
 								<?php echo $EM_Event->output_dates(); ?>
-								<br />
+								
 								<?php echo $EM_Event->output_times(); ?>
 							</td>
 							<td>
