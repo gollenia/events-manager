@@ -15,7 +15,7 @@ if( !class_exists('EM_Permalinks') ){
 		);
 		
 		public static function init(){
-			//add_filter('pre_update_option_dbem_events_page', array('EM_Permalinks','option_update'));
+			
 			if( get_option('dbem_flush_needed') ){
 				add_filter('wp_loaded', array('EM_Permalinks','flush')); //flush after init, in case there are themes adding cpts etc.
 			}
@@ -28,7 +28,7 @@ if( !class_exists('EM_Permalinks') ){
 			if( !defined('EM_LOCATIONS_SLUG') ){ define('EM_LOCATIONS_SLUG','locations'); }
 			if( !defined('EM_CATEGORY_SLUG') ){ define('EM_CATEGORY_SLUG','category'); }
 			if( !defined('EM_CATEGORIES_SLUG') ){ define('EM_CATEGORIES_SLUG','categories'); }
-			add_filter('post_type_archive_link',array('EM_Permalinks','post_type_archive_link'),10,2);
+			
 		}
 		
 		public static function flush(){
@@ -38,20 +38,7 @@ if( !class_exists('EM_Permalinks') ){
 		}
 		
 		public static function post_type_archive_link($link, $post_type){
-			if( $post_type == EM_POST_TYPE_EVENT ){
-				if( get_option('dbem_events_page') ){
-					$new_link = get_permalink(get_option('dbem_events_page'));
-				}
-			}
-			if( $post_type == EM_POST_TYPE_LOCATION ){
-				if( get_option('dbem_locations_page') ){
-					$new_link = get_permalink(get_option('dbem_locations_page'));
-				}
-			}
-			if( !empty($new_link) ){
-				$link = $new_link;
-			}
-			return $link;
+			return "";
 		}
 		
 		/**
@@ -87,75 +74,31 @@ if( !class_exists('EM_Permalinks') ){
 		public static function rewrite_rules_array($rules){
 			global $wpdb;
 			//get the slug of the event page
-			$events_page_id = get_option ( 'dbem_events_page' );
-			$events_page = get_post($events_page_id);
 			$em_rules = array();
-			if( is_object($events_page) ){
-				$events_slug = urldecode(preg_replace('/\/$/', '', str_replace( trailingslashit(home_url()), '', get_permalink($events_page_id)) ));
-				$events_slug = ( !empty($events_slug) ) ? trailingslashit($events_slug) : $events_slug;
-				$events_pagename = trim($events_slug,'/');
-				$em_rules[$events_slug.'(\d{4}-\d{2}-\d{2})$'] = 'index.php?pagename='.$events_pagename.'&calendar_day=$matches[1]'; //event calendar date search
-				if( $events_page_id != get_option('page_on_front') && EM_POST_TYPE_EVENT_SLUG != $events_slug ){ //ignore this rule if events page is the home page
-					$em_rules[$events_slug.'rss/?$'] = 'index.php?post_type='.EM_POST_TYPE_EVENT.'&feed=feed'; //rss page
-					$em_rules[$events_slug.'feed/?$'] = 'index.php?post_type='.EM_POST_TYPE_EVENT.'&feed=feed'; //compatible rss page
-				}
-				if( EM_POST_TYPE_EVENT_SLUG.'/' == $events_slug ){ //won't apply on homepage
-					//make sure we hard-code rewrites for child pages of events
-					$child_posts = $wpdb->get_results("SELECT ID, post_name FROM {$wpdb->posts} WHERE post_parent={$events_page->ID} AND post_type='page' AND post_status='publish'");
-					foreach($child_posts as $child_post){
-						$em_rules[$events_slug.urldecode($child_post->post_name).'/?$'] = 'index.php?page_id='.$child_post->ID; //single event booking form with slug    //check if child page has children
-					    $grandchildren = $wpdb->get_results("SELECT ID, post_name FROM {$wpdb->posts} WHERE post_parent={$child_post->ID} AND post_type='page' AND post_status='publish'");
-					    if( count( $grandchildren ) != 0 ) { 
-					        foreach($grandchildren as $grandchild) {
-					            $em_rules[$events_slug.urldecode($child_post->post_name).'/'.urldecode($grandchild->post_name).'/?$'] = 'index.php?page_id='.$grandchild->ID;
-					        }
-					    }
-					}
-				}elseif( empty($events_slug) ){ //hard code homepage child pages
-					$child_posts = $wpdb->get_results("SELECT ID, post_name FROM {$wpdb->posts} WHERE post_parent={$events_page->ID} AND post_type='page' AND post_status='publish'");
-					foreach($child_posts as $child_post){
-						$em_rules[$events_page->post_name.'/'.urldecode($child_post->post_name).'/?$'] = 'index.php?page_id='.$child_post->ID; //single event booking form with slug    //check if child page has children
-					    $grandchildren = $wpdb->get_results("SELECT ID, post_name FROM {$wpdb->posts} WHERE post_parent={$child_post->ID} AND post_type='page' AND post_status='publish'");
-					    if( count( $grandchildren ) != 0 ) { 
-					        foreach($grandchildren as $grandchild) {
-					            $em_rules[$events_slug.urldecode($child_post->post_name).'/'.urldecode($grandchild->post_name).'/?$'] = 'index.php?page_id='.$grandchild->ID;
-					        }
-					    }
-					}
-				}
+		
+			$events_slug = EM_POST_TYPE_EVENT_SLUG;
+			$em_rules[$events_slug.'/(\d{4}-\d{2}-\d{2})$'] = 'index.php?post_type='.EM_POST_TYPE_EVENT.'&calendar_day=$matches[1]'; //event calendar date search
+			$em_rules[$events_slug.'/(\d{4}-\d{2}-\d{2})/page/?([0-9]{1,})/?$'] = 'index.php?post_type='.EM_POST_TYPE_EVENT.'&calendar_day=$matches[1]&paged=$matches[2]'; //event calendar date search paged
 			
-				//add redirection for backwards compatability
-				$em_rules[$events_slug.EM_EVENT_SLUG.'/(.+)$'] = 'index.php?pagename='.$events_pagename.'&em_redirect=1&event_slug=$matches[1]'; //single event
-				$em_rules[$events_slug.EM_LOCATION_SLUG.'/(.+)$'] = 'index.php?pagename='.$events_pagename.'&em_redirect=1&location_slug=$matches[1]'; //single location page
-				$em_rules[$events_slug.EM_CATEGORY_SLUG.'/(.+)$'] = 'index.php?pagename='.$events_pagename.'&em_redirect=1&category_slug=$matches[1]'; //single category page slug
-				//add a rule that ensures that the events page is found and used over other pages
-				$em_rules[trim($events_slug,'/').'/?$'] = 'index.php?pagename='.$events_pagename ;
-			}else{
-				$events_slug = EM_POST_TYPE_EVENT_SLUG;
-				$em_rules[$events_slug.'/(\d{4}-\d{2}-\d{2})$'] = 'index.php?post_type='.EM_POST_TYPE_EVENT.'&calendar_day=$matches[1]'; //event calendar date search
-				$em_rules[$events_slug.'/(\d{4}-\d{2}-\d{2})/page/?([0-9]{1,})/?$'] = 'index.php?post_type='.EM_POST_TYPE_EVENT.'&calendar_day=$matches[1]&paged=$matches[2]'; //event calendar date search paged
-				if( get_option('dbem_rsvp_enabled') ){
-					$em_rules[$events_slug.'/my\-bookings$'] = 'index.php?post_type='.EM_POST_TYPE_EVENT.'&bookings_page=1'; //page for users to manage bookings
-				}
-				//check for potentially conflicting posts with the same slug as events
-				$conflicting_posts = get_posts(array('name'=>EM_POST_TYPE_EVENT_SLUG, 'post_type'=>'any', 'numberposts'=>0));
-				if( count($conflicting_posts) > 0 ){ //won't apply on homepage
-					foreach($conflicting_posts as $conflicting_post){
-						//make sure we hard-code rewrites for child pages of events
-						$child_posts = get_posts(array('post_type'=>'any', 'post_parent'=>$conflicting_post->ID, 'numberposts'=>0));
-						foreach($child_posts as $child_post){
-							$em_rules[EM_POST_TYPE_EVENT_SLUG.'/'.urldecode($child_post->post_name).'/?$'] = 'index.php?page_id='.$child_post->ID; //single event booking form with slug
-							//check if child page has children
-							$grandchildren = get_pages('child_of='.$child_post->ID);
-							if( count( $grandchildren ) != 0 ) {
-								foreach($grandchildren as $grandchild) {
-									$em_rules[$events_slug.urldecode($child_post->post_name).'/'.urldecode($grandchild->post_name).'/?$'] = 'index.php?page_id='.$grandchild->ID;
-								}
+			//check for potentially conflicting posts with the same slug as events
+			$conflicting_posts = get_posts(array('name'=>EM_POST_TYPE_EVENT_SLUG, 'post_type'=>'any', 'numberposts'=>0));
+			if( count($conflicting_posts) > 0 ){ //won't apply on homepage
+				foreach($conflicting_posts as $conflicting_post){
+					//make sure we hard-code rewrites for child pages of events
+					$child_posts = get_posts(array('post_type'=>'any', 'post_parent'=>$conflicting_post->ID, 'numberposts'=>0));
+					foreach($child_posts as $child_post){
+						$em_rules[EM_POST_TYPE_EVENT_SLUG.'/'.urldecode($child_post->post_name).'/?$'] = 'index.php?page_id='.$child_post->ID; //single event booking form with slug
+						//check if child page has children
+						$grandchildren = get_pages('child_of='.$child_post->ID);
+						if( count( $grandchildren ) != 0 ) {
+							foreach($grandchildren as $grandchild) {
+								$em_rules[$events_slug.urldecode($child_post->post_name).'/'.urldecode($grandchild->post_name).'/?$'] = 'index.php?page_id='.$grandchild->ID;
 							}
 						}
 					}
 				}
 			}
+			
 			//Check the event category and tags pages, because if we're overriding the pages and they're not within the Events page hierarchy it may 404
 			//if taxonomy base permalink is same as page permalink
 			foreach( array('tags','categories') as $taxonomy_name ){
@@ -208,27 +151,10 @@ if( !class_exists('EM_Permalinks') ){
 		 * deprecated, use get_post_permalink() from now on or the output function with a placeholder
 		 * Generate a URL. Pass each section of a link as a parameter, e.g. EM_Permalinks::url('event',$event_id); will create an event link.
 		 * @return string 
+		 * @deprecated
 		 */
 		public static function url(){
-			global $wp_rewrite;
-			$args = func_get_args();
-			$em_uri = get_permalink(get_option("dbem_events_page")); //PAGE URI OF EM
-			if ( $wp_rewrite->using_permalinks() /*&& !defined('EM_DISABLE_PERMALINKS')*/ ) {
-				$event_link = trailingslashit(trailingslashit($em_uri). implode('/',$args));
-			}
-			return $event_link;
-		}
-		
-		/**
-		 * checks if the events page has changed, and sets a flag to flush wp_rewrite.
-		 * @param mixed $val
-		 * @return mixed
-		 */
-		public static function option_update( $val ){
-			if( get_option('dbem_events_page') != $val ){
-				update_option('dbem_flush_needed',1);
-			}
-		   	return $val;
+			return "";
 		}
 		
 		// Adding the id var so that WP recognizes it
@@ -266,13 +192,6 @@ if( !class_exists('EM_Permalinks') ){
 
 //Specific links that aren't generated by objects
 
-/**
- * returns the url of the my bookings page, depending on the settings page and if BP is installed.
- * @return string
- */
-function em_get_my_bookings_url(){
-	return "";
-}
 
 /**
  * Gets the admin URL for editing events. If called from front-end and there's a front-end edit events page, that will be
@@ -280,10 +199,5 @@ function em_get_my_bookings_url(){
  */
 function em_get_events_admin_url(){
     $admin_url = admin_url('edit.php?post_type=event');
-    if( !is_admin() ){
-        if( get_option('dbem_edit_events_page') ){
-            $admin_url = get_permalink(get_option( 'dbem_edit_events_page' ));
-        }
-    }
     return apply_filters('em_get_events_admin_url', $admin_url);
 }
