@@ -19,7 +19,7 @@ $args = !empty($args) ? $args:array(); /* @var $args array */
 			<?php 
 			//search text
 			if( !empty($args['search_term']) ) em_locate_template('templates/search/search.php',true,array('args'=>$args));
-			if( !empty($args['search_geo']) ) em_locate_template('templates/search/geo.php',true,array('args'=>$args));
+			
 			?>
 			<?php if( !empty($args['css']) ) : //show the button here if we're using the default styling, if you still want to use this and use custom CSS, then you have to override our rules ?>
 			<button type="submit" class="em-search-submit loading">
