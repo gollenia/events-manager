@@ -164,7 +164,6 @@ $limit $offset
 		
 		//the query filter
 		$sql = apply_filters('em_locations_get_sql', $sql, $args); 
-		//if( em_wp_is_super_admin() && WP_DEBUG_DISPLAY ){ echo "<pre>"; print_r($sql); echo '</pre>'; }
 		
 		//If we're only counting results, return the number of results
 		if( $count ){
