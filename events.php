@@ -73,7 +73,7 @@ require_once('classes/em-taxonomy-frontend.php');
 require_once("em-posts.php");
 //Template Tags & Template Logic
 require_once("em-actions.php");
-require_once("em-emails.php");
+//require_once("em-emails.php");
 require_once("em-functions.php");
 require_once("em-ical.php");
 require_once("em-data-privacy.php");
@@ -83,7 +83,7 @@ require_once("multilingual/em-ml.php");
 require_once('classes/em-booking.php');
 require_once('classes/em-bookings.php');
 require_once("classes/em-bookings-table.php") ;
-require_once('classes/em-calendar.php');
+//require_once('classes/em-calendar.php');
 require_once('classes/em-category.php');
 require_once('classes/em-categories.php');
 require_once('classes/em-categories-frontend.php');
@@ -110,7 +110,6 @@ require_once('classes/em-tickets-bookings.php');
 require_once('classes/em-tickets.php');
 //Admin Files
 if( is_admin() ){
-	//require_once('classes/em-admin-notices.php');
 	require_once('admin/em-admin.php');
 	require_once('admin/em-bookings.php');
 	require_once('admin/em-docs.php');
@@ -151,6 +150,10 @@ require_once('add-ons/export/Export.php');
 	define('EM_RECURRENCE_TABLE',$prefix.'dbem_recurrence'); //TABLE NAME
 	define('EM_LOCATIONS_TABLE',$prefix.'em_locations'); //TABLE NAME
 	define('EM_BOOKINGS_TABLE',$prefix.'em_bookings'); //TABLE NAME
+	define('EM_TRANSACTIONS_TABLE', $wpdb->prefix.'em_transactions'); //TABLE NAME
+	define('EM_EMAIL_QUEUE_TABLE', $wpdb->prefix.'em_email_queue'); //TABLE NAME
+	define('EM_COUPONS_TABLE', $wpdb->prefix.'em_coupons'); //TABLE NAME
+	define('EM_BOOKINGS_RELATIONSHIPS_TABLE', $wpdb->prefix.'em_bookings_relationships'); //TABLE NAME
 
 	//Backward compatability for old images stored in < EM 5
 
@@ -166,21 +169,6 @@ if( file_exists($upload_dir['basedir'].'/locations-pics' ) ){
 	define("EM_IMAGE_DS",'/');
 }
 
-/**
- * Provides a way to proactively load groups of files, once, when needed.
- * @since 5.9.7.4
- */
-class EM_Loader {
-	public static $oauth = false;
-	
-	public static function oauth(){
-		require_once('classes/em-oauth/oauth-api.php');
-		add_action('em_enqueue_admin_styles', function(){
-			wp_enqueue_style('events-manager-oauth-admin', plugins_url('includes/events-manager-oauth-admin.css',__FILE__), array(), EM_VERSION);
-		});
-		self::$oauth = true;
-	}
-}
 
 /**
  * @author marcus
@@ -198,9 +186,18 @@ class EM_Scripts_and_Styles {
 		if( $hook_suffix == 'post.php' || (!empty($_GET['page']) && substr($_GET['page'],0,14) == 'events-manager') || (!empty($_GET['post_type']) && in_array($_GET['post_type'], array(EM_POST_TYPE_EVENT,EM_POST_TYPE_LOCATION,'event-recurring'))) ){
 			wp_enqueue_style( 'wp-color-picker' );
 			wp_enqueue_script('events-manager', plugins_url('includes/events-manager.js',__FILE__), array('jquery', 'jquery-ui-core','jquery-ui-widget','jquery-ui-position','jquery-ui-sortable','jquery-ui-datepicker','jquery-ui-autocomplete','jquery-ui-dialog','wp-color-picker'), EM_VERSION);
-		    do_action('em_enqueue_admin_scripts');
+		    global $pagenow;
+			if( !empty($_REQUEST['page']) && ($_REQUEST['page'] == 'events-manager-forms-editor' || ($_REQUEST['page'] == 'events-manager-bookings' && !empty($_REQUEST['action']) && $_REQUEST['action'] == 'manual_booking')) ){
+				wp_enqueue_script('events-manager-pro', plugins_url('includes/events-manager-pro.js',__FILE__), array('jquery', 'jquery-ui-core','jquery-ui-widget','jquery-ui-position')); //jQuery will load as dependency
+				do_action('em_enqueue_admin_scripts');
+			}
+			if( $pagenow == 'user-edit.php' ){
+				//need to include the em script for dates
+				EM_Scripts_and_Styles::admin_enqueue();
+			}
 			wp_enqueue_style('events-manager-admin', plugins_url('includes/admin-settings.css',__FILE__), array(), EM_VERSION);
 			do_action('em_enqueue_admin_styles');
+			wp_enqueue_style('events-manager-pro-admin', plugins_url('includes/events-manager-pro.css',__FILE__), array(), 5);
 			self::localize_script();
 		}
 	}
@@ -211,18 +208,18 @@ class EM_Scripts_and_Styles {
 	public static function localize_script(){
 		global $em_localized_js;
 		$locale_code = substr ( get_locale(), 0, 2 );
-		$date_format = get_option('dbem_date_format_js') ? get_option('dbem_date_format_js'):'yy-mm-dd'; //prevents blank datepickers if no option set
 		//Localize
 		$em_localized_js = array(
 			'ajaxurl' => admin_url('admin-ajax.php'),
 			'locationajaxurl' => admin_url('admin-ajax.php?action=locations_search'),
 			'firstDay' => get_option('start_of_week'),
 			'locale' => $locale_code,
-			'dateFormat' => $date_format,
 			'ui_css' => plugins_url('includes/jquery-ui.min.css', __FILE__),
 			'show24hours' => get_option('dbem_time_24h'),
 			'is_ssl' => is_ssl(),
 		);
+
+		
 	
 		//booking-specific stuff
 		if( get_option('dbem_rsvp_enabled') ){
@@ -239,12 +236,13 @@ class EM_Scripts_and_Styles {
 
 			));		
 		}
+		$em_localized_js['cache'] = defined('WP_CACHE') && WP_CACHE;
 		$em_localized_js['txt_search'] = get_option('dbem_search_form_text_label',__('Search','events-manager'));
 		$em_localized_js['txt_searching'] = __('Searching...','events-manager');
 		$em_localized_js['txt_loading'] = __('Loading...','events-manager');
 		
 		//logged in messages that visitors shouldn't need to see
-		if( is_user_logged_in() || is_page(get_option('dbem_edit_events_page')) ){
+		if( is_user_logged_in() ){
 		    if( get_option('dbem_recurrence_enabled') ){
 		    	if( !empty($_REQUEST['action']) && ($_REQUEST['action'] == 'edit' || $_REQUEST['action'] == 'event_save') && !empty($_REQUEST['event_id']) ){
 					$em_localized_js['event_reschedule_warning'] = __('Are you sure you want to continue?', 'events-manager') .PHP_EOL;
@@ -273,6 +271,7 @@ class EM_Scripts_and_Styles {
 			    $em_localized_js['open_text'] = __('Expand All','events-manager');
 			}
 		}		
+		
 		wp_localize_script('events-manager','EM', apply_filters('em_wp_localize_script', $em_localized_js));
 	}
 }
@@ -328,15 +327,13 @@ add_filter('plugins_loaded','em_plugins_loaded');
 function em_init(){
 	//Hard Links
 	global $EM_Mailer, $wp_rewrite;
-	if( get_option("dbem_events_page") > 0 ){
-		define('EM_URI', get_permalink(get_option("dbem_events_page"))); //PAGE URI OF EM
+	
+	if( $wp_rewrite->using_permalinks() ){
+		define('EM_URI', trailingslashit(home_url()). EM_POST_TYPE_EVENT_SLUG.'/'); //PAGE URI OF EM
 	}else{
-		if( $wp_rewrite->using_permalinks() ){
-			define('EM_URI', trailingslashit(home_url()). EM_POST_TYPE_EVENT_SLUG.'/'); //PAGE URI OF EM
-		}else{
-			define('EM_URI', trailingslashit(home_url()).'?post_type='.EM_POST_TYPE_EVENT); //PAGE URI OF EM
-		}
+		define('EM_URI', trailingslashit(home_url()).'?post_type='.EM_POST_TYPE_EVENT); //PAGE URI OF EM
 	}
+	
 	if( $wp_rewrite->using_permalinks() ){
 		$rss_url = trailingslashit(home_url()). EM_POST_TYPE_EVENT_SLUG.'/feed/';
 		define('EM_RSS_URI', $rss_url); //RSS PAGE URI via CPT archives page
@@ -462,14 +459,8 @@ if( is_multisite() ){
 				$return = get_site_option(str_replace('pre_option_','',$filter_name));
 				return $return;
 			}elseif( strstr($filter_name, 'pre_update_option_') !== false ){
-				if( em_wp_is_super_admin() ){
-					update_site_option(str_replace('pre_update_option_','',$filter_name), $value[0]);
-				}
 				return $value[1];
 			}elseif( strstr($filter_name, 'add_option_') !== false ){
-				if( em_wp_is_super_admin() ){
-					update_site_option(str_replace('add_option_','',$filter_name),$value[0]);
-				}
 				delete_option(str_replace('pre_option_','',$filter_name));
 				return;
 			}
@@ -579,22 +570,6 @@ add_filter('em_event_save', 'em_modified_monitor', 10,1);
 add_filter('em_location_save', 'em_modified_monitor', 10,1);
 
 
-function em_delete_blog( $blog_id ){
-	global $wpdb;
-	$prefix = $wpdb->get_blog_prefix($blog_id);
-	$wpdb->query('DROP TABLE '.$prefix.'em_events');
-	$wpdb->query('DROP TABLE '.$prefix.'em_bookings');
-	$wpdb->query('DROP TABLE '.$prefix.'em_locations');
-	$wpdb->query('DROP TABLE '.$prefix.'em_tickets');
-	$wpdb->query('DROP TABLE '.$prefix.'em_tickets_bookings');
-	$wpdb->query('DROP TABLE '.$prefix.'em_meta');
-	//delete events if MS Global
-	if( EM_MS_GLOBAL ){
-	    EM_Events::delete(array('limit'=>0, 'blog'=>$blog_id));
-	    EM_Locations::delete(array('limit'=>0, 'blog'=>$blog_id));
-	}
-}
-add_action('delete_blog','em_delete_blog');
 
 function em_activate() {
 	update_option('dbem_flush_needed',1);
@@ -610,13 +585,96 @@ register_deactivation_hook( __FILE__,'em_deactivate');
 
 
 
-add_action( 'plugins_loaded', 'wpdocs_load_textdomain' );
+
 /**
  * Load plugin textdomain.
  */
 function wpdocs_load_textdomain() {
 	load_plugin_textdomain('events-manager', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' ); 
+	load_plugin_textdomain('em-pro', false, dirname( plugin_basename( __FILE__ ) ).'/languages');
+}
+add_action( 'plugins_loaded', 'wpdocs_load_textdomain' );
+
+
+class EM_Pro {
+
+	/**
+	 * em_pro_data option
+	 * @var array
+	 */
+	var $data;
+
+	/**
+	 * Actions to take upon initial action hook
+	 */
+	public static function init(){
+
+		if( is_admin() ){ //although activate_plugins would be beter here, superusers don't visit every single site on MS
+			add_action('init', 'EM_Pro::install',2);
+		}
+		
+		//booking-specific features - this one may change in the future
+		require_once('emp-forms.php'); //form editor
+		
+		require_once('emp-ml.php');
+		
+
+		//booking-specific features
+		require_once('add-ons/gateways/gateways.php'); 
+		require_once('add-ons/bookings-form/bookings-form.php');
+		
+		require_once('add-ons/coupons/coupons.php');
+		require_once('add-ons/emails/emails.php');
+		require_once('add-ons/user-fields.php');
+
+	}
+	
+	public static function install(){
+	    if( current_user_can('list_users') ){
+	    	$old_version = get_option('em_pro_version');
+	    	if( $old_version == '' ) {
+	    		require_once('emp-install.php');
+	    		emp_install();
+	    	}
+	    }
+	}   
+	
+
+	/**
+	 * Enqueues the CSS required by Pro features. Fired by action em_enqueue_styles which is when EM enqueues it's stylesheet, if it doesn't then this shouldn't either 
+	 */
+	public static function em_enqueue_styles(){
+	    wp_enqueue_style('events-manager-pro', plugins_url('includes/events-manager-pro.css',__FILE__), array(), 5);
+	}
+	
 }
 
-require_once('emp.php');
-?>
+add_action( 'plugins_loaded', 'EM_Pro::init' );
+
+
+
+
+/* Creating the wp_events table to store event data*/
+function emp_activate() {
+	global $wp_rewrite;
+   	$wp_rewrite->flush_rules();
+}
+register_activation_hook( __FILE__,'emp_activate');
+
+
+//cron functions - ran here since functions aren't loaded, scheduling done by gateways and other modules
+/**
+ * Adds a schedule according to EM
+ * @param array $shcehules
+ * @return array
+ */
+function emp_cron_schedules($schedules){
+	$schedules['em_minute'] = array(
+		'interval' => 60,
+		'display' => 'Every Minute'
+	);
+	return $schedules;
+}
+add_filter('cron_schedules','emp_cron_schedules',10,1);
+
+require_once('blocks/Block.php');
