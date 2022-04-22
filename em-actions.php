@@ -13,8 +13,7 @@ function em_init_actions() {
 			if(isset($_REQUEST['id'])){
 				$EM_Location = new EM_Location( absint($_REQUEST['id']), 'location_id' );
 				$location_array = $EM_Location->to_array();
-				$location_array['location_balloon'] = $EM_Location->output( get_option('dbem_location_baloon_format') );
-		     	echo EM_Object::json_encode($location_array);
+		     	echo json_encode($location_array);
 			}
 			die();
 		}   
@@ -30,7 +29,7 @@ function em_init_actions() {
 			}else{
 				$result = array('result'=>false, 'error'=>__('No ticket id provided','events-manager'));	
 			}			
-		    echo EM_Object::json_encode($result);
+		    echo json_encode($result);
 			die();
 		}
 		if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'GlobalMapData') {
@@ -38,9 +37,8 @@ function em_init_actions() {
 			$json_locations = array();
 			foreach($EM_Locations as $location_key => $EM_Location) {
 				$json_locations[$location_key] = $EM_Location->to_array();
-				$json_locations[$location_key]['location_balloon'] = $EM_Location->output(get_option('dbem_map_text_format'));
 			}
-			echo EM_Object::json_encode($json_locations);
+			echo json_encode($json_locations);
 		 	die();
 	 	}
 		if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'GlobalEventsMapData') {
@@ -52,10 +50,9 @@ function em_init_actions() {
 			foreach($EM_Events as $EM_Event) {
 				$EM_Location = $EM_Event->get_location();
 				$location_array = $EM_Event->get_location()->to_array();
-				$location_array['location_balloon'] = $EM_Location->output(get_option('dbem_map_text_format'));
 				$json_locations[] = $location_array;
 			}
-			echo EM_Object::json_encode($json_locations);
+			echo json_encode($json_locations);
 		 	die();   
 	 	}
 	}
@@ -113,7 +110,7 @@ function em_init_actions() {
 		if ( $_REQUEST['action'] == 'event_delete' && wp_verify_nonce($_REQUEST['_wpnonce'],'event_delete_'.$EM_Event->event_id) ) { 
 			//DELETE action
 			$selectedEvents = !empty($_REQUEST['events']) ? $_REQUEST['events']:'';
-			if(  EM_Object::array_is_numeric($selectedEvents) ){
+			if( is_array($selectedEvents) && array_is_list($selectedEvents) ){
 				$events_result = EM_Events::delete( $selectedEvents );
 			}elseif( is_object($EM_Event) ){
 				$events_result = $EM_Event->delete();
@@ -155,7 +152,7 @@ function em_init_actions() {
 			}else{		
 				$return = array('result'=>false, 'message'=>$EM_Event->feedback_message, 'errors'=>$EM_Event->errors);
 			}
-			echo EM_Object::json_encode($return);
+			echo json_encode($return);
 			exit();
 		}
 	}
@@ -187,7 +184,7 @@ function em_init_actions() {
 			//get object or objects			
 			if( !empty($_REQUEST['locations']) || !empty($_REQUEST['location_id']) ){
 				$args = false;
-				if( !empty($_REQUEST['locations']) && EM_Object::array_is_numeric($_REQUEST['locations']) ){
+				if( !empty($_REQUEST['locations']) && is_array($_REQUEST['locations']) && array_is_list($_REQUEST['locations']) ){
 					$args = $_REQUEST['locations'];
 				}elseif( !empty($_REQUEST['location_id']) ){
 					$args = absint($_REQUEST['location_id']);
@@ -236,16 +233,16 @@ function em_init_actions() {
 				", $term);
 				$results = $wpdb->get_results($sql);
 			}
-			echo EM_Object::json_encode($results);
+			echo json_encode($results);
 			die();
 		}
 		if( isset($result) && $result && !empty($_REQUEST['em_ajax']) ){
 			$return = array('result'=>true, 'message'=>$EM_Location->feedback_message);
-			echo EM_Object::json_encode($return);
+			echo json_encode($return);
 			die();
 		}elseif( isset($result) && !$result && !empty($_REQUEST['em_ajax']) ){
 			$return = array('result'=>false, 'message'=>$EM_Location->feedback_message, 'errors'=>$EM_Notices->get_errors());
-			echo EM_Object::json_encode($return);
+			echo json_encode($return);
 			die();
 		}
 	}
@@ -326,7 +323,7 @@ function em_init_actions() {
 	  		//Event Admin only actions
 			$action = $allowed_actions[$_REQUEST['action']];
 			//Just do it here, since we may be deleting bookings of different events.
-			if( !empty($_REQUEST['bookings']) && EM_Object::array_is_numeric($_REQUEST['bookings'])){
+			if( !empty($_REQUEST['bookings']) && is_array($_REQUEST['bookings']) && array_is_list($_REQUEST['bookings'])){
 				$results = array();
 				foreach($_REQUEST['bookings'] as $booking_id){
 					$EM_Booking = em_get_booking($booking_id);
@@ -449,12 +446,12 @@ function em_init_actions() {
 		if( $result && defined('DOING_AJAX') ){
 			$return = array('result'=>true, 'message'=>$feedback);
 			header( 'Content-Type: application/javascript; charset=UTF-8', true ); //add this for HTTP -> HTTPS requests which assume it's a cross-site request
-			echo EM_Object::json_encode(apply_filters('em_action_'.$_REQUEST['action'], $return, $EM_Booking));
+			echo json_encode(apply_filters('em_action_'.$_REQUEST['action'], $return, $EM_Booking));
 			die();
 		}elseif( !$result && defined('DOING_AJAX') ){
 			$return = array('result'=>false, 'message'=>$feedback, 'errors'=>$EM_Notices->get_errors());
 			header( 'Content-Type: application/javascript; charset=UTF-8', true ); //add this for HTTP -> HTTPS requests which assume it's a cross-site request
-			echo EM_Object::json_encode(apply_filters('em_action_'.$_REQUEST['action'], $return, $EM_Booking));
+			echo json_encode(apply_filters('em_action_'.$_REQUEST['action'], $return, $EM_Booking));
 			die();
 		}
 	}
@@ -486,7 +483,7 @@ function em_init_actions() {
 				echo apply_filters('em_ajax_search_states', $return);
 				exit();
 			}else{
-				echo EM_Object::json_encode($results);
+				echo json_encode($results);
 				exit();
 			}
 		}
@@ -517,7 +514,7 @@ function em_init_actions() {
 				echo apply_filters('em_ajax_search_towns', $return);
 				exit();
 			}else{
-				echo EM_Object::json_encode($results);
+				echo json_encode($results);
 				exit();
 			}
 		}
@@ -541,7 +538,7 @@ function em_init_actions() {
 				echo apply_filters('em_ajax_search_regions', $return);
 				exit();
 			}else{
-				echo EM_Object::json_encode($results);
+				echo json_encode($results);
 				exit();
 			}
 		}
@@ -638,15 +635,15 @@ function em_ajax_search_and_pagination(){
 		em_locate_template('templates/events-list-grouped.php', true, array('args'=>$args)); //if successful, this template overrides the settings and defaults, including search
 	}elseif( $_REQUEST['action'] == 'search_locations' && defined('DOING_AJAX') ){
 		$args = EM_Locations::get_post_search($args);
-		$args['limit'] = !empty($args['limit']) ? $args['limit'] : get_option('dbem_locations_default_limit');
+		$args['limit'] = !empty($args['limit']) ? $args['limit'] : 20;
 		em_locate_template('templates/locations-list.php', true, array('args'=>$args)); //if successful, this template overrides the settings and defaults, including search
 	}elseif( $_REQUEST['action'] == 'search_tags' && defined('DOING_AJAX') ){
 		$args = EM_Tags::get_post_search($args);
-		$args['limit'] = !empty($args['limit']) ? $args['limit'] : get_option('dbem_tags_default_limit');
+		$args['limit'] = !empty($args['limit']) ? $args['limit'] : 20;
 		em_locate_template('templates/tags-list.php', true, array('args'=>$args)); //if successful, this template overrides the settings and defaults, including search
 	}elseif( $_REQUEST['action'] == 'search_cats' && defined('DOING_AJAX') ){
 		$args = EM_Categories::get_post_search($args);
-		$args['limit'] = !empty($args['limit']) ? $args['limit'] : get_option('dbem_categories_default_limit');
+		$args['limit'] = !empty($args['limit']) ? $args['limit'] : 20;
 		em_locate_template('templates/categories-list.php', true, array('args'=>$args)); //if successful, this template overrides the settings and defaults, including search
 	}
 	echo '</div>';
