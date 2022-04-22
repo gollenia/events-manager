@@ -4,7 +4,7 @@
  * This form should have $EM_Ticket and $col_count available globally. 
  */
 global $col_count, $EM_Ticket; /* @var EM_Ticket $EM_Ticket */
-var_dump($EM_Ticket->ticket_primary);
+
 $col_count = absint($col_count); //now we know it's a number
 ?>
 <div class="em-ticket-form">
