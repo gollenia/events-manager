@@ -20,7 +20,9 @@ const Inspector = (props) => {
 			speakerDescription,
 			priceOverwrite,
 			speakerIcon,
-			speakerLink
+			speakerLink,
+			bookedUpWarningThreshold,
+			showBookedUp
 		},
 		setAttributes,
 		
@@ -136,6 +138,24 @@ const Inspector = (props) => {
 				help={__("If empty, the first ticket's price is used", 'events')}
 				value={ priceOverwrite }
 				onChange={ (value) => setAttributes({ priceOverwrite: value })}
+			/>
+		</PanelBody>
+		<PanelBody
+			title={__('Booked up warning', 'events')}
+			initialOpen={true}
+		>
+			<ToggleControl
+				label={ __("Show if event is booked up or nearly booked up", 'events')}
+				checked={ showBookedUp }
+				onChange={ (value) => setAttributes({ showBookedUp: value }) }
+			/>
+			<RangeControl
+				label={ __("Warning threshold", 'events')}
+				value={ bookedUpWarningThreshold }
+				onChange={ (value) => setAttributes({ bookedUpWarningThreshold: value }) }
+				min={ 0 }
+				max={ 10 }
+				help={ __("Show a warning that the event is nearly booked up when only this number of spaces are left", 'events')}
 			/>
 		</PanelBody>
 		</InspectorControls>

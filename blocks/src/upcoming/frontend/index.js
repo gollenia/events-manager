@@ -10,29 +10,30 @@ import DescriptionItem from './descriptionItem'
 function Upcoming(props) {
 	if(!document.event_block_data) return (<></>)
 	const { 
-
-			columnsSmall,
-			columnsMedium,
-			columnsLarge,
-			showImages,
-			showCategory,
-			showLocation,
-			style,
-			limit,
-			order,
-			selectedCategory,
-			selectedLocation,
-			selectedTags,
-			scope,
-			excerptLength,
-			textAlignment,
-			showAudience,
-			showSpeaker,
-			showCategoryFilter,
-			showTagFilter,
-			showSearch,
-			filterPosition,
-		
+		columnsSmall,
+		columnsMedium,
+		columnsLarge,
+		showImages,
+		showCategory,
+		showLocation,
+		showBookedUp,
+		bookedUpWarningThreshold,
+		style,
+		limit,
+		order,
+		selectedCategory,
+		selectedLocation,
+		selectedTags,
+		scope,
+		excerptLength,
+		textAlignment,
+		showAudience,
+		showSpeaker,
+		showCategoryFilter,
+		showTagFilter,
+		showSearch,
+		filterPosition,
+		excludeCurrent
 	} = document.event_block_data[props.block]
 
 	const [ events, setEvents ] = useState([])
@@ -59,6 +60,13 @@ function Upcoming(props) {
 		tagFilter.push(tag);
 		changeFilter('tags', tagFilter)
 	}
+
+	const getUrl = (params = '') => {
+		const base = window.eventBlocksLocalization?.rest_url;
+		if(base === undefined) return;
+		if(params === '') return base;
+		return base + (base.includes('?') ? '&' : '?') + params;
+	}
 	
 	useEffect(() => {
 
@@ -68,12 +76,11 @@ function Upcoming(props) {
 			selectedCategory != 0 ? `category=${selectedCategory.join(',')}` : false,
 			selectedTags.length ? `tag=${selectedTags.join(',')}` : false,
 			scope != '' ? `scope=${scope}` : false,
-			selectedLocation ? `location=${selectedLocation}` : false
+			selectedLocation ? `location=${selectedLocation}` : false,
+			excludeCurrent ? `exclude=${window.eventBlocksLocalization?.current_id}` : false,
 		].filter(Boolean).join("&");
-
-		const url = '/events/v2/events?' + params;
-		
-		apiFetch( { path: url } ).then( ( posts ) => {
+		console.log(getUrl(params))
+		apiFetch( { path: getUrl(params) } ).then( ( posts ) => {
 			setEvents(posts)
 			
 			let categories = {};
@@ -173,6 +180,8 @@ function Upcoming(props) {
 						showCategory={showCategory}
 						showLocation={showLocation}
 						excerptLength={excerptLength}
+						showBookedUp={showBookedUp}
+						bookedUpWarningThreshold={bookedUpWarningThreshold}
 						textAlignment={textAlignment}
 						showAudience={showAudience}
 						showSpeaker={showSpeaker}

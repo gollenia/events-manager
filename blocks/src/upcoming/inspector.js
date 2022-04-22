@@ -26,8 +26,10 @@ const Inspector = (props) => {
 			showTagFilter,
 			showCategoryFilter,
 			showSearch,
-			filterStyle,
 			filterPosition,
+			showBookedUp,
+			bookedUpWarningThreshold,
+			excludeCurrent
 		},
 		tagList,
 		categoryList,
@@ -137,6 +139,12 @@ const Inspector = (props) => {
 				onChange={ ( value ) => {
 					setAttributes( { limit: value } );
 				} }
+			/>
+			<CheckboxControl
+				label={ __("Exclude current", 'events')}
+				checked={ excludeCurrent }
+				onChange={ (value) => setAttributes({ excludeCurrent: value }) }
+				help={ __("If applicable, exclude the current event from the list", 'events') }
 			/>
 			
 		</PanelBody>
@@ -276,6 +284,19 @@ const Inspector = (props) => {
 					onChange={ (value) => setAttributes({ showCategory: value }) }
 				/>
 			</PanelRow>
+			<CheckboxControl
+				label={ __("Show if event is booked up or nearly booked up", 'events')}
+				checked={ showBookedUp }
+				onChange={ (value) => setAttributes({ showBookedUp: value }) }
+			/>
+			<RangeControl
+				label={ __("Warning threshold", 'events')}
+				value={ bookedUpWarningThreshold }
+				onChange={ (value) => setAttributes({ bookedUpWarningThreshold: value }) }
+				min={ 0 }
+				max={ 10 }
+				help={ __("Show a warning that the event is nearly booked up when only this number of spaces are left", 'events')}
+			/>
 		</PanelBody>
 		</InspectorControls>
   	);

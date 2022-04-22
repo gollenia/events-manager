@@ -101,6 +101,18 @@
 		"scope": {
 			"type": "string",
 			"default": "future"
+		},
+		"bookedUpWarningThreshold": {
+			"type": "number",
+			"default": 0
+		},
+		"showBookedUp": {
+			"type": "boolean",
+			"default": true
+		},
+		"excludeCurrent": {
+			"type": "boolean",
+			"default": false
 		}
 	}
 }

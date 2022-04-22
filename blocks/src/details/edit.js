@@ -33,7 +33,8 @@ const edit = (props) => {
 			audienceIcon,
 			audienceDescription,
 			speakerIcon,
-			priceOverwrite
+			priceOverwrite,
+			showBookedUp
 		}
 		
 	} = props;
@@ -45,8 +46,15 @@ const edit = (props) => {
 		return select("core/editor").getCurrentPostId()
 	}, [] );
 
+	const getUrl = (params = '') => {
+		const base = window.eventBlocksLocalization?.rest_url;
+		if(base === undefined) return;
+		return base + (base.includes('?') ? '&' : '?') + params;
+	}
+
 	useEffect(() => {
-		fetch(`/wp-json/events/v2/events?post_id=${post_id}`)
+		const url = getUrl(`post_id=${post_id}`);
+		fetch(url)
 		.then(response => response.json())
 		.then(data => setEvent(data[0]))
 	}, []);
@@ -95,7 +103,14 @@ const edit = (props) => {
 						<div className='ctx:event-details__item'>
 							<i className="material-icons">euro</i>
 							<div><h5>{__('Price', 'events')}</h5>{priceOverwrite != '' ? priceOverwrite : event?.price?.format}</div>
-						</div>}
+						</div>
+					}
+					{ showBookedUp && event?.bookings?.has_bookings && 
+						<div className='ctx:event-details__item'>
+							<i className="material-icons">report_problem</i>
+							<div><h5>{__('Warning', 'events')}</h5>{__("This warning is shown, if few or no bookings are available")}</div>
+						</div>
+					}
 			</div>
 		</div>
 	);

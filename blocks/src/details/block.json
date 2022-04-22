@@ -55,6 +55,14 @@
 		"priceOverwrite": {
 			"type": "string",
 			"default": ""
+		},
+		"bookedUpWarningThreshold": {
+			"type": "number",
+			"default": 5
+		},
+		"showBookedUp": {
+			"type": "boolean",
+			"default": true
 		}
 
 	}
