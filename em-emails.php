@@ -5,7 +5,7 @@
  * @return boolean
  * @deprecated version 6.2.0
  */
- */
+ 
 function em_event_submission_emails($result, $EM_Event){
     if( $result ){
 		//if this is just published, we need to email the user about the publication, or send to pending mode again for review
