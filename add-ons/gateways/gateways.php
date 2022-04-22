@@ -179,7 +179,7 @@ class EM_Gateways {
 	    	$result = false;
 	    	if( defined('DOING_AJAX') ){
 	    		$return = array('result'=>false, 'message'=>$error, 'errors'=>$error);
-	    		echo EM_Object::json_encode($return);
+	    		echo json_encode($return);
 	    		die();
 	    	}
 	    }
@@ -505,10 +505,7 @@ class EM_Gateways {
 	 * @return array
 	 */
 	public static function data_privacy_export($export_items, $export_item, $EM_Booking ){
-		if( get_option('dbem_multiple_bookings') ){
-			$EM_MB_Booking = EM_Multiple_Bookings::get_main_booking($EM_Booking);
-			if( $EM_Booking->booking_id != $EM_MB_Booking->booking_id ) return $export_items; //we don't need to export bookings with an MB parent
-        }
+		
         //get the transaction
 		global $EM_Gateways_Transactions; /* @var EM_Gateways_Transactions $EM_Gateways_Transactions */
 		$transactions = $EM_Gateways_Transactions->get_transactions( $EM_Booking );
