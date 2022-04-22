@@ -44,7 +44,7 @@ class EM_Locations extends EM_Object {
 		$locations = array();
 		
 		//Quick version, we can accept an array of IDs, which is easy to retrieve
-		if( self::array_is_numeric($args) ){ //Array of numbers, assume they are event IDs to retreive
+		if( is_array($args) && array_is_list($args) ){ //Array of numbers, assume they are event IDs to retreive
 			//We can just get all the events here and return them
 			$locations = array();
 			foreach($args as $location_id){
@@ -223,7 +223,7 @@ $limit $offset
 			$locations_count = self::$num_rows_found;
 		}
 		//What format shall we output this to, or use default
-		$format = empty($args['format']) ? get_option( 'dbem_location_list_item_format' ) : $args['format'] ;
+		$format = empty($args['format']) ? '<li>#_LOCATIONLINK<ul><li>#_LOCATIONFULLLINE</li></ul></li>' : $args['format'] ;
 		
 		$output = "";
 		$locations = apply_filters('em_locations_output_locations', $locations);	
@@ -232,10 +232,10 @@ $limit $offset
 				$output .= $EM_Location->output($format);
 			}
 			//Add headers and footers to output
-			if( $format == get_option( 'dbem_location_list_item_format' ) ){
+			if( $format == '<li>#_LOCATIONLINK<ul><li>#_LOCATIONFULLLINE</li></ul></li>' ){
 			    //we're using the default format, so if a custom format header or footer is supplied, we can override it, if not use the default
-			    $format_header = empty($args['format_header']) ? get_option('dbem_location_list_item_format_header') : $args['format_header'];
-			    $format_footer = empty($args['format_footer']) ? get_option('dbem_location_list_item_format_footer') : $args['format_footer'];
+			    $format_header = empty($args['format_header']) ? '<ul class="em-locations-list">' : $args['format_header'];
+			    $format_footer = empty($args['format_footer']) ? '</ul>' : $args['format_footer'];
 			}else{
 			    //we're using a custom format, so if a header or footer isn't specifically supplied we assume it's blank
 			    $format_header = !empty($args['format_header']) ? $args['format_header'] : '' ;
@@ -361,7 +361,7 @@ $limit $offset
 			$conditions['owner'] = "location_owner=".$args['owner'];
 		}elseif( !empty($args['owner']) && $args['owner'] == 'me' && is_user_logged_in() ){
 			$conditions['owner'] = 'location_owner='.get_current_user_id();
-		}elseif( self::array_is_numeric($args['owner']) ){
+		}elseif(is_array($args['owner']) && array_is_list($args['owner']) ){
 			$conditions['owner'] = 'location_owner IN ('.implode(',',$args['owner']).')';
 		}
 
@@ -373,7 +373,7 @@ $limit $offset
 		}
 		//post search
 		if( !empty($args['post_id'])){
-			if( self::array_is_numeric($args['post_id']) ){
+			if( is_array($args['post_id']) && array_is_list($args['post_id']) ){
 				$conditions['post_id'] = "($locations_table.post_id IN (".implode(',',$args['post_id'])."))";
 			}else{
 				$conditions['post_id'] = "($locations_table.post_id={$args['post_id']})";

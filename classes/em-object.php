@@ -304,7 +304,7 @@ class EM_Object {
 		//Dates - first check 'month', and 'year', and adjust scope if needed
 		if( !($month=='' && $year=='') ){
 			//Sort out month range, if supplied an array of array(month,month), it'll check between these two months
-			if( self::array_is_numeric($month) ){
+			if( is_array($month) && array_is_list($month) ){
 				$date_month_start = $month[0];
 				$date_month_end = $month[1];
 			}else{
@@ -316,7 +316,7 @@ class EM_Object {
 				}
 			}
 			//Sort out year range, if supplied an array of array(year,year), it'll check between these two years
-			if( self::array_is_numeric($year) ){
+			if( is_array($year) && array_is_list($year) ){
 				$date_year_start = $year[0];
 				$date_year_end = $year[1];
 			}else{
@@ -377,7 +377,7 @@ class EM_Object {
 					$conditions['scope'] .= " OR (event_start_date <= CAST('".$EM_DateTime->getDate()."' AS DATE) AND event_end_date >= CAST('".$EM_DateTime->getDate()."' AS DATE))";
 				}
 			}elseif ($scope == "month" || $scope == "next-month"){
-				if( $scope == 'next-month' ) $EM_DateTime->add('P1M');
+				if( $scope == 'next-month' ) $EM_DateTime->add(new DateInterval('P1M'));
 				$start_month = $EM_DateTime->modify('first day of this month')->getDate();
 				$end_month = $EM_DateTime->modify('last day of this month')->getDate();
 				$conditions['scope'] = " (event_start_date BETWEEN CAST('$start_month' AS DATE) AND CAST('$end_month' AS DATE))";
@@ -385,7 +385,7 @@ class EM_Object {
 					$conditions['scope'] .= " OR (event_start_date < CAST('$start_month' AS DATE) AND event_end_date >= CAST('$start_month' AS DATE))";
 				}
 			}elseif ($scope == "week" || $scope == "next-week"){
-				if( $scope == 'next-week' ) $EM_DateTime->add('P7D');
+				if( $scope == 'next-week' ) $EM_DateTime->add(new DateInterval('P7D'));
 				$start_week = $EM_DateTime->modify('this week')->getDate();
 				$end_week = $EM_DateTime->modify('this week + 7 days')->getDate();
 				$conditions['scope'] = " (event_start_date BETWEEN CAST('$start_week' AS DATE) AND CAST('$end_week' AS DATE))";
@@ -395,7 +395,7 @@ class EM_Object {
 			}elseif( preg_match('/([0-9]+)\-months/',$scope,$matches) ){ // next x months means this month (what's left of it), plus the following x months until the end of that month.
 				$months_to_add = $matches[1];
 				$start_month = $EM_DateTime->getDate();
-				$end_month = $EM_DateTime->add('P'.$months_to_add.'M')->format('Y-m-t');
+				$end_month = $EM_DateTime->add(new DateInterval('P'.$months_to_add.'M'))->format('Y-m-t');
 				$conditions['scope'] = " (event_start_date BETWEEN CAST('$start_month' AS DATE) AND CAST('$end_month' AS DATE))";
 				if( !get_option('dbem_events_current_are_past') ){
 					$conditions['scope'] .= " OR (event_start_date < CAST('$start_month' AS DATE) AND event_end_date >= CAST('$start_month' AS DATE))";
@@ -417,7 +417,7 @@ class EM_Object {
 			$conditions['location'] = " {$location_id_table}.location_id = $location";
 		}elseif ( $location === 0 ) { //only helpful is searching events
 			$conditions['location'] = " {$events_table}.location_id = $location OR {$events_table}.location_id IS NULL";
-		}elseif ( self::array_is_numeric($location) ){
+		}elseif ( is_array($location) && array_is_list($location) ){
 			$conditions['location'] = "{$location_id_table}.location_id IN (" . implode(',', $location) .')';
 		}elseif ( is_object($location) && get_class($location)=='EM_Location' ){ //Now we deal with objects
 			$conditions['location'] = " {$location_id_table}.location_id = $location->location_id";
@@ -431,7 +431,7 @@ class EM_Object {
 		//Filter by Event - can be object, array, or id
 		if ( is_numeric($event) && $event > 0 ) { //event ID takes precedence
 			$conditions['event'] = " {$events_table}.event_id = $event";
-		}elseif ( self::array_is_numeric($event) ){ //array of ids
+		}elseif ( is_array($location) && array_is_list($event) ){ //array of ids
 			$conditions['event'] = "{$events_table}.event_id IN (" . implode(',', $event) .')';
 		}elseif ( is_object($event) && get_class($event)=='EM_Event' ){ //Now we deal with objects
 			$conditions['event'] = " {$events_table}.event_id = $event->event_id";
@@ -444,7 +444,7 @@ class EM_Object {
 
 		//Location specific filters
 		//if we're searching near something, country etc. becomes irrelevant
-		if( !empty($args['near']) && self::array_is_numeric($args['near']) ){
+		if( !empty($args['near']) && is_array($args['near']) && array_is_list($args['near']) ){
 			$distance = !empty($args['near_distance']) && is_numeric($args['near_distance']) ? absint($args['near_distance']) : absint(get_option('dbem_search_form_geo_units',25));
 			if( empty($args['near_unit']) ) $args['near_unit'] = get_option('dbem_search_form_geo_distance','mi');
 			$unit = ( !empty($args['near_unit']) && $args['near_unit'] == 'km' ) ? 6371 /* kilometers */ : 3959 /* miles */;
@@ -595,7 +595,7 @@ class EM_Object {
 			$conditions['owner'] = 'event_owner='.get_current_user_id();
 		}elseif( $owner == 'me' && !is_user_logged_in() ){
 		    $conditions = array('owner'=>'1=2'); //no events to be shown
-		}elseif( self::array_is_numeric($owner) ){
+		}elseif( is_array($owner) && array_is_list($owner) ){
 			$conditions['owner'] = 'event_owner IN ('.implode(',',$owner).')';
 		}
 		
@@ -696,9 +696,9 @@ class EM_Object {
 	
 	/**
 	 * Helper for building arrays of fields 
-	 * @param unknown $x_by_field
-	 * @param unknown $order
-	 * @param unknown $accepted_fields
+	 * @param mixed $x_by_field
+	 * @param mixed $order
+	 * @param mixed $accepted_fields
 	 * @param string $default_order
 	 * @return array
 	 */
@@ -975,7 +975,7 @@ class EM_Object {
 					if( !is_object($array[$key]) && !is_array($array[$key]) ){
 						$array[$key] = ($addslashes) ? wp_unslash($array[$key]):$array[$key];
 					}elseif( is_array($array[$key]) ){
-						$array[$key] = ($addslashes) ? wp_unslash_deep($array[$key]):$array[$key];
+						$array[$key] = ($addslashes) ? wp_unslash($array[$key]):$array[$key];
 					}
 					$this->$key = $array[$key];
 				}
@@ -1068,7 +1068,7 @@ class EM_Object {
 					//This is in the list of atts we want cleaned
 					if( is_numeric($string) ){
 						$array[$key] = (int) $string;
-					}elseif( self::array_is_numeric($string) ){
+					}elseif( is_array($string) && array_is_list($string) ){
 						$array[$key] = $string;
 					}elseif( !is_array($string) && preg_match('/^( ?[\-0-9] ?,?)+$/', $string) ){
 					    $array[$key] = explode(',', str_replace(' ','',$string));
@@ -1110,22 +1110,7 @@ class EM_Object {
 		return true;
 	}
 	
-	/**
-	 * Will return true if this is a simple (non-assoc) numeric array, meaning it has at one or more numeric entries and nothing else
-	 * @param mixed $array
-	 * @return boolean
-	 */
-	public static function array_is_numeric($array){
-		$results = array();
-
-		if(!is_array($array)) return;
-
-		foreach($array as $key => $item){
-			$results[] = (is_numeric($item)&&is_numeric($key));
-		}
-		
-		return (!in_array(false, $results) && count($results) > 0);
-	}	
+	
 	
 	/**
 	 * Returns an array of errors in this object
@@ -1154,106 +1139,11 @@ class EM_Object {
 	}
 	
 	/**
-	 * Converts an array to JSON format, useful for outputting data for AJAX calls. Uses a PHP4 fallback function, given it doesn't support json_encode().
-	 * @param array $array
+	 * Returns a URL to the post's Image
+	 *
+	 * @param string $size must be compatible with WordPress' get_the_post_thumbnail_url() function
 	 * @return string
 	 */
-	public static function json_encode($array){
-	    $array = apply_filters('em_object_json_encode_pre',$array);
-		if( function_exists("json_encode") ){
-			$return = json_encode($array);
-		}else{
-			$return = self::array_to_json($array);
-		}
-		if( isset($_REQUEST['callback']) && preg_match("/^jQuery[_a-zA-Z0-9]+$/", $_REQUEST['callback']) ){
-			$return = $_REQUEST['callback']."($return)";
-		}
-		return apply_filters('em_object_json_encode', $return, $array);
-	}
-	
-	/**
-	 * Compatible json encoder function for PHP4
-	 * @param array $array
-	 * @return string
-	 */
-	function array_to_json($array){
-		//PHP4 Comapatability - This encodes the array into JSON. Thanks go to Andy - http://www.php.net/manual/en/function.json-encode.php#89908
-		if( !is_array( $array ) ){
-	        $array = array();
-	    }
-	    $associative = count( array_diff( array_keys($array), array_keys( array_keys( $array )) ));
-	    if( $associative ){
-	        $construct = array();
-	        foreach( $array as $key => $value ){
-	            // We first copy each key/value pair into a staging array,
-	            // formatting each key and value properly as we go.
-	            // Format the key:
-	            if( is_numeric($key) ){
-	                $key = "key_$key";
-	            }
-	            $key = "'".addslashes($key)."'";
-	            // Format the value:
-	            if( is_array( $value )){
-	                $value = self::array_to_json( $value );
-	            }else if( is_bool($value) ) {
-	            	$value = ($value) ? "true" : "false";
-	            }else if( !is_numeric( $value ) || is_string( $value ) ){
-	                $value = "'".addslashes($value)."'";
-	            }
-	            // Add to staging array:
-	            $construct[] = "$key: $value";
-	        }
-	        // Then we collapse the staging array into the JSON form:
-	        $result = "{ " . implode( ", ", $construct ) . " }";
-	    } else { // If the array is a vector (not associative):
-	        $construct = array();
-	        foreach( $array as $value ){
-	            // Format the value:
-	            if( is_array( $value )){
-	                $value = self::array_to_json( $value );
-	            } else if( !is_numeric( $value ) || is_string( $value ) ){
-	                $value = "'".addslashes($value)."'";
-	            }
-	            // Add to staging array:
-	            $construct[] = $value;
-	        }
-	        // Then we collapse the staging array into the JSON form:
-	        $result = "[ " . implode( ", ", $construct ) . " ]";
-	    }		
-	    return $result;
-	}	
-	
-	/*
-	 * START IMAGE UPlOAD FUNCTIONS
-	 * Used for various objects, so shared in one place 
-	 */
-	/**
-	 * Returns the type of image in lowercase, if $path is true, a base filename is returned which indicates where to store the file from the root upload folder.
-	 * @param unknown_type $path
-	 * @return mixed|mixed
-	 */
-	function get_image_type($path = false){
-		$type = false;
-		switch( get_class($this) ){
-			case 'EM_Event':
-				$dir = (EM_IMAGE_DS == '/') ? 'events/':'';
-				$type = 'event';
-				break;
-			case 'EM_Location':
-				$dir = (EM_IMAGE_DS == '/') ? 'locations/':'';
-				$type = 'location';
-				break;
-			case 'EM_Category':
-				$dir = (EM_IMAGE_DS == '/') ? 'categories/':'';
-				$type = 'category';
-				break;
-		} 	
-		if($path){
-			return apply_filters('em_object_get_image_type',$dir.$type, $path, $this);
-		}
-		return apply_filters('em_object_get_image_type',$type, $path, $this);
-	}
-	
 	function get_image_url($size = 'full'){
 		$image_url = $this->image_url;
 		if( !empty($this->post_id) && (empty($this->image_url) || $size != 'full') ){
@@ -1264,148 +1154,8 @@ class EM_Object {
 			}elseif(!empty($src[0])){
 				$image_url = $src[0];
 			}
-			//legacy image finder, annoying, but must be done
-			if( empty($image_url) ){
-				$type = $this->get_image_type();
-				if( get_class($this) == "EM_Event" ){
-					$id = ( $this->is_recurrence() ) ? $this->recurrence_id:$this->event_id; //quick fix for recurrences
-				}elseif( get_class($this) == "EM_Location" ){
-				    $id = $this->location_id;
-				}else{
-				    $id = $this->id;
-				}
-				if( $type ){
-				  	foreach($this->mime_types as $mime_type) {
-						$file_name = $this->get_image_type(true)."-{$id}.$mime_type";
-						if( file_exists( EM_IMAGE_UPLOAD_DIR . $file_name) ) {
-				  			$image_url = $this->image_url = EM_IMAGE_UPLOAD_URI.$file_name;
-						}
-					}
-				}
-			}
 		}
 		return apply_filters('em_object_get_image_url', $image_url, $this);
-	}
-	
-	function image_delete($force_delete=true) {
-		$type = $this->get_image_type();
-		if( $type ){
-            $this->image_url = '';
-			if( $this->get_image_url() == '' ){
-				$result = true;
-			}else{
-				$post_thumbnail_id = get_post_thumbnail_id( $this->post_id );
-				//check that this image isn't being used by another CPT
-                global $wpdb;
-                $sql = $wpdb->prepare('SELECT count(*) FROM '.$wpdb->postmeta." WHERE meta_key='_thumbnail_id' AND meta_value=%d", array($post_thumbnail_id));
-				if( $wpdb->get_var($sql) <= 1 ){
-				    //not used by any other CPT, so just delete the image entirely (would usually only be used via front-end which has no media manager)
-				    //@todo add setting option to delete images from filesystem/media if not used by other posts
-    				$delete_attachment = wp_delete_attachment($post_thumbnail_id, $force_delete);
-    				if( false === $delete_attachment ){
-    					//check legacy image
-    					$type_id_name = $type.'_id';
-    					$file_name= EM_IMAGE_UPLOAD_DIR.$this->get_image_type(true)."-".$this->$type_id_name;
-    					$result = false;
-    					foreach($this->mime_types as $mime_type) { 
-    						if (file_exists($file_name.".".$mime_type)){
-    					  		$result = unlink($file_name.".".$mime_type);
-    						}
-    					}
-    				}else{
-    				    $result = true;
-    				}
-				}else{
-				    //just delete image association
-				    delete_post_meta($this->post_id, '_thumbnail_id');
-				}
-			}
-		}
-		return apply_filters('em_object_get_image_url', $result, $this);
-	}
-	
-	function image_upload(){
-		$type = $this->get_image_type();
-			
-		if ( !empty($_FILES[$type.'_image']['size']) && file_exists($_FILES[$type.'_image']['tmp_name']) && $this->image_validate() && $this->can_manage('upload_event_images','upload_event_images', false) ) {
-			require_once(ABSPATH . "wp-admin" . '/includes/file.php');					
-			require_once(ABSPATH . "wp-admin" . '/includes/image.php');
-        	require_once( ABSPATH . 'wp-admin/includes/media.php' );
-					
-			$attachment_id = media_handle_upload( $type.'_image', $this->post_id );
-			
-			/* Attach file to item */
-			if ( !is_wp_error($attachment_id) ){
-				//delete the old attachment
-				$this->image_delete();
-				update_post_meta($this->post_id, '_thumbnail_id', $attachment_id);
-				return apply_filters('em_object_image_upload', true, $this);
-			}else{
-			    //error uploading, pass error message on and return false
-			    $error_string = __('There was an error uploading the image.','events-manager');
-			    if( current_user_can('edit_others_events') && !empty($attachment_id->errors['upload_error']) ){
-    			    $error_string .= ' <em>('. implode(' ', $attachment_id->errors['upload_error']) .')</em>';
-			    }
-			    $this->add_error( $error_string );
-			    return apply_filters('em_object_image_upload', false, $this);
-			}
-		}elseif( !empty($_REQUEST[$type.'_image_delete']) ){
-			$this->image_delete();
-		}
-		return apply_filters('em_object_image_upload', false, $this);
-	}
-	
-	function image_validate(){
-		$type = $this->get_image_type();
-		if( $type ){
-			if ( !empty($_FILES[$type.'_image']) && $_FILES[$type.'_image']['size'] > 0 ) { 
-				if (is_uploaded_file($_FILES[$type.'_image']['tmp_name'])) {
-			  		list($width, $height, $mime_type, $attr) = getimagesize($_FILES[$type.'_image']['tmp_name']);
-					$maximum_size = get_option('dbem_image_max_size'); 
-					if ($_FILES[$type.'_image']['size'] > $maximum_size){ 
-				     	$this->add_error( __('The image file is too big! Maximum size:', 'events-manager')." $maximum_size");
-					}
-					$maximum_width = get_option('dbem_image_max_width'); 
-					$maximum_height = get_option('dbem_image_max_height');
-					$minimum_width = get_option('dbem_image_min_width'); 
-					$minimum_height = get_option('dbem_image_min_height');  
-				  	if (($width > $maximum_width) || ($height > $maximum_height)) { 
-						$this->add_error( __('The image is too big! Maximum size allowed:','events-manager')." $maximum_width x $maximum_height");
-				  	}
-				  	if (($width < $minimum_width) || ($height < $minimum_height)) { 
-						$this->add_error( __('The image is too small! Minimum size allowed:','events-manager')." $minimum_width x $minimum_height");
-				  	}
-				  	if ( empty($mime_type) || !array_key_exists($mime_type, $this->mime_types) ){ 
-						$this->add_error(__('The image is in a wrong format!','events-manager'));
-				  	}
-		  		}
-			}
-		}
-		return apply_filters('em_object_image_validate', count($this->errors) == 0, $this);
-	}
-	/*
-	 * END IMAGE UPlOAD FUNCTIONS
-	 */
-	
-	function output_excerpt($excerpt_length = 55, $excerpt_more = '[...]', $cut_excerpt = true){
-		if( !empty($this->post_excerpt) ){
-			$replace = $this->post_excerpt;
-		}else{
-			$replace = $this->post_content;
-		}
-		if( empty($this->post_excerpt) || $cut_excerpt ){
-			if ( preg_match('/<!--more(.*?)?-->/', $replace, $matches) ) {
-				$content = explode($matches[0], $replace, 2);
-				$replace = force_balance_tags($content[0]);
-			}
-			if( !empty($excerpt_length) ){
-				//shorten content by supplied number - copied from wp_trim_excerpt
-				$replace = strip_shortcodes( $replace );
-				$replace = str_replace(']]>', ']]&gt;', $replace);
-				$replace = wp_trim_words( $replace, $excerpt_length, $excerpt_more );
-			}
-		}
-		return $replace;
 	}
 
 	function sanitize_time( $time ){
