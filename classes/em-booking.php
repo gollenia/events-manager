@@ -438,7 +438,7 @@ class EM_Booking extends EM_Object{
 			// are bookings even available due to event and ticket cut-offs/restrictions? This is checked earlier in booking processes, but is relevant in checkout/cart situations where a previously-made booking is validated just before checkout
 			if( $this->get_event()->rsvp_end()->getTimestamp() < time() ){
 				$result = false;
-				$this->add_error(get_option('dbem_bookings_form_msg_closed'));
+				$this->add_error(__( 'Bookings have closed (e.g. event has started).', 'events-manager'));
 			}else{
 				foreach( $this->get_tickets_bookings() as $EM_Ticket_Booking ){
 					if( !$EM_Ticket_Booking->get_ticket()->is_available() ){
