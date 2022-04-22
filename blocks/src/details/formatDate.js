@@ -6,8 +6,7 @@
  */
 function formatDateRange(start, end = false) {
 
-
-	const locale = window.eventBlockLocale?.lang;
+	const locale = window.eventBlocksLocalization?.locale;
 	
 	start = new Date(start * 1000);
 	end = end ? new Date(end * 1000) : start;
@@ -48,14 +47,14 @@ function formatDateRange(start, end = false) {
  * @returns string formated date
  */
 function formatDate(date, format) {
-	const locale = window.eventBlockLocale.lang;
+	const locale = window.eventBlocksLocalization?.locale;
 	const dateFormatObject  = new Intl.DateTimeFormat(locale, format);
 	return dateFormatObject.format(date);
 }
 
 
 function formatTime(time) {
-	const locale = window.eventBlockLocale.lang;
+	const locale = window.eventBlocksLocalization?.locale;
 
 	const timeFormat = {
 		hour: 'numeric',
