@@ -339,7 +339,7 @@ class EM_Bookings extends EM_Object implements Iterator{
 	 */
 	function set_status( $status, $booking_ids, $send_email = true, $ignore_spaces = false ){
 		//FIXME status should work with instantiated object
-		if( self::array_is_numeric($booking_ids) ){
+		if( is_array($booking_ids) && array_is_list($booking_ids) ){
 			//Get all the bookings
 			$results = array();
 			$mails = array();
@@ -545,7 +545,7 @@ class EM_Bookings extends EM_Object implements Iterator{
 		$locations_table = EM_LOCATIONS_TABLE;
 		
 		//Quick version, we can accept an array of IDs, which is easy to retrieve
-		if( self::array_is_numeric($args) ){ //Array of numbers, assume they are event IDs to retreive
+		if( is_array($args) && array_is_list($args) ){ //Array of numbers, assume they are event IDs to retreive
 			//We can just get all the events here and return them
 			$sql = "
 				SELECT * FROM $bookings_table b 
@@ -682,7 +682,7 @@ class EM_Bookings extends EM_Object implements Iterator{
 		$conditions = apply_filters( 'em_bookings_build_sql_conditions', parent::build_sql_conditions($args), $args );
 		if( is_numeric($args['status']) ){
 			$conditions['status'] = 'booking_status='.$args['status'];
-		}elseif( self::array_is_numeric($args['status']) && count($args['status']) > 0 ){
+		}elseif( is_array($args['status']) && array_is_list($args['status']) && count($args['status']) > 0 ){
 			$conditions['status'] = 'booking_status IN ('.implode(',',$args['status']).')';
 		}elseif( !is_array($args['status']) && preg_match('/^([0-9],?)+$/', $args['status']) ){
 			$conditions['status'] = 'booking_status IN ('.$args['status'].')';
