@@ -305,9 +305,8 @@ class EM_Location extends EM_Object {
 				$this->add_error( sprintf(__("%s is required.", 'events-manager'), __('Your name','events-manager')) );
 			}
 		}
-		$validate_image = $this->image_validate();
 		$validate_meta = $this->validate_meta();
-		return apply_filters('em_location_validate', $validate_post && $validate_image && $validate_meta, $this );		
+		return apply_filters('em_location_validate', $validate_post && $validate_meta, $this );		
 	}
 	
 	/**
@@ -372,7 +371,6 @@ class EM_Location extends EM_Object {
 			$this->get_status();
 			
 			//save the image, errors here will surface during $this->save_meta()
-			$this->image_upload();
 			//now save the meta
 			$meta_save = $this->save_meta();
 		}elseif(is_wp_error($post_id)){
@@ -419,7 +417,7 @@ class EM_Location extends EM_Object {
 			$location_array = $this->to_array(true);
 
 					
-			file_put_contents('/var/www/vhosts/kids-team.internal/log/dumpling.txt', print_r($location_array, true), FILE_APPEND);
+			
         
 			unset($location_array['location_id']);
 			//decide whether or not event is private at this point
@@ -794,22 +792,6 @@ class EM_Location extends EM_Object {
 				case '#_LOCATIONNOTES':
 					$replace = $this->post_content;
 					break;
-				case '#_EXCERPT': //Deprecated
-				case '#_LOCATIONEXCERPT':
-				case '#_LOCATIONEXCERPTCUT':
-					if( !empty($this->post_excerpt) && $result != "#_LOCATIONEXCERPTCUT" ){
-						$replace = $this->post_excerpt;
-					}else{
-						$excerpt_length = ( $result == "#_LOCATIONEXCERPTCUT" ) ? 55 : false;
-						$excerpt_more = apply_filters('em_excerpt_more', ' ' . '[...]');
-						if( !empty($placeholders[3][$key]) ){
-							$ph_args = explode(',', $placeholders[3][$key]);
-							if( is_numeric($ph_args[0]) || empty($ph_args[0]) ) $excerpt_length = $ph_args[0];
-							if( !empty($ph_args[1]) ) $excerpt_more = $ph_args[1];
-						}
-						$replace = $this->output_excerpt($excerpt_length, $excerpt_more, $result == "#_LOCATIONEXCERPTCUT");
-					}
-					break;
 				case '#_LOCATIONIMAGEURL':
 				case '#_LOCATIONIMAGE':
 					$image_url = $this->get_image_url();
@@ -822,7 +804,7 @@ class EM_Location extends EM_Object {
 								$replace = "<img src='".$image_url."' alt='".esc_attr($this->location_name)."'/>";
 							}else{
 								$image_size = explode(',', $placeholders[3][$key]);
-								if( self::array_is_numeric($image_size) && count($image_size) > 1 ){
+								if( is_array($image_size) && array_is_list($image_size) && count($image_size) > 1 ){
 								    $replace = get_the_post_thumbnail($this->ID, $image_size);
 								}else{
 									$replace = "<img src='".$image_url."' alt='".esc_attr($this->location_name)."'/>";
