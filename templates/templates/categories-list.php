@@ -10,8 +10,4 @@
  */ 
 $args = apply_filters('em_content_categories_args', $args);
 
-if( get_option('dbem_css_catlist') ) echo "<div class='css-cats-list'>";
-
 echo EM_Categories::output( $args );
-
-if( get_option('dbem_css_catlist') ) echo "</div>";

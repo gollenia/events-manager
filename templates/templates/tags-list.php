@@ -10,8 +10,4 @@
  */
 $args = apply_filters('em_content_tags_args', $args); 
 
-if( get_option('dbem_css_taglist') ) echo "<div class='css-tags-list'>";
-
 echo EM_Tags::output( $args );
-
-if( get_option('dbem_css_taglist') ) echo "</div>";

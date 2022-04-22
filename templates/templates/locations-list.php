@@ -10,8 +10,4 @@
  */ 
 $args = apply_filters('em_content_locations_args', $args);
 
-if( get_option('dbem_css_loclist') ) echo "<div class='css-locations-list'>";
-
 echo EM_Locations::output( $args );
-
-if( get_option('dbem_css_loclist') ) echo "</div>";
