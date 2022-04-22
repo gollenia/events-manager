@@ -11,7 +11,7 @@ class Assets {
 
     public static function init() {
 		$instance = new self;
-		if( !is_admin()) add_action('init', [$instance, 'frontend_script']);
+		if( !is_admin()) add_action('wp_enqueue_scripts', [$instance, 'frontend_script']);
 		add_action('admin_init', [$instance, 'backend_script']);
 		return $instance;
     }
@@ -33,8 +33,10 @@ class Assets {
 		);
 		wp_set_script_translations( 'events-block-frontend', 'events', plugin_dir_path( __FILE__ ) . '../languages' );
 
-		wp_localize_script('events-block-frontend', 'eventBlockLocale', [
-			'lang' => str_replace('_', '-',get_locale()),
+		wp_localize_script('events-block-frontend', 'eventBlocksLocalization', [
+			'locale' => str_replace('_', '-',get_locale()),
+			'rest_url' => get_rest_url(null, 'events/v2/events'),
+			'current_id' => get_the_ID(),
 		]);
 	}
 
@@ -57,8 +59,9 @@ class Assets {
 		);
 		wp_set_script_translations( 'events-block-editor', 'events', plugin_dir_path( __FILE__ ) . '../languages' );
 
-		wp_localize_script('events-block-editor', 'eventBlockLocale', [
-			'lang' => str_replace('_', '-',get_locale()),
+		wp_localize_script('events-block-editor', 'eventBlocksLocalization', [
+			'locale' => str_replace('_', '-',get_locale()),
+			'rest_url' => get_rest_url(null, 'events/v2/events'),
 		]);
 		
 		$editor_css = '../includes/backend.css';
