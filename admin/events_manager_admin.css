@@ -15,6 +15,45 @@ p.warning {	border: 2px solid #FD0000; background: #FF7146; color: #fff; font-we
 #new-event { float: left; }
 
 
+.em-label { 
+	padding: 0px 5px;
+    display: inline-block;
+    border-radius: 3px;
+ }
+
+ .em-label.completed {
+	background: #4caf50;
+    color: #fff;
+ }
+
+ .em-label.pending {
+	background: #ffc107;
+	color: #000;
+ }
+
+ .em-booking-graph {
+	margin-top: 6px; border-radius: 999px; display: flex; width:100px; position: relative; height: 8px; background: #dddddd; box-shadow: inset 1px 1px 3px rgb(0,0,0,0.2)
+ }
+
+ .em-booking-graph-booked {
+	border-radius: 999px;
+	position: relative; height: 8px; background: #4caf50
+ }
+
+ .em-booking-graph-booked.cut {
+	border-top-right-radius: 0; border-bottom-right-radius: 0;
+ }
+
+ .em-booking-graph-pending {
+	border-radius: 999px;
+	position: relative; height: 8px; background: #ffc107
+ }
+
+ .em-booking-graph-pending.cut {
+	border-top-left-radius: 0; border-bottom-left-radius: 0;
+ }
+
+
 
 /* General Notices */
 #event-form .em-notice-warning, #post .em-notice-warning { margin:10px 0px; padding:15px 20px; border-left: 4px solid #ffa500; }
