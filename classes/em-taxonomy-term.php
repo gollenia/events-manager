@@ -181,27 +181,10 @@ class EM_Taxonomy_Term extends EM_Object {
 							$replace = "<img src='".esc_url($this->get_image_url())."' alt='".esc_attr($this->name)."'/>";
 						}else{
 							$image_size = explode(',', $placeholders[3][$key]);
-							if( self::array_is_numeric($image_size) && count($image_size) > 1 ){
+							if( is_array($image_size) && array_is_list($image_size) && count($image_size) > 1 ){
 								if( $this->get_image_id() ){
 									//get a thumbnail
-									if( get_option('dbem_disable_thumbnails') ){
-										$image_attr = '';
-										$image_args = array();
-										if( empty($image_size[1]) && !empty($image_size[0]) ){
-											$image_attr = 'width="'.$image_size[0].'"';
-											$image_args['w'] = $image_size[0];
-										}elseif( empty($image_size[0]) && !empty($image_size[1]) ){
-											$image_attr = 'height="'.$image_size[1].'"';
-											$image_args['h'] = $image_size[1];
-										}elseif( !empty($image_size[0]) && !empty($image_size[1]) ){
-											$image_attr = 'width="'.$image_size[0].'" height="'.$image_size[1].'"';
-											$image_args = array('w'=>$image_size[0], 'h'=>$image_size[1]);
-										}
-										$replace = "<img src='".esc_url(em_add_get_params($image_url, $image_args))."' alt='".esc_attr($this->name)."' $image_attr />";
-									}else{
-										//since we previously didn't store image ids along with the url to the image (since taxonomies don't allow normal featured images), sometimes we won't be able to do this, which is why we check there's a valid image id first
-										$replace = wp_get_attachment_image($this->get_image_id(), $image_size);
-									}
+									$replace = wp_get_attachment_image($this->get_image_id(), $image_size);
 								}
 							}else{
 								$replace = "<img src='".esc_url($this->get_image_url())."' alt='".esc_attr($this->name)."'/>";
@@ -274,27 +257,10 @@ class EM_Taxonomy_Term extends EM_Object {
 				$replace = "<img src='".esc_url($this->get_image_url())."' alt='".esc_attr($this->name)."'/>";
 			}else{
 				$image_size = explode(',', $placeholders[3][$key]);
-				if( self::array_is_numeric($image_size) && count($image_size) > 1 ){
+				if( is_array($image_size) && array_is_list($image_size) && count($image_size) > 1 ){
 					if( $this->get_image_id() ){
 						//get a thumbnail
-						if( get_option('dbem_disable_thumbnails') ){
-							$image_attr = '';
-							$image_args = array();
-							if( empty($image_size[1]) && !empty($image_size[0]) ){
-								$image_attr = 'width="'.$image_size[0].'"';
-								$image_args['w'] = $image_size[0];
-							}elseif( empty($image_size[0]) && !empty($image_size[1]) ){
-								$image_attr = 'height="'.$image_size[1].'"';
-								$image_args['h'] = $image_size[1];
-							}elseif( !empty($image_size[0]) && !empty($image_size[1]) ){
-								$image_attr = 'width="'.$image_size[0].'" height="'.$image_size[1].'"';
-								$image_args = array('w'=>$image_size[0], 'h'=>$image_size[1]);
-							}
-							$replace = "<img src='".esc_url(em_add_get_params($image_url, $image_args))."' alt='".esc_attr($this->name)."' $image_attr />";
-						}else{
-							//since we previously didn't store image ids along with the url to the image (since taxonomies don't allow normal featured images), sometimes we won't be able to do this, which is why we check there's a valid image id first
-							$replace = wp_get_attachment_image($this->get_image_id(), $image_size);
-						}
+						$replace = wp_get_attachment_image($this->get_image_id(), $image_size);
 					}
 				}else{
 					$replace = "<img src='".esc_url($this->get_image_url())."' alt='".esc_attr($this->name)."'/>";
