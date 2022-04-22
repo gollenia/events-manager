@@ -30,17 +30,17 @@ class EM_Person extends WP_User{
 		do_action('em_person',$this, $person_id, $username);
 	}
 	
-	function get_bookings($ids_only = false, $status= false){
+	function get_bookings($ids_only = false, bool|array $status = false){
 		global $wpdb;
 		$status_condition = $blog_condition = '';
 		
 		if( is_numeric($status) ){
 			$status_condition = " AND booking_status=$status";
-		}elseif( EM_Object::array_is_numeric($status) ){
+		}elseif( is_array($status) && array_is_list($status) ){
 			$status_condition = " AND booking_status IN (".implode(',', $status).")";
 		}
 		$EM_Booking = em_get_booking(); //empty booking for fields
-		$results = $wpdb->get_results("SELECT b.".implode(', b.', array_keys($EM_Booking->fields))." FROM ".EM_BOOKINGS_TABLE." b, ".EM_EVENTS_TABLE." e WHERE e.event_id=b.event_id AND person_id={$this->ID} {$blog_condition} {$status_condition} ORDER BY ".get_option('dbem_bookings_default_orderby','event_start_date')." ".get_option('dbem_bookings_default_order','ASC'),ARRAY_A);
+		$results = $wpdb->get_results("SELECT b.".implode(', b.', array_keys($EM_Booking->fields))." FROM ".EM_BOOKINGS_TABLE." b, ".EM_EVENTS_TABLE." e WHERE e.event_id=b.event_id AND person_id={$this->ID} {$blog_condition} {$status_condition} ORDER BY event_start_date ASC",ARRAY_A);
 		$bookings = array();
 		if($ids_only){
 			foreach($results as $booking_data){
