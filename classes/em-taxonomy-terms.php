@@ -57,7 +57,7 @@ class EM_Taxonomy_Terms extends EM_Object implements Iterator, Countable{
 				}
 			}
 			
-		}elseif( is_array($data) && self::array_is_numeric($data) ){
+		}elseif( is_array($data) && array_is_list($data) ){
 			foreach($data as $term_id){
 				$this->terms[$term_id] =  new $this->term_class($term_id);
 			}
@@ -73,7 +73,7 @@ class EM_Taxonomy_Terms extends EM_Object implements Iterator, Countable{
 	
 	public function get_post(){
 		$this->terms = array();
-		if(!empty($_POST['event_'.$this->terms_name]) && self::array_is_numeric($_POST['event_'.$this->terms_name])){
+		if(!empty($_POST['event_'.$this->terms_name]) && is_array($_POST['event_'.$this->terms_name]) && array_is_list($_POST['event_'.$this->terms_name])){
 			foreach( $_POST['event_'.$this->terms_name] as $term ){
 				$this->terms[$term] = new $this->term_class($term);
 			}
@@ -159,7 +159,7 @@ class EM_Taxonomy_Terms extends EM_Object implements Iterator, Countable{
 		
 	public static function get( $args = array() ) {		
 		//Quick version, we can accept an array of IDs, which is easy to retrieve
-		if( self::array_is_numeric($args) ){ //Array of numbers, assume they are taxonomy IDs to retreive
+		if( is_array($args) && array_is_list($args) ){ //Array of numbers, assume they are taxonomy IDs to retreive
 			$term_args = self::get_default_search( array('include' => $args ));
 			$results = get_terms( $term_args );
 		}else{
