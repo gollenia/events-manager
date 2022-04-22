@@ -106,5 +106,4 @@ jQuery(document).ready(function($){
 		}
 	});
 	//color pickers
-	$('#dbem_category_default_color, #dbem_tag_default_color').wpColorPicker();
 });
