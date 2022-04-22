@@ -421,7 +421,7 @@ class EM_Object {
 			$conditions['location'] = "{$location_id_table}.location_id IN (" . implode(',', $location) .')';
 		}elseif ( is_object($location) && get_class($location)=='EM_Location' ){ //Now we deal with objects
 			$conditions['location'] = " {$location_id_table}.location_id = $location->location_id";
-		}elseif ( is_array($location) && @get_class(current($location)=='EM_Location') ){ //we can accept array of ids or EM_Location objects
+		}elseif ( is_array($location) && @get_class(current($location))=='EM_Location') { //we can accept array of ids or EM_Location objects
 			foreach($location as $EM_Location){
 				$location_ids[] = $EM_Location->location_id;
 			}
@@ -429,13 +429,14 @@ class EM_Object {
 		}
 		
 		//Filter by Event - can be object, array, or id
-		if ( is_numeric($event) && $event > 0 ) { //event ID takes precedence
+		
+		if ( is_numeric($event) && $event > 0 ) { //Event ID takes precedence
 			$conditions['event'] = " {$events_table}.event_id = $event";
-		}elseif ( is_array($location) && array_is_list($event) ){ //array of ids
+		}elseif ( is_array($event) && array_is_list($event) ){ //array of ids
 			$conditions['event'] = "{$events_table}.event_id IN (" . implode(',', $event) .')';
 		}elseif ( is_object($event) && get_class($event)=='EM_Event' ){ //Now we deal with objects
 			$conditions['event'] = " {$events_table}.event_id = $event->event_id";
-		}elseif ( is_array($event) && @get_class(current($event)=='EM_Event') ){ //we can accept array of ids or EM_event objects
+		}elseif ( is_array($event) && @get_class(current($event))=='EM_Event') { //we can accept array of ids or EM_event objects
 			foreach($event as $EM_Event){
 				$event_ids[] = $EM_Event->event_id;
 			}
