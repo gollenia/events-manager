@@ -61,19 +61,12 @@ class EM_Emails {
 	public static function booking_email_ical_attachments( $msg, $EM_Booking ){
 		//add email ical attachment
 		$event_ids = array();
-		if( get_class($EM_Booking) == 'EM_Multiple_Booking' ){
-			if( !get_option('dbem_multiple_bookings_ical_attachments') ){
-				return $msg;
-			}
-			foreach( $EM_Booking->get_bookings() as $booking ){
-				$event_ids[] = $booking->event_id;
-			}
-		}else{
-			if( !get_option('dbem_bookings_ical_attachments') ){
-				return $msg;
-			}
-			$event_ids[] = $EM_Booking->event_id;
+		
+		if( !get_option('dbem_bookings_ical_attachments') ){
+			return $msg;
 		}
+		$event_ids[] = $EM_Booking->event_id;
+		
 		ob_start();
 		em_locate_template('templates/ical.php', true, array('args'=>array('event'=>$event_ids, 'scope'=>'all')));
 		$icalcontent = preg_replace("/([^\r])\n/", "$1\r\n", ob_get_clean());
