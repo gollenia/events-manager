@@ -101,11 +101,17 @@ function em_bookings_events_table() {
 					$rowno = 0;
 					foreach ( $events as $EM_Event ) {
 						/* @var $event EM_Event */
+
 						$rowno++;
 						$class = ($rowno % 2) ? ' class="alternate"' : '';
 						$style = "";
-						$booked_percent = $EM_Event->get_bookings()->get_booked_spaces() / ($EM_Event->get_spaces() / 100);
-						$pending_percent = $EM_Event->get_bookings()->get_pending_spaces() / ($EM_Event->get_spaces() / 100);
+						$booked_percent = 0;
+						$pending_percent = 0;
+						if($EM_Event->get_spaces() > 0) {
+							$booked_percent = $EM_Event->get_bookings()->get_booked_spaces() / ($EM_Event->get_spaces() / 100);
+							$pending_percent = $EM_Event->get_bookings()->get_pending_spaces() / ($EM_Event->get_spaces() / 100);
+						}
+						
 						
 						if ($EM_Event->start()->getTimestamp() < time() && $EM_Event->end()->getTimestamp() < time()){
 							$style = "style ='background-color: #FADDB7;'";
@@ -125,12 +131,9 @@ function em_bookings_events_table() {
 							<td >
 								<b><?php echo $EM_Event->get_bookings()->get_booked_spaces(); echo " ";  ?> /
 								<?php echo $EM_Event->get_bookings()->get_pending_spaces(); echo " "; echo __("Pending", "events-manager") ?></b>
-								<div style="margin-top: 6px; border-radius: 999px; display: flex; width:100px; position: relative; height: 8px; background: #dddddd">
-									<div style="width:<?php echo $booked_percent ?>%; border-radius: 999px; <?php if($pending_percent) echo "border-top-right-radius: 0; border-bottom-right-radius: 0;"; ?>
-									position: relative; height: 8px; background: #4caf50"></div>
-									<div style="width:<?php echo $pending_percent ?>%; border-radius: 999px; 
-									<?php if($booked_percent) echo "border-top-left-radius: 0; border-bottom-left-radius: 0;"; ?>
-									position: relative; height: 8px; background: #ffc107"></div>
+								<div class="em-booking-graph">
+									<div class="em-booking-graph-booked <?php if($pending_percent) echo "cut" ?>" style="width:<?php echo $booked_percent ?>%;"></div>
+									<div class="em-booking-graph-pending <?php if($booked_percent) echo "cut" ?>" style="width:<?php echo $pending_percent ?>%;"></div>
 								</div>
 							</td>
 							<td>
