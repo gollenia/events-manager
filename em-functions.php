@@ -277,10 +277,8 @@ function em_get_attributes($lattributes = false){
 	$formats =
 		get_option ( 'dbem_rss_description_format' ).
 		get_option ( 'dbem_rss_title_format' ).
-		get_option ( 'dbem_map_text_format' ).
-		get_option ( 'dbem_location_baloon_format' ).
-		get_option ( 'dbem_location_event_list_item_format' ).
-		get_option ( 'dbem_location_page_title_format' ).
+		"<li>#_EVENTLINK - #_EVENTDATES - #_EVENTTIMES</li>".
+		'#_LOCATIONNAME'.
 		get_option ( 'dbem_event_list_item_format' );
 
 	//We now have one long string of formats, get all the attribute placeholders
