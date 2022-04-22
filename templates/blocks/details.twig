@@ -22,7 +22,7 @@
 			<div class="description__title">{{ __("Date", "em-pro")}}</div>
 			<time class="description__data">
 			
-				{{ date }}
+				{{ event.date }}
 
 			</time>
 		</div>                        
@@ -38,7 +38,7 @@
 		<div class="description__text">
 			<div class="description__title">{{ __("Time", "em-pro")}}</div>
 			<time class="description__data">
-				{{ time }}
+				{{ event.time }}
 			</time>
 		</div>
 	</div>
@@ -88,7 +88,7 @@
 	{% endif %}
 	<!-- End SPACE WARNING -->
 	<!-- PRICE -->
-	{% if price.free and showPrice %}
+	{% if event.price.free and showPrice and not overwrittenPrice %}
 	<div class="description__item">
 		<div class="description__image">
 			<i class="description__icon material-icons">savings</i>
@@ -98,14 +98,14 @@
 			<div class="description__data"> {{ __("Free", "em-pro")}} </div>
 		</div>
 	</div>
-	{% elseif not price.free and showPrice %}
+	{% elseif not event.price.free and showPrice or overwrittenPrice %}
 	<div class="description__item">
 		<div class="description__image">
-			<i class="description__icon material-icons">{{price.currency}}</i>
+			<i class="description__icon material-icons">{{event.price.currency}}</i>
 		</div>
 		<div class="description__text">
 			<div class="description__title">{{ __("Price", "em-pro")}}</div>
-			<div class="description__data"> {{price.format}} </div>
+			<div class="description__data"> {{overwrittenPrice ? overwrittenPrice : event.price.format}} </div>
 		</div> 
 	</div>
 	{% endif %}
@@ -129,5 +129,24 @@
 	</div>
 	{% endif %}
 	<!-- End SPEAKER -->
+	<!-- BOOKED OUT WARNING -->
+	{% if showBookedUp and event.bookings.has_bookings and event.bookings.spaces <= bookedUpWarningThreshold %}
+	<div class="description__item">
+		<div class="description__image">
+			<i class="description__icon material-icons">{{ event.bookings.spaces > 0 ? "report_problem" : "sentiment_dissatisfied" }}</i>
+		</div>
+		<div class="description__text">
+			<div class="description__title">{{ __("Attention", "em-pro")}}</div>
+			<div class="description__data">
+				{% if event.bookings.spaces > 0 %}
+					{{ event.bookings.spaces > 1 ? __("Only %s spaces left", "em-pro")|format(event.bookings.spaces) : __("Only one space left", "em-pro") }}
+				{% else %}
+					{{ __("Booked up", "em-pro") }}
+				{% endif %}
+			</div>
+		</div>
+	</div> 
+	{% endif %}
+	<!-- End BOOKED OUT -->
 		
 </div>
