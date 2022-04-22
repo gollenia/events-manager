@@ -178,7 +178,7 @@ class EM_Form extends EM_Object {
 			case 'time':
 			    //split ranges (or create single array) and format, then re-implode
 			    if( $field_value != 'n/a' ){
-					$time_format = ( get_option('dbem_time_format') ) ? get_option('dbem_time_format'):get_option('time_format');
+					$time_format = get_option('time_format');
 				    $field_values = explode(',', $field_value);
 				    foreach($field_values as $key => $value){
 						$field_values[$key] = date($time_format, strtotime('2010-01-01 '.$value));
@@ -543,6 +543,7 @@ class EM_Form extends EM_Object {
 		$field = array_key_exists($field_id, $this->form_fields) ? $this->form_fields[$field_id]:false;
 		$field = $this->translate_field($field);
 		$value = (is_array($value)) ? $value:trim($value);
+		if(!$field) return;
 		$err = sprintf($this->form_required_error, $field['label']);
 		if( is_array($field) ){
 			$result = true; //innocent until proven guilty
