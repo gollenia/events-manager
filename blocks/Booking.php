@@ -79,7 +79,7 @@ class Booking {
 				"consent" => function_exists('get_the_privacy_policy_link') ? sprintf(get_option("dbem_data_privacy_consent_text"), get_the_privacy_policy_link()) : get_option("dbem_data_privacy_consent_text"), 
 				"pay_with" => get_option('dbem_gateway_label'),
 				"book_now" => get_option("dbem_bookings_submit_button"),
-				"time_format" => get_option("dbem_time_format"),
+				"time_format" => get_option('time_format'),
 				"allday" => get_option("dbem_event_all_day_message"),
 				"currency" => em_get_currency_symbol(true,get_option("dbem_bookings_currency")),
 				"modal_button" => get_option("dbem_booking_button_msg_book"),
