@@ -4,6 +4,8 @@ import SVG, { Props as SVGProps } from 'react-inlinesvg';
 
 const OfflinePayment = (props) => {
 
+	if(props.currentGateway === undefined) return <></>;
+
 	const {
 		eventData: {
             strings
