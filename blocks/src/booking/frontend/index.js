@@ -32,6 +32,19 @@ const Booking = () => {
 
     const [formData, setFormData] = useState({});
 
+	const {booking_nonce, rest_url, booking_url, wp_debug} = window.bookingAppData
+    const eventData = {
+		event: window.bookingAppData.event,
+		coupons: window.bookingAppData.coupons,
+		fields: window.bookingAppData.fields,
+		attendee_fields: window.bookingAppData.attendee_fields,
+		tickets: window.bookingAppData.tickets,
+		gateways: window.bookingAppData.gateways,
+		strings: window.bookingAppData.strings
+    }
+
+	if(eventData.event?.bookings?.spaces === 0) { return <></> }
+
     const ticketPrice = (key) => {
       return eventData.tickets[key].price * ticketSelection.reduce((n, ticket) => {
           return n + (ticket.id == eventData.tickets[key].id);
@@ -101,19 +114,10 @@ const Booking = () => {
   
     }
 
-    const {booking_nonce, rest_url, booking_url, wp_debug} = window.bookingAppData
-    const eventData = {
-		event: window.bookingAppData.event,
-		coupons: window.bookingAppData.coupons,
-		fields: window.bookingAppData.fields,
-		attendee_fields: window.bookingAppData.attendee_fields,
-		tickets: window.bookingAppData.tickets,
-		gateways: window.bookingAppData.gateways,
-		strings: window.bookingAppData.strings
-    }
+    
 
     const openModal = () => {
-		document.title = `${__('Registration', 'events')} ${eventData.event.event_name}`;
+		document.title = `${__('Registration', 'events')} ${eventData.event.title}`;
 		setModalVisible(true);
     }
 
