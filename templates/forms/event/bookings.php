@@ -180,7 +180,7 @@ $reschedule_warnings = !empty($EM_Event->event_id) && $EM_Event->is_recurring() 
 			</select>
 			<?php _e('at','events-manager'); ?>
 		</span>
-		<input type="time" name="event_rsvp_time" class="em-time-input" maxlength="8" size="8" value="<?php if (!empty($EM_Event->event_rsvp_time)) echo $EM_Event->rsvp_end()->format(em_get_hour_format()); ?>" />
+		<input type="time" name="event_rsvp_time" class="em-time-input" maxlength="8" size="8" value="<?php if (!empty($EM_Event->event_rsvp_time)) echo $EM_Event->rsvp_end()->format('H:i'); ?>" />
 		<br />
 		<p class="description"><?php esc_html_e('This is the definite date after which bookings will be closed for this event, regardless of individual ticket settings above. Default value will be the event start date.','events-manager'); ?></p>
 		</td>
