@@ -182,13 +182,10 @@ class EM_Coupons extends EM_Object {
 	/* Multiple Booking Functions */
 	
 	public static function cart_coupon_apply( $coupon_code ){
-		$EM_Multiple_Booking = EM_Multiple_Bookings::get_multiple_booking();
 		if(!empty($_REQUEST['coupon_code'])){
 			$EM_Coupon = new EM_Coupon($_REQUEST['coupon_code'], 'code');
 			if( !empty($EM_Coupon->coupon_id) ){
 				if( $EM_Coupon->is_valid() ){
-					$EM_Multiple_Booking->booking_meta['coupon'] = $EM_Coupon->to_array(); //we add an clean a coupon array here for the first time
-					$EM_Multiple_Booking->calculate_price(); //refresh price
 					return true;
 				}
 			}
@@ -218,7 +215,7 @@ class EM_Coupons extends EM_Object {
 			}
 		}
         header('Content-Type: text/javascript; charset=utf-8'); //to prevent MIME type errors in MultiSite environments
-		echo EM_Object::json_encode($response);
+		echo json_encode($response);
 		exit();
 	}
 	
@@ -540,7 +537,7 @@ class EM_Coupons extends EM_Object {
 				}
 			}
 		}
-		echo EM_Object::json_encode($result);
+		echo json_encode($result);
 		exit();
 	}
 	
@@ -565,7 +562,7 @@ class EM_Coupons extends EM_Object {
 		$coupons = array();
 		
 		//Quick version, we can accept an array of IDs, which is easy to retrieve
-		if( self::array_is_numeric($args) ){ //Array of numbers, assume they are event IDs to retreive
+		if( is_array($args) && array_is_list($args) ){ //Array of numbers, assume they are event IDs to retreive
 			//We can just get all the events here and return them
 			$sql = "SELECT * FROM $coupons_table WHERE coupon_id IN (".implode(",", $args).")";
 			$results = $wpdb->get_results($sql,ARRAY_A);
@@ -642,12 +639,7 @@ class EM_Coupons extends EM_Object {
 	
 	public static function em_bookings_table_rows_col_coupon($val, $EM_Booking){
 		//if in MB mode, change $EM_Booking with the main booking to grab coupon info, given that we don't support per-event coupons in MB mode atm
-		if( get_option('dbem_multiple_bookings') ){
-			$EM_Multiple_Booking = EM_Multiple_Bookings::get_main_booking($EM_Booking);
-			if( $EM_Multiple_Booking !== false ){
-				$EM_Booking = $EM_Multiple_Booking;
-			}
-		}
+		
 		//check if coupon code exists for this booking, if so, get it and replace $val with coupon code
 		if( self::booking_has_coupons($EM_Booking) ){
 			$vals = array();

@@ -30,7 +30,7 @@ class EM_Gateways_Transactions{
 	
 	/**
 	 * @param unknown $result
-	 * @param unknown $booking_ids
+	 * @param array $booking_ids
 	 * @return unknown
 	 */
 	public static function em_bookings_deleted($result, $booking_ids){
@@ -284,7 +284,9 @@ class EM_Gateways_Transactions{
 					<td class="column-trans-status">
 						<?php
 							if(!empty($transaction->transaction_status)) {
-								echo $transaction->transaction_status;
+								echo "<span class='em-label " . str_replace(" ", "-", strtolower($transaction->transaction_status)) . "'>"; 
+								_e($transaction->transaction_status, 'em-pro');
+								echo "</span>";
 							} else {
 								echo __('None yet','em-pro');
 							}
@@ -329,19 +331,7 @@ class EM_Gateways_Transactions{
 		//we can determine what to search for, based on if certain variables are set.
 		if( is_object($context) && (get_class($context)=="EM_Booking" || get_class($context)=="EM_Multiple_Booking" ) && $context->can_manage('manage_bookings','manage_others_bookings') ){
 			$booking_condition = "tx.booking_id = ".$context->booking_id;
-			if( get_option('dbem_multiple_bookings') && $context->can_manage('manage_others_bookings') ){
-				//in MB mode, if the user can manage others bookings, they can view information about the transaction for a group of bookings
-				$EM_Multiple_Booking = EM_Multiple_Bookings::get_main_booking($context);
-				if( $EM_Multiple_Booking !== false ){
-				    if( $context->booking_id != $EM_Multiple_Booking->booking_id){
-				        //we're looking at a booking within a multiple booking, so we can show payments specific to this event too
-                        $booking_condition = 'tx.booking_id IN ('.absint($EM_Multiple_Booking->booking_id).','.absint($context->booking_id).')';
-				    }else{
-				        //this is a MB booking, so we should show transactions related to the MB or any bookings within it
-                        $booking_condition = "( $booking_condition OR tx.booking_id IN (SELECT booking_id FROM ".EM_BOOKINGS_RELATIONSHIPS_TABLE." WHERE booking_main_id={$EM_Multiple_Booking->booking_id}))";
-				    }
-				}
-			}
+			
 			$conditions[] = $booking_condition;
 		}elseif( is_object($context) && get_class($context)=="EM_Event" && $context->can_manage('manage_bookings','manage_others_bookings') ){
 			$join = " JOIN $table ON $table.booking_id=tx.booking_id";
@@ -391,12 +381,7 @@ class EM_Gateways_Transactions{
 		global $EM_Event;
 		if( $col == 'gateway_txn_id' ){
 			//check if this isn't a multiple booking, otherwise look for info from main booking
-			if( get_option('dbem_multiple_bookings') ){
-				$EM_Multiple_Booking = EM_Multiple_Bookings::get_main_booking($EM_Booking);
-				if( $EM_Multiple_Booking !== false ){
-					$EM_Booking = $EM_Multiple_Booking;
-				}
-			}
+			
 			//get latest transaction with an ID
 			$old_limit = $this->limit;
 			$old_orderby = $this->orderby;
