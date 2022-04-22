@@ -17,16 +17,11 @@ class EM_ML_Options {
 				'dbem_data_privacy_consent_text',
 			//FORMATTING TAB
 				//events
-				'dbem_event_list_groupby_format',
 				'dbem_event_list_item_format_header',
 				'dbem_event_list_item_format',
-				'dbem_event_list_item_format_footer',
 				'dbem_no_events_message',
-				'dbem_list_date_title',
 				
-		        'dbem_event_excerpt_format',
-		        'dbem_event_excerpt_alt_format',
-				//Search Form
+		        //Search Form
 				'dbem_search_form_submit',
 				'dbem_search_form_advanced_hide',
 				'dbem_search_form_advanced_show',
@@ -47,9 +42,6 @@ class EM_ML_Options {
 				'dbem_search_form_dates_separator',
 				//Date/Time
 
-				'dbem_dates_separator',
-				'dbem_time_format',
-				'dbem_times_separator',
 				'dbem_event_all_day_message',
 				//Calendar
 
@@ -58,51 +50,22 @@ class EM_ML_Options {
 				'dbem_ical_real_description_format',
 				'dbem_ical_location_format',				
 				//Locations
-				'dbem_location_list_item_format_header',
-				'dbem_location_list_item_format',
-				'dbem_location_list_item_format_footer',
+				
+				
 				'dbem_no_locations_message',
-				'dbem_location_page_title_format',
-				'dbem_location_event_list_item_header_format',
-				'dbem_location_event_list_item_format',
-				'dbem_location_event_list_item_footer_format',
-				'dbem_location_no_events_message',
 				'dbem_location_event_single_format',
 				'dbem_location_no_event_message',
 				//Categories
-				'dbem_categories_list_item_format_header',
-				'dbem_categories_list_item_format',
-				'dbem_categories_list_item_format_footer',
 				'dbem_no_categories_message',
-				'dbem_category_page_title_format',
-				'dbem_category_page_format',
-				'dbem_category_event_list_item_header_format',
-				'dbem_category_event_list_item_format',
-				'dbem_category_event_list_item_footer_format',
-				'dbem_category_no_events_message',
-				'dbem_category_no_event_message',
-				'dbem_category_event_single_format',
 				//Tags
-				'dbem_tags_list_item_format_header',
-				'dbem_tags_list_item_format',
-				'dbem_tags_list_item_format_footer',
 				'dbem_no_tags_message',
-				'dbem_tag_page_title_format',
-				'dbem_tag_page_format',
-				'dbem_tag_event_list_item_header_format',
-				'dbem_tag_event_list_item_format',
-				'dbem_tag_event_list_item_footer_format',
-				'dbem_tag_no_events_message',
-				'dbem_tag_event_single_format',
-				'dbem_tag_no_event_message',
 				//RSS
 				'dbem_rss_main_description',
 				'dbem_rss_main_title',
 				'dbem_rss_title_format',
 				'dbem_rss_description_format',
-				//Maps
-				'dbem_map_text_format',
-				'dbem_location_baloon_format',
+
+				
 			//Bookings
 				//Pricing Options
 				'dbem_bookings_currency_thousands_sep',
@@ -111,9 +74,8 @@ class EM_ML_Options {
 				//booking feedback messages
 				'dbem_booking_feedback_cancelled',
 				'dbem_booking_warning_cancel',
-				'dbem_bookings_form_msg_disabled',
-				'dbem_bookings_form_msg_closed',
-				'dbem_bookings_form_msg_full',
+				
+
 				
 				
 				'dbem_booking_feedback',
