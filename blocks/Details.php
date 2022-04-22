@@ -48,7 +48,8 @@ class Details {
 	 */
     public function render($attributes, $content, $full_data) : string {
         $attributes['event'] = $this->get_event();
-		//var_dump($attributes['event']);
+		
+		$attributes['overwrittenPrice'] = $this->get_overwrite_price($attributes['priceOverwrite']);
 		
 		$attributes['currency'] = get_option('dbem_bookings_currency');
 		
@@ -58,6 +59,19 @@ class Details {
         return \Timber\Timber::compile($template, $attributes);
 
     }
+
+	public function get_overwrite_price($price) {
+		if(!$price) {
+			return "";
+		}
+		if(is_numeric($price)) {
+			$formatter = new PriceFormatter($price);
+			return $formatter->get_format();
+		}
+
+		return $price;
+
+	}
     public function get_template($name) : string { 
         $filename = substr($name, strpos($name, "/")+1) . ".twig";
         
