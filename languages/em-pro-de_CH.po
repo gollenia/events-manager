@@ -2341,3 +2341,18 @@ msgstr "Halbe Größe"
 
 msgid "If checked, the input filed is only half of the width"
 msgstr "Wenn aktiviert, wird das Feld nur halb so breit dargestellt"
+
+msgid "Completed"
+msgstr "Abgeschlossen"
+
+msgid "Attention"
+msgstr "Achtung"
+
+msgid "Only %s spaces left"
+msgstr "Nur noch %s Plätze frei"
+
+msgid "Only one space left"
+msgstr "Nur noch ein Platz frei"
+
+msgid "Booked up"
+msgstr "Ausgebucht"

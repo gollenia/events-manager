@@ -243,6 +243,27 @@
 			],
 			"Price": [
 				"Preis"
+			],
+			"Booked up warning": [
+				"Buchungs-Warnung"
+			],
+			"Show if event is booked up or nearly booked up": [
+				"Wenn das Event voll oder fast voll ist, wird eine Warnung angezeigt"
+			],
+			"Warning threshold": [
+				"Warnungsgrenze"
+			],
+			"Show a warning that the event is nearly booked up when only this number of spaces are left": [
+				"Wenn nur diese Anzahl von Plätzen verfügbar sind, wird eine Warnung angezeigt"
+			],
+			"Warning": [
+				"Warnung"
+			],
+			"This warning is shown, if few or no bookings are available": [
+				"Diese Warnung wird angezeigt, wenn wenige oder kein Plätzen verfügbar sind"
+			],
+			"If applicable, exclude the current event from the list": [
+				"Wenn möglich, den aktuellen Termin aus der Liste auslassen"
 			]
 
 		}

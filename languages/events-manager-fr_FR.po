@@ -6269,3 +6269,12 @@ msgstr "fini à:"
 
 msgid "o'clock"
 msgstr "heures"
+
+msgid "Add New Speaker"
+msgstr "Ajouter un nouveau Conférencier"
+
+msgid "Person Details"
+msgstr "Détails de la personne"
+
+msgid "No Speaker Found"
+msgstr "Aucun Conférencier trouvé"

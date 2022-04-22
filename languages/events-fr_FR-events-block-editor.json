@@ -237,8 +237,28 @@
 			],
 			"Price": [
 				"Prix"
+			],
+			"Booked up warning": [
+				"Alerte de réservation"
+			],
+			"Show if event is booked up or nearly booked up": [
+				"Afficher si l'événement est réservé ou presque réservé"
+			],
+			"Warning threshold": [
+				"Seuil d'alerte"
+			],
+			"Show a warning that the event is nearly booked up when only this number of spaces are left": [
+				"Afficher une alerte que l'événement est presque réservé quand il reste seulement ce nombre de places"
+			],
+			"Warning": [
+				"Alerte"
+			],
+			"This warning is shown, if few or no bookings are available": [
+				"Cette alerte est affichée, si peu ou aucune réservation est disponible"
+			],
+			"If applicable, exclude the current event from the list": [
+				"Si applicable, exclure l'événement actuel de la liste"
 			]
-
 		}
 	}
 }

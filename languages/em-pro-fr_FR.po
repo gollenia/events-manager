@@ -2415,3 +2415,18 @@ msgstr "Approuver automatiquement la réservation, même si aucun paiement n'est
 
 msgid "Approval"
 msgstr "Approbation"
+
+msgid "Completed"
+msgstr "Terminé"
+
+msgid "Attention"
+msgstr "Attention"
+
+msgid "Only %s spaces left"
+msgstr "Il ne reste que %s places"
+
+msgid "Only one space left"
+msgstr "Il ne reste qu'une place"
+
+msgid "Booked up"
+msgstr "Réservé"

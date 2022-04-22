@@ -6491,3 +6491,12 @@ msgstr "Endet um:"
 
 msgid "o'clock"
 msgstr "Uhr"
+
+msgid "Add New Speaker"
+msgstr "Neuen Referent hinzufügen"
+
+msgid "Person Details"
+msgstr "Personendetails"
+
+msgid "No Speaker Found"
+msgstr "Kein Referent gefunden"
