@@ -15,22 +15,16 @@ function em_options_save(){
 			if( $postKey != 'dbem_data' && substr($postKey, 0, 5) == 'dbem_' ){
 				//TODO some more validation/reporting
 				
-				if( in_array($postKey, array('dbem_bookings_notify_admin','dbem_event_submitted_email_admin','dbem_js_limit_events_form','dbem_js_limit_search','dbem_js_limit_general','dbem_css_limit_include','dbem_css_limit_exclude','dbem_search_form_geo_distance_options')) ){ $postValue = str_replace(' ', '', $postValue); } //clean up comma separated emails, no spaces needed
-				if( ($postKey == 'dbem_category_default_color' || $postKey == 'dbem_tag_default_color') && !sanitize_hex_color($postValue) ){
-					$EM_Notices->add_error( sprintf(esc_html_x('Colors must be in a valid %s format, such as #FF00EE.', 'hex format', 'events-manager'), '<a href="http://en.wikipedia.org/wiki/Web_colors">hex</a>').' '. esc_html__('This setting was not changed.', 'events-manager'), true);					
-				}elseif( $postKey == 'dbem_oauth' && is_array($postValue) ){
-					foreach($postValue as $postValue_key=>$postValue_val){
-						EM_Options::set($postValue_key, wp_unslash($postValue_val), 'dbem_oauth');
-					}
+				if( in_array($postKey, array('dbem_bookings_notify_admin','dbem_event_submitted_email_admin','dbem_js_limit_events_form','dbem_js_limit_search','dbem_js_limit_general','dbem_search_form_geo_distance_options')) ){ $postValue = str_replace(' ', '', $postValue); } //clean up comma separated emails, no spaces needed
+				
+				//TODO slashes being added?
+				if( is_array($postValue) ){
+					foreach($postValue as $postValue_key=>$postValue_val) $postValue[$postValue_key] = wp_unslash($postValue_val);
 				}else{
-					//TODO slashes being added?
-					if( is_array($postValue) ){
-					    foreach($postValue as $postValue_key=>$postValue_val) $postValue[$postValue_key] = wp_unslash($postValue_val);
-					}else{
-					    $postValue = wp_unslash($postValue);
-					}
-					update_option($postKey, $postValue);
+					$postValue = wp_unslash($postValue);
 				}
+				update_option($postKey, $postValue);
+				
 			}elseif( $postKey == 'dbem_data' && is_array($postValue) ){
 				foreach( $postValue as $postK => $postV ){
 					//TODO slashes being added?
@@ -71,19 +65,7 @@ function em_options_save(){
 		wp_safe_redirect($referrer);
 		exit();
 	}
-	//Migration
-	if( !empty($_GET['em_migrate_images']) && check_admin_referer('em_migrate_images','_wpnonce') && get_option('dbem_migrate_images') ){
-		include(plugin_dir_path(__FILE__).'../em-install.php');
-		$result = em_migrate_uploads();
-		if($result){
-			$failed = ( $result['fail'] > 0 ) ? $result['fail'] . ' images failed to migrate.' : '';
-			$EM_Notices->add_confirm('<strong>'.$result['success'].' images migrated successfully. '.$failed.'</strong>');
-		}
-		wp_safe_redirect(admin_url().'edit.php?post_type=event&page=events-manager-options&em_migrate_images');
-	}elseif( !empty($_GET['em_not_migrate_images']) && check_admin_referer('em_not_migrate_images','_wpnonce') ){
-		delete_option('dbem_migrate_images_nag');
-		delete_option('dbem_migrate_images');
-	}
+
 	//Uninstall
 	if( !empty($_REQUEST['action']) && $_REQUEST['action'] == 'uninstall' && current_user_can('activate_plugins') && !empty($_REQUEST['confirmed']) && check_admin_referer('em_uninstall_'.get_current_user_id().'_wpnonce') && current_user_can('delete_users') ){
 		if( check_admin_referer('em_uninstall_'.get_current_user_id().'_confirmed','_wpnonce2') ){
@@ -255,7 +237,7 @@ function em_admin_email_test_ajax(){
             	'message' => __('Email not sent.','events-manager')." <ul><li>".implode('</li><li>',$EM_Event->get_errors()).'</li></ul>'
             );
         }
-        echo EM_Object::json_encode($result);
+        echo json_encode($result);
     }
     exit();
 }
@@ -421,30 +403,6 @@ function em_admin_options_page() {
 	<?php
 }
 
-/**
- * Meta options box for image sizes. Shared in both MS and Normal options page, hence it's own function 
- */
-function em_admin_option_box_image_sizes(){
-	global $save_button;
-	?>
-	<div  class="postbox " id="em-opt-image-sizes" >
-	<div class="handlediv" title="<?php __('Click to toggle', 'events-manager'); ?>"><br /></div><h3><span><?php _e ( 'Image Sizes', 'events-manager'); ?> </span></h3>
-	<div class="inside">
-	    <p class="em-boxheader"><?php _e('These settings will only apply to the image uploading if using our front-end forms. In your WP admin area, images are handled by WordPress.','events-manager'); ?></p>
-		<table class='form-table'>
-			<?php
-			em_options_input_text ( __( 'Maximum width (px)', 'events-manager'), 'dbem_image_max_width', __( 'The maximum allowed width for images uploads', 'events-manager') );
-			em_options_input_text ( __( 'Minimum width (px)', 'events-manager'), 'dbem_image_min_width', __( 'The minimum allowed width for images uploads', 'events-manager') );
-			em_options_input_text ( __( 'Maximum height (px)', 'events-manager'), 'dbem_image_max_height', __( "The maximum allowed height for images uploaded, in pixels", 'events-manager') );
-			em_options_input_text ( __( 'Minimum height (px)', 'events-manager'), 'dbem_image_min_height', __( "The minimum allowed height for images uploaded, in pixels", 'events-manager') );
-			em_options_input_text ( __( 'Maximum size (bytes)', 'events-manager'), 'dbem_image_max_size', __( "The maximum allowed size for images uploaded, in bytes", 'events-manager') );
-			echo $save_button;
-			?>
-		</table>
-	</div> <!-- . inside -->
-	</div> <!-- .postbox -->
-	<?php	
-}
 
 /**
  * Meta options box for email settings. Shared in both MS and Normal options page, hence it's own function 
