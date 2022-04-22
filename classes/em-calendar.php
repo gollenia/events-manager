@@ -206,7 +206,7 @@ class EM_Calendar extends EM_Object {
 		$scope_datetime_start = new EM_DateTime("{$year}-{$month}-1");
 		$scope_datetime_end = new EM_DateTime($scope_datetime_start->format('Y-m-t'));
 		$scope_datetime_start->sub('P'.$offset.'D');
-		$scope_datetime_end->add('P'.$outset.'D');
+		$scope_datetime_end->add(new DateInterval("P" . $outset . "D"));
 		//we have two methods here, one for high-volume event sites i.e. many thousands of events per month, and another for thousands or less per month.
 		$args['array'] = true; //we're getting an array first to avoid extra queries during object creation
 		unset($args['month']);
@@ -266,7 +266,7 @@ class EM_Calendar extends EM_Object {
 						}
 						//count events for that day
 						$eventful_days_count[$event_eventful_date] = empty($eventful_days_count[$event_eventful_date]) ? 1 : $eventful_days_count[$event_eventful_date]+1;
-						$event_start->add('P1D');
+						$event_start->add(new DateInterval('P1D'));
 					}
 				}else{
 					//Only show events on the day that they start

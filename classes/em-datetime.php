@@ -214,7 +214,7 @@ class EM_DateTime extends DateTime {
 	 * @return EM_DateTime Returns object for chaining.
 	 * @throws Exception
 	 */
-	public function add( $DateInterval ) : EM_DateTime {
+	public function add( string|DateInterval $DateInterval ) : EM_DateTime {
 		if( is_object($DateInterval) ){
 			$result = parent::add($DateInterval);
 		}else{
@@ -232,7 +232,7 @@ class EM_DateTime extends DateTime {
 	 * @return EM_DateTime
 	 * @throws Exception
 	 */
-	public function sub( $DateInterval ) : EM_DateTime {
+	public function sub( string|DateInterval $DateInterval ) : EM_DateTime {
 		if( is_object($DateInterval) ){
 			$result = parent::sub($DateInterval);
 		}else{
