@@ -29,7 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Setting constants
 
-define('EM_VERSION', 6.2); //self expanatory, although version currently may not correspond directly with published version number
+define('EM_VERSION', 6.3); //self expanatory, although version currently may not correspond directly with published version number
 define('EM_DIR', dirname( __FILE__ )); //an absolute path to this directory
 define('EM_DIR_URI', trailingslashit(plugins_url('',__FILE__))); //an absolute path to this directory
 define('EM_MS_GLOBAL',false);
@@ -60,8 +60,10 @@ add_action('init', function() {
 
 
 
+
 // INCLUDES
 //Base classes
+require_once('polyfill.php');
 require_once('classes/em-options.php');
 require_once('classes/em-object.php');
 require_once('classes/em-datetime.php');
@@ -87,10 +89,10 @@ require_once("classes/em-bookings-table.php") ;
 require_once('classes/em-category.php');
 require_once('classes/em-categories.php');
 require_once('classes/em-categories-frontend.php');
-require_once('classes/em-event.php');
+require_once('classes/Events/Event.php');
 require_once('classes/event-locations/em-event-locations.php');
-require_once('classes/em-event-post.php');
-require_once('classes/em-events.php');
+require_once('classes/Events/EventPost.php');
+require_once('classes/Events/Events.php');
 require_once('classes/em-location.php');
 require_once('classes/em-location-post.php');
 require_once('classes/em-locations.php');
@@ -116,11 +118,10 @@ if( is_admin() ){
 	require_once('admin/em-help.php');
 	require_once('admin/em-options.php');
 	require_once('admin/em-data-privacy.php');
-	require_once('em-update.php');
 
 	//post/taxonomy controllers
-	require_once('classes/em-event-post-admin.php');
-	require_once('classes/em-event-posts-admin.php');
+	require_once('classes/Events/EventPostAdmin.php');
+	require_once('classes/Events/EventPostsAdmin.php');
 	require_once('classes/em-location-post-admin.php');
 	require_once('classes/em-location-posts-admin.php');
 	require_once('classes/em-taxonomy-admin.php');
@@ -139,36 +140,34 @@ if( is_admin() ){
 require_once('classes/speaker.php');
 require_once('add-ons/export/Export.php');
 
+require_once('emp-forms.php'); //form editor
+		
+require_once('emp-ml.php');
 
+
+//booking-specific features
+require_once('add-ons/gateways/gateways.php'); 
+require_once('add-ons/bookings-form/bookings-form.php');
+
+require_once('add-ons/coupons/coupons.php');
+require_once('add-ons/emails/emails.php');
+require_once('add-ons/user-fields.php');
+
+//This should come into a "Migration" class
 //Table names
-	global $wpdb;
-	$prefix = $wpdb->prefix;
-	define('EM_EVENTS_TABLE',$prefix.'em_events'); //TABLE NAME
-	define('EM_TICKETS_TABLE', $prefix.'em_tickets'); //TABLE NAME
-	define('EM_TICKETS_BOOKINGS_TABLE', $prefix.'em_tickets_bookings'); //TABLE NAME
-	define('EM_META_TABLE',$prefix.'em_meta'); //TABLE NAME
-	define('EM_RECURRENCE_TABLE',$prefix.'dbem_recurrence'); //TABLE NAME
-	define('EM_LOCATIONS_TABLE',$prefix.'em_locations'); //TABLE NAME
-	define('EM_BOOKINGS_TABLE',$prefix.'em_bookings'); //TABLE NAME
-	define('EM_TRANSACTIONS_TABLE', $wpdb->prefix.'em_transactions'); //TABLE NAME
-	define('EM_EMAIL_QUEUE_TABLE', $wpdb->prefix.'em_email_queue'); //TABLE NAME
-	define('EM_COUPONS_TABLE', $wpdb->prefix.'em_coupons'); //TABLE NAME
-	define('EM_BOOKINGS_RELATIONSHIPS_TABLE', $wpdb->prefix.'em_bookings_relationships'); //TABLE NAME
-
-	//Backward compatability for old images stored in < EM 5
-
-	$upload_dir = wp_upload_dir();
-
-if( file_exists($upload_dir['basedir'].'/locations-pics' ) ){
-	define("EM_IMAGE_UPLOAD_DIR", $upload_dir['basedir']."/locations-pics/");
-	define("EM_IMAGE_UPLOAD_URI", $upload_dir['baseurl']."/locations-pics/");
-	define("EM_IMAGE_DS",'-');
-}else{
-	define("EM_IMAGE_UPLOAD_DIR", $upload_dir['basedir']."/events-manager/");
-	define("EM_IMAGE_UPLOAD_URI", $upload_dir['baseurl']."/events-manager/");
-	define("EM_IMAGE_DS",'/');
-}
-
+global $wpdb;
+$prefix = $wpdb->prefix;
+define('EM_EVENTS_TABLE',$prefix.'em_events'); //TABLE NAME
+define('EM_TICKETS_TABLE', $prefix.'em_tickets'); //TABLE NAME
+define('EM_TICKETS_BOOKINGS_TABLE', $prefix.'em_tickets_bookings'); //TABLE NAME
+define('EM_META_TABLE',$prefix.'em_meta'); //TABLE NAME
+define('EM_RECURRENCE_TABLE',$prefix.'dbem_recurrence'); //TABLE NAME
+define('EM_LOCATIONS_TABLE',$prefix.'em_locations'); //TABLE NAME
+define('EM_BOOKINGS_TABLE',$prefix.'em_bookings'); //TABLE NAME
+define('EM_TRANSACTIONS_TABLE', $wpdb->prefix.'em_transactions'); //TABLE NAME
+define('EM_EMAIL_QUEUE_TABLE', $wpdb->prefix.'em_email_queue'); //TABLE NAME
+define('EM_COUPONS_TABLE', $wpdb->prefix.'em_coupons'); //TABLE NAME
+define('EM_BOOKINGS_RELATIONSHIPS_TABLE', $wpdb->prefix.'em_bookings_relationships'); //TABLE NAME
 
 /**
  * @author marcus
@@ -196,8 +195,9 @@ class EM_Scripts_and_Styles {
 				EM_Scripts_and_Styles::admin_enqueue();
 			}
 			wp_enqueue_style('events-manager-admin', plugins_url('includes/admin-settings.css',__FILE__), array(), EM_VERSION);
+			wp_enqueue_style('events-manager-pro', plugins_url('includes/events-manager-pro.css',__FILE__), array(), EM_VERSION);
 			do_action('em_enqueue_admin_styles');
-			wp_enqueue_style('events-manager-pro-admin', plugins_url('includes/events-manager-pro.css',__FILE__), array(), 5);
+			wp_enqueue_style('events-manager-pro-admin', plugins_url('includes/events-manager-pro.css',__FILE__), array(), EM_VERSION);
 			self::localize_script();
 		}
 	}
@@ -276,7 +276,7 @@ class EM_Scripts_and_Styles {
 	}
 }
 EM_Scripts_and_Styles::init();
-function em_enqueue_public(){ EM_Scripts_and_Styles::public_enqueue(); } //In case ppl used this somewhere
+
 
 /**
  * Perform plugins_loaded actions
@@ -423,54 +423,6 @@ function em_load_event(){
 add_action('template_redirect', 'em_load_event', 1);
 if(is_admin()){ add_action('init', 'em_load_event', 2); }
 
-if( is_multisite() ){
-	/**
-	 * Catches various option names and returns a network-wide option value instead of the individual blog option. Uses the magc __call function to catch unprecedented names.
-	 * @author marcus
-	 *
-	 */
-	class EM_MS_Globals {
-		function __construct(){ add_action( 'init', array(&$this, 'add_filters'), 1); }
-		function add_filters(){
-			foreach( $this->get_globals() as $global_option_name ){
-				add_filter('pre_option_'.$global_option_name, array(&$this, 'pre_option_'.$global_option_name), 1,1);
-				add_filter('pre_update_option_'.$global_option_name, array(&$this, 'pre_update_option_'.$global_option_name), 1,2);
-				add_action('add_option_'.$global_option_name, array(&$this, 'add_option_'.$global_option_name), 1,1);
-			}
-		}
-		function get_globals(){
-			$globals = array(
-				//multisite settings
-				'dbem_ms_global_table', 'dbem_ms_global_caps',
-				'dbem_ms_global_events', 'dbem_ms_global_events_links','dbem_ms_events_slug',
-				'dbem_ms_global_locations','dbem_ms_global_locations_links','dbem_ms_locations_slug','dbem_ms_mainblog_locations',
-				//mail
-				'dbem_rsvp_mail_port', 'dbem_mail_sender_address', 'dbem_smtp_password', 'dbem_smtp_username','dbem_smtp_host', 'dbem_mail_sender_name','dbem_smtp_html','dbem_smtp_html_br','dbem_smtp_host','dbem_rsvp_mail_send_method','dbem_rsvp_mail_SMTPAuth',
-				//images
-				'dbem_image_max_width','dbem_image_max_height','dbem_image_max_size'
-			);
-			if( EM_MS_GLOBAL ){
-				$globals[] = 'dbem_taxonomy_category_slug';
-			}
-			return apply_filters('em_ms_globals', $globals);
-		}
-		function __call($filter_name, $value){
-			if( strstr($filter_name, 'pre_option_') !== false ){
-				$return = get_site_option(str_replace('pre_option_','',$filter_name));
-				return $return;
-			}elseif( strstr($filter_name, 'pre_update_option_') !== false ){
-				return $value[1];
-			}elseif( strstr($filter_name, 'add_option_') !== false ){
-				delete_option(str_replace('pre_option_','',$filter_name));
-				return;
-			}
-			return $value[0];
-		}
-		
-	}
-	global $EM_MS_Globals;
-	$EM_MS_Globals = new EM_MS_Globals();
-}
 
 /**
  * Works much like <a href="http://codex.wordpress.org/Function_Reference/locate_template" target="_blank">locate_template</a>, except it takes a string instead of an array of templates, we only need to load one.
@@ -595,71 +547,6 @@ function wpdocs_load_textdomain() {
 }
 add_action( 'plugins_loaded', 'wpdocs_load_textdomain' );
 
-
-class EM_Pro {
-
-	/**
-	 * em_pro_data option
-	 * @var array
-	 */
-	var $data;
-
-	/**
-	 * Actions to take upon initial action hook
-	 */
-	public static function init(){
-
-		if( is_admin() ){ //although activate_plugins would be beter here, superusers don't visit every single site on MS
-			add_action('init', 'EM_Pro::install',2);
-		}
-		
-		//booking-specific features - this one may change in the future
-		require_once('emp-forms.php'); //form editor
-		
-		require_once('emp-ml.php');
-		
-
-		//booking-specific features
-		require_once('add-ons/gateways/gateways.php'); 
-		require_once('add-ons/bookings-form/bookings-form.php');
-		
-		require_once('add-ons/coupons/coupons.php');
-		require_once('add-ons/emails/emails.php');
-		require_once('add-ons/user-fields.php');
-
-	}
-	
-	public static function install(){
-	    if( current_user_can('list_users') ){
-	    	$old_version = get_option('em_pro_version');
-	    	if( $old_version == '' ) {
-	    		require_once('emp-install.php');
-	    		emp_install();
-	    	}
-	    }
-	}   
-	
-
-	/**
-	 * Enqueues the CSS required by Pro features. Fired by action em_enqueue_styles which is when EM enqueues it's stylesheet, if it doesn't then this shouldn't either 
-	 */
-	public static function em_enqueue_styles(){
-	    wp_enqueue_style('events-manager-pro', plugins_url('includes/events-manager-pro.css',__FILE__), array(), 5);
-	}
-	
-}
-
-add_action( 'plugins_loaded', 'EM_Pro::init' );
-
-
-
-
-/* Creating the wp_events table to store event data*/
-function emp_activate() {
-	global $wp_rewrite;
-   	$wp_rewrite->flush_rules();
-}
-register_activation_hook( __FILE__,'emp_activate');
 
 
 //cron functions - ran here since functions aren't loaded, scheduling done by gateways and other modules
