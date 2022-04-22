@@ -8,7 +8,7 @@ class ExportAdmin {
 
 	public static function init() {
 		$instance = new self;
-		add_action('em_options_page_footer_pages', [$instance, 'admin_page'],10,1);
+		//add_action('em_options_page_footer_pages', [$instance, 'admin_page'],10,1);
 		add_action('admin_enqueue_scripts', [$instance, 'enqueue_admin_scripts']);
 	}
 
