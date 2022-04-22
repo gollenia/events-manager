@@ -57,7 +57,7 @@ while ( count($EM_Events) > 0 ){
 		if($EM_Event->event_all_day){
 			//we get local time since we're representing a date not a time
 			$dateStart	= ';VALUE=DATE:'.$EM_Event->start()->format('Ymd'); //all day
-			$dateEnd	= ';VALUE=DATE:'.$EM_Event->end()->copy()->add('P1D')->format('Ymd'); //add one day
+			$dateEnd	= ';VALUE=DATE:'.$EM_Event->end()->copy()->add(new DateInterval('P1D'))->format('Ymd'); //add one day
 		}else{
 			//get date output with timezone and local time if timezone output is enabled, or UTC time if not and/or if offset is manual
 			if( $show_timezone ){
