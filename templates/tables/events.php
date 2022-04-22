@@ -123,7 +123,7 @@
 							</td>
 							<td>
 								<a href="<?php echo $EM_Event->duplicate_url(); ?>" title="<?php _e ( 'Duplicate this event', 'events-manager'); ?>">
-									<strong>+</strong>
+									
 								</a>
 							</td>
 							<?php if( get_option('dbem_locations_enabled') ): ?>
