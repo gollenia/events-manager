@@ -21,9 +21,9 @@ $hours_format = em_get_hour_format();
 	<span class="em-event-text"><?php _e('Event starts at','events-manager'); ?></span>
 	</div>
 	<div class="components-panel__row">
-	<input class="em-time-start" type="time" name="event_start_time" value="<?php echo $EM_Event->start()->format($hours_format); ?>" />
+	<input class="em-time-start" type="time" name="event_start_time" value="<?php echo $EM_Event->start()->format("H:i"); ?>" />
 	<label class="components-base-control__label"><?php _e('to','events-manager'); ?></label>
-	<input class="em-time-end" type="time" name="event_end_time" value="<?php echo $EM_Event->end()->format($hours_format); ?>" />
+	<input class="em-time-end" type="time" name="event_end_time" value="<?php echo $EM_Event->end()->format("H:i"); ?>" />
 	</div>
 	<div class="components-panel__row">
 	<?php _e('All day','events-manager'); ?> <input type="checkbox" class="em-time-all-day" name="event_all_day" value="1" <?php if(!empty($EM_Event->event_all_day)) echo 'checked="checked"'; ?> />
