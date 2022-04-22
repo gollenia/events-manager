@@ -5,17 +5,11 @@ class EM_Emails_Admin {
         add_action('em_options_page_footer_emails', 'EM_Emails_Admin::reminder_options');
         add_action('em_options_page_footer_emails', 'EM_Emails_Admin::custom_email_options');
 	    add_action('em_options_page_booking_email_templates_options_subtop', 'EM_Emails_Admin::ical_attachment_bookings');
-	    add_action('em_options_page_multiple_booking_email_templates_options_subtop', 'EM_Emails_Admin::ical_attachment_multiple_bookings');
     }
     
     public static function ical_attachment_bookings(){
 	    em_options_radio_binary ( esc_html__( 'Add iCal invite?', 'events-manager-pro'), 'dbem_bookings_ical_attachments', esc_html__( 'You can choose to add ical attachments to your booking emails, which display event information in email clients such as gmail and outlook allowing for easy adding to calendars.', 'events-manager-pro') );
     }
-	
-	public static function ical_attachment_multiple_bookings(){
-    	$extra_message = esc_html__('Note that for bookings with multiple events, some clients such as Gmail will only show the first event (this is a limitation in their parsing of ical), however the ical file can be downloaded and added to calendar clients for all the events.', 'events-manager-pro');
-		em_options_radio_binary ( esc_html__( 'Add iCal invite?', 'events-manager-pro'), 'dbem_multiple_bookings_ical_attachments', __( 'You can choose to add ical attachments to your booking emails, which display event information in email clients such as gmail and outlook allowing for easy adding to calendars.', 'events-manager-pro') .' '. $extra_message );
-	}
 	
     /*
      * --------------------------------------------
