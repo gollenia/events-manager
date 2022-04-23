@@ -80,7 +80,7 @@ function Upcoming(props) {
 			excludeCurrent ? `exclude=${window.eventBlocksLocalization?.current_id}` : false,
 		].filter(Boolean).join("&");
 		
-		apiFetch( { url: getUrl() } ).then( ( posts ) => {
+		apiFetch( { url: getUrl(params) } ).then( ( posts ) => {
 			setEvents(posts)
 			
 			let categories = {};
