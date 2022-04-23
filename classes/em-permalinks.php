@@ -110,6 +110,7 @@ if( !class_exists('EM_Permalinks') ){
 							$taxonomy_slug = urldecode(preg_replace('/\/$/', '', str_replace( trailingslashit(home_url()), '', get_permalink($taxonomy_page_id)) ));
 							$taxonomy_slug = ( !empty($taxonomy_slug) ) ? trailingslashit($taxonomy_slug) : $taxonomy_slug;
 							$em_rules[trim($taxonomy_slug,'/').'/?$'] = 'index.php?pagename='.trim($taxonomy_slug,'/') ;
+					}
 					
 				}
 			}
