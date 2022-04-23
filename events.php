@@ -90,12 +90,12 @@ require_once('classes/em-category.php');
 require_once('classes/em-categories.php');
 require_once('classes/em-categories-frontend.php');
 require_once('classes/Events/Event.php');
-require_once('classes/event-locations/em-event-locations.php');
+require_once('classes/Locations/EventLocations.php');
 require_once('classes/Events/EventPost.php');
 require_once('classes/Events/Events.php');
-require_once('classes/em-location.php');
-require_once('classes/em-location-post.php');
-require_once('classes/em-locations.php');
+require_once('classes/Locations/Location.php');
+require_once('classes/Locations/LocationPost.php');
+require_once('classes/Locations/Locations.php');
 require_once("classes/em-mailer.php") ;
 require_once('classes/em-notices.php');
 require_once('classes/em-people.php');
@@ -122,8 +122,8 @@ if( is_admin() ){
 	//post/taxonomy controllers
 	require_once('classes/Events/EventPostAdmin.php');
 	require_once('classes/Events/EventPostsAdmin.php');
-	require_once('classes/em-location-post-admin.php');
-	require_once('classes/em-location-posts-admin.php');
+	require_once('classes/Locations/LocationPostAdmin.php');
+	require_once('classes/Locations/LocationPostsAdmin.php');
 	require_once('classes/em-taxonomy-admin.php');
 	require_once('classes/em-categories-admin.php');
 	require_once('classes/em-tags-admin.php');

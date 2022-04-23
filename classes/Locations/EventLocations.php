@@ -64,4 +64,4 @@ class Event_Locations {
 	}
 	
 }
-require('em-event-location.php');
+require('EventLocation.php');
