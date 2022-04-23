@@ -79,8 +79,8 @@ function Upcoming(props) {
 			selectedLocation ? `location=${selectedLocation}` : false,
 			excludeCurrent ? `exclude=${window.eventBlocksLocalization?.current_id}` : false,
 		].filter(Boolean).join("&");
-		console.log(getUrl(params))
-		apiFetch( { path: getUrl(params) } ).then( ( posts ) => {
+		
+		apiFetch( { url: getUrl() } ).then( ( posts ) => {
 			setEvents(posts)
 			
 			let categories = {};
