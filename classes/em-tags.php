@@ -65,6 +65,6 @@ class EM_Tags extends EM_Taxonomy_Terms {
 	
 	public static function get_default_search( $array_or_defaults = array(), $array = array() ){
 		self::$instance = new EM_Tags();
-		return parent::get_default_search($defaults,$array);
+		return parent::get_default_search($array_or_defaults,$array);
 	}
 }
