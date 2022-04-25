@@ -11,6 +11,11 @@ class PriceFormatter {
 	public string $currency;
 	private NumberFormatter $fmt;
 	
+	/**
+	 * Construct a price object
+	 *
+	 * @param [type] $price
+	 */
 	public function __construct($price) {
 		$this->price = floatval($price);
 
@@ -41,5 +46,10 @@ class PriceFormatter {
 
 	public function is_free() {
 		return $this->price === 0.0;
+	}
+
+	public static function format($price) {
+		$price = new PriceFormatter($price);
+		return $price->format;
 	}
 }
