@@ -12,7 +12,7 @@ class Assets {
     public static function init() {
 		$instance = new self;
 		if( !is_admin()) add_action('wp_enqueue_scripts', [$instance, 'frontend_script']);
-		add_action('admin_init', [$instance, 'backend_script']);
+		add_action('admin_enqueue_scripts', [$instance, 'backend_script']);
 		return $instance;
     }
 
@@ -37,12 +37,13 @@ class Assets {
 			'locale' => str_replace('_', '-',get_locale()),
 			'rest_url' => get_rest_url(null, 'events/v2/events'),
 			'current_id' => get_the_ID(),
+			'post_type' => self::get_post_type()
 		]);
 	}
 
 	public function backend_script() {
 		$dir = __DIR__;
-	
+		
 		$script_asset_path = EM_DIR . "/includes/backend.asset.php";
 		if ( ! file_exists( $script_asset_path ) ) {
 			throw new \Error(
@@ -62,6 +63,8 @@ class Assets {
 		wp_localize_script('events-block-editor', 'eventBlocksLocalization', [
 			'locale' => str_replace('_', '-',get_locale()),
 			'rest_url' => get_rest_url(null, 'events/v2/events'),
+			'current_id' => get_the_ID(),
+			'post_type' => self::get_post_type()
 		]);
 		
 		$editor_css = '../includes/backend.css';
@@ -74,5 +77,20 @@ class Assets {
 		);
 	}
 
-   
+	public static function get_post_type () {
+
+		if(get_post_type()) return get_post_type();
+
+		if ( isset( $_REQUEST['post_type'] ) && post_type_exists( $_REQUEST['post_type'] ) ) {
+			return $_REQUEST['post_type'];
+		};
+
+		if(!function_exists('get_current_screen')) return 'post';
+
+		$screen = get_current_screen();
+		if(isset($screen->post_type)) return $screen->post_type;
+
+		
+		return '';
+	}
 }
