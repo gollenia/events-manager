@@ -19,16 +19,22 @@ const registerBlock = (block) => {
 	registerBlockType( name, settings );
 };
 
+let blocks = [
+	upcoming,
+	featured
+];
+
+if (window.eventBlocksLocalization?.post_type === 'event') {
+	blocks = [...blocks, details, booking];
+}
+
+console.log(blocks);
+console.log(window.eventBlocksLocalization?.post_type);
+
 
 export const registerBlocks = () => {
-	[
-		upcoming,
-		featured,
-		details,
-		booking		
-	].forEach(registerBlock);
+	blocks.forEach(registerBlock);
 };
-
 
 registerBlocks();
 
