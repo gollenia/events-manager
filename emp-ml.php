@@ -7,9 +7,6 @@ class EMP_ML {
     public static function init(){
         //translatable options
         add_filter('em_ml_translatable_options','EMP_ML::em_ml_translatable_options');
-        if( get_option('dbem_multiple_bookings') ){
-   	        add_filter('option_dbem_multiple_bookings_checkout_page','EM_ML_Options::get_translated_page');
-        }
         add_filter('em_ml_admin_settings_pages', 'EMP_ML::em_ml_admin_settings_pages');
     }
     
