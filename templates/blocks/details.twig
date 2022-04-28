@@ -114,7 +114,11 @@
 	{% if event.speaker and showSpeaker %}
 	<div class="description__item">  
 		<div class="description__image">
+			{% if event.speaker.image and speakerIcon == '' %}
 			<img src="{{event.speaker.image.sizes.thumbnail.url}}">
+			{% else %}
+			<i class="description__icon material-icons">{{speakerIcon}}</i>
+			{% endif %}
 		</div>
 		<div class="description__text">
 			<div class="description__title">{{ speakerDescription ? speakerDescription : __("Speaker", "em-pro")}}</div>

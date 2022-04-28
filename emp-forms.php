@@ -416,7 +416,9 @@ class EM_Form extends EM_Object {
 				$values = explode("\r\n",$field['options_selection_values']);
 				foreach($values as $value){ 
 					$value = trim($value); 
-					echo '<input type="checkbox" name="' . $field['name'] . '[]" class="' . $field['fieldid'] . '" value="' . esc_attr($value) . '" ' ((in_array($value, $default)) ? 'checked="checked"' : '') . ($field['required'] ? " required" : "") . ' />' . $value . '<br />';
+					echo '<input type="checkbox" name="' . $field['name'] . '[]" class="' . $field['fieldid'] . '" value="' 
+					. esc_attr($value) . '" ' . ((in_array($value, $default)) ? 'checked="checked"' : '') 
+					. ($field['required'] ? " required" : "") . ' />' . $value . '<br />';
 				}
 				echo "</span>";
 				break;
