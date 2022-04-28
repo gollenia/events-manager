@@ -11,36 +11,22 @@ class EM_Coupons extends EM_Object {
 	        include('coupons-admin.php');
 	    }
 		//add field to booking form and ajax
-		if( get_option('dbem_multiple_bookings') ){ //multiple bookings mode
-		    //add coupon field to checkout page booking form
-			add_action('em_cart_footer', 'EM_Coupons::em_cart_footer');
-			//hook into booking submission to add discount and coupon info
-			add_filter('em_multiple_booking_validate', array('EM_Coupons', 'em_booking_validate'), 10, 2);
-			add_filter('em_multiple_booking_save', array('EM_Coupons', 'em_booking_save'), 10, 2);
-			//ajax to apply coupon
-			add_action('wp_ajax_em_coupon_apply',array('EM_Coupons', 'cart_coupon_apply_ajax'));
-			add_action('wp_ajax_nopriv_em_coupon_apply',array('EM_Coupons', 'cart_coupon_apply_ajax'));
-			//AJAX fallback to apply coupon
-			if( !empty($_REQUEST['action']) && $_REQUEST['action'] == 'em_coupon_apply' && !defined('DOING_AJAX') ){
-				add_action('init', array('EM_Coupons', 'cart_coupon_apply_fallback'), 100);
-			}
-		}else{ //normal mode
-		    //add to any booking form
-			add_action('em_booking_form_footer', array('EM_Coupons', 'em_booking_form_footer'),1,2);
-			//meta box hook for adding coupons to booking info
-			add_filter('em_event_get_post_meta',array('EM_Coupons', 'em_event_get_post_meta'),10,2);
-			add_filter('em_event_save_meta',array('EM_Coupons', 'em_event_save_meta'),10,2);
-			add_filter('em_event_save_events',array('EM_Coupons', 'em_event_save_events'),10,3);
-			add_filter('em_event_delete_meta',array('EM_Coupons', 'em_event_delete_meta'),10,2);
-			add_action('rest_api_init', ['EM_Coupons', 'register_rest_route']);
-			//hook into booking submission to add discount and coupon info
-			add_filter('em_booking_get_post', array('EM_Coupons', 'em_booking_get_post'), 10, 2);
-			add_filter('em_booking_validate', array('EM_Coupons', 'em_booking_validate'), 10, 2);
-			add_filter('em_booking_save', array('EM_Coupons', 'em_booking_save'), 10, 2);
-			//add ajax response for coupon code queries
-			add_action('wp_ajax_em_coupon_check',array('EM_Coupons', 'coupon_check_ajax'));
-			add_action('wp_ajax_nopriv_em_coupon_check',array('EM_Coupons', 'coupon_check_ajax'));
-		}
+		
+		add_action('em_booking_form_footer', array('EM_Coupons', 'em_booking_form_footer'),1,2);
+		//meta box hook for adding coupons to booking info
+		add_filter('em_event_get_post_meta',array('EM_Coupons', 'em_event_get_post_meta'),10,2);
+		add_filter('em_event_save_meta',array('EM_Coupons', 'em_event_save_meta'),10,2);
+		add_filter('em_event_save_events',array('EM_Coupons', 'em_event_save_events'),10,3);
+		add_filter('em_event_delete_meta',array('EM_Coupons', 'em_event_delete_meta'),10,2);
+		add_action('rest_api_init', ['EM_Coupons', 'register_rest_route']);
+		//hook into booking submission to add discount and coupon info
+		add_filter('em_booking_get_post', array('EM_Coupons', 'em_booking_get_post'), 10, 2);
+		add_filter('em_booking_validate', array('EM_Coupons', 'em_booking_validate'), 10, 2);
+		add_filter('em_booking_save', array('EM_Coupons', 'em_booking_save'), 10, 2);
+		//add ajax response for coupon code queries
+		add_action('wp_ajax_em_coupon_check',array('EM_Coupons', 'coupon_check_ajax'));
+		add_action('wp_ajax_nopriv_em_coupon_check',array('EM_Coupons', 'coupon_check_ajax'));
+		
 		//deal with bookings that have coupons when they get deleted or cancelled
 		add_filter('em_booking_delete', array('EM_Coupons','em_booking_delete'), 10, 2);
 		add_filter('em_booking_set_status', array('EM_Coupons','em_booking_set_status'), 10, 2);
@@ -265,9 +251,15 @@ class EM_Coupons extends EM_Object {
 	}
 
 	public static function register_rest_route() {
-		register_rest_route('events-manager/v2', '/check_coupon', ['method' => 'GET', 'callback' => ['EM_Coupons', 'coupon_validate'], 'permission_callback' => fn() => true ]);
+		register_rest_route('events/v2', '/check_coupon', ['method' => 'GET', 'callback' => ['EM_Coupons', 'coupon_validate'], 'permission_callback' => fn() => true ]);
 	}
 
+	/**
+	 * Return a restful response with a coupon validation result
+	 *
+	 * @param WP_Request $request
+	 * @return array $response
+	 */
 	public static function coupon_validate($request){
 		
 		$result = [
@@ -629,11 +621,7 @@ class EM_Coupons extends EM_Object {
 	 */
 	
 	public static function em_bookings_table_cols_template($template){
-		if( get_option('dbem_multiple_bookings') ){
-			$template['coupon'] = '[MB] ' . __('Coupon Code','em-pro');
-		}else{
-			$template['coupon'] = __('Coupon Code','em-pro');
-		}
+		$template['coupon'] = __('Coupon Code','em-pro');
 		return $template;
 	}
 	
@@ -662,7 +650,7 @@ class EM_Coupons extends EM_Object {
             global $wpdb;
             $conditions['code'] = $wpdb->prepare("coupon_code = '%s'", array($args['code']));
         }
-		if( !empty($args['event']) && is_numeric($args['event']) && !get_option('dbem_multiple_bookings') ){ //if in MB mode, there are not event-specific coupons atm
+		if( !empty($args['event']) && is_numeric($args['event']) ){ //if in MB mode, there are not event-specific coupons atm
 			$conditions['event'] = "coupon_id IN (SELECT meta_value FROM ".EM_META_TABLE." WHERE object_id='{$args['event']}' AND meta_key='event-coupon')";
 			//search event-wide coupons by default
 			if( !empty($args['eventwide']) ){
@@ -687,9 +675,7 @@ class EM_Coupons extends EM_Object {
 			$conditions['event'] = '('.$conditions['event'].')';
 		}else{
 			//blog ownership
-			
-			//if in MB mode, every coupon is considered sitewide.
-            if( !get_option('dbem_multiple_bookings') ){ 
+
     			//owner lookup
     			if( !empty($args['owner']) && is_numeric($args['owner'])){
     				$conditions['owner'] = "coupon_owner=".$args['owner'];
@@ -734,12 +720,7 @@ class EM_Coupons extends EM_Object {
 						$conditions['sitewide'] = "coupon_sitewide=0";
 					}
 				}
-			}else{
-				//in Multiple Bookings Mode, coupon ownership is currently ignored for most purposes, but in admin area, we'll restrict just coupons
-				if( is_admin() && !empty($_GET['page']) && $_GET['page'] == 'events-manager-coupons' && !empty($args['owner']) && is_numeric($args['owner']) && current_user_can('manage_others_bookings') ){
-					$conditions['owner'] = "coupon_owner=".$args['owner'];
-				}
-			}
+			
 		}
 		return apply_filters( 'em_coupons_build_sql_conditions', $conditions, $args );
 	}

@@ -27,17 +27,8 @@ class EM_Custom_Emails_Admin_ML{
 		        $default_emails[$gateway]['title'] = "[$language] ". $original_default_emails[$gateway]['title'];
 		        $default_emails[$gateway]['text'] = '<p>'. sprintf(__('These settings are applied when making a booking on %s languge pages. The email template settings here will override those for the default language.','em-pro'),$language).'</p>';
 		        //modify MB titles too
-		        if( get_option('dbem_multiple_bookings') ){
-        			//duplicate default emails array and give them different keys
-        			$default_emails = EM_Custom_Emails_Admin::add_gateway_mb_default_emails($default_emails, $EM_Gateway);
-		            $default_emails[$gateway.'-mb']['title'] = "[$language] ". $original_default_emails[$gateway.'-mb']['title'];
-        			//get default mb values and merge them into email values
-		            $mb_default_email_values = EM_Custom_Emails_Admin::get_default_email_values($EM_Gateway, true);
-            		//get custom values if applicable
-            		$mb_email_values = EM_Custom_Emails_Admin::merge_gateway_default_values($gateway, $mb_default_email_values, $gateway_email_values);
-        			//merge them all together
-            		$email_values = array_merge($email_values, $mb_email_values); 
-		        }
+		        
+
 		        //output an editor form for this language
 		        EM_Custom_Emails_Admin::emails_editor($email_values, $default_emails, $admin_emails, 'em_custom_email_'.$lang);
 	        }
@@ -50,9 +41,6 @@ class EM_Custom_Emails_Admin_ML{
 	    $custom_booking_emails_ml = array();
 	    foreach( EM_ML::$langs as $lang => $language ){
 	        if( EM_ML::$wplang != $lang ){
-        		if( get_option('dbem_multiple_bookings') ){
-        		    $default_emails = EM_Custom_Emails_Admin::add_gateway_mb_default_emails($default_emails, $EM_Gateway);
-        		}
 	            $custom_booking_emails_ml[$lang] = EM_Custom_Emails_Admin::editor_get_post( $default_emails, 'em_custom_email_'.$lang);
 	        }
 	    }

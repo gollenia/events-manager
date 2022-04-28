@@ -308,22 +308,7 @@ class EM_Custom_Emails_Admin {
 		$default_emails[$gateway]['text'] .= __('Additionally, you can also override these emails at an event level when editing an event. Should you choose not to, any overriden emails on this page will be considered the default email for this gateway.','em-pro') .'</p>';
 		$default_emails[$gateway]['text'] .= '<p>'. __('Note that some gateways do not automatically send pending or confirmed emails, in these cases they may only apply to when event admins manually change the status of a booking resulting in an automated email getting sent.','em-pro').'</p>';
 		$default_emails[$gateway]['text'] .= '<p>'. __('Click on the title texts with a plus (+) next to them to reveal further options, and the minus (-) sign to hide them.','em-pro').'</p>';
-		if( get_option('dbem_multiple_bookings') ){
-			$default_emails[$gateway]['text'] =  '<p><strong>'.__('Important:','em-pro').'</strong> '. __('You are in Multiple Booking Mode. These emails will only be used when individually modifying bookings which trigger these individual event booking emails.','em-pro') .'</p>'. $default_emails[$gateway]['text'];
-			//duplicate default emails array and give them different keys
-			$default_emails = self::add_gateway_mb_default_emails($default_emails, $EM_Gateway);
-			//alter texts
-			$default_emails[$gateway.'-mb']['title'] = __('Multiple Booking Email Templates','em-pro');
-			$default_emails[$gateway.'-mb']['text'] = '<p>'. sprintf(__('Below you can modify the emails that are sent when bookings are made. This will override the default emails located in your %s settings page.','em-pro'), '<a href="'.admin_url('edit.php?post_type=event&page=events-manager-options#emails:multiple-booking-emails').'">'.__('Multiple Booking Email Templates','em-pro').'</a>');
-			$default_emails[$gateway.'-mb']['text'] .= '<p>'. __('Note that some gateways do not automatically send pending or confirmed emails, in these cases they may only apply to when event admins manually change the status of a booking resulting in an automated email getting sent.','em-pro').'</p>';
-			$default_emails[$gateway.'-mb']['text'] .= '<p>'. __('Click on the title texts with a plus (+) next to them to reveal further options, and the minus (-) sign to hide them.','em-pro').'</p>';		
-			//get default mb values and merge them into email values
-			$mb_default_email_values = self::get_default_email_values($EM_Gateway, true);
-    		//get custom values if applicable
-    		$mb_email_values = self::merge_gateway_default_values($gateway, $mb_default_email_values, $gateway_email_values);
-			//merge them all together
-    		$email_values = array_merge($email_values, $mb_email_values);
-		}
+		
 		self::emails_editor($email_values, $default_emails, $admin_emails);
 		do_action('after_gatweay_custom_emails', $EM_Gateway, $email_values, $default_emails, $default_email_values, $admin_emails);
 	}
@@ -345,9 +330,7 @@ class EM_Custom_Emails_Admin {
 	public static function em_gateway_update( $EM_Gateway ){
 		//update templates
 		$default_emails = self::get_gateway_default_emails($EM_Gateway);
-		if( get_option('dbem_multiple_bookings') ){
-		    $default_emails = self::add_gateway_mb_default_emails($default_emails, $EM_Gateway);
-		}
+		
 		$custom_booking_emails = self::editor_get_post( $default_emails );
 		$EM_Gateway->update_option('emails', serialize($custom_booking_emails));
 		//update admin email addresses
@@ -476,12 +459,7 @@ class EM_Custom_Emails_Admin {
 		if( get_option('dbem_custom_emails_events_admins')){
 			$custom_admin_emails = EM_Custom_Emails::get_event_admin_emails($EM_Event);
 		}
-		if( get_option('dbem_multiple_bookings') ){
-			//warn users that these emails only apply when resending emails in multipl bookings mode
-			echo '<p class="em-event-custom-emails-multiple-bookings-warning" style="font-style:italic; font-weight:bold;">';
-			echo sprintf(esc_html__('Since %s is enabled, these emails will only be sent when individual bookings are modified afterwards, such as changing the status of the booking individually or resending an email.','em-pro'), esc_html__('Multiple Bookings Mode','em-pro'));
-			echo '</p>';
-		}
+		
 		echo '<p>'. sprintf(__('Below you can modify the emails that are sent when bookings are made. This will override the default emails located in your %s settings page.','em-pro'), '<a href="'.admin_url('edit.php?post_type=event&page=events-manager-options#emails:booking-emails').'">'.esc_html('Booking Email Templates','events-manager').'</a>');
 		if( get_option('dbem_custom_emails_gateways') ){
 			echo '<p>'. sprintf(__('You can also create default emails for specific gateways in your individual %s settings page.','em-pro'), '<a href="'.admin_url('edit.php?post_type=event&page=events-manager-gateways').'">'.__('Gateway Settings','em-pro').'</a>');

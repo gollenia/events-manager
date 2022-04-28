@@ -128,18 +128,12 @@ class EM_Gateways_Admin{
 										<strong><a title="Edit <?php echo esc_attr($gateway); ?>" href="<?php echo EM_ADMIN_URL; ?>&amp;page=<?php echo $page; ?>&amp;action=edit&amp;gateway=<?php echo $key; ?>" class="row-title"><?php echo esc_html($gateway); ?></a></strong>
 										<?php
 											//Check if Multi-Booking Ready
-											if( get_option('dbem_multiple_bookings') && !$EM_Gateway->supports_multiple_bookings ){
-												echo '<br/><em>'. __('This gateway cannot be activated because it does not support multiple bookings mode.','em-pro') . '</em>';
-											}
+											
 											$actions = array();
 											$actions['edit'] = "<span class='edit'><a href='".EM_ADMIN_URL."&amp;page=" . $page . "&amp;action=edit&amp;gateway=" . $key . "'>" . __('Settings') . "</a></span>";
 
 											if(array_key_exists($key, $active)) {
 												$actions['toggle'] = "<span class='edit activate'><a href='" . wp_nonce_url(EM_ADMIN_URL."&amp;page=" . $page. "&amp;action=deactivate&amp;gateway=" . $key . "", 'toggle-gateway_' . $key) . "'>" . __('Deactivate') . "</a></span>";
-											} else {
-												if( !get_option('dbem_multiple_bookings') || ( get_option('dbem_multiple_bookings') && $EM_Gateway->supports_multiple_bookings ) ){
-													$actions['toggle'] = "<span class='edit deactivate'><a href='" . wp_nonce_url(EM_ADMIN_URL."&amp;page=" . $page. "&amp;action=activate&amp;gateway=" . $key . "", 'toggle-gateway_' . $key) . "'>" . __('Activate') . "</a></span>";
-												}
 											}
 										?>
 										<br><div class="row-actions"><?php echo implode(" | ", $actions); ?></div>

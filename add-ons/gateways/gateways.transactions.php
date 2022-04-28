@@ -336,10 +336,7 @@ class EM_Gateways_Transactions{
 		}elseif( is_object($context) && get_class($context)=="EM_Event" && $context->can_manage('manage_bookings','manage_others_bookings') ){
 			$join = " JOIN $table ON $table.booking_id=tx.booking_id";
 			$booking_condition = "event_id = ".$context->event_id;
-			if( get_option('dbem_multiple_bookings') && $context->can_manage('manage_others_bookings') ){
-				//in MB mode, if the user can manage others bookings, they can view information about the transaction for a group of bookings
-				$booking_condition = "( $booking_condition OR tx.booking_id IN (SELECT booking_main_id FROM ".EM_BOOKINGS_RELATIONSHIPS_TABLE." WHERE event_id={$context->event_id}))";
-			}
+			
 			$conditions[] = $booking_condition;		
 		}elseif( is_object($context) && get_class($context)=="EM_Person" ){
 			$join = " JOIN $table ON $table.booking_id=tx.booking_id";
@@ -402,11 +399,7 @@ class EM_Gateways_Transactions{
 	}
 	
 	function em_bookings_table_cols_template($template, $EM_Bookings_Table){
-		if( get_option('dbem_multiple_bookings') ){
-			$template['gateway_txn_id'] = '[MB] '. __('Transaction ID','em-pro');
-		}else{
-			$template['gateway_txn_id'] = __('Transaction ID','em-pro');
-		}
+		$template['gateway_txn_id'] = __('Transaction ID','em-pro');
 		$template['payment_total'] = __('Total Paid','em-pro');
 		return $template;
 	}

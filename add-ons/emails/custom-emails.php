@@ -12,11 +12,7 @@ class EM_Custom_Emails{
 			    //hook into admin emails for gateway-specific extra admin addresses
 				add_filter('em_booking_admin_emails','EM_Custom_Emails::gateway_admin_emails', 100, 2);
 			}
-			//multiple bookings
-			if( get_option('dbem_multiple_bookings') ){
-			    add_filter('em_custom_emails_gateway_groups', 'EM_Custom_Emails::em_custom_emails_gateway_groups',10,3);
-			    add_filter('em_multiple_booking_email_messages', 'EM_Custom_Emails::gateway_email_messages',100,2);
-			}
+			
 		}
 		//hooks for event-specific emails, which override gateway-spefic ones
 		if( get_option('dbem_custom_emails_events') ){

@@ -358,9 +358,6 @@ class EM_Gateway {
 	function handle_return_url(){
 		if( !empty($_GET['payment_complete']) && $_GET['payment_complete'] == $this->gateway ){
 			//add actions for each page where a thank you might appear by default
-			if( get_option('dbem_multiple_bookings') ){
-				add_filter('pre_option_dbem_multiple_bookings_feedback_no_bookings', array(&$this, 'get_thank_you_message') );
-			}
 			add_action('em_template_my_bookings_header', array(&$this, 'thank_you_message'));
 			add_action('em_booking_form_top', array(&$this, 'thank_you_message'));
 		}
@@ -562,11 +559,9 @@ class EM_Gateway {
 	function is_active() {
 		$active = get_option('em_payment_gateways', array());
 		$is_active = array_key_exists($this->gateway, $active);
-		if( get_option('dbem_multiple_bookings') ){
-			return $is_active && $this->supports_multiple_bookings;
-		}else{
-			return $is_active;			
-		}
+		
+		return $is_active;			
+		
 	}
 
 	/**

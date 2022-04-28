@@ -25,15 +25,9 @@ class EM_Booking_Form {
 		//Booking interception
 		$booking_button_request = !empty($_REQUEST['action']) && $_REQUEST['action'] == 'booking_add_one' && is_user_logged_in(); //in order to disable the form if booking button is pressed
 		if( !$booking_button_request ){
-			if( get_option('dbem_multiple_bookings') ){
-				//Mulitiple Booking Mode
-				add_filter('em_multiple_booking_get_post', array('EM_Booking_Form', 'em_booking_get_post'), 10, 2); //get post data + validate
-				add_filter('em_multiple_booking_validate', array('EM_Booking_Form', 'em_booking_validate'), 10, 2); //validate object
-			    add_filter('em_multiple_booking_save', array('EM_Booking_Form', 'em_booking_save'), 1, 2); //add new user fields to current EM_Person instance for use on this run
-			}else{
-			    //Normal bookings
-			    add_filter('em_booking_save', array('EM_Booking_Form', 'em_booking_save'), 1, 2); //add new user fields to current EM_Person instance for use on this run
-			}
+			
+			add_filter('em_booking_save', array('EM_Booking_Form', 'em_booking_save'), 1, 2); //add new user fields to current EM_Person instance for use on this run
+			
 			add_filter('em_booking_get_post', array('EM_Booking_Form', 'em_booking_get_post'), 10, 2); //get post data + validate
 			add_filter('em_booking_validate', array('EM_Booking_Form', 'em_booking_validate'), 10, 2); //validate object
 			add_action('em_bookings_added', array('EM_Booking_Form', 'em_bookings_added'), 10, 1); //add extra use reg data
@@ -74,8 +68,6 @@ class EM_Booking_Form {
 	 * @param EM_Booking $EM_Booking
 	 */
 	public static function get_form( $EM_Event = false, $custom_form_id = false ){
-	    //special lookup for multiple bookings
-	    if( is_object($custom_form_id) && get_class($custom_form_id) == 'EM_Multiple_Booking' ){ $custom_form_id = get_option('dbem_multiple_bookings_form'); }
 	    //make sure we don't need to get another form rather than the one already stored in this object
 	    $reload = (is_numeric($EM_Event) && $EM_Event != self::$event_id) || ( !empty($EM_Event->event_id) && $EM_Event->event_id != self::$event_id ) || ( empty($EM_Event) && $custom_form_id && $custom_form_id != self::$form_id );
 	    //get the right form

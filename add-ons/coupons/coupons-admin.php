@@ -40,7 +40,7 @@ class EM_Coupons_Admin {
 		
 		<?php
 		//show coupons that aren't event-wide or site-wide, if not in MB mode
-		if( !get_option('dbem_multiple_bookings') && current_user_can(EM_Coupons::$can_manage) ){ 
+		if( current_user_can(EM_Coupons::$can_manage) ){ 
         //not in multiple bookings mode and can create their own coupons 
         ?>
 		
@@ -344,8 +344,8 @@ class EM_Coupons_Admin {
 								<td><a href="<?php echo EM_ADMIN_URL; ?>&amp;page=events-manager-bookings&amp;person_id=<?php echo $EM_Booking->person_id; ?>"><?php echo $EM_Booking->person->get_name() ?></a></td>
 								<td><?php echo $EM_Booking->get_spaces() ?></td>
 								<td><?php echo $EM_Booking->get_price_post_taxes(true, false); ?></td>
-								<td><?php echo em_get_currency_formatted($EM_Coupon->get_discount($base_price)); ?> <em>(<?php echo $EM_Coupon->get_discount_text(); ?>)</em></td>
-								<td><?php echo em_get_currency_formatted($EM_Booking->get_price()); ?></td>
+								<td><?php echo \Contexis\Events\Intl\PriceFormatter::format($EM_Coupon->get_discount($base_price)); ?> <em>(<?php echo $EM_Coupon->get_discount_text(); ?>)</em></td>
+								<td><?php echo \Contexis\Events\Intl\PriceFormatter::format($EM_Booking->get_price()); ?></td>
 								<td>										
 									<?php
 									$edit_url = em_add_get_params($EM_Booking->get_admin_url());
@@ -390,7 +390,6 @@ class EM_Coupons_Admin {
 				<input type='hidden' name='coupon_id' value='<?php echo $EM_Coupon->coupon_id ?>'/>
 				<table class="form-table">
 					<tbody>
-					<?php if( !get_option('dbem_multiple_bookings') ): ?>
     					<tr valign="top">
     						<th scope="row"><?php _e('Coupon Availability', 'em-pro') ?></th>
     						<td>
@@ -405,9 +404,6 @@ class EM_Coupons_Admin {
     							<em><?php _e('Choose whether to allow this coupon to be used only on events you choose, all your events or all events on this site.','em-pro'); ?></em>
     						</td>
     					</tr>
-					<?php else: ?>
-					   <tr><td colspan="2"><p><?php _e('This coupon will be available for all bookings made and discount is applied to the total price before checking out.','em-pro'); ?></p>
-					<?php endif; ?>
 					<tr valign="top">
 						<th scope="row"><?php _e('Registered Users Only?', 'em-pro') ?></th>
 							<td><input type="checkbox" name="coupon_private" value="1" <?php if($EM_Coupon->coupon_private) echo 'checked="checked"'; ?> />

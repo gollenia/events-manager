@@ -19,23 +19,17 @@ class EM_Gateways {
 		add_filter('em_bookings_table_rows_col', array('EM_Gateways','em_bookings_table_rows_col'),10,5);
 		add_filter('em_bookings_table_cols_template', array('EM_Gateways','em_bookings_table_cols_template'),10,2);
 		//Booking interception
-		if( get_option('dbem_multiple_bookings') && empty($_REQUEST['manual_booking']) ){
-		    //Multiple bookings mode (and not doing a manual booking)
-			add_action('em_multiple_booking_add', array('EM_Gateways', 'em_booking_add'), 10, 3);
-			add_filter('em_multiple_booking_get_post',array('EM_Gateways', 'em_booking_get_post'), 10, 2);
-			add_filter('em_action_emp_checkout', array('EM_Gateways','em_action_booking_add'),10,2); //adds gateway var to feedback
-			//Booking Form Modifications
-		}else{
-		    //Normal Bookings mode, or manual booking
-			add_action('em_booking_add', array('EM_Gateways', 'em_booking_add'), 10, 3);
-			add_filter('em_booking_get_post',array('EM_Gateways', 'em_booking_get_post'), 10, 2);
-			add_filter('em_action_booking_add', array('EM_Gateways','em_action_booking_add'),10,2); //adds gateway var to feedback
-			//Booking Form Modifications
-				//buttons only way, oudated but still possible, will eventually depreciated this once an API is out, so use the latter pls
-				add_filter('em_booking_form_buttons', array('EM_Gateways','booking_form_buttons'),10,2); //Replace button with booking buttons
-				//new way, with payment selector
-				add_action('em_booking_form_footer', array('EM_Gateways','event_booking_form_footer'),10,2);
-		}
+		
+		//Normal Bookings mode, or manual booking
+		add_action('em_booking_add', array('EM_Gateways', 'em_booking_add'), 10, 3);
+		add_filter('em_booking_get_post',array('EM_Gateways', 'em_booking_get_post'), 10, 2);
+		add_filter('em_action_booking_add', array('EM_Gateways','em_action_booking_add'),10,2); //adds gateway var to feedback
+		//Booking Form Modifications
+		//buttons only way, oudated but still possible, will eventually depreciated this once an API is out, so use the latter pls
+		add_filter('em_booking_form_buttons', array('EM_Gateways','booking_form_buttons'),10,2); //Replace button with booking buttons
+		//new way, with payment selector
+		add_action('em_booking_form_footer', array('EM_Gateways','event_booking_form_footer'),10,2);
+	
 		//booking gateways JS
 		add_action('em_booking_js', array('EM_Gateways','em_booking_js'));
 		//Gateways and user fields
@@ -108,7 +102,7 @@ class EM_Gateways {
 		return $gateways;
 	}
 
-	static function get_gateways_rest() {
+	static function get_rest() {
 		global $EM_Gateways;
 		$gateways = array();
 		foreach($EM_Gateways as $EM_Gateway){
@@ -169,9 +163,7 @@ class EM_Gateways {
 	    if( !empty($_REQUEST['manual_booking']) && wp_verify_nonce($_REQUEST['manual_booking'], 'em_manual_booking_'.$_REQUEST['event_id']) ){
 	    	return $result;
 	    }
-	    if( get_option('dbem_multiple_bookings') && get_class($EM_Booking) == 'EM_Booking' ){ //we only deal with the EM_Multiple_Booking class if we're in multi booking mode
-	        return $result;	        
-	    }
+	 
 	    if( empty($EM_Booking->booking_id) && (empty($_REQUEST['gateway']) || !array_key_exists($_REQUEST['gateway'], self::active_gateways())) && $EM_Booking->get_price() > 0 && count(EM_Gateways::active_gateways()) > 0 ){
 	        //spammer or hacker trying to get around no gateway selection
 	    	$error = __('Choice of payment method not recognized. If you are seeing this error and selecting a method of payment, we apologize for the inconvenience. Please contact us and we\'ll help you make a booking as soon as possible.','em-pro');
