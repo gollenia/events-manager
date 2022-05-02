@@ -58,7 +58,7 @@
 				
 			<?php
 			if ( empty($EM_Events) ) {
-				echo get_option ( 'dbem_no_events_message' );
+				echo __('No events found','events-manager');
 			} else {
 			?>
 					

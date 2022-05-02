@@ -33,7 +33,7 @@ echo '<?xml version="1.0" encoding="UTF-8" ?>'."\n";
 				$event_url = $EM_Event->output('#_EVENTURL');
 				?>
 				<item>
-					<title><?php echo $EM_Event->output( get_option('dbem_rss_title_format'), "rss" ); ?></title>
+					<title><?php echo $EM_Event->output( "#_EVENTNAME" ); ?></title>
 					<link><?php echo $event_url; ?></link>
 					<guid><?php echo $event_url; ?></guid>
 					<pubDate><?php echo $EM_Event->start(true)->format('D, d M Y H:i:s +0000'); ?></pubDate>
