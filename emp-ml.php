@@ -20,13 +20,11 @@ class EMP_ML {
      * @return array:
      */
     public static function em_ml_translatable_options( $options ){
-        $options[] = 'dbem_emp_booking_form_error_required';
 		//email reminders
 		$options[] = 'dbem_emp_emails_reminder_subject';
 		$options[] = 'dbem_emp_emails_reminder_body';
         
 		//payment gateway options (pro, move out asap)
-		$options[] = 'dbem_gateway_label';
         //gateway translateable options
         if( get_option('dbem_rsvp_enabled') ){ 
 			foreach ( EM_Gateways::gateways_list() as $gateway => $gateway_name ){
