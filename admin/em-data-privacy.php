@@ -518,14 +518,4 @@ class EM_Data_Privacy {
 
 	}
 }
-EM_Data_Privacy::init();
-/*
-add_action('admin_init', function(){
-	$data = EM_Data_Privacy::exporter('subscriber@netweblogic.com');
-	echo "<table>";
-	foreach( $data['data'] as $items ){
-		foreach($items['data'] as $item) echo "<tr><th>{$item['name']}</th><td>{$item['value']}</td>";
-	}
-	echo "</table>";
-	die();
-}); //*/
+//EM_Data_Privacy::init();
