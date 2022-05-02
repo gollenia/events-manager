@@ -197,10 +197,6 @@ class EM_Location_Post_Admin{
 		em_locate_template('forms/location/where.php',true);		
 	}
 	
-	public static function meta_box_attributes(){
-		em_locate_template('forms/location/attributes.php',true);
-	}
-	
 	public static function meta_box_anonymous(){
 		global $EM_Location; /* @var EM_Location $EM_Location */
 		?>
