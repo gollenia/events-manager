@@ -82,6 +82,21 @@
 			],
 			"Amount": [
 				"Quantité"
+			],
+			"The request is lasting longer than expected. Please check your Internet connection or try again later.": [
+				"La requête est plus longue que prévu. Veuillez vérifier votre connexion Internet ou réessayer plus tard."
+			],
+			"Your booking is beeing processed.": [
+				"Votre commande est en cours de traitement."
+			],
+			"Please wait": [
+				"Veuillez patienter"
+			],
+			"Registration": [
+				"Inscription"
+			],
+			"Book now": [
+				"Commander"
 			]
 
 		}

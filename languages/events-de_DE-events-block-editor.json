@@ -259,11 +259,35 @@
 			"Warning": [
 				"Warnung"
 			],
-			"This warning is shown, if few or no bookings are available": [
-				"Diese Warnung wird angezeigt, wenn wenige oder kein Plätzen verfügbar sind"
-			],
 			"If applicable, exclude the current event from the list": [
 				"Wenn möglich, den aktuellen Termin aus der Liste auslassen"
+			],
+			"Registration": [
+				"Anmeldung"
+			],
+			"Booking": [
+				"Buchung"
+			],
+			"Add a button that allows the user to book tickets for an event.": [
+				"Fügt einen Button hinzu, der dem Besucher das Buchen von Plätzen für ein Event erlaubt."
+			],
+			"Event Booking": [
+				"Veranstaltungs-Buchung"
+			],
+			"Exclude current event": [
+				"Aktuelle Veranstaltung auslassen"
+			],
+			"Event Details": [
+				"Veranstaltungs-Details"
+			],
+			"Show a list with selected details of the event": [
+				"Zeigt eine Liste mit ausgewählten Details der Veranstaltung"
+			],
+			"This warning is shown, if few or no bookings are available": [
+				"Diese Warnung wird angezeigt, wenn wenige oder keine Plätzen verfügbar sind"
+			],
+			"In this widget, the event datails will be shown. Please save the page for a preview.": [
+				"In diesem Widget werden die Veranstaltungs-Details angezeigt. Bitte veröffentlichen Sie die Seite für eine Vorschau."
 			]
 
 		}
