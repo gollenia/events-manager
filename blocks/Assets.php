@@ -93,4 +93,8 @@ class Assets {
 		
 		return '';
 	}
+
+	public static function output_to_script_tag($output, $variable_name) {
+		return sprintf('<script>%s = %s;</script>', $variable_name, json_encode($output));
+	}
 }
