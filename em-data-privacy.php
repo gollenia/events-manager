@@ -54,7 +54,7 @@ function em_data_privacy_consent_hooks(){
 		}
 		add_action('em_event_get_post_meta', 'em_data_privacy_cpt_get_post', 10, 2);
 		add_action('em_event_validate', 'em_data_privacy_cpt_validate', 10, 2);
-		add_action('em_event_save', 'em_data_privacy_cpt_save', 10, 2);
+		//add_action('em_event_save', 'em_data_privacy_cpt_save', 10, 2);
 	}
 	//LOCATIONS
 	if( get_option('dbem_data_privacy_consent_locations') == 1 || ( get_option('dbem_data_privacy_consent_events') == 2 && !is_user_logged_in() ) ){
