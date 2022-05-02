@@ -87,7 +87,7 @@ function wp_events_plugin_init(){
 	]));
 	
 	$event_post_type_supports = apply_filters('em_cp_event_supports', ['title','editor','excerpt','thumbnail','author']);
-	$event_post_type = apply_filters('em_cpt_event', [	
+	$event_post_type = [	
 		'public' => true,
 		'hierarchical' => false,
 		'show_ui' => true,
@@ -129,7 +129,7 @@ function wp_events_plugin_init(){
 			'parent' => __('Parent Event','events-manager'),
 		],
 		'menu_icon' => 'dashicons-calendar-alt'
-	]);
+	];
 	if ( get_option('dbem_recurrence_enabled') ){
 		$event_recurring_post_type = apply_filters('em_cpt_event_recurring', [	
 			'public' => apply_filters('em_cp_event_recurring_public', false),
@@ -225,12 +225,6 @@ function wp_events_plugin_init(){
 			],
 		]);
 	}
-
-	
-	
-	
-	
-
 	
 	function em_gutenberg_support( $can_edit, $post_type ){
 		$recurrences = $post_type == 'event-recurring' && get_option('dbem_recurrence_enabled');
