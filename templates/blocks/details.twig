@@ -116,6 +116,8 @@
 		<div class="description__image">
 			{% if event.speaker.image and speakerIcon == '' %}
 			<img src="{{event.speaker.image.sizes.thumbnail.url}}">
+			{% elseif speakerIcon == '' %}
+			<i class="description__icon material-icons">male</i>
 			{% else %}
 			<i class="description__icon material-icons">{{speakerIcon}}</i>
 			{% endif %}
