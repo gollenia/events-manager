@@ -15,13 +15,10 @@ class EM_ML_Options {
 				'dbem_events_form_result_success_updated',
 				//privacy policy consent
 				'dbem_data_privacy_consent_text',
-			//FORMATTING TAB
-				//events
 				'dbem_event_list_item_format_header',
 				'dbem_event_list_item_format',
 				'dbem_no_events_message',
-				
-		        //Search Form
+
 				'dbem_search_form_submit',
 				'dbem_search_form_advanced_hide',
 				'dbem_search_form_advanced_show',
@@ -40,66 +37,40 @@ class EM_ML_Options {
 				'dbem_search_form_geo_units_label',
 				'dbem_search_form_dates_label',
 				'dbem_search_form_dates_separator',
-				//Date/Time
-
-				'dbem_event_all_day_message',
-				//Calendar
-
-				//Ical
+				
 				'dbem_ical_description_format',
 				'dbem_ical_real_description_format',
 				'dbem_ical_location_format',				
-				//Locations
-				
 				
 				'dbem_no_locations_message',
 				'dbem_location_event_single_format',
 				'dbem_location_no_event_message',
-				//Categories
+				
 				'dbem_no_categories_message',
-				//Tags
+		
 				'dbem_no_tags_message',
-				//RSS
+		
 				'dbem_rss_main_description',
 				'dbem_rss_main_title',
 				'dbem_rss_title_format',
 				'dbem_rss_description_format',
 
-				
-			//Bookings
-				//Pricing Options
 				'dbem_bookings_currency_thousands_sep',
 				'dbem_bookings_currency_decimal_point',
 				'dbem_bookings_currency_format',
-				//booking feedback messages
-				'dbem_booking_feedback_cancelled',
-				'dbem_booking_warning_cancel',
-				
-
-				
-				
 				'dbem_booking_feedback',
 				'dbem_booking_feedback_pending',
 				'dbem_booking_feedback_full',
 				'dbem_booking_feedback_error',
-				'dbem_booking_feedback_email_exists',
-				'dbem_booking_feedback_log_in',
 				'dbem_booking_feedback_nomail',
-				'dbem_booking_feedback_already_booked',
 				'dbem_booking_feedback_min_space',
-				'dbem_booking_feedback_spaces_limit',
-				'dbem_booking_button_msg_book',
-				'dbem_booking_button_msg_booking',
-				'dbem_booking_button_msg_booked',
 				
 				'dbem_booking_button_msg_error',
 				'dbem_booking_button_msg_full',
 				'dbem_booking_button_msg_closed',
 
-				//booking form options
 				'dbem_bookings_submit_button',
-			//Emails
-				//booking email templates
+			
 				'dbem_bookings_contact_email_pending_subject',
     			'dbem_bookings_contact_email_pending_body',
     			'dbem_bookings_contact_email_confirmed_subject',
