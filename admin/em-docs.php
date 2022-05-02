@@ -179,12 +179,6 @@ function em_docs_init($force_init = false){
 							'#_ATTENDEESPENDINGLIST' => array( 'desc' => 'Shows the list of people with a pending booking for the event.' ),
 							'#_BOOKINGSURL' => array( 'desc' => 'Shows the url to the admin, front-end or buddypress (if activated) bookings management page for this event. Only shown if user is logged in and able to manage bookings.' ),
 							'#_BOOKINGSLINK' => array( 'desc' => 'Shows a link to the admin, front-end or buddypress (if activated) bookings management page for this event. Only shown if user is logged in and able to manage bookings.' ),
-							'#_EVENTPRICERANGE' => array( 'desc' => 'Shows a "maximum - minimum" price range for available tickets at the time of display, or a single price if there is no range. Once bookings are closed this will show a 0 value, if you have enabled \'Show unavailable tickets\' in your booking settings these will be included. Price is formatted according to currency formatting in your settings page.' ),
-							'#_EVENTPRICERANGEALL' => array( 'desc' => 'Like #_EVENTPRICERANGE but shows all tickets price range whether or not bookings or individual tickets are available.' ),
-							'#_EVENTPRICEMIN' => array( 'desc' => 'Shows the lowest available ticket price for this event. Will display a value of 0 if no ticket is available.' ),
-							'#_EVENTPRICEMAX' => array( 'desc' => 'Shows the highest available ticket price for this event. Will display a value of 0 if no ticket is avaialble.' ),
-							'#_EVENTPRICEMINALL' => array( 'desc' => 'Shows the lowest ticket price for this event, whether available or not.' ),
-							'#_EVENTPRICEMAXALL' => array( 'desc' => 'Shows the highest ticket price for this event, whether available or not.' ),
 						)
 					),
 					'Contact Details' => array(
