@@ -142,7 +142,7 @@ require_once('add-ons/export/Export.php');
 
 require_once('emp-forms.php'); //form editor
 		
-require_once('emp-ml.php');
+//require_once('emp-ml.php');
 
 
 //booking-specific features
@@ -259,7 +259,6 @@ class EM_Scripts_and_Styles {
 		    }
 			if( get_option('dbem_rsvp_enabled') ){
 				$em_localized_js['disable_bookings_warning'] = __('Are you sure you want to disable bookings? If you do this and save, you will lose all previous bookings. If you wish to prevent further bookings, reduce the number of spaces available to the amount of bookings you currently have', 'events-manager');
-				$em_localized_js['booking_warning_cancel'] = get_option('dbem_booking_warning_cancel');
 			}
 		}
 		//load admin/public only vars
