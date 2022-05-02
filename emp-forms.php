@@ -4,7 +4,6 @@ class EM_Forms {
 	public static function init(){
 		if( is_admin() ){
 			add_action('em_create_events_submenu',array('EM_Forms', 'admin_menu'),1,1);
-			add_action('em_options_page_footer_bookings',array('EM_Forms', 'admin_options'),10);
 			
 			//specific admin stuff for the editor
 			if( !empty($_REQUEST['page']) && $_REQUEST['page'] == 'events-manager-forms-editor' ){
@@ -34,24 +33,6 @@ class EM_Forms {
 		<?php
 	}
 	
-	public static function admin_options(){
-		global $save_button;
-		if( current_user_can('list_users') ){
-		?>
-			<div  class="postbox " id="em-opt-pro-booking-form-options" >
-			<div class="handlediv" title="<?php esc_attr_e('Click to toggle', 'events-manager'); ?>"><br /></div><h3 class='hndle'><span><?php _e ( 'PRO Booking Form Options', 'em-pro' ); ?> </span></h3>
-			<div class="inside">
-				<table class='form-table'>
-					<?php 
-						em_options_input_text ( __( 'Default required field error', 'em-pro' ), 'dbem_emp_booking_form_error_required', __( 'This is the message shown by default when a required booking form field is left empty, %s will be replaced by the field label.','em-pro' ) );
-					?>
-				</table>
-				<?php echo $save_button; ?> 
-			</div> <!-- . inside -->
-			</div> <!-- .postbox -->
-		<?php
-		}
-	}
 	
 	/**
 	 * Add extra localized JS options to the em_wp_localize_script filter.
@@ -322,9 +303,7 @@ class EM_Form extends EM_Object {
 							<?php
 						}else{
 							//registration fields
-							if( empty($_REQUEST[$field['fieldid']]) && is_user_logged_in() && get_option('dbem_emp_booking_form_reg_show') && !EM_Bookings::$force_registration ){
-								$post = EM_User_Fields::get_user_meta(get_current_user_id(), $field['type']);
-							}
+							
 							?>
 							<p class="input-<?php echo $field['type']; ?> input-group">
 								<label for='<?php echo $field['fieldid'] ?>'>
@@ -696,7 +675,7 @@ class EM_Form extends EM_Object {
 							}elseif( is_user_logged_in() ){
 								$email_exists = email_exists($value);
 								if( $email_exists && $email_exists != get_current_user_id() ){
-									$this->add_error( get_option('dbem_booking_feedback_email_exists') );
+									$this->add_error( __('This email already exists in our system, please log in to register to proceed with your booking.','events-manager') );
 									$result = false;	
 								}
 							}
@@ -930,7 +909,7 @@ class EM_Form extends EM_Object {
 										<?php if( EM_ML::$is_ml ) $this->editor_ml_fields_trigger('options_select_error'); ?>
 										<p>
 											<?php _e('This error will show if a value isn\'t chosen.','em-pro'); ?>
-											<br /><?php _e('Default:','em-pro'); echo ' <code>'.sprintf(get_option('dbem_emp_booking_form_error_required'), '[FIELD]').'</code>'; ?>
+											<br /><?php _e('Default:','em-pro'); echo ' <code>'.sprintf(__('Please fill in the field: %s','em-pro'), '[FIELD]').'</code>'; ?>
 										</p>
 									</div>
 									<?php if( EM_ML::$is_ml ) $this->editor_ml_fields('options_select_error', $field_values); ?>
@@ -968,7 +947,7 @@ class EM_Form extends EM_Object {
 										<?php if( EM_ML::$is_ml ) $this->editor_ml_fields_trigger('options_country_error'); ?>
 										<p>
 											<?php _e('This error will show if a value isn\'t chosen.','em-pro'); ?>
-											<br /><?php _e('Default:','em-pro'); echo ' <code>'.sprintf(get_option('dbem_emp_booking_form_error_required'), '[FIELD]').'</code>'; ?>
+											<br /><?php _e('Default:','em-pro'); echo ' <code>'.sprintf(__('Please fill in the field: %s','em-pro'), '[FIELD]').'</code>'; ?>
 										</p>
 									</div>
 									<?php if( EM_ML::$is_ml ) $this->editor_ml_fields('options_country_error', $field_values); ?>
@@ -1079,7 +1058,7 @@ class EM_Form extends EM_Object {
 										<?php if( EM_ML::$is_ml ) $this->editor_ml_fields_trigger('options_selection_error'); ?>
 										<p>
 											<?php _e('This error will show if a value isn\'t chosen.','em-pro'); ?>
-											<br /><?php _e('Default:','em-pro'); echo ' <code>'.sprintf(get_option('dbem_emp_booking_form_error_required'), '[FIELD]').'</code>'; ?>
+											<br /><?php _e('Default:','em-pro'); echo ' <code>'.sprintf(__('Please fill in the field: %s','em-pro'), '[FIELD]').'</code>'; ?>
 										</p>
 									</div>
 									<?php if( EM_ML::$is_ml ) $this->editor_ml_fields('options_selection_error', $field_values); ?>
@@ -1112,7 +1091,7 @@ class EM_Form extends EM_Object {
 										<?php if( EM_ML::$is_ml ) $this->editor_ml_fields_trigger('options_checkbox_error'); ?>
 										<p>
 											<?php _e('This error will show if this box is not checked.','em-pro'); ?>
-											<br /><?php _e('Default:','em-pro'); echo ' <code>'.sprintf(get_option('dbem_emp_booking_form_error_required'), '[FIELD]').'</code>'; ?>
+											<br /><?php _e('Default:','em-pro'); echo ' <code>'.sprintf(__('Please fill in the field: %s','em-pro'), '[FIELD]').'</code>'; ?>
 										</p>
 									</div>
 									<?php if( EM_ML::$is_ml ) $this->editor_ml_fields('options_checkbox_error', $field_values); ?>
@@ -1145,7 +1124,7 @@ class EM_Form extends EM_Object {
 										<?php if( EM_ML::$is_ml ) $this->editor_ml_fields_trigger('options_text_error'); ?>
 										<p>
 											<?php _e('If the regex above does not match this error will be displayed.','em-pro'); ?>
-											<br /><?php _e('Default:','em-pro'); echo ' <code>'.sprintf(get_option('dbem_emp_booking_form_error_required'), '[FIELD]').'</code>'; ?>
+											<br /><?php _e('Default:','em-pro'); echo ' <code>'.sprintf(__('Please fill in the field: %s','em-pro'), '[FIELD]').'</code>'; ?>
 										</p>
 									</div>
 									<?php if( EM_ML::$is_ml ) $this->editor_ml_fields('options_text_error', $field_values); ?>
@@ -1187,7 +1166,7 @@ class EM_Form extends EM_Object {
 										<?php if( EM_ML::$is_ml ) $this->editor_ml_fields_trigger('options_reg_error'); ?>
 										<p>
 											<?php _e('If the regex above does not match this error will be displayed.','em-pro'); ?>
-											<br /><?php _e('Default:','em-pro'); echo ' <code>'.sprintf(get_option('dbem_emp_booking_form_error_required'), '[FIELD]').'</code>'; ?>
+											<br /><?php _e('Default:','em-pro'); echo ' <code>'.sprintf(__('Please fill in the field: %s','em-pro'), '[FIELD]').'</code>'; ?>
 										</p>
 									</div>
 									<?php if( EM_ML::$is_ml ) $this->editor_ml_fields('options_reg_error', $field_values); ?>
@@ -1228,7 +1207,7 @@ class EM_Form extends EM_Object {
 										<input type="text" name="options_captcha_error[]" <?php self::input_default('options_captcha_error',$field_values); ?> />
 										<p>
 											<?php _e('This error will show if the captcha is not correct.','em-pro'); ?>
-											<br /><?php _e('Default:','em-pro'); echo ' <code>'.sprintf(get_option('dbem_emp_booking_form_error_required'), '[FIELD]').'</code>'; ?>
+											<br /><?php _e('Default:','em-pro'); echo ' <code>'.sprintf(__('Please fill in the field: %s','em-pro'), '[FIELD]').'</code>'; ?>
 										</p>
 									</div>
 								</div>
