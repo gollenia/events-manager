@@ -214,21 +214,12 @@ function em_get_currencies(){
 	return apply_filters('em_get_currencies',$currencies);
 }
 
-function em_get_currency_formatted($price, $currency=false, $format=false, $precision = 2){
-	$formatted_price = '';
-	if(!$format) $format = get_option('dbem_bookings_currency_format','@#');
-	if(!$currency) $currency = get_option('dbem_bookings_currency');
-	$formatted_price = str_replace('#', number_format( $price, $precision, get_option('dbem_bookings_currency_decimal_point','.'), get_option('dbem_bookings_currency_thousands_sep',',') ), $format);
-	$formatted_price = str_replace('@', em_get_currency_symbol(true,$currency), $formatted_price);
-	return apply_filters('em_get_currency_formatted', $formatted_price, $price, $currency, $format);
-}
+
 
 function em_get_currency_symbol($true_symbol = false, $currency = false){
-	if( !$currency ) $currency = get_option('dbem_bookings_currency');
-	if($true_symbol){
-		return em_get_currencies()->true_symbols[$currency];
-	}
-	return apply_filters('em_get_currency_symbol', em_get_currencies()->symbols[$currency]);
+	$formatter = new \Contexis\Events\Intl\PriceFormatter(0);
+	return $formatter->get_currency();
+	
 }
 
 function em_get_currency_name($currency = false){
@@ -268,43 +259,6 @@ function em_wp_get_referer(){
 	}else{
 		return wp_get_referer();
 	}
-}
-
-function em_get_attributes($lattributes = false){
-	$attributes = array('names'=>array(), 'values'=>array());
-	if( !$lattributes ) return $attributes;
-	//We also get a list of attribute names and create a ddm list (since placeholders are fixed)
-	$formats =
-		get_option ( 'dbem_rss_description_format' ).
-		get_option ( 'dbem_rss_title_format' ).
-		"<li>#_EVENTLINK - #_EVENTDATES - #_EVENTTIMES</li>".
-		'#_LOCATIONNAME'.
-		get_option ( 'dbem_event_list_item_format' );
-
-	//We now have one long string of formats, get all the attribute placeholders
-	if( $lattributes ){
-		preg_match_all('/#_LATT\{([^}]+)\}(\{([^}]+)\})?/', $formats, $matches);
-	}else{
-		preg_match_all('/#_ATT\{([^}]+)\}(\{([^}]+)\})?/', $formats, $matches);
-	}
-	//Now grab all the unique attributes we can use in our event.
-	foreach($matches[1] as $key => $attribute) {
-		if( !in_array($attribute, $attributes['names']) ){
-			$attributes['names'][] = $attribute ;
-			$attributes['values'][$attribute] = array();
-		}
-		//check if there's ddm values
-		if( !empty($matches[3][$key]) ){
-		    $new_values = explode('|',$matches[3][$key]);
-		    if( count($new_values) > count($attributes['values'][$attribute]) ){
-		    	foreach($new_values as $key => $value){
-		    	    $new_values[$key] = trim($value);
-		    	}
-				$attributes['values'][$attribute] = apply_filters('em_get_attributes_'.$attribute, $new_values, $attribute, $matches);
-		    }
-		}
-	}
-	return apply_filters('em_get_attributes', $attributes, $matches, $lattributes);
 }
 
 /**
