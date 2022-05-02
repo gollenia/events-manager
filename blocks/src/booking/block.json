@@ -1,7 +1,8 @@
 {
 	"name": "events-manager/booking",
 	"apiVersion": 2,
-	"title": "Booking",
+	"title": "Event Booking",
+	"description": "Add a button that allows the user to book tickets for an event.",
 	"category": "widgets", 
 	"attributes": {
 		"buttonTitle": {
@@ -11,6 +12,14 @@
 		"buttonColor": {
 			"type": "string",
 			"default": "primary"
+		},
+		"bookNow": {
+			"type": "string",
+			"default": ""
+		},
+		"buttonIcon": {
+			"type": "string",
+			"default": ""
 		}
 
 	}

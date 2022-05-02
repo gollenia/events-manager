@@ -30,8 +30,6 @@ const EditUpcoming = (props) => {
 		setAttributes
 	} = props;
 
-	
-
 	const categoryList = useSelect( ( select ) => {
 		const { getEntityRecords } = select( coreStore );
 		const query = { hide_empty: true };

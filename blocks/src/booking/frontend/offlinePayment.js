@@ -13,7 +13,8 @@ const OfflinePayment = (props) => {
         currentGateway: {
             id, title, methods, html
         },
-		bookingId
+		bookingId,
+		formatCurrency
     } = props
 
 	if(!bookingId) return <></>;
@@ -60,7 +61,7 @@ const OfflinePayment = (props) => {
 						<tr><th className='text-left'>{__('BIC', 'events')}</th><td>{paymentInfo.bic}</td></tr>
 						<tr><th className='text-left'>{__('Beneficial', 'events')}</th><td>{paymentInfo.beneficiary}</td></tr>
 						<tr><th className='text-left'>{__('Purpose', 'events')}</th><td>{paymentInfo.purpose}</td></tr>
-						<tr><th className='text-left'>{__('Amount', 'events')}</th><td>{paymentInfo.amount} {strings.currency}</td></tr>
+						<tr><th className='text-left'>{__('Amount', 'events')}</th><td>{formatCurrency(paymentInfo.amount)}</td></tr>
 					</table>
 				</div>
 			</div>

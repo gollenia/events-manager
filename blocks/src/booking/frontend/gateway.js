@@ -1,5 +1,6 @@
 import { __ } from '@wordpress/i18n';
 import React from 'react'
+import PropTypes from "prop-types"
 
 /*
 *   Simple renderer for a given gateway
@@ -7,7 +8,7 @@ import React from 'react'
 const Gateway = (props) => {
 
     if(props.currentGateway == undefined) {
-        return (<div>No Gateways given</div>)
+        return (<div>{__("You can pay via bank transaction", "events")}</div>)
     }
 
     const {
@@ -25,9 +26,9 @@ const Gateway = (props) => {
             <h5>{__("Payment", "events")}</h5>
             <h3>{title}</h3>
             <p dangerouslySetInnerHTML={createMarkup()}></p>
-            <div>
+            <div className="description">
                 { id=="mollie" && Object.keys(methods).map((method) => {
-                    return (<li className={`${method}`} key={method}><img src={"/wp-content/plugins/events-mollie/assets/methods/" + method + ".svg"}/> {methods[method]}</li>)
+                    return (<li className={`description-item ${method}`} key={method}><img src={"/wp-content/plugins/events-mollie/assets/methods/" + method + ".svg"}/> {methods[method]}</li>)
                 }) }
             </div>
         </div>
@@ -35,3 +36,7 @@ const Gateway = (props) => {
 }
 
 export default Gateway
+
+Gateway.propTypes = {
+    currentGateway: PropTypes.array
+}

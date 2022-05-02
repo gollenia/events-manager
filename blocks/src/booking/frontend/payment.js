@@ -11,7 +11,7 @@ const Payment = (props) => {
 
     const {
         eventData: {
-            gateways, event, coupons, strings, tickets
+            gateways, event, coupons, l10n, tickets, rest_url
         },
         ticketPrice,
         fullPrice,
@@ -22,10 +22,8 @@ const Payment = (props) => {
         formData,
         updateForm,
         changeCoupon,
-        rest_url
+		formatCurrency
     } = props
-
-	console.log(props.eventData)
 
     const gatewayOptions = () => {
         const result = {}
@@ -35,7 +33,6 @@ const Payment = (props) => {
         }
         return result   
     }
-
 
     const currentGateway = () => {
         if(gateways == undefined) return null
@@ -59,9 +56,7 @@ const Payment = (props) => {
             code
         }
 
-		console.log(event)
-  
-        const url = new URL(rest_url + "events-manager/v2/check_coupon")
+		const url = new URL(rest_url + "events/v2/check_coupon")
         url.search = new URLSearchParams(params).toString();
         
         await fetch(url, {}).then(response => response.json()).then(response => {
@@ -80,10 +75,10 @@ const Payment = (props) => {
                         <div className="list__content">
                             <div className="list__title">{tickets[id].name}</div>    
                             <div className="list__subtitle">{tickets[id].description}</div>
-                            <div className="list__subtitle">{__("Base price:", "events")} {tickets[id].price} {strings.currency}</div>
+                            <div className="list__subtitle">{__("Base price:", "events")} {formatCurrency(tickets[id].price)}</div>
                         </div>
                         <div className="list__actions">
-                            <span className="button button--pseudo nowrap">{ticketPrice(id)} {strings.currency}</span>
+                            <span className="button button--pseudo nowrap">{formatCurrency(ticketPrice(id))}</span>
                             
                         </div>
                     </div>
@@ -95,7 +90,7 @@ const Payment = (props) => {
                             
                         </div>
                         <div className="list__actions">
-                            <b className="button button--pseudo nowrap">{coupon.discount} {coupon.percent ? "%" : strings.currency}</b>
+                            <b className="button button--pseudo nowrap">{coupon.percent ? coupon.discount + " %" : formatCurrency(coupon.discount)}</b>
                         </div>
                     </div>
                 }
@@ -105,7 +100,7 @@ const Payment = (props) => {
                             
                         </div>
                         <div className="list__actions">
-                            <b className="button button--pseudo nowrap">{fullPrice()} {strings.currency}</b>
+                            <b className="button button--pseudo nowrap">{formatCurrency(fullPrice())}</b>
                             
                         </div>
                     </div>
@@ -136,7 +131,7 @@ const Payment = (props) => {
                 onChange={(event) => { selectGateway(event)}}
                 name="gateway"
                 value={currentGatewayId}
-                label={strings.pay_with}
+                label={__("Payment method", "events")}
                 type="select"
                 options={gwO}
             /> }
@@ -145,7 +140,7 @@ const Payment = (props) => {
                 onChange={(event) => { updateFormField("data_privacy_consent", event)}}
                 name="data_privacy_consent"
                 value={formData.data_privacy_consent}
-                label={strings.consent}
+                label={l10n.consent}
                 type="checkbox"
             />
             

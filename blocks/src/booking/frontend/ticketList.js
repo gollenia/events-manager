@@ -17,7 +17,8 @@ const TicketList = (props) => {
         removeTicket, 
         updateTicket, 
         ticketPrice, 
-        fullPrice
+        fullPrice,
+		formatCurrency
     } = props
 
     const form = useRef(null)
@@ -53,10 +54,10 @@ const TicketList = (props) => {
                     <div className="list__content">
                         <div className="list__title">{ticket.name}</div>    
                         <div className="list__subtitle">{ticket.description}</div>
-                        <div className="list__subtitle">{__("Base price:", "events")} {ticket.price} {strings.currency}</div>
+                        <div className="list__subtitle">{__("Base price:", "events")} {formatCurrency(ticket.price)}</div>
                     </div>
                     <div className="list__actions">
-                        <span className="button button--pseudo nowrap">{ticketPrice(key)} {strings.currency}</span>
+                        <span className="button button--pseudo nowrap">{formatCurrency(ticketPrice(key))}</span>
                         <button className="button button--primary button--icon" onClick={() => addNewTicket(key)}><i className="material-icons">add_circle</i></button>
                     </div>
                 </div>
@@ -68,18 +69,17 @@ const TicketList = (props) => {
                         
                     </div>
                     <div className="list__actions">
-                        <b className="button button--pseudo nowrap">{coupon.discount} {coupon.percent ? "%" : strings.currency}</b>
+                        <b className="button button--pseudo nowrap">{coupon.percent ? `${coupon.discount}%` : formatCurrency(coupon.discount)}</b>
                         <button className="button button--primary button--icon invisible"><i className="material-icons">add_circle</i></button>
                     </div>
                 </div>
                 }
                 <div className="list__item" >
                     <div className="list__content">
-                        <div className="list__title"><b>{__("Full price", "events")} {strings.currency}</b></div>    
-                        
+                        <div className="list__title"><b>{__("Full price", "events")}</b></div>    
                     </div>
                     <div className="list__actions">
-                        <b className="button button--pseudo nowrap">{fullPrice()} {strings.currency} </b>
+                        <b className="button button--pseudo nowrap">{formatCurrency(fullPrice())}</b>
                         <button className="button button--primary button--icon invisible"><i className="material-icons">add_circle</i></button>
                     </div>
                 </div>

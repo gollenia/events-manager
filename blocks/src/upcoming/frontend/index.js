@@ -92,7 +92,6 @@ function Upcoming(props) {
 				for(let tag in event.tags) {
 					
 					if (tags[tag] == undefined) {
-						console.log("adding tag " + tag)
 						tags[tag] = event.tags[tag];
 					}
 				}

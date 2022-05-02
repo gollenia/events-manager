@@ -85,7 +85,7 @@ const edit = (props) => {
 				{ ...props }
 			/>
 
-			<div className='ctx:event-details__wrapper'>
+			{ event && <div className='ctx:event-details__wrapper'>
 					{ showAudience && <div className='ctx:event-details__item'><i className="material-icons">{audienceIcon}</i><div><h5>{audienceDescription != '' ? audienceDescription : __('Audience', 'events')}</h5>{event?.audience ?? __('no data')}</div></div>}
 					{ showLocation && <div className='ctx:event-details__item'><i className="material-icons">place</i><div><h5>{__('Location', 'events')}</h5>{event?.location?.address}</div></div>}
 					{ showDate && <div className='ctx:event-details__item'><i className="material-icons">today</i><div><h5>{__('Date', 'events')}</h5>{startFormatted()}</div></div>}
@@ -108,10 +108,16 @@ const edit = (props) => {
 					{ showBookedUp && event?.bookings?.has_bookings && 
 						<div className='ctx:event-details__item'>
 							<i className="material-icons">report_problem</i>
-							<div><h5>{__('Warning', 'events')}</h5>{__("This warning is shown, if few or no bookings are available")}</div>
+							<div><h5>{__('Warning', 'events')}</h5>{__("This warning is shown, if few or no bookings are available", "events")}</div>
 						</div>
 					}
-			</div>
+			</div> }
+			{ !event && <div className="components-placeholder is-large">
+                <div className="components-placeholder__label">
+                    {__("Event Details", "events")}</div>
+					
+                <div className="components-placeholder__instructions">{__("In this widget, the event datails will be shown. Please save the page for a preview.", "events")}</div>
+            </div> }
 		</div>
 	);
 

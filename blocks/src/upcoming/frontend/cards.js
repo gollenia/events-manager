@@ -29,9 +29,6 @@ function card(props) {
 
 
 	const bookingWarning = () => {
-		console.dir(showBookedUp)
-		console.dir(item.bookings.has_bookings)
-		console.dir(bookedUpWarningThreshold)
 		if (!showBookedUp || !item.bookings.has_bookings) return <></>;
 		if (item.bookings?.spaces > bookedUpWarningThreshold) return <></>;
 
@@ -52,8 +49,6 @@ function card(props) {
 
 	const cardFooter = () => {
 		if(!showAudience && !showSpeaker && !showLocation && !showBookedUp) return <></>;
-		console.log("Audience of " + item.title + " is ")
-		console.log(item.location)
 		return ( 
 			<div class="card__footer card__subtitle pills pills--small">
 				{ showAudience && item.audience?.length > 0 && <span className='pills__item event__audience'>{item.audience}</span>}

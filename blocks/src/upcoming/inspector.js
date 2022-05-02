@@ -39,6 +39,8 @@ const Inspector = (props) => {
 		setAttributes
 	} = props;
 
+	const postType = window.eventBlocksLocalization?.post_type;
+
 	const locationViewOptions = [
 		{ value: "", label: __("Don't show", 'events') },
 		{ value: "name", label: __("Name", 'events') },
@@ -140,12 +142,15 @@ const Inspector = (props) => {
 					setAttributes( { limit: value } );
 				} }
 			/>
+			{ postType === 'event' && 
 			<CheckboxControl
-				label={ __("Exclude current", 'events')}
+				label={ __("Exclude current event", 'events')}
 				checked={ excludeCurrent }
 				onChange={ (value) => setAttributes({ excludeCurrent: value }) }
 				help={ __("If applicable, exclude the current event from the list", 'events') }
 			/>
+			}
+			
 			
 		</PanelBody>
 		<PanelBody

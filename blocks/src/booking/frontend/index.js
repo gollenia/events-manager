@@ -15,15 +15,20 @@ import Payment from "./payment"
 import ErrorFallback from './error';
 import OfflinePayment from './offlinePayment';
 
+// this function  is suposed to open the modal from the parent component
 let openBookingModal = () => {}
 
 const Booking = () => {
 
-    const [error, setError] = useState("");
+	if(!window.booking_data) return null;
+
+    // if an error occures, the error message willbe stored in this variable
+	const [error, setError] = useState("");
+
     const [modalVisible, setModalVisible] = useState(false);
-    const [message, setMessage] = useState("");
+    const [orderResponse, setOrderResponse] = useState("");
     const [originalDocumentTitle, setOriginalDocumentTitle] = useState("");
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(0);
     const [wizzardStep, setWizzardStep] = useState(() => 0);
     const [ticketSelection, setTicketSelection] = useState(() => []);
     const [coupon, setCoupon] = useState(() => { return {}});
@@ -32,16 +37,7 @@ const Booking = () => {
 
     const [formData, setFormData] = useState({});
 
-	const {booking_nonce, rest_url, booking_url, wp_debug} = window.bookingAppData
-    const eventData = {
-		event: window.bookingAppData.event,
-		coupons: window.bookingAppData.coupons,
-		fields: window.bookingAppData.fields,
-		attendee_fields: window.bookingAppData.attendee_fields,
-		tickets: window.bookingAppData.tickets,
-		gateways: window.bookingAppData.gateways,
-		strings: window.bookingAppData.strings
-    }
+	const eventData = window.booking_data
 
 	if(eventData.event?.bookings?.spaces === 0) { return <></> }
 
@@ -49,10 +45,6 @@ const Booking = () => {
       return eventData.tickets[key].price * ticketSelection.reduce((n, ticket) => {
           return n + (ticket.id == eventData.tickets[key].id);
       }, 0);
-    }
-
-    const changeCoupon = (coupon) => {
-      setCoupon(coupon);
     }
 
     const currentGateway = () => {
@@ -84,7 +76,6 @@ const Booking = () => {
 		}
 
 		if(!coupon.success) return sum;
-
 		if(!coupon.percent) return sum - parseInt(coupon.discount)
 		
 		return sum - (sum / 100 * parseInt(coupon.discount))
@@ -114,7 +105,12 @@ const Booking = () => {
   
     }
 
-    
+    const formatCurrency = (price) => {
+		return new Intl.NumberFormat(eventData.l10n.locale, { 
+			style: 'currency', 
+			currency: eventData.l10n.currency }
+		).format(price)
+	}
 
     const openModal = () => {
 		document.title = `${__('Registration', 'events')} ${eventData.event.title}`;
@@ -145,16 +141,24 @@ const Booking = () => {
           
     }, [])
 
-    if(Object.keys(eventData).length == 0) return (<span className="button button--error button-pseudo">{__('Error: No connection to server.', 'events')}</span>);
+    if(Object.keys(eventData).length == 0) return (<span className="button button--error button--pseudo">{__('Error: No connection to server.', 'events')}</span>);
 
-    const order = () => {
+	const addTimeWarning = () => {
+		if(loading == 0) return;
+		setLoading(2);
+	}
 
-        setLoading(true)
-        const request = formData
-        request['_wpnonce'] = booking_nonce
-        request['action'] = "booking_add"
-        request['em_attendee_fields'] = {}
-        request['em_tickets'] = {}
+    const sendOrder = () => {
+
+        setLoading(1)
+		setTimeout(addTimeWarning, 10000)
+        let request = {...formData, 
+			"_wpnonce": eventData._nonce,
+			"action": "booking_add",
+			"em_attendee_fields": {},
+			"em_tickets": []
+		}
+        
         eventData.tickets.map((ticket) => {
             request['em_attendee_fields'][ticket.id] = []
             request['em_tickets'][ticket.id] = {spaces: 0}
@@ -171,13 +175,13 @@ const Booking = () => {
 
         request["gateway"] = gateway
         request['event_id'] = eventData.event.event_id
-        const url = new URL(booking_url)
+        const url = new URL(eventData.booking_url)
         url.search = qs.stringify(request)
 		
         fetch(url).then((response) => response.json()).then((response) => {
 			
 			if(!response.result) {
-				setLoading(false)
+				setLoading(0)
 				setError(response.errors)
 				return;
 			}
@@ -187,15 +191,17 @@ const Booking = () => {
 			if(response.gateway === "offline") {
 				setBookingId(response.booking_id)
 			}
-		  	setMessage(response.message);
+		  	setOrderResponse(response.message);
 			setWizzardStep(3)
-			setLoading(false)
+			setLoading(0)
 			return;
 	
         })
 
         // Show warning 
     }
+	
+	console.log(eventData)
 
     const cleanUp = () => {
         closeModal()
@@ -225,14 +231,15 @@ const Booking = () => {
 	return (
 		<div>
 			<ErrorBoundary FallbackComponent={ErrorFallback}>
-			<button className="button button--primary" onClick={() => {openModal()}}>{ eventData?.strings?.modal_button }</button>
+			<button className="button button--primary" onClick={() => {openModal()}}>{ eventData?.attributes?.buttonTitle  !== "" ? eventData?.attributes?.buttonTitle : __("Registration", "events") }</button>
 			
 			<div className={`modal modal--fullscreen ${wizzardStep == 3 ? " modal--success" : ""} ${modalVisible ? "modal--open" : ""}`}>
-			{ loading && <div className="modal__overlay">
+			{ loading > 0 && <div className="modal__overlay">
 				<aside>
-				<div className="spinning-loader"></div>
-				<h4>{eventData?.strings.loading}</h4>
-				<h5>{eventData?.strings.dont_close}</h5>
+					<div className="spinning-loader"></div>
+					<h4>{__("Please wait", "events")}</h4>
+					<h5>{__("Your booking is beeing processed.", "events")}</h5>
+					{ loading > 1 && <div className="alert alert--warning">{__("The request is lasting longer than expected. Please check your Internet connection or try again later.", "events")}</div> }
 				</aside>
 			</div> }
 			<div className="modal__dialog">
@@ -256,6 +263,7 @@ const Booking = () => {
 						ticketPrice={ticketPrice}
 						fullPrice={fullPrice}
 						countTickets={countTickets}
+						formatCurrency={formatCurrency}
 					/>
 					</div>
 					</div>
@@ -278,6 +286,7 @@ const Booking = () => {
 							fields={eventData.fields}
 							formData={formData}
 							updateForm={updateForm}
+							formatCurrency={formatCurrency}
 						/>
 					</div>
 					
@@ -288,7 +297,7 @@ const Booking = () => {
 					<Payment 
 						eventData={eventData}
 						coupon={coupon}
-						changeCoupon={changeCoupon}
+						changeCoupon={setCoupon}
 						formData={formData}
 						error={error}
 						currentGatewayId={gateway}
@@ -296,7 +305,7 @@ const Booking = () => {
 						updateForm={updateForm}
 						ticketPrice={ticketPrice}
 						fullPrice={fullPrice}
-						rest_url={rest_url}
+						formatCurrency={formatCurrency}
 					/>
 						
 					</div>
@@ -305,12 +314,13 @@ const Booking = () => {
 		
 					<div className={`wizzard__step ${wizzardStep == 3 ? " wizzard__step--active" : ""} ${wizzardStep == 2 ? " " : ""}` }>
 					<div className="container">
-						{message}
+						{ orderResponse }
 						{ fullPrice() !== 0 &&
 							<OfflinePayment 
 								currentGateway={currentGateway()}
 								bookingId={bookingId}
 								eventData={eventData}
+								formatCurrency={formatCurrency}
 							/>
 						}
 						
@@ -324,7 +334,9 @@ const Booking = () => {
 					<div className="container button-group button-group--right">
 					{ wizzardStep > (eventData?.attendee_fields?.length == 0 ? 1 : 0) && wizzardStep < 3 && <button className="button button--secondary" onClick={() => {setWizzardStep(wizzardStep-1)}}>{__('Back', 'events')}</button> }
 					{ wizzardStep < (fullPrice() == 0 ? 1 : 2) && <button className="button button--primary" onClick={() => {setWizzardStep(wizzardStep+1)}} >{__('Next', 'events')}</button> }
-					{ wizzardStep == (fullPrice() == 0 ? 1 : 2) && <button className="button button--primary" onClick={() => {order()}}>{eventData.strings.book_now}</button> }
+					{ wizzardStep == (fullPrice() == 0 ? 1 : 2) && <button className="button button--primary" onClick={() => {sendOrder()}}>
+						{ eventData?.attributes?.bookNow  !== "" ? eventData?.attributes?.bookNow : __("Book now", "events") }
+					</button> }
 					{ wizzardStep == 3 && <button className="button button--success" onClick={() => {cleanUp()}}>{__("Close", "events")}</button> }
 					</div>
 				</div>

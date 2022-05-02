@@ -12,11 +12,12 @@ import './editor.scss';
 import { __ } from '@wordpress/i18n'; 
 import { withColors } from '@wordpress/block-editor';
 
-const { name, title } = metadata;
+const { name, title, description } = metadata;
 
 const settings = {
 	...metadata,
-	title: __( title, 'ctx-blocks' ),
+	title: __( title, 'events' ),
+	description: __( description, 'events' ),
 	icon,
 	edit: withColors({buttonColor: 'buttonColor'})(Edit),
 	save: () => { return null }

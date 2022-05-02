@@ -49,12 +49,12 @@ const edit = (props) => {
 			<Inspector
 					{ ...props }
 			/>
-				<span style={style} className="ctx-button" >
+				<span style={style} className="events ctx-button" >
 				<RichText
 					tagName="span"
 					value={ buttonTitle }
 					onChange={ (value) => setAttributes({ buttonTitle: value }) }
-					placeholder={ __( 'Button title', 'ctx-blocks' ) }
+					placeholder={ __( 'Registration', 'events' ) }
 					allowedFormats={ [ 'core/bold', 'core/italic' ] }
 				/>
 				</span>

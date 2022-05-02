@@ -1,7 +1,8 @@
 {
 	"name": "events-manager/details",
 	"apiVersion": 2,
-	"title": "Details",
+	"title": "Event Details",
+	"description": "Show a list with selected details of the event",
 	"category": "widgets", 
 	"attributes": {
 		"showLocation": {

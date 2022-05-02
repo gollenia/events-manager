@@ -1,7 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import InputField from './inputField'
 
-
+/*
+ *	Renders a single ticket with it's form fields
+ *  and a delete button
+ *
+*/
 const Ticket = ({ticket, fields, ticketKey, removeTicket, updateTicket}) => {
 
     const [attendeeName, setAttendeeName] = useState("");

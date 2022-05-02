@@ -7,7 +7,7 @@ const UserRegistration = (props) => {
  
 
   const {
-    eventData: { fields, tickets, strings, attendee_fields },
+    eventData: { fields, tickets, attendee_fields, l10n },
     updateForm,
     ticketSelection,
     addTicket,
@@ -17,7 +17,8 @@ const UserRegistration = (props) => {
     coupon,
     formData,
     countTickets,
-    removeTicketByType
+    removeTicketByType,
+	formatCurrency
   } = props
 
   const updateFormField = (field, value) => {
@@ -34,11 +35,11 @@ const UserRegistration = (props) => {
                     <div className="list__content">
                         <div className="list__title">{tickets[id].name}</div>    
                         <div className="list__subtitle">{tickets[id].description}</div>
-                        <div className="list__subtitle">{__("Base price:", "events")} {tickets[id].price} {strings.currency}</div>
+                        <div className="list__subtitle">{__("Base price:", "events")} {formatCurrency(tickets[id].price)}</div>
                     </div>
                     
                     <div className="list__actions">
-                        <span className="button button--pseudo nowrap">{ticketPrice(id)} {strings.currency}</span>
+                        <span className="button button--pseudo nowrap">{formatCurrency(ticketPrice(id))}</span>
                         { attendee_fields.length == 0 && <div className="number-picker">
                           <button className="button button--primary button--icon" onClick={() => removeTicketByType(tickets[id].id)} disabled={tickets[id].min == countTickets(tickets[id].id)}></button>
                           <input value={countTickets(tickets[id].id)}/>
@@ -54,7 +55,7 @@ const UserRegistration = (props) => {
                         
                     </div>
                     <div className="list__actions">
-                        <b className="button button--pseudo nowrap">{coupon.discount} {coupon.percent ? "%" : strings.currency}</b>
+                        <b className="button button--pseudo nowrap">{coupon.discount} {coupon.percent ? coupon.discount + " %" : formatCurrency(coupon.discount)}</b>
                         { attendee_fields.length == 0 && <div className="number-picker invisible">
                           <button className="button button--primary button--icon" ></button>
                           <input/>
@@ -69,7 +70,7 @@ const UserRegistration = (props) => {
                         
                     </div>
                     <div className="list__actions">
-                        <b className="button button--pseudo nowrap">{fullPrice()} {strings.currency}</b>      
+                        <b className="button button--pseudo nowrap">{formatCurrency(fullPrice())}</b>      
                         { attendee_fields.length == 0 && <div className="number-picker invisible">
                           <button className="button button--primary button--icon" ></button>
                           <input/>
@@ -103,7 +104,7 @@ const UserRegistration = (props) => {
               onChange={(event) => { updateFormField("data_privacy_consent", event)}}
               name="data_privacy_consent"
               value={formData.data_privacy_consent}
-              label={strings.consent}
+              label={l10n.consent}
               type="checkbox"
             />
           }
