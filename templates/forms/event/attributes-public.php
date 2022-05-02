@@ -5,7 +5,7 @@
 */
 global $EM_Event;
 /* @var $EM_Event EM_Event */
-$attributes = em_get_attributes();
+$attributes = array('names'=>array(), 'values'=>array());
 $has_deprecated = false;
 ?>
 <?php if( count( $attributes['names'] ) > 0 ) : ?>

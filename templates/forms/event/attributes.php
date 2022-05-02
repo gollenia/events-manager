@@ -1,6 +1,6 @@
 <?php
 global $EM_Event;
-$attributes = em_get_attributes();
+$attributes =  array('names'=>array(), 'values'=>array());
 $has_deprecated = false;
 ?>
 <div id="event-attributes">

@@ -1,6 +1,6 @@
 <?php
 global $EM_Location;
-$attributes = em_get_attributes(true); //get Lattributes
+$attributes = array('names'=>array(), 'values'=>array()); //get Lattributes
 $has_deprecated = false;
 ?>
 <div id="location-attributes">
