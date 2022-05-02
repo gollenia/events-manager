@@ -295,29 +295,6 @@ function em_init_actions() {
 				}
 			
 			ob_clean();
-	  	}elseif ( $_REQUEST['action'] == 'booking_cancel') {
-	  		//Cancel Booking
-			em_verify_nonce('booking_cancel');
-	  		if( $EM_Booking->can_manage() ){
-				if( $EM_Booking->cancel() ){
-					$result = true;
-					if( !defined('DOING_AJAX') ){
-						if( $EM_Booking->person->ID == get_current_user_id() ){
-							$EM_Notices->add_confirm(get_option('dbem_booking_feedback_cancelled'), true );	
-						}else{
-							$EM_Notices->add_confirm( $EM_Booking->feedback_message, true );
-						}
-						wp_safe_redirect( $_SERVER['HTTP_REFERER'] );
-						exit();
-					}
-				}else{
-					$result = false;
-					$EM_Notices->add_error( $EM_Booking->get_errors() );
-					$feedback = $EM_Booking->feedback_message;
-				}
-			}else{
-				$EM_Notices->add_error( __('You must log in to cancel your booking.', 'events-manager') );
-			}
 		//TODO user action shouldn't check permission, booking object should.
 	  	}elseif( array_key_exists($_REQUEST['action'], $allowed_actions) && $EM_Event->can_manage('manage_bookings','manage_others_bookings') ){
 	  		//Event Admin only actions
