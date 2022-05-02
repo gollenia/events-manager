@@ -226,7 +226,7 @@ class EM_Gateways {
 				
 			?>
 			<p class="input-select em-booking-gateway" id="em-booking-gateway">
-				<label><?php echo get_option('dbem_gateway_label'); ?></label>
+				<label><?php echo __("Pay with", "events-manager") ?></label>
 				<select name="gateway">
 				<?php
 				foreach($active_gateways as $gateway => $active_val){

@@ -34,7 +34,7 @@ class EM_User_Fields {
 	public static function get_form(){
 		if( empty(self::$form) ){
 			self::$form = new EM_Form('em_user_fields');
-			self::$form->form_required_error = get_option('dbem_emp_booking_form_error_required');
+			self::$form->form_required_error = __('Please fill in the field: %s','em-pro');
 			self::$form->is_user_form = true;
 		}
 		return self::$form;
@@ -320,18 +320,6 @@ class EM_User_Fields {
 					</div>
 		<?php
 	}
-	
-	private static function show_reg_fields(){
-		return !is_user_logged_in(); 
-	}
-
-	public static function data_privacy_exporters( $exporters ){
-		$exporters['events-manager-user'] = array(
-			'exporter_friendly_name' =>  __( 'Events Manager', 'events-manager' ) . ' - ' .__( 'Further Information', 'events-manager' ),
-			'callback' => 'EM_Data_Privacy::export_locations',
-		);
-	    return $exporters;
-    }
 
     public static function data_privacy_export_user( $export_item, $user ){
 	    $EM_Form = self::get_form();

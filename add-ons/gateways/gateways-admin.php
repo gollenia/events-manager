@@ -6,27 +6,9 @@ class EM_Gateways_Admin{
 		if( !empty($_REQUEST['page']) && $_REQUEST['page'] == 'events-manager-gateways' ){
 			add_action('admin_init', 'EM_Gateways_Admin::handle_gateways_panel_updates', 10, 1);
 		}
-		add_action('em_options_page_footer_bookings', 'EM_Gateways_Admin::admin_options');
+		
 	}
 	
-	public static function admin_options(){
-		if( current_user_can('list_users') ){
-		?>
-			<a name="pro-api"></a>
-			<div  class="postbox " id="em-opt-gateway-options">
-			<div class="handlediv" title="<?php esc_attr_e('Click to toggle', 'events-manager'); ?>"><br /></div><h3 class='hndle'><span><?php _e ( 'Payment Gateway Options', 'em-pro' ); ?> </span></h3>
-			<div class="inside">
-				<table class='form-table'>
-					<?php 
-						
-						em_options_input_text(__('Gateway Label','em-pro'),'dbem_gateway_label', __('If you are not using quick pay buttons a drop-down menu will be used, with this label.','em-pro'));
-					?>
-				</table>
-			</div> <!-- . inside -->
-			</div> <!-- .postbox -->
-		<?php
-		}
-	}
 	
 	public static function admin_menu($plugin_pages){
 		$plugin_pages[] = add_submenu_page('edit.php?post_type='.EM_POST_TYPE_EVENT, __('Payment Gateways','em-pro'),__('Payment Gateways','em-pro'),'list_users','events-manager-gateways', 'EM_Gateways_Admin::handle_gateways_panel');
@@ -90,7 +72,7 @@ class EM_Gateways_Admin{
 				<table class="widefat fixed">
 					<thead>
 					<tr>
-					<th style="" class="manage-column column-cb check-column" id="cb" scope="col"><input type="checkbox"></th>
+					<th class="manage-column column-cb check-column" id="cb" scope="col"><input type="checkbox"></th>
 						<?php
 						foreach($columns as $key => $col) {
 							?>
@@ -102,7 +84,7 @@ class EM_Gateways_Admin{
 					</thead>	
 					<tfoot>
 					<tr>
-					<th style="" class="manage-column column-cb check-column" scope="col"><input type="checkbox"></th>
+					<th class="manage-column column-cb check-column" scope="col"><input type="checkbox"></th>
 						<?php
 						reset($columns);
 						foreach($columns as $key => $col) {

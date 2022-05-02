@@ -91,7 +91,7 @@ class EM_Booking_Form {
 			}
 			self::$event_id = !empty($EM_Event) ? $EM_Event->event_id:false;
 			self::$form = new EM_Form($form_data['form'], 'em_bookings_form');
-			self::$form->form_required_error = get_option('dbem_emp_booking_form_error_required');
+			self::$form->form_required_error = __('Please fill in the field: %s','em-pro');
 		}
         
 		return self::$form;

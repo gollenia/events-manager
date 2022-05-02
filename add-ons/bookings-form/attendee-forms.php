@@ -87,7 +87,7 @@ class EM_Attendees_Form {
 				self::$form_id = 0;
 			    self::$form = new EM_Attendee_Form(array(), 'em_attendee_form', false); //empty form to avoid errors
 			}
-			self::$form->form_required_error = get_option('dbem_emp_booking_form_error_required');
+			self::$form->form_required_error = __('Please fill in the field: %s','em-pro');
 			//modify field ids to contain ticket number and []
 			if( is_array( self::$form->form_fields) ){
 				foreach(self::$form->form_fields as $field_id => $form_data){

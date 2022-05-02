@@ -1,42 +1,18 @@
 <?php if( !function_exists('current_user_can') || !current_user_can('manage_options') ) return; ?>
 <!-- FORMAT OPTIONS -->
 <div class="em-menu-formats em-menu-group"  <?php if( !defined('EM_SETTINGS_TABS') || !EM_SETTINGS_TABS) : ?>style="display:none;"<?php endif; ?>>				
-	<div  class="postbox " id="em-opt-events-formats" >
-	<div class="handlediv" title="<?php __('Click to toggle', 'events-manager'); ?>"><br /></div><h3><span><?php _e ( 'Events', 'events-manager'); ?> </span></h3>
-	<div class="inside">
-    	<table class="form-table">
-		 	
-			<?php
-			$grouby_modes = array(0=>__('None','events-manager'), 'yearly'=>__('Yearly','events-manager'), 'monthly'=>__('Monthly','events-manager'), 'weekly'=>__('Weekly','events-manager'), 'daily'=>__('Daily','events-manager'));
-			
-			em_options_input_text ( __( 'No events message', 'events-manager'), 'dbem_no_events_message', __( 'The message displayed when no events are available.', 'events-manager') );
-			?>
-		 	
-		</table>
-	</div> <!-- . inside -->
-	</div> <!-- .postbox -->
+	
 
-	<div  class="postbox " id="em-opt-date-time" >
-	<div class="handlediv" title="<?php __('Click to toggle', 'events-manager'); ?>"><br /></div><h3><span><?php _e ( 'Date/Time', 'events-manager'); ?> </span></h3>
-	<div class="inside">
-		<p class="em-boxheader"><?php
-			$date_time_format_tip = sprintf(__('Date and Time formats follow the <a href="%s">WordPress time formatting conventions</a>', 'events-manager'), 'http://codex.wordpress.org/Formatting_Date_and_Time');
-			echo $date_time_format_tip; 
-		?></p>
+	
 		<table class="form-table">
     		<?php
-			em_options_input_text ( __( 'Date Range', 'events-manager'), 'dbem_date_range', sprintf(__( 'How should date ranges be formatted?.', 'events-manager'), __('dates','events-manager')) );
-			em_options_input_text ( __( 'All Day Message', 'events-manager'), 'dbem_event_all_day_message', sprintf(__( 'If an event lasts all day, this text will show if using the %s placeholder', 'events-manager'), '<code>#_EVENTTIMES</code>') );
 			em_options_radio_binary ( __( 'Use 24h Format?', 'events-manager'), 'dbem_time_24h', __( 'When creating events, would you like your times to be shown in 24 hour format?', 'events-manager') );
 			echo $save_button;
 			?>
 		</table>
-	</div> <!-- . inside -->
-	</div> <!-- .postbox -->
+	
 	      
-   	<div  class="postbox " id="em-opt-calendar-formats" >
-	<div class="handlediv" title="<?php __('Click to toggle', 'events-manager'); ?>"><br /></div><h3><span><?php _e ( 'Calendar', 'events-manager'); ?></span></h3>
-	<div class="inside">
+  
     	<table class="form-table">
 		   
 		    <tr class="em-header"><td colspan="2"><h4><?php echo sprintf(__('iCal Feed Settings','events-manager'),__('Event','events-manager')); ?></h4></td></tr>
@@ -49,13 +25,10 @@
 		    echo $save_button;        
 			?>
 		</table>
-	</div> <!-- . inside -->
-	</div> <!-- .postbox -->
+	
 	
 
-	<div  class="postbox " id="em-opt-rss-formats" >
-	<div class="handlediv" title="<?php __('Click to toggle', 'events-manager'); ?>"><br /></div><h3><span><?php _e ( 'RSS', 'events-manager'); ?> </span></h3>
-	<div class="inside">
+
     	<table class="form-table">
 			<?php				
 			em_options_input_text ( __( 'RSS main title', 'events-manager'), 'dbem_rss_main_title', __( 'The main title of your RSS events feed.', 'events-manager').$events_placeholder_tip );
@@ -112,9 +85,7 @@
 			echo $save_button;
 			?>
 		</table>
-	</div> <!-- . inside -->
-	</div> <!-- .postbox -->
-
+	
 	
 	<?php do_action('em_options_page_footer_formats'); ?>
 	
