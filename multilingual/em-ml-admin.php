@@ -164,21 +164,5 @@ class EM_ML_Admin{
 		</table>
 		<?php
 	}
-	
-	public static function event_meta_box_attributes(){
-	    global $EM_Event;
-    	//get original location for attributes
-        $event = EM_ML::get_original_event($EM_Event);
-        EM_ML_IO::event_merge_original_attributes($EM_Event, $event);
-		em_locate_template('forms/event/attributes.php',true);
-	}
-	
-	public static function location_meta_box_attributes(){
-	    global $EM_Location;
-    	//get original location for attributes
-    	$location = EM_ML::get_original_location($EM_Location);
-	    EM_ML_IO_Locations::location_merge_original_attributes($EM_Location, $location);
-		em_locate_template('forms/location/attributes.php',true);
-	}
 }
 EM_ML_Admin::init();
