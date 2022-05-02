@@ -234,7 +234,7 @@ class EM_Event_Posts_Admin{
 				if(!$EM_Event->event_all_day){
 					echo \Contexis\Events\Intl\DateFormatter::get_time($EM_Event->start()->getTimestamp(), $EM_Event->end()->getTimestamp());
 				}else{
-					echo get_option('dbem_event_all_day_message');
+					echo __('All Day','events-manager');
 				}
 				if( $EM_Event->get_timezone()->getName() != EM_DateTimeZone::create()->getName() ) echo '<span class="dashicons dashicons-info" style="font-size:16px; color:#ccc; padding-top:2px;" title="'.esc_attr(str_replace('_', ' ', $EM_Event->event_timezone)).'"></span>';
 				break;

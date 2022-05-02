@@ -1815,7 +1815,7 @@ class EM_Event extends EM_Object{
 		}
 		//This is for the custom attributes
 		preg_match_all('/#_ATT\{([^}]+)\}(\{([^}]+\}?)\})?/', $event_string, $results);
-		$attributes = em_get_attributes();
+		$attributes =  array('names'=>array(), 'values'=>array());
 		foreach($results[0] as $resultKey => $result) {
 			//check that we haven't mistakenly captured a closing bracket in second bracket set
 			if( !empty($results[3][$resultKey]) && $results[3][$resultKey][0] == '/' ){
@@ -1977,59 +1977,6 @@ class EM_Event extends EM_Object{
 							$replace = $link;
 						}
 					}	 
-					break;
-				case '#_EVENTPRICERANGE':
-					//get the range of prices
-					$min = false;
-					$max = 0;
-					if( $this->get_bookings()->is_open() || !empty($show_all_ticket_prices) ){
-						foreach( $this->get_tickets()->tickets as $EM_Ticket ){
-							/* @var $EM_Ticket EM_Ticket */
-							if( $EM_Ticket->is_available() || !empty($show_all_ticket_prices) ){
-								if($EM_Ticket->get_price() > $max ){
-									$max = $EM_Ticket->get_price();
-								}
-								if($EM_Ticket->get_price() < $min || $min === false){
-									$min = $EM_Ticket->get_price();
-								}						
-							}
-						}
-					}
-					if( empty($min) ) $min = 0;
-					if( $min != $max ){
-						$replace = em_get_currency_formatted($min).' - '.em_get_currency_formatted($max);
-					}else{
-						$replace = em_get_currency_formatted($min);
-					}
-					break;
-				case '#_EVENTPRICEMIN':
-				case '#_EVENTPRICEMINALL':
-					//get the range of prices
-					$min = false;
-					foreach( $this->get_tickets()->tickets as $EM_Ticket ){
-						/* @var $EM_Ticket EM_Ticket */
-						if( $EM_Ticket->is_available() || $result == '#_EVENTPRICEMINALL'){
-							if( $EM_Ticket->get_price() < $min || $min === false){
-								$min = $EM_Ticket->get_price();
-							}
-						}
-					}
-					if( $min === false ) $min = 0;
-					$replace = em_get_currency_formatted($min);
-					break;
-				case '#_EVENTPRICEMAX':
-				case '#_EVENTPRICEMAXALL':
-					//get the range of prices
-					$max = 0;
-					foreach( $this->get_tickets()->tickets as $EM_Ticket ){
-						/* @var $EM_Ticket EM_Ticket */
-						if( $EM_Ticket->is_available() || $result == '#_EVENTPRICEMAXALL'){
-							if( $EM_Ticket->get_price() > $max ){
-								$max = $EM_Ticket->get_price();
-							}
-						}			
-					}
-					$replace = em_get_currency_formatted($max);
 					break;
 				case '#_AVAILABLESEATS': //deprecated
 				case '#_AVAILABLESPACES':
