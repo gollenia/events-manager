@@ -514,8 +514,6 @@ function em_add_options() {
 		'dbem_search_form_towns' => 0,
 		'dbem_search_form_towns_label' => __('All Cities/Towns','events-manager'),
 		'dbem_search_form_town_label' => __('City/Town','events-manager'),
-				
-		'dbem_event_all_day_message' => __('All Day','events-manager'),
 		'dbem_no_events_message' => sprintf(__( 'No %s', 'events-manager'),__('Events','events-manager')),
 		//Location Formatting
 		'dbem_locations_default_limit' => 10,
@@ -568,37 +566,20 @@ function em_add_options() {
 		'dbem_bookings_currency' => 'USD',
 		'dbem_bookings_currency_decimal_point' => $decimal_point,
 		'dbem_bookings_currency_thousands_sep' => $thousands_sep,
-		'dbem_bookings_currency_format' => '@#',
+		
 		'dbem_bookings_tax' => 0, //extra tax
 		'dbem_bookings_tax_auto_add' => 0, //adjust prices to show tax?
 			//Form Options
 		'dbem_bookings_submit_button' => __('Send your booking', 'events-manager'),	
 		'dbem_bookings_form_max' => 20,
-
-		//messages
-		'dbem_booking_warning_cancel' => __('Are you sure you want to cancel your booking?','events-manager'),
-		'dbem_booking_feedback_cancelled' =>sprintf(__('Booking %s','events-manager'), __('Cancelled','events-manager')),
 		'dbem_booking_feedback_pending' =>__('Booking successful, pending confirmation (you will also receive an email once confirmed).', 'events-manager'),
 		'dbem_booking_feedback' => __('Booking successful.', 'events-manager'),
 		'dbem_booking_feedback_full' => __('Booking cannot be made, not enough spaces available!', 'events-manager'),
-		'dbem_booking_feedback_log_in' => __('You must log in or register to make a booking.','events-manager'),
 		'dbem_booking_feedback_nomail' => __('However, there were some problems whilst sending confirmation emails to you and/or the event contact person. You may want to contact them directly and letting them know of this error.', 'events-manager'),
 		'dbem_booking_feedback_error' => __('Booking could not be created','events-manager').':',
-		'dbem_booking_feedback_email_exists' => __('This email already exists in our system, please log in to register to proceed with your booking.','events-manager'),
 		'dbem_booking_feedback_new_user' => __('A new user account has been created for you. Please check your email for access details.','events-manager'),
 		'dbem_booking_feedback_reg_error' => __('There was a problem creating a user account, please contact a website administrator.','events-manager'),
-		'dbem_booking_feedback_already_booked' => __('You already have booked a seat at this event.','events-manager'),
 		'dbem_booking_feedback_min_space' => __('You must request at least one space to book an event.','events-manager'),
-		'dbem_booking_feedback_spaces_limit' => __('You cannot book more than %d spaces for this event.','events-manager'),
-		//button messages
-		'dbem_booking_button_msg_book' => __('Book Now', 'events-manager'),
-		'dbem_booking_button_msg_booking' => __('Booking...','events-manager'),
-		'dbem_booking_button_msg_booked' => sprintf(__('%s Submitted','events-manager'), __('Booking','events-manager')),
-		
-		'dbem_booking_button_msg_error' => sprintf(__('%s Error. Try again?','events-manager'), __('Booking','events-manager')),
-		'dbem_booking_button_msg_full' => __('Sold Out', 'events-manager'),
-		'dbem_booking_button_msg_closed' => ucwords(__( 'Bookings closed', 'events-manager')), //ucwords it to prevent extra translation
-
 		//Emails
 		'dbem_bookings_notify_admin' => 0,
 		'dbem_bookings_contact_email' => 1,
@@ -636,10 +617,7 @@ function em_add_options() {
 		'dbem_taxonomy_category_slug' => 'events/categories',
 		'dbem_taxonomy_tag_slug' => 'events/tags',
 		//event cp options
-		
-
 		'dbem_events_default_archive_order' => 'ASC',
-		
 	    'dbem_cp_events_excerpt_formats' => 1,
 		'dbem_cp_events_search_results' => 0,
 		//location cp options
@@ -687,10 +665,6 @@ function em_add_options() {
 		'dbem_emp_emails_reminder_time' => '12:00 AM',
 		'dbem_emp_emails_reminder_days' => 1,
 		'dbem_emp_emails_reminder_ical' => 1,
-
-		'dbem_emp_booking_form_reg_show' => 1,
-		'dbem_gateway_label' => __('Pay With','em-pro'),
-		
 		//offline
 		'em_offline_option_name' => __('Pay Offline', 'em-pro'),
 		'em_offline_booking_feedback' => __('Booking successful.', 'events-manager'),
@@ -706,8 +680,7 @@ function em_add_options() {
 			'dbem_phone' => array ( 'label' => __('Phone','events-manager'), 'type' => 'text', 'fieldid'=>'dbem_phone' ),
 			'dbem_fax' => array ( 'label' => __('Fax','em-pro'), 'type' => 'text', 'fieldid'=>'dbem_fax' ),
 			'dbem_company' => array ( 'label' => __('Company','em-pro'), 'type' => 'text', 'fieldid'=>'dbem_company' ),
-		],
-		'dbem_emp_booking_form_error_required' => __('Please fill in the field: %s','em-pro'),
+		]
 		
 	);
 	
@@ -886,6 +859,24 @@ function em_upgrade_current_installation(){
 		delete_option('dbem_cp_categories_formats');
 		delete_option('dbem_cp_tags_formats');
 		delete_option('dbem_disable_thumbnails');
+		delete_option('dbem_bookings_currency_format');
+		delete_option('dbem_event_all_day_message');
+		delete_option("dbem_gateway_label");
+		delete_option('dbem_booking_feedback_log_in');
+		delete_option('dbem_booking_feedback_already_booked');
+		delete_option('dbem_booking_button_msg_book');
+		delete_option('dbem_booking_button_msg_booking');
+		delete_option('dbem_booking_button_msg_booked');
+		delete_option('dbem_booking_feedback_cancelled');
+		delete_option('dbem_booking_warning_cancel');
+		delete_option('dbem_booking_button_msg_error');
+		delete_option('dbem_booking_button_msg_full');
+		delete_option('dbem_booking_button_msg_closed');
+		delete_option('dbem_booking_feedback_spaces_limit');
+		delete_option('dbem_thumbnails_enabled');
+		delete_option('dbem_emp_booking_form_error_required');
+		delete_option('dbem_emp_booking_form_reg_show');
+		delete_option('dbem_booking_feedback_email_exists');
 	}
 }
 
