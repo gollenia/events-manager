@@ -47,7 +47,8 @@ class Booking {
     public function enqueue_scripts() {
         global $post;
         $event = em_get_event($post->id, 'post_id');
-        
+        $priceFormatter = new \Contexis\Events\Intl\PriceFormatter(0);
+		
         if (!$event->event_id ) return;
 
 		$script_asset = require( EM_DIR . "/includes/booking.asset.php" );
@@ -74,17 +75,13 @@ class Booking {
 			'fields' => \EM_Booking_Form::get_fields($event),
 			'attendee_fields' => \EM_Attendees_Form::get_fields($event),
 			'tickets' => $event->get_tickets_rest(),
-			'gateways' => \EM_Gateways::get_gateways_rest(),
+			'gateways' => \EM_Gateways::get_rest(),
 			'strings' => [ 
 				"consent" => function_exists('get_the_privacy_policy_link') ? sprintf(get_option("dbem_data_privacy_consent_text"), get_the_privacy_policy_link()) : get_option("dbem_data_privacy_consent_text"), 
-				"pay_with" => get_option('dbem_gateway_label'),
-				"book_now" => get_option("dbem_bookings_submit_button"),
 				"time_format" => get_option('time_format'),
-				"allday" => get_option("dbem_event_all_day_message"),
-				"currency" => em_get_currency_symbol(true,get_option("dbem_bookings_currency")),
-				"modal_button" => get_option("dbem_booking_button_msg_book"),
-				"loading" => get_option("dbem_booking_button_msg_booking"),
-				"dont_close" => get_option("dbem_booking_button_msg_booked")
+				"currency_code" => $priceFormatter->get_currency_code(),
+				"currency" => $priceFormatter->get_currency(),	// To be removed in future versions
+				"locale" => str_replace('_', '-',get_locale()),
 			]
 		));
 		wp_set_script_translations( 'booking', 'events', EM_DIR  . '/languages' );
@@ -101,17 +98,40 @@ class Booking {
     /**
      * Return the DOM Element that the booking app mounts on - or not
      *
-     * @param EM_Event or Int $EM_Event
-     * @return void
-     */
-    public static function render($event = 0) {
+     * @param array $attribures
+     * @return string HTML
+	 */
+    public static function render($attributes) {
 		global $post;
 		
-        $EM_Event = em_get_event($post->id, 'post_id');
+        $event = em_get_event($post->id, 'post_id');
 		
-        if (count($EM_Event->get_bookings()->get_available_tickets()) == 0) return false;
+        if (count($event->get_bookings()->get_available_tickets()) == 0) return false;
+		$priceFormatter = new \Contexis\Events\Intl\PriceFormatter(0);
 
-        return "<div id='booking_app'></div>";
+		$data = [
+			'attributes' => $attributes,
+			'_nonce' => wp_create_nonce('booking_add'),
+			'rest_url' => get_rest_url(),
+			'booking_url' => admin_url('admin-ajax.php'),
+			'event' => \EM_Events::get_rest(['event' => $event->id])[0],
+			'coupons' => [
+				'available' => \EM_Coupons::event_has_coupons($event),
+			],
+			'fields' => \EM_Booking_Form::get_fields($event),
+			'attendee_fields' => \EM_Attendees_Form::get_fields($event),
+			'tickets' => $event->get_tickets_rest(),
+			'gateways' => \EM_Gateways::get_rest(),
+			'l10n' => [ 
+				"consent" => get_option("dbem_privacy_message"), 
+				"currency" => $priceFormatter->get_currency_code(),
+				"locale" => str_replace('_', '-',get_locale()),
+			]
+		];
+
+		$result = Assets::output_to_script_tag($data, 'booking_data');
+		$result .= "<div id='booking_app'></div>";
+        return $result;
     }
 
 }
