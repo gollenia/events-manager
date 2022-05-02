@@ -44,6 +44,10 @@ class PriceFormatter {
 		return $this->fmt->getSymbol(NumberFormatter::CURRENCY_SYMBOL);
 	}
 
+	public function get_currency_code() {
+		return $this->fmt->getTextAttribute(NumberFormatter::CURRENCY_CODE);
+	}
+
 	public function is_free() {
 		return $this->price === 0.0;
 	}

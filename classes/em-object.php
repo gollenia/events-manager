@@ -1178,7 +1178,7 @@ class EM_Object {
 	 * @return string
 	 */
 	function format_price( $price ){
-		return em_get_currency_formatted( $price );
+		return \Contexis\Events\Intl\PriceFormatter::format( $price );
 	}
 	
 	/**
