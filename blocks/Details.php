@@ -51,8 +51,6 @@ class Details {
 		
 		$attributes['overwrittenPrice'] = $this->get_overwrite_price($attributes['priceOverwrite']);
 		
-		$attributes['currency'] = get_option('dbem_bookings_currency');
-		
 		$attributes['is_daterange'] = wp_date('jY', $attributes['event']['start']) !== wp_date('jY', $attributes['event']['end']);
 		$template = $this->get_template($full_data->name);
         
@@ -85,9 +83,12 @@ class Details {
     private function get_event() {
 
 		$tax_query = [];
-
 		global $post;
-		return \EM_Events::get_rest(['post_id' => $post->id])[0];
+		$events = \EM_Events::get_rest(['post_id' => $post->id]);
+		if(count($events) > 0) {
+			return $events[0];
+		}
+		return [];
 
     }
 
