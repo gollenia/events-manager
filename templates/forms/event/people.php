@@ -6,6 +6,7 @@ $args = array(
     'post_status' => 'publish',
     'orderby' => 'title', 
     'order' => 'ASC', 
+	'posts_per_page' => -1,
 );
 $query = new WP_Query( $args );
 $speakers = $query->posts;
