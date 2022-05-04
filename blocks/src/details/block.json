@@ -27,7 +27,7 @@
 		},
 		"showPrice": {
 			"type": "boolean",
-			"default": true
+			"default": false
 		},
 		"audienceDescription": {
 			"type": "string",
