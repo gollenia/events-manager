@@ -51,9 +51,9 @@ const Inspector = (props) => {
 				label={ __("Icon", 'events')}
 				value={ audienceIcon }
 				options={ [
-					{ value: 'groups', label: 'People' },
-					{ value: 'male', label: 'Male' },
-					{ value: 'female', label: 'Female' }
+					{ value: 'groups', label: __('People', 'events') },
+					{ value: 'male', label: __('Männlich', 'events') },
+					{ value: 'female', label: __('Weiblich', 'events') }
 				] }
 				onChange={ (value) => setAttributes({ audienceIcon: value }) }
 			/>
