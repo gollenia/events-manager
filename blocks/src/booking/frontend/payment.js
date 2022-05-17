@@ -1,155 +1,68 @@
-const { useState, React } = require('react');
+const { React } = require('react');
 import { __ } from '@wordpress/i18n';
 import PropTypes from "prop-types"
-import Gateway from './gateway';
+import Coupon from './coupon';
 
 import InputField from './inputField'
+import Summary from './summary';
 
 const Payment = (props) => {
 
-	const [couponCode, setCouponCode] = useState("");
-
     const {
-        eventData: {
-            gateways, event, coupons, l10n, tickets, rest_url
-        },
-        ticketPrice,
-        fullPrice,
-        coupon,
-        error,
-        currentGatewayId,
-        updateGateway,
-        formData,
-        updateForm,
-        changeCoupon,
-		formatCurrency
+        state: {
+			request,
+			response,
+			data
+		},
+		state,
+		dispatch,
     } = props
 
+	
     const gatewayOptions = () => {
         const result = {}
-        if(gateways == undefined) return result
-        for (let i = 0; i < gateways.length; ++i) {
-            result[gateways[i].id] = gateways[i].title
-        }
+        if(data.available_gateways == undefined) return result
+		Object.keys(data.available_gateways).forEach(id => {
+			result[id] = data.available_gateways[id].title;
+		});
         return result   
-    }
-
-    const currentGateway = () => {
-        if(gateways == undefined) return null
-        const index = gateways.findIndex((element) => { return element.id === currentGatewayId });
-        return gateways[index]
-    }
-
-    const gwO = gatewayOptions();
-
-    const selectGateway = (event) => {
-        updateGateway(event)
-    }
-
-    const updateFormField = (field, value) => {
-        updateForm(field, value)
-      }
-
-    const checkCouponCode = async (code) => {
-        const params = {
-            event_id: event.event_id,
-            code
-        }
-
-		const url = new URL(rest_url + "events/v2/check_coupon")
-        url.search = new URLSearchParams(params).toString();
-        
-        await fetch(url, {}).then(response => response.json()).then(response => {
-            console.log("coupon", response)
-            changeCoupon(response)
-        })
     }
 
     
     return (
         <div className="grid xl:grid--columns-2 grid--gap-12">
             <div>
-                <div className="list ">
-                { Object.keys(tickets).map((id, key) =>
-                    <div className="list__item" key={key}>
-                        <div className="list__content">
-                            <div className="list__title">{tickets[id].name}</div>    
-                            <div className="list__subtitle">{tickets[id].description}</div>
-                            <div className="list__subtitle">{__("Base price:", "events")} {formatCurrency(tickets[id].price)}</div>
-                        </div>
-                        <div className="list__actions">
-                            <span className="button button--pseudo nowrap">{formatCurrency(ticketPrice(id))}</span>
-                            
-                        </div>
-                    </div>
-                )}
-                { coupon.success &&
-                <div className="list__item" >
-                        <div className="list__content">
-                            <div className="list__title">{coupon.description || __("Coupon", "events")}</div>    
-                            
-                        </div>
-                        <div className="list__actions">
-                            <b className="button button--pseudo nowrap">{coupon.percent ? coupon.discount + " %" : formatCurrency(coupon.discount)}</b>
-                        </div>
-                    </div>
-                }
-                <div className="list__item" >
-                        <div className="list__content">
-                            <div className="list__title"><b>{__("Full price", "events")}</b></div>    
-                            
-                        </div>
-                        <div className="list__actions">
-                            <b className="button button--pseudo nowrap">{formatCurrency(fullPrice())}</b>
-                            
-                        </div>
-                    </div>
-                </div>
-                <div>
-                    <Gateway currentGateway={currentGateway()}/>
-                </div>
+				<Summary state={state} dispatch={dispatch} />
             </div>
 			<div>
-        <form className="form">
-            { coupons.available && 
-			<div className="input-group">
-                <div className="input input-group__main">
-                <label>{__('Coupon code','events')}</label>
-                <input 
-					value={couponCode}
-					onChange={(event) => {setCouponCode(event.target.value)}}
-                    type="text"
-                    label="coupon"
-                    name="coupon_code"
-                />
-                </div>
-				<span onClick={() => {checkCouponCode(couponCode)}} className='button button--secondary'>{__("Check coupon", "events")}</span>
-			</div>
-            }
-            { gateways.length > 1 &&
-            <InputField
-                onChange={(event) => { selectGateway(event)}}
-                name="gateway"
-                value={currentGatewayId}
-                label={__("Payment method", "events")}
-                type="select"
-                options={gwO}
-            /> }
+			<form className="form">
+				{ data.event.has_coupons && 
+					<Coupon state={state} dispatch={dispatch} />
+				}
+				{ Object.keys(data.available_gateways).length > 1 &&
+				<InputField
+					onChange={(event) => {dispatch({type: "SET_GATEWAY", payload: event})} }
+					name="gateway"
+					value={request.gateway}
+					label={__("Payment method", "events")}
+					type="select"
+					options={gatewayOptions()}
+				/> }
 
-            <InputField
-                onChange={(event) => { updateFormField("data_privacy_consent", event)}}
-                name="data_privacy_consent"
-                value={formData.data_privacy_consent}
-                label={l10n.consent}
-                type="checkbox"
-            />
-            
-             
-            { error != "" && 
-                <div class="alert bg-error text-white" dangerouslySetInnerHTML={{__html: error}}></div>
-            }
-        </form>
-		</div>
+				<InputField
+					onChange={(event) => {dispatch({type: "SET_FIELD", payload: {form: "registration", field: "data_privacy_consent", value: event}})} }
+					name="data_privacy_consent"
+					value={request.registration.data_privacy_consent}
+					label={data.l10n.consent}
+					type="checkbox"
+				/>
+				
+				
+				{ response.error != "" && 
+					<div class="alert bg-error text-white" dangerouslySetInnerHTML={{__html: response.error}}></div>
+				}
+			</form>
+			</div>
         </div>
     )
 }

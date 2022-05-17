@@ -1,42 +1,39 @@
 import React, { useState } from "react";
 import InputField from './inputField'
+import eventData from "./modules/eventData";
+import { __ } from '@wordpress/i18n';
 
 /*
  *	Renders a single ticket with it's form fields
  *  and a delete button
  *
 */
-const Ticket = ({ticket, fields, ticketKey, removeTicket, updateTicket}) => {
+const Ticket = (props) => {
 
-    const [attendeeName, setAttendeeName] = useState("");
+	const {
+		state,
+		dispatch,
+		ticket,
+		index,
+	} = props;
 
-    const modifyTicket = (field, value) => {
-        ticket["fields"][field] = value
-        updateTicket(ticketKey, ticket);
-        if(field == "attendee_name" || field == "name") {
-            
-            setAttendeeName(value)
-            
-        }
-    }
-
-    if(ticket == undefined) {
-        return
-    }
-
+	const { attendee_fields } = state.data;
+	
     return (
         <div className="card card--no-image bg-white my-8 card--shadow">
             <div className="card__content">
-            <div className="card__title mb-8">{ticket.name} {attendeeName.length > 0 ? "Für" : ""} {attendeeName}</div>
+            <div className="card__title mb-8">{ticket.name} {ticket.fields?.attendee_name ? __("for", "events") : ""} {ticket.fields.attendee_name}</div>
 			<div className="form">
-            { fields.map((field, key) => 
+            { attendee_fields.map((field, key) => {
+				
+				return (
                 <InputField
                     key={key}
                     name={field.name}
                     label={field.label}
                     required={field.required}
 					half={field.half}
-                    value={field.value}
+                    value={ticket.fields[field.name]}
                     pattern={field.pattern}
                     min={field.min}
                     max={field.max}
@@ -44,8 +41,8 @@ const Ticket = ({ticket, fields, ticketKey, removeTicket, updateTicket}) => {
                     options={field.options}
                     selectHint={field.select_hint}
                     type={field.type}
-                    onChange={(value) => modifyTicket(field.name, value)}
-                />
+                    onChange={(value) => dispatch({type: "SET_FIELD", payload: {form: 'ticket', index, field: field.name, value: value}})}
+                />)}
             ) }
           	</div>
             <div className="card__footer mt-8">
@@ -53,7 +50,7 @@ const Ticket = ({ticket, fields, ticketKey, removeTicket, updateTicket}) => {
                     
                 </div>
                 <div className="card__supplemental">
-                    <button className="button button--error button--icon button--pop" onClick={() => removeTicket(ticket.uid)} disabled={ticket.min >= ticketKey + 1}><i class="material-icons">delete</i></button>
+					<span href="" className="button button--error button--icon button--pop" onClick={() => dispatch({type: "REMOVE_TICKET", payload: {index}})} disabled={ticket.min >= index + 1}><i class="material-icons">delete</i></span>
                 </div>
             </div>
             </div>

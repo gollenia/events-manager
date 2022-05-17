@@ -1,22 +1,18 @@
 import { __ } from '@wordpress/i18n';
 import React from 'react'
 import PropTypes from "prop-types"
+import eventData from './modules/eventData';
 
 /*
 *   Simple renderer for a given gateway
 */
 const Gateway = (props) => {
 
-    if(props.currentGateway == undefined) {
-        return (<div>{__("You can pay via bank transaction", "events")}</div>)
-    }
+    const {state, dispatch} = props
+	const { request, data } = state
 
-    const {
-        currentGateway: {
-            id, title, methods, html
-        }
-    } = props
-
+    const { title, html, name, methods } = data.available_gateways[request.gateway];
+	
     function createMarkup() {
         return {__html: html};
     }
@@ -24,11 +20,11 @@ const Gateway = (props) => {
     return (
         <div>
             <h5>{__("Payment", "events")}</h5>
-            <h3>{title}</h3>
+            <h5>{title}</h5>
             <p dangerouslySetInnerHTML={createMarkup()}></p>
             <div className="description">
-                { id=="mollie" && Object.keys(methods).map((method) => {
-                    return (<li className={`description-item ${method}`} key={method}><img src={"/wp-content/plugins/events-mollie/assets/methods/" + method + ".svg"}/> {methods[method]}</li>)
+                { methods !== undefined && Object.keys(methods).map((method) => {
+                    return (<li className={`description__item ${method}`} key={method}><img src={"/wp-content/plugins/events-mollie/assets/methods/" + method + ".svg"}/> {methods[method]}</li>)
                 }) }
             </div>
         </div>
@@ -36,7 +32,3 @@ const Gateway = (props) => {
 }
 
 export default Gateway
-
-Gateway.propTypes = {
-    currentGateway: PropTypes.array
-}

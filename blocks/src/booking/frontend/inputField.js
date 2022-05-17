@@ -44,7 +44,6 @@ const InputField = (props) => {
             const result = []
             Object.entries(options).forEach(entry => {
                 const [key, label] = entry;
-            
                 result.push(<option selected={value == key} key={key} value={key}>{label}</option>)
             });
             return result;
@@ -84,7 +83,7 @@ const InputField = (props) => {
                     <label>{getLabel()}</label>
                     <select onChange= {handleChange} name={name} required={required}>
                         { defaultValue && <option value="">{defaultValue}</option>}
-                        { !defaultValue && <option value="">{selectHint}</option>}
+                        { selectHint && <option value="">{selectHint}</option>}
                         { selectOptions() }
                     </select>
                 </div>
@@ -104,7 +103,7 @@ const InputField = (props) => {
             InputTag = (
                 <div className="checkbox">
                     <label>
-                    <input onChange={(event) => {handleCheckboxChange(event)}} type="checkbox" name={name} required={required} />
+                    <input onChange={(event) => {handleCheckboxChange(event)}} type="checkbox" name={name} required={required} checked={value}/>
                     <span dangerouslySetInnerHTML={createMarkup(label)}></span>
                     </label>
                 </div>
@@ -114,7 +113,7 @@ const InputField = (props) => {
             InputTag = (
                 <div className={"input" + (half ? " input--half" : "")}>
                     <label>{getLabel()}</label>
-                    <input onChange= {event => {handleChange(event)}} type={type} name={name} min={min} max={max} required={required} pattern={pattern}/>
+                    <input onChange= {event => {handleChange(event)}} type={type} name={name} min={min} max={max} required={required} value={value} pattern={pattern}/>
                 </div>
             )
             break;
@@ -130,7 +129,7 @@ const InputField = (props) => {
             InputTag = (
                 <div className={"input" + (half ? " input--half" : "")}>
                     <label>{getLabel()}</label>
-                    <input onChange= {event => {handleChange(event)}} type={type} name={name} required={required} pattern={pattern}/>
+                    <input onChange= {event => {handleChange(event)}} type={type} name={name} required={required} value={value} pattern={pattern}/>
                 </div>
             )
     }
@@ -147,6 +146,7 @@ InputField.propTypes = {
     name: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,
     label: PropTypes.string.isRequired,
+	value: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.bool]),
     required: PropTypes.bool,
     pattern: PropTypes.string,
     defaultValue: PropTypes.string,
