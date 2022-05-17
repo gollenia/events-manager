@@ -1374,12 +1374,6 @@ msgstr "Wenn ausgewählt, muss für jede Buchung mindestens ein oder die minimal
 msgid "Available until"
 msgstr "Verfügbar bis"
 
-#: templates/forms/event/bookings-ticket-form.php:54
-#: templates/forms/event/bookings-ticket-form.php:73
-msgctxt "time"
-msgid "at"
-msgstr "um"
-
 #: templates/forms/event/bookings-ticket-form.php:51
 #: templates/forms/event/bookings-ticket-form.php:70
 #: templates/forms/event/bookings.php:189
