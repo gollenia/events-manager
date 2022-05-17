@@ -97,8 +97,26 @@
 			],
 			"Book now": [
 				"Jetzt buchen"
+			],
+			"Done": [
+				"Fertig"
+			],
+			"Please fill in all required fields": [
+				"Bitte fülle alle erforderlichen Felder aus"
+			],
+			"Please select a payment method": [
+				"Bitte wähle eine Zahlungsmethode"
+			],
+			"Please accept the privacy policy": [
+				"Bitte akzeptiere die Datenschutzerklärung"
+			],
+			"You will be redirected to the payment gateway" : [
+				"Du wirst zum Zahlungsgateway weitergeleitet"
+			],
+			"Please select at least one ticket": [
+				"Bitte wähle mindestens ein Ticket aus"
 			]
-
 		}
 	}
 }
+
