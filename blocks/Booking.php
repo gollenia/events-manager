@@ -15,7 +15,7 @@ class Booking {
 		
 		add_action('init', [$instance, 'register_block']);
         
-        add_action( 'wp_enqueue_scripts', [$instance, 'enqueue_scripts'] );
+        add_action( 'wp_enqueue_scripts', [$instance, 'register_scripts'] );
 		//add_action( 'admin_enqueue_scripts', [$instance, 'admin_enqueue_scripts'] );
         
     }
@@ -44,13 +44,8 @@ class Booking {
      *
      * @return void
      */
-    public function enqueue_scripts() {
-        global $post;
-        $event = em_get_event($post->id, 'post_id');
+    public function register_scripts() {
         
-        if (!$event->event_id ) return;
-		if (count($event->get_bookings()->get_available_tickets()) == 0) return false;
-
 		$script_asset = require( EM_DIR . "/includes/booking.asset.php" );
 		wp_register_script( 
 			'booking', 
@@ -80,7 +75,7 @@ class Booking {
     public static function render($attributes) {
 		global $post;
 
-		$event = em_get_event($post->id, 'post_id');
+		$event = \EM_Event::find($post->id, 'post_id');
 		
 		add_action( 'wp_enqueue_scripts', function() {
 			wp_enqueue_script('booking');
