@@ -504,8 +504,13 @@ class EM_Event extends EM_Object{
 	public function get_tickets_rest() {
 		$tickets = (array)$this->get_bookings()->get_available_tickets()->tickets;
 		$ticket_collection = [];
+		$available_fields = \EM_Attendees_Form::get_fields($event);
+		$fields = [];
+		foreach ($available_fields as $field) {
+			$fields[$field['name']] = $field['default_value'];
+		}
         foreach($tickets as $id => $ticket) {
-            array_push($ticket_collection, [
+			$ticket_collection[$id]= [
                 "id" => $id,
                 "event_id" => $ticket->event_id,
                 "is_available" => $ticket->is_available,
@@ -514,8 +519,8 @@ class EM_Event extends EM_Object{
                 "min" => $ticket->ticket_min ?: 0,
                 "name" => $ticket->ticket_name,
                 "description" => $ticket->ticket_description,
-                "fields" => []
-            ]);
+                "fields" => $fields
+            ];
         }
         return $ticket_collection;
 	}
