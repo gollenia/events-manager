@@ -135,6 +135,10 @@
         function remove_all(){
         	$this->notices = array('errors'=>array(), 'infos'=>array(), 'alerts'=>array(), 'confirms'=>array());
         }
+
+		function get_errors_rest($type) {
+			return $this->notices[$type];
+		}
         
         function get($type){
             if( isset($this->notices[$type]) ){
