@@ -1,6 +1,6 @@
 <?php
 global $EM_Event, $post;
-$hours_format = em_get_hour_format();
+
 $start_date= $EM_Event->event_start_date ? $EM_Event->start()->getDate() : date('Y-m-d');
 $end_date= $EM_Event->event_end_date ? $EM_Event->end()->getDate() : date('Y-m-d');
 $unchanged= $EM_Event->event_end_date ? 0 : 1;

@@ -47,28 +47,15 @@ class EM_ML_Options {
 				'dbem_location_no_event_message',
 				
 				'dbem_no_categories_message',
-		
 				'dbem_no_tags_message',
 		
-				'dbem_rss_main_description',
-				'dbem_rss_main_title',
-				'dbem_rss_title_format',
-				'dbem_rss_description_format',
-
-				'dbem_bookings_currency_thousands_sep',
-				'dbem_bookings_currency_decimal_point',
 				'dbem_bookings_currency_format',
 				'dbem_booking_feedback',
 				'dbem_booking_feedback_pending',
-				'dbem_booking_feedback_full',
-				'dbem_booking_feedback_error',
-				'dbem_booking_feedback_nomail',
-				'dbem_booking_feedback_min_space',
-				
+				'dbem_booking_feedback_full',				
 				'dbem_booking_button_msg_error',
 				'dbem_booking_button_msg_full',
 				'dbem_booking_button_msg_closed',
-
 				'dbem_bookings_submit_button',
 			
 				'dbem_bookings_contact_email_pending_subject',

@@ -9,10 +9,6 @@ class EM_Location_Post {
 			//override excerpts?
 		
 		
-			//display as page or other template?
-			if( get_option('dbem_cp_locations_template') ){
-				add_filter('single_template',array('EM_Location_Post','single_template'));
-			}
 		
 			
 		}
@@ -27,12 +23,9 @@ class EM_Location_Post {
 	public static function single_template($template){
 		global $post;
 		if( !locate_template('single-'.EM_POST_TYPE_LOCATION.'.php') && $post->post_type == EM_POST_TYPE_LOCATION ){
-			//do we have a default template to choose for events?
-			if( get_option('dbem_cp_locations_template') == 'page' ){
-				$post_templates = array('page.php','index.php');
-			}else{
-			    $post_templates = array(get_option('dbem_cp_locations_template'));
-			}
+			
+			$post_templates = array('page.php','index.php');
+			
 			if( !empty($post_templates) ){
 			    $post_template = locate_template($post_templates,false);
 			    if( !empty($post_template) ) $template = $post_template;
@@ -60,18 +53,8 @@ class EM_Location_Post {
 	public static function parse_query(){
 	    global $wp_query;
 		if( !empty($wp_query->query_vars['post_type']) && $wp_query->query_vars['post_type'] == EM_POST_TYPE_LOCATION ){
-			if( is_admin() ){
-				$wp_query->query_vars['orderby'] = (!empty($_REQUEST['orderby'])) ? $_REQUEST['orderby']:'title';
-				$wp_query->query_vars['order'] = (!empty($_REQUEST['order'])) ? $_REQUEST['order']:'ASC';
-			}else{
-			  	if( get_option('dbem_locations_default_archive_orderby') == 'title'){
-			  		$wp_query->query_vars['orderby'] = 'title';
-			  	}else{
-				  	$wp_query->query_vars['orderby'] = 'meta_value_num';
-				  	$wp_query->query_vars['meta_key'] = get_option('dbem_locations_default_archive_orderby','_location_country');	  		
-			  	}
-				$wp_query->query_vars['order'] = get_option('dbem_locations_default_archive_order','ASC');
-			}
+			$wp_query->query_vars['orderby'] = (!empty($_REQUEST['orderby'])) ? $_REQUEST['orderby']:'title';
+			$wp_query->query_vars['order'] = (!empty($_REQUEST['order'])) ? $_REQUEST['order']:'ASC';	
 		}
 	}
 }

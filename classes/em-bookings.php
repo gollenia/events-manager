@@ -136,7 +136,7 @@ class EM_Bookings extends EM_Object implements Iterator{
 			}
 			if(!$email){
 				$EM_Booking->email_not_sent = true;
-				$this->feedback_message .= ' '.get_option('dbem_booking_feedback_nomail');
+				$this->feedback_message .= ' '.__('However, there were some problems whilst sending confirmation emails to you and/or the event contact person. You may want to contact them directly and letting them know of this error.', 'events-manager');
 				if( current_user_can('activate_plugins') ){
 					if( count($EM_Booking->get_errors()) > 0 ){
 						$this->feedback_message .= '<br/><strong>Errors:</strong> (only admins see this message)<br/><ul><li>'. implode('</li><li>', $EM_Booking->get_errors()).'</li></ul>';
@@ -148,7 +148,7 @@ class EM_Bookings extends EM_Object implements Iterator{
 			return apply_filters('em_bookings_add', true, $EM_Booking);
 		}else{
 			//Failure
-			$this->errors[] = "<strong>".get_option('dbem_booking_feedback_error')."</strong><br />". implode('<br />', $EM_Booking->errors);
+			$this->errors[] = "<strong>".__('Booking could not be created','events-manager')."</strong><br />". implode('<br />', $EM_Booking->errors);
 		}
 		return apply_filters('em_bookings_add', false, $EM_Booking);
 	}
@@ -181,15 +181,15 @@ class EM_Bookings extends EM_Object implements Iterator{
 			return $EM_Event;
 		}else{
 			if( is_numeric($this->event_id) && $this->event_id > 0 ){
-				return em_get_event($this->event_id, 'event_id');
+				return EM_Event::find($this->event_id, 'event_id');
 			}elseif( is_array($this->bookings) ){
 				foreach($this->bookings as $EM_Booking){
 					/* @var $EM_Booking EM_Booking */
-					return em_get_event($EM_Booking->event_id, 'event_id');
+					return EM_Event::find($EM_Booking->event_id, 'event_id');
 				}
 			}
 		}
-		return em_get_event($this->event_id, 'event_id');
+		return EM_Event::find($this->event_id, 'event_id');
 	}
 	
 	/**
@@ -339,7 +339,7 @@ class EM_Bookings extends EM_Object implements Iterator{
 	 */
 	function set_status( $status, $booking_ids, $send_email = true, $ignore_spaces = false ){
 		//FIXME status should work with instantiated object
-		if( is_array($booking_ids) && array_is_list($booking_ids) ){
+		if( is_array($booking_ids) && !empty($booking_ids) && array_is_list($booking_ids) ){
 			//Get all the bookings
 			$results = array();
 			$mails = array();
@@ -545,7 +545,7 @@ class EM_Bookings extends EM_Object implements Iterator{
 		$locations_table = EM_LOCATIONS_TABLE;
 		
 		//Quick version, we can accept an array of IDs, which is easy to retrieve
-		if( is_array($args) && array_is_list($args) ){ //Array of numbers, assume they are event IDs to retreive
+		if( is_array($args) && !empty($args) && array_is_list($args) ){ //Array of numbers, assume they are event IDs to retreive
 			//We can just get all the events here and return them
 			$sql = "
 				SELECT * FROM $bookings_table b 

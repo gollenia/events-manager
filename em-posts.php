@@ -6,10 +6,11 @@ define('EM_TAXONOMY_CATEGORY','event-categories');
 define('EM_TAXONOMY_TAG','event-tags');
 
 define('EM_POST_TYPE_EVENT_SLUG',get_option('dbem_cp_events_slug', 'events'));
-define('EM_POST_TYPE_LOCATION_SLUG',get_option('dbem_cp_locations_slug', 'locations'));
 
-define('EM_TAXONOMY_CATEGORY_SLUG', get_option('dbem_taxonomy_category_slug', 'events/categories'));
-define('EM_TAXONOMY_TAG_SLUG', get_option('dbem_taxonomy_tag_slug', 'events/tags'));
+// We do not need these slugs in the frontend anymore, but we need to keep their definitions here for the backend
+define('EM_POST_TYPE_LOCATION_SLUG','locations');
+define('EM_TAXONOMY_CATEGORY_SLUG', 'events/categories');
+define('EM_TAXONOMY_TAG_SLUG', 'events/tags');
 
 
 //This bit registers the CPTs
@@ -187,11 +188,11 @@ function wp_events_plugin_init(){
 			'show_in_menu' => 'edit.php?post_type='.EM_POST_TYPE_EVENT,
 			'show_in_nav_menus'=>true,
 			'can_export' => true,
-			'exclude_from_search' => !get_option('dbem_cp_locations_search_results'),
+			'exclude_from_search' => true,
 			'publicly_queryable' => true,
 			'rewrite' => ['slug' => EM_POST_TYPE_LOCATION_SLUG, 'with_front'=>false],
 			'query_var' => true,
-			'has_archive' => get_option('dbem_cp_locations_has_archive', false) == true,
+			'has_archive' => false,
 			'supports' => apply_filters('em_cp_location_supports', ['title','excerpt','thumbnail','author']),
 			'capability_type' => 'location',
 			'capabilities' => [
@@ -274,7 +275,7 @@ function em_map_meta_cap( $caps, $cap, $user_id, $args ) {
 			if( !empty($post->post_type) && $post->post_type == 'revision' ) $post = get_post($post->post_parent);
 			if( empty($post->post_type) || !in_array($post->post_type, array(EM_POST_TYPE_EVENT, 'event-recurring')) ) return $caps;
 			//continue with getting post type and assigning caps
-			$EM_Event = em_get_event($post);
+			$EM_Event = EM_Event::find($post);
 			$post_type = get_post_type_object( $EM_Event->post_type );
 			/* Set an empty array for the caps. */
 			$caps = [];
@@ -308,7 +309,7 @@ function em_map_meta_cap( $caps, $cap, $user_id, $args ) {
 			if( !empty($post->post_type) && $post->post_type == 'revision' ) $post = get_post($post->post_parent);
 			if( empty($post->post_type) || $post->post_type != 'event-recurring' ) return $caps;
 			//continue with getting post type and assigning caps
-			$EM_Event = em_get_event($post);
+			$EM_Event = EM_Event::find($post);
 			$post_type = get_post_type_object( $EM_Event->post_type );
 			/* Set an empty array for the caps. */
 			$caps = [];

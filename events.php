@@ -215,7 +215,6 @@ class EM_Scripts_and_Styles {
 			'firstDay' => get_option('start_of_week'),
 			'locale' => $locale_code,
 			'ui_css' => plugins_url('includes/jquery-ui.min.css', __FILE__),
-			'show24hours' => get_option('dbem_time_24h'),
 			'is_ssl' => is_ssl(),
 		);
 
@@ -368,7 +367,7 @@ function em_load_event(){
 		if( isset( $_REQUEST['event_id'] ) && is_numeric($_REQUEST['event_id']) && !is_object($EM_Event) ){
 			$EM_Event = new EM_Event( absint($_REQUEST['event_id']) );
 		}elseif( isset($_REQUEST['post']) && (get_post_type($_REQUEST['post']) == 'event' || get_post_type($_REQUEST['post']) == 'event-recurring') ){
-			$EM_Event = em_get_event($_REQUEST['post'], 'post_id');
+			$EM_Event = EM_Event::find($_REQUEST['post'], 'post_id');
 		}elseif ( !empty($_REQUEST['event_slug']) && EM_MS_GLOBAL && is_main_site() && !get_site_option('dbem_ms_global_events_links')) {
 			// single event page for a subsite event being shown on the main blog
 			global $wpdb;
@@ -379,7 +378,7 @@ function em_load_event(){
 				$query = $wpdb->prepare('SELECT event_id FROM '.EM_EVENTS_TABLE.' WHERE event_slug = %s AND blog_id != %d', $_REQUEST['event_slug'], get_current_blog_id());
 				$event_id = $wpdb->get_var($query);
 			}
-			$EM_Event = em_get_event($event_id);
+			$EM_Event = EM_Event::find($event_id);
 		}
 		if( isset($_REQUEST['location_id']) && is_numeric($_REQUEST['location_id']) && !is_object($EM_Location) ){
 			$EM_Location = new EM_Location( absint($_REQUEST['location_id']) );
@@ -474,37 +473,6 @@ class EM_Formats {
 global $EM_Formats;
 $EM_Formats = new EM_Formats();
 
-/**
- * Catches the event rss feed requests
- */
-function em_rss() {
-	global $post, $wp_query, $wpdb;
-	//check if we're meant to override the feeds - we only check EM's taxonomies because we can't guarantee (well, not without more coding) that it's not being used by other CPTs
-	if( is_feed() && $wp_query->get(EM_TAXONOMY_CATEGORY) ){
-		//event category feed
-		$args = array('category' => $wp_query->get(EM_TAXONOMY_CATEGORY));
-	}elseif( is_feed() && $wp_query->get(EM_TAXONOMY_TAG) ){
-		//event tag feed
-		$args = array('tag' => $wp_query->get(EM_TAXONOMY_TAG));
-	}elseif( is_feed() && $wp_query->get('post_type') == EM_POST_TYPE_LOCATION && $wp_query->get(EM_POST_TYPE_LOCATION) ){
-		//location feeds
-		$location_id = $wpdb->get_var('SELECT location_id FROM '.EM_LOCATIONS_TABLE." WHERE location_slug='".$wp_query->get(EM_POST_TYPE_LOCATION)."' AND location_status=1 LIMIT 1");
-		if( !empty($location_id) ){
-			$args = array('location'=> $location_id);
-		}
-	}elseif( is_feed() && $wp_query->get('post_type') == EM_POST_TYPE_EVENT ) {
-		//events feed - show it all
-		$args = array();
-	}
-	if( isset($args) ){
-		$wp_query->is_feed = true; //make is_feed() return true AIO SEO fix
-		ob_start();
-		em_locate_template('templates/rss.php', true, array('args'=>$args));
-		echo apply_filters('em_rss', ob_get_clean());
-		die();
-	}
-}
-add_action ( 'template_redirect', 'em_rss' );
 
 /**
  * Monitors event saves and changes the rss pubdate and a last modified option so it's current

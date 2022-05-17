@@ -316,11 +316,10 @@ function em_admin_options_page() {
 	    $tabs_enabled = true;
 	    $general_tab_link = esc_url(add_query_arg( array('em_tab'=>'general')));
 	    $pages_tab_link = esc_url(add_query_arg( array('em_tab'=>'pages')));
-	    $formats_tab_link = esc_url(add_query_arg( array('em_tab'=>'formats')));
 	    $bookings_tab_link = esc_url(add_query_arg( array('em_tab'=>'bookings')));
 	    $emails_tab_link = esc_url(add_query_arg( array('em_tab'=>'emails')));
 	}else{
-	    $general_tab_link = $pages_tab_link = $formats_tab_link = $bookings_tab_link = $emails_tab_link = '';
+	    $general_tab_link = $pages_tab_link = $bookings_tab_link = $emails_tab_link = '';
 	}
 	?>
 	<script type="text/javascript" charset="utf-8"><?php include(EM_DIR.'/includes/admin-settings.js'); ?></script>
@@ -329,8 +328,7 @@ function em_admin_options_page() {
 		<h1 id="em-options-title"><?php _e ( 'Event Manager Options', 'events-manager'); ?></h1>
 		<h2 class="nav-tab-wrapper">
 			<a href="<?php echo $general_tab_link; ?>#general" id="em-menu-general" class="nav-tab nav-tab-active"><?php _e('General','events-manager'); ?></a>
-			<a href="<?php echo $pages_tab_link; ?>#pages" id="em-menu-pages" class="nav-tab"><?php _e('Pages','events-manager'); ?></a>
-			<a href="<?php echo $formats_tab_link; ?>#formats" id="em-menu-formats" class="nav-tab"><?php _e('Formatting','events-manager'); ?></a>
+			
 			<?php if( get_option('dbem_rsvp_enabled') ): ?>
 			<a href="<?php echo $bookings_tab_link; ?>#bookings" id="em-menu-bookings" class="nav-tab"><?php _e('Bookings','events-manager'); ?></a>
 			<?php endif; ?>
@@ -355,8 +353,7 @@ function em_admin_options_page() {
 			    if( empty($_REQUEST['em_tab']) || $_REQUEST['em_tab'] == 'general' ){ 
 			        include('settings/general.php');
 			    }else{
-        			if( $_REQUEST['em_tab'] == 'pages' ) include('settings/pages.php');
-        			if( $_REQUEST['em_tab'] == 'formats' ) include('settings/formats.php');
+        			
         			if( get_option('dbem_rsvp_enabled') && $_REQUEST['em_tab'] == 'bookings'  ){
         			    include('settings/bookings.php');
         			}
@@ -371,8 +368,8 @@ function em_admin_options_page() {
 			    }
 			}else{
     			include('settings/general.php');
-    			include('settings/pages.php');
-    			include('settings/formats.php');
+    			
+    			
     			if( get_option('dbem_rsvp_enabled') ){
     			    include('settings/bookings.php');
     			}

@@ -516,31 +516,12 @@ function em_add_options() {
 		'dbem_search_form_town_label' => __('City/Town','events-manager'),
 		'dbem_no_events_message' => sprintf(__( 'No %s', 'events-manager'),__('Events','events-manager')),
 		//Location Formatting
-		'dbem_locations_default_limit' => 10,
 		'dbem_no_locations_message' => sprintf(__( 'No %s', 'events-manager'),__('Locations','events-manager')),
 		'dbem_location_default_country' => '',
 
 		'dbem_location_event_single_format' => '#_EVENTLINK - #_EVENTDATES - #_EVENTTIMES',
 		'dbem_location_no_event_message' => __('No events in this location', 'events-manager'),
 
-		//RSS Stuff
-		'dbem_rss_limit' => 50,
-		'dbem_rss_scope' => 'future',
-		'dbem_rss_main_title' => get_bloginfo('title')." - ".__('Events', 'events-manager'),
-		'dbem_rss_main_description' => get_bloginfo('description')." - ".__('Events', 'events-manager'),
-		'dbem_rss_description_format' => "#_EVENTDATES - #_EVENTTIMES <br/>#_LOCATIONNAME <br/>#_LOCATIONADDRESS <br/>#_LOCATIONTOWN",
-		'dbem_rss_title_format' => "#_EVENTNAME",
-		'dbem_rss_order' => get_option('dbem_events_default_order', 'ASC'), //get event order and orderby or use same new installation defaults
-		'dbem_rss_orderby' => get_option('dbem_events_default_orderby', 'event_start_date,event_start_time,event_name'),
-		'em_rss_pubdate' => date('D, d M Y H:i:s +0000'),
-		//iCal Stuff
-		'dbem_ical_limit' => 50,
-		'dbem_ical_scope' => "future",
-		'dbem_ical_description_format' => "#_EVENTNAME",
-		'dbem_ical_real_description_format' => "#_EVENTEXCERPT",
-		'dbem_ical_location_format' => "#_LOCATIONNAME, #_LOCATIONFULLLINE, #_LOCATIONCOUNTRY",
-		//Google Maps
-		
 		//Email Config
 		'dbem_email_disable_registration' => 0,
 		'dbem_rsvp_mail_port' => 465,
@@ -564,8 +545,7 @@ function em_add_options() {
 		'dbem_bookings_approval_overbooking' => 0, //overbooking possible when approving?
 		
 		'dbem_bookings_currency' => 'USD',
-		'dbem_bookings_currency_decimal_point' => $decimal_point,
-		'dbem_bookings_currency_thousands_sep' => $thousands_sep,
+		
 		
 		'dbem_bookings_tax' => 0, //extra tax
 		'dbem_bookings_tax_auto_add' => 0, //adjust prices to show tax?
@@ -575,11 +555,8 @@ function em_add_options() {
 		'dbem_booking_feedback_pending' =>__('Booking successful, pending confirmation (you will also receive an email once confirmed).', 'events-manager'),
 		'dbem_booking_feedback' => __('Booking successful.', 'events-manager'),
 		'dbem_booking_feedback_full' => __('Booking cannot be made, not enough spaces available!', 'events-manager'),
-		'dbem_booking_feedback_nomail' => __('However, there were some problems whilst sending confirmation emails to you and/or the event contact person. You may want to contact them directly and letting them know of this error.', 'events-manager'),
-		'dbem_booking_feedback_error' => __('Booking could not be created','events-manager').':',
 		'dbem_booking_feedback_new_user' => __('A new user account has been created for you. Please check your email for access details.','events-manager'),
 		'dbem_booking_feedback_reg_error' => __('There was a problem creating a user account, please contact a website administrator.','events-manager'),
-		'dbem_booking_feedback_min_space' => __('You must request at least one space to book an event.','events-manager'),
 		//Emails
 		'dbem_bookings_notify_admin' => 0,
 		'dbem_bookings_contact_email' => 1,
@@ -611,28 +588,11 @@ function em_add_options() {
 		'dbem_bookings_my_title_format' => __('My Bookings','events-manager'),
 		//Flags
 		'dbem_hello_to_user' => 1,
-
 		'dbem_cp_events_slug' => 'events',
-		'dbem_cp_locations_slug' => 'locations',
-		'dbem_taxonomy_category_slug' => 'events/categories',
-		'dbem_taxonomy_tag_slug' => 'events/tags',
 		//event cp options
 		'dbem_events_default_archive_order' => 'ASC',
 	    'dbem_cp_events_excerpt_formats' => 1,
 		'dbem_cp_events_search_results' => 0,
-		//location cp options
-		'dbem_cp_locations_template' => '',
-		//'dbem_cp_locations_template_page' => 0, DEPREICATED
-		'dbem_cp_locations_formats' => 1,
-		'dbem_cp_locations_has_archive' => 1,
-		'dbem_locations_default_archive_orderby' => 'title',
-		'dbem_locations_default_archive_order' => 'ASC',
-		'dbem_cp_locations_archive_formats' => 1,
-	    'dbem_cp_locations_excerpt_formats' => 1,
-		'dbem_cp_locations_search_results' => 0,
-		'dbem_cp_locations_comments' => 1,
-	    //optimization options
-	    
 	    //feedback reminder
 	    'dbem_feedback_reminder' => time(),
 	    'dbem_conditional_recursions' => 1,
@@ -708,17 +668,7 @@ function em_add_options() {
 	$wpdb->insert(EM_META_TABLE, array('meta_value'=>serialize($booking_form_data), 'meta_key'=>'booking-form','object_id'=>0));
 	add_option('em_booking_form_fields', $wpdb->insert_id);
 		
-	//set time localization for first time depending on current settings
-	if( get_option('dbem_time_24h','not set') == 'not set'){
-		//Localise vars regardless
-		$locale_code = substr ( get_locale(), 0, 2 );
-		if (preg_match('/^en_(?:GB|IE|AU|NZ|ZA|TT|JM)$/', get_locale())) {
-		    $locale_code = 'en-GB';
-		}
-		//Set time
-		$show24Hours = ( !preg_match("/en|sk|zh|us|uk/", $locale_code ) );	// Setting 12 hours format for those countries using it
-		update_option('dbem_time_24h', $show24Hours);
-	}
+	
 }
 
 function em_upgrade_current_installation(){
@@ -877,6 +827,37 @@ function em_upgrade_current_installation(){
 		delete_option('dbem_emp_booking_form_error_required');
 		delete_option('dbem_emp_booking_form_reg_show');
 		delete_option('dbem_booking_feedback_email_exists');
+		delete_option('dbem_bookings_currency_decimal_point');
+		delete_option('dbem_bookings_currency_thousands_sep');
+		delete_option('dbem_booking_feedback_min_space');
+		delete_option('dbem_booking_feedback_nomail');
+		delete_option('dbem_booking_feedback_error');
+		delete_option('dbem_rss_main_title');
+		delete_option('dbem_rss_main_description');
+		delete_option('dbem_rss_limit');
+		delete_option('dbem_rss_description_format');
+		delete_option('dbem_rss_title_format');
+		delete_option('dbem_rss_order');
+		delete_option('dbem_rss_orderby');
+		delete_option('em_rss_pubdate');
+		delete_option('dbem_cp_locations_slug');
+		delete_option('dbem_taxonomy_category_slug');
+		delete_option('dbem_taxonomy_tag_slug');
+		delete_option('dbem_ical_description_format');
+		delete_option('dbem_ical_real_description_format');
+		delete_option('dbem_ical_location_format');
+		delete_option('dbem_ical_limit');
+		delete_option('dbem_ical_scope');
+		delete_option('dbem_cp_locations_formats');
+		delete_option('dbem_cp_locations_comments');
+		delete_option('dbem_cp_locations_archive_formats');
+	    delete_option('dbem_cp_locations_excerpt_formats');
+		delete_option('dbem_cp_locations_search_results');
+		delete_option('dbem_cp_locations_template');
+		delete_option('dbem_cp_locations_has_archive');
+		delete_option('dbem_locations_default_archive_orderby');
+		delete_option('dbem_locations_default_archive_order');
+		delete_option('dbem_locations_default_limit');
 	}
 }
 

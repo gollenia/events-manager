@@ -1,18 +1,18 @@
 <?php 
 //define and clean up formats for display
-$summary_format = str_replace ( ">", "&gt;", str_replace ( "<", "&lt;", get_option ( 'dbem_ical_description_format' ) ) );
-$description_format = str_replace ( ">", "&gt;", str_replace ( "<", "&lt;", get_option ( 'dbem_ical_real_description_format') ) );
-$location_format = str_replace ( ">", "&gt;", str_replace ( "<", "&lt;", get_option ( 'dbem_ical_location_format' ) ) );
+$summary_format = str_replace ( ">", "&gt;", str_replace ( "<", "&lt;", "#_EVENTNAME" ) );
+$description_format = str_replace ( ">", "&gt;", str_replace ( "<", "&lt;", "#_EVENTEXCERPT" ) );
+$location_format = str_replace ( ">", "&gt;", str_replace ( "<", "&lt;", "#_LOCATIONNAME, #_LOCATIONFULLLINE, #_LOCATIONCOUNTRY" ) );
 $parsed_url = parse_url(get_bloginfo('url'));
 $site_domain = preg_replace('/^www./', '', $parsed_url['host']);
-$timezone_support = defined('EM_ICAL_TIMEZONE_SUPPORT') ? EM_ICAL_TIMEZONE_SUPPORT : true;
+$timezone_support = true;
 
 //figure out limits
-$ical_limit = get_option('dbem_ical_limit');
+$ical_limit = 50;
 $page_limit = $ical_limit > 50 || !$ical_limit ? 50:$ical_limit; //set a limit of 50 to output at a time, unless overall limit is lower
 //get passed on $args and merge with defaults
 $args = !empty($args) ? $args:array(); /* @var $args array */
-$args = array_merge(array('limit'=>$page_limit, 'page'=>'1', 'owner'=>false, 'orderby'=>'event_start_date,event_start_time', 'scope' => get_option('dbem_ical_scope') ), $args);
+$args = array_merge(array('limit'=>$page_limit, 'page'=>'1', 'owner'=>false, 'orderby'=>'event_start_date,event_start_time', 'scope' => 'future' ), $args);
 $args = apply_filters('em_calendar_template_args',$args);
 //get first round of events to show, we'll start adding more via the while loop
 $EM_Events = EM_Events::get( $args );

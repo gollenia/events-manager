@@ -228,7 +228,14 @@ function em_get_currency_name($currency = false){
 }
 
 function em_get_hour_format(){
-	return get_option('dbem_time_24h') ? "H:i":"h:i A";
+	$locale_code = substr ( get_locale(), 0, 2 );
+	if (preg_match('/^en_(?:GB|IE|AU|NZ|ZA|TT|JM)$/', get_locale())) {
+		$locale_code = 'en-GB';
+	}
+	//Set time
+	$show24Hours = ( !preg_match("/en|sk|zh|us|uk/", $locale_code ) );	// Setting 12 hours format for those countries using it
+	
+	return $show24Hours ? "H:i":"h:i A";
 }
 
 function em_get_days_names(){
