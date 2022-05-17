@@ -116,6 +116,8 @@ class EM_Gateways_Admin{
 
 											if(array_key_exists($key, $active)) {
 												$actions['toggle'] = "<span class='edit activate'><a href='" . wp_nonce_url(EM_ADMIN_URL."&amp;page=" . $page. "&amp;action=deactivate&amp;gateway=" . $key . "", 'toggle-gateway_' . $key) . "'>" . __('Deactivate') . "</a></span>";
+											} else {
+												$actions['toggle'] = "<span class='edit activate'><a href='" . wp_nonce_url(EM_ADMIN_URL."&amp;page=" . $page. "&amp;action=activate&amp;gateway=" . $key . "", 'toggle-gateway_' . $key) . "'>" . __('Activate') . "</a></span>";
 											}
 										?>
 										<br><div class="row-actions"><?php echo implode(" | ", $actions); ?></div>
