@@ -260,6 +260,15 @@ class EM_Gateway {
 		}
 		return $message;
 	}
+
+	function get_rest() {
+		return array(
+			'name' => $this->gateway,
+			"title" => get_option('em_'.$this->gateway.'_option_name'),
+        	"html" => get_option('em_'.$this->gateway.'_form'),
+			"description" => get_option('em_'.$this->gateway.'_option_description'),
+		);
+	}
 	
 	/*
 	 * --------------------------------------------------
