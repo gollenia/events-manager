@@ -235,7 +235,7 @@ class EM_Gateways_Transactions{
 				<tr valign="middle" class="alternate">
 					<td>
 						<?php
-							$EM_Booking = em_get_booking($transaction->booking_id);
+							$EM_Booking = EM_Booking::find($transaction->booking_id);
 							if( get_class($EM_Booking) == 'EM_Multiple_Booking' ){
 								$link = em_add_get_params($EM_Booking->get_admin_url(), array('booking_id'=>$EM_Booking->booking_id, 'em_ajax'=>null, 'em_obj'=>null));
 								echo '<a href="'.$link.'">'.$EM_Booking->get_event()->event_name.'</a>';
@@ -418,7 +418,7 @@ function emp_transactions_init(){
 		global $wpdb;
 		$booking_id = $wpdb->get_var('SELECT booking_id FROM '.EM_TRANSACTIONS_TABLE." WHERE transaction_id='".$_REQUEST['txn_id']."'");
 		if( !empty($booking_id) ){
-			$EM_Booking = em_get_booking($booking_id);
+			$EM_Booking = EM_Booking::find($booking_id);
 			if( (!empty($EM_Booking->booking_id) && $EM_Booking->can_manage()) || is_super_admin() ){
 				//all good, delete it
 				$wpdb->query('DELETE FROM '.EM_TRANSACTIONS_TABLE." WHERE transaction_id='".$_REQUEST['txn_id']."'");

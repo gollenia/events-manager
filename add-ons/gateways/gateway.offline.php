@@ -40,7 +40,7 @@ class EM_Gateway_Offline extends EM_Gateway {
 		
 		//Check if manual payment has been added
 		if( !empty($_REQUEST['booking_id']) && !empty($_REQUEST['action']) && !empty($_REQUEST['_wpnonce'])){
-			$EM_Booking = em_get_booking($_REQUEST['booking_id']);
+			$EM_Booking = EM_Booking::find($_REQUEST['booking_id']);
 			if( $_REQUEST['action'] == 'gateway_add_payment' && is_object($EM_Booking) && wp_verify_nonce($_REQUEST['_wpnonce'], 'gateway_add_payment') ){
 				if( !empty($_REQUEST['transaction_total_amount']) && is_numeric($_REQUEST['transaction_total_amount']) ){
 					$this->record_transaction($EM_Booking, $_REQUEST['transaction_total_amount'], get_option('dbem_bookings_currency'), current_time('mysql'), '', 'Completed', $_REQUEST['transaction_note']);

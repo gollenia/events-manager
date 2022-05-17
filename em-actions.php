@@ -252,7 +252,7 @@ function em_init_actions() {
 		
 		global $EM_Event, $EM_Booking, $EM_Person;
 		//Load the booking object, with saved booking if requested
-		$EM_Booking = ( !empty($_REQUEST['booking_id']) ) ? em_get_booking($_REQUEST['booking_id']) : em_get_booking();
+		$EM_Booking = ( !empty($_REQUEST['booking_id']) ) ? EM_Booking::find($_REQUEST['booking_id']) : EM_Booking::find();
 		if( !empty($EM_Booking->event_id) ){
 			//Load the event object, with saved event if requested
 			$EM_Event = $EM_Booking->get_event();
@@ -303,7 +303,7 @@ function em_init_actions() {
 			if( !empty($_REQUEST['bookings']) && is_array($_REQUEST['bookings']) && array_is_list($_REQUEST['bookings'])){
 				$results = array();
 				foreach($_REQUEST['bookings'] as $booking_id){
-					$EM_Booking = em_get_booking($booking_id);
+					$EM_Booking = EM_Booking::find($booking_id);
 					$result = $EM_Booking->$action();
 					$results[] = $result;
 					if( !in_array(false, $results) && !$result ){
@@ -426,7 +426,7 @@ function em_init_actions() {
 			echo json_encode(apply_filters('em_action_'.$_REQUEST['action'], $return, $EM_Booking));
 			die();
 		}elseif( !$result && defined('DOING_AJAX') ){
-			$return = array('result'=>false, 'message'=>$feedback, 'errors'=>$EM_Notices->get_errors());
+			$return = array('result'=>false, 'message'=>$feedback, 'error'=>$EM_Booking->get_errors());
 			header( 'Content-Type: application/javascript; charset=UTF-8', true ); //add this for HTTP -> HTTPS requests which assume it's a cross-site request
 			echo json_encode(apply_filters('em_action_'.$_REQUEST['action'], $return, $EM_Booking));
 			die();

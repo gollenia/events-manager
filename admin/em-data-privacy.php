@@ -74,7 +74,7 @@ class EM_Data_Privacy {
 
 			$items_removed = $items_retained = false;
 			foreach ( $booking_ids as $booking_id ) {
-				$EM_Booking = em_get_booking($booking_id);
+				$EM_Booking = EM_Booking::find($booking_id);
 				if( $EM_Booking->delete() ){
 					$items_removed = true;
 				}else{
@@ -267,7 +267,7 @@ class EM_Data_Privacy {
 		);
 
 		foreach ( $bookings as $booking_id ) {
-			$EM_Booking = em_get_booking($booking_id);
+			$EM_Booking = EM_Booking::find($booking_id);
 			$export_item = $booking_export_default;
 			$export_item['item_id'] = 'booking-'.$EM_Booking->booking_id;
 			$export_item['data']['status'] = array('name' => __('Status','events-manager'), 'value' => $EM_Booking->get_status() );

@@ -31,7 +31,7 @@ class EM_QR_Code_Generator {
 	 */
     public function generate_qr_code() {
 		if(empty($_REQUEST['booking_id'])) return;
-		$booking = em_get_booking($_REQUEST['booking_id']);
+		$booking = EM_Booking::find(absint($_REQUEST['booking_id']));
 		$logo_id = get_option("em_offline_beneficiary", true);
 		$logo = wp_get_attachment_image( $logo_id );
 		$event = em_get_event($booking->event_id);
@@ -67,7 +67,7 @@ class EM_QR_Code_Generator {
 	 */
 	public function get_payment_info() {
 		if(empty($_REQUEST['booking_id'])) return;
-		$booking = em_get_booking($_REQUEST['booking_id']);
+		$booking = EM_Booking::find(absint($_REQUEST['booking_id']));
 		$event = em_get_event($booking->event_id);
 
 		$result = [

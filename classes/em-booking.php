@@ -1,30 +1,5 @@
 <?php
-/**
- * gets a booking in a more db-friendly manner, allows hooking into booking object right after instantiation
- * @param mixed $id
- * @param mixed $search_by
- * @return EM_Booking
- */
-function em_get_booking($id = false) {
-	global $EM_Booking;
-	//check if it's not already global so we don't instantiate again
-	if( is_object($EM_Booking) && get_class($EM_Booking) == 'EM_Booking' ){
-		if( is_object($id) && $EM_Booking->booking_id == $id->booking_id ){
-			return apply_filters('em_get_booking', $EM_Booking);
-		}else{
-			if( is_numeric($id) && $EM_Booking->booking_id == $id ){
-				return apply_filters('em_get_booking', $EM_Booking);
-			}elseif( is_array($id) && !empty($id['booking_id']) && $EM_Booking->booking_id == $id['booking_id'] ){
-				return apply_filters('em_get_booking', $EM_Booking);
-			}
-		}
-	}
-	if( is_object($id) && get_class($id) == 'EM_Booking' ){
-		return apply_filters('em_get_booking', $id);
-	}else{
-		return apply_filters('em_get_booking', new EM_Booking($id));
-	}
-}
+
 /**
  * Contains all information and relevant functions surrounding a single booking made with Events Manager
  * @property int|false $booking_status
@@ -340,6 +315,31 @@ class EM_Booking extends EM_Object{
 		$booking_meta = serialize($this->booking_meta);
 		$result = $wpdb->update( EM_BOOKINGS_TABLE, array('booking_meta' => $booking_meta), array('booking_id' => $this->booking_id) );
 		return apply_filters('em_booking_update_meta', $result !== false, $meta_key, $meta_value, $this);
+	}
+
+
+	/**
+	 * former em_get_booking function, now static.
+	 */
+	public static function find($id = false) {
+		global $EM_Booking;
+		//check if it's not already global so we don't instantiate again
+		if( is_object($EM_Booking) && get_class($EM_Booking) == 'EM_Booking' ){
+			if( is_object($id) && $EM_Booking->booking_id == $id->booking_id ) { return $EM_Booking;
+			
+			}else{
+				if( is_numeric($id) && $EM_Booking->booking_id == $id ){
+					return apply_filters('em_get_booking', $EM_Booking);
+				}elseif( is_array($id) && !empty($id['booking_id']) && $EM_Booking->booking_id == $id['booking_id'] ){
+					return apply_filters('em_get_booking', $EM_Booking);
+				}
+			}
+		}
+		if( is_object($id) && get_class($id) == 'EM_Booking' ){
+			return apply_filters('em_get_booking', $id);
+		}else{
+			return apply_filters('em_get_booking', new EM_Booking($id));
+		}
 	}
 	
 	/**

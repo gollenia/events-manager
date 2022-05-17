@@ -186,9 +186,9 @@ class EM_Ticket_Booking extends EM_Object{
 			$this->booking = $EM_Booking;
 		}else{
 			if(is_numeric($this->booking_id)){
-				$this->booking = em_get_booking($this->booking_id);
+				$this->booking = EM_Booking::find($this->booking_id);
 			}else{
-				$this->booking = em_get_booking();
+				$this->booking = EM_Booking::find();
 			}
 		}
 		return apply_filters('em_ticket_booking_get_booking', $this->booking, $this);;

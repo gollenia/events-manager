@@ -149,9 +149,9 @@ class EM_Tickets_Bookings extends EM_Object implements Iterator, Countable {
 			$this->booking = $EM_Booking;
 		}else{
 			if(is_numeric($booking_id)){
-				$this->booking = em_get_booking($booking_id);
+				$this->booking = EM_Booking::find($booking_id);
 			}else{
-				$this->booking = em_get_booking();
+				$this->booking = EM_Booking::find();
 			}
 		}
 		return apply_filters('em_tickets_bookings_get_booking', $this->booking, $this);;

@@ -406,7 +406,7 @@ function em_load_event(){
 			}
 		}
 		if( isset($_REQUEST['booking_id']) && is_numeric($_REQUEST['booking_id']) && !is_object($_REQUEST['booking_id']) ){
-			$EM_Booking = em_get_booking( absint($_REQUEST['booking_id']) );
+			$EM_Booking = EM_Booking::find( absint($_REQUEST['booking_id']) );
 		}
 		if( isset($_REQUEST['category_id']) && is_numeric($_REQUEST['category_id']) && !is_object($_REQUEST['category_id']) ){
 			$EM_Category = new EM_Category( absint($_REQUEST['category_id']) );

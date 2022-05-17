@@ -11,6 +11,8 @@ use chillerlan\QRCode\Common\EccLevel;
 /**
  * Register admin api that creates a banking qr code
  * added by Thomas Gollenia
+ * TODO: Rewrite this in JavaScript to reduce API calls and stupid PHP, Composer and stuff
+ * 
  */
 class EM_QR_Code_Generator {
     
@@ -31,7 +33,7 @@ class EM_QR_Code_Generator {
 	 */
     public function generate_qr_code() {
 		if(empty($_REQUEST['booking_id'])) return;
-		$booking = em_get_booking($_REQUEST['booking_id']);
+		$booking = EM_Booking::find(absint($_REQUEST['booking_id']));
 		$logo_id = get_option("em_offline_beneficiary", true);
 		$logo = wp_get_attachment_image( $logo_id );
 		$event = em_get_event($booking->event_id);
@@ -66,25 +68,37 @@ class EM_QR_Code_Generator {
 	 * @return array
 	 */
 	public function get_payment_info() {
-		if(empty($_REQUEST['booking_id'])) return;
+		$result = $this->get_payment_data();
+		header('Content-Type: application/json');
+		echo json_encode($result);
+		wp_die();
+	}
 
-		if(!get_option("em_offline_iban", true)) return false;
+	function get_payment_data() {
+		if(empty($_REQUEST['booking_id'])) return [
+			'success' => false,
+			'error' => "No booking id given"
+		];
+		
+		if(!get_option("em_offline_iban", true)) return [
+				'success' => false,
+				'error' => "No IBAN given"
+		];
+		
 
-		$booking = em_get_booking($_REQUEST['booking_id']);
+		$booking = EM_Booking::find(absint($_REQUEST['booking_id']));
 		$event = em_get_event($booking->event_id);
 
-		$result = [
+		return [
+			"success" => true,
+			"error" => "",
 			"purpose" => $_REQUEST['booking_id'] . "-" . $event->post_name . "-" . $booking->booking_meta['registration']['user_name'],
 			"iban" => get_option("em_offline_iban", true),
 			"beneficiary" => get_option("em_offline_beneficiary", true),
 			"bic" => get_option("em_offline_bic", true),
 			"bank" => get_option("em_offline_bank", true),
-			"amount" => number_format((float)$booking->booking_price, 2, ',', '.')
+			"amount" => $booking->booking_price
 		];
-
-		header('Content-Type: application/json');
-		echo json_encode($result);
-		wp_die();
 	}
 
 

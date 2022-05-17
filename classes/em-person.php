@@ -39,7 +39,7 @@ class EM_Person extends WP_User{
 		}elseif( is_array($status) && array_is_list($status) ){
 			$status_condition = " AND booking_status IN (".implode(',', $status).")";
 		}
-		$EM_Booking = em_get_booking(); //empty booking for fields
+		$EM_Booking = EM_Booking::find(); //empty booking for fields
 		$results = $wpdb->get_results("SELECT b.".implode(', b.', array_keys($EM_Booking->fields))." FROM ".EM_BOOKINGS_TABLE." b, ".EM_EVENTS_TABLE." e WHERE e.event_id=b.event_id AND person_id={$this->ID} {$blog_condition} {$status_condition} ORDER BY event_start_date ASC",ARRAY_A);
 		$bookings = array();
 		if($ids_only){
@@ -49,7 +49,7 @@ class EM_Person extends WP_User{
 			return apply_filters('em_person_get_bookings', $bookings, $this);
 		}else{
 			foreach($results as $booking_data){
-				$bookings[] = em_get_booking($booking_data);
+				$bookings[] = EM_Booking::find($booking_data);
 			}
 			return apply_filters('em_person_get_bookings', new EM_Bookings($bookings), $this);
 		}

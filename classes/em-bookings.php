@@ -103,7 +103,7 @@ class EM_Bookings extends EM_Object implements Iterator{
 				$bookings = $wpdb->get_results($sql, ARRAY_A);
 			}
 			foreach ($bookings as $booking){
-				$this->bookings[] = em_get_booking($booking);
+				$this->bookings[] = EM_Booking::find($booking);
 			}
 		}
 		return apply_filters('em_bookings_load', $this->bookings);
@@ -344,7 +344,7 @@ class EM_Bookings extends EM_Object implements Iterator{
 			$results = array();
 			$mails = array();
 			foreach( $booking_ids as $booking_id ){
-				$EM_Booking = em_get_booking($booking_id);
+				$EM_Booking = EM_Booking::find($booking_id);
 				if( !$EM_Booking->can_manage() ){
 					$this->feedback_message = __('Bookings %s. Mails Sent.', 'events-manager');
 					return false;
@@ -360,7 +360,7 @@ class EM_Bookings extends EM_Object implements Iterator{
 				return false;
 			}
 		}elseif( is_numeric($booking_ids) || is_object($booking_ids) ){
-			$EM_Booking = ( is_object($booking_ids) && get_class($booking_ids) == 'EM_Booking') ? $booking_ids : em_get_booking($booking_ids);
+			$EM_Booking = ( is_object($booking_ids) && get_class($booking_ids) == 'EM_Booking') ? $booking_ids : EM_Booking::find($booking_ids);
 			$result = $EM_Booking->set_status($status);
 			$this->feedback_message = $EM_Booking->feedback_message;
 			return $result;
@@ -526,7 +526,7 @@ class EM_Bookings extends EM_Object implements Iterator{
 			$sql = $wpdb->prepare('SELECT booking_id FROM '.EM_BOOKINGS_TABLE.' WHERE event_id = %d AND person_id = %d AND booking_status NOT IN (2,3)', $this->event_id, $user_id);
 			$booking_id = $wpdb->get_var($sql);
 			if( (int) $booking_id > 0 ){
-				$EM_Booking = em_get_booking($booking_id);
+				$EM_Booking = EM_Booking::find($booking_id);
 				return apply_filters('em_bookings_has_booking', $EM_Booking, $this);
 			}
 		}
@@ -554,7 +554,7 @@ class EM_Bookings extends EM_Object implements Iterator{
 			$results = $wpdb->get_results(apply_filters('em_bookings_get_sql',$sql),ARRAY_A);
 			$bookings = array();
 			foreach($results as $result){
-				$bookings[] = em_get_booking($result);
+				$bookings[] = EM_Booking::find($result);
 			}
 			return $bookings; //We return all the bookings matched as an EM_Booking array. 
 		}
@@ -609,7 +609,7 @@ class EM_Bookings extends EM_Object implements Iterator{
 		$results = (is_array($results)) ? $results:array();
 		$bookings = array();
 		foreach ( $results as $booking ){
-			$bookings[] = em_get_booking($booking);
+			$bookings[] = EM_Booking::find($booking);
 		}
 		$EM_Bookings = new EM_Bookings($bookings);
 		return apply_filters('em_bookings_get', $EM_Bookings);
