@@ -24,9 +24,13 @@ class PriceFormatter {
 			NumberFormatter::CURRENCY
 		);
 
+		$this->fmt->setTextAttribute(NumberFormatter::CURRENCY_CODE, get_option('dbem_bookings_currency'));
+
+		//$this->fmt->setAttribute(NumberFormatter::CURRENCY_CODE, get_option('dbem_bookings_currency'));
+
 		$this->free = $this->is_free();
 		$this->format = $this->get_format();
-		$this->currency = $this->get_currency();
+		$this->currency = get_option('dbem_bookings_currency');
 	}
 	
 	/**
