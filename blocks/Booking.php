@@ -47,43 +47,19 @@ class Booking {
     public function enqueue_scripts() {
         global $post;
         $event = em_get_event($post->id, 'post_id');
-        $priceFormatter = new \Contexis\Events\Intl\PriceFormatter(0);
-		
+        
         if (!$event->event_id ) return;
+		if (count($event->get_bookings()->get_available_tickets()) == 0) return false;
 
 		$script_asset = require( EM_DIR . "/includes/booking.asset.php" );
-		wp_enqueue_script( 
+		wp_register_script( 
 			'booking', 
 			plugins_url( '/../includes/booking.js', __FILE__ ),
 			$script_asset['dependencies'],
 			$script_asset['version'],
 			true 
 		);
-		wp_localize_script( 'booking', 'bookingAppData',
-		array( 
-			'booking_nonce' => wp_create_nonce('booking_add'),
-			'rest_nonce' => wp_create_nonce( 'booking_rest' ),
-			'rest_url' => get_rest_url(),
-			'booking_url' => admin_url('admin-ajax.php'),
-			'wp_debug' => WP_DEBUG,
-			'event_id' => $event->id,
-			'event' => \EM_Events::get_rest(['event' => $event->id])[0],
-			'coupons' => [
-				'available' => \EM_Coupons::event_has_coupons($event),
-				'nonce' => wp_create_nonce('emp_checkout'),
-			],
-			'fields' => \EM_Booking_Form::get_fields($event),
-			'attendee_fields' => \EM_Attendees_Form::get_fields($event),
-			'tickets' => $event->get_tickets_rest(),
-			'gateways' => \EM_Gateways::get_rest(),
-			'strings' => [ 
-				"consent" => function_exists('get_the_privacy_policy_link') ? sprintf(get_option("dbem_data_privacy_consent_text"), get_the_privacy_policy_link()) : get_option("dbem_data_privacy_consent_text"), 
-				"time_format" => get_option('time_format'),
-				"currency_code" => $priceFormatter->get_currency_code(),
-				"currency" => $priceFormatter->get_currency(),	// To be removed in future versions
-				"locale" => str_replace('_', '-',get_locale()),
-			]
-		));
+		
 		wp_set_script_translations( 'booking', 'events', EM_DIR  . '/languages' );
     
     }
@@ -103,9 +79,13 @@ class Booking {
 	 */
     public static function render($attributes) {
 		global $post;
+
+		$event = em_get_event($post->id, 'post_id');
 		
-        $event = em_get_event($post->id, 'post_id');
-		
+		add_action( 'wp_enqueue_scripts', function() {
+			wp_enqueue_script('booking');
+		});
+
         if (count($event->get_bookings()->get_available_tickets()) == 0) return false;
 		$priceFormatter = new \Contexis\Events\Intl\PriceFormatter(0);
 
@@ -115,13 +95,10 @@ class Booking {
 			'rest_url' => get_rest_url(),
 			'booking_url' => admin_url('admin-ajax.php'),
 			'event' => \EM_Events::get_rest(['event' => $event->id])[0],
-			'coupons' => [
-				'available' => \EM_Coupons::event_has_coupons($event),
-			],
-			'fields' => \EM_Booking_Form::get_fields($event),
+			'registration_fields' => \EM_Booking_Form::get_fields($event),
 			'attendee_fields' => \EM_Attendees_Form::get_fields($event),
-			'tickets' => $event->get_tickets_rest(),
-			'gateways' => \EM_Gateways::get_rest(),
+			'available_tickets' => $event->get_tickets_rest(),
+			'available_gateways' => \EM_Gateways::get_rest(),
 			'l10n' => [ 
 				"consent" => get_option("dbem_privacy_message"), 
 				"currency" => $priceFormatter->get_currency_code(),
