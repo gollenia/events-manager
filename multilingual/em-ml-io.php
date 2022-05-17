@@ -230,7 +230,7 @@ class EM_ML_IO {
 				//check that we're not in the original language, as that has been duplicated already
 				if( $translation->event_id != $EM_Event->event_id ){
 					//get the translation of original event that was duplicated if exists and duplicate it
-					$event = em_get_event($translation->event_id);
+					$event = EM_Event::find($translation->event_id);
 					$EM_ML_DUPLICATING = true;
 					$event->event_parent = $event_id; // change parent to new event
 					$event->duplicate();
@@ -292,7 +292,7 @@ class EM_ML_IO {
 			// copied from EM_Event->delete_events function
 			$event_ids = $wpdb->get_col( $sql );
 			foreach($event_ids as $event_id){
-				$EM_Event = em_get_event( $event_id );
+				$EM_Event = EM_Event::find( $event_id );
 				$EM_Event->delete(true);
 				$events_array[] = $EM_Event;
 			}
@@ -364,7 +364,7 @@ class EM_ML_IO {
 				foreach( $event_ids as $event_id ){ /* @var EM_Event $event */
 					$EM_EVENT_SAVE_POST = false;
 					EM_ML_Search::$active = false; //just in case
-					$event = em_get_event( $event_id );
+					$event = EM_Event::find( $event_id );
 					EM_ML_IO::event_merge_original_meta( $event, $EM_Event );
 					$event->recurring_reschedule = $EM_Event->recurring_reschedule;
 					$event->recurring_recreate_bookings = false; //specifically skip creation/recreation of tickets/booking-data for translations, as these are overriden by ML functions
