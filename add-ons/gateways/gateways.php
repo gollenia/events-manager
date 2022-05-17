@@ -107,13 +107,7 @@ class EM_Gateways {
 		$gateways = array();
 		foreach($EM_Gateways as $EM_Gateway){
 			if($EM_Gateway->is_active()){
-				array_push($gateways, [
-                    "name" => $EM_Gateway->title,
-                    "id" => $EM_Gateway->gateway,
-                    "title" => get_option('em_'.$EM_Gateway->gateway.'_option_name'),
-                    "html" => get_option('em_'.$EM_Gateway->gateway.'_form'),
-                    "methods" => $EM_Gateway->gateway == "mollie" ? get_option('mollie_activated_methods') : []
-                ]);
+				$gateways[$EM_Gateway->gateway] = $EM_Gateway->get_rest();
 			}
 		}
 		return $gateways; 
