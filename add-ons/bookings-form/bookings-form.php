@@ -73,7 +73,7 @@ class EM_Booking_Form {
 	    //get the right form
 		if( empty(self::$form) || $reload ){
 			global $wpdb;
-			if(is_numeric($EM_Event)){ $EM_Event = em_get_event($EM_Event); }
+			if(is_numeric($EM_Event)){ $EM_Event = EM_Event::find($EM_Event); }
 			$custom_form_id = ( !empty($EM_Event->post_id) ) ? get_post_meta($EM_Event->post_id, '_custom_booking_form', true):$custom_form_id;
 			
 			$form_id = !empty($custom_form_id) && is_numeric($custom_form_id) ? $custom_form_id:get_option('em_booking_form_fields');

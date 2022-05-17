@@ -115,7 +115,7 @@ class EM_Data_Privacy {
 			$events = self::get_cpts($email_address, $page, $post_type);
 
 			foreach( $events as $post_id ){
-				$EM_Event = em_get_event($post_id, 'post_id');
+				$EM_Event = EM_Event::find($post_id, 'post_id');
 				//erase the location first
 				$EM_Location = $EM_Event->get_location();
 				if( $EM_Location->location_id && get_option('dbem_data_privacy_erase_locations', 2) ){
@@ -360,7 +360,7 @@ class EM_Data_Privacy {
 		$events = self::get_cpts($email_address, $page, $post_type);
 
 		foreach( $events as $post_id ){
-			$EM_Event = em_get_event($post_id, 'post_id');
+			$EM_Event = EM_Event::find($post_id, 'post_id');
 			$export_item = $event_export_default;
 			$export_item['item_id'] = 'event-post-'.$EM_Event->post_id;
 			$export_item['data'][] = array('name' => __('Event Name','events-manager'), 'value' => $EM_Event->event_name );

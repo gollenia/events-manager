@@ -271,7 +271,7 @@ class EM_Coupons_Admin {
 		$bookings_count = 0;
 		$EM_Bookings = array();
 		foreach($bookings as $booking_id){ 
-			$EM_Booking = em_get_booking($booking_id);
+			$EM_Booking = EM_Booking::find($booking_id);
 			if( !empty($EM_Booking->booking_meta['coupon']) ){
 				$coupon = new EM_Coupon($EM_Booking->booking_meta['coupon']);
 				if($EM_Coupon->coupon_code == $coupon->coupon_code && $EM_Coupon->coupon_id == $coupon->coupon_id){

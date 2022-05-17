@@ -69,7 +69,7 @@ class EM_Attendees_Form {
 	public static function get_form($EM_Event = false){
 		if( empty(self::$form) || (!empty($EM_Event) && (empty(self::$form->event_id) || $EM_Event->event_id != self::$form->event_id)) ){
 			global $wpdb;
-			if(is_numeric($EM_Event)){ $EM_Event = em_get_event($EM_Event); }
+			if(is_numeric($EM_Event)){ $EM_Event = EM_Event::find($EM_Event); }
 			$form_id = self::get_form_id($EM_Event);
 			if( is_numeric($form_id) && $form_id > 0 ){
 				$sql = $wpdb->prepare("SELECT meta_id, meta_value FROM ".EM_META_TABLE." WHERE meta_key = 'attendee-form' AND meta_id=%d", $form_id);
@@ -446,7 +446,7 @@ class EM_Attendees_Form {
 		if( !empty($_REQUEST['action']) && $_REQUEST['action'] == 'export_bookings_csv' && !empty($_REQUEST['show_attendees']) && wp_verify_nonce($_REQUEST['_wpnonce'], 'export_bookings_csv')){
 			$EM_Event = false;
 			if( !empty($_REQUEST['event_id']) ){
-				$EM_Event = em_get_event( absint($_REQUEST['event_id']) );
+				$EM_Event = EM_Event::find( absint($_REQUEST['event_id']) );
 			}
 			$title = $EM_Event ? $EM_Event->slug : "all";
 

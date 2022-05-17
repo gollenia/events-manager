@@ -255,7 +255,7 @@ class EM_Calendar extends EM_Object {
 						$event_eventful_date = $event_start->getDate();
 						if( empty($eventful_days_count[$event_eventful_date]) || !$limit || $eventful_days_count[$event_eventful_date] < $limit ){
 							//now we know this is an event that'll be used, convert it to an object
-							$EM_Event = em_get_event($event['post_id'], 'post_id');
+							$EM_Event = EM_Event::find($event['post_id'], 'post_id');
 							if( empty($eventful_days[$event_eventful_date]) || !is_array($eventful_days[$event_eventful_date]) ) $eventful_days[$event_eventful_date] = array();
 							//add event to array with a corresponding timestamp for sorting of times including long and all-day events
 							$event_ts_marker = ($EM_Event->event_all_day) ? 0 : (int) $event_start->getTimestamp();
@@ -272,7 +272,7 @@ class EM_Calendar extends EM_Object {
 					//Only show events on the day that they start
 					$event_eventful_date = $event['event_start_date'];
 					if( empty($eventful_days_count[$event_eventful_date]) || !$limit || $eventful_days_count[$event_eventful_date] < $limit ){
-						$EM_Event = em_get_event($event['post_id'], 'post_id');
+						$EM_Event = EM_Event::find($event['post_id'], 'post_id');
 						if( empty($eventful_days[$event_eventful_date]) || !is_array($eventful_days[$event_eventful_date]) ) $eventful_days[$event_eventful_date] = array();
 						//add event to array with a corresponding timestamp for sorting of times including long and all-day events
 						$event_ts_marker = ($EM_Event->event_all_day) ? 0 : (int) $EM_Event->start()->getTimestamp();

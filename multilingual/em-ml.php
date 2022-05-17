@@ -274,7 +274,7 @@ class EM_ML{
 	    $translated_id = self::get_translation_id($object, $language);
 	    $translated_object = $object; //return $object if the condition below isn't met
 	    if( $object->post_id != $translated_id ){
-			if( em_is_event($object) ) $translated_object = em_get_event($translated_id,'post_id');
+			if( em_is_event($object) ) $translated_object = EM_Event::find($translated_id,'post_id');
 			if( em_is_location( $object ) ) $translated_object = em_get_location($translated_id,'post_id');
 	    }
 	    return apply_filters('em_ml_get_translation', $translated_object, $object, $language);
@@ -295,7 +295,7 @@ class EM_ML{
 				$items = $wpdb->get_results( $wpdb->prepare('SELECT event_id, event_language FROM '.EM_EVENTS_TABLE.' WHERE event_id=%s OR (event_translation=1 AND event_parent=%s)', $EM_Object->event_id, $EM_Object->event_id) );
 			}
 			foreach( $items as $item ){
-				$translated_objects[$item->event_language] = em_get_event($item->event_id);
+				$translated_objects[$item->event_language] = EM_Event::find($item->event_id);
 			}
 		}elseif( !empty($EM_Object->location_language) ){
 			if( !$EM_Object->translation ){ // original
@@ -350,7 +350,7 @@ class EM_ML{
 			}
 			if( !empty($original_post_id) ){
 				if( em_is_event($EM_Object) ){
-					$object = em_get_event( $original_post_id, 'post_id' );
+					$object = EM_Event::find( $original_post_id, 'post_id' );
 				}elseif( em_is_location($EM_Object) ){
 					$object = em_get_location( $original_post_id, 'post_id' );
 				}

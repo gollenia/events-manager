@@ -37,11 +37,11 @@ class EM_Events extends EM_Object {
 		$locations_table = EM_LOCATIONS_TABLE;
 		
 		//Quick version, we can accept an array of IDs, which is easy to retrieve
-		if( is_array($args) && array_is_list($args) ){ //Array of numbers, assume they are event IDs to retreive
+		if( is_array($args) && !empty($args) && array_is_list($args) ){ //Array of numbers, assume they are event IDs to retreive
 			//We can just get all the events here and return them
 			$events = array();
 			foreach($args as $event_id){
-				$events[$event_id] = em_get_event($event_id);
+				$events[$event_id] = EM_Event::find($event_id);
 			}
 			return apply_filters('em_events_get', $events, $args);
 		}
@@ -148,7 +148,7 @@ class EM_Events extends EM_Object {
 		$events = array();
 		
 		foreach ( $results as $event ){
-			$events[] = em_get_event($event['post_id'], 'post_id');
+			$events[] = EM_Event::find($event['post_id'], 'post_id');
 		}
 		
 		return apply_filters('em_events_get', $events, $args);
@@ -287,7 +287,7 @@ class EM_Events extends EM_Object {
 		if( current_user_can('edit_others_events') ){
 			return apply_filters('em_events_can_manage', true, $event_ids);
 		}
-		if( is_array($event_ids) && array_is_list($event_ids) ){
+		if( is_array($event_ids) && !empty($event_ids) && array_is_list($event_ids) ){
 			$condition = implode(" OR event_id=", $event_ids);
 			//we try to find any of these events that don't belong to this user
 			$results = $wpdb->get_var("SELECT COUNT(*) FROM ". EM_EVENTS_TABLE ." WHERE event_owner != '". get_current_user_id() ."' event_id=$condition;");

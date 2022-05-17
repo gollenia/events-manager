@@ -51,7 +51,7 @@ if( !class_exists('EM_Permalinks') ){
 				if( $wp_query->get('event_slug') ){
 					$event = $wpdb->get_row('SELECT event_id, post_id FROM '.EM_EVENTS_TABLE." WHERE event_slug='".$wp_query->get('event_slug')."' AND (blog_id=".get_current_blog_id()." OR blog_id IS NULL OR blog_id=0)", ARRAY_A);
 					if( !empty($event) ){
-						$EM_Event = em_get_event($event['event_id']);
+						$EM_Event = EM_Event::find($event['event_id']);
 						$url = get_permalink($EM_Event->post_id);
 					}
 				}elseif( $wp_query->get('location_slug') ){

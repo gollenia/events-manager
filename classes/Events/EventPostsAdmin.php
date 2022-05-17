@@ -63,7 +63,7 @@ class EM_Event_Posts_Admin{
 	
     public static function admin_notices(){
         if( !empty($_REQUEST['recurrence_id']) && is_numeric($_REQUEST['recurrence_id']) ){
-            $EM_Event = em_get_event( absint($_REQUEST['recurrence_id']) );
+            $EM_Event = EM_Event::find( absint($_REQUEST['recurrence_id']) );
             ?>
             <div class="notice notice-info">
                 <p><?php echo sprintf(esc_html__('You are viewing individual recurrences of recurring event %s.', 'events-manager'), '<a href="'.$EM_Event->get_edit_url().'">'.$EM_Event->event_name.'</a>'); ?></p>
@@ -202,7 +202,7 @@ class EM_Event_Posts_Admin{
 	
 	public static function columns_output( $column ) {
 		global $post, $EM_Event;
-		$EM_Event = em_get_event($post, 'post_id');
+		$EM_Event = EM_Event::find($post, 'post_id');
 		
 		/* @var $post EM_Event */
 		switch ( $column ) {
@@ -296,7 +296,7 @@ class EM_Event_Posts_Admin{
 	public static function row_actions($actions, $post){
 		if($post->post_type == EM_POST_TYPE_EVENT){
 			global $post, $EM_Event;
-			$EM_Event = em_get_event($post, 'post_id');
+			$EM_Event = EM_Event::find($post, 'post_id');
 			unset($actions['inline hide-if-no-js']);
 			unset($actions['edit']);
 			$actions['duplicate'] = '<a href="'.$EM_Event->duplicate_url().'" title="'.sprintf(__('Duplicate %s','events-manager'), __('Event','events-manager')).'">'.__('Duplicate','events-manager').'</a>';
@@ -398,7 +398,7 @@ class EM_Event_Recurring_Posts_Admin{
 	public static function columns_output( $column ) {
 		global $post, $EM_Event;
 		if( $post->post_type == 'event-recurring' ){
-			$post = $EM_Event = em_get_event($post);
+			$post = $EM_Event = EM_Event::find($post);
 			/* @var $post EM_Event */
 			switch ( $column ) {
 				case 'event-id':
@@ -434,7 +434,7 @@ class EM_Event_Recurring_Posts_Admin{
 	public static function row_actions($actions, $post){
 		if($post->post_type == 'event-recurring'){
 			global $post, $EM_Event;
-			$EM_Event = em_get_event($post, 'post_id');
+			$EM_Event = EM_Event::find($post, 'post_id');
 			unset($actions['inline hide-if-no-js']);
 			$actions['duplicate'] = '<a href="'.$EM_Event->duplicate_url().'" title="'.sprintf(__('Duplicate %s','events-manager'), __('Event','events-manager')).'">'.__('Duplicate','events-manager').'</a>';
 		}

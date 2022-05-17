@@ -527,7 +527,7 @@ class EM_Ticket extends EM_Object{
 	 * @return EM_Event 
 	 */
 	function get_event(){
-		return em_get_event($this->event_id);
+		return EM_Event::find($this->event_id);
 	}
 	
 	/**

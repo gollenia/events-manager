@@ -26,7 +26,7 @@ class EM_Event_Post {
 		$is_post_type = $post_type == EM_POST_TYPE_EVENT || $post_type == 'event-recurring';
 		$saving_status = !in_array(get_post_status($post_id), array('trash','auto-draft')) && !defined('DOING_AUTOSAVE');
 		if(!defined('UNTRASHING_'.$post_id) && $is_post_type && $saving_status ){
-		    $EM_Event = em_get_event($post_id, 'post_id');
+		    $EM_Event = EM_Event::find($post_id, 'post_id');
 		    $EM_Event->set_status(1);
 		}
 	}
@@ -68,7 +68,7 @@ class EM_Event_Post {
 	public static function the_date( $the_date, $d = '', $post = null ){
 		$post = get_post( $post );
 		if( $post->post_type == EM_POST_TYPE_EVENT ){
-			$EM_Event = em_get_event($post);
+			$EM_Event = EM_Event::find($post);
 			if ( '' == $d ){
 				$the_date = $EM_Event->start()->i18n(get_option('date_format'));
 			}else{
@@ -81,7 +81,7 @@ class EM_Event_Post {
 	public static function the_time( $the_time, $f = '', $post = null ){
 		$post = get_post( $post );
 		if( $post->post_type == EM_POST_TYPE_EVENT ){
-			$EM_Event = em_get_event($post);
+			$EM_Event = EM_Event::find($post);
 			if ( '' == $f ){
 				$the_time = $EM_Event->start()->i18n(get_option('time_format'));
 			}else{

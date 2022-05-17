@@ -26,7 +26,7 @@ class EM_Event_Post_Admin{
 	public static function admin_head(){
 		global $post, $EM_Event;
 		if( empty($EM_Event) && !empty($post) && $post->post_type == EM_POST_TYPE_EVENT ){
-			$EM_Event = em_get_event($post->ID, 'post_id');
+			$EM_Event = EM_Event::find($post->ID, 'post_id');
 		}
 	}
 	
@@ -85,7 +85,7 @@ class EM_Event_Post_Admin{
 		if( !$untrashing && $is_post_type && $saving_status ){
 			if( !empty($_REQUEST['_emnonce']) && wp_verify_nonce($_REQUEST['_emnonce'], 'edit_event') ){ 
 				//this is only run if we know form data was submitted, hence the nonce
-				$EM_Event = em_get_event($post_ID, 'post_id');
+				$EM_Event = EM_Event::find($post_ID, 'post_id');
 				$EM_Event->post_type = $post_type;
 				//Handle Errors by making post draft
 				$get_meta = $EM_Event->get_post_meta();
@@ -227,7 +227,7 @@ class EM_Event_Post_Admin{
 
 	public static function before_delete_post($post_id){
 		if(get_post_type($post_id) == EM_POST_TYPE_EVENT){
-			$EM_Event = em_get_event($post_id,'post_id');
+			$EM_Event = EM_Event::find($post_id,'post_id');
 			do_action('em_event_delete_pre ',$EM_Event);
 			$EM_Event->delete_meta();
 		}
@@ -236,7 +236,7 @@ class EM_Event_Post_Admin{
 	public static function trashed_post($post_id){
 		if(get_post_type($post_id) == EM_POST_TYPE_EVENT){
 			global $EM_Notices;
-			$EM_Event = em_get_event($post_id,'post_id');
+			$EM_Event = EM_Event::find($post_id,'post_id');
 			$EM_Event->set_status(-1);
 			$EM_Notices->remove_all(); //no validation/notices needed
 		}
@@ -262,7 +262,7 @@ class EM_Event_Post_Admin{
 		global $EM_Event;
 		//since this is the first point when the admin area loads event stuff, we load our EM_Event here
 		if( empty($EM_Event) && !empty($post) ){
-			$EM_Event = em_get_event($post->ID, 'post_id');
+			$EM_Event = EM_Event::find($post->ID, 'post_id');
 		}
 		if( !empty($EM_Event->event_owner_anonymous) ){
 			add_meta_box('em-event-anonymous', __('Anonymous Submitter Info','events-manager'), array('EM_Event_Post_Admin','meta_box_anonymous'),EM_POST_TYPE_EVENT, 'side','high');
@@ -382,7 +382,7 @@ class EM_Event_Recurring_Post_Admin{
 	public static function admin_head(){
 		global $post, $EM_Event;
 		if( !empty($post) && $post->post_type == 'event-recurring' ){
-			$EM_Event = em_get_event($post->ID, 'post_id');
+			$EM_Event = EM_Event::find($post->ID, 'post_id');
 			//quick hacks to make event admin table make more sense for events
 			?>
 			<script type="text/javascript">
@@ -407,7 +407,7 @@ class EM_Event_Recurring_Post_Admin{
 		$post_type = get_post_type($post_id);
 		$saving_status = !in_array(get_post_status($post_id), array('trash','auto-draft')) && !defined('DOING_AUTOSAVE');
 		if(!defined('UNTRASHING_'.$post_id) && $post_type == 'event-recurring' && $saving_status && !empty($EM_EVENT_SAVE_POST) ){
-			$EM_Event = em_get_event($post_id, 'post_id');
+			$EM_Event = EM_Event::find($post_id, 'post_id');
 			$EM_Event->post_type = $post_type;
 			//get the list post IDs for recurrences this recurrence
 		 	if( !$EM_Event->save_events() && ( $EM_Event->is_published() || 'future' == $EM_Event->post_status ) ){
@@ -420,7 +420,7 @@ class EM_Event_Recurring_Post_Admin{
 
 	public static function before_delete_post($post_id){
 		if(get_post_type($post_id) == 'event-recurring'){
-			$EM_Event = em_get_event($post_id,'post_id');
+			$EM_Event = EM_Event::find($post_id,'post_id');
 			do_action('em_event_delete_pre ',$EM_Event);
 			//now delete recurrences
 			//only delete other events if this isn't a draft-never-published event
@@ -441,7 +441,7 @@ class EM_Event_Recurring_Post_Admin{
 	public static function trashed_post($post_id){
 		if(get_post_type($post_id) == 'event-recurring'){
 			global $EM_Notices, $wpdb;
-			$EM_Event = em_get_event($post_id,'post_id');
+			$EM_Event = EM_Event::find($post_id,'post_id');
 			$EM_Event->set_status(null);
 			//only trash other events if this isn't a draft-never-published event
 			if( !empty($EM_Event->event_id) ){
@@ -463,7 +463,7 @@ class EM_Event_Recurring_Post_Admin{
 			global $wpdb;
 			//set a constant so we know this event doesn't need 'saving'
 			if(!defined('UNTRASHING_'.$post_id)) define('UNTRASHING_'.$post_id, true);
-			$EM_Event = em_get_event($post_id,'post_id');
+			$EM_Event = EM_Event::find($post_id,'post_id');
 			//only untrash other events if this isn't a draft-never-published event, because if so it never had other events to untrash
 			if( !empty($EM_Event->event_id) ){
     			$events_array = EM_Events::get( array('recurrence_id'=>$EM_Event->event_id, 'scope'=>'all', 'status'=>'everything' ) );
@@ -489,7 +489,7 @@ class EM_Event_Recurring_Post_Admin{
 		global $EM_Event;
 		//since this is the first point when the admin area loads event stuff, we load our EM_Event here
 		if( empty($EM_Event) && !empty($post) ){
-			$EM_Event = em_get_event($post->ID, 'post_id');
+			$EM_Event = EM_Event::find($post->ID, 'post_id');
 		}
 		if( !empty($EM_Event->event_owner_anonymous) ){
 			add_meta_box('em-event-anonymous', __('Anonymous Submitter Info','events-manager'), array('EM_Event_Post_Admin','meta_box_anonymous'),'event-recurring', 'side','high');

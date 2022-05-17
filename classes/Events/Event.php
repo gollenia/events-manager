@@ -1,49 +1,6 @@
 <?php
 use EM_Event_Locations\Event_Location, EM_Event_Locations\Event_Locations;
-/**
- * Get an event in a db friendly way, by checking globals, cache and passed variables to avoid extra class instantiations.
- * @param mixed $id can be either a post object, event object, event id or post id
- * @param mixed $search_by default is post_id, otherwise it can be by event_id as well. In multisite global mode, a blog id can be supplied to load events from another blog.
- * @return EM_Event
- */
-function em_get_event($id = false, $search_by = 'event_id') {
-	global $EM_Event;
-	//check if it's not already global so we don't instantiate again
-	if( is_object($EM_Event) && get_class($EM_Event) == 'EM_Event' ){
-		if( is_object($id) && $EM_Event->post_id == $id->ID ){
-			return apply_filters('em_get_event', $EM_Event);
-		}elseif( !is_object($id) ){
-			if( $search_by == 'event_id' && $EM_Event->event_id == $id ){
-				return apply_filters('em_get_event', $EM_Event);
-			}elseif( $search_by == 'post_id' && $EM_Event->post_id == $id ){
-				return apply_filters('em_get_event', $EM_Event);
-			}
-		}
-	}
-	if( is_object($id) && get_class($id) == 'EM_Event' ){
-		return apply_filters('em_get_event', $id);
-	}elseif( !defined('EM_CACHE') || EM_CACHE ){
-		//check the cache first
-		$event_id = false;
-		if( is_numeric($id) ){
-			if( $search_by == 'event_id' ){
-				$event_id = absint($id);
-			}elseif( $search_by == 'post_id' ){
-				$event_id = wp_cache_get($id, 'em_events_ids');
-			}
-		}elseif( !empty($id->ID) && !empty($id->post_type) && ($id->post_type == EM_POST_TYPE_EVENT || $id->post_type == 'event-recurring') ){
-			$event_id = wp_cache_get($id->ID, 'em_events_ids');
-		}
-		if( $event_id ){
-			$event = wp_cache_get($event_id, 'em_events');
-			if( is_object($event) && !empty($event->event_id) && $event->event_id){
-				return apply_filters('em_get_event', $event);
-			}
-		}
-	}
-	//if we get this far, just create a new event
-	return apply_filters('em_get_event', new EM_Event($id,$search_by));
-}
+
 /**
  * Event Object. This holds all the info pertaining to an event, including location and recurrence info.
  * An event object can be one of three "types" a recurring event, recurrence of a recurring event, or a single event.
@@ -501,7 +458,52 @@ class EM_Event extends EM_Object{
 		}
 	}
 
-	public function get_tickets_rest() {
+		/**
+	 * Get an event in a db friendly way, by checking globals, cache and passed variables to avoid extra class instantiations.
+	 * @param mixed $id can be either a post object, event object, event id or post id
+	 * @param mixed $search_by default is post_id, otherwise it can be by event_id as well. In multisite global mode, a blog id can be supplied to load events from another blog.
+	 * @return EM_Event
+	 */
+	public static function find($id = false, $search_by = 'event_id') {
+		global $EM_Event;
+		//check if it's not already global so we don't instantiate again
+		if( is_object($EM_Event) && get_class($EM_Event) == 'EM_Event' ){
+			if( is_object($id) && $EM_Event->post_id == $id->ID ){
+				return $EM_Event;
+			}elseif( !is_object($id) ){
+				if( $search_by == 'event_id' && $EM_Event->event_id == $id ){
+					return $EM_Event;
+				}elseif( $search_by == 'post_id' && $EM_Event->post_id == $id ){
+					return $EM_Event;
+				}
+			}
+		}
+		if( is_object($id) && get_class($id) == 'EM_Event' ){
+			return $id;
+		}elseif( !defined('EM_CACHE') || EM_CACHE ){
+			//check the cache first
+			$event_id = false;
+			if( is_numeric($id) ){
+				if( $search_by == 'event_id' ){
+					$event_id = absint($id);
+				}elseif( $search_by == 'post_id' ){
+					$event_id = wp_cache_get($id, 'em_events_ids');
+				}
+			}elseif( !empty($id->ID) && !empty($id->post_type) && ($id->post_type == EM_POST_TYPE_EVENT || $id->post_type == 'event-recurring') ){
+				$event_id = wp_cache_get($id->ID, 'em_events_ids');
+			}
+			if( $event_id ){
+				$event = wp_cache_get($event_id, 'em_events');
+				if( is_object($event) && !empty($event->event_id) && $event->event_id){
+					return $event;
+				}
+			}
+		}
+		//if we get this far, just create a new event
+		return new EM_Event($id,$search_by);
+	}
+
+	public function get_tickets_rest($event) {
 		$tickets = (array)$this->get_bookings()->get_available_tickets()->tickets;
 		$ticket_collection = [];
 		$available_fields = \EM_Attendees_Form::get_fields($event);
@@ -1588,7 +1590,7 @@ class EM_Event extends EM_Object{
 	 */
 	public function get_parent(){
 		if( $this->event_parent ){
-			return em_get_event( $this->event_parent );
+			return EM_Event::find( $this->event_parent );
 		}
 		return null;
 	}
@@ -1726,7 +1728,7 @@ class EM_Event extends EM_Object{
 	
 	function get_edit_reschedule_url(){
 		if( $this->is_recurrence() ){
-			$EM_Event = em_get_event($this->recurrence_id);
+			$EM_Event = EM_Event::find($this->recurrence_id);
 			return $EM_Event->get_edit_url();
 		}
 	}
@@ -2232,7 +2234,7 @@ class EM_Event extends EM_Object{
 	 */
 	function get_event_recurrence(){
 		if(!$this->is_recurring()){
-			return em_get_event($this->recurrence_id, 'event_id');
+			return EM_Event::find($this->recurrence_id, 'event_id');
 		}else{
 			return $this;
 		}
@@ -2664,7 +2666,7 @@ class EM_Event extends EM_Object{
 			$event_ids = $wpdb->get_col( $sql );
 			// go through each event and delete individually so individual hooks are fired appropriately
 			foreach($event_ids as $event_id){
-				$EM_Event = em_get_event( $event_id );
+				$EM_Event = EM_Event::find( $event_id );
 				if($EM_Event->recurrence_id == $this->event_id){
 					$EM_Event->delete(true);
 					$events_array[] = $EM_Event;
@@ -2967,7 +2969,7 @@ function em_event_gallery_override( $attr = array() ){
 	global $post;
 	if( !empty($post->post_type) && $post->post_type == EM_POST_TYPE_EVENT && empty($attr['id']) && empty($attr['ids']) ){
 		//no id specified, so check if it's recurring and override id with recurrence template post id
-		$EM_Event = em_get_event($post->ID, 'post_id');
+		$EM_Event = EM_Event::find($post->ID, 'post_id');
 		if( $EM_Event->is_recurrence() ){
 			$attr['id'] = $EM_Event->get_event_recurrence()->post_id;
 		}

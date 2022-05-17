@@ -110,7 +110,7 @@ function em_init_actions() {
 		if ( $_REQUEST['action'] == 'event_delete' && wp_verify_nonce($_REQUEST['_wpnonce'],'event_delete_'.$EM_Event->event_id) ) { 
 			//DELETE action
 			$selectedEvents = !empty($_REQUEST['events']) ? $_REQUEST['events']:'';
-			if( is_array($selectedEvents) && array_is_list($selectedEvents) ){
+			if( is_array($selectedEvents) && array_is_list($selectedEvents) && !empty($selectedEvents) ){
 				$events_result = EM_Events::delete( $selectedEvents );
 			}elseif( is_object($EM_Event) ){
 				$events_result = $EM_Event->delete();
@@ -534,7 +534,7 @@ function em_init_actions() {
 	//Export CSV - WIP
 	if( !empty($_REQUEST['action']) && $_REQUEST['action'] == 'export_bookings_csv' && wp_verify_nonce($_REQUEST['_wpnonce'], 'export_bookings_csv')){
 		if( !empty($_REQUEST['event_id']) ){
-			$EM_Event = em_get_event( absint($_REQUEST['event_id']) );
+			$EM_Event = EM_Event::find( absint($_REQUEST['event_id']) );
 		}
 		//sort out cols
 		if( !empty($_REQUEST['cols']) && is_array($_REQUEST['cols']) ){
