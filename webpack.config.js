@@ -8,6 +8,17 @@ const defaultConfig = require('@wordpress/scripts/config/webpack.config.js');
 module.exports = {
 	...defaultConfig,
 	...{
+		module: {
+			...defaultConfig.module,
+			rules: [
+				{
+					test: /\.tsx?$/,
+					use: "ts-loader",
+					exclude: /node_modules/,
+				},
+				...defaultConfig.module.rules,
+			],
+		},
 		optimization: {
 			minimizer: [
 				new TerserPlugin({
