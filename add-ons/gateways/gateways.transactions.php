@@ -257,8 +257,7 @@ class EM_Gateways_Transactions{
 					<td class="column-amount">
 						<?php
 							$amount = $transaction->transaction_total_amount;
-							echo $transaction->transaction_currency;
-							echo "&nbsp;" . number_format($amount, 2, '.', ',');
+							echo \Contexis\Events\Intl\PriceFormatter::format($amount);
 						?>
 					</td>
 					<td class="column-gateway-trans-id">
