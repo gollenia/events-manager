@@ -44,14 +44,16 @@ class EM_Locations extends EM_Object {
 		$locations = array();
 		
 		//Quick version, we can accept an array of IDs, which is easy to retrieve
-		if( is_array($args) && array_is_list($args) ){ //Array of numbers, assume they are event IDs to retreive
+		if( is_array($args) && !empty($args) && array_is_list($args) ){ //Array of numbers, assume they are event IDs to retreive
 			//We can just get all the events here and return them
+			
 			$locations = array();
 			foreach($args as $location_id){
 				$locations[$location_id] = em_get_location($location_id);
 			}
 			return apply_filters('em_locations_get', $locations, $args); //We return all the events matched as an EM_Event array. 
 		}elseif( is_numeric($args) ){
+			
 			//return an event in the usual array format
 			return apply_filters('em_locations_get', array(em_get_location($args)), $args);
 		}elseif( is_array($args) && is_object(current($args)) && get_class((current($args))) == 'EM_Location' ){
@@ -62,6 +64,7 @@ class EM_Locations extends EM_Object {
 
 		//We assume it's either an empty array or array of search arguments to merge with defaults			
 		$args = self::get_default_search($args);
+		
 		$limit = ( $args['limit'] && is_numeric($args['limit'])) ? "LIMIT {$args['limit']}" : '';
 		$offset = ( $limit != "" && is_numeric($args['offset']) ) ? "OFFSET {$args['offset']}" : '';
 		
@@ -260,7 +263,7 @@ $limit $offset
 		//get default args if we're in a search, supply to parent since we can't depend on late static binding until WP requires PHP 5.3 or later
 		if( empty($default_args) && (!empty($args['ajax']) || !empty($_REQUEST['action']) && $_REQUEST['action'] == $search_action) ){
 			$default_args = self::get_default_search();
-			$default_args['limit'] = get_option('dbem_locations_default_limit'); //since we're paginating, get the default limit, which isn't obtained from get_default_search()
+			$default_args['limit'] = 25; //since we're paginating, get the default limit, which isn't obtained from get_default_search()
 		}
 		return parent::get_pagination_links($args, $count, $search_action, $default_args);
 	}
@@ -361,7 +364,7 @@ $limit $offset
 			$conditions['owner'] = "location_owner=".$args['owner'];
 		}elseif( !empty($args['owner']) && $args['owner'] == 'me' && is_user_logged_in() ){
 			$conditions['owner'] = 'location_owner='.get_current_user_id();
-		}elseif(is_array($args['owner']) && array_is_list($args['owner']) ){
+		}elseif(is_array($args['owner']) && !empty($args['owner']) &&  array_is_list($args['owner']) ){
 			$conditions['owner'] = 'location_owner IN ('.implode(',',$args['owner']).')';
 		}
 
@@ -373,7 +376,7 @@ $limit $offset
 		}
 		//post search
 		if( !empty($args['post_id'])){
-			if( is_array($args['post_id']) && array_is_list($args['post_id']) ){
+			if( is_array($args['post_id']) && !empty($args['post_id']) && array_is_list($args['post_id']) ){
 				$conditions['post_id'] = "($locations_table.post_id IN (".implode(',',$args['post_id'])."))";
 			}else{
 				$conditions['post_id'] = "($locations_table.post_id={$args['post_id']})";

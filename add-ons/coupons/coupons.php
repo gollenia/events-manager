@@ -554,7 +554,7 @@ class EM_Coupons extends EM_Object {
 		$coupons = array();
 		
 		//Quick version, we can accept an array of IDs, which is easy to retrieve
-		if( is_array($args) && array_is_list($args) ){ //Array of numbers, assume they are event IDs to retreive
+		if( is_array($args) && !empty($args) && array_is_list($args) ){ //Array of numbers, assume they are event IDs to retreive
 			//We can just get all the events here and return them
 			$sql = "SELECT * FROM $coupons_table WHERE coupon_id IN (".implode(",", $args).")";
 			$results = $wpdb->get_results($sql,ARRAY_A);
@@ -654,7 +654,7 @@ class EM_Coupons extends EM_Object {
 			$conditions['event'] = "coupon_id IN (SELECT meta_value FROM ".EM_META_TABLE." WHERE object_id='{$args['event']}' AND meta_key='event-coupon')";
 			//search event-wide coupons by default
 			if( !empty($args['eventwide']) ){
-				$EM_Event = em_get_event($args['event']);
+				$EM_Event = EM_Event::find($args['event']);
 				if( !empty($EM_Event->event_id) ){
 					if( $args['eventwide'] === 1 || $args['eventwide'] === true ){
 						//in this case, we explicitly want eventwide coupons

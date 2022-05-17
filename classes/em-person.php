@@ -36,7 +36,7 @@ class EM_Person extends WP_User{
 		
 		if( is_numeric($status) ){
 			$status_condition = " AND booking_status=$status";
-		}elseif( is_array($status) && array_is_list($status) ){
+		}elseif( is_array($status) && !empty($status) && array_is_list($status) ){
 			$status_condition = " AND booking_status IN (".implode(',', $status).")";
 		}
 		$EM_Booking = EM_Booking::find(); //empty booking for fields

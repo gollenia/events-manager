@@ -57,7 +57,7 @@ class EM_Taxonomy_Terms extends EM_Object implements Iterator, Countable{
 				}
 			}
 			
-		}elseif( is_array($data) && array_is_list($data) ){
+		}elseif( is_array($data) && !empty($data) && array_is_list($data) ){
 			foreach($data as $term_id){
 				$this->terms[$term_id] =  new $this->term_class($term_id);
 			}
@@ -151,7 +151,7 @@ class EM_Taxonomy_Terms extends EM_Object implements Iterator, Countable{
 	 */
 	public function get_event(){
 		if( is_numeric($this->event_id) ){
-			return em_get_event($this->event_id);
+			return EM_Event::find($this->event_id);
 		}else{
 			return new EM_Event();
 		}
@@ -159,7 +159,7 @@ class EM_Taxonomy_Terms extends EM_Object implements Iterator, Countable{
 		
 	public static function get( $args = array() ) {		
 		//Quick version, we can accept an array of IDs, which is easy to retrieve
-		if( is_array($args) && array_is_list($args) ){ //Array of numbers, assume they are taxonomy IDs to retreive
+		if( is_array($args) && !empty($args) && array_is_list($args) ){ //Array of numbers, assume they are taxonomy IDs to retreive
 			$term_args = self::get_default_search( array('include' => $args ));
 			$results = get_terms( $term_args );
 		}else{

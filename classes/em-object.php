@@ -304,7 +304,7 @@ class EM_Object {
 		//Dates - first check 'month', and 'year', and adjust scope if needed
 		if( !($month=='' && $year=='') ){
 			//Sort out month range, if supplied an array of array(month,month), it'll check between these two months
-			if( is_array($month) && array_is_list($month) ){
+			if( is_array($month) && !empty($month) && array_is_list($month) ){
 				$date_month_start = $month[0];
 				$date_month_end = $month[1];
 			}else{
@@ -316,7 +316,7 @@ class EM_Object {
 				}
 			}
 			//Sort out year range, if supplied an array of array(year,year), it'll check between these two years
-			if( is_array($year) && array_is_list($year) ){
+			if( is_array($year) && !empty($year) && array_is_list($year) ){
 				$date_year_start = $year[0];
 				$date_year_end = $year[1];
 			}else{
@@ -417,7 +417,7 @@ class EM_Object {
 			$conditions['location'] = " {$location_id_table}.location_id = $location";
 		}elseif ( $location === 0 ) { //only helpful is searching events
 			$conditions['location'] = " {$events_table}.location_id = $location OR {$events_table}.location_id IS NULL";
-		}elseif ( is_array($location) && array_is_list($location) ){
+		}elseif ( is_array($location) && !empty($location) && array_is_list($location) ){
 			$conditions['location'] = "{$location_id_table}.location_id IN (" . implode(',', $location) .')';
 		}elseif ( is_object($location) && get_class($location)=='EM_Location' ){ //Now we deal with objects
 			$conditions['location'] = " {$location_id_table}.location_id = $location->location_id";
@@ -432,7 +432,7 @@ class EM_Object {
 		
 		if ( is_numeric($event) && $event > 0 ) { //Event ID takes precedence
 			$conditions['event'] = " {$events_table}.event_id = $event";
-		}elseif ( is_array($event) && array_is_list($event) ){ //array of ids
+		}elseif ( is_array($event) && !empty($event) && array_is_list($event) ){ //array of ids
 			$conditions['event'] = "{$events_table}.event_id IN (" . implode(',', $event) .')';
 		}elseif ( is_object($event) && get_class($event)=='EM_Event' ){ //Now we deal with objects
 			$conditions['event'] = " {$events_table}.event_id = $event->event_id";
@@ -596,7 +596,7 @@ class EM_Object {
 			$conditions['owner'] = 'event_owner='.get_current_user_id();
 		}elseif( $owner == 'me' && !is_user_logged_in() ){
 		    $conditions = array('owner'=>'1=2'); //no events to be shown
-		}elseif( is_array($owner) && array_is_list($owner) ){
+		}elseif( is_array($owner) && !empty($owner) && array_is_list($owner) ){
 			$conditions['owner'] = 'event_owner IN ('.implode(',',$owner).')';
 		}
 		
@@ -1069,7 +1069,7 @@ class EM_Object {
 					//This is in the list of atts we want cleaned
 					if( is_numeric($string) ){
 						$array[$key] = (int) $string;
-					}elseif( is_array($string) && array_is_list($string) ){
+					}elseif( is_array($string) && !empty($string) && array_is_list($string) ){
 						$array[$key] = $string;
 					}elseif( !is_array($string) && preg_match('/^( ?[\-0-9] ?,?)+$/', $string) ){
 					    $array[$key] = explode(',', str_replace(' ','',$string));
