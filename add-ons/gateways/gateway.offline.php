@@ -88,7 +88,7 @@ class EM_Gateway_Offline extends EM_Gateway {
 			if( $EM_Booking->booking_status == 5 && $this->uses_gateway($EM_Booking) ){ //check values
 				$return['message'] = get_option('em_'.$this->gateway.'_booking_feedback');
 				if( !empty($EM_Booking->email_not_sent) ){
-					$return['message'] .=  ' '.get_option('dbem_booking_feedback_nomail');
+					$return['message'] .=  ' '.__('However, there were some problems whilst sending confirmation emails to you and/or the event contact person. You may want to contact them directly and letting them know of this error.', 'events-manager');
 				}
 				$return['booking_id'] = $EM_Booking->id;
 				return apply_filters('em_gateway_offline_booking_add', $return, $EM_Booking->get_event(), $EM_Booking);

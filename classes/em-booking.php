@@ -419,7 +419,7 @@ class EM_Booking extends EM_Object{
 		);
 		//give some errors in step 1
 		if( $this->booking_spaces == 0 ){
-			$this->add_error(get_option('dbem_booking_feedback_min_space'));
+			$this->add_error(__('You must request at least one space to book an event.','events-manager'));
 		}
 		//step 2, tickets bookings info
 		if( count($this->get_tickets_bookings()) > 0 ){
@@ -731,7 +731,7 @@ class EM_Booking extends EM_Object{
 	    //add taxes to price
 		$summary['taxes'] = array('rate'=> 0, 'amount'=> 0);
 	    if( $this->get_price_taxes() > 0 ){
-		    $summary['taxes'] = array('rate'=> number_format($this->get_tax_rate(),2, get_option('dbem_bookings_currency_decimal_point'), get_option('dbem_bookings_currency_thousands_sep')).'%', 'amount'=> $this->get_price_taxes(true));
+		    $summary['taxes'] = array('rate'=> \Contexis\Events\Intl\PriceFormatter::format($this->get_price_taxes(true)));
 	    }
 	    //apply post-tax discounts
 	    $summary['discounts_post_tax'] = $this->get_price_adjustments_summary('discounts', 'post');
@@ -770,7 +770,7 @@ class EM_Booking extends EM_Object{
 		}elseif( is_object($EM_Event) && $EM_Event->event_id == $this->event_id ){
 			$this->event = $EM_Event;
 		}else{
-			$this->event = em_get_event($this->event_id, 'event_id');
+			$this->event = EM_Event::find($this->event_id, 'event_id');
 		}
 		return apply_filters('em_booking_get_event', $this->event, $this);
 	}
