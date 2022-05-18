@@ -503,10 +503,16 @@ class EM_Event extends EM_Object{
 		return new EM_Event($id,$search_by);
 	}
 
-	public function get_tickets_rest($event) {
+	/**
+	 * return an array of tickets. We also include the attendee fields, since maybe we later want to 
+	 * have separate fields for each ticket.
+	 *
+	 * @return void
+	 */
+	public function get_tickets_rest() {
 		$tickets = (array)$this->get_bookings()->get_available_tickets()->tickets;
 		$ticket_collection = [];
-		$available_fields = \EM_Attendees_Form::get_fields($event);
+		$available_fields = \EM_Attendees_Form::get_fields($this);
 		$fields = [];
 		foreach ($available_fields as $field) {
 			$fields[$field['name']] = $field['default_value'];
@@ -1121,12 +1127,7 @@ class EM_Event extends EM_Object{
 			//update timestamps, dates and times
 			update_post_meta($this->post_id, '_event_start_local', $this->start()->getDateTime());
 			update_post_meta($this->post_id, '_event_end_local', $this->end()->getDateTime());
-			//Deprecated, only for backwards compatibility, these meta fields will eventually be deleted!
-			$site_data = get_site_option('dbem_data');
-			if( !empty($site_data['updates']['timezone-backcompat']) ){
-				update_post_meta($this->post_id, '_start_ts', str_pad($this->start()->getTimestamp(), 10, 0, STR_PAD_LEFT));
-				update_post_meta($this->post_id, '_end_ts', str_pad($this->end()->getTimestamp(), 10, 0, STR_PAD_LEFT));
-			}
+			
 			//sort out event status			
 			$result = count($this->errors) == 0;
 			$this->get_status();
@@ -2380,12 +2381,7 @@ class EM_Event extends EM_Object{
 						//add extra date/time post meta
 						$meta_fields['_event_start_local'] = $event['event_start_date'].' '.$event['event_start_time'];
 						$meta_fields['_event_end_local'] = $event['event_end_date'].' '.$event['event_end_time'];
-						//Deprecated meta fields
-						$site_data = get_site_option('dbem_data');
-						if( !empty($site_data['updates']['timezone-backcompat']) ){
-							$meta_fields['_start_ts'] = $start_timestamp;
-							$meta_fields['_end_ts'] = $end_timestamp;
-						}
+						
 						//create the event
 						if( $wpdb->insert($wpdb->posts, $post_fields ) ){
 							$event['post_id'] = $post_id = $post_ids[$start_timestamp] = $wpdb->insert_id; //post id saved into event and also as a var for later user
@@ -2459,11 +2455,7 @@ class EM_Event extends EM_Object{
 			 		$meta_fields['_event_start_local'] = $event_array['event_start_date']. ' ' . $event_array['event_start_time'];
 			 		$meta_fields['_event_end_date'] = $event_array['event_end_date'];
 			 		$meta_fields['_event_end_local'] = $event_array['event_end_date']. ' ' . $event_array['event_end_time'];
-					$site_data = get_site_option('dbem_data');
-					if( !empty($site_data['updates']['timezone-backcompat']) ){
-				 		$meta_fields['_start_ts'] = $start_timestamp;
-				 		$meta_fields['_end_ts'] = $end_timestamp;
-					}
+					
 			 		//overwrite event and post tables
 			 		$wpdb->update(EM_EVENTS_TABLE, $event, array('event_id' => $event_array['event_id']));
 			 		$wpdb->update($wpdb->posts, $post_fields, array('ID' => $event_array['post_id']));

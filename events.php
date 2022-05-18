@@ -29,7 +29,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Setting constants
 
-define('EM_VERSION', 6.3); //self expanatory, although version currently may not correspond directly with published version number
+define('EM_VERSION', 6.4); //self expanatory, although version currently may not correspond directly with published version number
 define('EM_DIR', dirname( __FILE__ )); //an absolute path to this directory
 define('EM_DIR_URI', trailingslashit(plugins_url('',__FILE__))); //an absolute path to this directory
 define('EM_MS_GLOBAL',false);
@@ -342,7 +342,7 @@ function em_init(){
 	$EM_Mailer = new EM_Mailer();
 	//Upgrade/Install Routine
 	if( is_admin() && current_user_can('manage_options') ){
-		if( EM_VERSION > get_option('dbem_version', 0) || (is_multisite() && !EM_MS_GLOBAL && get_option('em_ms_global_install')) ){
+		if( EM_VERSION > get_option('dbem_version', 0) ){
 			require_once( dirname(__FILE__).'/em-install.php');
 			em_install();
 		}

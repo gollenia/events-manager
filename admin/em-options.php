@@ -12,30 +12,20 @@ function em_options_save(){
 		//Build the array of options here
 		
 		foreach ($_POST as $postKey => $postValue){
-			if( $postKey != 'dbem_data' && substr($postKey, 0, 5) == 'dbem_' ){
-				//TODO some more validation/reporting
-				
-				if( in_array($postKey, array('dbem_bookings_notify_admin','dbem_event_submitted_email_admin','dbem_js_limit_events_form','dbem_js_limit_search','dbem_js_limit_general','dbem_search_form_geo_distance_options')) ){ $postValue = str_replace(' ', '', $postValue); } //clean up comma separated emails, no spaces needed
-				
-					//TODO slashes being added?
-					if( is_array($postValue) ){
-					    foreach($postValue as $postValue_key=>$postValue_val) $postValue[$postValue_key] = wp_unslash($postValue_val);
-					}else{
-					    $postValue = wp_unslash($postValue);
-					}
-					update_option($postKey, $postValue);
-				
-			}elseif( $postKey == 'dbem_data' && is_array($postValue) ){
-				foreach( $postValue as $postK => $postV ){
-					//TODO slashes being added?
-					if( is_array($postV) ){
-						foreach($postV as $postValue_key=>$postValue_val) $postV[$postValue_key] = wp_unslash($postValue_val);
-					}else{
-						$postV = wp_unslash($postV);
-					}
-					EM_Options::set( $postK, $postV );
-				}
+			
+			//TODO some more validation/reporting
+			
+			if( in_array($postKey, array('dbem_bookings_notify_admin','dbem_event_submitted_email_admin','dbem_js_limit_events_form','dbem_js_limit_search','dbem_js_limit_general','dbem_search_form_geo_distance_options')) ){ $postValue = str_replace(' ', '', $postValue); } //clean up comma separated emails, no spaces needed
+			
+			//TODO slashes being added?
+			if( is_array($postValue) ){
+				foreach($postValue as $postValue_key=>$postValue_val) $postValue[$postValue_key] = wp_unslash($postValue_val);
+			}else{
+				$postValue = wp_unslash($postValue);
 			}
+			update_option($postKey, $postValue);
+				
+			
 		}
 		//set capabilities
 		if( !empty($_POST['em_capabilities']) && is_array($_POST['em_capabilities']) ){
