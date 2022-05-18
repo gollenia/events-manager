@@ -79,7 +79,7 @@ const InputField = (props) => {
     switch (type) {
         case "select":
             InputTag = (
-                <div className={"select" + (half ? " select--half" : "")}>
+                <div className={"select" + (half ? " select--half" : "") + (required ? " input--required" : "")}>
                     <label>{getLabel()}</label>
                     <select onChange= {handleChange} name={name} required={required}>
                         { defaultValue && <option value="">{defaultValue}</option>}
@@ -111,7 +111,7 @@ const InputField = (props) => {
             break;
         case "date":
             InputTag = (
-                <div className={"input" + (half ? " input--half" : "")}>
+                <div className={"input" + (half ? " input--half" : "") + (required ? " input--required" : "")}>
                     <label>{getLabel()}</label>
                     <input onChange= {event => {handleChange(event)}} type={type} name={name} min={min} max={max} required={required} value={value} pattern={pattern}/>
                 </div>
@@ -119,7 +119,7 @@ const InputField = (props) => {
             break;
         case "textarea":
             InputTag = (
-                <div className="textarea">
+                <div className={"textarea" + (required ? " input--required" : "")}>
                     <label>{getLabel()}</label>
                     <textarea onChange= {handleChange} name={name} value={value} required={required}></textarea>
                 </div>
@@ -127,7 +127,7 @@ const InputField = (props) => {
             break;
         default:
             InputTag = (
-                <div className={"input" + (half ? " input--half" : "")}>
+                <div className={"input" + (half ? " input--half" : "") + (required ? " input--required" : "")}>
                     <label>{getLabel()}</label>
                     <input onChange= {event => {handleChange(event)}} type={type} name={name} required={required} value={value} pattern={pattern}/>
                 </div>

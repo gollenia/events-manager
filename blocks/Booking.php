@@ -47,7 +47,7 @@ class Booking {
     public function register_scripts() {
         
 		$script_asset = require( EM_DIR . "/includes/booking.asset.php" );
-		wp_register_script( 
+		wp_enqueue_script( 
 			'booking', 
 			plugins_url( '/../includes/booking.js', __FILE__ ),
 			$script_asset['dependencies'],
@@ -74,15 +74,15 @@ class Booking {
 	 */
     public static function render($attributes) {
 		global $post;
-
+		
 		$event = \EM_Event::find($post->id, 'post_id');
 		
 		add_action( 'wp_enqueue_scripts', function() {
 			wp_enqueue_script('booking');
 		});
 
-        if (count($event->get_bookings()->get_available_tickets()) == 0) return false;
-		$priceFormatter = new \Contexis\Events\Intl\PriceFormatter(0);
+        
+		$priceFormatter = new \Contexis\Events\Intl\Price(0);
 
 		$data = [
 			'attributes' => $attributes,
@@ -103,6 +103,7 @@ class Booking {
 
 		$result = Assets::output_to_script_tag($data, 'booking_data');
 		$result .= "<div id='booking_app'></div>";
+		
         return $result;
     }
 

@@ -39,8 +39,8 @@ const Booking = () => {
 	useEffect(() => {
 		dispatch({type: "VALIDITY", payload: { 
 			"tickets": document.getElementById('user-attendee-form')?.checkValidity() && request.tickets.length > 0,
-			"registration": document.getElementById('user-registration-form')?.checkValidity(),
-			"payment": data.event.is_free || request.registration.data_privacy_consent 
+			"registration": document.getElementById('user-registration-form')?.checkValidity() && request.tickets.length > 0,
+			"payment": data.event.is_free || !data.l10n.consent || request.registration.data_privacy_consent 
 		}});
 	}, [state])
 	
@@ -65,7 +65,7 @@ const Booking = () => {
 			<div className="modal__dialog">
 				<div className="modal__header">
 					<div className="container flex xl:flex--center flex--column xl:flex--row">
-						<div className='flex--1'><h5 className="margin--0">Anmeldung</h5><h3 className="margin--0">{ data.event.title }</h3></div>
+						<div className='flex--1'><b className="margin--0">Anmeldung</b><h3 className="margin--0">{ data.event.title }</h3></div>
 						<Guide state={state} />
 					</div>
 					<button className="modal__close" onClick={() => {dispatch({type: "SET_MODAL", payload: false})}}></button>

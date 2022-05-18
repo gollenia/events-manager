@@ -8,12 +8,12 @@ const Footer = ({state, dispatch}) => {
 
 	const [TICKETS, REGISTRATION, PAYMENT, SUCCESS] = [wizzard.step == 0, wizzard.step == 1, wizzard.step == 2, wizzard.step == 3]
 
-	const TICKETS_MISSING = TICKETS && request.tickets.length == 0
+	const TICKETS_MISSING = TICKETS && request.tickets.length == 0 || REGISTRATION && data.attendee_fields.length == 0 && request.tickets.length == 0
 	const ATTENDEES_MISSING = TICKETS && request.tickets.length > 0 && !wizzard.steps.tickets.valid
 	const REGISTRATION_MISSING = REGISTRATION && !wizzard.steps.registration.valid
 	const PAYMENT_MISSING = PAYMENT && request.gateway == ""
 	const ONLINE_PAYMENT = request.gateway != "offline"
-	const PRIVACY_MISSING = PAYMENT && !request.registration.data_privacy_consent
+	const PRIVACY_MISSING = data.l10n.constent && ( (PAYMENT && !request.registration.data_privacy_consent) || !wizzard.payment.enabled && REGISTRATION && !request.registration.data_privacy_consent )
 
 	const FINAL_STEP = wizzard.steps.payment.enabled ? 2 : 1
 

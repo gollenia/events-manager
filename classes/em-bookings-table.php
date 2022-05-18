@@ -567,7 +567,7 @@ class EM_Bookings_Table{
 			}elseif($col == 'booking_status'){
 				$val = $EM_Booking->get_status(true);
 			}elseif($col == 'booking_date'){
-				$val = \Contexis\Events\Intl\DateFormatter::get_date($EM_Booking->date()->getTimestamp()) . " " . \Contexis\Events\Intl\DateFormatter::get_time($EM_Booking->date()->getTimestamp());
+				$val = \Contexis\Events\Intl\Date::get_date($EM_Booking->date()->getTimestamp()) . " " . \Contexis\Events\Intl\Date::get_time($EM_Booking->date()->getTimestamp());
 			}elseif($col == 'actions' ){
 				if( $format == 'csv' ) continue; 
 				$val = implode(' | ', $this->get_booking_actions($EM_Booking));

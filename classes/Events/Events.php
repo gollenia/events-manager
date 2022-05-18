@@ -212,9 +212,9 @@ class EM_Events extends EM_Object {
 					'state' => $location->location_state,
 				],
 				'has_coupons' => \EM_Coupons::event_has_coupons($event),
-				'date' => \Contexis\Events\Intl\DateFormatter::get_date($event->start()->getTimestamp(), $event->end()->getTimestamp()),
-				'time' => \Contexis\Events\Intl\DateFormatter::get_time($event->start()->getTimestamp(), $event->end()->getTimestamp()),
-				'price' => new Contexis\Events\Intl\PriceFormatter($price),
+				'date' => \Contexis\Events\Intl\Date::get_date($event->start()->getTimestamp(), $event->end()->getTimestamp()),
+				'time' => \Contexis\Events\Intl\Date::get_time($event->start()->getTimestamp(), $event->end()->getTimestamp()),
+				'price' => new Contexis\Events\Intl\Price($price),
 				'is_free' => $event->is_free(),
 				'start' => $event->start()->getTimestamp(),
 				'end' => $event->end()->getTimestamp(),
@@ -269,14 +269,7 @@ class EM_Events extends EM_Object {
 		return apply_filters('em_events_delete',  in_array(false, $results), $event_ids);
 	}
 	
-	public static function get_pagination_links($args, $count, $search_action = 'search_events', $default_args = array()){
-		//get default args if we're in a search, supply to parent since we can't depend on late static binding until WP requires PHP 5.3 or later
-		if( empty($default_args) && (!empty($args['ajax']) || !empty($_REQUEST['action']) && $_REQUEST['action'] == $search_action) ){
-			$default_args = self::get_default_search();
-			$default_args['limit'] = 0;
-		}
-		return parent::get_pagination_links($args, $count, $search_action, $default_args);
-	}
+	
 	
 	/* (non-PHPdoc)
 	 * DEPRECATED - this class should just contain static classes,

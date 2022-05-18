@@ -22,7 +22,7 @@
 	<table class='form-table' role="presentation">
 		<?php
 		/* Tax & Currency */
-		em_options_select ( __( 'Currency', 'events-manager'), 'dbem_bookings_currency', em_get_currencies()->names, __( 'Choose your currency for displaying event pricing.', 'events-manager') );
+		em_options_select ( __( 'Currency', 'events-manager'), 'dbem_bookings_currency', \Contexis\Events\Intl\Price::currency_list()->names, __( 'Choose your currency for displaying event pricing.', 'events-manager') );
 		em_options_input_text ( __( 'Tax Rate', 'events-manager'), 'dbem_bookings_tax', __( 'Add a tax rate to your ticket prices (entering 10 will add 10% to the ticket price).', 'events-manager') );
 		em_options_radio_binary ( __( 'Add tax to ticket price?', 'events-manager'), 'dbem_bookings_tax_auto_add', __( 'When displaying ticket prices and booking totals, include the tax automatically?', 'events-manager') );
 		

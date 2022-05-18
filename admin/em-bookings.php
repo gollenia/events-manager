@@ -340,7 +340,7 @@ function em_bookings_single(){
 													<span class="em-booking-single-info">0</span>
 													<div class="em-booking-single-edit"><input name="em_tickets[<?php echo $EM_Ticket->ticket_id; ?>][spaces]" class="em-ticket-select" id="em-ticket-spaces-<?php echo $EM_Ticket->ticket_id; ?>" value="0" /></div>
 												</td>
-												<td><?php echo em_get_currency_symbol() ?>0.00</td>
+												<td><?php echo \Contexis\Events\Intl\Price::currency_code() ?>0.00</td>
 											</tr>
 											<?php do_action('em_bookings_admin_ticket_row', $EM_Ticket, $EM_Booking); ?>
 											<?php endif; ?>

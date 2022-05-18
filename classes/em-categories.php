@@ -54,10 +54,7 @@ class EM_Categories extends EM_Taxonomy_Terms {
 		return parent::output($args);
 	}
 	
-	public static function get_pagination_links($args, $count, $search_action = 'search_cats', $default_args = array()){
-		self::$instance = new EM_Categories();
-		return parent::get_pagination_links($args, $count, $search_action, $default_args);
-	}
+	
 
 	public static function get_post_search($args = array(), $filter = false, $request = array(), $accepted_args = array()){
 		self::$instance = new EM_Categories();

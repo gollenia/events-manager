@@ -181,7 +181,7 @@ class EM_Coupon extends EM_Object {
 				break;
 			case '#' :
 				//discount by price
-				$text = sprintf(__('%s Off','em-pro'), \Contexis\Events\Intl\PriceFormatter::format($this->coupon_discount));
+				$text = sprintf(__('%s Off','em-pro'), \Contexis\Events\Intl\Price::format($this->coupon_discount));
 				break;
 		}
 		return apply_filters('em_coupon_get_discount_text', $text, $this);

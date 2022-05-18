@@ -1,9 +1,8 @@
 <?php
 /* Used by the admin area to display recurring event time-related information - edit with caution */
 global $EM_Event;
-$days_names = em_get_days_names();
-$hours_format = em_get_hour_format();
-$classes = array();
+$days_names = \Contexis\Events\Intl\Date::weekdays();
+
 ?>
 <div id="em-form-recurrence" class="event-form-recurrence event-form-when">
 	<p class="em-time-range">

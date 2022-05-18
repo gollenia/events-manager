@@ -2196,11 +2196,11 @@ class EM_Event extends EM_Object{
 	}
 	
 	function output_times() {
-		return \Contexis\Events\Intl\DateFormatter::get_time($this->start()->getTimestamp(), $this->end()->getTimestamp());
+		return \Contexis\Events\Intl\Date::get_time($this->start()->getTimestamp(), $this->end()->getTimestamp());
 	}
 	
 	function output_dates() {
-		return \Contexis\Events\Intl\DateFormatter::get_date($this->start()->getTimestamp(), $this->end()->getTimestamp());
+		return \Contexis\Events\Intl\Date::get_date($this->start()->getTimestamp(), $this->end()->getTimestamp());
 	}
 	
 	/**********************************************************

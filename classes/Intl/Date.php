@@ -4,7 +4,7 @@ namespace Contexis\Events\Intl;
 
 use IntlDateFormatter;
 
-class DateFormatter {
+class Date {
 
 	var $start;
 	var $end;
@@ -42,7 +42,7 @@ class DateFormatter {
 	public static function get_date(int $start, int $end = 0) {
 		$instance = new self($start, $end);
 		
-		if($instance->is_same_day()) {
+		if($instance->is_same_day() || $end == 0) {
 			return $instance->fmt->format($start);
 		}
 		return $instance->date_range();
@@ -50,6 +50,10 @@ class DateFormatter {
 
 	public static function get_time(int $start, int $end = 0) {
 		$instance = new self($start, $end, true);
+
+		if($end == 0) {
+			return $instance->fmt->format($start);
+		}
 		
 		if($instance->is_same_day()) {
 			return $instance->fmt->format($start) . " " . __('to', 'events-manager') . " " . $instance->fmt->format($end) . " " . __("o'clock", 'events-manager');
@@ -105,5 +109,17 @@ class DateFormatter {
 	 */
 	public function is_same_year() {
 		return wp_date('Y', $this->start) === wp_date('Y', $this->end);
+	}
+
+	public static function weekdays() {
+		return [
+			__('Mon', 'events-manager'),
+			__('Tue', 'events-manager'),
+			__('Wed', 'events-manager'),
+			__('Thu', 'events-manager'),
+			__('Fri', 'events-manager'),
+			__('Sat', 'events-manager'),
+			__('Sun', 'events-manager')
+		];
 	}
 }

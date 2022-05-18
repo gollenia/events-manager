@@ -344,8 +344,8 @@ class EM_Coupons_Admin {
 								<td><a href="<?php echo EM_ADMIN_URL; ?>&amp;page=events-manager-bookings&amp;person_id=<?php echo $EM_Booking->person_id; ?>"><?php echo $EM_Booking->person->get_name() ?></a></td>
 								<td><?php echo $EM_Booking->get_spaces() ?></td>
 								<td><?php echo $EM_Booking->get_price_post_taxes(true, false); ?></td>
-								<td><?php echo \Contexis\Events\Intl\PriceFormatter::format($EM_Coupon->get_discount($base_price)); ?> <em>(<?php echo $EM_Coupon->get_discount_text(); ?>)</em></td>
-								<td><?php echo \Contexis\Events\Intl\PriceFormatter::format($EM_Booking->get_price()); ?></td>
+								<td><?php echo \Contexis\Events\Intl\Price::format($EM_Coupon->get_discount($base_price)); ?> <em>(<?php echo $EM_Coupon->get_discount_text(); ?>)</em></td>
+								<td><?php echo \Contexis\Events\Intl\Price::format($EM_Booking->get_price()); ?></td>
 								<td>										
 									<?php
 									$edit_url = em_add_get_params($EM_Booking->get_admin_url());

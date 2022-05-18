@@ -237,10 +237,7 @@ class EM_Taxonomy_Terms extends EM_Object implements Iterator, Countable{
 			}
 			$output =  $format_header .  $output . $format_footer;
 			//Pagination (if needed/requested)
-			if( !empty($args['pagination']) && !empty($limit) && $terms_count >= $limit ){
-				//Show the pagination links (unless there's less than 10 events, or the custom limit)
-				$output .= self::get_pagination_links($args, $terms_count);
-			}
+			
 		} else {
 			$output = get_option ( 'dbem_no_'. self::$instance->terms_name .'_message' );
 		}
@@ -249,15 +246,7 @@ class EM_Taxonomy_Terms extends EM_Object implements Iterator, Countable{
 		return apply_filters('em_'. self::$instance->terms_name .'_output', $output, $terms, $args);		
 	}
 	
-	public static function get_pagination_links($args, $count, $search_action = false, $default_args = array()){
-		//get default args if we're in a search, supply to parent since we can't depend on late static binding until WP requires PHP 5.3 or later
-		if( $search_action === false ) $search_action = self::$instance->ajax_search_action;
-		if( empty($default_args) && (!empty($args['ajax']) || !empty($_REQUEST['action']) && $_REQUEST['action'] == $search_action) ){
-			$default_args = self::get_default_search();
-			$default_args['limit'] = get_option('dbem_'. self::$instance->terms_name .'_default_limit');
-		}
-		return parent::get_pagination_links($args, $count, $search_action, $default_args);
-	}
+	
 
 	public static function get_post_search($args = array(), $filter = false, $request = array(), $accepted_args = array()){
 		//supply $accepted_args to parent argument since we can't depend on late static binding until WP requires PHP 5.3 or later

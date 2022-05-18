@@ -247,10 +247,7 @@ $limit $offset
 			$output =  $format_header .  $output . $format_footer;
 			
 			//Pagination (if needed/requested)
-			if( !empty($args['pagination']) && !empty($limit) && $locations_count > $limit ){
-				//output pagination links
-				$output .= self::get_pagination_links($args, $locations_count);
-			}
+			
 		}elseif( $args['no_results_msg'] !== false ){
 			$output = !empty($args['no_results_msg']) ? $args['no_results_msg'] : get_option('dbem_no_locations_message');
 		}
@@ -259,14 +256,6 @@ $limit $offset
 		return apply_filters('em_locations_output', $output, $locations, $args);		
 	}
 	
-	public static function get_pagination_links($args, $count, $search_action = 'search_locations', $default_args = array()){
-		//get default args if we're in a search, supply to parent since we can't depend on late static binding until WP requires PHP 5.3 or later
-		if( empty($default_args) && (!empty($args['ajax']) || !empty($_REQUEST['action']) && $_REQUEST['action'] == $search_action) ){
-			$default_args = self::get_default_search();
-			$default_args['limit'] = 25; //since we're paginating, get the default limit, which isn't obtained from get_default_search()
-		}
-		return parent::get_pagination_links($args, $count, $search_action, $default_args);
-	}
 	
 	public static function delete( $args = array() ){
 	    $locations = array();

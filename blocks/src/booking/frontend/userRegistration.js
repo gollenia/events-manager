@@ -39,7 +39,7 @@ const UserRegistration = (props) => {
                 onChange={(event) => {dispatch({type: "SET_FIELD", payload: {form: "registration", field: field.name, value: event}})} }
               />
           ) }
-          { data.event.is_free &&  
+          { data.event.is_free && data.l10n.consent &&
             <InputField
 			  onChange={(event) => {dispatch({type: "SET_FIELD", payload: {form: "registration", field: "data_privacy_consent", value: event}})} }
               name="data_privacy_consent"

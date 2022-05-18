@@ -86,7 +86,7 @@ $reschedule_warnings = !empty($EM_Event->event_id) && $EM_Event->is_recurring() 
 									</div>
 								</td>
 								<td class="ticket-price">
-									<span class="ticket_price"><?php echo ($EM_Ticket->ticket_price) ? esc_html($EM_Ticket->get_price_precise(true)) : esc_html__('Free','events-manager'); ?></span>
+									<span class="ticket_price"><?php echo ($EM_Ticket->ticket_price) ? \Contexis\Events\Intl\Price::format($EM_Ticket->ticket_price) : esc_html__('Free','events-manager'); ?></span>
 								</td>
 								<td class="ticket-limit">
 									<span class="ticket_min">
@@ -95,15 +95,15 @@ $reschedule_warnings = !empty($EM_Event->event_id) && $EM_Event->is_recurring() 
 									<span class="ticket_max"><?php echo ( !empty($EM_Ticket->ticket_max) ) ? esc_html($EM_Ticket->ticket_max):'-'; ?></span>
 								</td>
 								<td class="ticket-time">
-									<span class="ticket_start ticket-dates-from-normal"><?php echo ( !empty($EM_Ticket->ticket_start) ) ? $EM_Ticket->start():''; ?></span>
+									<span class="ticket_start ticket-dates-from-normal"><?php echo ( !empty($EM_Ticket->ticket_start) ) ? \Contexis\Events\Intl\Date::get_date($EM_Ticket->start()->getTimestamp()):''; ?></span>
 									<span class="ticket_start_recurring_days ticket-dates-from-recurring"><?php if( !empty($EM_Ticket->ticket_meta['recurrences']) ) echo $EM_Ticket->ticket_meta['recurrences']['start_days']; ?></span>
 									<span class="ticket_start_recurring_days_text ticket-dates-from-recurring <?php if( !empty($EM_Ticket->ticket_meta['recurrences']) && !is_numeric($EM_Ticket->ticket_meta['recurrences']['start_days']) ) echo 'hidden'; ?>"><?php _e('day(s)','events-manager'); ?></span>
-									<span class="ticket_start_time"><?php echo ( !empty($EM_Ticket->ticket_start) ) ? $EM_Ticket->start()->format( em_get_hour_format() ):''; ?></span>
+									<span class="ticket_start_time"><?php echo ( !empty($EM_Ticket->ticket_start) ) ? \Contexis\Events\Intl\Date::get_time($EM_Ticket->start()->getTimestamp() ):''; ?></span>
 									<br />
-									<span class="ticket_end ticket-dates-from-normal"><?php echo ( !empty($EM_Ticket->ticket_end) ) ? $EM_Ticket->end():''; ?></span>
+									<span class="ticket_end ticket-dates-from-normal"><?php echo ( !empty($EM_Ticket->ticket_end) ) ? \Contexis\Events\Intl\Date::get_date($EM_Ticket->end()->getTimestamp()):''; ?></span>
 									<span class="ticket_end_recurring_days ticket-dates-from-recurring"><?php if( !empty($EM_Ticket->ticket_meta['recurrences']) ) echo $EM_Ticket->ticket_meta['recurrences']['end_days']; ?></span>
 									<span class="ticket_end_recurring_days_text ticket-dates-from-recurring <?php if( !empty($EM_Ticket->ticket_meta['recurrences']) && !is_numeric($EM_Ticket->ticket_meta['recurrences']['end_days']) ) echo 'hidden'; ?>"><?php _e('day(s)','events-manager'); ?></span>
-									<span class="ticket_end_time"><?php echo ( !empty($EM_Ticket->ticket_end) ) ? $EM_Ticket->end()->format( em_get_hour_format() ):''; ?></span>
+									<span class="ticket_end_time"><?php echo ( !empty($EM_Ticket->ticket_end) ) ? \Contexis\Events\Intl\Date::get_time($EM_Ticket->end()->getTimestamp() ):''; ?></span>
 								</td>
 								<td class="ticket-qty">
 									<span class="ticket_available_spaces"><?php echo $EM_Ticket->get_available_spaces(); ?></span>/
@@ -147,7 +147,7 @@ $reschedule_warnings = !empty($EM_Event->event_id) && $EM_Event->is_recurring() 
 	<h3 class="title"><?php esc_html_e('Event Options','events-manager'); ?></h3>
 	<table id="em-booking-options" class="form-table">
 	<tbody>
-	<?php if( count($EM_Ticket->get_event()->get_tickets()->tickets) > 1 ): ?>
+	<?php if( count($EM_Ticket->get_event()->get_tickets()->tickets) > 0 ): ?>
 	
 	<tr>
 		<th><?php esc_html_e('Total Spaces','events-manager'); ?></th>

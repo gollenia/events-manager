@@ -229,10 +229,10 @@ class EM_Event_Posts_Admin{
 				break;
 			case 'date-time':
 				
-				echo \Contexis\Events\Intl\DateFormatter::get_date($EM_Event->start()->getTimestamp(), $EM_Event->end()->getTimestamp());;
+				echo \Contexis\Events\Intl\Date::get_date($EM_Event->start()->getTimestamp(), $EM_Event->end()->getTimestamp());;
 				echo "<br />";
 				if(!$EM_Event->event_all_day){
-					echo \Contexis\Events\Intl\DateFormatter::get_time($EM_Event->start()->getTimestamp(), $EM_Event->end()->getTimestamp());
+					echo \Contexis\Events\Intl\Date::get_time($EM_Event->start()->getTimestamp(), $EM_Event->end()->getTimestamp());
 				}else{
 					echo __('All Day','events-manager');
 				}

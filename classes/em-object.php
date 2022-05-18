@@ -797,62 +797,7 @@ class EM_Object {
 		return apply_filters('em_get_post_search', $args);
 	}
 	
-	/**
-	 * Generates pagination for classes like EM_Events based on supplied arguments and whether AJAX is enabled.
-	 * 
-	 * @param array $args The arguments being searched for
-	 * @param integer $count The number of total items to paginate through
-	 * @param string $search_action The name of the action query var used to trigger a search - used in AJAX requests and normal searches
-	 * @param array $default_args The default arguments and values this object accepts, used to compare against $args to create a querystring
-	 * @return string
-	 * @uses em_paginate()
-	 */
-	public static function get_pagination_links($args, $count, $search_action = 'search_events', $default_args = array()){
-		$limit = ( !empty($args['limit']) && is_numeric($args['limit']) ) ? $args['limit']:false;
-		$page = ( !empty($args['page']) && is_numeric($args['page']) ) ? $args['page']:1;
-		$pno = !empty($args['page_queryvar']) ? $args['page_queryvar'] : 'pno';
-		$default_pag_args = array($pno=>'%PAGE%', 'page'=>null, 'search'=>null, 'action'=>null, 'pagination'=>null); //clean out the bad stuff, set up page number template
-		$page_url = $_SERVER['REQUEST_URI'];
-		//$default_args are values that can be added to the querystring for use in searching events in pagination either in searches or ajax pagination
-		if( !empty($_REQUEST['action']) && $_REQUEST['action'] == $search_action && empty($default_args) ){
-			//due to late static binding issues in PHP, this'll always return EM_Object::get_default_search so this is a fall-back
-			$default_args = self::get_default_search();
-		}
-		//go through default arguments (if defined) and build a list of unique non-default arguments that should go into the querystring
-		$unique_args = array(); //this is the set of unique arguments we'll add to the querystring
-		$ignored_args = array('offset', 'ajax', 'array', 'pagination','format','format_header','format_footer'); 
-		foreach( $default_args as $arg_key => $arg_default_val){
-			if( array_key_exists($arg_key, $args) && !in_array($arg_key, $ignored_args) ){
-				//if array exists, implode it in case one value is already imploded for matching purposes
-				$arg_val = is_array($args[$arg_key]) ? implode(',', $args[$arg_key]) : $args[$arg_key];
-				$arg_default_val = is_array($arg_default_val) ? implode(',',$arg_default_val) : $arg_default_val;
-				if( $arg_val != $arg_default_val ){
-					$unique_args[$arg_key] = $arg_val;
-				}
-			}
-		}
-		if( !empty($unique_args['search']) ){ 
-			$unique_args['em_search'] = $unique_args['search']; //special case, since em_search is used in links rather than search, which we remove below
-			unset($unique_args['search']);
-		}
-		//build general page link with all arguments
-		$pag_args = array_merge($unique_args, $default_pag_args);
-		//if we're using ajax or already did an events search via a form, add the action here for pagination links
-		if( !empty($args['ajax']) || (!empty($_REQUEST['action']) && $_REQUEST['action'] == $search_action ) ){
-			$unique_args['action'] = $pag_args['action'] = $search_action;
-		}
-		//if we're in an ajax call, make sure we aren't calling admin-ajax.php
-		if( defined('DOING_AJAX') ) $page_url = em_wp_get_referer();
-		//finally, glue the url with querystring and pass onto pagination function
-		$page_link_template = em_add_get_params($page_url, $pag_args, false); //don't html encode, so em_paginate does its thing;
-		if( empty($args['ajax']) || defined('DOING_AJAX') ) $unique_args = array(); //don't use data method if ajax is disabled or if we're already in an ajax request (SERP irrelevenat)
-		$return = apply_filters('em_object_get_pagination_links', em_paginate( $page_link_template, $count, $limit, $page, $unique_args ), $page_link_template, $count, $limit, $page);
-		//if PHP is 5.3 or later, you can specifically filter by class e.g. em_events_output_pagination - this replaces the old filter originally located in the actual child classes
-		if( function_exists('get_called_class') ){
-			$return = apply_filters(strtolower(get_called_class()).'_output_pagination', $return, $page_link_template, $count, $limit, $page);
-		}
-		return $return;
-	}
+
 	
 	public function __get( $shortname ){
 		if( !empty($this->shortnames[$shortname]) ){
@@ -1178,7 +1123,7 @@ class EM_Object {
 	 * @return string
 	 */
 	function format_price( $price ){
-		return \Contexis\Events\Intl\PriceFormatter::format( $price );
+		return \Contexis\Events\Intl\Price::format( $price );
 	}
 	
 	/**

@@ -731,7 +731,7 @@ class EM_Booking extends EM_Object{
 	    //add taxes to price
 		$summary['taxes'] = array('rate'=> 0, 'amount'=> 0);
 	    if( $this->get_price_taxes() > 0 ){
-		    $summary['taxes'] = array('rate'=> \Contexis\Events\Intl\PriceFormatter::format($this->get_price_taxes(true)));
+		    $summary['taxes'] = array('rate'=> \Contexis\Events\Intl\Price::format($this->get_price_taxes(true)));
 	    }
 	    //apply post-tax discounts
 	    $summary['discounts_post_tax'] = $this->get_price_adjustments_summary('discounts', 'post');
@@ -1095,10 +1095,10 @@ class EM_Booking extends EM_Object{
 					$replace = $this->get_spaces();
 					break;
 				case '#_BOOKINGDATE':
-					$replace = ( $this->date() !== false ) ? \Contexis\Events\Intl\DateFormatter::get_date($this->date()->getTimestamp()) :'n/a';
+					$replace = ( $this->date() !== false ) ? \Contexis\Events\Intl\Date::get_date($this->date()->getTimestamp()) :'n/a';
 					break;
 				case '#_BOOKINGTIME':
-					$replace = ( $this->date() !== false ) ?  \Contexis\Events\Intl\DateFormatter::get_time($this->date()->getTimestamp()) :'n/a';
+					$replace = ( $this->date() !== false ) ?  \Contexis\Events\Intl\Date::get_time($this->date()->getTimestamp()) :'n/a';
 					break;
 				case '#_COMMENT' : //deprecated
 				case '#_BOOKINGCOMMENT':

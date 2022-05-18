@@ -257,7 +257,7 @@ class EM_Gateways_Transactions{
 					<td class="column-amount">
 						<?php
 							$amount = $transaction->transaction_total_amount;
-							echo \Contexis\Events\Intl\PriceFormatter::format($amount);
+							echo \Contexis\Events\Intl\Price::format($amount);
 						?>
 					</td>
 					<td class="column-gateway-trans-id">

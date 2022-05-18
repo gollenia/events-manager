@@ -1,8 +1,8 @@
 <?php
 namespace Contexis\Events\Blocks;
 
-use Contexis\Events\Intl\PriceFormatter;
-use Contexis\Events\Intl\DateFormatter;
+use Contexis\Events\Intl\Price;
+use Contexis\Events\Intl\Date;
 
 class Details {
 
@@ -63,7 +63,7 @@ class Details {
 			return "";
 		}
 		if(is_numeric($price)) {
-			$formatter = new PriceFormatter($price);
+			$formatter = new Price($price);
 			return $formatter->get_format();
 		}
 
