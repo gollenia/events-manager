@@ -23,14 +23,7 @@ function em_install() {
 			
 			add_action('em_ml_init', 'EM_ML::toggle_languages_index');
 		 	
-			//New install, or Migrate?
-			if( $old_version < 5 && !empty($old_version) ){
-				update_option('dbem_upgrade_throttle', time()+300);
-				set_time_limit(300);
-				
-				update_site_option('dbem_ms_update_nag',1);
-			}elseif( empty($old_version) ){
-				
+			if( empty($old_version) ){
 				update_option('dbem_hello_to_user',1);
 			}
 					
@@ -43,10 +36,14 @@ function em_install() {
 		  	update_option('dbem_version', EM_VERSION);
 			delete_option('dbem_upgrade_throttle');
 			delete_option('dbem_upgrade_throttle_time');
-			//last but not least, flush the toilet
+			
 			global $wp_rewrite;
 			$wp_rewrite->flush_rules();
+			
 			update_option('dbem_flush_needed',1);
+			add_action ( 'admin_notices', function() {
+				echo '<div class="updated"><p>'.__('Events has been updated to version ',  'events-manager'). EM_VERSION . '</p></div>';
+			});
 		}else{
 			function em_upgrading_in_progress_notification(){
 				?><div class="error"><p>Events Manager upgrade still in progress. Please be patient, this message should disappear once the upgrade is complete.</p></div><?php
@@ -470,9 +467,6 @@ function em_add_options() {
 	$respondent_email_body_localizable = __("Dear #_BOOKINGNAME, <br />This is a reminder about your #_BOOKINGSPACES space/spaces reserved for #_EVENTNAME.<br />When : #_EVENTDATES @ #_EVENTTIMES<br />Where : #_LOCATIONNAME - #_LOCATIONFULLLINE<br />We look forward to seeing you there!<br />Yours faithfully,<br />#_CONTACTNAME",'em-pro').$email_footer;
 	//all the options
 	$dbem_options = array(
-		'dbem_data' => array(), //used to store admin-related data such as notice flags and other row keys that may not always exist in the wp_options table
-		//time formats
-		
 		
 		//defaults
 		'dbem_default_location'=>0,
@@ -672,10 +666,9 @@ function em_add_options() {
 }
 
 function em_upgrade_current_installation(){
-	global $wpdb, $wp_locale, $EM_Notices;
-
 	
-	if( get_option('dbem_version') != '' && get_option('dbem_version') < 6.3 ){
+	if( get_option('dbem_version') != '' && get_option('dbem_version') < 6.4 ) {
+		
 		delete_option('dbem_multiple_bookings_email_cancelled_body');
 		delete_option('dbem_multiple_bookings_email_cancelled_subject');
 		delete_option('dbem_multiple_bookings_email_rejected_body');
@@ -691,6 +684,7 @@ function em_upgrade_current_installation(){
 		delete_option('dbem_multiple_bookings_contact_email_confirmed_body');
 		delete_option('dbem_multiple_bookings_contact_email_confirmed_subject');
 		delete_option('dbem_multiple_bookings_feedback_added_body');
+		delete_option('dbem_multiple_bookings_feedback_added');
 		delete_option('dbem_multiple_bookings_feedback_already_added');
 		delete_option('dbem_multiple_bookings_feedback_no_bookings');
 		delete_option('dbem_multiple_bookings_feedback_loading_cart');
@@ -838,6 +832,7 @@ function em_upgrade_current_installation(){
 		delete_option('dbem_rss_description_format');
 		delete_option('dbem_rss_title_format');
 		delete_option('dbem_rss_order');
+		delete_option('dbem_rss_scope');
 		delete_option('dbem_rss_orderby');
 		delete_option('em_rss_pubdate');
 		delete_option('dbem_cp_locations_slug');
@@ -858,6 +853,7 @@ function em_upgrade_current_installation(){
 		delete_option('dbem_locations_default_archive_orderby');
 		delete_option('dbem_locations_default_archive_order');
 		delete_option('dbem_locations_default_limit');
+		delete_option('dbem_data');
 	}
 }
 
