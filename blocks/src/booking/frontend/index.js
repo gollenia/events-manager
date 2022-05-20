@@ -4,6 +4,7 @@
 import React, { useEffect, useState, useReducer } from 'react'
 import { __ } from '@wordpress/i18n';
 
+
 import {ErrorBoundary} from 'react-error-boundary'
 
 /*
@@ -24,7 +25,7 @@ import Guide from './guide';
 const Booking = () => {
 
 	// if no spaces are left, nothing is shown
-	if(window.booking_data.event?.bookings?.spaces === 0) { return <>no data</> }
+	if(window.booking_data.event?.bookings?.spaces === 0) { return <></> }
 
 	//const [state, setstate] = useState(initialState);
 
@@ -40,7 +41,7 @@ const Booking = () => {
 		dispatch({type: "VALIDITY", payload: { 
 			"tickets": document.getElementById('user-attendee-form')?.checkValidity() && request.tickets.length > 0,
 			"registration": document.getElementById('user-registration-form')?.checkValidity() && request.tickets.length > 0,
-			"payment": data.event.is_free || !data.l10n.consent || request.registration.data_privacy_consent 
+			"payment": !data.l10n.consent || data.l10n.consent && request.registration.data_privacy_consent 
 		}});
 	}, [state])
 	
