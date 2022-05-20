@@ -5,12 +5,11 @@ const Guide = ({state}) => {
 	const { wizzard } = state;
 
 	const steps = () => {
-		let stepNumber = 0;
+		let badgeNumber = 0;
 
 		let result = Object.keys(wizzard?.steps).map((step, index) => { 		
 			
 			if(!wizzard.steps[step].enabled) {
-				console.log("Nonono")
 				return <></>;
 			}
 			const classes = [
@@ -22,15 +21,14 @@ const Guide = ({state}) => {
 
 			const badgeContent = () => {
 				if(wizzard.steps[step].step >= wizzard.step) {
-					return <span>{stepNumber}</span>
+					return <span>{badgeNumber}</span>
 				}
 				if(wizzard.steps[step].valid) return <i className="material-icons">done</i>
 				return <i className="material-icons">close</i>
 			}
 
-			stepNumber++;
+			badgeNumber++;
 			
-			console.log("sdlfkjgkj")
 			return (
 				<div className={classes}>
 					<div class="wizzard__badge">{badgeContent()}</div>
