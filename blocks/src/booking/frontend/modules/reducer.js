@@ -11,11 +11,11 @@ const reducer = (state = {}, action) => {
 		state.wizzard.step = payload;
 		return {...state}
 
-	case 'INCREMET_WIZZARD':
+	case 'INCREMENT_WIZZARD':
 		state.wizzard.step = state.wizzard.step + (payload ? payload : 1);
 		return {...state}
 
-	case 'DECREMET_WIZZARD':
+	case 'DECREMENT_WIZZARD':
 		state.wizzard.step = state.wizzard.step - (payload ? payload : 1);
 		return {...state}
 
