@@ -49,7 +49,7 @@ const Payment = (props) => {
 					options={gatewayOptions()}
 				/> }
 
-				{ data.l10n.constent &&
+				{ data.l10n.consent &&
 				<InputField
 					onChange={(event) => {dispatch({type: "SET_FIELD", payload: {form: "registration", field: "data_privacy_consent", value: event}})} }
 					name="data_privacy_consent"
