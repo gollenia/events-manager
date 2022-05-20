@@ -13,7 +13,7 @@ const Footer = ({state, dispatch}) => {
 	const REGISTRATION_MISSING = REGISTRATION && !wizzard.steps.registration.valid
 	const PAYMENT_MISSING = PAYMENT && request.gateway == ""
 	const ONLINE_PAYMENT = request.gateway != "offline"
-	const PRIVACY_MISSING = data.l10n.constent && ( (PAYMENT && !request.registration.data_privacy_consent) || !wizzard.payment.enabled && REGISTRATION && !request.registration.data_privacy_consent )
+	const PRIVACY_MISSING = data.l10n.consent && ( (PAYMENT && !request.registration.data_privacy_consent) || !wizzard.steps.payment.enabled && REGISTRATION && !request.registration.data_privacy_consent )
 
 	const FINAL_STEP = wizzard.steps.payment.enabled ? 2 : 1
 
@@ -41,7 +41,7 @@ const Footer = ({state, dispatch}) => {
 				
 				{ /* Next Button */}
 				{ wizzard.step < FINAL_STEP && 
-					<button type="button" disabled={ERROR} className="button button--primary" onClick={() => {dispatch({type: "INCREMET_WIZZARD"})}} >{__('Next', 'events')}</button> }
+					<button type="button" disabled={ERROR} className="button button--primary" onClick={() => {dispatch({type: "INCREMENT_WIZZARD"})}} >{__('Next', 'events')}</button> }
 				
 				{ wizzard.step == FINAL_STEP && <button disabled={!wizzard.steps.registration.valid || !wizzard.steps.payment.valid} className="button button--primary" onClick={() => {sendOrder(state, dispatch)}}>
 					{ data.attributes?.bookNow  !== "" ? data.attributes?.bookNow : __("Book now", "events") }
