@@ -8,11 +8,10 @@
     const [errorSent, setErrorSent] = useState(false);
 
     const request = {
-        error,
-        event_id: window.bookingAppData.event_id
+        error
     }
 
-    const url = new URL(window.bookingAppData.rest_url)
+    const url = new URL(window.booking_data.rest_url)
     url.search = new URLSearchParams(request).toString();
 
 

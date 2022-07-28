@@ -21,7 +21,7 @@ $timezones = array();
 //calendar header
 $output_header = "BEGIN:VCALENDAR
 VERSION:2.0
-PRODID:-//wp-events-plugin.com//".EM_VERSION."//EN";
+PRODID:-//wp-events-plugin.com//".Events::VERSION."//EN";
 
 //if timezone is supported, we output the blog timezone here
 if( $timezone_support ){

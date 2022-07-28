@@ -1,6 +1,8 @@
 import initialState from "./initialState";
 import { __ } from '@wordpress/i18n';
 
+const initializer = initialState => initialState
+
 const reducer = (state = {}, action) => {
 
   const { type, payload } = action;
@@ -9,14 +11,17 @@ const reducer = (state = {}, action) => {
 
 	case 'SET_WIZZARD':
 		state.wizzard.step = payload;
+		state.wizzard.checkValidity = true;
 		return {...state}
 
 	case 'INCREMENT_WIZZARD':
 		state.wizzard.step = state.wizzard.step + (payload ? payload : 1);
+		state.wizzard.checkValidity = true;
 		return {...state}
 
 	case 'DECREMENT_WIZZARD':
 		state.wizzard.step = state.wizzard.step - (payload ? payload : 1);
+		state.wizzard.checkValidity = true;
 		return {...state}
 
 	case 'SET_MODAL':
@@ -30,6 +35,7 @@ const reducer = (state = {}, action) => {
 
 	case 'ADD_TICKET':
 		state.request.tickets.push(JSON.parse(JSON.stringify(state.data.available_tickets[payload])));
+		state.wizzard.checkValidity = true;
 		return {...state}
 
 	case 'SET_FIELD':
@@ -39,11 +45,13 @@ const reducer = (state = {}, action) => {
 		if (payload.form === 'registration') {
 			state.request.registration[payload.field] = payload.value;
 		}
+		state.wizzard.checkValidity = true;
 		return {...state}
 
 	case 'REMOVE_TICKET':
 		const index = payload.index !== undefined ? payload.index : state.request.tickets.findIndex(ticket => ticket.id === payload.id);
 		state.request.tickets.splice(index, 1);
+		state.wizzard.checkValidity = true;
 		return {...state}
 
 	case 'SET_COUPON':
@@ -64,15 +72,20 @@ const reducer = (state = {}, action) => {
 
 	case 'SET_GATEWAY':
 		state.request.gateway = payload;
+		state.wizzard.checkValidity = true;
 		return {...state}
 
 	case 'VALIDITY':
 		for(let key in payload) {
 			state.wizzard.steps[key].valid = payload[key];
 		}
+		state.wizzard.checkValidity = false;
+		return {...state};
 
 	case 'RESET':
-		return initialState
+		console.log("resetting...")
+		
+		return initializer();
 
 	default:
 		console.log("UNKNOWN ACTION", action);

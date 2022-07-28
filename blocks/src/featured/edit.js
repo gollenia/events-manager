@@ -42,7 +42,7 @@
  
 	 const categoryList = useSelect( ( select ) => {
 		 const { getEntityRecords } = select( coreStore );
-		 const query = { hide_empty: true };
+		 const query = { hide_empty: true, per_page: -1 };
 		 const list = getEntityRecords( 'taxonomy', 'event-categories', query );
 		 let categoryOptionsArray = [{value: 0, label: ""}];
 		 if (!list) {
@@ -58,7 +58,7 @@
  
 	 const tagList = useSelect( ( select ) => {
 		 const { getEntityRecords } = select( coreStore );
-		 const query = { hide_empty: true };
+		 const query = { hide_empty: true, per_page: -1 };
 		 const list = getEntityRecords( 'taxonomy', 'event-tags', query );
 		 
 		 if (!list) {
@@ -87,7 +87,7 @@
 
 	 const currentEvent = useSelect( ( select ) => {
 		const { getEntityRecords } = select( coreStore );
-		let query = { };
+		let query = { per_page: -1 };
 		if(selectedCategory !== 0) {
 			query["event-categories"] = selectedCategory
 		}

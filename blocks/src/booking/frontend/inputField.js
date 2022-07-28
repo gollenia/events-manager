@@ -1,28 +1,33 @@
 const React = require('react');
-
-import PropTypes from "prop-types"
+import { __ } from '@wordpress/i18n';
 
 const InputField = (props) => {
-    let InputTag
+	
+    const {
+		field: { 
+			type, 
+			name, 
+			label, 
+			required = false, 
+			pattern = false, 
+			placeholder = "", 
+			options,
+			width = 4
+		},
+		field,
+		value,
+	} = props;
 
-    const {type, name, label, required = false, pattern, defaultValue, options, selectHint, value, min, max, half} = props
+	const columns = [0, 2, 3, 4, 6];
 
 	const getLabel = () => {
 		const parser = new DOMParser();
 		return parser.parseFromString(`<!doctype html><body>${label}`, 'text/html').body.textContent;
-
 	}
 	
 	const createMarkup = (textString) => {
         return {__html: textString};
     }
-
-	if (type === "html") {
-		const content = createMarkup(value);
-
-		if(!content.__html) return (<div>{value}</div>);
-		return (<div className="help" dangerouslySetInnerHTML={content}></div>);
-	}
 
     const handleChange = event => {
         props.onChange(event.target.value)
@@ -48,7 +53,6 @@ const InputField = (props) => {
             });
             return result;
         }
-
         return options.map((option, index) => {
             return (<option selected={value == option} key={index}>{option}</option>)
         })
@@ -77,82 +81,60 @@ const InputField = (props) => {
 
 
     switch (type) {
+		case "html":
+			const content = createMarkup(value);
+			if(!content.__html) return (<div>{value}</div>);
+			return (<div className={`input-html grid__column--span-${columns[width]}`} dangerouslySetInnerHTML={content}></div>);
         case "select":
-            InputTag = (
-                <div className={"select" + (half ? " select--half" : "") + (required ? " input--required" : "")}>
+            return (
+                <div className={`select grid__column--span-${columns[width]} ${required ? " input--required" : ""}`}>
                     <label>{getLabel()}</label>
                     <select onChange= {handleChange} name={name} required={required}>
-                        { defaultValue && <option value="">{defaultValue}</option>}
-                        { selectHint && <option value="">{selectHint}</option>}
+                        { field.hasEmptyOption && <option value="">{props.help ? props.help : __("Please select", "events")}</option>}
                         { selectOptions() }
                     </select>
                 </div>
             )
-            break;
         case "radio":
-            InputTag = (
-                <div className="radio">
+            return (
+                <div className={`radio grid__column--span-${columns[width]} ${required ? " input--required" : ""}`}>
                     <label>{getLabel()}</label>
                     <fieldset className="radio">
                         { radioOptions() }
                     </fieldset>
                 </div>
             )
-            break;
         case "checkbox":
-            InputTag = (
-                <div className="checkbox">
+            return (
+                <div className={`checkbox grid__column--span-${columns[width]}`}>
                     <label>
-                    <input onChange={(event) => {handleCheckboxChange(event)}} type="checkbox" name={name} required={required} checked={value}/>
-                    <span dangerouslySetInnerHTML={createMarkup(label)}></span>
+                    <input onChange={(event) => {handleCheckboxChange(event)}} type="checkbox" name={name} required={required} checked={value || placeholder}/>
+                    <span dangerouslySetInnerHTML={createMarkup(field.help)}></span>
                     </label>
                 </div>
             )
-            break;
         case "date":
-            InputTag = (
-                <div className={"input" + (half ? " input--half" : "") + (required ? " input--required" : "")}>
+            return (
+                <div className={`input grid__column--span-${columns[width]} ${required ? " input--required" : ""}`}>
                     <label>{getLabel()}</label>
-                    <input onChange= {event => {handleChange(event)}} type={type} name={name} min={min} max={max} required={required} value={value} pattern={pattern}/>
+                    <input onChange= {event => {handleChange(event)}} type={type} name={name} min={field.min} max={field.max} required={required} value={value} />
                 </div>
             )
-            break;
         case "textarea":
-            InputTag = (
-                <div className={"textarea" + (required ? " input--required" : "")}>
+            return (
+                <div className={`textarea grid__column--span-${columns[width]} ${required ? " input--required" : ""}`}>
                     <label>{getLabel()}</label>
-                    <textarea onChange= {handleChange} name={name} value={value} required={required}></textarea>
+                    <textarea placeholder={placeholder} onChange= {handleChange} name={name} value={value} required={required}></textarea>
                 </div>
             )
-            break;
         default:
-            InputTag = (
-                <div className={"input" + (half ? " input--half" : "") + (required ? " input--required" : "")}>
+            return (
+                <div className={`input grid__column--span-${columns[width]} ${required ? " input--required" : ""}`}>
                     <label>{getLabel()}</label>
-                    <input onChange= {event => {handleChange(event)}} type={type} name={name} required={required} value={value} pattern={pattern}/>
+                    <input onChange= {event => {handleChange(event)}} type={type} name={name} required={required} placeholder={placeholder} value={value} pattern={pattern}/>
                 </div>
             )
     }
-
-    return (
-        <>
-            { InputTag }
-        </>
-        
-    )
-}
-
-InputField.propTypes = {
-    name: PropTypes.string.isRequired,
-    type: PropTypes.string.isRequired,
-    label: PropTypes.string.isRequired,
-	value: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.bool]),
-    required: PropTypes.bool,
-    pattern: PropTypes.string,
-    defaultValue: PropTypes.string,
-    options: PropTypes.array,
-    selectHint: PropTypes.string,
-    onChange: PropTypes.func
 }
 
 export default InputField

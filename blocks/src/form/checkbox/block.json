@@ -1,0 +1,43 @@
+{
+	"name": "events-manager/form-checkbox",
+	"apiVersion": 2,
+	"title": "Checkbox",
+	"description": "Lets the user check something",
+	"category": "widgets", 
+	"attributes": {
+		"fieldid": {
+			"type": "string",
+			"default": ""
+		},
+		"width": {
+			"type": "integer",
+			"default": 4
+		},
+		"required": {
+			"type": "boolean",
+			"default": false
+		},
+		"label": {
+			"type": "string",
+			"default": ""
+		},
+		"placeholder": {
+			"type": "boolean",
+			"default": false
+		},
+		"help": {
+			"type": "string",
+			"default": ""
+		},
+		"error": {
+			"type": "string",
+			"default": ""
+		},
+		"style": {
+			"type": "string",
+			"default": "checkbox"
+		}
+		
+	},
+	"parent": [ "events-manager/form-container" ]
+}

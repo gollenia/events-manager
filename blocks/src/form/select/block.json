@@ -1,0 +1,47 @@
+{
+	"name": "events-manager/form-select",
+	"apiVersion": 2,
+	"title": "Select",
+	"description": "Lets the user select something",
+	"category": "widgets", 
+	"attributes": {
+		"fieldid": {
+			"type": "string",
+			"default": ""
+		},
+		"width": {
+			"type": "string",
+			"default": true
+		},
+		"required": {
+			"type": "boolean",
+			"default": false
+		},
+		"options": {
+			"type": "array",
+			"default": []
+		},
+		"hasEmptyOption": {
+			"type": "boolean",
+			"default": false
+		},
+		"label": {
+			"type": "string",
+			"default": ""
+		},
+		"placeholder": {
+			"type": "boolean",
+			"default": false
+		},
+		"help": {
+			"type": "string",
+			"default": ""
+		},
+		"error": {
+			"type": "string",
+			"default": ""
+		}
+		
+	},
+	"parent": [ "events-manager/form-container" ]
+}

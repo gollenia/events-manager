@@ -124,7 +124,7 @@ class EM_Location extends EM_Object {
 	var $required_fields = array();
 	var $feedback_message = "";
 	var $mime_types = array(1 => 'gif', 2 => 'jpg', 3 => 'png'); 
-	var $errors = array();
+	var array $errors = array();
 	/**
 	 * previous status of location
 	 * @access protected
@@ -316,7 +316,7 @@ class EM_Location extends EM_Object {
 	function validate_meta(){
 		//check required fields
 		foreach ( $this->required_fields as $field => $description) {
-			if( $field == 'location_country' && !array_key_exists($this->location_country, em_get_countries()) ){ 
+			if( $field == 'location_country' && !array_key_exists($this->location_country, \Contexis\Events\Intl\Countries::get()) ){ 
 				//country specific checking
 				$this->add_error( $this->required_fields['location_country'].__(" is required.", 'events-manager') );				
 			}elseif ( $this->$field == "" ) {
@@ -888,7 +888,7 @@ class EM_Location extends EM_Object {
 	}
 	
 	function get_country(){
-		$countries = em_get_countries();
+		$countries = \Contexis\Events\Intl\Countries::get();
 		if( !empty($countries[$this->location_country]) ){
 			return apply_filters('em_location_get_country', $countries[$this->location_country], $this);
 		}

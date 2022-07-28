@@ -2354,5 +2354,3 @@ msgstr "Nur noch %s Plätze frei"
 msgid "Only one space left"
 msgstr "Nur noch ein Platz frei"
 
-msgid "Booked up"
-msgstr "Ausgebucht"

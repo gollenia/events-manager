@@ -97,6 +97,7 @@ class EM_Event_Post_Admin{
 	}
 	
 	public static function save_post($post_id, $post = false){
+		file_put_contents("/var/www/vhosts/kids-team.internal/log/meta.log", print_r(date('H:i', time()) . " Event_Post_Admin->save_post() " . get_post_meta($post_id, '_event_audience', true) . "\n", true), FILE_APPEND);
 		global $wpdb, $EM_Event, $EM_Notices, $EM_SAVING_EVENT, $EM_EVENT_SAVE_POST; /* @var EM_Notices $EM_Notices */
 		if( !empty($EM_SAVING_EVENT) ) return; //never proceed with this if using EM_Event::save();
 		if ( isset($_GET['preview_id']) && isset($_GET['preview_nonce']) && wp_verify_nonce( $_GET['preview_nonce'], 'post_preview_' . $post_id ) ) return; //don't proceed with saving when previewing, may cause issues

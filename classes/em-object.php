@@ -11,7 +11,7 @@ class EM_Object {
 	protected $shortnames = array();
 	var $required_fields = array();
 	var $feedback_message = "";
-	var $errors = array();
+	var array $errors = array();
 	var $mime_types = array(1 => 'gif', 2 => 'jpg', 3 => 'png');
 	
 	private static $taxonomies_array; //see self::get_taxonomies()
@@ -453,7 +453,7 @@ class EM_Object {
 		}else{
 			//country lookup
 			if( !empty($args['country']) ){
-				$countries = em_get_countries();
+				$countries = \Contexis\Events\Intl\Countries::get();
 				//we can accept country codes or names so we need to change names to country codes
 				$country_arg = !is_array($args['country']) ? array($args['country']) : $args['country'];
 			    foreach( $country_arg as $country ){
@@ -1062,26 +1062,25 @@ class EM_Object {
 	 * Returns an array of errors in this object
 	 * @return array 
 	 */
-	function get_errors(){
-		if(is_array($this->errors)) return $this->errors;
-		return [];
+	function get_errors() {
+		
+		return $this->errors;
 	}
 	
 	/**
 	 * Adds an error to the object
 	 */
 	function add_error($errors){
-		if(!is_array($errors)){ $errors = array($errors); } //make errors var an array if it isn't already
-		if(!is_array($this->errors)){ $this->errors = array(); } //create empty array if this isn't an array
-		foreach($errors as $key => $error){			
-			if( !in_array($error, $this->errors) ){
-			    if( !is_array($error) ){
-					$this->errors[] = $error;
-			    }else{
-			        $this->errors[] = array($key => $error);
-			    }
-			}
+		
+		foreach($errors as $error){
+			$this->errors[] = $error;
 		}
+	}
+
+	function add_error_array(array $error) {
+		
+		$this->errors[] = $error;
+		
 	}
 	
 	/**

@@ -15,7 +15,7 @@ const Success = (props) => {
 
 	const { request, response, data } = state;
 
-	if (response.booking.booking_id == 0) return null;
+	if (!response.booking.result) return null;
 
 	if (data.event.is_free) {
 		return (

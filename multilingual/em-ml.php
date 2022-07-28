@@ -52,19 +52,19 @@ class EM_ML{
 		    self::$is_ml = true;
 		    do_action('em_ml_pre_init'); //only initialize when this is a MultiLingual instance 
     		//make sure options are being translated immediately if needed
-    		include(EM_DIR.'/multilingual/em-ml-options.php');
+    		include(Events::DIR.'/multilingual/em-ml-options.php');
     		//load all the extra ML helper classes
-			include(EM_DIR.'/multilingual/em-ml-io.php');
-			include(EM_DIR.'/multilingual/em-ml-placeholders.php');
-			include(EM_DIR.'/multilingual/em-ml-search.php');
+			include(Events::DIR.'/multilingual/em-ml-io.php');
+			include(Events::DIR.'/multilingual/em-ml-placeholders.php');
+			include(Events::DIR.'/multilingual/em-ml-search.php');
 			if( is_admin() ){
-				include(EM_DIR.'/multilingual/em-ml-admin.php');
+				include(Events::DIR.'/multilingual/em-ml-admin.php');
 			}
 			if( get_option('dbem_rsvp_enabled') ){
-				include(EM_DIR.'/multilingual/em-ml-bookings.php');
+				include(Events::DIR.'/multilingual/em-ml-bookings.php');
 			}
 			if( get_option('dbem_locations_enabled') ){
-				include(EM_DIR.'/multilingual/em-ml-io-locations.php');
+				include(Events::DIR.'/multilingual/em-ml-io-locations.php');
 			}
 			//change some localized script vars
     		add_filter('em_wp_localize_script', 'EM_ML::em_wp_localize_script');

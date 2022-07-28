@@ -33,7 +33,7 @@ const Footer = ({state, dispatch}) => {
   	return (
 		<div className="section">
 			<div className="container button-group button-group--right">
-				{ message() != "" && <button className="button--pseudo" >{__(message(), "events")}</button> }
+				{ message() != "" && <span className="button--pseudo" >{__(message(), "events")}</span> }
 
 				{ /* Back Button  */}
 				{ wizzard.step > (wizzard.steps.tickets.enabled ? 0 : 1) && wizzard.step < 3 && 

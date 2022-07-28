@@ -1,0 +1,19 @@
+.ctx\:event-field {
+
+	div.label {
+		display: flex;
+		p {
+			margin: 0;
+		}
+	}
+
+	fieldset {
+		display: flex;
+		flex-direction: column;
+		gap: .5rem;
+	}
+	input[type="radio"] {
+		margin-top: 2px;
+		margin-right: .5rem;
+	} 
+}

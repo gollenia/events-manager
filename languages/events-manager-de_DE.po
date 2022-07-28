@@ -6725,3 +6725,33 @@ msgstr "Personendetails"
 
 msgid "No Speaker Found"
 msgstr "Kein Referent gefunden"
+
+msgid "Booked up"
+msgstr "Ausgebucht"
+
+msgid "Forms"
+msgstr "Formulare"
+
+msgid "Attendee Form"
+msgstr "Teilnehmerformular"
+
+msgid "Form Name"
+msgstr "Formularname"
+
+msgid "End Date"
+msgstr "Enddatum"
+
+msgid "Toggle activation"
+msgstr "Aktivierung umschalten" 
+
+msgid "Current events"
+msgstr "Laufende Veranstaltungen"
+
+msgid "Attendee Forms"
+msgstr "Teilnehmerformulare"
+
+msgid "Booking Forms"
+msgstr "Registrierungsformulare"
+
+msgid "Create"
+msgstr "Erstellen"

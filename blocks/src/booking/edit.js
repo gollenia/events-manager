@@ -42,8 +42,6 @@ const edit = (props) => {
 		color: textColor,
   	}
 
-	console.log(style);
-
 	return (
 		<div {...blockProps}>
 			<Inspector

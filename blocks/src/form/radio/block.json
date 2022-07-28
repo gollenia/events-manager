@@ -1,0 +1,43 @@
+{
+	"name": "events-manager/form-radio",
+	"apiVersion": 2,
+	"title": "Radio Select",
+	"description": "Lets the user check something",
+	"category": "widgets", 
+	"attributes": {
+		"fieldid": {
+			"type": "string",
+			"default": ""
+		},
+		"width": {
+			"type": "integer",
+			"default": 4
+		},
+		"required": {
+			"type": "boolean",
+			"default": false
+		},
+		"label": {
+			"type": "string",
+			"default": ""
+		},
+		"placeholder": {
+			"type": "integer",
+			"default": 0
+		},
+		"help": {
+			"type": "string",
+			"default": ""
+		},
+		"error": {
+			"type": "string",
+			"default": ""
+		},
+		"options": {
+			"type": "array",
+			"default": []
+		}
+		
+	},
+	"parent": [ "events-manager/form-container" ]
+}

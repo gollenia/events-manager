@@ -83,9 +83,6 @@ class EM_ML_Options {
 				'dbem_event_published_email_body',
 				'dbem_event_reapproved_email_subject',
 				'dbem_event_reapproved_email_body',
-				//Registration Emails
-				'dbem_bookings_email_registration_subject',
-				'dbem_bookings_email_registration_body'
 		));
 		//When in the EM settings page translatable values should be shown in the currently active language
 		if( is_admin() && !empty($_REQUEST['page']) && $_REQUEST['page'] == 'events-manager-options' ) return;

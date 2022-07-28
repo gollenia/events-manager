@@ -1,0 +1,47 @@
+{
+	"name": "events-manager/form-date",
+	"apiVersion": 2,
+	"title": "Date Field",
+	"description": "Lets the user specify a date",
+	"category": "widgets", 
+	"attributes": {
+		"fieldid": {
+			"type": "string",
+			"default": ""
+		},
+		"width": {
+			"type": "string",
+			"default": true
+		},
+		"required": {
+			"type": "boolean",
+			"default": false
+		},
+		"min": {
+			"type": "datetime",
+			"default": ""
+		},
+		"max": {
+			"type": "datetime",
+			"default": ""
+		},
+		"label": {
+			"type": "string",
+			"default": ""
+		},
+		"placeholder": {
+			"type": "string",
+			"default": ""
+		},
+		"help": {
+			"type": "string",
+			"default": ""
+		},
+		"error": {
+			"type": "string",
+			"default": ""
+		}
+		
+	},
+	"parent": [ "events-manager/form-container" ]
+}

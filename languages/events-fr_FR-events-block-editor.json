@@ -52,7 +52,7 @@
             "From:": [
 				"À:"
 			],
-			"To": [
+			"To:": [
 				"Pour"
 			],
 			"Location": [
@@ -257,37 +257,262 @@
 				"Si applicable, exclure l'événement actuel de la liste"
 			],
 			"Registration": [
-				"Anmeldung"
+				"Enregistrement"
 			],
 			"Booking": [
-				"Buchung"
+				"Réservation"
 			],
 			"Add a button that allows the user to book tickets for an event.": [
-				"Fügt einen Button hinzu, der dem Besucher das Buchen von Plätzen für ein Event erlaubt."
+				"Ajoute un bouton qui permet au visiteur de réserver des places pour un événement."
 			],
 			"Event Booking": [
-				"Veranstaltungs-Buchung"
+				"Réservation d'événement"
 			],
 			"Exclude current event": [
-				"Aktuelle Veranstaltung auslassen"
+				"Ignorer l'événement en cours"
 			],
 			"Event Details": [
-				"Veranstaltungs-Details"
+				"Détails de l'évènement"
 			],
 			"Show a list with selected details of the event": [
-				"Zeigt eine Liste mit ausgewählten Details der Veranstaltung"
+				"Affiche une liste avec les détails sélectionnés de l'événement"
 			],
 			"This warning is shown, if few or no bookings are available": [
-				"Diese Warnung wird angezeigt, wenn wenige oder keine Plätzen verfügbar sind"
+				"Cet avertissement s'affiche lorsque peu ou pas de sièges sont disponibles"
 			],
 			"In this widget, the event datails will be shown. Please save the page for a preview.": [
-				"In diesem Widget werden die Veranstaltungs-Details angezeigt. Bitte veröffentlichen Sie die Seite für eine Vorschau."
+				"Les détails de l'événement sont affichés dans ce widget. Veuillez publier la page pour un aperçu."
 			],
 			"Show Location": [
 				"Afficher l'emplacement"
 			],
 			"Add Link": [
 				"Afficher Lien"
+			],
+			"Label for the field": [
+				"Inscription du terrain"
+			],
+			"Unique identifier": [
+				"Identifiant unique"
+			],
+			"Required": [
+				"Champ obligatoire"
+			],
+			"Help": [
+				"Aider"
+			],
+			"Help text for the input field": [
+				"Texte d'aide pour le champ de saisie"
+			],
+			"Error": [
+				"Erreur"
+			],
+			"Error message": [
+				"Message d'erreur"
+			],
+			"Size": [
+				"Taille"
+			],
+			"Number of columns the input field will occupy": [
+				"Nombre de colonnes que le champ de saisie occupera"
+			],
+			"Email Field": [
+				"Champ e-mail"
+			],
+			"Lets the user type an email address.": [
+				"Permet à l'utilisateur d'entrer une adresse e-mail."
+			],
+			"Text Field": [
+				"Zone de texte"
+			],
+			"Lets the user type a short text": [
+				"Permet à l'utilisateur de saisir un texte court."
+			],
+			"Pattern": [
+				"Goûter"
+			],
+			"Regular expression to prevent wrong or illegal input": [
+				"Expression régulière qui empêche la saisie incorrecte ou illégale"
+			],
+			"Details about how to fill this field": [
+				"Détails sur la façon de remplir ce champ"
+			],
+			"Text Area": [
+				"Champ de message"
+			],
+			"Lets the user type a longer text": [
+				"Permet à l'utilisateur de saisir un texte plus long."
+			],
+			"Date Field": [
+				"Champ date"
+			],
+			"Lets the user specify a date": [
+				"Permet à l'utilisateur de spécifier une date."
+			],
+			"Minimun": [
+				"Minimum"
+			],
+			"Maximum": [
+				"Maximum"
+			],
+			"Checkbox": [
+				"Case à cocher"
+			],
+			"Lets the user check something": [
+				"Permet à l'utilisateur de cocher ou décocher quelque chose."
+			],
+			"Options": [
+				"Options"
+			],
+			"Select": [
+				"Sélection"
+			],
+			"Lets the user select something": [
+				"Permet à l'utilisateur de sélectionner quelque chose."
+			],
+			"Empty option": [
+				"Option vide"
+			],
+			"An empty option ist shown and selected as default": [
+				"Une option vide est ajoutée et sélectionnée par défaut"
+			],
+			"Lets the user select a country": [
+				"Permet à l'utilisateur de sélectionner un pays."
+			],
+			"Phone Field": [
+				"Numéro de téléphone"
+			],
+			"Lets the user type a phone number.": [
+				"Permet à l'utilisateur d'entrer un numéro de téléphone."
+			],
+			"Radio Select": [
+				"Sélection radio"
+			],
+			"Lets the user select on of multiple options": [
+				"Permet à l'utilisateur de choisir parmi plusieurs options."
+			],
+			"Text Block": [
+				"Bloc de texte"
+			],
+			"Headline or text block": [
+				"Titre et/ou bloc de texte"
+			],
+			"Add Field": [
+				"Ajouter le champ"
+			],
+			"Number of text rows": [
+				"Nombre de lignes de texte"
+			],
+			"Rows": [
+				"Lignes"
+			],
+			"Form Container": [
+				"Conteneur de formulaire"
+			],
+			"What should your visitor say \"yes\" to?": [
+				"À quoi le visiteur doit-il dire «oui» ?"
+			],
+			"at least": [
+				"au moins"
+			],
+			"at best": [
+				"au plus"
+			],
+			"years": [
+				"Années"
+			],
+			"e.g. minimal age for an attendee": [
+				"p.e. âge minimum pour un participant"
+			],
+			"e.g. maximal age for an attendee": [
+				"p.e. l'âge maximum pour un participant"
+			],
+			"Lowest Date": [
+				"Date minimale"
+			],
+			"Highest Date": [
+				"Date maximale"
+			],
+			"Text to inform the user that this checkbox must be checked": [
+				"Texte informant l'utilisateur que cette case doit être cochée"
+			],
+			"Is toggle switch": [
+				"Présent comme interrupteur"
+			],
+			"Show the checkbox as toggable switch": [
+				"Représente la case à cocher comme un interrupteur marche/arrêt"
+			],
+			"Box": [
+				"Cercueil"
+			],
+			"Toggle": [
+				"Changer"
+			],
+			"Make a selection": [
+				"Fais un choix"
+			],
+			"Options for the select control. Each line represents one option": [
+				"Options de sélection. Chaque ligne représente une option"
+			],
+			"Options for the radio control. Each line represents one option": [
+				"Options de sélection radio. Chaque ligne représente une option"
+			],
+			"Text to display when the user types in invalid or insufficient data": [
+				"Texte affiché lorsque l'utilisateur saisit des données invalides ou insuffisantes"
+			],
+			"Text to inform the user that a choice has to be made":[
+				"Texte informant l'utilisateur qu'une sélection doit être faite"
+			],
+			"Height": [
+				"Hauteur"
+			],
+			"Width": [
+				"Vaste"
+			],
+			"Registration Form": [
+				"Formulaire d'inscription"
+			],
+			"Attendee Form": [
+				"Rormulaire de participation"
+			],
+			"Bookings": [
+				"Réservations"
+			],
+			"Time and Date": [
+				"Date et l'heure"
+			],
+			"Starts at": [
+				"Commence à"
+			],
+			"Ends at": [
+				"Fini à"
+			],
+			"From": [
+				"À"
+			],
+			"To": [
+				"Pour"
+			],
+			"Select a location": [
+				"Sélectionnez un emplacement"
+			],
+			"All day": [
+				"Toute la journée"
+			],
+			"Select a speaker": [
+				"Sélectionnez le conférencier"
+			],
+			"Persons": [
+				"Personnes"
+			],
+			"Manage Tickets": [
+				"Gérer les billets"
+			],
+			"Emails": [
+				"E-Mails"
+			],
+			"Enable Booking": [
+				"Enable Booking"
 			]
 		}
 	}

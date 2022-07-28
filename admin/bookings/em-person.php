@@ -111,16 +111,16 @@ function em_bookings_person_table(){
 										$reject_url = em_add_get_params($_SERVER['REQUEST_URI'], array('action'=>'bookings_reject', 'booking_id'=>$EM_Booking->booking_id));
 										$delete_url = em_add_get_params($_SERVER['REQUEST_URI'], array('action'=>'bookings_delete', 'booking_id'=>$EM_Booking->booking_id));
 										?>
-										<?php if( get_option('dbem_bookings_approval') && ($EM_Booking->booking_status == 0 ) ): ?>
+										<?php if( get_option('dbem_bookings_approval') && ($EM_Booking->booking_status == EM_Booking::PENDING ) ): ?>
 										<a class="em-bookings-approve" href="<?php echo $approve_url ?>"><?php _e('Approve','events-manager'); ?></a> |
 										<?php endif; ?>
-										<?php if( get_option('dbem_bookings_approval') && $EM_Booking->booking_status == 1 ): ?>
+										<?php if( get_option('dbem_bookings_approval') && $EM_Booking->booking_status == EM_Booking::APPROVED ): ?>
 										<a class="em-bookings-unapprove" href="<?php echo $unapprove_url ?>"><?php _e('Unapprove','events-manager'); ?></a> |
 										<?php endif; ?>
-										<?php if( $EM_Booking->booking_status == 2 ): ?>
+										<?php if( $EM_Booking->booking_status == EM_Booking::REJECTED ): ?>
 										<a class="em-bookings-approve" href="<?php echo $approve_url ?>"><?php _e('Restore','events-manager'); ?></a> |
 										<?php endif; ?>
-										<?php if( $EM_Booking->booking_status == 0 || $EM_Booking->booking_status == 1 ): ?>
+										<?php if( $EM_Booking->booking_status == EM_Booking::PENDING || $EM_Booking->booking_status == EM_Booking::APPROVED ): ?>
 										<a class="em-bookings-reject" href="<?php echo $reject_url ?>"><?php _e('Reject','events-manager'); ?></a> |
 										<?php endif; ?>
 										<a class="em-bookings-edit" href="<?php echo EM_ADMIN_URL; ?>&amp;page=events-manager-bookings&amp;booking_id=<?php echo $EM_Booking->booking_id; ?>"><?php _e('Edit/View','events-manager'); ?></a> |

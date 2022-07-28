@@ -39,6 +39,8 @@ function em_admin_menu(){
    	}
 	$plugin_pages['options'] = add_submenu_page('edit.php?post_type='.EM_POST_TYPE_EVENT, __('Events Manager Settings','events-manager'),__('Settings','events-manager'), 'manage_options', "events-manager-options", 'em_admin_options_page');
 	$plugin_pages['help'] = add_submenu_page('edit.php?post_type='.EM_POST_TYPE_EVENT, __('Getting Help for Events Manager','events-manager'),__('Help','events-manager'), 'manage_options', "events-manager-help", 'em_admin_help_page');
+
+	$plugin_pages['bookingforms'] = add_submenu_page('edit.php?post_type='.EM_POST_TYPE_EVENT, __('Edit booking and attendee forms','events-manager'),__('Forms','events-manager'), 'manage_options', "events-manager-forms", ["\\Contexis\\Events\\Forms\\Admin", "option_page"]);
 	//If multisite global with locations set to be saved in main blogs we can force locations to be created on the main blog only
 	
 	$plugin_pages = apply_filters('em_create_events_submenu',$plugin_pages);
@@ -123,14 +125,11 @@ add_action ( 'admin_notices', 'em_admin_warnings', 100 );
  * @return array
  */
 function em_plugin_action_links($actions, $file, $plugin_data) {
-	$new_actions = array();
-	$new_actions[] = sprintf( '<a href="'.EM_ADMIN_URL.'&amp;page=events-manager-options">%s</a>', __('Settings', 'events-manager') );
-	$new_actions = array_merge($new_actions, $actions);
-	$uninstall_url = EM_ADMIN_URL.'&amp;page=events-manager-options&amp;action=uninstall&amp;_wpnonce='.wp_create_nonce('em_uninstall_'.get_current_user_id().'_wpnonce');
-	$new_actions[] = '<span class="delete"><a href="'.$uninstall_url.'" class="delete">'.__('Uninstall','events-manager').'</a></span>';
-	return $new_actions;
+	array_unshift($actions, sprintf( '<a href="'.EM_ADMIN_URL.'&amp;page=events-manager-options">%s</a>', __('Settings', 'events-manager') ));
+	return $actions;
 }
-add_filter( 'plugin_action_links_events-manager/events-manager.php', 'em_plugin_action_links', 10, 3 );
+
+add_filter( 'plugin_action_links_events/events.php', 'em_plugin_action_links', 10, 3 );
 
 function em_user_action_links( $actions, $user ){
 	if (!is_admin() && !current_user_can( 'manage_others_bookings')) return $actions;

@@ -1,0 +1,47 @@
+{
+	"name": "events-manager/form-textarea",
+	"apiVersion": 2,
+	"title": "Text Area",
+	"description": "Lets the user type a longer text",
+	"category": "widgets", 
+	"attributes": {
+		"fieldid": {
+			"type": "string",
+			"default": ""
+		},
+		"width": {
+			"type": "integer",
+			"default": 4
+		},
+		"required": {
+			"type": "boolean",
+			"default": false
+		},
+		"pattern": {
+			"type": "string",
+			"default": ""
+		},
+		"label": {
+			"type": "string",
+			"default": ""
+		},
+		"placeholder": {
+			"type": "string",
+			"default": ""
+		},
+		"help": {
+			"type": "string",
+			"default": ""
+		},
+		"rows": {
+			"type": "number",
+			"default": 3
+		},
+		"error": {
+			"type": "string",
+			"default": ""
+		}
+		
+	},
+	"parent": [ "events-manager/form-container" ]
+}

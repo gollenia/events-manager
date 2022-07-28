@@ -1,6 +1,8 @@
 <?php
 /**
  * Performs actions on init. This works for both ajax and normal requests, the return results depends if an em_ajax flag is passed via POST or GET.
+ * 
+ * TODO: This whole file mus be split up and the official wp_ajax_ functions should be used instead.
  */
 function em_init_actions() {
 	global $wpdb,$EM_Notices,$EM_Event; 
@@ -250,7 +252,7 @@ function em_init_actions() {
 	//Booking Actions
 	if( !empty($_REQUEST['action']) && substr($_REQUEST['action'],0,7) == 'booking' && (is_user_logged_in() || ($_REQUEST['action'] == 'booking_add')) ){
 		
-		global $EM_Event, $EM_Booking, $EM_Person;
+		global $EM_Event, $EM_Booking;
 		//Load the booking object, with saved booking if requested
 		$EM_Booking = ( !empty($_REQUEST['booking_id']) ) ? EM_Booking::find($_REQUEST['booking_id']) : EM_Booking::find();
 		if( !empty($EM_Booking->event_id) ){
@@ -272,21 +274,15 @@ function em_init_actions() {
 				do_action('em_booking_add', $EM_Event, $EM_Booking, $post_validation);
 				if( $post_validation ){
 				    //register the user - or not depending - according to the booking
-				    $registration = true;
 					$EM_Bookings = $EM_Event->get_bookings();
-					if( $registration && $EM_Bookings->add($EM_Booking) ){
+					if( $EM_Bookings->add($EM_Booking) ){
 						$result = true;
 						$EM_Notices->add_confirm( $EM_Bookings->feedback_message );		
 						$feedback = $EM_Bookings->feedback_message;
 					}else{
 						$result = false;
-						if(!$registration){
-						    $EM_Notices->add_error( $EM_Booking->get_errors() );
-							$feedback = $EM_Booking->feedback_message;
-						}else{
-						    $EM_Notices->add_error( $EM_Bookings->get_errors() );
-							$feedback = $EM_Bookings->feedback_message;
-						}				
+						$EM_Notices->add_error( $EM_Booking->get_errors() );
+						$feedback = $EM_Booking->feedback_message;
 					}
 					global $em_temp_user_data; $em_temp_user_data = false; //delete registered user temp info (if exists)
 				}else{
@@ -393,8 +389,11 @@ function em_init_actions() {
 			em_verify_nonce('booking_modify_person_'.$EM_Booking->booking_id);
 			if( $EM_Booking->can_manage('manage_bookings','manage_others_bookings') ){
 			    global $wpdb;
+				
+				$EM_Booking->get_post();
+				
 				if( //save just the booking meta, avoid extra unneccesary hooks and things to go wrong
-					$EM_Booking->is_no_user() && $EM_Booking->get_person_post() && 
+					$EM_Booking->is_no_user() && $EM_Booking->get_post() && 
 			    	$wpdb->update(EM_BOOKINGS_TABLE, array('booking_meta'=> serialize($EM_Booking->booking_meta)), array('booking_id'=>$EM_Booking->booking_id)) !== false
 				){
 					$EM_Notices->add_confirm( $EM_Booking->feedback_message, true );
@@ -419,18 +418,12 @@ function em_init_actions() {
 				$EM_Notices->add_error($EM_Booking->errors);
 			}
 		}
-	
-		if( $result && defined('DOING_AJAX') ){
-			$return = array('result'=>true, 'message'=>$feedback);
-			header( 'Content-Type: application/javascript; charset=UTF-8', true ); //add this for HTTP -> HTTPS requests which assume it's a cross-site request
-			echo json_encode(apply_filters('em_action_'.$_REQUEST['action'], $return, $EM_Booking));
-			die();
-		}elseif( !$result && defined('DOING_AJAX') ){
-			$return = array('result'=>false, 'message'=>$feedback, 'error'=>$EM_Booking->get_errors());
-			header( 'Content-Type: application/javascript; charset=UTF-8', true ); //add this for HTTP -> HTTPS requests which assume it's a cross-site request
-			echo json_encode(apply_filters('em_action_'.$_REQUEST['action'], $return, $EM_Booking));
-			die();
-		}
+
+		header( 'Content-Type: application/javascript; charset=UTF-8', true );
+		$return = array('nasenbär' => $_REQUEST['action'], 'result'=>$result, 'message'=>$feedback, 'error'=>$EM_Booking->get_errors());
+		echo json_encode(apply_filters('em_action_'.$_REQUEST['action'], $return, $EM_Booking));
+		wp_die();
+		
 	}
 	
 	//AJAX call for searches
@@ -604,7 +597,6 @@ function em_ajax_search_and_pagination(){
 		$args['scope'] = 'future';
 		$args = EM_Events::get_post_search($args);
 		$args['limit'] = !empty($args['limit']) ? $args['limit'] : 0;
-		em_locate_template('templates/events-list.php', true, array('args'=>$args)); //if successful, this template overrides the settings and defaults, including search
 	}elseif( $_REQUEST['action'] == 'search_events_grouped' && defined('DOING_AJAX') ){
 		$args['scope'] = 'future';
 		$args = EM_Events::get_post_search($args);

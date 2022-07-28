@@ -1,15 +1,22 @@
+<?php 
+use \Contexis\Events\Options;
+?>
+
 <?php if( !function_exists('current_user_can') || !current_user_can('manage_options') ) return; ?>
+
+
+
 <!-- GENERAL OPTIONS -->
 <div class="em-menu-general em-menu-group">
-	
+	 
         <table class="form-table">
             <?php 
-			em_options_radio_binary ( __( 'Enable recurrence?', 'events-manager'), 'dbem_recurrence_enabled', __( 'Select yes to enable the recurrence features feature','events-manager') ); 
-			em_options_radio_binary ( __( 'Enable bookings?', 'events-manager'), 'dbem_rsvp_enabled', __( 'Select yes to allow bookings and tickets for events.','events-manager') );     
-			em_options_radio_binary ( __( 'Enable locations?', 'events-manager'), 'dbem_locations_enabled', __( 'If you disable locations, bear in mind that you should remove your location page, shortcodes and related placeholders from your <a href="#formats" class="nav-tab-link" rel="#em-menu-formats">formats</a>.','events-manager'), '', '.em-location-type-option' );
-			em_options_radio_binary ( __( 'Are current events past events?', 'events-manager'), 'dbem_events_current_are_past', __( "By default, events that have an end date later than today will be included in searches, set this to yes to consider events that started 'yesterday' as past.", 'events-manager') );
-			em_options_radio_binary ( __( 'Include in WordPress Searches?', 'events-manager'), 'dbem_cp_events_search_results', sprintf(__( "Allow %s to appear in the built-in search results.", 'events-manager'),__('events','events-manager')) );
-			em_options_input_text ( __( 'Permalink', 'events-manager'), 'dbem_cp_events_slug', sprintf(__('e.g. %s - you can use / Separators too', 'events-manager'), '<strong>'.home_url().'/<code>'.esc_html(get_option('dbem_cp_events_slug',EM_POST_TYPE_EVENT_SLUG)).'</code>/summercamp/</strong>'), EM_POST_TYPE_EVENT_SLUG );
+			Options::checkbox( __( 'Recurring Events', 'events-manager'), 'dbem_recurrence_enabled', __( 'Events can be managed as a collection of recurring events','events-manager') ); 
+			Options::checkbox( __( 'Bookings', 'events-manager'), 'dbem_rsvp_enabled', __( 'Allow bookings and tickets for events.','events-manager') );     
+			Options::checkbox( __( 'Locations', 'events-manager'), 'dbem_locations_enabled', __( 'Activate possibility to add locations to events','events-manager'), '', '.em-location-type-option' );
+			Options::checkbox( __( 'Current Events', 'events-manager'), 'dbem_events_current_are_past', __( "Currently running events should be treated as already passed", 'events-manager') );
+			Options::checkbox( __( 'WordPress Search', 'events-manager'), 'dbem_cp_events_search_results', sprintf(__( "Allow %s to appear in the built-in search results.", 'events-manager'),__('events','events-manager')) );
+			Options::input( __( 'Permalink', 'events-manager'), 'dbem_cp_events_slug', sprintf(__('e.g. %s - you can use / Separators too', 'events-manager'), '<strong>'.home_url().'/<code>'.esc_html(get_option('dbem_cp_events_slug',EM_POST_TYPE_EVENT_SLUG)).'</code>/summercamp/</strong>'), ['default' => EM_POST_TYPE_EVENT_SLUG, 'class' => 'regular-text code'] ) ;
 		?>
 		</table>
 		<h2><?php _e("Locations", "events-manager") ?></h2>
@@ -25,9 +32,9 @@
 					$location_options[$EM_Location->location_id] = $EM_Location->location_name;
 				}
 
-				em_options_select ( __( 'Default Location', 'events-manager'), 'dbem_default_location', $location_options, __( 'This option allows you to select the default location when adding an event.','events-manager') );
-				em_options_select ( __( 'Default Location Country', 'events-manager'), 'dbem_location_default_country', em_get_countries(__('no default country', 'events-manager')), __('If you select a default country, that will be pre-selected when creating a new location.','events-manager') );
-				}
+				Options::select( __( 'Default Location', 'events-manager'), 'dbem_default_location', $location_options, __( 'This option allows you to select the default location when adding an event.','events-manager') );
+				Options::select( __( 'Default Location Country', 'events-manager'), 'dbem_location_default_country', \Contexis\Events\Intl\Countries::get(__('no default country', 'events-manager')), __('If you select a default country, that will be pre-selected when creating a new location.','events-manager') );
+			}
 
 			?>
 
@@ -82,11 +89,7 @@
 
 
 	<?php do_action('em_options_page_footer'); ?>
-	
 
-	<?php 
-	//em_admin_option_box_data_privacy(); 
-	?>
 	
 	
 	

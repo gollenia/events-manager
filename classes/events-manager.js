@@ -16,145 +16,6 @@ jQuery(document).ready( function($){
 		$(this).closest('.em-calendar-wrapper').load(url, function(){$(this).trigger('em_calendar_load');});
 	} );
 
-	//Events Search
-	$(document).on('click change', '.em-toggle', function(e){
-		e.preventDefault();
-		//show or hide advanced tickets, hidden by default
-		let el = $(this);
-		let rel = el.attr('rel').split(':');
-		if( el.hasClass('show-search') ){
-			if( rel.length > 1 ){ el.closest(rel[1]).find(rel[0]).slideUp(); }
-			else{ $(rel[0]).slideUp(); }
-			el.find('.show, .show-advanced').show();
-			el.find('.hide, .hide-advanced').hide();
-			el.removeClass('show-search');
-		}else{
-			if( rel.length > 1 ){ el.closest(rel[1]).find(rel[0]).slideDown(); }
-			else{ $(rel[0]).slideDown(); }
-			el.find('.show, .show-advanced').hide();
-			el.find('.hide, .hide-advanced').show();
-			el.addClass('show-search');
-		}
-		
-	});
-	if( EM.search_term_placeholder ){
-		if( 'placeholder' in document.createElement('input') ){
-			$('input.em-events-search-text, input.em-search-text').attr('placeholder', EM.search_term_placeholder);
-		}else{
-			$('input.em-events-search-text, input.em-search-text').on('blur', function(){
-				if( this.value=='' ) this.value = EM.search_term_placeholder;
-			}).on('focus', function(){
-				if( this.value == EM.search_term_placeholder ) this.value='';
-			}).trigger('blur');
-		}
-	}
-	$('.em-search-form select[name=country]').on('change', function(){
-		let el = $(this);
-		$('.em-search select[name=state]').html('<option value="">'+EM.txt_loading+'</option>');
-		$('.em-search select[name=region]').html('<option value="">'+EM.txt_loading+'</option>');
-		$('.em-search select[name=town]').html('<option value="">'+EM.txt_loading+'</option>');
-		if( el.val() != '' ){
-			el.closest('.em-search-location').find('.em-search-location-meta').slideDown();
-			let data = {
-				action : 'search_states',
-				country : el.val(),
-				return_html : true
-			};
-			$('.em-search select[name=state]').load( EM.ajaxurl, data );
-			data.action = 'search_regions';
-			$('.em-search select[name=region]').load( EM.ajaxurl, data );
-			data.action = 'search_towns';
-			$('.em-search select[name=town]').load( EM.ajaxurl, data );
-		}else{
-			el.closest('.em-search-location').find('.em-search-location-meta').slideUp();
-		}
-	});
-
-	$('.em-search-form select[name=region]').on('change', function(){
-		$('.em-search select[name=state]').html('<option value="">'+EM.txt_loading+'</option>');
-		$('.em-search select[name=town]').html('<option value="">'+EM.txt_loading+'</option>');
-		let data = {
-			action : 'search_states',
-			region : $(this).val(),
-			country : $('.em-search-form select[name=country]').val(),
-			return_html : true
-		};
-		$('.em-search select[name=state]').load( EM.ajaxurl, data );
-		data.action = 'search_towns';
-		$('.em-search select[name=town]').load( EM.ajaxurl, data );
-	});
-
-	$('.em-search-form select[name=state]').on('change', function(){
-		$('.em-search select[name=town]').html('<option value="">'+EM.txt_loading+'</option>');
-		let data = {
-			action : 'search_towns',
-			state : $(this).val(),
-			region : $('.em-search-form select[name=region]').val(),
-			country : $('.em-search-form select[name=country]').val(),
-			return_html : true
-		};
-		$('.em-search select[name=town]').load( EM.ajaxurl, data );
-	});
-	
-	//in order for this to work, you need the above classes to be present in your templates
-	$(document).on('submit', '.em-search-form, .em-events-search-form', function(e){
-		let form = $(this);
-    	if( this.em_search && this.em_search.value == EM.txt_search){ this.em_search.value = ''; }
-    	let results_wrapper = form.closest('.em-search-wrapper').find('.em-search-ajax');
-    	if( results_wrapper.length == 0 ) results_wrapper = $('.em-search-ajax');
-    	if( results_wrapper.length > 0 ){
-    		results_wrapper.append('<div class="loading" id="em-loading"></div>');
-    		let submitButton = form.find('.em-search-submit');
-    		submitButton.data('buttonText', submitButton.val()).val(EM.txt_searching);
-    		let img = submitButton.children('img');
-    		if( img.length > 0 ) img.attr('src', img.attr('src').replace('search-mag.png', 'search-loading.gif'));
-    		let lets = form.serialize();
-    		$.ajax( EM.ajaxurl, {
-				type : 'POST',
-	    		dataType : 'html',
-	    		data : lets,
-			    success : function(responseText){
-			    	submitButton.val(submitButton.data('buttonText'));
-			    	if( img.length > 0 ) img.attr('src', img.attr('src').replace('search-loading.gif', 'search-mag.png'));
-		    		results_wrapper.replaceWith(responseText);
-		        	if( form.find('input[name=em_search]').val() == '' ){ form.find('input[name=em_search]').val(EM.txt_search); }
-		        	//reload results_wrapper
-		        	results_wrapper = form.closest('.em-search-wrapper').find('.em-search-ajax');
-		        	if( results_wrapper.length == 0 ) results_wrapper = $('.em-search-ajax');
-			    	jQuery(document).triggerHandler('em_search_ajax', [lets, results_wrapper, e]); //ajax has loaded new results
-			    }
-	    	});
-    		e.preventDefault();
-			return false;
-    	}
-	});
-	if( $('.em-search-ajax').length > 0 ){
-		$(document).on('click', '.em-search-ajax a.page-numbers', function(e){
-			let a = $(this);
-			let data = a.closest('.em-pagination').attr('data-em-ajax');
-			let wrapper = a.closest('.em-search-ajax');
-			let wrapper_parent = wrapper.parent();
-		    let qlets = a.attr('href').split('?');
-		    let lets = qlets[1];
-		    //add data-em-ajax att if it exists
-		    if( data != '' ){
-		    	lets = lets != '' ? lets+'&'+data : data;
-		    }
-		    wrapper.append('<div class="loading" id="em-loading"></div>');
-		    $.ajax( EM.ajaxurl, {
-				type : 'POST',
-	    		dataType : 'html',
-	    		data : lets,
-			    success : function(responseText) {
-			    	wrapper.replaceWith(responseText);
-			    	wrapper = wrapper_parent.find('.em-search-ajax');
-			    	jQuery(document).triggerHandler('em_search_ajax', [lets, wrapper, e]); //ajax has loaded new results
-			    }
-	    	});
-			e.preventDefault();
-			return false;
-		});
-	}
 		
 	/*
 	 * ADMIN AREA AND PUBLIC FORMS (Still polishing this section up, note that form ids and classes may change accordingly)
@@ -906,3 +767,96 @@ document.addEventListener('DOMContentLoaded', EventsManager.init, false);
 
 
 
+
+function em_custom_mails() {
+	let trigger_selector = document.querySelectorAll('.em-nav-item');
+	if(trigger_selector.length == 0) return;	
+	if( trigger_selector.length == 1 ){
+		document.querySelector('.em-nav-side')?.classList.add('hidden');
+		document.querySelector('.em-nav-content')?.classList.remove('hidden');
+		return;
+	}
+
+	//add listener to triggers for groups and subgroups
+	trigger_selector.forEach(element => {
+		
+		element.addEventListener("click", (event) => {
+			trigger_selector.forEach(item => { item.classList.remove('active') });
+			document.querySelectorAll('.em-nav-content')?.forEach(e =>{
+				e.classList.add('hidden');
+			})
+			event.target.classList.add('active')
+			document.querySelector(element.getAttribute('rel'))?.classList.remove('hidden');
+		})
+	});
+
+
+	let accordion_items = document.querySelectorAll('.em-accordion-item');
+
+	accordion_items.forEach(element => {
+		
+		element.addEventListener("click", (event) => {
+			accordion_items.forEach(item => { item.classList.remove('active') });
+			document.querySelectorAll('.em-accordion-content')?.forEach(e =>{
+				e.classList.add('hidden');
+			})
+			event.target.classList.add('active')
+			document.getElementById(element.getAttribute('rel'))?.classList.remove('hidden');
+		})
+	});
+
+	let mail_subgroups = document.querySelectorAll('.em-subgroup-email')
+
+	mail_subgroups.forEach(element => {
+
+		let selector = element.querySelector('.em-cet-status');
+		let content = element.querySelector('.em-mail-vals');
+		let indicator = element.querySelector('.em-mail-status-indicator')
+		
+		selector.addEventListener("change", (event) => {
+			console.log(indicator)
+			indicator?.setAttribute('data-status', event.target.value)
+			if(event.target.value == 1) {
+				content.classList.remove("hidden");
+				return;
+			}
+			content.classList.add("hidden");
+		})
+	});
+
+	document.getElementById('booking-modal-close')?.addEventListener('click', (event) => {
+		let element = document.getElementById('booking-modal')
+		element.style.display = "none"
+	})
+
+	document.getElementById('email-modal-close')?.addEventListener('click', (event) => {
+		let element = document.getElementById('email-modal')
+		element.style.display = "none"
+	})
+}
+
+document.addEventListener('DOMContentLoaded', em_custom_mails, false);
+
+
+ document.addEventListener('DOMContentLoaded', () => {
+     document.body.addEventListener('click', event => {
+         if(event.target.classList.contains("em-bookings-approve-offline") && !confirm(EM.offline_confirm)) {
+             event.stopPropagation();
+             event.stopImmediatePropagation();
+             event.preventDefault();
+             return false;
+         }
+     });
+
+     document.body.addEventListener('click', event => {
+         if(event.target.classList.contains("em-transaction-delete")) {
+             const el = event.target;
+             if( !confirm(EM.transaction_delete) ){ return false; }
+             const url = em_ajaxify( el.attr('href'));
+             let td = el.parents('td').first();
+             td.html(EM.txt_loading);
+             td.load( url );
+             return false;
+         }
+     })
+ });

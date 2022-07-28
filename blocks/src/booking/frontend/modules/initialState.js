@@ -57,6 +57,7 @@ const initialState = {
 		},
 		keys: ["tickets", "registration", "payment", "success"],
 		step: eventData.attendee_fields.length === 0 ? 1 : 0,
+		checkValidity: true
 	},
 	response: {
 		booking: {

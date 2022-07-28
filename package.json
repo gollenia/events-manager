@@ -1,7 +1,8 @@
 {
+	"version": "6.4.0",
 	"scripts": {
-		"build": "wp-scripts build classes/events-manager.js admin/admin-settings.js admin/taxonomies-admin.js blocks/src/backend.js blocks/src/frontend.js /blocks/src/booking.js add-ons/bookings-form/form-editor.js add-ons/bookings-form/events-manager-pro.js --output-path='./includes'",
-		"start": "wp-scripts start classes/events-manager.js admin/admin-settings.js admin/taxonomies-admin.js blocks/src/backend.js blocks/src/frontend.js /blocks/src/booking.js add-ons/bookings-form/form-editor.js add-ons/bookings-form/events-manager-pro.js --output-path='./includes'",
+		"build": "wp-scripts build classes/events-manager.js admin/admin-settings.js blocks/src/backend.js blocks/src/frontend.js /blocks/src/booking.js --output-path='./includes'",
+		"start": "wp-scripts start classes/events-manager.js admin/admin-settings.js blocks/src/backend.js blocks/src/frontend.js /blocks/src/booking.js --output-path='./includes'",
 		"lang": "node lang.js"
 	},
 	"dependencies": {
@@ -15,6 +16,7 @@
 	},
 	"devDependencies": {
 		"@wordpress/scripts": "^19.2.2",
-		"ts-loader": "^9.3.0"
+		"ts-loader": "^9.3.0",
+		"web-vitals": "^2.1.4"
 	}
 }

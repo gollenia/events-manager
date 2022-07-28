@@ -1,7 +1,0 @@
-{
-	"allowSyntheticDefaultImports": true,
-	"moduleResolution": "node",
-	"jsx": "react-jsx",
-	"module": "ESNext",
-	"target": "ES5"
-}

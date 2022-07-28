@@ -1,0 +1,21 @@
+.ctx\:event-html {
+	padding: 1rem 1rem;
+	background: #f8f8f8;
+	border: 1px solid #cccccc;
+	grid-column: auto / span 6;
+	box-sizing: border-box;
+	max-width: 1200px !important;
+
+	&--3 {
+		grid-column: auto / span 4;
+	}
+
+	&--2 {
+		grid-column: auto / span 3;
+	}
+
+	&--1 {
+		grid-column: auto / span 2;
+	}
+}
+

@@ -1,10 +1,14 @@
 <?php
+
+namespace Contexis\Events;
 /**
  * Controls how events are queried and displayed via the WordPress Custom Post APIs
  * @author marcus
  *
  */
-class EM_Event_Post {
+class EventPost {
+
+	const TYPE = "event";
 	
 	public static function init(){
 
@@ -12,23 +16,94 @@ class EM_Event_Post {
 		//Front Side Modifiers
 		if( !is_admin() ){
 			//Override post template tags
-			add_filter('get_the_date',array('EM_Event_Post','the_date'),10,3);
-			add_filter('get_the_time',array('EM_Event_Post','the_time'),10,3);
+			add_filter('get_the_date',array($instance,'the_date'),10,3);
+			add_filter('get_the_time',array($instance,'the_time'),10,3);
 		}
-		add_action('parse_query', array('EM_Event_Post','parse_query'));
-		add_action('publish_future_post',array('EM_Event_Post','publish_future_post'),10,1);
+		add_action('parse_query', array($instance,'parse_query'));
+		add_action('publish_future_post',array($instance,'publish_future_post'),10,1);
+		add_action('rest_api_init', array($instance, 'register_meta') );
 		add_action('rest_api_init',array($instance,'register_rest'),10,1);
+		
 	}
 	
 	public static function publish_future_post($post_id){
 		global $EM_Event;
 		$post_type = get_post_type($post_id);
-		$is_post_type = $post_type == EM_POST_TYPE_EVENT || $post_type == 'event-recurring';
+		$is_post_type = $post_type == self::TYPE || $post_type == 'event-recurring';
 		$saving_status = !in_array(get_post_status($post_id), array('trash','auto-draft')) && !defined('DOING_AUTOSAVE');
 		if(!defined('UNTRASHING_'.$post_id) && $is_post_type && $saving_status ){
-		    $EM_Event = EM_Event::find($post_id, 'post_id');
+		    $EM_Event = \EM_Event::find($post_id, 'post_id');
 		    $EM_Event->set_status(1);
 		}
+	}
+
+	public function register_meta() {
+		
+		register_post_meta( 'event', '_booking_form', [
+			'type' => 'integer',
+			'single'       => true,
+			'default' => 0,
+			'sanitize_callback' => 'absint',
+			'auth_callback' => function() {
+				return current_user_can( 'edit_posts' );
+			},
+			'show_in_rest' => [
+				'schema' => [
+					'default' => 0,
+					'style' => "integer"
+				]
+			]
+		]);
+
+		register_post_meta( 'event', '_attendee_form', [
+			'type' => 'integer',
+			'single' => true,
+			'default' => 0,
+			'sanitize_callback' => 'absint',
+			'auth_callback' => function() {
+				return current_user_can( 'edit_posts' );
+			},
+			'show_in_rest' => [
+				'schema' => [
+					'default' => 0,
+					'style' => "integer"
+				]
+			]
+		]);
+
+		register_post_meta( 'event', '_speaker_id', [
+			'type' => 'integer',
+			'single' => true,
+			'default' => 0,
+			'sanitize_callback' => 'absint',
+			'auth_callback' => function() {
+				return current_user_can( 'edit_posts' );
+			},
+			'show_in_rest' => [
+				'schema' => [
+					'default' => 0,
+					'style' => "integer"
+				]
+			]
+		]);
+
+		register_post_meta( 'event', '_event_audience', [
+			'type' => 'string',
+			'single' => true,
+			'default' => "",
+			'auth_callback' => function() {
+				return current_user_can( 'edit_posts' );
+			},
+			'show_in_rest' => [
+				'schema' => [
+					'default' => "",
+					'style' => "string"
+				]
+			]
+		]);
+
+	
+
 	}
 	
 	/**
@@ -67,8 +142,8 @@ class EM_Event_Post {
 	
 	public static function the_date( $the_date, $d = '', $post = null ){
 		$post = get_post( $post );
-		if( $post->post_type == EM_POST_TYPE_EVENT ){
-			$EM_Event = EM_Event::find($post);
+		if( $post->post_type == self::TYPE ){
+			$EM_Event = \EM_Event::find($post);
 			if ( '' == $d ){
 				$the_date = $EM_Event->start()->i18n(get_option('date_format'));
 			}else{
@@ -80,8 +155,8 @@ class EM_Event_Post {
 	
 	public static function the_time( $the_time, $f = '', $post = null ){
 		$post = get_post( $post );
-		if( $post->post_type == EM_POST_TYPE_EVENT ){
-			$EM_Event = EM_Event::find($post);
+		if( $post->post_type == self::TYPE ){
+			$EM_Event = \EM_Event::find($post);
 			if ( '' == $f ){
 				$the_time = $EM_Event->start()->i18n(get_option('time_format'));
 			}else{
@@ -122,7 +197,7 @@ class EM_Event_Post {
 				}
 			}
 			if ( $scope == 'today' || $scope == 'tomorrow' || preg_match ( "/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/", $scope ) ) {
-				$EM_DateTime = new EM_DateTime($scope); //create default time in blog timezone
+				$EM_DateTime = new \EM_DateTime($scope); //create default time in blog timezone
 				if( get_option('dbem_events_current_are_past') && $wp_query->query_vars['post_type'] != 'event-recurring' ){
 					$query[] = array( 'key' => '_event_start_date', 'value' => $EM_DateTime->getDate() );
 				}else{
@@ -130,7 +205,7 @@ class EM_Event_Post {
 					$query[] = array( 'key' => '_event_end_date', 'value' => $EM_DateTime->getDate(), 'compare' => '>=', 'type' => 'DATE' );
 				}				
 			}elseif ($scope == "future" || $scope == 'past' ){
-				$EM_DateTime = new EM_DateTime(); //create default time in blog timezone
+				$EM_DateTime = new \EM_DateTime(); //create default time in blog timezone
 				$EM_DateTime->setTimezone('UTC');
 				$compare = $scope == 'future' ? '>=' : '<';
 				if( get_option('dbem_events_current_are_past') && $wp_query->query_vars['post_type'] != 'event-recurring' ){
@@ -139,8 +214,8 @@ class EM_Event_Post {
 					$query[] = array( 'key' => '_event_end', 'value' => $EM_DateTime->getDateTime(), 'compare' => $compare, 'type' => 'DATETIME' );
 				}
 			}elseif ($scope == "month" || $scope == "next-month" || $scope == 'this-month'){
-				$EM_DateTime = new EM_DateTime(); //create default time in blog timezone
-				if( $scope == 'next-month' ) $EM_DateTime->add(new DateInterval('P1M'));
+				$EM_DateTime = new \EM_DateTime(); //create default time in blog timezone
+				if( $scope == 'next-month' ) $EM_DateTime->add(new \DateInterval('P1M'));
 				$start_month = $scope == 'this-month' ? $EM_DateTime->getDate() : $EM_DateTime->modify('first day of this month')->getDate();
 				$end_month = $EM_DateTime->modify('last day of this month')->getDate();
 				if( get_option('dbem_events_current_are_past') && $wp_query->query_vars['post_type'] != 'event-recurring' ){
@@ -150,7 +225,7 @@ class EM_Event_Post {
 					$query[] = array( 'key' => '_event_end_date', 'value' => $start_month, 'compare' => '>=', 'type' => 'DATE' );
 				}
 			}elseif ($scope == "week" || $scope == 'this-week'){
-				$EM_DateTime = new EM_DateTime(); //create default time in blog timezone
+				$EM_DateTime = new \EM_DateTime(); //create default time in blog timezone
 				list($start_date, $end_date) = $EM_DateTime->get_week_dates( $scope );
 				if( get_option('dbem_events_current_are_past') && $wp_query->query_vars['post_type'] != 'event-recurring' ){
 					$query[] = array( 'key' => '_event_start_date', 'value' => array($start_date,$end_date), 'type' => 'DATE', 'compare' => 'BETWEEN');
@@ -206,9 +281,9 @@ class EM_Event_Post {
 			'event' => array_key_exists('event', $_REQUEST) ? $_REQUEST['event'] : null,
         ];
 		
-		return EM_Events::get_rest($args);
+		return \EM_Events::get_rest($args);
 		
 		
 	}
 }
-EM_Event_Post::init();
+EventPost::init();

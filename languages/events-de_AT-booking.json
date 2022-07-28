@@ -115,6 +115,9 @@
 			],
 			"Please select at least one ticket": [
 				"Bitte wähle mindestens ein Ticket aus"
+			],
+			"Please select": [
+				"Bitte auswählen..."
 			]
 		}
 	}

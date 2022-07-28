@@ -1,16 +1,18 @@
 <?php
 namespace Contexis\Events\Blocks;
 
+use Contexis\Events\Assets;
+
 class Upcoming {
 
 	public array $args;
 	
 	public $blockname = 'upcoming';
 
-    public static function init(Assets $assets) {
+    public static function init() {
 
 		$instance = new self;
-        $instance->args = $assets->args;
+        $instance->args = Assets::$args;
 		
 		add_action('init', [$instance, 'register_block']);
         
@@ -19,7 +21,7 @@ class Upcoming {
 
 	public function get_block_meta() {
 		
-		$filename = EM_DIR . "/blocks/src/upcoming/block.json";
+		$filename = \Events::DIR . "/blocks/src/upcoming/block.json";
 		
 		if(!file_exists($filename)) {    
 			return false;

@@ -1,10 +1,12 @@
 <?php
 // TODO make person details more secure and integrate with WP user data 
-class EM_Person extends WP_User{
+class EM_Person extends WP_User {
 
     public $custom_user_fields = array();
+	public $phone;
 
-	function __construct( $person_id = false, $username = '', $blog_id='' ){
+	function __construct( $person_id = false, $username = '' ){
+		
 		if( is_array($person_id) ){
 			if( array_key_exists('person_id',$person_id) ){
 				$person_id = $person_id['person_id'];
@@ -15,6 +17,13 @@ class EM_Person extends WP_User{
 			}
 		}elseif( is_object($person_id) && get_class($person_id) == 'WP_User'){
 			$person_id = $person_id->ID; //create new object if passed a wp_user
+		}
+		if( is_numeric($person_id) && $person_id == 0 ){
+			
+			$this->data = new stdClass();
+			$this->ID = 0;
+			$this->display_name = 'Anonymous User';
+			$this->user_email = 'anonymous@'.preg_replace('/https?:\/\//', '', get_site_url());
 		}
 		if($username){
 			parent::__construct($person_id, $username);
@@ -101,14 +110,16 @@ class EM_Person extends WP_User{
 		    'dbem_phone' => array('name' => __('Phone','events-manager'), 'value' => $this->phone),
         );
 	    $summary = array_merge( $summary, $this->custom_user_fields );
+		
 	    return apply_filters('em_person_get_summary', $summary, $this);
     }
 
 	function get_name(){
 		$full_name = $this->first_name  . " " . $this->last_name ;
+		//var_dump($this);
 		$full_name = wp_kses_data(trim($full_name));
 		$name = !empty($full_name) ? $full_name : $this->display_name;
-		return apply_filters('em_person_get_name', $name, $this);
+		return apply_filters('em_person_get_name',$name, $this);
 	}
 }
 ?>

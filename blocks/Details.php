@@ -2,7 +2,7 @@
 namespace Contexis\Events\Blocks;
 
 use Contexis\Events\Intl\Price;
-use Contexis\Events\Intl\Date;
+use Contexis\Events\Assets;
 
 class Details {
 
@@ -10,10 +10,10 @@ class Details {
 	
 	public $blockname = 'details';
 
-    public static function init(Assets $assets) {
+    public static function init() {
 
 		$instance = new self;
-        $instance->args = $assets->args;
+        $instance->args = Assets::$args;
 		
 		add_action('init', [$instance, 'register_block']);
         
@@ -21,7 +21,7 @@ class Details {
     }
 
 	public function get_block_meta() {
-		$filename = EM_DIR . "/blocks/src/details/block.json";
+		$filename = \Events::DIR . "/blocks/src/details/block.json";
 		
 		if(!file_exists($filename)) {    
 			return false;
@@ -77,7 +77,7 @@ class Details {
             return get_template_directory() . 'events/' . $filename;
         }
 
-        return EM_DIR . '/templates/blocks/' . $filename;
+        return \Events::DIR . '/templates/blocks/' . $filename;
     }
     
     private function get_event() {

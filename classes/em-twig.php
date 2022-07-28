@@ -26,7 +26,7 @@ class EM_Twig {
             array_push($this->locations, get_template_directory() . 'events/');
         }
     
-        array_push($this->locations, EM_DIR . '/' . 'templates/');
+        array_push($this->locations, Events::DIR . '/' . 'templates/');
     }
 }
 

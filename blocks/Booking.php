@@ -2,16 +2,18 @@
 
 namespace Contexis\Events\Blocks;
 
+use Contexis\Events\Assets;
+
 class Booking {
 
 	public array $args;
 	
 	public $blockname = 'details';
     
-    public static function init(Assets $assets) {
+    public static function init() {
         
         $instance = new self;
-        $instance->args = $assets->args;
+        $instance->args = Assets::$args;
 		
 		add_action('init', [$instance, 'register_block']);
         
@@ -22,7 +24,7 @@ class Booking {
 
 	public function get_block_meta() {
 		
-		$filename = EM_DIR . "/blocks/src/booking/block.json";
+		$filename = \Events::DIR . "/blocks/src/booking/block.json";
 		
 		if(!file_exists($filename)) {    
 			return false;
@@ -46,7 +48,7 @@ class Booking {
      */
     public function register_scripts() {
         
-		$script_asset = require( EM_DIR . "/includes/booking.asset.php" );
+		$script_asset = require( \Events::DIR . "/includes/booking.asset.php" );
 		wp_enqueue_script( 
 			'booking', 
 			plugins_url( '/../includes/booking.js', __FILE__ ),
@@ -55,7 +57,7 @@ class Booking {
 			true 
 		);
 		
-		wp_set_script_translations( 'booking', 'events', EM_DIR  . '/languages' );
+		wp_set_script_translations( 'booking', 'events', \Events::DIR  . '/languages' );
     
     }
 
@@ -81,6 +83,7 @@ class Booking {
 			wp_enqueue_script('booking');
 		});
 
+		
         
 		$priceFormatter = new \Contexis\Events\Intl\Price(0);
 
@@ -90,14 +93,16 @@ class Booking {
 			'rest_url' => get_rest_url(),
 			'booking_url' => admin_url('admin-ajax.php'),
 			'event' => \EM_Events::get_rest(['event' => $event->id])[0],
-			'registration_fields' => \EM_Booking_Form::get_fields($event),
-			'attendee_fields' => \EM_Attendees_Form::get_fields($event),
+			'registration_fields' => \EM_Booking_Form::get_booking_form($event->post_id),
+			'attendee_fields' => \EM_Attendees_Form::get_attendee_form($event->post_id),
 			'available_tickets' => $event->get_tickets_rest(),
 			'available_gateways' => \EM_Gateways::get_rest(),
+			'form' => \EM_Booking_Form::get_booking_form($event->post_id), 
 			'l10n' => [ 
 				"consent" => get_option("dbem_privacy_message"), 
 				"currency" => $priceFormatter->get_currency_code(),
 				"locale" => str_replace('_', '-',get_locale()),
+				"countries" => \Contexis\Events\Intl\Countries::get()
 			]
 		];
 

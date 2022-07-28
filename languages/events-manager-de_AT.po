@@ -928,11 +928,9 @@ msgstr "Buchungen für %s"
 msgid "No locations have been inserted yet!"
 msgstr "Bisher wurden noch keine Veranstaltungsorte angelegt!"
 
-#: templates/tables/locations.php:26
 msgid "All %s"
 msgstr "Alle %s"
 
-#: templates/tables/locations.php:23
 msgid "My %s"
 msgstr "Meine %s"
 
@@ -3166,12 +3164,12 @@ msgid "Allow %s to appear in the built-in search results."
 msgstr "Erlaube %s in den eingebauten Suchergebnissen aufzutauchen."
 
 #: admin/settings/tabs/pages.php:133 admin/settings/tabs/pages.php:312
-msgid "Include in WordPress Searches?"
-msgstr "In die WordPress Suche einbinden?"
+msgid "WordPress Search"
+msgstr "WordPress Suche"
 
 #: admin/settings/tabs/pages.php:132
-msgid "By default, events that have an end date later than today will be included in searches, set this to yes to consider events that started 'yesterday' as past."
-msgstr "Standardmäßig werden bei der Suche alle Veranstaltungen, deren Enddatum später als heute ist. Setze dies hier auf ja, damit Veranstaltungen, die 'gestern' begonnen haben, als vergangen behandelt werden."
+msgid "Currently running events should be treated as already passed"
+msgstr "Aktuell laufende Veranstaltungen werden als bereits vorbei behandelt"
 
 #: admin/settings/tabs/pages.php:132
 msgid "Are current events past events?"
@@ -3581,12 +3579,8 @@ msgid "Require locations for events?"
 msgstr "Muss ein Veranstaltungsort angegeben werden?"
 
 #: admin/settings/tabs/general.php:60
-msgid "If you disable locations, bear in mind that you should remove your location page, shortcodes and related placeholders from your <a href=\"#formats\" class=\"nav-tab-link\" rel=\"#em-menu-formats\">formats</a>."
-msgstr "Wenn du Orte deaktivierst, denke daran, dass du die Orts-Seite, Shortcodes und verknüpfte Platzhalter von deiner <a href=\"#formats\" class=\"nav-tab-link\" rel=\"#em-menu-formats\">Formate Seite</a> löschst."
-
-#: admin/settings/tabs/general.php:60
-msgid "Enable locations?"
-msgstr "Veranstaltungsorte aktivieren?"
+msgid "Activate possibility to add locations to events"
+msgstr "Ortsangaben zu Veranstaltungen ermöglichen"
 
 #: admin/settings/tabs/general.php:117
 msgid "If you select a default country, that will be pre-selected when creating a new location."
@@ -3677,20 +3671,16 @@ msgid "Enable tags?"
 msgstr "Schlagworte aktivieren?"
 
 #: admin/settings/tabs/general.php:30
-msgid "Select yes to allow bookings and tickets for events."
-msgstr "Ja auswählen um Buchungen und Tickets für Veranstaltungen zu aktivieren."
+msgid "Allow bookings and tickets for events."
+msgstr "Buchungen und Tickets für Veranstaltungen erlauben."
 
 #: admin/settings/tabs/general.php:30
 msgid "Enable bookings?"
 msgstr "Buchungen aktivieren?"
 
 #: admin/settings/tabs/general.php:29
-msgid "Select yes to enable the recurrence features feature"
-msgstr "Wähle Ja, um Funktionen für wiederkehrende Veranstaltungen zu aktivieren"
-
-#: admin/settings/tabs/general.php:29
-msgid "Enable recurrence?"
-msgstr "Wiederkehrende Veranstaltungen aktivieren?"
+msgid "Events can be managed as a collection of recurring events"
+msgstr "Veranstaltungen können als Sammlung von wiederkehrenden Veranstaltungen verwaltet werden"
 
 #: admin/settings/tabs/general.php:11 admin/settings/tabs/general.php:56
 #: admin/settings/tabs/general.php:125
@@ -6494,3 +6484,34 @@ msgstr "Personendetails"
 
 msgid "No Speaker Found"
 msgstr "Kein Referent gefunden"
+
+msgid "Booked up"
+msgstr "Ausgebucht"
+
+msgid "Forms"
+msgstr "Formulare"
+
+msgid "Attendee Form"
+msgstr "Teilnehmerformular"
+
+msgid "Form Name"
+msgstr "Formularname"
+
+
+msgid "End Date"
+msgstr "Enddatum"
+
+msgid "Toggle activation"
+msgstr "Aktivierung umschalten" 
+
+msgid "Current events"
+msgstr "Laufende Veranstaltungen"
+
+msgid "Attendee Forms"
+msgstr "Teilnehmerformulare"
+
+msgid "Booking Forms"
+msgstr "Registrierungsformulare"
+
+msgid "Create"
+msgstr "Erstellen"

@@ -59,7 +59,6 @@ const edit = (props) => {
 		.then(data => setEvent(data[0]))
 	}, []);
 
-	console.log(event);
 
 	const blockProps = useBlockProps({
 		className: [

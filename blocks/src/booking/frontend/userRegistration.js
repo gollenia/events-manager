@@ -21,32 +21,26 @@ const UserRegistration = (props) => {
         <div className="grid xl:grid--columns-2 grid--gap-12">
           <Summary {...props} />
 		  <div>
-            <form className="form" id="user-registration-form">
+            <form className="form--trap form grid xl:grid--columns-6 grid--gap-8" id="user-registration-form">
             { data.registration_fields.map((field, key) => 
               
               <InputField
                 key={key}
-                type={field.type}
-                name={field.name}
-				half={field.half}
-                label={field.label}
-                required={field.required}
-                pattern={field.pattern}
-                defaultValue={field.default}
-                value={state.request.registration[field.name]}
-                options={field.options}
-                selectHint={field.select_hint}
-                onChange={(event) => {dispatch({type: "SET_FIELD", payload: {form: "registration", field: field.name, value: event}})} }
+                field={field}
+                value={state.request.registration[field.fieldid]}
+                onChange={(event) => {dispatch({type: "SET_FIELD", payload: {form: "registration", field: field.fieldid, value: event}})} }
               />
           ) }
           { data.event.is_free && data.l10n.consent &&
             <InputField
-			  onChange={(event) => {dispatch({type: "SET_FIELD", payload: {form: "registration", field: "data_privacy_consent", value: event}})} }
-              name="data_privacy_consent"
-              value={state.request.registration.data_privacy_consent}
-              label={data.l10n.consent}
-              type="checkbox"
-            />
+			onChange={(event) => {dispatch({type: "SET_FIELD", payload: {form: "registration", field: "data_privacy_consent", value: event}})} }
+			value={request.registration.data_privacy_consent}
+			field={{
+				name: "data_privacy_consent",
+				help: data.l10n.consent,
+				type: "checkbox"
+			}}
+		/>
           }
 
           { data.event.is_free && error != "" && 

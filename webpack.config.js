@@ -19,6 +19,9 @@ module.exports = {
 				...defaultConfig.module.rules,
 			],
 		},
+		watchOptions: {
+		    ignored: /node_modules/,
+		},
 		optimization: {
 			minimizer: [
 				new TerserPlugin({

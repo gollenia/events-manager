@@ -1,13 +1,48 @@
 <?php
 
+function em_uninstall() {
+	global $wpdb;
+	//delete EM posts
+	remove_action('before_delete_post',array('EM_Location_Post_Admin','before_delete_post'),10,1);
+	remove_action('before_delete_post',array('EM_Event_Post_Admin','before_delete_post'),10,1);
+	remove_action('before_delete_post',array('EM_Event_Recurring_Post_Admin','before_delete_post'),10,1);
+	$post_ids = $wpdb->get_col('SELECT ID FROM '.$wpdb->posts." WHERE post_type IN ('".EM_Event::POST_TYPE."','".EM_POST_TYPE_LOCATION."','event-recurring')");
+	foreach($post_ids as $post_id){
+		wp_delete_post($post_id);
+	}
+	//delete categories
+	$cat_terms = get_terms(EM_TAXONOMY_CATEGORY, array('hide_empty'=>false));
+	foreach($cat_terms as $cat_term){
+		wp_delete_term($cat_term->term_id, EM_TAXONOMY_CATEGORY);
+	}
+	$tag_terms = get_terms(EM_TAXONOMY_TAG, array('hide_empty'=>false));
+	foreach($tag_terms as $tag_term){
+		wp_delete_term($tag_term->term_id, EM_TAXONOMY_TAG);
+	}
+	//delete EM tables
+	$wpdb->query('DROP TABLE '.EM_EVENTS_TABLE);
+	$wpdb->query('DROP TABLE '.EM_BOOKINGS_TABLE);
+	$wpdb->query('DROP TABLE '.EM_LOCATIONS_TABLE);
+	$wpdb->query('DROP TABLE '.EM_TICKETS_TABLE);
+	$wpdb->query('DROP TABLE '.EM_TICKETS_BOOKINGS_TABLE);
+	$wpdb->query('DROP TABLE '.EM_RECURRENCE_TABLE);
+	$wpdb->query('DROP TABLE '.EM_META_TABLE);
+	
+	//delete options
+	$wpdb->query('DELETE FROM '.$wpdb->options.' WHERE option_name LIKE \'em_%\' OR option_name LIKE \'dbem_%\'');
+	//deactivate and go!
+	deactivate_plugins(array('events-manager/events-manager.php','events-manager-pro/events-manager-pro.php'), true);
+	wp_safe_redirect(admin_url('plugins.php?deactivate=true'));
+	exit();
+}
+
 function em_install() {
 	global $wp_rewrite;
 	switch_to_locale(EM_ML::$wplang); //switch to blog language (if applicable)
    	$wp_rewrite->flush_rules();
-	$old_version = get_option('dbem_version');
-	//Won't upgrade <4.300 anymore
+	$old_version = get_option('dbem_version');	
    	
-	if( EM_VERSION > $old_version || $old_version == '' ){
+	if( Events::VERSION > $old_version || $old_version == '' ){
 		if( get_option('dbem_upgrade_throttle') <= time() || !get_option('dbem_upgrade_throttle') ){
 		 	// Creates the events table if necessary
 			em_create_events_table();
@@ -33,7 +68,7 @@ function em_install() {
 			em_upgrade_current_installation();
 			do_action('events_manager_updated', $old_version );
 			//Update Version
-		  	update_option('dbem_version', EM_VERSION);
+		  	update_option('dbem_version', Events::VERSION);
 			delete_option('dbem_upgrade_throttle');
 			delete_option('dbem_upgrade_throttle_time');
 			
@@ -42,7 +77,7 @@ function em_install() {
 			
 			update_option('dbem_flush_needed',1);
 			add_action ( 'admin_notices', function() {
-				echo '<div class="updated"><p>'.__('Events has been updated to version ',  'events-manager'). EM_VERSION . '</p></div>';
+				echo '<div class="updated"><p>'.__('Events has been updated to version ',  'events-manager'). Events::VERSION . '</p></div>';
 			});
 		}else{
 			function em_upgrading_in_progress_notification(){
@@ -518,11 +553,7 @@ function em_add_options() {
 
 		//Email Config
 		'dbem_email_disable_registration' => 0,
-		'dbem_rsvp_mail_port' => 465,
-		'dbem_smtp_host' => 'localhost',
-		'dbem_mail_sender_name' => '',
-		'dbem_rsvp_mail_send_method' => 'wp_mail',
-		'dbem_rsvp_mail_SMTPAuth' => 1,
+		
 		'dbem_smtp_html' => 1,
 		'dbem_smtp_html_br' => 1,
 		'dbem_smtp_encryption' => 'tls',
@@ -571,8 +602,6 @@ function em_add_options() {
 		'dbem_bookings_email_cancelled_subject' => __('Booking Cancelled','events-manager'),
 		'dbem_bookings_email_cancelled_body' => str_replace("<br/>", "\n\r", $respondent_email_cancelled_body_localizable),
 		//Registration Email
-		'dbem_bookings_email_registration_subject' => $booking_registration_email_subject,
-		'dbem_bookings_email_registration_body' => str_replace("<br/>", "\n\r", $booking_registration_email_body),
 		//Ticket Specific Options
 		'dbem_bookings_tickets_ordering' => 1,
 		'dbem_bookings_tickets_orderby' => 'ticket_price DESC, ticket_name ASC',
@@ -854,6 +883,14 @@ function em_upgrade_current_installation(){
 		delete_option('dbem_locations_default_archive_order');
 		delete_option('dbem_locations_default_limit');
 		delete_option('dbem_data');
+		delete_option('dbem_bookings_email_registration_subject');
+		delete_option('dbem_bookings_email_registration_body');
+		delete_option('dbem_rsvp_mail_port');
+		delete_option('dbem_smtp_host');
+		delete_option('dbem_mail_sender_name');
+		delete_option('dbem_rsvp_mail_send_method');
+		delete_option('dbem_rsvp_mail_SMTPAuth');
+		
 	}
 }
 
@@ -933,7 +970,7 @@ function em_migrate_events($events){
 	foreach($events as $event){
 		//new post info
 		$post_array = array();
-		$post_array['post_type'] = $event['recurrence'] == 1 ? 'event-recurring' : EM_POST_TYPE_EVENT;
+		$post_array['post_type'] = $event['recurrence'] == 1 ? 'event-recurring' : EM_Event::POST_TYPE;
 		$post_array['post_title'] = $event['event_name'];
 		$post_array['post_content'] = $event['post_content'];
 		$post_array['post_status'] = (!isset($event['event_status']) || $event['event_status'])  ? 'publish':'pending';
@@ -1084,7 +1121,7 @@ function em_migrate_datetime_timezones( $reset_new_fields = true, $migrate_date_
 	//reave meta data - at this point once we've copied over all of the dates, so we do 5 queries to postmeta, one for each field we've created above start/end times in local/utc and timezone
 	if( empty($migration_errors) ){
 		//delete all previously added fields, in case they were added before
-		$sql = 'DELETE FROM '.$wpdb->postmeta." WHERE meta_key IN ('_event_start','_event_end','_event_timezone', '_event_start_local', '_event_end_local') AND post_id IN (SELECT ID FROM ".$wpdb->posts." WHERE post_type='".EM_POST_TYPE_EVENT."' OR post_type='event-recurring')";
+		$sql = 'DELETE FROM '.$wpdb->postmeta." WHERE meta_key IN ('_event_start','_event_end','_event_timezone', '_event_start_local', '_event_end_local') AND post_id IN (SELECT ID FROM ".$wpdb->posts." WHERE post_type='".EM_Event::POST_TYPE."' OR post_type='event-recurring')";
 		$migration_result = $wpdb->query($sql);
 		if( $migration_result === false ) $migration_errors[] = array('Previous meta deletion', $wpdb->last_error);
 		foreach( array('event_start', 'event_end', 'event_timezone', 'start', 'end') as $field ){

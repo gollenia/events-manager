@@ -135,29 +135,29 @@ class EM_ML_Bookings {
 	        if( $EM_Event->post_id != $EM_Booking->get_event()->post_id ){
 	            //below is copied script from EM_Booking::email_messages() replacing get_option with EM_ML_Options::get_option() supplying the booking language 
         	    switch( $EM_Booking->booking_status ){
-        	    	case 0:
-        	    	case 5: //TODO remove offline status from here and move to pro
+        	    	case EM_Booking::PENDING:
+        	    	case EM_Booking::AWAITING_PAYMENT:
         	    		$msg['user']['subject'] = EM_ML_Options::get_option('dbem_bookings_email_pending_subject', $lang);
         	    		$msg['user']['body'] = EM_ML_Options::get_option('dbem_bookings_email_pending_body', $lang);
         	    		//admins should get something (if set to)
         	    		$msg['admin']['subject'] = EM_ML_Options::get_option('dbem_bookings_contact_email_pending_subject', $lang);
         	    		$msg['admin']['body'] = EM_ML_Options::get_option('dbem_bookings_contact_email_pending_body', $lang);
         	    		break;
-        	    	case 1:
+        	    	case EM_Booking::APPROVED:
         	    		$msg['user']['subject'] = EM_ML_Options::get_option('dbem_bookings_email_confirmed_subject', $lang);
         	    		$msg['user']['body'] = EM_ML_Options::get_option('dbem_bookings_email_confirmed_body', $lang);
         	    		//admins should get something (if set to)
         	    		$msg['admin']['subject'] = EM_ML_Options::get_option('dbem_bookings_contact_email_confirmed_subject', $lang);
         	    		$msg['admin']['body'] = EM_ML_Options::get_option('dbem_bookings_contact_email_confirmed_body', $lang);
         	    		break;
-        	    	case 2:
+        	    	case EM_Booking::REJECTED:
         	    		$msg['user']['subject'] = EM_ML_Options::get_option('dbem_bookings_email_rejected_subject', $lang);
         	    		$msg['user']['body'] = EM_ML_Options::get_option('dbem_bookings_email_rejected_body', $lang);
         	    		//admins should get something (if set to)
         	    		$msg['admin']['subject'] = EM_ML_Options::get_option('dbem_bookings_contact_email_rejected_subject', $lang);
         	    		$msg['admin']['body'] = EM_ML_Options::get_option('dbem_bookings_contact_email_rejected_body', $lang);
         	    		break;
-        	    	case 3:
+        	    	case EM_Booking::CANCELLED:
         	    		$msg['user']['subject'] = EM_ML_Options::get_option('dbem_bookings_email_cancelled_subject', $lang);
         	    		$msg['user']['body'] = EM_ML_Options::get_option('dbem_bookings_email_cancelled_body', $lang);
         	    		//admins should get something (if set to)

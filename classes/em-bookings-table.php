@@ -8,13 +8,13 @@ class EM_Bookings_Table{
 	 * * value - label for use in collumn headers 
 	 * @var array
 	 */
-	public $cols = array('user_name','event_name','booking_spaces','booking_status','booking_price','actions');
+	public $cols = ['user_name','event_name','booking_spaces','booking_status','booking_price','actions'];
 	/**
 	 * Asoociative array of available collumn keys and corresponding headers, which will be used to display this table of bookings
-	 * @var unknown_type
+	 * @var array
 	 */
-	public $cols_template = array();
-	public $sortable_cols = array('booking_date');
+	public $cols_template = [];
+	public $sortable_cols = ['booking_date'];
 	/**
 	 * Object we're viewing bookings in relation to.
 	 * @var object
@@ -427,7 +427,7 @@ class EM_Bookings_Table{
 					<?php if( $this->bookings_count > 0 ): ?>
 					<tbody>
 						<?php 
-						$rowno = 0;
+						
 						$event_count = (!empty($event_count)) ? $event_count:0;
 						foreach ($this->bookings->bookings as $EM_Booking) {
 							?>

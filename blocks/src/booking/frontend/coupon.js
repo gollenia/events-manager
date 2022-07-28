@@ -48,7 +48,7 @@ function Coupon({state, dispatch}) {
 	].filter(Boolean).join(' ');
 
 	return (
-		<div className="input-group">
+		<div className="input-group grid__column--span-6">
 			<div className="input input-group__main">
 			<label>{__('Coupon code','events')}</label>
 			<input 

@@ -1,0 +1,18 @@
+.ctx\:event-form {
+	
+	&__container {
+		max-width: 1200px;
+		margin: 0 auto 2rem auto;
+		display: grid;
+		grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+		gap: 1rem;
+	}
+
+	&__appender {
+		max-width: 1200px;
+		margin-left: auto;
+		margin-right: auto;
+		display: flex;
+		justify-content: flex-end;
+	}
+}

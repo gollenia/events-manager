@@ -1,0 +1,16 @@
+{
+	"name": "events-manager/form-html",
+	"apiVersion": 2,
+	"title": "Text Block",
+	"description": "Headline or text block",
+	"category": "widgets", 
+	"attributes": {
+		
+		"width": {
+			"type": "integer",
+			"default": 4
+		}
+		
+	},
+	"parent": [ "events-manager/form-container" ]
+}

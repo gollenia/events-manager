@@ -132,8 +132,13 @@ function em_bookings_events_table() {
 								<b><?php echo $EM_Event->get_bookings()->get_booked_spaces(); echo " ";  ?> /
 								<?php echo $EM_Event->get_bookings()->get_pending_spaces(); echo " "; echo __("Pending", "events-manager") ?></b>
 								<div class="em-booking-graph">
-									<div class="em-booking-graph-booked <?php if($pending_percent) echo "cut" ?>" style="width:<?php echo $booked_percent ?>%;"></div>
-									<div class="em-booking-graph-pending <?php if($booked_percent) echo "cut" ?>" style="width:<?php echo $pending_percent ?>%;"></div>
+									<?php if($booked_percent < 100) { ?>
+										<div class="em-booking-graph-booked <?php if($pending_percent) echo "cut" ?>" style="width:<?php echo $booked_percent ?>%;"></div>
+										<div class="em-booking-graph-pending <?php if($booked_percent) echo "cut" ?>" style="width:<?php echo $pending_percent ?>%;"></div>
+									<?php } ?>
+									<?php if($booked_percent >= 100) { ?>
+										<div class="em-booking-graph-full" style="width:100%;"></div>
+									<?php } ?>
 								</div>
 							</td>
 							<td>

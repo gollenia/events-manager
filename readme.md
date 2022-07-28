@@ -29,7 +29,26 @@ If you start developping, you need npm.
 - `npm run build` Compile a compressed version for production
 - `npm start` Compile an uncompressed version and watch for changes
 With these commands, ALL Javascript and CSS files are generated and put into `./includes`
+
+
+
 ### Versions
-For previous versions see the original authors blog: https://wp-events-plugin.com/blog/
+
+#### 6.5
+  - Form Editor completely recoded into Gutenberg
+  - Refactoring and redesigning of the booking frontend
+  - More cleanup work
+
+#### 6.4
+  - removed all old layouting options
+  - booking app rewritten for better user experience and performance
+
+#### 6.3
+  - PDF Generator added
+  - New List view for events
+  - Whole event is now displayed with block, no layout used anymore
+
 #### 6.2
-All the new stuff listed above
+  - Over 200 unused options removed
+
+For previous versions see the original authors blog: https://wp-events-plugin.com/blog/

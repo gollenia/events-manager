@@ -27,7 +27,6 @@ const Payment = (props) => {
 		});
         return result   
     }
-
     
     return (
         <div className="grid xl:grid--columns-2 grid--gap-12">
@@ -35,27 +34,32 @@ const Payment = (props) => {
 				<Summary state={state} dispatch={dispatch} />
             </div>
 			<div>
-			<form className="form">
+			<form className="form--trap form grid xl:grid--columns-6 grid--gap-8">
 				{ data.event.has_coupons && 
 					<Coupon state={state} dispatch={dispatch} />
 				}
 				{ Object.keys(data.available_gateways).length > 1 &&
 				<InputField
 					onChange={(event) => {dispatch({type: "SET_GATEWAY", payload: event})} }
-					name="gateway"
+					field={{
+						name: "gateway", 
+						label: __("Payment method", "event"),
+						type: "select",
+						options: gatewayOptions()
+					}}
 					value={request.gateway}
-					label={__("Payment method", "events")}
-					type="select"
-					options={gatewayOptions()}
+					
 				/> }
 
 				{ data.l10n.consent &&
 				<InputField
 					onChange={(event) => {dispatch({type: "SET_FIELD", payload: {form: "registration", field: "data_privacy_consent", value: event}})} }
-					name="data_privacy_consent"
 					value={request.registration.data_privacy_consent}
-					label={data.l10n.consent}
-					type="checkbox"
+					field={{
+						name: "data_privacy_consent",
+						help: data.l10n.consent,
+						type: "checkbox"
+					}}
 				/> }
 				
 				

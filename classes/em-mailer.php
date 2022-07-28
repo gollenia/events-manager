@@ -25,7 +25,7 @@ class EM_Mailer {
 	 * @return boolean
 	 */
 	public function send($subject="no title",$body="No message specified", $receiver='', $attachments = array() ) {
-		//TODO add an EM_Error global object, for this sort of error reporting. (@marcus like StatusNotice)
+		
 		$subject = html_entity_decode(wp_kses_data($subject)); //decode entities, but run kses first just in case users use placeholders containing html
 		if( is_array($receiver) ){
 			$receiver_emails = array();
@@ -39,121 +39,34 @@ class EM_Mailer {
 			$receiver = trim($receiver);
 			$emails_ok = is_email($receiver);
 		}
+
 		if( get_option('dbem_smtp_html') && get_option('dbem_smtp_html_br') ){
 			$body = nl2br($body);
 		}
-		if ( $emails_ok && get_option('dbem_rsvp_mail_send_method') == 'wp_mail' ){
-			$from = get_option('dbem_mail_sender_address');
-			$headers = array();
-			$headers[] = get_option('dbem_mail_sender_name') ? 'From: '.get_option('dbem_mail_sender_name').' <'.$from.'>':'From: '.$from;
-			$headers[] = get_option('dbem_mail_sender_name') ? 'Reply-To: '.get_option('dbem_mail_sender_name').' <'.$from.'>':'From: '.$from;
+
+		if ( $emails_ok ) {
+			$from = get_option('dbem_mail_sender_address', get_bloginfo('admin_email'));
+			$name = get_option('dbem_mail_sender_name', get_bloginfo('name'));
+			$headers = [
+				get_option('dbem_mail_sender_name') ? 'From: '.$name.' <'.$from.'>':'From: '.$from,
+				get_option('dbem_mail_sender_name') ? 'Reply-To: '.$name.' <'.$from.'>':'From: '.$from
+			];
 			if( get_option('dbem_smtp_html') ){ //create filter to change content type to html in wp_mail
 				add_filter('wp_mail_content_type','EM_Mailer::return_texthtml');
 			}
-			//prep attachments for WP Mail, which only accept a path
 			self::$attachments = $attachments;
-			add_action('phpmailer_init', 'EM_Mailer::add_attachments_to_mailer', 9999, 1);
-			//send and handle errors
+			
 			$send = wp_mail($receiver, $subject, $body, $headers);
-			//unload attachments hook
-			remove_action('phpmailer_init', 'EM_Mailer::add_attachments_to_mailer', 9999);
-			//send email
-			if(!$send){
-				global $phpmailer; /* @var PHPMailer $phpmailer */
-				if( !empty($phpmailer->ErrorInfo) ) {
-					$this->errors[] = $phpmailer->ErrorInfo;
-				}
-			}
-			//cleanup
 			self::delete_email_attachments($attachments);
 			return $send;
-		}elseif( $emails_ok ){
-			$this->load_phpmailer();
-			$mail = new PHPMailer\PHPMailer\PHPMailer();
-			try{
-				//$mail->SMTPDebug = true;
-				if( get_option('dbem_smtp_html') ){
-					$mail->isHTML();
-				}
-				$mail->clearAllRecipients();
-				$mail->clearAddresses();
-				$mail->clearAttachments();
-				$mail->clearCustomHeaders();
-				$mail->clearReplyTos();
-				$mail->CharSet = 'utf-8';
-			    $mail->setLanguage('en', dirname(__FILE__).'/');
-				$mail->PluginDir = dirname(__FILE__).'/phpmailer/';
-				$host = get_option('dbem_smtp_host');
-				//if port is supplied via the host address, give that precedence over the port setting
-				if( preg_match('/^(.+):([0-9]+)$/', $host, $host_port_matches) ){
-					$mail->Host = $host_port_matches[1];
-					$mail->Port = $host_port_matches[2];
-				}else{
-					$mail->Host = $host;
-					$mail->Port = get_option('dbem_rsvp_mail_port');
-				}
-				$mail->Username = get_option('dbem_smtp_username');
-				$mail->Password = get_option('dbem_smtp_password');
-				$mail->From = get_option('dbem_mail_sender_address');
-				$mail->FromName = get_option('dbem_mail_sender_name'); // This is the from name in the email, you can put anything you like here
-				$mail->Body = $body;
-				$mail->Subject = $subject;
-				//SSL/TLS
-				if( get_option('dbem_smtp_encryption') ){
-					$mail->SMTPSecure = get_option('dbem_smtp_encryption');
-				}
-				$mail->SMTPAutoTLS = get_option('dbem_smtp_autotls') == 1;
-				//add attachments
-				self::add_attachments_to_mailer($mail, $attachments);
-				if(is_array($receiver)){
-					foreach($receiver as $receiver_email){
-						$mail->addAddress($receiver_email);
-					}
-				}else{
-					$mail->addAddress($receiver);
-				}
-				do_action('em_mailer', $mail); //$mail will still be modified
-				
-				//Protocols
-			    if( get_option('dbem_rsvp_mail_send_method') == 'qmail' ){
-					$mail->isQmail();
-				}elseif( get_option('dbem_rsvp_mail_send_method') == 'sendmail' ){
-					$mail->isSendmail();
-				}else {
-					$mail->Mailer = get_option('dbem_rsvp_mail_send_method');
-				}
-				if(get_option('dbem_rsvp_mail_SMTPAuth') == '1'){
-					$mail->SMTPAuth = TRUE;
-			    }
-				do_action('em_mailer_before_send', $mail, $subject, $body, $receiver, $attachments); //$mail can still be modified
-			    $send = $mail->send();
-				if(!$send){
-					$this->errors[] = $mail->ErrorInfo;
-				}
-				do_action('em_mailer_sent', $mail, $send); //$mail can still be modified
-				self::delete_email_attachments($attachments);
-				return $send;
-			}catch( phpmailerException $ex ){
-				$this->errors[] = $mail->ErrorInfo;
-				self::delete_email_attachments($attachments);
-				return false;
-			}
-		}else{
-			$this->errors[] = __('Please supply a valid email format.', 'events-manager');
-			self::delete_email_attachments($attachments);
-			return false;
 		}
+
+		$this->errors[] = __('Please supply a valid email format.', 'events-manager');
+		self::delete_email_attachments($attachments);
+		return false;
+		
 	}
-	
-	/**
-	 * load phpmailer classes
-	 */
-	public function load_phpmailer(){
-		require_once ABSPATH . WPINC . '/PHPMailer/PHPMailer.php';
-		require_once ABSPATH . WPINC . '/PHPMailer/Exception.php';
-		require_once ABSPATH . WPINC . '/PHPMailer/SMTP.php';
-	}
-	
+
 	/**
 	 * Shorthand function for filters to return 'text/html' string.
 	 * @return string 'text/html'
@@ -161,32 +74,7 @@ class EM_Mailer {
 	public static function return_texthtml(){
 		return "text/html";
 	}
-	
-	/**
-	 * WP_Mail doesn't accept attachment meta, only an array of paths, this function post-fixes attachments to the PHPMailer object.
-	 * @param PHPMailer $phpmailer
-	 * @param array $attachments
-	 */
-	public static function add_attachments_to_mailer( $phpmailer, $attachments = array() ){
-		//add attachments
-		$attachments = !empty($attachments) ? $attachments : self::$attachments;
-		if( !empty($attachments) ){
-			foreach($attachments as $attachment){
-				$att = array('name'=> '', 'encoding' => 'base64', 'type' => 'application/octet-stream');
-				if( is_array($attachment) ){
-					$att = array_merge($att, $attachment);
-				}else{
-					$att['path'] = $attachment;
-				}
-				try{
-					$phpmailer->addAttachment($att['path'], $att['name'], $att['encoding'], $att['type']);
-				}catch( phpmailerException $ex ){
-					//do nothing
-				}
-			}
-		}
-		self::$attachments = array();
-	}
+
 	
 	public static function delete_email_attachments( $attachments ){
 		foreach( $attachments as $attachment ){

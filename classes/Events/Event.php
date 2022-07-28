@@ -1,5 +1,6 @@
 <?php
 use EM_Event_Locations\Event_Location, EM_Event_Locations\Event_Locations;
+use \Contexis\Events\EventPost;
 
 /**
  * Event Object. This holds all the info pertaining to an event, including location and recurrence info.
@@ -30,6 +31,8 @@ use EM_Event_Locations\Event_Location, EM_Event_Locations\Event_Locations;
 //TODO Integrate recurrences into events table
 //FIXME If you create a super long recurrence timespan, there could be thousands of events... need an upper limit here.
 class EM_Event extends EM_Object{
+
+	const POST_TYPE = "event";
 	/* Field Names */
 	var $event_id;
 	var $post_id;
@@ -240,7 +243,7 @@ class EM_Event extends EM_Object{
 	 * If there are any errors, they will be added here.
 	 * @var array
 	 */
-	var $errors = array();
+	var array $errors = array();
 	/**
 	 * If something was successful, a feedback message might be supplied here.
 	 * @var string
@@ -325,7 +328,7 @@ class EM_Event extends EM_Object{
 			: absint($id['post_id']);
 			$search_by = (!empty($id['event_id'])) ? 'event_id':'post_id';
 		}
-		$is_post = !empty($id->ID) && ($id->post_type == EM_POST_TYPE_EVENT || $id->post_type == 'event-recurring');
+		$is_post = !empty($id->ID) && ($id->post_type == EventPost::TYPE || $id->post_type == 'event-recurring');
 		if( $is_post ){
 			$id->ID = absint($id->ID);
 		}else{
@@ -512,11 +515,7 @@ class EM_Event extends EM_Object{
 	public function get_tickets_rest() {
 		$tickets = (array)$this->get_bookings()->get_available_tickets()->tickets;
 		$ticket_collection = [];
-		$available_fields = \EM_Attendees_Form::get_fields($this);
-		$fields = [];
-		foreach ($available_fields as $field) {
-			$fields[$field['name']] = $field['default_value'];
-		}
+		
         foreach($tickets as $id => $ticket) {
 			$ticket_collection[$id]= [
                 "id" => $id,
@@ -527,7 +526,7 @@ class EM_Event extends EM_Object{
                 "min" => $ticket->ticket_min ?: 0,
                 "name" => $ticket->ticket_name,
                 "description" => $ticket->ticket_description,
-                "fields" => $fields
+				"fields" => []
             ];
         }
         return $ticket_collection;
@@ -554,7 +553,7 @@ class EM_Event extends EM_Object{
 	
 	function load_postdata($event_post, $search_by = false){
 		//load event post object if it's an actual object and also a post type of our event CPT names
-
+		file_put_contents("/var/www/vhosts/kids-team.internal/log/meta.log", print_r(date('H:i', time()) . " Event->load_post_data() - post: " . $this->post_id . ' ' . get_post_meta($this->post_id, '_event_audience', true) . "\n", true), FILE_APPEND);
 		if( is_object($event_post) && ($event_post->post_type == 'event-recurring' || $event_post->post_type == EM_POST_TYPE_EVENT) ){
 			//load post data - regardless
 			$this->post_id = absint($event_post->ID);
@@ -590,7 +589,7 @@ class EM_Event extends EM_Object{
 					}
 				}
 
-				$this->speaker_id = array_key_exists('speaker_id', $event_meta) ? intval($event_meta['speaker_id'][0]) : 0;
+				$this->speaker_id = array_key_exists('_speaker_id', $event_meta) ? intval($event_meta['_speaker_id'][0]) : 0;
 				
 				if( $this->has_event_location() ) $this->get_event_location()->load_postdata($event_meta);
 				//quick compatability fix in case _event_id isn't loaded or somehow got erased in post meta
@@ -627,6 +626,7 @@ class EM_Event extends EM_Object{
 	}
 	
 	function get_event_meta($blog_id = false){
+		file_put_contents("/var/www/vhosts/kids-team.internal/log/meta.log", print_r(date('H:i', time()) . " Event->get_event_meta() - post: " . $this->post_id . ' ' . get_post_meta($this->post_id, '_event_audience', true) . "\n", true), FILE_APPEND);
 		if( !empty($this->blog_id) ) $blog_id = $this->blog_id; //if there's a blog id already, there's no doubt where to look for
 		if( empty($this->post_id) ) return array();
 		
@@ -641,11 +641,12 @@ class EM_Event extends EM_Object{
 	 * @return boolean
 	 */
 	function get_post($validate = true){	
+		file_put_contents("/var/www/vhosts/kids-team.internal/log/meta.log", print_r(date('H:i', time()) . " Event->get_post() - post: " . $this->post_id . ' ' . get_post_meta($this->post_id, '_event_audience', true) . "\n", true), FILE_APPEND);
 		global $allowedposttags;
 		do_action('em_event_get_post_pre', $this);
 		//we need to get the post/event name and content.... that's it.
 		$this->post_content = isset($_POST['content']) ? wp_kses( wp_unslash($_POST['content']), $allowedposttags):'';
-		$this->post_excerpt = !empty($this->post_excerpt) ? $this->post_excerpt:''; //fix null error
+		$this->post_excerpt = !empty($this->post_excerpt) ? $this->post_excerpt:'';
 		$this->event_name = ( !empty($_POST['event_name']) ) ? sanitize_post_field('post_title', $_POST['event_name'], $this->post_id, 'db'):'';
 		$this->post_type = ($this->is_recurring() || !empty($_POST['recurring'])) ? 'event-recurring':EM_POST_TYPE_EVENT;
 		//don't forget categories!
@@ -663,6 +664,7 @@ class EM_Event extends EM_Object{
 	 * @return boolean
 	 */
 	function get_post_meta(){
+		
 		do_action('em_event_get_post_meta_pre', $this);
 		
 		//Check if this is recurring or not early on so we can take appropriate action further down
@@ -716,7 +718,8 @@ class EM_Event extends EM_Object{
 			$location_type = isset($_POST['location_type']) ? sanitize_key($_POST['location_type']) : 'location';
 			
 			if( $location_type == 'location' && empty($_POST['location_id']) ) $location_type = 0; //backward compat
-			// assign location data
+			// assign location data 
+			
 			if( $location_type === 0 || $location_type === '0' ){
 				// no location
 				$this->location_id = 0;
@@ -753,7 +756,7 @@ class EM_Event extends EM_Object{
 		
 		//Bookings
 		$can_manage_bookings = $this->can_manage('manage_bookings','manage_others_bookings');
-		$preview_autosave = is_admin() && !empty($_REQUEST['_emnonce']) && !empty($_REQUEST['wp-preview']) && $_REQUEST['wp-preview'] == 'dopreview'; //we shouldn't save new data during a preview auto-save
+		$preview_autosave = is_admin() && !empty($_REQUEST['wp-preview']) && $_REQUEST['wp-preview'] == 'dopreview'; //we shouldn't save new data during a preview auto-save
 		if( !$preview_autosave && $can_manage_bookings && !empty($_POST['event_rsvp']) && $_POST['event_rsvp'] ){
 			//get tickets only if event is new, non-recurring, or recurring but specifically allowed to reschedule by user
 			if( !$this->is_recurring() || (empty($this->event_id) || !empty($_REQUEST['event_recreate_tickets'])) || !$this->event_rsvp ){
@@ -889,11 +892,9 @@ class EM_Event extends EM_Object{
 
 		$this->compat_keys(); //compatability
 
-		$this->event_audience = $_POST['event_audience'] ?? "";
+		$this->event_audience = get_post_meta($this->post_id, '_event_audience', "");
 		
 		$this->speaker_id = intval($_POST['speaker_id']) ?? 0;
-
-		
 
 		return apply_filters('em_event_get_post_meta', count($this->errors) == 0, $this);
 
@@ -985,6 +986,7 @@ class EM_Event extends EM_Object{
 	 * @return boolean
 	 */
 	function save(){
+		file_put_contents("/var/www/vhosts/kids-team.internal/log", print_r($_POST));
 		global $blog_id, $EM_SAVING_EVENT;
 		$EM_SAVING_EVENT = true; //this flag prevents our dashboard save_post hooks from going further
 		if( !$this->can_manage('edit_events', 'edit_others_events') && empty($this->event_id) ){
@@ -1006,7 +1008,7 @@ class EM_Event extends EM_Object{
 		$post_array['post_title'] = $this->event_name;
 		$post_array['post_content'] = !empty($this->post_content) ? $this->post_content : '';
 		$post_array['post_excerpt'] = $this->post_excerpt;
-		file_put_contents('/var/www/vhosts/kids-team.internal/log/dumpling.txt', print_r($this->errors, true), FILE_APPEND);
+		
 		//decide on post status
 		if( empty($this->force_status) ){
 			if( count($this->errors) == 0 ){
@@ -1067,9 +1069,10 @@ class EM_Event extends EM_Object{
 	}
 	
 	function save_meta(){
+		file_put_contents("/var/www/vhosts/kids-team.internal/log", print_r($_POST));
 		global $wpdb, $EM_SAVING_EVENT;
 		$EM_SAVING_EVENT = true;
-
+		
 		//trigger setting of event_end and event_start in case it hasn't been set already
 		$this->start();
 		$this->end();
@@ -1150,6 +1153,7 @@ class EM_Event extends EM_Object{
 				$event_truly_exists = false;
 			}
 			//save all the meta
+			
 			if( empty($this->event_id) || !$event_truly_exists ){
 				$this->previous_status = 0; //for sure this was previously status 0
 				$this->event_date_created = $event_array['event_date_created'] = current_time('mysql');
@@ -1304,7 +1308,7 @@ class EM_Event extends EM_Object{
 	function delete( $force_delete = false ){
 		if( $this->can_manage('delete_events', 'delete_others_events') ){
 		    if( !is_admin() ){
-				include_once('em-event-post-admin.php');
+				include_once('EventPostAdmin.php');
 				if( !defined('EM_EVENT_DELETE_INCLUDE') ){
 					EM_Event_Post_Admin::init();
 					EM_Event_Recurring_Post_Admin::init();
@@ -1500,6 +1504,7 @@ class EM_Event extends EM_Object{
 	 * @return EM_DateTime
 	 */
 	public function get_datetime( $when = 'start', $utc_timezone = false ){
+
 		if( $when != 'start' && $when != 'end') return new EM_DateTime(); //currently only start/end dates are relevant
 		//Initialize EM_DateTime if not already initialized, or if previously initialized object is invalid (e.g. draft event with invalid dates being resubmitted)
 		$when_date = 'event_'.$when.'_date';
@@ -2959,7 +2964,7 @@ if ( is_object($GLOBALS['wp_embed']) ){
  */
 function em_event_gallery_override( $attr = array() ){
 	global $post;
-	if( !empty($post->post_type) && $post->post_type == EM_POST_TYPE_EVENT && empty($attr['id']) && empty($attr['ids']) ){
+	if( !empty($post->post_type) && $post->post_type == EventPost::TYPE && empty($attr['id']) && empty($attr['ids']) ){
 		//no id specified, so check if it's recurring and override id with recurrence template post id
 		$EM_Event = EM_Event::find($post->ID, 'post_id');
 		if( $EM_Event->is_recurrence() ){

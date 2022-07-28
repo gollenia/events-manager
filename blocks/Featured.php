@@ -1,16 +1,18 @@
 <?php
 namespace Contexis\Events\Blocks;
 
+use Contexis\Events\Assets;
+
 class Featured {
 
 	public array $args;
 	
 	public $blockname = 'featured';
 
-    public static function init(Assets $assets) {
+    public static function init() {
 
 		$instance = new self;
-        $instance->args = $assets->args;
+        $instance->args = Assets::$args;
 		
 		add_action('init', [$instance, 'register_block']);
         
@@ -19,7 +21,7 @@ class Featured {
 
 	public function get_block_meta() {
 		
-		$filename = EM_DIR . "/blocks/src/featured/block.json";
+		$filename = \Events::DIR . "/blocks/src/featured/block.json";
 		
 		if(!file_exists($filename)) {    
 			return false;
@@ -59,7 +61,7 @@ class Featured {
             return get_template_directory() . 'events/' . $filename;
         }
 
-        return EM_DIR . '/templates/blocks/' . $filename;
+        return \Events::DIR . '/templates/blocks/' . $filename;
     }
     
     private function get_locations() {

@@ -4,7 +4,7 @@
  * @author marcus
  * @property EM_Booking[] $bookings
  */
-class EM_Bookings extends EM_Object implements Iterator{
+class EM_Bookings extends EM_Object implements Iterator {
 	
 	/**
 	 * Array of EM_Booking objects for a specific event
@@ -115,26 +115,26 @@ class EM_Bookings extends EM_Object implements Iterator{
 	 * @return boolean
 	 */
 	function add( $EM_Booking ){
-		global $wpdb,$EM_Mailer;
+		
 		//Save the booking
-		$email = false;
+		$emailSent = false;
 		//set status depending on approval settings
 		if( empty($EM_Booking->booking_status) ){ //if status is not set, give 1 or 0 depending on approval settings
-			$EM_Booking->booking_status = get_option('dbem_bookings_approval') ? 0:1;
+			$EM_Booking->booking_status = get_option('dbem_bookings_approval') ? EM_Booking::PENDING : EM_Booking::APPROVED;
 		}
 		$result = $EM_Booking->save(false);
-		if($result){
+		if($result){ 
 			//Success
 		    do_action('em_bookings_added', $EM_Booking);
 			if( $this->bookings === null ) $this->bookings = array();
 			$this->bookings[] = $EM_Booking;
-			$email = $EM_Booking->email();
-			if( get_option('dbem_bookings_approval') == 1 && $EM_Booking->booking_status == 0){
+			$emailSent = $EM_Booking->email();
+			if( get_option('dbem_bookings_approval') == 1 && $EM_Booking->booking_status == EM_Booking::PENDING){
 				$this->feedback_message = get_option('dbem_booking_feedback_pending');
 			}else{
 				$this->feedback_message = get_option('dbem_booking_feedback');
 			}
-			if(!$email){
+			if(!$emailSent){
 				$EM_Booking->email_not_sent = true;
 				$this->feedback_message .= ' '.__('However, there were some problems whilst sending confirmation emails to you and/or the event contact person. You may want to contact them directly and letting them know of this error.', 'events-manager');
 				if( current_user_can('activate_plugins') ){
@@ -436,7 +436,7 @@ class EM_Bookings extends EM_Object implements Iterator{
 	function get_bookings( $all_bookings = false ){
 		$confirmed = array();
 		foreach ( $this->load() as $EM_Booking ){
-			if( $EM_Booking->booking_status == 1 || (get_option('dbem_bookings_approval') == 0 && $EM_Booking->booking_status == 0) || $all_bookings ){
+			if( $EM_Booking->booking_status == EM_Booking::APPROVED || (get_option('dbem_bookings_approval') == 0 && $EM_Booking->booking_status == EM_Booking::PENDING) || $all_bookings ){
 				$confirmed[] = $EM_Booking;
 			}
 		}
@@ -454,7 +454,7 @@ class EM_Bookings extends EM_Object implements Iterator{
 		}
 		$pending = array();
 		foreach ( $this->load() as $EM_Booking ){
-			if($EM_Booking->booking_status == 0){
+			if($EM_Booking->booking_status == EM_Booking::PENDING){
 				$pending[] = $EM_Booking;
 			}
 		}
@@ -469,7 +469,7 @@ class EM_Bookings extends EM_Object implements Iterator{
 	function get_rejected_bookings(){
 		$rejected = array();
 		foreach ( $this->load() as $EM_Booking ){
-			if($EM_Booking->booking_status == 2){
+			if($EM_Booking->booking_status == EM_Booking::REJECTED){
 				$rejected[] = $EM_Booking;
 			}
 		}
@@ -484,7 +484,7 @@ class EM_Bookings extends EM_Object implements Iterator{
 	function get_cancelled_bookings(){
 		$cancelled = array();
 		foreach ( $this->load() as $EM_Booking ){
-			if($EM_Booking->booking_status == 3){
+			if($EM_Booking->booking_status == EM_Booking::CANCELLED){
 				$cancelled[] = $EM_Booking;
 			}
 		}

@@ -1,0 +1,11 @@
+{
+	"name": "events-manager/form-container",
+	"apiVersion": 2,
+	"title": "Form Container",
+	"description": "Show a list with selected details of the event",
+	"category": "layout", 
+	"attributes": {
+		
+
+	}
+}

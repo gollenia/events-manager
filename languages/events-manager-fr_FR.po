@@ -6278,3 +6278,33 @@ msgstr "Détails de la personne"
 
 msgid "No Speaker Found"
 msgstr "Aucun Conférencier trouvé"
+
+msgid "Booked up"
+msgstr "Réservé jusqu'à"
+
+msgid "Forms"
+msgstr "Formes"
+
+msgid "Attendee Form"
+msgstr "Formulaire de participation"
+
+msgid "Form Name"
+msgstr "Nom de forme"
+
+msgid "End Date"
+msgstr "Date de fin"
+
+msgid "Toggle activation"
+msgstr "Basculer l'activation" 
+
+msgid "Current events"
+msgstr "Événements en cours"
+
+msgid "Attendee Forms"
+msgstr "Formulaires de participation"
+
+msgid "Booking Forms"
+msgstr "Formulaires d'inscription"
+
+msgid "Create"
+msgstr "Créer"

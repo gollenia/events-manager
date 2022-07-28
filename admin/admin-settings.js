@@ -72,10 +72,7 @@ jQuery(document).ready(function($){
 		}
 	}).trigger('change');
 	
-	//ML Stuff
-	$('.em-translatable').on('click', function(){
-		$(this).nextAll('.em-ml-options').toggle();
-	});
+
 	//radio triggers
 	$('input[type="radio"].em-trigger').on('change', function(e){
 		let el = $(this);
@@ -107,3 +104,4 @@ jQuery(document).ready(function($){
 	});
 	//color pickers
 });
+

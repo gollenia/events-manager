@@ -1,7 +1,7 @@
 {
     "name": "contexis/event-manager-pro",
-    "version": "1.0.0",
-    "description": "Event manager Pro",
+    "version": "6.4.0",
+    "description": "Events Manager",
     "type": "project",
     "homepage": "http://www.kids-team.at",
     "readme": "readme.md",
@@ -43,7 +43,8 @@
         "psr-4": {
             "Contexis\\Events\\Blocks\\": ["blocks"],
 			"Contexis\\Events\\Addons\\": ["add-ons/*"],
-			"Contexis\\Events\\Intl\\": "classes/Intl/"
+			"Contexis\\Events\\Intl\\": "classes/Intl/",
+			"Contexis\\Events\\Admin\\": "classes/Admin/"
         }
     }
 }

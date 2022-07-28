@@ -40,7 +40,7 @@ $required = apply_filters('em_required_html','<i>*</i>');
 			<th><?php _e ( 'Country:', 'events-manager')?>&nbsp;</th>
 			<td>
 				<select id="location-country" name="location_country">
-					<?php foreach(em_get_countries(__('none selected','events-manager')) as $country_key => $country_name): ?>
+					<?php foreach(\Contexis\Events\Intl\Countries::get(__('none selected','events-manager')) as $country_key => $country_name): ?>
 					<option value="<?php echo $country_key; ?>" <?php echo ( $EM_Location->location_country === $country_key || ($EM_Location->location_country == '' && $EM_Location->location_id == '' && get_option('dbem_location_default_country')==$country_key) ) ? 'selected="selected"':''; ?>><?php echo $country_name; ?></option>
 					<?php endforeach; ?>
 				</select> <?php echo $required; ?>

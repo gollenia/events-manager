@@ -1,0 +1,43 @@
+{
+	"name": "events-manager/form-text",
+	"apiVersion": 2,
+	"title": "Text Field",
+	"description": "Lets the user type a short text",
+	"category": "widgets", 
+	"attributes": {
+		"fieldid": {
+			"type": "string",
+			"default": ""
+		},
+		"width": {
+			"type": "integer",
+			"default": 4
+		},
+		"required": {
+			"type": "boolean",
+			"default": false
+		},
+		"pattern": {
+			"type": "string",
+			"default": ""
+		},
+		"label": {
+			"type": "string",
+			"default": ""
+		},
+		"placeholder": {
+			"type": "string",
+			"default": ""
+		},
+		"help": {
+			"type": "string",
+			"default": ""
+		},
+		"error": {
+			"type": "string",
+			"default": ""
+		}
+		
+	},
+	"parent": [ "events-manager/form-container" ]
+}

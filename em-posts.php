@@ -1,14 +1,17 @@
 <?php
 
 define('EM_POST_TYPE_EVENT','event'); 
+define('EM_POST_TYPE_FORM','bookingform');
 define('EM_POST_TYPE_LOCATION','location');
 define('EM_TAXONOMY_CATEGORY','event-categories');
 define('EM_TAXONOMY_TAG','event-tags');
+define('EM_POST_TYPE_ATTENDEEFORM','attendeeform');
 
 define('EM_POST_TYPE_EVENT_SLUG',get_option('dbem_cp_events_slug', 'events'));
 
 // We do not need these slugs in the frontend anymore, but we need to keep their definitions here for the backend
 define('EM_POST_TYPE_LOCATION_SLUG','locations');
+define('EM_POST_TYPE_FORMS_SLUG','forms');
 define('EM_TAXONOMY_CATEGORY_SLUG', 'events/categories');
 define('EM_TAXONOMY_TAG_SLUG', 'events/tags');
 
@@ -87,7 +90,7 @@ function wp_events_plugin_init(){
 		]
 	]));
 	
-	$event_post_type_supports = apply_filters('em_cp_event_supports', ['title','editor','excerpt','thumbnail','author']);
+	$event_post_type_supports = apply_filters('em_cp_event_supports', ['title','editor','excerpt','thumbnail','author','custom-fields']);
 	$event_post_type = [	
 		'public' => true,
 		'hierarchical' => false,
@@ -100,7 +103,7 @@ function wp_events_plugin_init(){
 		'publicly_queryable' => true,
 		'rewrite' => ['slug' => EM_POST_TYPE_EVENT_SLUG,'with_front'=>false],
 		'has_archive' => false,
-		'supports' => $event_post_type_supports,
+		'supports' => ['title','editor','excerpt','thumbnail','author','custom-fields'],
 		'capability_type' => 'event',
 		'capabilities' => [
 			'publish_posts' => 'publish_events',
@@ -226,6 +229,8 @@ function wp_events_plugin_init(){
 			],
 		]);
 	}
+
+	
 	
 	function em_gutenberg_support( $can_edit, $post_type ){
 		$recurrences = $post_type == 'event-recurring' && get_option('dbem_recurrence_enabled');

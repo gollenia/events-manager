@@ -1,0 +1,17 @@
+.ctx\:event-field {
+
+
+	select {
+		width: 100%;
+		max-width: 100%;
+	} 
+
+	&__select {
+		display: flex;
+		gap: 1rem;
+
+		button {
+			height: 30px;
+		}
+	}
+}

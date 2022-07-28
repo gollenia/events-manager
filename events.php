@@ -1,9 +1,9 @@
 <?php
 /*
 Plugin Name: Events
-Version: 6.0
+Version: 6.4
 Plugin URI: https://github.com/gollenia/events-manager
-Description: Event registration and booking management for WordPress. Recurring events, locations, webinars, google maps, rss, ical, booking registration and more!
+Description: Event registration and booking management for WordPress. Recurring events, locations, webinars, ical, booking registration and more!
 Author: Marcus Sykes, Thomas Gollenia
 Author URI: https://github.com/gollenia/events-manager
 Text Domain: events
@@ -29,21 +29,23 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Setting constants
 
-define('EM_VERSION', 6.4); //self expanatory, although version currently may not correspond directly with published version number
-define('EM_DIR', dirname( __FILE__ )); //an absolute path to this directory
-define('EM_DIR_URI', trailingslashit(plugins_url('',__FILE__))); //an absolute path to this directory
-define('EM_MS_GLOBAL',false);
+
+
+class Events {
+	const VERSION = '6.4';
+	const DIR = __DIR__;
+}
 
 //temporarily disable AJAX by default, future updates will eventually have this turned on as we work out some kinks
 if( !defined('EM_AJAX') ){
-	define( 'EM_AJAX', get_option('dbem_events_page_ajax', (defined('EM_AJAX_SEARCH') && EM_AJAX_SEARCH)) );
+	define( 'EM_AJAX', true );
 }
 
 require_once( plugin_dir_path( __FILE__ ) . '/vendor/autoload.php');
 
 require_once('classes/em-twig.php');
 
-$EM_Twig = EM_Twig::init();
+$EM_Twig = \EM_Twig::init();
 
 
 add_filter( 'timber/locations', function($paths) use ($EM_Twig) {
@@ -51,19 +53,12 @@ add_filter( 'timber/locations', function($paths) use ($EM_Twig) {
 	return $paths;
 });
 
-add_action('init', function() {
-	register_rest_field( 'event', 'meta', array(
-		'get_callback' => function ( $data ) {
-			return get_post_meta( $data['id'], '', '' );
-		}, ));
-});
-
-
 
 
 // INCLUDES
 //Base classes
 require_once('polyfill.php');
+require_once('classes/Assets.php');
 require_once('classes/em-options.php');
 require_once('classes/em-object.php');
 require_once('classes/em-datetime.php');
@@ -72,10 +67,10 @@ require_once('classes/em-taxonomy-term.php');
 require_once('classes/em-taxonomy-terms.php');
 require_once('classes/em-taxonomy-frontend.php');
 //set up events as posts
+require_once('classes/Forms/FormPost.php');
 require_once("em-posts.php");
 //Template Tags & Template Logic
 require_once("em-actions.php");
-//require_once("em-emails.php");
 require_once("em-functions.php");
 require_once("em-ical.php");
 require_once("em-data-privacy.php");
@@ -85,7 +80,7 @@ require_once("multilingual/em-ml.php");
 require_once('classes/em-booking.php');
 require_once('classes/em-bookings.php');
 require_once("classes/em-bookings-table.php") ;
-//require_once('classes/em-calendar.php');
+
 require_once('classes/em-category.php');
 require_once('classes/em-categories.php');
 require_once('classes/em-categories-frontend.php');
@@ -112,6 +107,8 @@ require_once('classes/em-tickets-bookings.php');
 require_once('classes/em-tickets.php');
 //Admin Files
 if( is_admin() ){
+	
+	require_once('classes/Forms/FormPostAdmin.php');
 	require_once('admin/em-admin.php');
 	require_once('admin/em-bookings.php');
 	require_once('admin/em-docs.php');
@@ -122,6 +119,7 @@ if( is_admin() ){
 	//post/taxonomy controllers
 	require_once('classes/Events/EventPostAdmin.php');
 	require_once('classes/Events/EventPostsAdmin.php');
+	
 	require_once('classes/Locations/LocationPostAdmin.php');
 	require_once('classes/Locations/LocationPostsAdmin.php');
 	require_once('classes/em-taxonomy-admin.php');
@@ -136,22 +134,18 @@ if( is_admin() ){
 	require_once('admin/bookings/em-person.php');
 }
 
-// new namespaced classes
 require_once('classes/speaker.php');
-require_once('add-ons/export/Export.php');
+require_once('classes/Export/Export.php');
 
-require_once('emp-forms.php'); //form editor
-		
-//require_once('emp-ml.php');
-
+require_once('classes/Forms/Forms.php');
 
 //booking-specific features
-require_once('add-ons/gateways/gateways.php'); 
-require_once('add-ons/bookings-form/bookings-form.php');
+require_once('classes/Gateways/Gateways.php'); 
+require_once('classes/Forms/BookingsForm.php');
 
-require_once('add-ons/coupons/coupons.php');
-require_once('add-ons/emails/emails.php');
-require_once('add-ons/user-fields.php');
+require_once('classes/Coupons/Coupons.php');
+require_once('classes/Emails/Emails.php');
+require_once('classes/Forms/UserFields.php');
 
 //This should come into a "Migration" class
 //Table names
@@ -173,108 +167,6 @@ define('EM_BOOKINGS_RELATIONSHIPS_TABLE', $wpdb->prefix.'em_bookings_relationshi
  * @author marcus
  * Contains functions for loading styles on both admin and public sides.
  */
-class EM_Scripts_and_Styles {
-	public static function init(){
-		if( is_admin() ){
-			//Scripts and Styles
-			add_action('admin_enqueue_scripts', array('EM_Scripts_and_Styles','admin_enqueue'));
-		}
-	}
-	
-	public static function admin_enqueue( $hook_suffix = false ){
-		if( $hook_suffix == 'post.php' || (!empty($_GET['page']) && substr($_GET['page'],0,14) == 'events-manager') || (!empty($_GET['post_type']) && in_array($_GET['post_type'], array(EM_POST_TYPE_EVENT,EM_POST_TYPE_LOCATION,'event-recurring'))) ){
-			wp_enqueue_style( 'wp-color-picker' );
-			wp_enqueue_script('events-manager', plugins_url('includes/events-manager.js',__FILE__), array('jquery', 'jquery-ui-core','jquery-ui-widget','jquery-ui-position','jquery-ui-sortable','jquery-ui-datepicker','jquery-ui-autocomplete','jquery-ui-dialog','wp-color-picker'), EM_VERSION);
-		    global $pagenow;
-			if( !empty($_REQUEST['page']) && ($_REQUEST['page'] == 'events-manager-forms-editor' || ($_REQUEST['page'] == 'events-manager-bookings' && !empty($_REQUEST['action']) && $_REQUEST['action'] == 'manual_booking')) ){
-				wp_enqueue_script('events-manager-pro', plugins_url('includes/events-manager-pro.js',__FILE__), array('jquery', 'jquery-ui-core','jquery-ui-widget','jquery-ui-position')); //jQuery will load as dependency
-				do_action('em_enqueue_admin_scripts');
-			}
-			if( $pagenow == 'user-edit.php' ){
-				//need to include the em script for dates
-				EM_Scripts_and_Styles::admin_enqueue();
-			}
-			wp_enqueue_style('events-manager-admin', plugins_url('includes/admin-settings.css',__FILE__), array(), EM_VERSION);
-			wp_enqueue_style('events-manager-pro', plugins_url('includes/events-manager-pro.css',__FILE__), array(), EM_VERSION);
-			do_action('em_enqueue_admin_styles');
-			wp_enqueue_style('events-manager-pro-admin', plugins_url('includes/events-manager-pro.css',__FILE__), array(), EM_VERSION);
-			self::localize_script();
-		}
-	}
-
-	/**
-	 * Localize the script vars that require PHP intervention, removing the need for inline JS.
-	 */
-	public static function localize_script(){
-		global $em_localized_js;
-		$locale_code = substr ( get_locale(), 0, 2 );
-		//Localize
-		$em_localized_js = array(
-			'ajaxurl' => admin_url('admin-ajax.php'),
-			'locationajaxurl' => admin_url('admin-ajax.php?action=locations_search'),
-			'firstDay' => get_option('start_of_week'),
-			'locale' => $locale_code,
-			'ui_css' => plugins_url('includes/jquery-ui.min.css', __FILE__),
-			'is_ssl' => is_ssl(),
-		);
-
-		
-	
-		//booking-specific stuff
-		if( get_option('dbem_rsvp_enabled') ){
-			$offset = defined('EM_BOOKING_MSG_JS_OFFSET') ? EM_BOOKING_MSG_JS_OFFSET : 30;
-		    $em_localized_js = array_merge($em_localized_js, array(
-				'bookingInProgress' => __('Please wait while the booking is being submitted.','events-manager'),
-				'tickets_save' => __('Save Ticket','events-manager'),
-				'bookings_export_save' => __('Export Bookings','events-manager'),
-				'bookings_settings_save' => __('Save Settings','events-manager'),
-				'booking_delete' => __("Are you sure you want to delete?",'events-manager'),
-		    	'booking_offset' => $offset,
-				//booking button
-				
-
-			));		
-		}
-		$em_localized_js['cache'] = defined('WP_CACHE') && WP_CACHE;
-		$em_localized_js['txt_search'] = get_option('dbem_search_form_text_label',__('Search','events-manager'));
-		$em_localized_js['txt_searching'] = __('Searching...','events-manager');
-		$em_localized_js['txt_loading'] = __('Loading...','events-manager');
-		
-		//logged in messages that visitors shouldn't need to see
-		if( is_user_logged_in() ){
-		    if( get_option('dbem_recurrence_enabled') ){
-		    	if( !empty($_REQUEST['action']) && ($_REQUEST['action'] == 'edit' || $_REQUEST['action'] == 'event_save') && !empty($_REQUEST['event_id']) ){
-					$em_localized_js['event_reschedule_warning'] = __('Are you sure you want to continue?', 'events-manager') .PHP_EOL;
-					$em_localized_js['event_reschedule_warning'] .= __('Modifications to event times will cause all recurrences of this event to be deleted and recreated, previous bookings will be deleted.', 'events-manager');
-					$em_localized_js['event_recurrence_overwrite'] = __('Are you sure you want to continue?', 'events-manager') .PHP_EOL;
-					$em_localized_js['event_recurrence_overwrite'] .= __( 'Modifications to recurring events will be applied to all recurrences and will overwrite any changes made to those individual event recurrences.', 'events-manager') .PHP_EOL;
-					$em_localized_js['event_recurrence_overwrite'] .= __( 'Bookings to individual event recurrences will be preserved if event times and ticket settings are not modified.', 'events-manager');
-					$em_localized_js['event_recurrence_bookings'] = __('Are you sure you want to continue?', 'events-manager') .PHP_EOL;
-					$em_localized_js['event_recurrence_bookings'] .= __('Modifications to event tickets will cause all bookings to individual recurrences of this event to be deleted.', 'events-manager');
-		    	}
-				$em_localized_js['event_detach_warning'] = __('Are you sure you want to detach this event? By doing so, this event will be independent of the recurring set of events.', 'events-manager');
-				$delete_text = ( !EMPTY_TRASH_DAYS ) ? __('This cannot be undone.','events-manager'):__('All events will be moved to trash.','events-manager');
-				$em_localized_js['delete_recurrence_warning'] = __('Are you sure you want to delete all recurrences of this event?', 'events-manager').' '.$delete_text;
-		    }
-			if( get_option('dbem_rsvp_enabled') ){
-				$em_localized_js['disable_bookings_warning'] = __('Are you sure you want to disable bookings? If you do this and save, you will lose all previous bookings. If you wish to prevent further bookings, reduce the number of spaces available to the amount of bookings you currently have', 'events-manager');
-			}
-		}
-		//load admin/public only vars
-		if( is_admin() ){
-			$em_localized_js['event_post_type'] = EM_POST_TYPE_EVENT;
-			$em_localized_js['location_post_type'] = EM_POST_TYPE_LOCATION;
-			if( !empty($_GET['page']) && $_GET['page'] == 'events-manager-options' ){
-			    $em_localized_js['close_text'] = __('Collapse All','events-manager');
-			    $em_localized_js['open_text'] = __('Expand All','events-manager');
-			}
-		}		
-		
-		wp_localize_script('events-manager','EM', apply_filters('em_wp_localize_script', $em_localized_js));
-	}
-}
-EM_Scripts_and_Styles::init();
-
 
 /**
  * Perform plugins_loaded actions
@@ -339,10 +231,10 @@ function em_init(){
 		$rss_url = em_add_get_params(home_url(), array('post_type'=>EM_POST_TYPE_EVENT, 'feed'=>'rss2'));
 		define('EM_RSS_URI', $rss_url); //RSS PAGE URI
 	}
-	$EM_Mailer = new EM_Mailer();
+	$EM_Mailer = new \EM_Mailer();
 	//Upgrade/Install Routine
 	if( is_admin() && current_user_can('manage_options') ){
-		if( EM_VERSION > get_option('dbem_version', 0) ){
+		if( Events::VERSION > get_option('dbem_version', 0) ){
 			require_once( dirname(__FILE__).'/em-install.php');
 			em_install();
 		}
@@ -362,62 +254,49 @@ add_filter('init','em_init',1);
  */
 function em_load_event(){
 	global $EM_Event, $EM_Recurrences, $EM_Location, $EM_Person, $EM_Booking, $EM_Category, $EM_Ticket, $current_user;
-	if( !defined('EM_LOADED') ){
-		$EM_Recurrences = array();
-		if( isset( $_REQUEST['event_id'] ) && is_numeric($_REQUEST['event_id']) && !is_object($EM_Event) ){
-			$EM_Event = new EM_Event( absint($_REQUEST['event_id']) );
-		}elseif( isset($_REQUEST['post']) && (get_post_type($_REQUEST['post']) == 'event' || get_post_type($_REQUEST['post']) == 'event-recurring') ){
-			$EM_Event = EM_Event::find($_REQUEST['post'], 'post_id');
-		}elseif ( !empty($_REQUEST['event_slug']) && EM_MS_GLOBAL && is_main_site() && !get_site_option('dbem_ms_global_events_links')) {
-			// single event page for a subsite event being shown on the main blog
-			global $wpdb;
-			$matches = array();
-			if( preg_match('/\-([0-9]+)$/', $_REQUEST['event_slug'], $matches) ){
-				$event_id = $matches[1];
-			}else{
-				$query = $wpdb->prepare('SELECT event_id FROM '.EM_EVENTS_TABLE.' WHERE event_slug = %s AND blog_id != %d', $_REQUEST['event_slug'], get_current_blog_id());
-				$event_id = $wpdb->get_var($query);
-			}
-			$EM_Event = EM_Event::find($event_id);
-		}
-		if( isset($_REQUEST['location_id']) && is_numeric($_REQUEST['location_id']) && !is_object($EM_Location) ){
-			$EM_Location = new EM_Location( absint($_REQUEST['location_id']) );
-		}elseif( isset($_REQUEST['post']) && get_post_type($_REQUEST['post']) == 'location' ){
-			$EM_Location = em_get_location($_REQUEST['post'], 'post_id');
-		}elseif ( !empty($_REQUEST['location_slug']) && EM_MS_GLOBAL && is_main_site() && !get_site_option('dbem_ms_global_locations_links')) {
-			// single event page for a subsite event being shown on the main blog
-			global $wpdb;
-			$matches = array();
-			if( preg_match('/\-([0-9]+)$/', $_REQUEST['location_slug'], $matches) ){
-				$location_id = $matches[1];
-			}else{
-				$query = $wpdb->prepare('SELECT location_id FROM '.EM_LOCATIONS_TABLE." WHERE location_slug = %s AND blog_id != %d", $_REQUEST['location_slug'], get_current_blog_id());
-				$location_id = $wpdb->get_var($query);
-			}
-			$EM_Location = em_get_location($location_id);
-		}
-		if( is_user_logged_in() || (!empty($_REQUEST['person_id']) && is_numeric($_REQUEST['person_id'])) ){
-			//make the request id take priority, this shouldn't make it into unwanted objects if they use theobj::get_person().
-			if( !empty($_REQUEST['person_id']) ){
-				$EM_Person = new EM_Person( absint($_REQUEST['person_id']) );
-			}else{
-				$EM_Person = new EM_Person( get_current_user_id() );
-			}
-		}
-		if( isset($_REQUEST['booking_id']) && is_numeric($_REQUEST['booking_id']) && !is_object($_REQUEST['booking_id']) ){
-			$EM_Booking = EM_Booking::find( absint($_REQUEST['booking_id']) );
-		}
-		if( isset($_REQUEST['category_id']) && is_numeric($_REQUEST['category_id']) && !is_object($_REQUEST['category_id']) ){
-			$EM_Category = new EM_Category( absint($_REQUEST['category_id']) );
-		}elseif( isset($_REQUEST['category_slug']) && !is_object($EM_Category) ){
-			$EM_Category = new EM_Category( $_REQUEST['category_slug'] );
-		}
-		if( isset($_REQUEST['ticket_id']) && is_numeric($_REQUEST['ticket_id']) && !is_object($_REQUEST['ticket_id']) ){
-			$EM_Ticket = new EM_Ticket( absint($_REQUEST['ticket_id']) );
-		}
-		define('EM_LOADED',true);
+	if (defined('EM_LOADED')) return;
+	
+	$EM_Recurrences = array();
+
+	if( isset( $_REQUEST['event_id'] ) && is_numeric($_REQUEST['event_id']) && !is_object($EM_Event) ){
+		$EM_Event = new \EM_Event( absint($_REQUEST['event_id']) );
+	}elseif( isset($_REQUEST['post']) && (get_post_type($_REQUEST['post']) == 'event' || get_post_type($_REQUEST['post']) == 'event-recurring') ){
+		$EM_Event = \EM_Event::find($_REQUEST['post'], 'post_id');
 	}
+
+	if( isset($_REQUEST['location_id']) && is_numeric($_REQUEST['location_id']) && !is_object($EM_Location) ){
+		$EM_Location = new \EM_Location( absint($_REQUEST['location_id']) );
+	}elseif( isset($_REQUEST['post']) && get_post_type($_REQUEST['post']) == 'location' ){
+		$EM_Location = em_get_location($_REQUEST['post'], 'post_id');
+	}
+
+	if( is_user_logged_in() || (!empty($_REQUEST['person_id']) && is_numeric($_REQUEST['person_id'])) ){
+		//make the request id take priority, this shouldn't make it into unwanted objects if they use theobj::get_person().
+		if( !empty($_REQUEST['person_id']) ){
+			$EM_Person = new \EM_Person( absint($_REQUEST['person_id']) );
+		}else{
+			$EM_Person = new \EM_Person( get_current_user_id() );
+		}
+	}
+
+	if( isset($_REQUEST['booking_id']) && is_numeric($_REQUEST['booking_id']) && !is_object($_REQUEST['booking_id']) ){
+		$EM_Booking = \EM_Booking::find( absint($_REQUEST['booking_id']) );
+	}
+
+	if( isset($_REQUEST['category_id']) && is_numeric($_REQUEST['category_id']) && !is_object($_REQUEST['category_id']) ){
+		$EM_Category = new \EM_Category( absint($_REQUEST['category_id']) );
+	}elseif( isset($_REQUEST['category_slug']) && !is_object($EM_Category) ){
+		$EM_Category = new \EM_Category( $_REQUEST['category_slug'] );
+	}
+
+	if( isset($_REQUEST['ticket_id']) && is_numeric($_REQUEST['ticket_id']) && !is_object($_REQUEST['ticket_id']) ){
+		$EM_Ticket = new \EM_Ticket( absint($_REQUEST['ticket_id']) );
+	}
+
+	define('EM_LOADED',true);
+	
 }
+
 add_action('template_redirect', 'em_load_event', 1);
 if(is_admin()){ add_action('init', 'em_load_event', 2); }
 
@@ -434,8 +313,8 @@ function em_locate_template( $template_name, $load=false, $the_args = array() ) 
 	$located = locate_template(array('plugins/events-manager/'.$template_name));
 	if( !$located ){
 		$located = apply_filters('em_locate_template_default', $located, $template_name, $load, $the_args);
-		if ( !$located && file_exists(EM_DIR.'/templates/'.$template_name) ) {
-			$located = EM_DIR.'/templates/'.$template_name;
+		if ( !$located && file_exists(Events::DIR.'/templates/'.$template_name) ) {
+			$located = Events::DIR.'/templates/'.$template_name;
 		}
 	}
 	$located = apply_filters('em_locate_template', $located, $template_name, $load, $the_args);
@@ -447,10 +326,10 @@ function em_locate_template( $template_name, $load=false, $the_args = array() ) 
 	return $located;
 }
 
-/**
+/*
  * Quick class to dynamically catch wp_options that are EM formats and need replacing with template files.
  * Since the options filter doesn't have a catchall filter, we send all filters to the __call function and figure out the option that way.
- */
+ 
 class EM_Formats {
 	function __construct(){ add_action( 'template_redirect', array(&$this, 'add_filters')); }
 	function add_filters(){
@@ -472,7 +351,7 @@ class EM_Formats {
 }
 global $EM_Formats;
 $EM_Formats = new EM_Formats();
-
+**/
 
 /**
  * Monitors event saves and changes the rss pubdate and a last modified option so it's current
@@ -514,6 +393,8 @@ function wpdocs_load_textdomain() {
 }
 add_action( 'plugins_loaded', 'wpdocs_load_textdomain' );
 
+
+register_uninstall_hook(__FILE__, 'em_uninstall');
 
 
 //cron functions - ran here since functions aren't loaded, scheduling done by gateways and other modules
