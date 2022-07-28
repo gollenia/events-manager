@@ -1,7 +1,7 @@
 /*
 *   External dependecies
 */
-import React, { useEffect, useState, useReducer } from 'react'
+import React, { useEffect, useReducer } from 'react'
 import { __ } from '@wordpress/i18n';
 
 
@@ -20,14 +20,18 @@ import initialState from './modules/initialState.js';
 import reducer from './modules/reducer.js';
 import Guide from './guide';
 
+// TEST
+
+import { isEqual } from 'lodash'
+import { useRef } from 'react'
+
+
 // this function  is suposed to open the modal from the parent component
 
 const Booking = () => {
 
 	// if no spaces are left, nothing is shown
 	if(window.booking_data.event?.bookings?.spaces === 0) { return <></> }
-
-	//const [state, setstate] = useState(initialState);
 
 	const [state, dispatch] = useReducer(reducer, initialState);
 
@@ -38,6 +42,7 @@ const Booking = () => {
     if(Object.keys(data).length == 0) return (<span className="button button--error button--pseudo">{__('Error: No connection to server.', 'events')}</span>);
 
 	useEffect(() => {
+		if(!wizzard.checkValidity) return;
 		dispatch({type: "VALIDITY", payload: { 
 			"tickets": document.getElementById('user-attendee-form')?.checkValidity() && request.tickets.length > 0,
 			"registration": document.getElementById('user-registration-form')?.checkValidity() && request.tickets.length > 0,
@@ -46,6 +51,7 @@ const Booking = () => {
 	}, [state])
 	
 	console.log("state", state);
+	co
       
 	return (
 		<div>
