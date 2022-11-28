@@ -54,7 +54,7 @@ class EM_Location_Posts_Admin{
 	    return array_merge($id_array, $columns, array(
 	    	'address' => __('Address','events-manager'), 
 	    	'town' => __('Town','events-manager'),
-	    	'state' => __('State','events-manager'),
+	    	'zip' => __('Postcode','events-manager'),
 	    	'country' => __('Country','events-manager') 
 	    ));
 	}
@@ -72,8 +72,8 @@ class EM_Location_Posts_Admin{
 			case 'town':
 				echo $post->location_town;
 				break;
-			case 'state':
-				echo $post->location_state;
+			case 'zip':
+				echo $post->location_postcode;
 				break;
 			case 'country':
 				echo $post->location_country;

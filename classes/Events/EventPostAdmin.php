@@ -14,7 +14,7 @@ class EM_Event_Post_Admin{
 		}
 		//Save/Edit actions
 		add_filter('wp_insert_post_data',array('EM_Event_Post_Admin','wp_insert_post_data'),100,2); //validate post meta before saving is done
-		add_action('save_post',array('EM_Event_Post_Admin','save_post'),1,1); //set to 1 so metadata gets saved ASAP
+		add_action('save_post',array('EM_Event_Post_Admin','save_post'),10,3); //set to 1 so metadata gets saved ASAP
 		add_action('before_delete_post',array('EM_Event_Post_Admin','before_delete_post'),10,1);
 		add_action('trashed_post',array('EM_Event_Post_Admin','trashed_post'),10,1);
 		add_action('untrash_post',array('EM_Event_Post_Admin','untrash_post'),10,1);
@@ -83,7 +83,7 @@ class EM_Event_Post_Admin{
 		$saving_status = !in_array($data['post_status'], array('trash','auto-draft')) && !defined('DOING_AUTOSAVE') && !$doing_add_meta_ajax;
 		$untrashing = $post_ID && defined('UNTRASHING_'.$post_ID);
 		if( !$untrashing && $is_post_type && $saving_status ){
-			if( !empty($_REQUEST['_emnonce']) && wp_verify_nonce($_REQUEST['_emnonce'], 'edit_event') ){ 
+			if( true ){ 
 				//this is only run if we know form data was submitted, hence the nonce
 				$EM_Event = EM_Event::find($post_ID, 'post_id');
 				$EM_Event->post_type = $post_type;
@@ -97,8 +97,9 @@ class EM_Event_Post_Admin{
 	}
 	
 	public static function save_post($post_id, $post = false){
-		file_put_contents("/var/www/vhosts/kids-team.internal/log/meta.log", print_r(date('H:i', time()) . " Event_Post_Admin->save_post() " . get_post_meta($post_id, '_event_audience', true) . "\n", true), FILE_APPEND);
 		global $wpdb, $EM_Event, $EM_Notices, $EM_SAVING_EVENT, $EM_EVENT_SAVE_POST; /* @var EM_Notices $EM_Notices */
+		file_put_contents("/var/www/vhosts/kids-team.internal/log/sp.log", print_r("landing...", true), FILE_APPEND);
+		
 		if( !empty($EM_SAVING_EVENT) ) return; //never proceed with this if using EM_Event::save();
 		if ( isset($_GET['preview_id']) && isset($_GET['preview_nonce']) && wp_verify_nonce( $_GET['preview_nonce'], 'post_preview_' . $post_id ) ) return; //don't proceed with saving when previewing, may cause issues
 		$post_type = get_post_type($post_id);
@@ -114,82 +115,47 @@ class EM_Event_Post_Admin{
 			$EM_Event = new EM_Event($post_id, 'post_id'); 
 			$EM_Event->post_type = $post_type;
 			//check whether this is a quick save or not, then save accordingly
-			if( !empty($_REQUEST['_emnonce']) && wp_verify_nonce($_REQUEST['_emnonce'], 'edit_event') ){ 
-				//this is only run if we know form data was submitted, hence the nonce
-				$get_meta = $EM_Event->get_post_meta();
-				$validate_meta = $EM_Event->validate_meta(); //Handle Errors by making post draft
-				do_action('em_event_save_pre', $EM_Event); //technically, the event is saved... but the meta isn't. wp doesn't give an pre-intervention action for this (or does it?)
-				//if we execute a location save here, we will screw up the current save_post $wp_filter pointer executed in do_action()
-        	    //therefore, we save the current pointer position (priority) and set it back after saving the location further down
-        	    global $wp_filter, $wp_current_filter;
-        	    $wp_filter_priority = key($wp_filter['save_post']);
-        	    $tag = end($wp_current_filter);
-	           //save the event meta, whether validated or not and which includes saving a location
-				$save_meta = $EM_Event->save_meta();
-        		//reset save_post pointer in $wp_filter to its original position
-        		reset( $wp_filter[$tag] );
-        		do{
-        		   if( key($wp_filter[$tag]) == $wp_filter_priority ) break; 
-        		}while ( next($wp_filter[$tag]) !== false );
-        		//save categories in case of default category
-        		$EM_Event->get_categories()->save();
-				//continue whether all went well or not
-				if( !$get_meta || !$validate_meta || !$save_meta ){
-					//failed somewhere, set to draft, don't publish
-					$EM_Event->set_status(null, true);
-					if( $EM_Event->is_recurring() ){
-						$EM_Notices->add_error( '<strong>'.__('Your event details are incorrect and recurrences cannot be created, please correct these errors first:','events-manager').'</strong>', true); //Always seems to redirect, so we make it static
-					}else{
-						$EM_Notices->add_error( '<strong>'.sprintf(__('Your %s details are incorrect and cannot be published, please correct these errors first:','events-manager'),__('event','events-manager')).'</strong>', true); //Always seems to redirect, so we make it static
-					}
-					$EM_Notices->add_error($EM_Event->get_errors(), true); //Always seems to redirect, so we make it static
-					apply_filters('em_event_save', false, $EM_Event);
+			
+			//this is only run if we know form data was submitted, hence the nonce
+			$get_meta = $EM_Event->get_post_meta();
+			$validate_meta = $EM_Event->validate_meta(); //Handle Errors by making post draft
+			do_action('em_event_save_pre', $EM_Event); //technically, the event is saved... but the meta isn't. wp doesn't give an pre-intervention action for this (or does it?)
+			//if we execute a location save here, we will screw up the current save_post $wp_filter pointer executed in do_action()
+			//therefore, we save the current pointer position (priority) and set it back after saving the location further down
+			global $wp_filter, $wp_current_filter;
+			$wp_filter_priority = key($wp_filter['save_post']);
+			$tag = end($wp_current_filter);
+			//save the event meta, whether validated or not and which includes saving a location
+			$save_meta = $EM_Event->save_meta();
+			//reset save_post pointer in $wp_filter to its original position
+			reset( $wp_filter[$tag] );
+			do{
+				if( key($wp_filter[$tag]) == $wp_filter_priority ) break; 
+			}while ( next($wp_filter[$tag]) !== false );
+			//save categories in case of default category
+			$EM_Event->get_categories()->save();
+			//continue whether all went well or not
+			if( !$get_meta || !$validate_meta || !$save_meta ){
+				//failed somewhere, set to draft, don't publish
+				$EM_Event->set_status(null, true);
+				if( $EM_Event->is_recurring() ){
+					$EM_Notices->add_error( '<strong>'.__('Your event details are incorrect and recurrences cannot be created, please correct these errors first:','events-manager').'</strong>', true); //Always seems to redirect, so we make it static
 				}else{
-					//if this is just published, we need to email the user about the publication, or send to pending mode again for review
-					if( (!$EM_Event->is_recurring() && !current_user_can('publish_events')) || ($EM_Event->is_recurring() && !current_user_can('publish_recurring_events')) ){
-						if( $EM_Event->is_published() ){ $EM_Event->set_status(0, true); } //no publishing and editing... security threat
-					}
-					apply_filters('em_event_save', true, $EM_Event);
-					//flag a cache refresh if we get here
-					$EM_Event->refresh_cache = true;
-					add_filter('save_post', 'EM_Event_Post_Admin::refresh_cache', 100000000);
+					$EM_Notices->add_error( '<strong>'.sprintf(__('Your %s details are incorrect and cannot be published, please correct these errors first:','events-manager'),__('event','events-manager')).'</strong>', true); //Always seems to redirect, so we make it static
 				}
+				$EM_Notices->add_error($EM_Event->get_errors(), true); //Always seems to redirect, so we make it static
+				apply_filters('em_event_save', false, $EM_Event);
 			}else{
-				//we're updating only the quick-edit style information, which is only post info saved into the index
-				if( $EM_Event->validate() ){
-					do_action('em_event_save_pre', $EM_Event); //technically, the event is saved... but the meta isn't. wp doesn't give an pre-intervention action for this (or does it?)
-					//first things first, we must make sure we have an index, if not, reset it to a new one:
-					$event_truly_exists = $wpdb->get_var('SELECT event_id FROM '.EM_EVENTS_TABLE." WHERE event_id={$EM_Event->event_id}") == $EM_Event->event_id;
-					if(empty($EM_Event->event_id) || !$event_truly_exists){ $EM_Event->save_meta(); }
-					//we can save the status now
-					$EM_Event->get_previous_status(); //before we save anything
-					$event_status = $EM_Event->get_status(true);
-					//if this is just published, we need to email the user about the publication, or send to pending mode again for review
-					if( (!$EM_Event->is_recurring() && !current_user_can('publish_events')) || ($EM_Event->is_recurring() && !current_user_can('publish_recurring_events')) ){
-						if( $EM_Event->is_published() ){ $EM_Event->set_status(0, true); } //no publishing and editing... security threat
-					}
-					//now update the db
-					$where_array = array($EM_Event->event_name, $EM_Event->event_owner, $EM_Event->event_slug, $EM_Event->event_private, $EM_Event->event_id);
-					$sql = $wpdb->prepare("UPDATE ".EM_EVENTS_TABLE." SET event_name=%s, event_owner=%d, event_slug=%s, event_status={$event_status}, event_private=%d WHERE event_id=%d", $where_array);
-					$wpdb->query($sql);
-					//If we're saving via quick-edit in MS Global mode, then the categories need to be pushed to the ms global index
-					
-					//deal with recurrences
-					if( $EM_Event->is_recurring() && ($EM_Event->is_published() || (defined('EM_FORCE_RECURRENCES_SAVE') && EM_FORCE_RECURRENCES_SAVE)) ){
-						//recurrences are (re)saved only if event is published
-						$EM_Event->save_events();
-					}
-					apply_filters('em_event_save', true, $EM_Event);
-					//flag a cache refresh if we get here
-					$EM_Event->refresh_cache = true;
-					add_filter('save_post', 'EM_Event_Post_Admin::refresh_cache', 100000000);
-				}else{
-					do_action('em_event_save_pre', $EM_Event); //technically, the event is saved... but the meta isn't. wp doesn't give an pre-intervention action for this (or does it?)
-					//Event doesn't validate, so set status to null
-					$EM_Event->set_status(null, true);
-					apply_filters('em_event_save', false, $EM_Event);
+				//if this is just published, we need to email the user about the publication, or send to pending mode again for review
+				if( (!$EM_Event->is_recurring() && !current_user_can('publish_events')) || ($EM_Event->is_recurring() && !current_user_can('publish_recurring_events')) ){
+					if( $EM_Event->is_published() ){ $EM_Event->set_status(0, true); } //no publishing and editing... security threat
 				}
+				apply_filters('em_event_save', true, $EM_Event);
+				//flag a cache refresh if we get here
+				$EM_Event->refresh_cache = true;
+				add_filter('save_post', 'EM_Event_Post_Admin::refresh_cache', 100000000);
 			}
+			
 			self::maybe_publish_location($EM_Event);
 			//Set server timezone back, even though it should be UTC anyway
 			date_default_timezone_set($server_timezone);
@@ -265,9 +231,7 @@ class EM_Event_Post_Admin{
 		if( empty($EM_Event) && !empty($post) ){
 			$EM_Event = EM_Event::find($post->ID, 'post_id');
 		}
-		if( !empty($EM_Event->event_owner_anonymous) ){
-			add_meta_box('em-event-anonymous', __('Anonymous Submitter Info','events-manager'), array('EM_Event_Post_Admin','meta_box_anonymous'),EM_POST_TYPE_EVENT, 'side','high');
-		}
+		
 		add_meta_box('em-event-when', __('When','events-manager'), array('EM_Event_Post_Admin','meta_box_date'),EM_POST_TYPE_EVENT, 'side','high');
 		add_meta_box('em-event-people', __('People','events-manager'), array('EM_Event_Post_Admin','meta_box_people'),EM_POST_TYPE_EVENT, 'side','high');
 		if(get_option('dbem_locations_enabled', true)){
@@ -298,28 +262,20 @@ class EM_Event_Post_Admin{
 		echo "<pre>"; print_r($EM_Event); echo "</pre>";		
 	}
 	
-	public static function meta_box_anonymous(){
-		global $EM_Event;
-		?>
-		<div class='updated'><p><?php echo sprintf(__('This %s was submitted by a guest. You will find their details in the <em>Anonymous Submitter Info</em> box','events-manager'), __('event', 'events-manager')); ?></p></div>
-		<p><strong><?php _e('Name','events-manager'); ?> :</strong> <?php echo $EM_Event->event_owner_name; ?></p> 
-		<p><strong><?php _e('Email','events-manager'); ?> :</strong> <?php echo $EM_Event->event_owner_email; ?></p> 
-		<?php
-	}
 	
 	public static function meta_box_date(){
 		//create meta box check of date nonce
 		?><input type="hidden" name="_emnonce" value="<?php echo wp_create_nonce('edit_event'); ?>" /><?php
-		em_locate_template('forms/event/when.php', true);
+		
 	}
 
 	public static function meta_box_people(){
 		//create meta box check of date nonce
-		em_locate_template('forms/event/people.php', true);
+		
 	}
 	
 	public static function meta_box_bookings_stats(){
-		em_locate_template('forms/event/booking-stats.php',true);
+		
 	}
 
 	public static function meta_box_bookings(){
@@ -332,7 +288,7 @@ class EM_Event_Post_Admin{
 	}
 	
 	public static function meta_box_location(){
-		em_locate_template('forms/event/location.php',true);
+		//em_locate_template('forms/event/location.php',true);
 	}
 	
 	public static function meta_box_ms_categories(){
@@ -492,9 +448,7 @@ class EM_Event_Recurring_Post_Admin{
 		if( empty($EM_Event) && !empty($post) ){
 			$EM_Event = EM_Event::find($post->ID, 'post_id');
 		}
-		if( !empty($EM_Event->event_owner_anonymous) ){
-			add_meta_box('em-event-anonymous', __('Anonymous Submitter Info','events-manager'), array('EM_Event_Post_Admin','meta_box_anonymous'),'event-recurring', 'side','high');
-		}
+		
 		add_meta_box('em-event-recurring', __('Recurrences','events-manager'), array('EM_Event_Recurring_Post_Admin','meta_box_recurrence'),'event-recurring', 'normal','high');
 		//add_meta_box('em-event-meta', 'Event Meta (debugging only)', array('EM_Event_Post_Admin','meta_box_metadump'),'event-recurring', 'normal','high');
 		if(get_option('dbem_locations_enabled', true)){

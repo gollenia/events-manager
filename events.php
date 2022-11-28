@@ -326,32 +326,6 @@ function em_locate_template( $template_name, $load=false, $the_args = array() ) 
 	return $located;
 }
 
-/*
- * Quick class to dynamically catch wp_options that are EM formats and need replacing with template files.
- * Since the options filter doesn't have a catchall filter, we send all filters to the __call function and figure out the option that way.
- 
-class EM_Formats {
-	function __construct(){ add_action( 'template_redirect', array(&$this, 'add_filters')); }
-	function add_filters(){
-		//you can hook into this filter and activate the format options you want to override by supplying the wp option names in an array, just like in the database.
-		$formats = apply_filters('em_formats_filter', array());
-		foreach( $formats as $format_name ){
-			add_filter('pre_option_'.$format_name, array(&$this, $format_name), 1,1);
-		}
-	}
-	function __call( $name, $value ){
-		$format = em_locate_template( 'formats/'.substr($name, 5).'.php' );
-		if( $format ){
-			ob_start();
-			require_once($format);
-			$value[0] = ob_get_clean();
-		}
-		return $value[0];
-	}
-}
-global $EM_Formats;
-$EM_Formats = new EM_Formats();
-**/
 
 /**
  * Monitors event saves and changes the rss pubdate and a last modified option so it's current
@@ -403,13 +377,13 @@ register_uninstall_hook(__FILE__, 'em_uninstall');
  * @param array $shcehules
  * @return array
  */
-function emp_cron_schedules($schedules){
+function em_cron_schedules($schedules){
 	$schedules['em_minute'] = array(
 		'interval' => 60,
 		'display' => 'Every Minute'
 	);
 	return $schedules;
 }
-add_filter('cron_schedules','emp_cron_schedules',10,1);
+add_filter('cron_schedules','em_cron_schedules',10,1);
 
-require_once('blocks/Block.php');
+require_once('classes/Blocks/Block.php');

@@ -262,7 +262,7 @@ class EM_Custom_Emails{
 	 * @return array
 	 */
 	public static function em_data_privacy_export_events_item($export_item, $EM_Event ){
-		//if( empty($EM_Event->event_owner_anonymous) ){ //we may want to limit this to registered users only since anon users can't do this
+		
 		$admin_emails = self::get_event_admin_emails($EM_Event);
 		$event_emails = self::get_event_emails($EM_Event);
 		if( !empty($admin_emails) ){

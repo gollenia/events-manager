@@ -41,8 +41,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Contexis\\Events\\Blocks\\": ["blocks"],
-			"Contexis\\Events\\Addons\\": ["add-ons/*"],
+            "Contexis\\Events\\Blocks\\": "classes/Blocks/",
 			"Contexis\\Events\\Intl\\": "classes/Intl/",
 			"Contexis\\Events\\Admin\\": "classes/Admin/"
         }

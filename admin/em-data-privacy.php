@@ -374,7 +374,7 @@ class EM_Data_Privacy {
 				$export_item['data'][] = array('name' => __('When','events-manager'), 'value' => $EM_Event->output('#_EVENTDATES @ #_EVENTTIMES') );
 			}
 			$export_item['data'][] = array('name' => __('Timezone','events-manager'), 'value' => $EM_Event->start()->getTimezone()->getName() );
-			if( !empty($EM_Event->event_owner_name) ) $export_item['data'][] = array('name' => __('Name','events-manager'), 'value' => $EM_Event->event_owner_name );
+			
 			if( $EM_Event->get_location()->location_id ){
 				$EM_Location = $EM_Event->get_location();
 				$export_item['data'][] = array('name' => __('Location','events-manager'), 'value' => $EM_Location->location_name . ', '. $EM_Location->get_full_address() .', '. $EM_Location->location_country);
@@ -487,7 +487,7 @@ class EM_Data_Privacy {
 		$limit = apply_filters('em_data_privacy_export_limit', 100);
 		$offset = ($page -1) * $limit;
 		$user = get_user_by('email', $email_address); //is user or no-user?
-		$anon_email_key = $post_type == EM_POST_TYPE_LOCATION ? '_owner_email':'_event_owner_email';
+		$anon_email_key = '_owner_email';
 		//get event IDs submitted by user or "anonymously" by email
 		$events = array();
 		if( $user !== false ){

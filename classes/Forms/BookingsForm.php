@@ -54,14 +54,18 @@ class EM_Booking_Form {
 	 */
 	public static function get_form( $EM_Event = false, $custom_form_id = false ){
 	    //make sure we don't need to get another form rather than the one already stored in this object
-	    $reload = (is_numeric($EM_Event) && $EM_Event != self::$event_id) || ( !empty($EM_Event->event_id) && $EM_Event->event_id != self::$event_id ) || ( empty($EM_Event) && $custom_form_id && $custom_form_id != self::$form_id );
+	    
+		$reload = (is_numeric($EM_Event) && $EM_Event != self::$event_id) || 
+			( !empty($EM_Event->event_id) && $EM_Event->event_id != self::$event_id ) ||
+			( empty($EM_Event) && $custom_form_id && $custom_form_id != self::$form_id );
 	    //get the right form
 
 		if( empty(self::$form) || $reload ){
 
 			if(is_numeric($EM_Event)){ $EM_Event = EM_Event::find($EM_Event); }
 			
-			self::$form_id = get_post_meta($EM_Event->post_id, '_booking_form', true);
+
+			self::$form_id = $EM_Event ? get_post_meta($EM_Event->post_id, '_booking_form', true) : 0;
 
 			$form_data = self::get_form_data($EM_Event);
 

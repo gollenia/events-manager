@@ -105,7 +105,7 @@ class Assets {
 	
 	public function admin_enqueue( $hook_suffix = false ){
 		wp_enqueue_script('events-manager', plugins_url('../includes/events-manager.js',__FILE__), array('jquery', 'jquery-ui-core','jquery-ui-widget','jquery-ui-position','jquery-ui-sortable','jquery-ui-datepicker','jquery-ui-autocomplete','jquery-ui-dialog','wp-color-picker'), \Events::VERSION);		
-		wp_enqueue_style('events-manager-admin', plugins_url('../includes/admin-settings.css',__FILE__), array(), \Events::VERSION);
+		wp_enqueue_style('events-manager-admin', plugins_url('../includes/admin.css',__FILE__), array(), \Events::VERSION);
 		//wp_enqueue_style('events-manager-pro-admin', plugins_url('includes/events-manager-pro.css',__FILE__), array(), \Events::VERSION);
 		$this->localize_admin_script();
 	}

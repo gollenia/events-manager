@@ -102,6 +102,98 @@ class EventPost {
 			]
 		]);
 
+		register_post_meta( 'event', '_event_start_date', [
+			'type' => 'string',
+			'single' => true,
+			'default' => "",
+			'auth_callback' => function() {
+				return current_user_can( 'edit_posts' );
+			},
+			'show_in_rest' => [
+				'schema' => [
+					'default' => "",
+					'style' => "string"
+				]
+			]
+		]);
+
+		register_post_meta( 'event', '_event_end_date', [
+			'type' => 'string',
+			'single' => true,
+			'default' => "",
+			'auth_callback' => function() {
+				return current_user_can( 'edit_posts' );
+			},
+			'show_in_rest' => [
+				'schema' => [
+					'default' => "",
+					'style' => "string"
+				]
+			]
+		]);
+
+		register_post_meta( 'event', '_event_start_time', [
+			'type' => 'string',
+			'single' => true,
+			'default' => "",
+			'auth_callback' => function() {
+				return current_user_can( 'edit_posts' );
+			},
+			'show_in_rest' => [
+				'schema' => [
+					'default' => "",
+					'style' => "string"
+				]
+			]
+		]);
+
+		register_post_meta( 'event', '_event_end_time', [
+			'type' => 'string',
+			'single' => true,
+			'default' => "",
+			'auth_callback' => function() {
+				return current_user_can( 'edit_posts' );
+			},
+			'show_in_rest' => [
+				'schema' => [
+					'default' => "",
+					'style' => "string"
+				]
+			]
+		]);
+
+		register_post_meta( 'event', '_event_all_day', [
+			'type' => 'integer',
+			'single' => true,
+			'default' => 0,
+			'sanitize_callback' => 'absint',
+			'auth_callback' => function() {
+				return current_user_can( 'edit_posts' );
+			},
+			'show_in_rest' => [
+				'schema' => [
+					'default' => 0,
+					'style' => "integer"
+				]
+			]
+		]);
+
+		register_post_meta( 'event', '_location_id', [
+			'type' => 'integer',
+			'single' => true,
+			'default' => 0,
+			'sanitize_callback' => 'absint',
+			'auth_callback' => function() {
+				return current_user_can( 'edit_posts' );
+			},
+			'show_in_rest' => [
+				'schema' => [
+					'default' => 0,
+					'style' => "integer"
+				]
+			]
+		]);
+
 	
 
 	}

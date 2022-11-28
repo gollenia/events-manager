@@ -503,18 +503,11 @@ class EM_Gateways {
 				    'item_id' => 'booking-transaction-'.$transaction->transaction_id, //replace ID with txn ID
 				    'data' => array() // replace this with assoc array of name/value key arrays
 			    );
-			    if( get_class($EM_Booking) == 'EM_Multiple_Booking' ){
-			        $events = array();
-				    foreach( $EM_MB_Booking->get_bookings() as $EM_Booking ){ /* @var EM_Booking $EM_Booking */
-				        //handle potentially deleted events in a MB booking
-					    $events[] = !empty($EM_Booking->get_event()->post_id) ? $EM_Booking->get_event()->output('#_EVENTLINK - #_EVENTDATES @ #_EVENTTIMES') : __('Deleted Event', 'em-pro');
-				    }
-				    $transactions_item['data'][] = array('name' => __('Events','em-pro'), 'value' => implode('<br>', $events) );
-                }else{
-				    $EM_Event = $EM_Booking->get_event(); //handle potentially deleted events in a MB booking
-				    $event_string = !empty($EM_Event->post_id) ? $EM_Event->output('#_EVENTLINK - #_EVENTDATES @ #_EVENTTIMES') : __('Deleted Event', 'em-pro');
-				    $transactions_item['data'][] = array('name' => __('Event','em-pro'), 'value' => $event_string );
-                }
+			    
+				$EM_Event = $EM_Booking->get_event(); //handle potentially deleted events in a MB booking
+				$event_string = !empty($EM_Event->post_id) ? $EM_Event->output('#_EVENTLINK - #_EVENTDATES @ #_EVENTTIMES') : __('Deleted Event', 'em-pro');
+				$transactions_item['data'][] = array('name' => __('Event','em-pro'), 'value' => $event_string );
+                
 			    $transactions_item['data'][] = array('name' => __('Status','em-pro'), 'value' => $transaction->transaction_status );
 			    $transactions_item['data'][] = array('name' => __('Gateway','em-pro'), 'value' => $transaction->transaction_gateway );
 			    $transactions_item['data'][] = array('name' => __('Date','em-pro'), 'value' => $transaction->transaction_total_amount .' '.$transaction->transaction_currency);

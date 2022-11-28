@@ -74,6 +74,7 @@ function em_init_actions() {
 			//Set server timezone to UTC in case other plugins are doing something naughty
 			$server_timezone = date_default_timezone_get();
 			date_default_timezone_set('UTC');
+			
 			//Grab and validate submitted data
 			if ( $EM_Event->get_post() && $EM_Event->save() ) { //EM_Event gets the event if submitted via POST and validates it (safer than to depend on JS)
 				$events_result = true;

@@ -7,10 +7,7 @@ class EM_Location_Post {
 			
 			add_filter('rest_api_init', ['EM_Location_Post','register_rest_fields']);
 			//override excerpts?
-		
-		
-		
-			
+
 		}
 		add_action('parse_query', array('EM_Location_Post','parse_query'));
 	}	
@@ -46,9 +43,6 @@ class EM_Location_Post {
 		$EM_Location = em_get_location($object["id"], 'post_id');
 		return $EM_Location->location_id;
 	}
-	
-
-	
 	
 	public static function parse_query(){
 	    global $wp_query;

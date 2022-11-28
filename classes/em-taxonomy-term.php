@@ -225,18 +225,6 @@ class EM_Taxonomy_Term extends EM_Object {
 				case '#_'. $ph .'SLUG':
 					$replace = $this->slug;
 					break;
-				case '#_'. $ph .'EVENTSPAST': //deprecated, erroneous documentation, left for compatability
-				case '#_'. $ph .'EVENTSNEXT': //deprecated, erroneous documentation, left for compatability
-				case '#_'. $ph .'EVENTSALL': //deprecated, erroneous documentation, left for compatability
-				case '#_'. $ph .'PASTEVENTS':
-				case '#_'. $ph .'NEXTEVENTS':
-				case '#_'. $ph .'NEXTEVENT':
-					$events = EM_Events::get( array($this->option_name=>$this->term_id, 'scope'=>'future', 'limit'=>1, 'orderby'=>'event_start_date,event_start_time') );
-					$replace = get_option('dbem_'. $this->option_name .'_no_event_message');
-					foreach($events as $EM_Event){
-						$replace = $EM_Event->output(get_option('dbem_'. $this->option_name .'_event_single_format'));
-					}
-					break;
 				default:
 					$replace = $full_result;
 					break;
