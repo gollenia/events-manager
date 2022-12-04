@@ -532,7 +532,7 @@ class EM_Event extends EM_Object{
 	
 	function load_postdata($event_post, $search_by = false){
 		//load event post object if it's an actual object and also a post type of our event CPT names
-		file_put_contents("/var/www/vhosts/kids-team.internal/log/meta.log", print_r(date('H:i', time()) . " Event->load_post_data() - post: " . $this->post_id . ' ' . get_post_meta($this->post_id, '_event_audience', true) . "\n", true), FILE_APPEND);
+		
 		if( is_object($event_post) && ($event_post->post_type == 'event-recurring' || $event_post->post_type == EM_POST_TYPE_EVENT) ){
 			//load post data - regardless
 			$this->post_id = absint($event_post->ID);
@@ -610,7 +610,7 @@ class EM_Event extends EM_Object{
 		$event_meta = get_post_meta($this->post_id);
 		
 		if( !is_array($event_meta) ) $event_meta = array();
-		file_put_contents("/var/www/vhosts/kids-team.internal/log/metaarray.log", print_r($event_meta, true), FILE_APPEND);
+		
 		return apply_filters('em_event_get_event_meta', $event_meta);
 	}
 	
