@@ -42,7 +42,7 @@
 		<?php endif; ?>
 		<?php
 		if ( $locations_count >= $limit ) {
-			$locations_nav = em_admin_paginate( $locations_count, $limit, $page );
+			$locations_nav = Contexis\Events\Admin\Pagination::paginate( $locations_count, $limit, $page );
 			echo $locations_nav;
 		}
 		?>
