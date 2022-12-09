@@ -80,7 +80,7 @@ function em_bookings_pending_table($event_id = false){
 					-->
 					<?php 
 					if ( $bookings_count >= $limit ) {
-						$bookings_nav = em_admin_paginate( $bookings_count, $limit, $page, array('em_ajax'=>0, 'em_obj'=>'em_bookings_pending_table'));
+						$bookings_nav = Contexis\Events\Admin\Pagination::paginate( $bookings_count, $limit, $page, array('em_ajax'=>0, 'em_obj'=>'em_bookings_pending_table'));
 						echo $bookings_nav;
 					}
 					?>

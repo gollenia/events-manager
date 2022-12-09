@@ -15,7 +15,7 @@ class EM_Speakers {
 
 	public function register_post_type(){
 		$args = apply_filters('em_cpt_speaker', [	
-            'public' => true,
+            'public' => false,
             'hierarchical' => false,
             'show_in_rest' => true,
             'show_in_admin_bar' => true,
@@ -23,9 +23,9 @@ class EM_Speakers {
             'show_in_menu' => 'edit.php?post_type=event',
             'show_in_nav_menus'=>true,
             'can_export' => true,
-            'publicly_queryable' => true,
+            'publicly_queryable' => false,
             'rewrite' => ['slug' => 'event-speaker', 'with_front'=>false],
-            'query_var' => true,
+            'query_var' => false,
             'has_archive' => false,
             'supports' => ['title','thumbnail'],
             'label' => __('Speakers','events-manager'),

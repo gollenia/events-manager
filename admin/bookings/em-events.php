@@ -74,7 +74,7 @@ function em_bookings_events_table() {
 				-->
 				<?php 
 				if ( $events_count >= $limit ) {
-					$events_nav = em_admin_paginate( $events_count, $limit, $page, array('em_ajax'=>0, 'em_obj'=>'em_bookings_events_table'));
+					$events_nav = Contexis\Events\Admin\Pagination::paginate( $events_count, $limit, $page, array('em_ajax'=>0, 'em_obj'=>'em_bookings_events_table'));
 					echo $events_nav;
 				}
 				?>

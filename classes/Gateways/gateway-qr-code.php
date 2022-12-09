@@ -32,8 +32,7 @@ class EM_QR_Code_Generator {
     public function generate_qr_code() {
 		if(empty($_REQUEST['booking_id'])) return;
 		$booking = EM_Booking::find(absint($_REQUEST['booking_id']));
-		$logo_id = get_option("em_offline_beneficiary", true);
-		$logo = wp_get_attachment_image( $logo_id );
+		
 		$event = EM_Event::find($booking->event_id); 
 		$paymentData = Data::create()
 			->setName(get_option("em_offline_beneficiary", true))

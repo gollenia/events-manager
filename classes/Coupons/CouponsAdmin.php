@@ -3,7 +3,7 @@ use Contexis\Events\Options;
 
 class EM_Coupons_Admin {
     static function init(){
-		include('coupon-admin.php');
+		include('CouponAdmin.php');
         //coupon admin add/edit page
         add_action('em_create_events_submenu', 'EM_Coupons_Admin::admin_menu',10,1);
     }
@@ -203,7 +203,7 @@ class EM_Coupons_Admin {
 					</div>
 					<?php
 					if ( $coupons_count >= $limit ) {
-						$coupons_nav = em_admin_paginate( $coupons_count, $limit, $page );
+						$coupons_nav = Contexis\Events\Admin\Pagination::paginate( $coupons_count, $limit, $page );
 						echo $coupons_nav;
 					}
 					?>
@@ -322,7 +322,7 @@ class EM_Coupons_Admin {
 			<?php if ( $coupons_count >= $limit ) : ?>
 			<div class='tablenav'>
 				<?php 
-				$bookings_nav = em_admin_paginate($coupons_count, $limit, $page, array());
+				$bookings_nav = Contexis\Events\Admin\Pagination::paginate($coupons_count, $limit, $page, array());
 				echo $bookings_nav;
 				?>
 				<div class="clear"></div>

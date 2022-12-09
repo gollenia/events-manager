@@ -182,7 +182,7 @@ class EM_Gateways_Transactions{
 				</div>
 				<?php 
 				if ( $this->total_transactions >= $this->limit ) {
-					echo em_admin_paginate( $this->total_transactions, $this->limit, $this->page, array(),'#%#%','#');
+					echo Contexis\Events\Admin\Pagination::paginate( $this->total_transactions, $this->limit, $this->page, array(),'#%#%','#');
 				}
 				?>
 			</div>

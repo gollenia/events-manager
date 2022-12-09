@@ -222,10 +222,7 @@ class EM_Gateway_Offline extends EM_Gateway {
 		
 		do_action('em_before_manual_booking_form');
 		//Data privacy consent - not added in admin by default, so we add it here
-		if( get_option('dbem_data_privacy_consent_bookings') > 0 ){
-			add_filter('pre_option_dbem_data_privacy_consent_remember', '__return_zero');
-			add_action('em_booking_form_footer', 'em_data_privacy_consent_checkbox', 9, 0); //supply 0 args since arg is $EM_Event and callback will think it's an event submission form
-		}
+		
 		?>
 		<div class='wrap'>
             <?php if( is_admin() ): ?>

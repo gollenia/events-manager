@@ -1,14 +1,14 @@
 <?php
 //TODO make coupons stackable
 //TODO add logging of coupon useage in seperate log table
-include('coupon.php');
+include('Coupon.php');
 class EM_Coupons extends EM_Object {
     
     static public $can_manage = 'manage_others_bookings';
     
 	public static function init(){
 	    if( is_admin() ){
-	        include('coupons-admin.php');
+	        include('CouponsAdmin.php');
 	    }
 		//add field to booking form and ajax
 		

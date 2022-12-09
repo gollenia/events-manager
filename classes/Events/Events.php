@@ -86,7 +86,7 @@ class EM_Events extends EM_Object {
 		}
 		
 		//check if we need to join a location table for this search, which is necessary if any location-specific are supplied, or if certain arguments such as orderby contain location fields
-		if( !empty($args['groupby']) || (defined('EM_DISABLE_OPTIONAL_JOINS') && EM_DISABLE_OPTIONAL_JOINS) ){
+		if( !empty($args['groupby']) ){
 			$location_specific_args = array('town', 'state', 'country', 'region', 'near', 'geo', 'search');
 			$join_locations = false;
 			foreach( $location_specific_args as $arg ) if( !empty($args[$arg]) ) $join_locations = true;
@@ -223,10 +223,10 @@ class EM_Events extends EM_Object {
 				'excerpt' => $event->post_excerpt,
 				'title' => $event->post_title,
 				'speaker' => $speaker,
-				'tags' => $tags->terms
+				'tags' => $tags->terms,
+				'bookingEnd' => $event->rsvp_end()->getTimestamp() * 1000,
+				'bookingEndFormatted' => \Contexis\Events\Intl\Date::get_date($event->rsvp_end()->getTimestamp())
 			]);
-
-			
 		}
 		return $result;
 	}

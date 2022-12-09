@@ -43,10 +43,8 @@ if( !defined('EM_AJAX') ){
 
 require_once( plugin_dir_path( __FILE__ ) . '/vendor/autoload.php');
 
-require_once('classes/em-twig.php');
-
+require_once('classes/Twig.php');
 $EM_Twig = \EM_Twig::init();
-
 
 add_filter( 'timber/locations', function($paths) use ($EM_Twig) {
 	$paths[] = $EM_Twig->locations;
@@ -59,13 +57,13 @@ add_filter( 'timber/locations', function($paths) use ($EM_Twig) {
 //Base classes
 require_once('polyfill.php');
 require_once('classes/Assets.php');
-require_once('classes/em-options.php');
-require_once('classes/em-object.php');
-require_once('classes/em-datetime.php');
-require_once('classes/em-datetimezone.php');
-require_once('classes/em-taxonomy-term.php');
-require_once('classes/em-taxonomy-terms.php');
-require_once('classes/em-taxonomy-frontend.php');
+require_once('classes/Options.php');
+require_once('classes/Object.php');
+require_once('classes/Datetime.php');
+require_once('classes/DatetimeZone.php');
+require_once('classes/Taxonomies/TaxonomyTerm.php');
+require_once('classes/Taxonomies/TaxonomyTerms.php');
+//require_once('classes/Taxonomies/TaxonomyFrontend.php');
 //set up events as posts
 require_once('classes/Forms/FormPost.php');
 require_once("em-posts.php");
@@ -73,17 +71,17 @@ require_once("em-posts.php");
 require_once("em-actions.php");
 require_once("em-functions.php");
 require_once("em-ical.php");
-require_once("em-data-privacy.php");
+//require_once("em-data-privacy.php");
 require_once("multilingual/em-ml.php");
 
 //Classes
-require_once('classes/em-booking.php');
-require_once('classes/em-bookings.php');
-require_once("classes/em-bookings-table.php") ;
+require_once('classes/Bookings/Booking.php');
+require_once('classes/Bookings/Bookings.php');
+require_once("classes/Bookings/BookingsTable.php") ;
 
-require_once('classes/em-category.php');
-require_once('classes/em-categories.php');
-require_once('classes/em-categories-frontend.php');
+require_once('classes/Categories/Category.php');
+require_once('classes/Categories/Categories.php');
+//require_once('classes/Categories/CategoriesFrontend.php');
 require_once('classes/Events/Event.php');
 require_once('classes/Locations/EventLocations.php');
 require_once('classes/Events/EventPost.php');
@@ -91,20 +89,20 @@ require_once('classes/Events/Events.php');
 require_once('classes/Locations/Location.php');
 require_once('classes/Locations/LocationPost.php');
 require_once('classes/Locations/Locations.php');
-require_once("classes/em-mailer.php") ;
-require_once('classes/em-notices.php');
-require_once('classes/em-people.php');
-require_once('classes/em-person.php');
-require_once('classes/em-permalinks.php');
-require_once('classes/em-speakers.php');
+require_once("classes/Emails/Mailer.php") ;
+require_once('classes/Notices.php');
+require_once('classes/People/People.php');
+require_once('classes/People/Person.php');
+require_once('classes/Permalinks.php');
+require_once('classes/Speaker/Speakers.php');
 
-require_once('classes/em-tag.php');
-require_once('classes/em-tags.php');
-require_once('classes/em-tags-frontend.php');
-require_once('classes/em-ticket-booking.php');
-require_once('classes/em-ticket.php');
-require_once('classes/em-tickets-bookings.php');
-require_once('classes/em-tickets.php');
+require_once('classes/Tags/Tag.php');
+require_once('classes/Tags/Tags.php');
+//require_once('classes/Tags/TagsFrontend.php');
+require_once('classes/Tickets/TicketBooking.php');
+require_once('classes/Tickets/Ticket.php');
+require_once('classes/Tickets/TicketsBookings.php');
+require_once('classes/Tickets/Tickets.php');
 //Admin Files
 if( is_admin() ){
 	
@@ -122,9 +120,9 @@ if( is_admin() ){
 	
 	require_once('classes/Locations/LocationPostAdmin.php');
 	require_once('classes/Locations/LocationPostsAdmin.php');
-	require_once('classes/em-taxonomy-admin.php');
-	require_once('classes/em-categories-admin.php');
-	require_once('classes/em-tags-admin.php');
+	require_once('classes/Taxonomies/TaxonomyAdmin.php');
+	require_once('classes/Categories/CategoriesAdmin.php');
+	require_once('classes/Tags/TagsAdmin.php');
 	//bookings folder
 	require_once('admin/bookings/em-cancelled.php');
 	require_once('admin/bookings/em-confirmed.php');
@@ -134,7 +132,7 @@ if( is_admin() ){
 	require_once('admin/bookings/em-person.php');
 }
 
-require_once('classes/speaker.php');
+require_once('classes/Speaker/Speaker.php');
 require_once('classes/Export/Export.php');
 
 require_once('classes/Forms/Forms.php');

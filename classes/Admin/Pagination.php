@@ -17,7 +17,7 @@ class Pagination {
 	 * @uses paginate_links()
 	 * @uses add_query_arg()
 	 */
-	function paginate($total, $limit, $page=1, $vars=false, $base = false, $format = ''){
+	public static function paginate($total, $limit, $page=1, $vars=false, $base = false, $format = ''){
 		$return = '<div class="tablenav-pages em-tablenav-pagination">';
 		$base = !empty($base) ? $base:esc_url_raw(add_query_arg( 'pno', '%#%' ));
 		$events_nav = paginate_links( array(

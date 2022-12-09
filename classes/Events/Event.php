@@ -30,7 +30,7 @@ use \Contexis\Events\EventPost;
 //TODO Can add more recurring functionality such as "also update all future recurring events" or "edit all events" like google calendar does.
 //TODO Integrate recurrences into events table
 //FIXME If you create a super long recurrence timespan, there could be thousands of events... need an upper limit here.
-class EM_Event extends EM_Object{
+class EM_Event extends EM_Object{ 
 
 	const POST_TYPE = "event";
 	/* Field Names */
@@ -303,28 +303,25 @@ class EM_Event extends EM_Object{
 	 * @param mixed $id
 	 * @param mixed $search_by default is post_id, otherwise it can be by event_id as well. In multisite global mode, a blog id can be supplied to load events from another blog.
 	 */
-	function __construct($id = false, $search_by = 'event_id') {
+	function __construct(bool | int | object $id = false, $search_by = 'event_id') {
 		global $wpdb;
-		if( is_array($id) ){
-			//deal with the old array style, but we can't supply arrays anymore
-			$id = (!empty($id['event_id'])) 
-			? absint($id['event_id']) 
-			: absint($id['post_id']);
-			$search_by = (!empty($id['event_id'])) ? 'event_id':'post_id';
-		}
+		if( is_array($id) ) new \WP_Error('events', "Events can't be arrays anymore");
+
 		$is_post = !empty($id->ID) && ($id->post_type == EventPost::TYPE || $id->post_type == 'event-recurring');
+
 		if( $is_post ){
 			$id->ID = absint($id->ID);
-		}else{
+		} else {
 			$id = absint($id);
 			if( $id == 0 ) $id = false;
 		}
+
 		if( is_numeric($id) || $is_post ){ //only load info if $id is a number
 			$event_post = null;
 			if($search_by == 'event_id' && !$is_post ){
 				//search by event_id, get post_id and blog_id (if in ms mode) and load the post
 				$results = $wpdb->get_row($wpdb->prepare("SELECT post_id, blog_id FROM ".EM_EVENTS_TABLE." WHERE event_id=%d",$id), ARRAY_A);
-				if( !empty($results['post_id']) ){ $this->post_id = $results['post_id']; $this->event_id = $id; }
+				if( !empty($results['post_id']) ) { $this->post_id = $results['post_id']; $this->event_id = $id; }
 				if( $results['blog_id']=='' ){
 				    if( $results['blog_id']=='' )  $results['blog_id'] = get_current_site()->blog_id;
 					$event_post = get_blog_post($results['blog_id'], $results['post_id']);
@@ -446,7 +443,7 @@ class EM_Event extends EM_Object{
 	 * @param mixed $search_by default is post_id, otherwise it can be by event_id as well. In multisite global mode, a blog id can be supplied to load events from another blog.
 	 * @return EM_Event
 	 */
-	public static function find($id = false, $search_by = 'event_id') {
+	public static function find(object | int | bool $id = false, $search_by = 'event_id') {
 		global $EM_Event;
 		//check if it's not already global so we don't instantiate again
 		if( is_object($EM_Event) && get_class($EM_Event) == 'EM_Event' ){

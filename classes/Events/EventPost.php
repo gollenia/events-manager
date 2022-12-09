@@ -39,6 +39,22 @@ class EventPost {
 
 	public function register_meta() {
 		
+		register_post_meta( 'event', '_event_rsvp_date', [
+			'type' => 'string',
+			'single'       => true,
+			'default' => '',
+			'sanitize_callback' => '',
+			'auth_callback' => function() {
+				return current_user_can( 'edit_posts' );
+			},
+			'show_in_rest' => [
+				'schema' => [
+					'default' => '',
+					'style' => "string"
+				]
+			]
+		]);
+
 		register_post_meta( 'event', '_booking_form', [
 			'type' => 'integer',
 			'single'       => true,

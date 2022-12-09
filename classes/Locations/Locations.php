@@ -291,8 +291,8 @@ $limit $offset
 	 * @return boolean
 	 */
 	public static function check_events_table_join( $args, $event_fields ){
-		//for we only will check optional joining by default for groupby searches, and for the original searches if EM_DISABLE_OPTIONAL_JOINS is set to true in wp-config.php
-		if( !empty($args['groupby']) || (defined('EM_DISABLE_OPTIONAL_JOINS') && EM_DISABLE_OPTIONAL_JOINS) ){
+		//for we only will check optional joining by default for groupby searches
+		if( !empty($args['groupby']) ){
 			$event_specific_args = array('eventful', 'eventless', 'tag', 'category', 'event', 'recurrence', 'month', 'year', 'rsvp', 'bookings');
 			$event_specific_args = apply_filters('em_locations_event_specific_args', $event_specific_args);
 			$join_events_table = $args['scope'] != 'all'; //only value where false is not default so we check that first
