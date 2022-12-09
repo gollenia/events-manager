@@ -49,7 +49,7 @@
 			<div class="tablenav">
 				<?php
 				if ( $events_count >= $limit ) {
-					$events_nav = em_admin_paginate( $events_count, $limit, $page);
+					$events_nav = Contexis\Events\Admin\Pagination::paginate( $events_count, $limit, $page);
 					echo $events_nav;
 				}
 				?>
