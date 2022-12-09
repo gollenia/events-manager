@@ -3,9 +3,7 @@
 	"apiVersion": 2,
 	"title": "Form Container",
 	"description": "Show a list with selected details of the event",
-	"category": "layout", 
-	"attributes": {
-		
-
-	}
+	"category": "layout",
+	"attributes": {},
+	"usesContext": [ "postType" ]
 }

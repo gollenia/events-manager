@@ -3,7 +3,7 @@
 	"apiVersion": 2,
 	"title": "Event Booking",
 	"description": "Add a button that allows the user to book tickets for an event.",
-	"category": "widgets", 
+	"category": "widgets",
 	"attributes": {
 		"buttonTitle": {
 			"type": "string",
@@ -21,6 +21,6 @@
 			"type": "string",
 			"default": ""
 		}
-
-	}
+	},
+	"usesContext": [ "postType" ]
 }

@@ -135,6 +135,22 @@
 	</div>
 	{% endif %}
 	<!-- End SPEAKER -->
+	<!-- BOOKING END -->
+	{% if showBookingEnd and event.bookingEndFormatted %}
+	<div class="description__item">
+		<div class="description__image">
+			<i class="description__icon material-icons">event</i>
+		</div>
+		<div class="description__text">
+			<div class="description__title">{{ __("Booking end", "em-pro")}}</div>
+			<time class="description__data">
+				{{ event.bookingEndFormatted }}
+
+			</time>
+		</div>                        
+	</div>
+	{% endif %}
+	<!-- End BOOKING END -->
 	<!-- BOOKED OUT WARNING -->
 	{% if showBookedUp and event.bookings.has_bookings and event.bookings.spaces <= bookedUpWarningThreshold %}
 	<div class="description__item">
