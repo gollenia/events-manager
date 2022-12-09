@@ -2356,3 +2356,6 @@ msgstr "Nur noch ein Platz frei"
 
 msgid "Booked up"
 msgstr "Ausgebucht"
+
+msgid "Booking end"
+msgstr "Anmeldeschluss"

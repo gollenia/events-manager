@@ -2430,3 +2430,6 @@ msgstr "Il ne reste qu'une place"
 
 msgid "Booked up"
 msgstr "Réservé"
+
+msgid "Booking end"
+msgstr "Date limite d'inscription"
