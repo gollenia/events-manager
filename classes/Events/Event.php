@@ -303,7 +303,7 @@ class EM_Event extends EM_Object{
 	 * @param mixed $id
 	 * @param mixed $search_by default is post_id, otherwise it can be by event_id as well. In multisite global mode, a blog id can be supplied to load events from another blog.
 	 */
-	function __construct(bool | int | object $id = false, $search_by = 'event_id') {
+	function __construct($id = false, $search_by = 'event_id') {
 		global $wpdb;
 		if( is_array($id) ) new \WP_Error('events', "Events can't be arrays anymore");
 
@@ -443,7 +443,7 @@ class EM_Event extends EM_Object{
 	 * @param mixed $search_by default is post_id, otherwise it can be by event_id as well. In multisite global mode, a blog id can be supplied to load events from another blog.
 	 * @return EM_Event
 	 */
-	public static function find(object | int | bool $id = false, $search_by = 'event_id') {
+	public static function find($id = false, $search_by = 'event_id') {
 		global $EM_Event;
 		//check if it's not already global so we don't instantiate again
 		if( is_object($EM_Event) && get_class($EM_Event) == 'EM_Event' ){
