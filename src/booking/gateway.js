@@ -1,34 +1,37 @@
 import { __ } from '@wordpress/i18n';
-import React from 'react'
-import PropTypes from "prop-types"
-import eventData from './modules/eventData';
+import React from 'react';
 
 /*
-*   Simple renderer for a given gateway
-*/
-const Gateway = (props) => {
+ *   Simple renderer for a given gateway
+ */
+const Gateway = ( props ) => {
+	const { state, dispatch } = props;
+	const { request, data } = state;
 
-    const {state, dispatch} = props
-	const { request, data } = state
+	const { title, html, name, methods } = data.available_gateways[ request.gateway ];
 
-    const { title, html, name, methods } = data.available_gateways[request.gateway];
-	
-    function createMarkup() {
-        return {__html: html};
-    }
+	function createMarkup() {
+		return { __html: html };
+	}
 
-    return (
-        <div>
-            <h5>{__("Payment", "events")}</h5>
-            <h5>{title}</h5>
-            <p dangerouslySetInnerHTML={createMarkup()}></p>
-            <div className="description">
-                { methods !== undefined && Object.keys(methods).map((method) => {
-                    return (<li className={`description__item ${method}`} key={method}><img src={"/wp-content/plugins/events-mollie/assets/methods/" + method + ".svg"}/> {methods[method]}</li>)
-                }) }
-            </div>
-        </div>
-    )
-}
+	return (
+		<div>
+			<h5>{ __( 'Payment', 'events' ) }</h5>
+			<h5>{ title }</h5>
+			<p dangerouslySetInnerHTML={ createMarkup() }></p>
+			<div className="description">
+				{ methods !== undefined &&
+					Object.keys( methods ).map( ( method ) => {
+						return (
+							<li className={ `description__item ${ method }` } key={ method }>
+								<img src={ '/wp-content/plugins/events-mollie/assets/methods/' + method + '.svg' } />{ ' ' }
+								{ methods[ method ] }
+							</li>
+						);
+					} ) }
+			</div>
+		</div>
+	);
+};
 
-export default Gateway
+export default Gateway;
