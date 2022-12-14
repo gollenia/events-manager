@@ -90,93 +90,29 @@ function em_docs_init($force_init = false){
 							'#_EVENTID' => array( 'desc' => 'Shows the event ID number in the wp_em_events table.' ),
 							'#_EVENTPOSTID' => array( 'desc' => 'Shows the event corresponding Post ID in the wp_posts table.' ),
 							'#_EVENTNAME' => array( 'desc' => 'Displays the name of the event.' ),
-							'#_EVENTNOTES' => array( 'desc' => 'Shows the description of the event.' ),
 							'#_EVENTEXCERPT' => array( 'desc' => 'If an excerpt has been added to the event, it will be used. If you added a <a href="http://en.support.wordpress.com/splitting-content/more-tag/">more tag</a> to your event description, only the content before this tag will show.' ),
 							'#_EVENTEXCERPT{words,...}' => array( 'desc' => 'If an excerpt has not been added to the event you can use this format <code>#_EVENTEXCERPT{10,...}</code>, where 10 is the number of words to show and ... is what is used at the cut-off point.' ),
-							'#_EVENTEXCERPTCUT' => array( 'desc' => 'Same as <code>#_EVENTEXCERPT</code> (and also accepts the <code>{words,...}</code> arguments) but will also cut excerpts as well as post content. Default word limit is 55 and cut-off is <code>[...]</code>' ),
 							'#_EVENTIMAGE' => array( 'desc' => 'Shows the event image, if available.' ),
 							'#_EVENTIMAGE{x,y}' => array( 'desc' => 'Shows the event image thumbnail, x and y are width and height respectively, both being numbers e.g. <code>#_EVENTIMAGE{100,100}</code>. If 0 is used for either width or height, the corresponding dimension will be proportionally sized' ),
 							'#_EVENTCATEGORIES' => array( 'desc' => 'Shows a list of category links this event belongs to.' ),
-							'#_EVENTCATEGORIESIMAGES'  => array( 'desc' => 'Shows a list of category images this event belongs to. Categories without an image will be ignored.' ),
 							'#_EVENTTAGS' => array( 'desc' => 'Shows a list of tag links this event belongs to.' ),
-							'#_EVENTLOCATION' => array( 'desc' => 'Displays information about the event location, which is different from a physical location. <a href="https://wp-events-plugin.com/documentation/location-types/">See our documentation for more information</a>, as each location type may display different information and will have different additional placeholders.' ),
-							'#_RECURRINGDATERANGE' => array( 'desc' => 'Range of dates between the start/end of the recurring event pattern for an event recurrence, blank for non-recurrences.' ),
-							'#_RECURRINGPATTERN' => array( 'desc' => 'Describes the pattern of a recurring event when used on an event recurrence, blank for non-recurrences.' ),
-							'#_RECURRINGID' => array( 'desc' => 'The event ID of the recurring event template when displayed on a recurrence, blank for non-recurrences.' ),
-						)
-					),
-					'Date and Times' => array(
-						'desc' => 'These are shortcut placeholders for pre-formatted dates and times. See the Custom Date/Time Formatting section below for more refined formatting placeholders.',
-						'placeholders' => array(
-							'#_24HSTARTTIME' => array( 'desc' => 'Displays the start time in a 24 hours format (e.g. 16:30).' ),
-							'#_24HENDTIME' => array( 'desc' => 'Displays the end time in a 24 hours format (e.g. 18:30).' ),
-							'#_12HSTARTTIME' => array( 'desc' => 'Displays the start time in a 12 hours format (e.g. 4:30 PM).' ),
-							'#_12HENDTIME' => array( 'desc' => 'Displays the end time in a 12 hours format (e.g. 6:30 PM).' ),
-							'#_EVENTTIMES' => array( 'desc' => 'Displays either a single time, time-span, or "All Day" depending on your event times. Format is taken from your Events Manager settings page.' ),
-							'#_EVENTDATES' => array( 'desc' => 'Displays either a single date or a date range depending on your event dates. Format is taken from your Events Manager settings page.' ),
-						)
-					),
-					'Custom Date/Time Formatting' => array(
-						'desc' => 'Events Manager allows extremely flexible date formatting by using <a href="http://www.php.net/manual/en/function.date.php">PHP date syntax format characters</a> along with placeholders.',
-						'placeholders' => array(
-							'# or #@' => array( 'desc' => 'Prepend <code>#</code> or <code>#@</code> before a valid PHP date syntax format character to show start and end date/time information respectively (e.g. <code>#F</code> will show the starting month name like "January", #@h shows the end hour).' ),
-							'#_{x} or #@_{x}' => array( 'desc' => 'You can also create a date format without prepending # to each character by wrapping a valid php date() format in <code>#_{}</code> or <code>#@_{}</code> (e.g. <code>#_{d/m/Y}</code>). If there is no end date (or is same as start date), the value is not shown. This is useful if you want to show event end dates only on events that are longer than one day, e.g. <code>#j #M #Y #@_{ \u\n\t\i\l j M Y}</code>.' ),
-						)
-					),
-					'WordPress-relative Timezone Date/Time Placeholders' => array(
-						'desc' => 'These placeholders are extensions of the default Date/Time placholders, but instead will display the time of the event relative to your WordPress timezone rather than the local time of the event itself. Your WordPress site timezone is found in your <em><strong>Dashboard > Settings > General</strong></em> settings page.',
-						'placeholders' => array(
-							'#_24HSTARTTIME_SITE' => array( 'desc' => 'Sames as <code>#_24HSTARTTIME</code> but displays time relative to your site timezone.' ),
-							'#_24HENDTIME_SITE' => array( 'desc' => 'Sames as <code>#_24HENDTIME</code> but displays time relative to your site timezone.' ),
-							'#_12HSTARTTIME_SITE' => array( 'desc' => 'Sames as <code>#_12HSTARTTIME</code> but displays time relative to your site timezone.' ),
-							'#_12HENDTIME_SITE' => array( 'desc' => 'Sames as <code>#_12HENDTIME</code> but displays time relative to your site timezone.' ),
-							'#_EVENTTIMES_SITE' => array( 'desc' => 'Sames as <code>#_EVENTTIMES</code> but displays times relative to your site timezone.' ),
-							'#_EVENTDATES_SITE' => array( 'desc' => 'Sames as <code>#_EVENTDATES</code> but displays dates relative to your site timezone (dates can be different for events near midnight in a different timezone).' ),
-							'#__{x} or #@__{x}' => array( 'desc' => 'Same as <code>#_{x}</code> or <code>#@_{x}</code> but displays the time of the event relative to your WordPress timezone rather than the local time of the event itself.' ),
-						)
-					),
-					'Viewer Timezone Date/Time Placeholders' => array(
-						'desc' => 'These placeholders are extensions of the default Date/Time placholders, but instead will display the time of the event relative to the visitor timezone rather than the local event start time. This time is based on the user browser settings and JavaScript, so this may not always be accurate if a visitor is travelling and does not update their browser timezone, or if they have disabled JS on their browser.',
-						'placeholders' => array(
-							'#_24HSTARTTIME_LOCAL' => array( 'desc' => 'Sames as <code>#_24HSTARTTIME</code> but displays time relative to your visitor browser timezone.' ),
-							'#_24HENDTIME_LOCAL' => array( 'desc' => 'Sames as <code>#_24HENDTIME</code> but displays time relative to your visitor browser timezone.' ),
-							'#_12HSTARTTIME_LOCAL' => array( 'desc' => 'Sames as <code>#_12HSTARTTIME</code> but displays time relative to your visitor browser timezone.' ),
-							'#_12HENDTIME_LOCAL' => array( 'desc' => 'Sames as <code>#_12HENDTIME</code> but displays time relative to your visitor browser timezone.' ),
-							'#_EVENTTIMES_LOCAL' => array( 'desc' => 'Sames as <code>#_EVENTTIMES</code>  but displays time relative to your visitor browser timezone.' ),
-							'#_EVENTTIMES_LOCAL{...}' => array( 'desc' => 'Sames as <code>#_EVENTTIMES_LOCAL</code> but displays custom format by replacing <code>...</code> with <a href="https://momentjs.com/docs/#/displaying/"> documented Moment JS formatting syntax</a>.'),
-							'#_EVENTDATES_LOCAL' => array( 'desc' => 'Sames as <code>#_EVENTDATES</code> but displays dates relative to your site timezone (dates can be different for events near midnight in a different timezone).' ),
-							'#_EVENTDATES_LOCAL{...}' => array( 'desc' => 'Sames as <code>#_EVENTDATES_LOCAL</code> but displays custom format by replacing <code>...</code> with <a href="https://momentjs.com/docs/#/displaying/"> documented Moment JS formatting syntax</a>.'),
 						)
 					),
 					'Links/URLs' => array(
 						'placeholders' => array(
-							'#_EVENTIMAGEURL' => array( 'desc' => 'Shows the event image url, if available.' ),
 							'#_EVENTURL' => array( 'desc' => 'Simply prints the event URL. You can use this placeholder to build your own customised links.' ),
 							'#_EVENTLINK' => array( 'desc' => 'Displays the event name with a link to the event page.' ),
-							'#_EDITEVENTLINK' => array( 'desc' => 'Inserts a link to the admin  or buddypress (if activated) edit event page, only if a user is logged in and is allowed to edit the event.' ),
-							'#_EDITEVENTURL' => array( 'desc' => 'Inserts a url to the admin or buddypress (if activated) edit event page, only if a user is logged in and is allowed to edit the event.' ),
-						)
-					),
-					'Custom Attributes' => array(
-						'desc' => 'Events Manager allows you to create dynamic attributes to your events, which act as extra information fields for your events (e.g. "Dress Code"). For more information see <a href="http://wp-events-plugin.com/documentation/event-attributes/">our online documentation</a> for more info on attributes.',
-						'placeholders' => array( 
-							'#_ATT{key}' => array('desc'=> 'This key will appear as an option when adding attributes to your event.'),
-							'#_ATT{key}{alternative text}' => array('desc'=> 'This key will appear as an option when adding attributes to your event. The text in the second braces will appear if the attribute is not defined or left blank for that event.'),
-							'#_ATT{key}{option 1|option 2|option 3|etc.}' => array('desc'=> 'This key will appear as an option when adding attributes to your event. The second braces are optional and will use a select box with these values as input. If no valid value is defined, the first option is used.'),
 						)
 					),
 					'Bookings' => array(
 						'desc' => 'These placeholders will only show if bookings are enabled for the given event and in the events manager settings page. Spaces placeholders will default to 0',
 						'placeholders' => array(
-							'#_BOOKINGFORM' => array( 'desc' => 'Adds a booking forms for this event.' ),
-							'#_BOOKINGBUTTON' => array( 'desc' => 'A single button that will appear to logged in users, if they click on it, they apply for a booking. This button will only display if there is one ticket.' ),
+							'#_BOOKINGFIELDS' => array( 'desc' => 'Show all booking fields in a table.' ),
+							'#_BOOKINGFIELD' => array( 'desc' => 'Single booking field' ),
 							'#_AVAILABLESPACES' => array( 'desc' => 'Shows available spaces for the event.' ),
 							'#_BOOKEDSPACES' => array( 'desc' => 'Shows the amount of currently booked spaces for the event.' ),
 							'#_PENDINGSPACES' => array( 'desc' => 'Shows the amount of pending spaces for the event.' ),
 							'#_SPACES' => array( 'desc' => 'Shows the total spaces for the event.' ),
-							'#_ATTENDEES' => array( 'desc' => 'Shows the list of user avatars attending the event.' ),
-							'#_ATTENDEESLIST' => array( 'desc' => 'Shows the list of people attending the event.' ),
-							'#_ATTENDEESPENDINGLIST' => array( 'desc' => 'Shows the list of people with a pending booking for the event.' ),
 							'#_BOOKINGSURL' => array( 'desc' => 'Shows the url to the admin, front-end or buddypress (if activated) bookings management page for this event. Only shown if user is logged in and able to manage bookings.' ),
 							'#_BOOKINGSLINK' => array( 'desc' => 'Shows a link to the admin, front-end or buddypress (if activated) bookings management page for this event. Only shown if user is logged in and able to manage bookings.' ),
 						)
@@ -187,116 +123,15 @@ function em_docs_init($force_init = false){
 							'#_CONTACTNAME' => array( 'desc' => 'Name of the contact person for this event (as shown in the dropdown when adding an event).' ),
 							'#_CONTACTUSERNAME' => array( 'desc' => 'Contact person\'s username.' ),
 							'#_CONTACTEMAIL' => array( 'desc' => 'E-mail of the contact person for this event.' ),
-							'#_CONTACTURL' => array( 'desc' => 'Website of the contact person for this event.' ),
-							'#_CONTACTPHONE' => array( 'desc' => 'Phone number of the contact person for this event. Can be set in the user profile page.' ),
-							'#_CONTACTAVATAR' => array( 'desc' => 'Contact person\'s avatar.' ),
-							'#_CONTACTPROFILELINK' => array( 'desc' => 'Contact person\'s "Profile" link. Only works with BuddyPress enabled.' ),
-							'#_CONTACTPROFILEURL' => array( 'desc' => 'Contact person\'s profile url. Only works with BuddyPress enabled.' ),
-							'#_CONTACTID' => array( 'desc' => 'Contact person\'s WordPress user ID.'),
-							'#_CONTACTMETA' => array( 'desc' => 'Display any user meta of a WordPress account by including the meta key, e.g. #_CONTACTMETA{dbem_phone}'),
+							'#_CONTACTAVATAR' => array( 'desc' => 'Contact person\'s avatar.' )
 						)
 					),
-					'iCal/Calendar' => array(
-						'placeholders' => array(
-							'#_EVENTICALURL' => array( 'desc' => 'Displays the URL of the event ical feed (ics file format).' ),
-							'#_EVENTICALLINK' => array( 'desc' => 'Displays an html link to the event ical feed (ics file format).' ),
-							'#_EVENTWEBCALURL' => array( 'desc' => 'Same as #_EVENTICALURL, but using the <a href="https://en.wikipedia.org/wiki/Webcal">webcal:// protocol</a>, which will open up various calendar apps automatically including iCalendar, Outlook and Google Calendar.', 'since'=>'5.8' ),
-							'#_EVENTWEBCALLINK' => array( 'desc' => 'Same as #_EVENTICALLINK, but using the <a href="https://en.wikipedia.org/wiki/Webcal">webcal:// protocol</a>, which will open up various calendar apps automatically including iCalendar, Outlook and Google Calendar.', 'since'=>'5.8' ),
-							'#_EVENTGCALURL' => array( 'desc' => 'Displays URL which would take the user to Google Calendar and pre-fill their add new event form.' ),
-							'#_EVENTGCALLINK' => array( 'desc' => 'Displays a button which would take the user to Google Calendar and pre-fill their add new event form.' )
-						)
-					),
-				),
-				'event-locations' => array(
-					'Event Location URLs' => array(
-						'placeholders' => array(
-							'#_EVENTLOCATION' => array( 'desc' => 'An HTML link, opens in a new tab.' ),
-							'#_EVENTLOCATION{url}' => array( 'desc' => 'Just the URL.' ),
-							'#_EVENTLOCATION{text}' => array( 'desc' => 'Just the Link Text' ),
-							'#_EVENTLOCATION{_self}' => array( 'desc' => 'Regular HTML link' ),
-							'#_EVENTLOCATION{_parent}' => array( 'desc' => 'HTML link with target=”_parent”' ),
-							'#_EVENTLOCATION{_top}' => array( 'desc' => 'HTML link with target=”_top”' )
-						)
-					),
-				),
-				'categories' => array(
-					'Category Details' => array(
-						'desc' => 'You can use these when displaying categories or for showing the first available category in an event format.',
-						'placeholders' => array(
-							'#_CATEGORYNAME' => array( 'desc' => 'Shows the category name.' ),
-							'#_CATEGORYID' => array( 'desc' => 'Shows the category ID.' ),
-							'#_CATEGORYSLUG' => array( 'desc' => 'Shows the category slug.' ),
-							'#_CATEGORYLINK' => array( 'desc' => 'Category name with a link to the category page.' ),
-							'#_CATEGORYURL' => array( 'desc' => 'URL of the category page.' ),
-							'#_CATEGORYCOLOR' => array( 'desc' => 'Shows the category color (useful for inline styling), in hex format, if no color is defined the default category color from your settings page will be used.' ),
-							'#_CATEGORYIMAGE' => array( 'desc' => 'Shows the category image, if available.' ),
-							'#_CATEGORYIMAGE{x,y}' => array( 'desc' => 'Shows the category image thumbnail if available, x and y are width and height respectively, both being numbers e.g. <code>#_CATEGORYIMAGE{100,100}</code>. If 0 is used for either width or height, the corresponding dimension will be proportionally sized.' ),
-							'#_CATEGORYIMAGEURL' => array( 'desc' => 'Shows the category image url, if available.' ),
-							'#_CATEGORYNOTES' => array( 'desc' => 'Shows the category description.' )
-						)
-					),			
-					'Related Events' => array(
-						'desc' => 'You can show lists of other events belonging to this category. The formatting of the list is the same as a normal events list.',
-						'placeholders' => array(
-							'#_CATEGORYPASTEVENTS' => array( 'desc' => 'Will show a list of all past events with this category.' ),
-							'#_CATEGORYNEXTEVENTS' => array( 'desc' => 'Will show a list of all future events with this category.' ),
-							'#_CATEGORYALLEVENTS' => array( 'desc' => 'Will show a list of all events with this category.' ),
-							'#_CATEGORYNEXTEVENT' => array( 'desc' => 'Will show the next event with this category.' )
-						)
-					),
-					'iCal/RSS Feeds' => array(
-						'placeholders' => array(
-							'#_CATEGORYICALURL' => array( 'desc' => 'Displays the URL of the event ical feed (ics file format) which shows all events with this category.', 'since'=>'5.5.2' ),
-							'#_CATEGORYICALLINK' => array( 'desc' => 'Displays an html link to the event ical feed (ics file format) which shows all events with this category.', 'since'=>'5.5.2' ),
-							'#_CATEGORYWEBCALURL' => array( 'desc' => 'Same as #_CATEGORYICALURL, but using the <a href="https://en.wikipedia.org/wiki/Webcal">webcal:// protocol</a>, which will open up various calendar apps automatically including iCalendar, Outlook and Google Calendar.', 'since'=>'5.8' ),
-							'#_CATEGORYWEBCALLINK' => array( 'desc' => 'Same as #_CATEGORYICALLINK, but using the <a href="https://en.wikipedia.org/wiki/Webcal">webcal:// protocol</a>, which will open up various calendar apps automatically including iCalendar, Outlook and Google Calendar.', 'since'=>'5.8' ),
-							'#_CATEGORYRSSURL' => array( 'desc' => 'Displays the URL of an RSS feed showing all upcoming events happening in this category.', 'since'=>'5.5.2' ),
-							'#_CATEGORYRSSLINK' => array( 'desc' => 'Displays an html link to an RSS feed showing all upcoming events happening in this category.', 'since'=>'5.5.2' )
-						)
-					)
-				),
-				'tags' => array(
-					'Tag Details' => array(
-						'desc' => 'You can use these when displaying tags or for showing the first available tag in an event format.',
-						'placeholders' => array(
-							'#_TAGNAME' => array( 'desc' => 'Shows the tag name.' ),
-							'#_TAGID' => array( 'desc' => 'Shows the tag ID.' ),
-							'#_TAGSLUG' => array( 'desc' => 'Shows the tag slug.' ),
-							'#_TAGLINK' => array( 'desc' => 'Tag name with a link to the tag page.' ),
-							'#_TAGURL' => array( 'desc' => 'URL of the tag page.' ),
-							'#_TAGNOTES' => array( 'desc' => 'Shows the tag description.' ),
-							'#_TAGCOLOR' => array( 'desc' => 'Shows the tag color (useful for inline styling), in hex format, if no color is defined the default tag color from your settings page will be used.' ),
-							'#_TAGIMAGE' => array( 'desc' => 'Shows the tag image, if available.' ),
-							'#_TAGIMAGE{x,y}' => array( 'desc' => 'Shows the tag image thumbnail if available, x and y are width and height respectively, both being numbers e.g. <code>#_TAGIMAGE{100,100}</code>. If 0 is used for either width or height, the corresponding dimension will be proportionally sized.' ),
-							'#_TAGIMAGEURL' => array( 'desc' => 'Shows the tag image url, if available.' ),
-						)
-					),			
-					'Related Events' => array(
-						'desc' => 'You can show lists of other events belonging to this tag. The formatting of the list is the same as a normal events list.',
-						'placeholders' => array(
-							'#_TAGPASTEVENTS' => array( 'desc' => 'Will show a list of all past events with this tag.' ),
-							'#_TAGNEXTEVENTS' => array( 'desc' => 'Will show a list of all future events with this tag.' ),
-							'#_TAGALLEVENTS' => array( 'desc' => 'Will show a list of all events with this tag.' ),
-							'#_TAGNEXTEVENT' => array( 'desc' => 'Will show the next event with this tag.' )
-						)
-					),
-					'iCal/RSS Feeds' => array(
-						'placeholders' => array(
-							'#_TAGICALURL' => array( 'desc' => 'Displays the URL of the event ical feed (ics file format) which shows all events with this tag.', 'since'=>'5.5.2' ),
-							'#_TAGICALLINK' => array( 'desc' => 'Displays an html link to the event ical feed (ics file format) which shows all events with this tag.' , 'since'=>'5.5.2'),
-							'#_TAGWEBCALURL' => array( 'desc' => 'Same as #_TAGICALURL, but using the <a href="https://en.wikipedia.org/wiki/Webcal">webcal:// protocol</a>, which will open up various calendar apps automatically including iCalendar, Outlook and Google Calendar.', 'since'=>'5.8' ),
-							'#_TAGWEBCALLINK' => array( 'desc' => 'Same as #_TAGICALLINK, but using the <a href="https://en.wikipedia.org/wiki/Webcal">webcal:// protocol</a>, which will open up various calendar apps automatically including iCalendar, Outlook and Google Calendar.', 'since'=>'5.8' ),
-							'#_TAGRSSURL' => array( 'desc' => 'Displays the URL of an RSS feed showing all upcoming events happening in this tag.', 'since'=>'5.5.2' ),
-							'#_TAGRSSLINK' => array( 'desc' => 'Displays an html link to an RSS feed showing all upcoming events happening in this tag.', 'since'=>'5.5.2' )
-						)
-					)
 				),
 				'locations' => array(
 					'Location Details' => array(
 						'desc' => '',
 						'placeholders' => array(
 							'#_LOCATIONID' => array( 'desc' => 'Shows the event ID number in the wp_em_locations table.' ),
-							'#_LOCATIONPOSTID' => array( 'desc' => 'Shows the location corresponding Post ID in the wp_posts table.' ),
 							'#_LOCATIONNAME' => array( 'desc' => 'Displays the location name.' ),
 							'#_LOCATIONADDRESS' => array( 'desc' => 'Displays the address.' ),
 							'#_LOCATIONTOWN' => array( 'desc' => 'Displays the town.' ),
@@ -304,26 +139,7 @@ function em_docs_init($force_init = false){
 							'#_LOCATIONPOSTCODE' => array( 'desc' => 'Displays the postcode.' ),
 							'#_LOCATIONREGION' => array( 'desc' => 'Displays the region.' ),
 							'#_LOCATIONCOUNTRY' => array( 'desc' => 'Displays the country.' ),
-							'#_LOCATIONLONGITUDE' => array( 'desc' => 'Displays the longitude, used for locating in Google Maps.' ),
-							'#_LOCATIONLATITUDE' => array( 'desc' => 'Displays the latitude, used for locating in Google Maps.' ),
-							'#_LOCATIONMAP' => array( 'desc' => 'Displays a google map showing where the location is located (Will not show if maps are disabled in the settings page)' ),
-							'#_LOCATIONNOTES' => array( 'desc' => 'Shows the location description.' ),
-							'#_LOCATIONEXCERPT' => array( 'desc' => 'If an excerpt has been added to the location, it will be used. If you added a <a href="http://en.support.wordpress.com/splitting-content/more-tag/">more tag</a> to your location description, only the content before this tag will show.' ),
-							'#_LOCATIONEXCERPT{words, ...}' => array( 'desc' => 'If an excerpt has not been added to the location, only a specific length is shown, e.g. <code>#_EVENTEXCERPT{10,...}</code> where 10 is the number of words to show and ... is what is used at the cut-off point.' ),
-							'#_LOCATIONEXCERPTCUT' => array( 'desc' => 'Same as <code>#_LOCATIONEXCERPT</code> (and also accepts the <code>{words,...}</code> arguments) but will also cut excerpts as well as post content. Default word limit is 55 and cut-off is <code>[...]</code>' ),
 							'#_LOCATIONIMAGE' => array( 'desc' => 'Shows the location image.' ),
-							'#_LOCATIONIMAGE{x,y}' => array( 'desc' => 'Shows the location image thumbnail, x and y are width and height respectively, both being numbers e.g. <code>#_LOCATIONIMAGE{100,100}</code>. If 0 is used for either width or height, the corresponding dimension will be proportionally sized.' ),
-							'#_LOCATIONIMAGEURL' => array( 'desc' => 'Shows the location image url, if available.' ),
-							'#_LOCATIONFULLLINE' => array( 'desc' => 'Shows a comma-separated line of location information, ommitting blanks (format of address, town, state, postcode, region' ),
-							'#_LOCATIONFULLBR' => array( 'desc' => 'Shows a line-break (br tag) separated location information, ommitting blanks (format of address, town, state, postcode, region' ),
-						)
-					),
-					'Custom Attributes' => array(
-						'desc' => 'Events Manager allows you to create dynamic attributes to your locations, which act as extra information fields for your locations (e.g. "Dress Code"). For more information see <a href="http://wp-events-plugin.com/documentation/event-attributes/">our online documentation</a> for more info on attributes.',
-						'placeholders' => array( 
-							'#_LATT{key}' => array('desc'=> 'This key will appear as an option when adding attributes to your location.'),
-							'#_LATT{key}{alternative text}' => array('desc'=> 'This key will appear as an option when adding attributes to your location. The text in the second braces will appear if the attribute is not defined or left blank for that location.'),
-							'#_LATT{key}{option 1|option 2|option 3|etc.}' => array('desc'=> 'This key will appear as an option when adding attributes to your location. The second braces are optional and will use a select box with these values as input. If no valid value is defined, the first option is used.'),
 						)
 					),
 					'Links' => array(
@@ -332,25 +148,6 @@ function em_docs_init($force_init = false){
 							'#_LOCATIONLINK' => array( 'desc' => 'Displays the location name with a link to the location page.' ),
 							'#_EDITLOCATIONLINK' => array( 'desc' => 'Inserts a link to the admin  or buddypress (if activated) edit location page, only if a user is logged in and is allowed to edit the location.' ),
 							'#_EDITLOCATIONURL' => array( 'desc' => 'Inserts a url to the admin or buddypress (if activated) edit location page, only if a user is logged in and is allowed to edit the location.' )
-						)
-					),			
-					'Related Events' => array(
-						'desc' => 'You can show lists of other events that are being held at this location. The formatting of the list is the same as a normal events list.',
-						'placeholders' => array(
-							'#_LOCATIONPASTEVENTS' => array( 'desc' => 'Will show a list of all past events at this location.' ),
-							'#_LOCATIONNEXTEVENTS' => array( 'desc' => 'Will show a list of all future events at this location.' ),
-							'#_LOCATIONALLEVENTS' => array( 'desc' => 'Will show a list of all events at this location.' ),
-							'#_LOCATIONNEXTEVENT' => array( 'desc' => 'Will show a link to the next event at this location, or the no events message.' ),
-						)
-					),
-					'iCal/RSS Feeds' => array(
-						'placeholders' => array(
-							'#_LOCATIONICALURL' => array( 'desc' => 'Displays the URL of the location ical feed (ics file format) which shows all events happening at that location.', 'since'=>'5.5.2' ),
-							'#_LOCATIONICALLINK' => array( 'desc' => 'Displays an html link to the event ical feed (ics file format) which shows all events happening at that location.', 'since'=>'5.5.2' ),
-							'#_LOCATIONWEBCALURL' => array( 'desc' => 'Same as #_LOCATIONICALURL, but using the <a href="https://en.wikipedia.org/wiki/Webcal">webcal:// protocol</a>, which will open up various calendar apps automatically including iCalendar, Outlook and Google Calendar.', 'since'=>'5.8' ),
-							'#_LOCATIONWEBCALLINK' => array( 'desc' => 'Same as #_LOCATIONICALLINK, but using the <a href="https://en.wikipedia.org/wiki/Webcal">webcal:// protocol</a>, which will open up various calendar apps automatically including iCalendar, Outlook and Google Calendar.', 'since'=>'5.8' ),
-							'#_LOCATIONRSSURL' => array( 'desc' => 'Displays the URL of an RSS feed showing all upcoming events happening at this location.', 'since'=>'5.5.2' ),
-							'#_LOCATIONRSSLINK' => array( 'desc' => 'Displays an html link to an RSS feed showing all upcoming events happening at this location.', 'since'=>'5.5.2' )
 						)
 					)
 				),
@@ -361,17 +158,9 @@ function em_docs_init($force_init = false){
 							'#_BOOKINGID' => array( 'desc' => 'The unique ID of this booking, useful if you are making your own customizations to this plugin.' ),
 							'#_BOOKINGNAME' => array( 'desc' => 'Name of person who made the booking.' ),
 							'#_BOOKINGEMAIL' => array( 'desc' => 'Email of person who made the booking.' ),
-							'#_BOOKINGPHONE' => array( 'desc' => 'Phone number of person who made the booking.' ),
-							'#_BOOKINGSPACES' => array( 'desc' => 'Number of spaces the person has booked.' ),
-							'#_BOOKINGCOMMENT' => array( 'desc' => 'Any specific comments made by the person who made the booking.' ),
 							'#_BOOKINGTICKETNAME' => array( 'desc' => 'Name of the ticket booked. Useful in single ticket mode, if multiple tickets are booked a random ticket is used.' ),
 							'#_BOOKINGTICKETDESCRIPTION' => array( 'desc' => 'Description of the ticket booked. Useful in single ticket mode, if multiple tickets are booked a random ticket is used.' ),
-							'#_BOOKINGTICKETPRICE' => array( 'desc' => 'Booked ticket price with currency symbol (e.g. $ 10.00). Useful in single ticket mode, if multiple tickets are booked a random ticket is used.' ),
-							'#_BOOKINGTICKETS' => array( 'desc' => 'A list of booked tickets. You can modify this by using template files and modifying templates/emails/bookingtickets.php' ),
-							'#_BOOKINGSUMMARY' => array( 'desc' => 'Shows a breakdown of price/quantity booked by ticket, followed by a summary of price totals, taxes, and other discounts applied.' ),
-							'#_BOOKINGFORMCUSTOM{field_id}' => array( 'desc' => sprintf('(<a href="%s">pro only</a>) Shows booking form custom fields. The field_id value must match that of your custom booking form field.','http://wp-events-plugin.com/features/') ),
-							'#_BOOKINGFORMCUSTOMREG{field_id}' => array( 'desc' => sprintf('(<a href="%s">pro only</a>) Shows booking form custom fields that are used for guest user registration. The field_id value must match that of your custom booking form field.','http://wp-events-plugin.com/features/') ),
-							'#_BOOKINGFORMCUSTOMFIELDS' => array( 'desc' => sprintf('(<a href="%s">pro only</a>) Generates a list of booking form custom fields that are used in the booking.','http://wp-events-plugin.com/features/') ),
+							'#_BOOKINGFIELD{field_slug}' => array( 'desc' => 'Show the value of a single booking field' ),
 							'#_BOOKINGATTENDEES' => array('desc' => sprintf('(<a href="%s">pro only</a>) Generates a list of attendee information displaying the filled in form data for each attendee (requires individual attendee forms enabled for the event). This list is split by ticket type, then by individual attendee.','http://wp-events-plugin.com/features/')), //coupons too!
 							'#_BOOKINGADMINURL' => array( 'desc' => 'URL for admins to view and manage the booking. This should only be used on admin-specific email templates.' ),
 							'#_BOOKINGADMINLINK' => array( 'desc' => 'HTML link for admins to view and manage the booking. This should only be used on admin-specific email templates.' ),
@@ -380,10 +169,9 @@ function em_docs_init($force_init = false){
 					'Pricing Information' => array(
 						'desc' => '',
 						'placeholders' => array(
-							'#_BOOKINGPRICE' => array( 'desc' => 'Displays booking total price (tax inclusion depends on your booking settings).' ),
-							'#_BOOKINGPRICETAX' => array( 'desc' => 'Displays booking total tax.' ),
-							'#_BOOKINGPRICEWITHOUTTAX' => array( 'desc' => 'Displays booking total without tax.' ),
-							'#_BOOKINGPRICEWITHTAX' => array( 'desc' => 'Displays booking total with tax.' ),
+							'#_PRICE' => array( 'desc' => 'Displays booking total price (tax inclusion depends on your booking settings).' ),
+							
+							
 						)
 					),
 					'Ticket Information' => array(
@@ -397,16 +185,16 @@ function em_docs_init($force_init = false){
 							'#_BOOKINGTICKETPRICEWITHOUTTAX' => array( 'desc' => 'Shows the price excluding tax of the first ticket booked (useful in single ticket mode/events).' ),
 						)
 					),
-					'Links' => array(
-						'desc' => 'People are able to manage their bookings. Below are some placeholder which automatically provides correctly formatted urls',
-						'placeholders' => array(
-							'#_BOOKINGLISTURL' => array( 'desc' => 'URL to page showing that users booked events.' )
-						)
-					),
+
 					'Gateway-Specific Information' => array(
 						'desc' => 'Information pertaining to speicifc gateways. '. sprintf('Requires <a href="%s">Events Manager Pro</a>','http://wp-events-plugin.com/features/'),
 						'placeholders' => array(
-							'#_BOOKINGTXNID' => array( 'desc' => '<em>Online Payments Only</em> - Prints the transaction ID of this booking if available.' )
+							'#_BOOKINGTXNID' => array( 'desc' => '<em>Online Payments Only</em> - Prints the transaction ID of this booking if available.' ),
+							'#_IBAN' => array( 'desc' => __('Shows the IBAN number for Offline Payments.', 'em-pro') ),
+							'#_BENEFICIARY' => array( 'desc' => __('Displays the beneficiary name.', 'em-pro') ),
+							'#_REFERENCE' => array( 'desc' => __('Payment reference (auto generated)', 'em-pro') ),
+							'#_BANK' => array( 'desc' => __('Name of the Bank', 'em-pro') ),
+							'#_PAYMENTDEADLINE' => array( 'desc' => __('Show the date until the payment has to be done', 'em-pro') ),
 						)
 					),
 					'Coupon Information' => array(
