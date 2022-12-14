@@ -12,19 +12,6 @@ jQuery( document ).ready( function ( $ ) {
 			.addClass( 'em-time-range' );
 	} );
 
-	/* Calendar AJAX */
-	$( '.em-calendar-wrapper a' ).off( 'click' );
-	$( '.em-calendar-wrapper' ).on( 'click', 'a.em-calnav, a.em-calnav', function ( e ) {
-		e.preventDefault();
-		$( this ).closest( '.em-calendar-wrapper' ).prepend( '<div class="loading" id="em-loading"></div>' );
-		let url = em_ajaxify( $( this ).attr( 'href' ) );
-		$( this )
-			.closest( '.em-calendar-wrapper' )
-			.load( url, function () {
-				$( this ).trigger( 'em_calendar_load' );
-			} );
-	} );
-
 	/*
 	 * ADMIN AREA AND PUBLIC FORMS (Still polishing this section up, note that form ids and classes may change accordingly)
 	 */
