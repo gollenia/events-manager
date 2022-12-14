@@ -2356,3 +2356,9 @@ msgstr "Nur noch ein Platz frei"
 
 msgid "Booking end"
 msgstr "Anmeldeschluss"
+
+msgid "Payment Deadline"
+msgstr "Zahlungsfrist"
+
+msgid "Number of days until payment has to be made"
+msgstr "Anzahl von Tagen, innerhalb derer die Zahlung erfolgen muss"

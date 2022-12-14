@@ -2433,3 +2433,9 @@ msgstr "Réservé"
 
 msgid "Booking end"
 msgstr "Date limite d'inscription"
+
+msgid "Payment Deadline"
+msgstr "Date limite de paiement"
+
+msgid "Number of days until payment has to be made"
+msgstr "Nombre de jours dans lesquels le paiement doit être effectué"

@@ -416,9 +416,10 @@ class EM_Gateway_Offline extends EM_Gateway {
 		  <?php 
 		  	  Options::input( esc_html__('Success Message', 'em-pro'), 'em_'. $this->gateway . '_booking_feedback', esc_html__('The message that is shown to a user when a booking with offline payments is successful.','em-pro') );
 			  Options::input( esc_html__('IBAN', 'em-pro'), 'em_'. $this->gateway . '_iban', esc_html__('In order to generate a QR Code for payment, you have to provide a valid IBAN','em-pro'), ["class" => 'regular-text code', 'pattern' => '[A-Z0-9]'] );
-			  Options::input( esc_html__('BIC', 'em-pro'), 'em_'. $this->gateway . '_bic', esc_html__('Though not needed, some banks are only happy if you provide a BIC','em-pro'), ["class" => 'regular-text code', 'pattern' => '[A-Z0-9]'] );
+			  Options::input( esc_html__('BIC', 'em-pro'), 'em_'. $this->gateway . '_bic', esc_html__('Though not needed, some banks are only happy if you provide a BIC','em-pro'), ["class" => 'regular-text code', 'pattern' => '[A-Z0-9]'] );			  
 			  Options::input( esc_html__('Bank', 'em-pro'), 'em_'. $this->gateway . '_bank', esc_html__('Same goes with Bank name.','em-pro') );
 			  Options::input( esc_html__('Beneficiary', 'em-pro'), 'em_'. $this->gateway . '_beneficiary', esc_html__('In some countries you need to specify a beneficiary. This Data is added to the QR Code.','em-pro') );
+			  Options::input( esc_html__('Payment Deadline', 'em-pro'), 'em_'. $this->gateway . '_deadline', esc_html__('Number of days until payment has to be made','em-pro'), ["placeholder" => "10", "type" => Options::NUMBER, "class" => 'regular-text code', 'pattern' => '[0-9]'] );
 		  ?>
 		</tbody>
 		</table>
@@ -435,6 +436,7 @@ class EM_Gateway_Offline extends EM_Gateway {
 			'em_'. $this->gateway . '_bic',
 			'em_'. $this->gateway . '_bank',
 			'em_'. $this->gateway . '_beneficiary',
+			'em_'. $this->gateway . '_deadline',
 		];
 		foreach( $gateway_options as $option_wpkses ) add_filter('gateway_update_'.$option_wpkses,'wp_kses_post');
 		return parent::update($gateway_options);

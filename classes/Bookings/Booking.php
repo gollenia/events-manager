@@ -1,5 +1,7 @@
 <?php
 
+use Contexis\Events\Intl\Date;
+
 /**
  * Contains all information and relevant functions surrounding a single booking made with Events Manager
  * @property int|false $booking_status
@@ -1211,6 +1213,12 @@ class EM_Booking extends EM_Object{
 					break;
 				case '#_BANK':
 					$replace = get_option("em_offline_bank", true);
+					break;
+				case '#_PAYMENTDEADLINE':
+					$date = new DateTime();
+					$interval = new DateInterval('P' . get_option("em_offline_deadline", 10) . 'D');
+					$date->add($interval);
+					$replace = \Contexis\Events\Intl\Date::get_date($date->getTimestamp());
 					break;
 				case '#_BOOKINGATTENDEES':
 					ob_start();
