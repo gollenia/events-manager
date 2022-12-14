@@ -187,7 +187,7 @@ function em_docs_init($force_init = false){
 					),
 
 					'Gateway-Specific Information' => array(
-						'desc' => 'Information pertaining to speicifc gateways. '. sprintf('Requires <a href="%s">Events Manager Pro</a>','http://wp-events-plugin.com/features/'),
+						'desc' => 'Information pertaining to speicifc gateways.',
 						'placeholders' => array(
 							'#_BOOKINGTXNID' => array( 'desc' => '<em>Online Payments Only</em> - Prints the transaction ID of this booking if available.' ),
 							'#_IBAN' => array( 'desc' => __('Shows the IBAN number for Offline Payments.', 'em-pro') ),
@@ -198,7 +198,7 @@ function em_docs_init($force_init = false){
 						)
 					),
 					'Coupon Information' => array(
-						'desc' => 'When a booking has been made with a coupon, you can display coupon information using these placeholders. If no coupon is used, nothing will be shown. '.sprintf('Requires <a href="%s">Events Manager Pro</a>','http://wp-events-plugin.com/features/'),
+						'desc' => 'When a booking has been made with a coupon, you can display coupon information using these placeholders. If no coupon is used, nothing will be shown.',
 						'placeholders' => array(
 							'#_BOOKINGCOUPON' => array('desc' => 'Displays the coupon code followed by the amount/percentage discounted.'),
 							'#_BOOKINGCOUPONCODE' => array('desc' => 'Displays the coupon code used.'),
@@ -225,6 +225,7 @@ function em_docs_placeholders($atts){
 		global $EM_Documentation;
 		$type = $atts['type'];
 		$data = $EM_Documentation['placeholders'][$type];
+		
 		foreach($data as $sectionTitle => $details) : ?>
 			<div>
 				<h3><?php echo $sectionTitle; ?></h3>
