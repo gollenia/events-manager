@@ -46,11 +46,7 @@ class EM_Event_Post_Admin{
 				$warning .= "<p>".sprintf(__('To manage the whole set, <a href="%s">edit the recurring event template</a>.', 'events-manager'),admin_url('post.php?action=edit&amp;post='.$EM_Event->get_event_recurrence()->post_id))."</p>";
 				?><div class="notice notice-warning is-dismissible"><?php echo $warning; ?></div><?php
 			}
-			if( !empty($EM_Event->group_id) && function_exists('groups_get_group') ){
-				$group = groups_get_group(array('group_id'=>$EM_Event->group_id));
-				$warning = sprintf(__('WARNING: This is a event belonging to the group "%s". Other group admins can also modify this event.', 'events-manager'), $group->name);
-				?><div class="notice notice-info is-dismissible"><p><?php echo $warning; ?></p></div><?php
-			}
+			
 		}
 	}
 	
@@ -231,16 +227,8 @@ class EM_Event_Post_Admin{
 			$EM_Event = EM_Event::find($post->ID, 'post_id');
 		}
 		
-		add_meta_box('em-event-when', __('When','events-manager'), array('EM_Event_Post_Admin','meta_box_date'),EM_POST_TYPE_EVENT, 'side','high');
-		add_meta_box('em-event-people', __('People','events-manager'), array('EM_Event_Post_Admin','meta_box_people'),EM_POST_TYPE_EVENT, 'side','high');
-		if(get_option('dbem_locations_enabled', true)){
-			add_meta_box('em-event-where', __('Where','events-manager'), array('EM_Event_Post_Admin','meta_box_location'),EM_POST_TYPE_EVENT, 'normal','high');
-		}
 		if( get_option('dbem_rsvp_enabled', true) && $EM_Event->can_manage('manage_bookings','manage_others_bookings') ){
 			add_meta_box('em-event-bookings', __('Bookings/Registration','events-manager'), array('EM_Event_Post_Admin','meta_box_bookings'),EM_POST_TYPE_EVENT, 'normal','high');
-			if( !empty($EM_Event->event_id) && $EM_Event->event_rsvp ){
-				add_meta_box('em-event-bookings-stats', __('Bookings Stats','events-manager'), array('EM_Event_Post_Admin','meta_box_bookings_stats'),EM_POST_TYPE_EVENT, 'side','core');
-			}
 		}
 
 		
@@ -268,14 +256,6 @@ class EM_Event_Post_Admin{
 		
 	}
 
-	public static function meta_box_people(){
-		//create meta box check of date nonce
-		
-	}
-	
-	public static function meta_box_bookings_stats(){
-		
-	}
 
 	public static function meta_box_bookings(){
 		em_locate_template('forms/event/bookings.php', true);
@@ -450,9 +430,6 @@ class EM_Event_Recurring_Post_Admin{
 		
 		add_meta_box('em-event-recurring', __('Recurrences','events-manager'), array('EM_Event_Recurring_Post_Admin','meta_box_recurrence'),'event-recurring', 'normal','high');
 		//add_meta_box('em-event-meta', 'Event Meta (debugging only)', array('EM_Event_Post_Admin','meta_box_metadump'),'event-recurring', 'normal','high');
-		if(get_option('dbem_locations_enabled', true)){
-			add_meta_box('em-event-where', __('Where','events-manager'), array('EM_Event_Post_Admin','meta_box_location'),'event-recurring', 'normal','high');
-		}
 		if( get_option('dbem_rsvp_enabled') && $EM_Event->can_manage('manage_bookings','manage_others_bookings') ){
 			add_meta_box('em-event-bookings', __('Bookings/Registration','events-manager'), array('EM_Event_Post_Admin','meta_box_bookings'),'event-recurring', 'normal','high');
 		}
