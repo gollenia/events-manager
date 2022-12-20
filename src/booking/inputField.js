@@ -87,7 +87,7 @@ const InputField = ( props ) => {
 							} }
 							type="radio"
 							name={ `${ name }[${ index }]` }
-							checked={ option == value }
+							checked={ value ? option == value : placeholder == index }
 						/>
 						{ option }
 					</label>

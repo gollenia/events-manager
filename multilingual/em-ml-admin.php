@@ -21,18 +21,13 @@ class EM_ML_Admin{
 	    //decide if it's a master event, if not then hide the meta boxes
 	    if( !empty($EM_Event) && !EM_ML::is_original($EM_Event) ){
 	        //remove meta boxes for events
-		    remove_meta_box('em-event-when', EM_POST_TYPE_EVENT, 'side');
 		    remove_meta_box('em-event-recurring', 'event-recurring', 'normal');
 		    remove_meta_box('em-event-when-recurring', 'event-recurring', 'side');
-	    	remove_meta_box('em-event-where', EM_POST_TYPE_EVENT, 'normal');
-		    remove_meta_box('em-event-where', 'event-recurring', 'normal');
-		    remove_meta_box('em-event-bookings', EM_POST_TYPE_EVENT, 'normal');
+	    	remove_meta_box('em-event-bookings', EM_POST_TYPE_EVENT, 'normal');
 		    remove_meta_box('em-event-bookings', 'event-recurring', 'normal');
-		    remove_meta_box('em-event-bookings-stats', EM_POST_TYPE_EVENT, 'side');
-		    remove_meta_box('em-event-bookings-stats', 'event-recurring', 'side');
 		    remove_meta_box('em-event-group', EM_POST_TYPE_EVENT, 'side');
 		    remove_meta_box('em-event-group', 'event-recurring', 'side');
-		    foreach( array('em-event-when', 'em-event-recurring', 'em-event-when-recurring', 'em-event-where', 'em-event-bookings', 'em-event-bookings-stats', 'em-event-group') as $box_name ){
+		    foreach( array('em-event-recurring', 'em-event-when-recurring', 'em-event-group') as $box_name ){
 		    	foreach( array(EM_POST_TYPE_EVENT, 'event-recurring') as $type ){
 		    		$screen_name = convert_to_screen($type)->id;
 			        foreach( array('core', 'default', 'high', 'low') as $priority ){

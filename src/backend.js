@@ -4,7 +4,6 @@
 import { registerBlockType } from '@wordpress/blocks';
 import { registerPlugin } from '@wordpress/plugins';
 
-
 /**
  * Blocks dependencies.
  */
@@ -29,13 +28,11 @@ import datetimeSelector from './plugins/event/datetime';
 import locationSelector from './plugins/event/location';
 import peopleSelector from './plugins/event/people';
 
-
-const registerBlock = (block) => {
-	if (!block) return;
+const registerBlock = ( block ) => {
+	if ( ! block ) return;
 	const { name, settings } = block;
 	registerBlockType( name, settings );
 };
-
 
 let blocks = [
 	upcoming,
@@ -50,42 +47,37 @@ let blocks = [
 	formCountry,
 	formPhone,
 	formRadio,
-	formHTML
+	formHTML,
 ];
 
-let plugins = [
+let plugins = [];
 
-]
-
-registerPlugin('plugin-location-datetime', {
+registerPlugin( 'plugin-location-datetime', {
 	icon: null,
 	render: locationSelector,
-});
+} );
 
-registerPlugin('plugin-select-datetime', {
+registerPlugin( 'plugin-select-datetime', {
 	icon: null,
 	render: datetimeSelector,
-});
+} );
 
-registerPlugin('plugin-select-people', {
+registerPlugin( 'plugin-select-people', {
 	icon: null,
 	render: peopleSelector,
-});
+} );
 
-registerPlugin('plugin-booking-options', {
+registerPlugin( 'plugin-booking-options', {
 	icon: null,
 	render: bookingOptions,
-});
+} );
 
-
-
-if (window.eventBlocksLocalization?.post_type === 'event') {
-	blocks = [...blocks, details, booking];
+if ( window.eventBlocksLocalization?.post_type === 'event' ) {
+	blocks = [ ...blocks, details, booking ];
 }
 
 export const registerBlocks = () => {
-	blocks.forEach(registerBlock);
+	blocks.forEach( registerBlock );
 };
 
 registerBlocks();
-
