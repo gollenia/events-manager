@@ -1,17 +1,19 @@
 .ctx\:event-field {
-
-
-	input[type="date"] {
+	input[type='date'] {
 		width: 100%;
-	} 
-
-	
+	}
 }
 
 .age-info {
-	background: aliceblue;
+	background: #d6e7f1;
 	padding: 4px 8px;
 	border: 1px solid #b6d1e8;
 	border-radius: 3px;
-	color: #4679a5;
+	color: #385f81;
+
+	input {
+		background-color: #edf6ff;
+		border-color: #92abc0;
+		color: #385f81;
+	}
 }
