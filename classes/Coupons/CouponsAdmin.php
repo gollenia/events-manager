@@ -429,7 +429,7 @@ class EM_Coupons_Admin {
     					</tr>
 					<tr valign="top">
 						<th scope="row"><label for="coupon_code"><?php _e('Coupon Code', 'em-pro') ?></label></th>
-							<td><input required onblur="this.checkValidity();" pattern="[A-Za-z0-9]" class="regular-text code" type="text" name="coupon_code" value="<?php echo esc_attr($EM_Coupon->coupon_code); ?>" />
+							<td><input required onblur="this.checkValidity();" class="regular-text code" type="text" name="coupon_code" value="<?php echo esc_attr($EM_Coupon->coupon_code); ?>" />
 							<p class="description"><?php _e('This is the code you give to users for them to use when booking.','em-pro'); ?></p>
 						</td>
 					</tr>
