@@ -649,7 +649,9 @@ const InputField = props => {
         required: required,
         checked: value || placeholder
       }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("span", {
-        dangerouslySetInnerHTML: createMarkup(field.help)
+        dangerouslySetInnerHTML: {
+          __html: field.help
+        }
       })));
     case 'date':
       return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {

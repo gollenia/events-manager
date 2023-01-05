@@ -152,7 +152,7 @@ const InputField = ( props ) => {
 							required={ required }
 							checked={ value || placeholder }
 						/>
-						<span dangerouslySetInnerHTML={ createMarkup( field.help ) }></span>
+						<span dangerouslySetInnerHTML={ { __html: field.help } }></span>
 					</label>
 				</div>
 			);
