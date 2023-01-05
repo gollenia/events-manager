@@ -134,8 +134,12 @@ const InputField = ( props ) => {
 				</div>
 			);
 		case 'checkbox':
-			console.log( field.help );
-			console.log( createMarkup( field.help ) );
+			console.log( {
+				name: field.name,
+				raw: field.help,
+				createMarkup: createMarkup( field.help ),
+			} );
+
 			return (
 				<div className={ `checkbox grid__column--span-${ columns[ width ] }` }>
 					<label>

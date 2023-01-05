@@ -633,8 +633,11 @@ const InputField = props => {
         className: "radio"
       }, radioOptions()));
     case 'checkbox':
-      console.log(field.help);
-      console.log(createMarkup(field.help));
+      console.log({
+        name: field.name,
+        raw: field.help,
+        createMarkup: createMarkup(field.help)
+      });
       return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("div", {
         className: `checkbox grid__column--span-${columns[width]}`
       }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("label", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)("input", {
