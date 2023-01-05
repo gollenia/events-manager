@@ -10,7 +10,7 @@ foreach($form_fields as $name => $field) {
 		$value = "<a href='mailto:$value'>$value</a>";
 	}
 	if($field['type'] == "checkbox") {
-		$value = $value ? "😀 " . __("Yes", "events-manager") : "😠 " . __("No", "events-manager");
+		$value = $value ? __("Yes", "events-manager") : __("No", "events-manager");
 	}
 	if($field['type'] == "date") {
 		$value = date_i18n(get_option('date_format'), strtotime($value));
