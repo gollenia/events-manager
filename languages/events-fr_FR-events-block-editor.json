@@ -211,7 +211,10 @@
 			"Emails": [ "E-Mails" ],
 			"Enable Booking": [ "Enable Booking" ],
 			"Booking end": [ "Fin de réservation" ],
-			"Show booking end": [ "Afficher la fin de la réservation" ]
+			"Show booking end": [ "Afficher la fin de la réservation" ],
+			"Only for internal usage - place field text below": [
+				"Uniquement pour usage interne - placez le texte du champ ci-dessous"
+			]
 		}
 	}
 }

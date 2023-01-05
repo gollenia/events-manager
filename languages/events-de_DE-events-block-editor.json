@@ -220,7 +220,8 @@
 			"Emails": [ "E-Mails" ],
 			"Enable Booking": [ "Buchungen aktivieren" ],
 			"Booking end": [ "Anmeldeschluss" ],
-			"Show booking end": [ "Anmeldeschluss anzeigen" ]
+			"Show booking end": [ "Anmeldeschluss anzeigen" ],
+			"Only for internal usage - place field text below": [ "Nur für interne Zwecke - Feldtext unten einfügen" ]
 		}
 	}
 }
