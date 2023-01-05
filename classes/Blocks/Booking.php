@@ -93,7 +93,7 @@ class Booking
 		$priceFormatter = new \Contexis\Events\Intl\Price(0);
 
 		$data = [
-			'attributes' => $attributes,
+			'attributes' => $attributes, 
 			'_nonce' => wp_create_nonce('booking_add'),
 			'rest_url' => get_rest_url(),
 			'booking_url' => admin_url('admin-ajax.php'),
