@@ -1131,11 +1131,9 @@ class EM_Booking extends EM_Object{
 					if(!$placeholder_atts[1]) break; 
 					$replace = $this->meta['booking'][$placeholder_atts[1]];
 					break;
-				case '#_BOOKINGFIELDS':
+				case '#_BOOKINGFIELDS': 
 					ob_start();
-					foreach($this->meta['booking'] as $key => $value) {
-						echo "<table><tr><td>" . $key . ":</td><td>" . $value . "</td></tr></table>";
-					}
+					em_locate_template('emails/bookingfields.php', true, array('EM_Booking'=>$this));
 					$replace = ob_get_clean();
 					break;
 				case '#_BOOKINGFIELD':
