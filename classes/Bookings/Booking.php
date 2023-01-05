@@ -1207,7 +1207,7 @@ class EM_Booking extends EM_Object{
 					$replace = $this->booking_id . "-" . $this->event->post_name . "-" . $this->booking_meta['registration']['last_name'];
 					break;
 				case '#_PRICE': 
-					$replace = $this->booking_price;
+					$replace = \Contexis\Events\Intl\Price::format($this->booking_price);
 					break;
 				case '#_BANK':
 					$replace = get_option("em_offline_bank", true);
