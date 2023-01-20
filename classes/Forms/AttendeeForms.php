@@ -201,11 +201,12 @@ class EM_Attendees_Form {
 	    		$key = sprintf(__('Attendee %s','em-pro'), $i);
 	    		$attendees[$key] = array();
 	    		foreach( $EM_Form->form_fields as $fieldid => $field){
+					if( $field['type'] == 'html' ) continue;
+	    			
+					$field_value = (isset($EM_Form->field_values[$fieldid])) ? $EM_Form->field_values[$fieldid]:'n/a';
+					$field_label = (isset($field['label'])) ? $field['label']:$fieldid;
 					
-	    			if( $field['type'] != 'html' ){
-	    				$field_value = (isset($EM_Form->field_values[$fieldid])) ? $EM_Form->field_values[$fieldid]:'n/a';
-	    				$attendees[$key][$field['label']] = $EM_Form->get_formatted_value($field, $field_value);
-	    			}
+					$attendees[$key][$field_label] = $EM_Form->get_formatted_value($field, $field_value);
 	    		}
 	    		$i++;
 		    }
@@ -328,20 +329,35 @@ class EM_Attendees_Form {
 		
 			//generate bookings export according to search request
 			$EM_Bookings_Table = new EM_Bookings_Table(true);
+			$alphabet = range('A', 'Z');
 			
 			//Rows
 			$EM_Bookings_Table->limit = 250; //if you're having server memory issues, try messing with this number
 			$EM_Bookings = $EM_Bookings_Table->get_bookings();
+			$form_fields = self::get_form($EM_Event->event_id)->form_fields;
 			
 			$headers = $EM_Bookings_Table->get_headers(true);
+			$registration_length = count($headers);
+			$titles = array_fill(0, count($headers), '<b><middle><style height="50" bgcolor="#f2f2f2" color="#000000"></style></middle></b>');
+			$titles[0] = '<b><middle><style height="25" bgcolor="#f2f2f2" color="#000000">' . __('Registration Fields','em-pro') . '</style></middle></b>';
+			foreach($headers as $key => $header){
+				$headers[$key] = '<b><middle><style height="50" bgcolor="#f2f2f2" color="#000000">' . $header . '</style></middle></b>';
+			}
 			if( !empty($_REQUEST['event_id']) ){
-				foreach(self::get_form($_REQUEST['event_id'])->form_fields as $field ){
+				$i = 0;
+				foreach($form_fields as $field ){
 					if( $field['type'] != 'html' ){
-						$headers[] = EM_Bookings_Table::sanitize_spreadsheet_cell($field['label']);
+						$headers[] = EM_Bookings_Table::sanitize_spreadsheet_cell('<b><middle><style height="25" bgcolor="#e2efda" color="#375623">' . $field['label'] . '</style></middle></b>');
+						$titles[] = $i == 0 ? '<b><middle><style height="25" bgcolor="#e2efda" color="#375623">' . __('Attendee','em-pro') . '</style></middle></b>' : '<b><middle><style height="25" bgcolor="#e2efda" color="#375623"></style></middle></b>';
+						$i++;
 					}
 				}
 			}
-			$excel_sheet = [$EM_Bookings_Table->get_headers(true)];
+			
+			$excel_sheet = [$titles];
+			$excel_sheet[] = $headers;
+			
+
 			while(!empty($EM_Bookings->bookings)){
 				foreach( $EM_Bookings->bookings as $EM_Booking ) {
 					/* @var EM_Booking $EM_Booking */
@@ -365,7 +381,9 @@ class EM_Attendees_Form {
 				$EM_Bookings = $EM_Bookings_Table->get_bookings();
 			}
 			$xlsx = Shuchkin\SimpleXLSXGen::fromArray( $excel_sheet );
-			$xlsx->downloadAs($title . '-bookings.xlsx');
+			$xlsx->mergeCells('A1:'. $alphabet[$registration_length-1].'1');
+			$xlsx->mergeCells($alphabet[$registration_length].'1:'. $alphabet[count($headers)-1].'1');
+			$xlsx->downloadAs($title . '-' . lcfirst(__('Bookings', 'events-manager')) . '.xlsx');
 			exit();
 		}
 	}
