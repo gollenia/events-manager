@@ -26,7 +26,7 @@
                 "php": "^7.4 || ^8.0"
             },
             "require-dev": {
-                "phan/phan": "^5.3",
+                "phan/phan": "^5.4",
                 "phpunit/phpunit": "^9.5",
                 "setasign/fpdf": "^1.8.2"
             },
@@ -95,7 +95,7 @@
                     "type": "ko_fi"
                 }
             ],
-            "time": "2022-07-28T00:20:23+00:00"
+            "time": "2022-12-16T15:20:18+00:00"
         },
         {
             "name": "chillerlan/php-settings-container",
@@ -163,16 +163,16 @@
         },
         {
             "name": "composer/installers",
-            "version": "v2.1.1",
+            "version": "v2.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/installers.git",
-                "reference": "af93ba6e52236418f07a278033eba6959ee5b983"
+                "reference": "c29dc4b93137acb82734f672c37e029dfbd95b35"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/installers/zipball/af93ba6e52236418f07a278033eba6959ee5b983",
-                "reference": "af93ba6e52236418f07a278033eba6959ee5b983",
+                "url": "https://api.github.com/repos/composer/installers/zipball/c29dc4b93137acb82734f672c37e029dfbd95b35",
+                "reference": "c29dc4b93137acb82734f672c37e029dfbd95b35",
                 "shasum": ""
             },
             "require": {
@@ -260,6 +260,7 @@
                 "magento",
                 "majima",
                 "mako",
+                "matomo",
                 "mediawiki",
                 "miaoxing",
                 "modulework",
@@ -287,7 +288,7 @@
             ],
             "support": {
                 "issues": "https://github.com/composer/installers/issues",
-                "source": "https://github.com/composer/installers/tree/v2.1.1"
+                "source": "https://github.com/composer/installers/tree/v2.2.0"
             },
             "funding": [
                 {
@@ -303,20 +304,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-04-13T09:13:00+00:00"
+            "time": "2022-08-20T06:45:11+00:00"
         },
         {
             "name": "mpdf/mpdf",
-            "version": "v8.1.1",
+            "version": "v8.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/mpdf/mpdf.git",
-                "reference": "e511e89a66bdb066e3fbf352f00f4734d5064cbf"
+                "reference": "add590e93b7502efafd9839a68cff99f3497b318"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/mpdf/mpdf/zipball/e511e89a66bdb066e3fbf352f00f4734d5064cbf",
-                "reference": "e511e89a66bdb066e3fbf352f00f4734d5064cbf",
+                "url": "https://api.github.com/repos/mpdf/mpdf/zipball/add590e93b7502efafd9839a68cff99f3497b318",
+                "reference": "add590e93b7502efafd9839a68cff99f3497b318",
                 "shasum": ""
             },
             "require": {
@@ -324,7 +325,7 @@
                 "ext-mbstring": "*",
                 "myclabs/deep-copy": "^1.7",
                 "paragonie/random_compat": "^1.4|^2.0|^9.99.99",
-                "php": "^5.6 || ^7.0 || ~8.0.0 || ~8.1.0",
+                "php": "^5.6 || ^7.0 || ~8.0.0 || ~8.1.0 || ~8.2.0",
                 "php-http/message-factory": "^1.0",
                 "psr/http-message": "^1.0",
                 "psr/log": "^1.0 || ^2.0",
@@ -334,7 +335,7 @@
                 "mockery/mockery": "^1.3.0",
                 "mpdf/qrcode": "^1.1.0",
                 "squizlabs/php_codesniffer": "^3.5.0",
-                "tracy/tracy": "^2.4",
+                "tracy/tracy": "~2.5",
                 "yoast/phpunit-polyfills": "^1.0"
             },
             "suggest": {
@@ -380,7 +381,7 @@
                     "type": "custom"
                 }
             ],
-            "time": "2022-04-18T11:50:28+00:00"
+            "time": "2022-12-15T11:24:39+00:00"
         },
         {
             "name": "myclabs/deep-copy",
@@ -722,16 +723,16 @@
         },
         {
             "name": "shuchkin/simplexlsxgen",
-            "version": "1.2.15",
+            "version": "1.3.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/shuchkin/simplexlsxgen.git",
-                "reference": "053574d1e1afa637f8c0b3900a11d9cdba7d6b72"
+                "reference": "6d7608f8ca0a12fb379560b6a7e4109f5e033f40"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/shuchkin/simplexlsxgen/zipball/053574d1e1afa637f8c0b3900a11d9cdba7d6b72",
-                "reference": "053574d1e1afa637f8c0b3900a11d9cdba7d6b72",
+                "url": "https://api.github.com/repos/shuchkin/simplexlsxgen/zipball/6d7608f8ca0a12fb379560b6a7e4109f5e033f40",
+                "reference": "6d7608f8ca0a12fb379560b6a7e4109f5e033f40",
                 "shasum": ""
             },
             "require": {
@@ -768,9 +769,9 @@
             ],
             "support": {
                 "issues": "https://github.com/shuchkin/simplexlsxgen/issues",
-                "source": "https://github.com/shuchkin/simplexlsxgen/tree/1.2.15"
+                "source": "https://github.com/shuchkin/simplexlsxgen/tree/1.3.10"
             },
-            "time": "2022-07-05T05:29:18+00:00"
+            "time": "2022-12-14T18:13:39+00:00"
         },
         {
             "name": "smhg/sepa-qr-data",
@@ -818,16 +819,16 @@
         },
         {
             "name": "symfony/polyfill-ctype",
-            "version": "v1.26.0",
+            "version": "v1.27.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-ctype.git",
-                "reference": "6fd1b9a79f6e3cf65f9e679b23af304cd9e010d4"
+                "reference": "5bbc823adecdae860bb64756d639ecfec17b050a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-ctype/zipball/6fd1b9a79f6e3cf65f9e679b23af304cd9e010d4",
-                "reference": "6fd1b9a79f6e3cf65f9e679b23af304cd9e010d4",
+                "url": "https://api.github.com/repos/symfony/polyfill-ctype/zipball/5bbc823adecdae860bb64756d639ecfec17b050a",
+                "reference": "5bbc823adecdae860bb64756d639ecfec17b050a",
                 "shasum": ""
             },
             "require": {
@@ -842,7 +843,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "1.26-dev"
+                    "dev-main": "1.27-dev"
                 },
                 "thanks": {
                     "name": "symfony/polyfill",
@@ -880,7 +881,7 @@
                 "portable"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-ctype/tree/v1.26.0"
+                "source": "https://github.com/symfony/polyfill-ctype/tree/v1.27.0"
             },
             "funding": [
                 {
@@ -896,20 +897,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-05-24T11:49:31+00:00"
+            "time": "2022-11-03T14:55:06+00:00"
         },
         {
             "name": "symfony/polyfill-mbstring",
-            "version": "v1.26.0",
+            "version": "v1.27.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-mbstring.git",
-                "reference": "9344f9cb97f3b19424af1a21a3b0e75b0a7d8d7e"
+                "reference": "8ad114f6b39e2c98a8b0e3bd907732c207c2b534"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/9344f9cb97f3b19424af1a21a3b0e75b0a7d8d7e",
-                "reference": "9344f9cb97f3b19424af1a21a3b0e75b0a7d8d7e",
+                "url": "https://api.github.com/repos/symfony/polyfill-mbstring/zipball/8ad114f6b39e2c98a8b0e3bd907732c207c2b534",
+                "reference": "8ad114f6b39e2c98a8b0e3bd907732c207c2b534",
                 "shasum": ""
             },
             "require": {
@@ -924,7 +925,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "1.26-dev"
+                    "dev-main": "1.27-dev"
                 },
                 "thanks": {
                     "name": "symfony/polyfill",
@@ -963,7 +964,7 @@
                 "shim"
             ],
             "support": {
-                "source": "https://github.com/symfony/polyfill-mbstring/tree/v1.26.0"
+                "source": "https://github.com/symfony/polyfill-mbstring/tree/v1.27.0"
             },
             "funding": [
                 {
@@ -979,20 +980,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-05-24T11:49:31+00:00"
+            "time": "2022-11-03T14:55:06+00:00"
         },
         {
             "name": "timber/timber",
-            "version": "2.0.0-alpha.6",
+            "version": "2.0.0-beta.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/timber/timber.git",
-                "reference": "52e3fcb263a5165c0aadeb1dc0a562903bae8a39"
+                "reference": "1b91b3c31589162b2bc1872d0ff946fa7b68665d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/timber/timber/zipball/52e3fcb263a5165c0aadeb1dc0a562903bae8a39",
-                "reference": "52e3fcb263a5165c0aadeb1dc0a562903bae8a39",
+                "url": "https://api.github.com/repos/timber/timber/zipball/1b91b3c31589162b2bc1872d0ff946fa7b68665d",
+                "reference": "1b91b3c31589162b2bc1872d0ff946fa7b68665d",
                 "shasum": ""
             },
             "require": {
@@ -1013,7 +1014,7 @@
                 "wp-coding-standards/wpcs": "^2.0",
                 "wpackagist-plugin/advanced-custom-fields": "^5.0",
                 "wpackagist-plugin/co-authors-plus": "^3.3",
-                "yoast/phpunit-polyfills": "^1.0.1"
+                "yoast/wp-test-utils": "^1.0"
             },
             "suggest": {
                 "php-coveralls/php-coveralls": "^2.0 for code coverage",
@@ -1054,20 +1055,20 @@
                 "issues": "https://github.com/timber/timber/issues",
                 "source": "https://github.com/timber/timber"
             },
-            "time": "2022-06-29T16:00:27+00:00"
+            "time": "2022-08-04T19:34:07+00:00"
         },
         {
             "name": "twig/twig",
-            "version": "v3.4.1",
+            "version": "v3.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "e939eae92386b69b49cfa4599dd9bead6bf4a342"
+                "reference": "3ffcf4b7d890770466da3b2666f82ac054e7ec72"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/e939eae92386b69b49cfa4599dd9bead6bf4a342",
-                "reference": "e939eae92386b69b49cfa4599dd9bead6bf4a342",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/3ffcf4b7d890770466da3b2666f82ac054e7ec72",
+                "reference": "3ffcf4b7d890770466da3b2666f82ac054e7ec72",
                 "shasum": ""
             },
             "require": {
@@ -1082,7 +1083,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.4-dev"
+                    "dev-master": "3.5-dev"
                 }
             },
             "autoload": {
@@ -1118,7 +1119,7 @@
             ],
             "support": {
                 "issues": "https://github.com/twigphp/Twig/issues",
-                "source": "https://github.com/twigphp/Twig/tree/v3.4.1"
+                "source": "https://github.com/twigphp/Twig/tree/v3.5.0"
             },
             "funding": [
                 {
@@ -1130,7 +1131,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2022-05-17T05:48:52+00:00"
+            "time": "2022-12-27T12:28:18+00:00"
         }
     ],
     "packages-dev": [],
