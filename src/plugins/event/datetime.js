@@ -41,6 +41,9 @@ const datetimeSelector = () => {
 							value={ meta._event_start_date ? meta._event_start_date : getNow() }
 							onChange={ ( value ) => {
 								setMeta( { _event_start_date: value } );
+								if ( ! meta._event_end_date ) {
+									setMeta( { _event_end_date: value } );
+								}
 							} }
 							name="em-from-date"
 							type="date"
@@ -52,7 +55,7 @@ const datetimeSelector = () => {
 					<label for="em-to-date">{ __( 'To', 'events' ) }</label>
 					<div>
 						<TextControl
-							value={ meta._event_end_date ? meta._event_end_date : meta._event_start_date }
+							value={ meta._event_end_date }
 							onChange={ ( value ) => {
 								setMeta( { _event_end_date: value } );
 							} }
