@@ -54,12 +54,16 @@ class Featured {
         
     }
 
-	public function get_template($name) : string {
+	public function get_template($name) : string { 
         $filename = substr($name, strpos($name, "/")+1) . ".twig";
         
         if(file_exists(get_template_directory() . "/plugins/events/" . $filename)) {
-            return get_template_directory() . 'events/' . $filename;
+            return get_template_directory() . '/plugins/events/' . $filename;
         }
+		
+		if(file_exists(get_stylesheet_directory() . "/plugins/events/templates/blocks/" . $filename)) {
+			return get_stylesheet_directory() . '/plugins/events/templates/blocks/' . $filename;
+		}
 
         return \Events::DIR . '/templates/blocks/' . $filename;
     }
