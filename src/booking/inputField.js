@@ -98,6 +98,7 @@ const InputField = ( props ) => {
 
 	switch ( type ) {
 		case 'html':
+			console.log( 'html', value );
 			const content = createMarkup( value );
 			if ( ! content.__html ) return <div>{ value }</div>;
 			return (
