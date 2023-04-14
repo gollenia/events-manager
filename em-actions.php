@@ -421,7 +421,7 @@ function em_init_actions() {
 		}
 
 		header( 'Content-Type: application/javascript; charset=UTF-8', true );
-		$return = array('nasenbär' => $_REQUEST['action'], 'result'=>$result, 'message'=>$feedback, 'error'=>$EM_Booking->get_errors());
+		$return = array('result'=>$result, 'message'=>$feedback, 'error'=>$EM_Booking->get_errors());
 		echo json_encode(apply_filters('em_action_'.$_REQUEST['action'], $return, $EM_Booking));
 		wp_die();
 		
