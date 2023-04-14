@@ -30,7 +30,7 @@ $days_names = \Contexis\Events\Intl\Date::weekdays();
 		<select id="recurrence-frequency" name="recurrence_freq">
 			<?php
 				$freq_options = array ("daily" => __ ( 'Daily', 'events-manager'), "weekly" => __ ( 'Weekly', 'events-manager'), "monthly" => __ ( 'Monthly', 'events-manager'), 'yearly' => __('Yearly','events-manager') );
-				em_option_items ( $freq_options, $EM_Event->recurrence_freq ); 
+				Contexis\Events\Options::option_items ( $freq_options, $EM_Event->recurrence_freq ); 
 			?>
 		</select>
 		<?php _e ( 'every', 'events-manager')?>
@@ -46,18 +46,18 @@ $days_names = \Contexis\Events\Intl\Date::weekdays();
 		<p class="alternate-selector" id="weekly-selector">
 			<?php
 				$saved_bydays = ($EM_Event->is_recurring() && $EM_Event->recurrence_byday != '' ) ? explode ( ",", $EM_Event->recurrence_byday ) : array(); 
-				em_checkbox_items ( 'recurrence_bydays[]', $days_names, $saved_bydays ); 
+				Contexis\Events\Options::checkbox_items ( 'recurrence_bydays[]', $days_names, $saved_bydays ); 
 			?>
 		</p>
 		<p class="alternate-selector" id="monthly-selector" style="display:inline;">
 			<select id="monthly-modifier" name="recurrence_byweekno">
 				<?php
 					$weekno_options = array ("1" => __ ( 'first', 'events-manager'), '2' => __ ( 'second', 'events-manager'), '3' => __ ( 'third', 'events-manager'), '4' => __ ( 'fourth', 'events-manager'), '5' => __ ( 'fifth', 'events-manager'), '-1' => __ ( 'last', 'events-manager') ); 
-					em_option_items ( $weekno_options, $EM_Event->recurrence_byweekno  ); 
+					Contexis\Events\Options::option_items ( $weekno_options, $EM_Event->recurrence_byweekno  ); 
 				?>
 			</select>
 			<select id="recurrence-weekday" name="recurrence_byday">
-				<?php em_option_items ( $days_names, $EM_Event->recurrence_byday  ); ?>
+				<?php Contexis\Events\Options::option_items ( $days_names, $EM_Event->recurrence_byday  ); ?>
 			</select>
 			<?php _e('of each month','events-manager'); ?>
 			&nbsp;
