@@ -1469,6 +1469,21 @@ class EM_Event extends EM_Object{
 		}
 		return apply_filters('em_event_get_event_location', $Event_Location, $this);
 	}
+
+	public function can_book(){
+		$can_book = true;
+
+		$now = new DateTime();
+
+		if( $this->event_rsvp && $this->rsvp_end() && $this->rsvp_end()->getTimestamp() < $now->getTimestamp() ){
+			$can_book = false;
+		}
+		if( $this->get_spaces() <= 0 ){
+			$can_book = false;
+		}
+
+		return apply_filters('em_event_can_book', $can_book, $this);
+	}
 	
 	/**
 	 * Returns whether the event has an event location associated with it (different from a physical location). If supplied, can check against a specific type.
