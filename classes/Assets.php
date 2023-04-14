@@ -37,7 +37,6 @@ class Assets {
 	}
 
 	public function backend_script() {
-		$dir = __DIR__;
 		
 		$script_asset_path = \Events::DIR . "/includes/backend.asset.php";
 		if ( ! file_exists( $script_asset_path ) ) {
@@ -70,7 +69,7 @@ class Assets {
 			'events-block-style',
 			plugins_url( $editor_css, __FILE__ ),
 			array(),
-			filemtime( "$dir/$editor_css" )
+			$script_asset['version']
 		);
 	}
 
