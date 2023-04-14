@@ -111,6 +111,10 @@ class Booking
 			]
 		];
 
+		if(!$event->can_book()) {
+			return "";
+		}
+
 		$result = Assets::output_to_script_tag($data, 'booking_data');
 		$result .= "<div id='booking_app'></div>";
 
