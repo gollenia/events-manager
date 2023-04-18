@@ -10,9 +10,11 @@
 		"@wordpress/blocks": "^8.0.0",
 		"@wordpress/core-data": "^4.0.7",
 		"@wordpress/i18n": "^3.20.0",
+		"leaflet": "^1.9.3",
 		"qs": "^6.10.1",
 		"react-error-boundary": "^3.1.4",
-		"react-inlinesvg": "^2.3.0"
+		"react-inlinesvg": "^2.3.0",
+		"react-leaflet": "^4.2.1"
 	},
 	"devDependencies": {
 		"@wordpress/scripts": "^19.2.2",
