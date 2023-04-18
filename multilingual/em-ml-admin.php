@@ -46,15 +46,7 @@ class EM_ML_Admin{
 			    add_meta_box('em-event-bookings-translation', __('Bookings/Registration','events-manager'), 'EM_ML_Admin::meta_box_bookings_translation','event-recurring', 'normal','high');
 		    }
 	    }
-	    //locations, decide if it's a master location, if not then hide the meta boxes
-	    if( !empty($EM_Location) && !EM_ML::is_original($EM_Location) ){
-	        //add translation-specific meta boxes
-		    add_meta_box('em-event-translation', __('Translated Location Information','events-manager'), 'EM_ML_Admin::meta_box_translated_location',EM_POST_TYPE_LOCATION, 'side','high');
-	        //remove other meta boxes
-	    	remove_meta_box('em-location-where', EM_POST_TYPE_LOCATION, 'normal');
-		    add_meta_box('em-location-where', __('Where','events-manager'), array('EM_ML_Admin','meta_box_location_where'),EM_POST_TYPE_LOCATION, 'normal','high');
-	    	
-	    }
+	  
 	}
 	
 	public static function meta_box_translated_event(){
@@ -120,44 +112,6 @@ class EM_ML_Admin{
 	    <?php
 	}
 	
-	public static function meta_box_location_where(){
-		global $EM_Location; /* @var EM_Location $EM_Location */
-		$location = EM_ML::get_original_location($EM_Location);
-		$location_address = $EM_Location->location_address == $location->location_address || !$EM_Location->location_address ? '' : $EM_Location->location_address;
-		$location_town = $EM_Location->location_town == $location->location_town || !$EM_Location->location_town ? '' : $EM_Location->location_town;
-		$location_state = $EM_Location->location_state == $location->location_state || !$EM_Location->location_state ? '' : $EM_Location->location_state;
-		$location_region = $EM_Location->location_region == $location->location_region || !$EM_Location->location_region ? '' : $EM_Location->location_region;
-		?>
-		<p><em><?php esc_html_e('Below are translations for your location address. If left blank, the language of the original event will be used.','events-manager'); ?></em></p>
-		<table class="event-bookings-location-translation form-table">
-			<tbody>
-				<tr class="em-location-data-address">
-					<th><?php _e ( 'Address:', 'events-manager')?>&nbsp;</th>
-					<td>
-						<input id="location-address" type="text" name="location_address" value="<?php echo esc_attr($location_address); ?>" placeholder="<?php echo esc_attr($location->location_address); ?>">
-					</td>
-				</tr>
-				<tr class="em-location-data-town">
-					<th><?php _e ( 'City/Town:', 'events-manager')?>&nbsp;</th>
-					<td>
-						<input id="location-town" type="text" name="location_town" value="<?php echo esc_attr($location_town); ?>"  placeholder="<?php echo esc_attr($location->location_town); ?>">
-					</td>
-				</tr>
-				<tr class="em-location-data-state">
-					<th><?php _e ( 'State/County:', 'events-manager')?>&nbsp;</th>
-					<td>
-						<input id="location-state" type="text" name="location_state" value="<?php echo esc_attr($location_state); ?>"  placeholder="<?php echo esc_attr($location->location_state); ?>">
-					</td>
-				</tr>
-				<tr class="em-location-data-region">
-					<th><?php _e ( 'Region:', 'events-manager')?>&nbsp;</th>
-					<td>
-						<input id="location-region" type="text" name="location_region" value="<?php echo esc_attr($location_region); ?>"  placeholder="<?php echo esc_attr($location->location_region); ?>">
-					</td>
-				</tr>
-			</tbody>
-		</table>
-		<?php
-	}
+	
 }
 EM_ML_Admin::init();

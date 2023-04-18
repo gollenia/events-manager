@@ -21,6 +21,7 @@ import * as formRadio from './blocks/form/radio/index.js';
 import * as formSelect from './blocks/form/select/index.js';
 import * as formText from './blocks/form/text/index.js';
 import * as formTextarea from './blocks/form/textarea/index.js';
+import * as locationEditor from './blocks/location';
 import * as upcoming from './blocks/upcoming';
 
 import bookingOptions from './plugins/event/booking';
@@ -28,10 +29,10 @@ import datetimeSelector from './plugins/event/datetime';
 import locationSelector from './plugins/event/location';
 import peopleSelector from './plugins/event/people';
 
-const registerBlock = ( block ) => {
-	if ( ! block ) return;
+const registerBlock = (block) => {
+	if (!block) return;
 	const { name, settings } = block;
-	registerBlockType( name, settings );
+	registerBlockType(name, settings);
 };
 
 let blocks = [
@@ -48,36 +49,37 @@ let blocks = [
 	formPhone,
 	formRadio,
 	formHTML,
+	locationEditor,
 ];
 
 let plugins = [];
 
-registerPlugin( 'plugin-location-datetime', {
+registerPlugin('plugin-location-datetime', {
 	icon: null,
 	render: locationSelector,
-} );
+});
 
-registerPlugin( 'plugin-select-datetime', {
+registerPlugin('plugin-select-datetime', {
 	icon: null,
 	render: datetimeSelector,
-} );
+});
 
-registerPlugin( 'plugin-select-people', {
+registerPlugin('plugin-select-people', {
 	icon: null,
 	render: peopleSelector,
-} );
+});
 
-registerPlugin( 'plugin-booking-options', {
+registerPlugin('plugin-booking-options', {
 	icon: null,
 	render: bookingOptions,
-} );
+});
 
-if ( window.eventBlocksLocalization?.post_type === 'event' ) {
-	blocks = [ ...blocks, details, booking ];
+if (window.eventBlocksLocalization?.post_type === 'event') {
+	blocks = [...blocks, details, booking];
 }
 
 export const registerBlocks = () => {
-	blocks.forEach( registerBlock );
+	blocks.forEach(registerBlock);
 };
 
 registerBlocks();

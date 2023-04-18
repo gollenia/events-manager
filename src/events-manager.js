@@ -400,7 +400,7 @@ jQuery( document ).ready( function ( $ ) {
 				},
 			],
 		};
-		
+
 		if ( $( '#em-bookings-table-settings' ).length > 0 ) {
 			//Settings Overlay
 			$( '#em-bookings-table-settings' ).dialog( em_bookings_settings_dialog );

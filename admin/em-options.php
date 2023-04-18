@@ -77,7 +77,7 @@ function em_admin_options_page() {
 	?>
 	
 	<style type="text/css">.postbox h3 { cursor:pointer; }</style>
-	<div class="wrap <?php if(empty($tabs_enabled)) echo 'tabs-active' ?>">
+	<div class="em-tabs wrap <?php if(empty($tabs_enabled)) echo 'tabs-active' ?>">
 		<h1 id="em-options-title"><?php _e ( 'Event Manager Options', 'events-manager'); ?></h1>
 		<h2 class="nav-tab-wrapper">
 			<a href="<?php echo $general_tab_link; ?>#general" id="em-menu-general" class="nav-tab nav-tab-active"><?php _e('General','events-manager'); ?></a>

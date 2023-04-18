@@ -251,16 +251,16 @@ class EM_Location extends EM_Object {
 	 * @return boolean
 	 */
 	function get_post($validate = true){
-	    global $allowedtags;
 		do_action('em_location_get_post_pre', $this);
 		$this->location_name = ( !empty($_POST['location_name']) ) ? sanitize_post_field('post_title', $_POST['location_name'], $this->post_id, 'db'):'';
-		$this->post_content = ( !empty($_POST['content']) ) ? wp_kses( wp_unslash($_POST['content']), $allowedtags):'';
+		$this->post_content = "";
 		$this->get_post_meta(false);
 		
 		$result = $validate ? $this->validate():true; //validate both post and meta, otherwise return true
 		$this->compat_keys();
 		return apply_filters('em_location_get_post', $result, $this);		
 	}
+
 	/**
 	 * Retrieve event post meta information via POST, which should be always be called when saving the event custom post via WP.
 	 * @param boolean $validate whether or not to run validation, default is true
@@ -269,25 +269,22 @@ class EM_Location extends EM_Object {
 	function get_post_meta($validate = true){
 		//We are getting the values via POST or GET
 		do_action('em_location_get_post_meta_pre', $this);
-		$this->location_address = ( !empty($_POST['location_address']) ) ? wp_kses(wp_unslash($_POST['location_address']), array()):'';
-		$this->location_town = ( !empty($_POST['location_town']) ) ? wp_kses(wp_unslash($_POST['location_town']), array()):'';
-		$this->location_state = ( !empty($_POST['location_state']) ) ? wp_kses(wp_unslash($_POST['location_state']), array()):'';
-		$this->location_postcode = ( !empty($_POST['location_postcode']) ) ? wp_kses(wp_unslash($_POST['location_postcode']), array()):'';
-		$this->location_region = ( !empty($_POST['location_region']) ) ? wp_kses(wp_unslash($_POST['location_region']), array()):'';
-		$this->location_country = ( !empty($_POST['location_country']) ) ? wp_kses(wp_unslash($_POST['location_country']), array()):'';
-		$this->location_url = ( !empty($_POST['location_url']) ) ? wp_kses(wp_unslash($_POST['location_url']), array()):'';
-		$this->location_latitude = ( !empty($_POST['location_latitude']) && is_numeric($_POST['location_latitude']) ) ? round($_POST['location_latitude'], 6):'';
-		$this->location_longitude = ( !empty($_POST['location_longitude']) && is_numeric($_POST['location_longitude']) ) ? round($_POST['location_longitude'], 6):'';
-		//Sort out event attributes - note that custom post meta now also gets inserted here automatically (and is overwritten by these attributes)
 		
-		//location language
-		if( EM_ML::$is_ml && !empty($_POST['location_language']) && array_key_exists($_POST['location_language'], EM_ML::$langs) ){
-			$this->location_language = $_POST['location_language'];
-		}
+		$this->location_address = get_post_meta($this->post_id, '_location_address', true);
+		$this->location_town = get_post_meta($this->post_id, '_location_town', true);
+		$this->location_state = get_post_meta($this->post_id, '_location_state', true);
+		$this->location_postcode = get_post_meta($this->post_id, '_location_postcode', true);
+		$this->location_region = get_post_meta($this->post_id, '_location_region', true);
+		$this->location_country = get_post_meta($this->post_id, '_location_country', true);
+		$this->location_url = get_post_meta($this->post_id, '_location_url', true);
+		$this->location_latitude = get_post_meta($this->post_id, '_location_latitude', true);
+		$this->location_longitude = get_post_meta($this->post_id, '_location_longitude', true);
+	
+		
 		//the line below should be deleted one day and we move validation out of this function, when that happens check otherfunctions like EM_ML_IO::get_post_meta function which force validation again 
-		$result = $validate ? $this->validate_meta():true; //post returns null
+		
 		$this->compat_keys();
-		return apply_filters('em_location_get_post_meta',$result, $this, $validate); //if making a hook, assume that eventually $validate won't be passed on
+		return apply_filters('em_location_get_post_meta',true, $this, $validate); //if making a hook, assume that eventually $validate won't be passed on
 	}
 	
 	function validate(){
@@ -296,37 +293,14 @@ class EM_Location extends EM_Object {
 			$validate_post = false;
 			$this->add_error( __('Location name','events-manager').__(" is required.", 'events-manager') );
 		}
-		//anonymous submissions and guest basic info
-		if( !empty($this->owner_anonymous) ){
-			if( !is_email($this->owner_email) ){
-				$this->add_error( sprintf(__("%s is required.", 'events-manager'), __('A valid email','events-manager')) );
-			}
-			if( empty($this->owner_name) ){
-				$this->add_error( sprintf(__("%s is required.", 'events-manager'), __('Your name','events-manager')) );
-			}
-		}
-		$validate_meta = $this->validate_meta();
-		return apply_filters('em_location_validate', $validate_post && $validate_meta, $this );		
+
+		return apply_filters('em_location_validate', $validate_post, $this );		
 	}
 	
-	/**
-	 * Validates the location. Should be run during any form submission or saving operation.
-	 * @return boolean
-	 */
-	function validate_meta(){
-		//check required fields
-		foreach ( $this->required_fields as $field => $description) {
-			if( $field == 'location_country' && !array_key_exists($this->location_country, \Contexis\Events\Intl\Countries::get()) ){ 
-				//country specific checking
-				$this->add_error( $this->required_fields['location_country'].__(" is required.", 'events-manager') );				
-			}elseif ( $this->$field == "" ) {
-				$this->add_error( $description.__(" is required.", 'events-manager') );
-			}
-		}
-		return apply_filters('em_location_validate_meta', ( count($this->errors) == 0 ), $this);
-	}
+
 	
 	function save(){
+		
 		global $wpdb, $current_user, $blog_id, $EM_SAVING_LOCATION;
 		$EM_SAVING_LOCATION = true; //this flag prevents our dashboard save_post hooks from going further
 		//TODO shuffle filters into right place
@@ -397,18 +371,8 @@ class EM_Location extends EM_Object {
 		global $wpdb;
 		if( $this->can_manage('edit_locations','edit_others_locations') ){
 			do_action('em_location_save_meta_pre', $this);
-			//language default
+			
 			if( !$this->location_language ) $this->location_language = EM_ML::$current_language;
-			//Update Post Meta
-			$current_meta_values = get_post_meta($this->post_id);
-			foreach( array_keys($this->fields) as $key ){
-				if( !EM_ML::$is_ml && ($key == 'location_language' || $key == 'location_translation') ) continue;
-				if( !in_array($key, $this->post_fields) && $key != 'blog_id' && $this->$key != '' ){
-					update_post_meta($this->post_id, '_'.$key, $this->$key);
-				}elseif( array_key_exists('_'.$key, $current_meta_values) ){ //we should delete event_attributes, but maybe something else uses it without us knowing
-					delete_post_meta($this->post_id, '_'.$key);
-				}
-			}
 			
 			//refresh status
 			$this->get_status();
@@ -459,7 +423,7 @@ class EM_Location extends EM_Object {
 			$this->add_error( sprintf(__('You do not have permission to create/edit %s.','events-manager'), __('locations','events-manager')) );
 		}
 		$this->compat_keys();
-		$result = count($this->errors) == 0;
+		
 		return apply_filters('em_location_save_meta', count($this->errors) == 0, $this);
 	}
 	
@@ -619,8 +583,7 @@ class EM_Location extends EM_Object {
 		return apply_filters('em_location_load_similar', false, $this);
 	}
 	
-	function has_events( $status = 1 ){
-		global $wpdb;	
+	function has_events( $status = 1 ){	
 		$events_count = EM_Events::count(array('location_id' => $this->location_id, 'status' => $status));
 		return apply_filters('em_location_has_events', $events_count > 0, $this);
 	}
@@ -680,211 +643,7 @@ class EM_Location extends EM_Object {
 	}
 	
 	function output($format, $target="html") {
-		$location_string = $format;
-	 	
-	 	
-		preg_match_all('/\{([a-zA-Z0-9_]+)\}(.+?)\{\/\1\}/s', $location_string, $conditionals);
-		if( count($conditionals[0]) > 0 ){
-			//Check if the language we want exists, if not we take the first language there
-			foreach($conditionals[1] as $key => $condition){
-				$show_condition = false;
-				if ($condition == 'has_loc_image'){
-					//does this event have an image?
-					$show_condition = ( $this->get_image_url() != '' );
-				}elseif ($condition == 'no_loc_image'){
-					//does this event have an image?
-					$show_condition = ( $this->get_image_url() == '' );
-				}elseif ($condition == 'has_events'){
-					//does this location have any events
-					$show_condition = $this->has_events();
-				}elseif ($condition == 'no_events'){
-					//does this location NOT have any events?
-					$show_condition = $this->has_events() == false;
-				}
-				$show_condition = apply_filters('em_location_output_show_condition', $show_condition, $condition, $conditionals[0][$key], $this); 
-				if($show_condition){
-					//calculate lengths to delete placeholders
-					$placeholder_length = strlen($condition)+2;
-					$replacement = substr($conditionals[0][$key], $placeholder_length, strlen($conditionals[0][$key])-($placeholder_length *2 +1));
-				}else{
-					$replacement = '';
-				}
-				$location_string = str_replace($conditionals[0][$key], apply_filters('em_location_output_condition', $replacement, $condition, $conditionals[0][$key], $this), $location_string);
-			}
-		}
-	 	
-		//This is for the custom attributes
-		preg_match_all('/#_LATT\{([^}]+)\}(\{([^}]+)\})?/', $location_string, $results);
-		foreach($results[0] as $resultKey => $result) {
-			//check that we haven't mistakenly captured a closing bracket in second bracket set
-			if( !empty($results[3][$resultKey]) && $results[3][$resultKey][0] == '/' ){
-				$result = $results[0][$resultKey] = str_replace($results[2][$resultKey], '', $result);
-				$results[3][$resultKey] = $results[2][$resultKey] = '';
-			}
-			//Strip string of placeholder and just leave the reference
-			$attRef = substr( substr($result, 0, strpos($result, '}')), 7 );
-			$attString = '';
-			$placeholder_atts = array('#_ATT', $results[1][$resultKey]);
-			if( is_array($this->location_attributes) && array_key_exists($attRef, $this->location_attributes) ){
-				$attString = $this->location_attributes[$attRef];
-			}elseif( !empty($results[3][$resultKey]) ){
-				//Check to see if we have a second set of braces;
-				$placeholder_atts[] = $results[3][$resultKey];
-				$attStringArray = explode('|', $results[3][$resultKey]);
-				$attString = $attStringArray[0];
-			}elseif( !empty($attributes['values'][$attRef][0]) ){
-				$attString = $attributes['values'][$attRef][0];
-			}
-			$attString = apply_filters('em_location_output_placeholder', $attString, $this, $result, $target, $placeholder_atts);
-			$location_string = str_replace($result, $attString ,$location_string );
-		}
-	 	preg_match_all("/(#@?_?[A-Za-z0-9_]+)({([^}]+)})?/", $location_string, $placeholders);
-	 	$replaces = array();
-		foreach($placeholders[1] as $key => $result) {
-			$replace = '';
-			$full_result = $placeholders[0][$key];
-			$placeholder_atts = array($result);
-			if( !empty($placeholders[3][$key]) ) $placeholder_atts[] = $placeholders[3][$key];
-			switch( $result ){
-				case '#_LOCATIONID':
-					$replace = $this->location_id;
-					break;
-				case '#_LOCATIONPOSTID':
-					$replace = $this->post_id;
-					break;
-				case '#_NAME': //Depricated
-				case '#_LOCATION': //Depricated
-				case '#_LOCATIONNAME':
-					$replace = $this->location_name;
-					break;
-				case '#_ADDRESS': //Depricated
-				case '#_LOCATIONADDRESS': 
-					$replace = $this->location_address;
-					break;
-				case '#_TOWN': //Depricated
-				case '#_LOCATIONTOWN':
-					$replace = $this->location_town;
-					break;
-				case '#_LOCATIONSTATE':
-					$replace = $this->location_state;
-					break;
-				case '#_LOCATIONPOSTCODE':
-					$replace = $this->location_postcode;
-					break;
-				case '#_LOCATIONREGION':
-					$replace = $this->location_region;
-					break;
-				case '#_LOCATIONCOUNTRY':
-					$replace = $this->get_country();
-					break;
-				case '#_LOCATIONFULLLINE':
-				case '#_LOCATIONFULLBR':
-					$glue = $result == '#_LOCATIONFULLLINE' ? ', ':'<br />';
-					$replace = $this->get_full_address($glue);
-					break;
-				case '#_LOCATIONLONGITUDE':
-					$replace = $this->location_longitude;
-					break;
-				case '#_LOCATIONLATITUDE':
-					$replace = $this->location_latitude;
-					break;
-				case '#_DESCRIPTION':  //Deprecated
-				case '#_LOCATIONNOTES':
-					$replace = $this->post_content;
-					break;
-				case '#_LOCATIONIMAGEURL':
-				case '#_LOCATIONIMAGE':
-					$image_url = $this->get_image_url();
-	        		if( $image_url != ''){
-	        			$image_url = esc_url($image_url);
-	        			if($result == '#_LOCATIONIMAGEURL'){
-		        			$replace =  $image_url;
-						}else{
-							if( empty($placeholders[3][$key]) ){
-								$replace = "<img src='".$image_url."' alt='".esc_attr($this->location_name)."'/>";
-							}else{
-								$image_size = explode(',', $placeholders[3][$key]);
-								if( is_array($image_size) && array_is_list($image_size) && count($image_size) > 1 ){
-								    $replace = get_the_post_thumbnail($this->ID, $image_size);
-								}else{
-									$replace = "<img src='".$image_url."' alt='".esc_attr($this->location_name)."'/>";
-								}
-							}
-						}
-	        		}
-					break;
-				case '#_LOCATIONURL':
-				case '#_LOCATIONLINK':
-				case '#_LOCATIONPAGEURL': //Depricated
-					$link = esc_url($this->get_permalink());
-					$replace = ($result == '#_LOCATIONURL' || $result == '#_LOCATIONPAGEURL') ? $link : '<a href="'.$link.'">'.esc_html($this->location_name).'</a>';
-					break;
-				case '#_LOCATIONEDITURL': // Deprecated - always worked but documented as #_EDITLOCATIONURL
-				case '#_LOCATIONEDITLINK': // Deprecated - always worked but documented incorrectly as #_EDITLOCATIONLINK
-				case '#_EDITLOCATIONURL':
-				case '#_EDITLOCATIONLINK':
-				    if( $this->can_manage('edit_locations','edit_others_locations') ){
-						$link = esc_url($this->get_edit_url());
-						$replace = ($result == '#_LOCATIONEDITURL' || $result == '#_EDITLOCATIONURL' ) ? $link : '<a href="'.$link.'" title="'.esc_attr($this->location_name).'">'.esc_html(sprintf(__('Edit Location','events-manager'))).'</a>';
-				    }
-					break;
-				case '#_LOCATIONICALURL':
-				case '#_LOCATIONICALLINK':
-					$replace = $this->get_ical_url();
-					if( $result == '#_LOCATIONICALLINK' ){
-						$replace = '<a href="'.esc_url($replace).'">iCal</a>';
-					}
-					break;
-				case '#_LOCATIONWEBCALURL':
-				case '#_LOCATIONWEBCALLINK':
-					$replace = $this->get_ical_url();
-					$replace = str_replace(array('http://','https://'), 'webcal://', $replace);
-					if( $result == '#_LOCATIONWEBCALLINK' ){
-						$replace = '<a href="'.esc_url($replace).'">Webcal</a>';
-					}
-					break;
-				case '#_LOCATIONRSSURL':
-				case '#_LOCATIONRSSLINK':
-					$replace = $this->get_rss_url();
-					if( $result == '#_LOCATIONRSSLINK' ){
-						$replace = '<a href="'.esc_url($replace).'">RSS</a>';
-					}
-					break;
-				case '#_PASTEVENTS': //Depricated
-				case '#_LOCATIONPASTEVENTS':
-				case '#_NEXTEVENTS': //Depricated
-				case '#_LOCATIONNEXTEVENTS':
-				case '#_LOCATIONNEXTEVENT':
-					$events = EM_Events::get( array('location'=>$this->location_id, 'scope'=>'future', 'limit'=>1, 'orderby'=>'event_start_date,event_start_time') );
-					$replace = get_option('dbem_location_no_event_message');
-					foreach($events as $EM_Event){
-						$replace = $EM_Event->output(get_option('dbem_location_event_single_format'));
-					}
-					break;
-				default:
-					$replace = $full_result;
-					break;
-			}
-			$replaces[$full_result] = apply_filters('em_location_output_placeholder', $replace, $this, $full_result, $target, $placeholder_atts);
-		}
-		//sort out replacements so that during replacements shorter placeholders don't overwrite longer varieties.
-		krsort($replaces);
-		foreach($replaces as $full_result => $replacement){
-			if( !in_array($full_result, array('#_DESCRIPTION','#_LOCATIONNOTES')) ){
-				$location_string = str_replace($full_result, $replacement , $location_string );
-			}else{
-				$desc_replace[$full_result] = $replacement;
-			}
-		}
-		
-		//Finally, do the location notes, so that previous placeholders don't get replaced within the content, which may use shortcodes
-		if( !empty($desc_replace) ){
-			foreach($desc_replace as $full_result => $replacement){
-				$location_string = str_replace($full_result, $replacement , $location_string );
-			}
-		}
-		
-		return apply_filters('em_location_output', $location_string, $this, $format, $target);	
+		return apply_filters('em_location_output', "", $this, $format, $target);	
 	}
 	
 	function get_country(){
