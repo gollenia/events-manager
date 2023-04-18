@@ -813,8 +813,6 @@ class EM_Event extends EM_Object{
 		
 		$this->speaker_id = intval($_POST['speaker_id']) ?? 0;
 
-		file_put_contents("/var/www/vhosts/kids-team.internal/log/event.log", print_r($this, true));
-
 		return apply_filters('em_event_get_post_meta', count($this->errors) == 0, $this);
 
 	}

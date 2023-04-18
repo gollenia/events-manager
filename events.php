@@ -29,10 +29,6 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 // Setting constants
 
-add_action('wp_after_insert_post', function ($postId, $postAfter) {
-	file_put_contents("/var/www/vhosts/kids-team.internal/log/save_post.txt", "hihi");
-}, 10, 2);
-
 class Events {
 	const VERSION = '6.4';
 	const DIR = __DIR__;
