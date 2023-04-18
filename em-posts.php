@@ -196,7 +196,10 @@ function wp_events_plugin_init(){
 			'rewrite' => ['slug' => EM_POST_TYPE_LOCATION_SLUG, 'with_front'=>false],
 			'query_var' => true,
 			'has_archive' => false,
-			'supports' => apply_filters('em_cp_location_supports', ['title','excerpt','thumbnail','author']),
+			'template' => [
+				['events-manager/locationeditor']
+			],
+			'supports' => apply_filters('em_cp_location_supports', ['title','excerpt','thumbnail','editor','custom-fields']),
 			'capability_type' => 'location',
 			'capabilities' => [
 				'publish_posts' => 'publish_locations',
