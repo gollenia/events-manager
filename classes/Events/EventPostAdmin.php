@@ -266,9 +266,7 @@ class EM_Event_Post_Admin{
 		em_locate_template('forms/tickets-form.php', true); //put here as it can't be in the add event form
 	}
 	
-	public static function meta_box_location(){
-		//em_locate_template('forms/event/location.php',true);
-	}
+
 	
 	public static function meta_box_ms_categories(){
 		global $EM_Event;
