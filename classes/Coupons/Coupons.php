@@ -500,7 +500,7 @@ class EM_Coupons extends EM_Object {
 	 */
 	public static function admin_meta_box($EM_Event){
 		//load this only when needed, so moved into the EM_Coupons_Admin object, 
-		include_once('coupons-admin.php');
+		include_once('CouponsAdmin.php');
 		EM_Coupons_Admin::admin_meta_box($EM_Event);
 	}
 	
