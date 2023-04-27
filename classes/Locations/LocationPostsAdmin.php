@@ -61,7 +61,7 @@ class EM_Location_Posts_Admin{
 	
 	public static function columns_output( $column ) {
 		global $post;
-		$post = em_get_location($post); 
+		$post = EM_Location::get($post); 
 		switch ( $column ) {
 			case 'location-id':
 				echo $post->location_id;

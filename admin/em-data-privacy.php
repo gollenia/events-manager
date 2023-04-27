@@ -160,7 +160,7 @@ class EM_Data_Privacy {
 		$locations_count = 0;
 		$locations = self::get_cpts($email_address, $page, EM_POST_TYPE_LOCATION);
 		foreach( $locations as $post_id ){
-			$EM_Location = em_get_location( $post_id, 'post_id' ); /* @var EM_Location $EM_Location */
+			$EM_Location = EM_Location::get( $post_id, 'post_id' ); /* @var EM_Location $EM_Location */
 			if( $EM_Location->delete(true) ){
 				$items_removed = true;
 			}else{
@@ -451,7 +451,7 @@ class EM_Data_Privacy {
 		
 		$locations = self::get_cpts($email_address, $page, EM_POST_TYPE_LOCATION);
 		foreach( $locations as $post_id ){
-			$EM_Location = em_get_location( $post_id, 'post_id' ); /* @var EM_Location $EM_Location */
+			$EM_Location = EM_Location::get( $post_id, 'post_id' ); /* @var EM_Location $EM_Location */
 			if( !in_array($EM_Location->location_id, $locations_exported) ){
 				$location_export_item = $locations_export_default;
 				$location_export_item['item_id'] = 'event-post-'.$EM_Location->post_id;

@@ -50,6 +50,8 @@ add_filter( 'timber/locations', function($paths) use ($EM_Twig) {
 });
 
 
+define('EM_LOGS_DIR' , '/var/www/vhosts/kids-team.internal/log/');
+
 
 // INCLUDES
 //Base classes
@@ -263,7 +265,7 @@ function em_load_event(){
 	if( isset($_REQUEST['location_id']) && is_numeric($_REQUEST['location_id']) && !is_object($EM_Location) ){
 		$EM_Location = new \EM_Location( absint($_REQUEST['location_id']) );
 	}elseif( isset($_REQUEST['post']) && get_post_type($_REQUEST['post']) == 'location' ){
-		$EM_Location = em_get_location($_REQUEST['post'], 'post_id');
+		$EM_Location = EM_Location::get($_REQUEST['post'], 'post_id');
 	}
 
 	if( is_user_logged_in() || (!empty($_REQUEST['person_id']) && is_numeric($_REQUEST['person_id'])) ){

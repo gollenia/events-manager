@@ -351,7 +351,7 @@ function em_map_meta_cap( $caps, $cap, $user_id, $args ) {
 			if( !empty($post->post_type) && $post->post_type == 'revision' ) $post = get_post($post->post_parent);
 			if( empty($post->post_type) || $post->post_type != EM_POST_TYPE_LOCATION ) return $caps;
 			//continue with getting post type and assigning caps
-			$EM_Location = em_get_location($post);
+			$EM_Location = EM_Location::get($post);
 			$post_type = get_post_type_object( $EM_Location->post_type );
 			/* Set an empty array for the caps. */
 			$caps = [];

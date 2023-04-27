@@ -57,7 +57,7 @@ if( !class_exists('EM_Permalinks') ){
 				}elseif( $wp_query->get('location_slug') ){
 					$location = $wpdb->get_row('SELECT location_id, post_id FROM '.EM_LOCATIONS_TABLE." WHERE location_slug='".$wp_query->get('location_slug')."' AND (blog_id=".get_current_blog_id()." OR blog_id IS NULL OR blog_id=0)", ARRAY_A);
 					if( !empty($location) ){
-						$EM_Location = em_get_location($location['location_id']);
+						$EM_Location = EM_Location::get($location['location_id']);
 						$url = get_permalink($EM_Location->post_id);
 					}
 				}elseif( $wp_query->get('category_slug') ){

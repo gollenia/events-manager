@@ -49,13 +49,13 @@ class EM_Locations extends EM_Object {
 			
 			$locations = array();
 			foreach($args as $location_id){
-				$locations[$location_id] = em_get_location($location_id);
+				$locations[$location_id] = EM_Location::get($location_id);
 			}
 			return apply_filters('em_locations_get', $locations, $args); //We return all the events matched as an EM_Event array. 
 		}elseif( is_numeric($args) ){
 			
 			//return an event in the usual array format
-			return apply_filters('em_locations_get', array(em_get_location($args)), $args);
+			return apply_filters('em_locations_get', array(EM_Location::get($args)), $args);
 		}elseif( is_array($args) && is_object(current($args)) && get_class((current($args))) == 'EM_Location' ){
 		    //we were passed an array of EM_Location classes, so we just give it back
 		    /* @todo do we really need this condition in EM_Locations::get()? */
@@ -189,7 +189,7 @@ $limit $offset
 		}
 		
 		foreach ( $results as $location ){
-			$locations[] = em_get_location($location['post_id'], 'post_id');
+			$locations[] = EM_Location::get($location['post_id'], 'post_id');
 		}
 		
 		return apply_filters('em_locations_get', $locations, $args);
