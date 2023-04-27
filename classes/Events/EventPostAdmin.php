@@ -232,16 +232,7 @@ class EM_Event_Post_Admin{
 		}
 
 		
-		add_action('post_submitbox_misc_actions', 'EM_Event_Post_Admin::meta_box_action_post_submitbox_start');
-	}
-	
-	public static function meta_box_action_post_submitbox_start(){
-		global $EM_Event;
-		?>
-		<div class="misc-pub-section misc-pub-post-status misc-event-duplicate-link">
-			<a href="<?php echo esc_url($EM_Event->duplicate_url()); ?>"><?php echo esc_html(sprintf(__('Duplicate %s','events-manager'), __('Event','events-manager'))); ?></a>
-		</div>
-		<?php
+		
 	}		
 	
 	public static function meta_box_metadump(){
@@ -426,16 +417,12 @@ class EM_Event_Recurring_Post_Admin{
 			$EM_Event = EM_Event::find($post->ID, 'post_id');
 		}
 		
-		add_meta_box('em-event-recurring', __('Recurrences','events-manager'), array('EM_Event_Recurring_Post_Admin','meta_box_recurrence'),'event-recurring', 'normal','high');
-		//add_meta_box('em-event-meta', 'Event Meta (debugging only)', array('EM_Event_Post_Admin','meta_box_metadump'),'event-recurring', 'normal','high');
+	
 		if( get_option('dbem_rsvp_enabled') && $EM_Event->can_manage('manage_bookings','manage_others_bookings') ){
 			add_meta_box('em-event-bookings', __('Bookings/Registration','events-manager'), array('EM_Event_Post_Admin','meta_box_bookings'),'event-recurring', 'normal','high');
 		}
 		
 		
-		if( defined('WP_DEBUG') && WP_DEBUG && defined('WP_DEBUG_DISPLAY') && WP_DEBUG_DISPLAY ){
-		    add_meta_box('em-event-meta', 'Event Meta (debugging only)', array('EM_Event_Post_Admin','meta_box_metadump'),'event-recurring', 'normal','high');
-		}
 	}
 	
 	public static function meta_box_recurrence(){
