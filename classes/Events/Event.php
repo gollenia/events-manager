@@ -459,7 +459,7 @@ class EM_Event extends EM_Object{
 		}
 		if( is_object($id) && get_class($id) == 'EM_Event' ){
 			return $id;
-		}elseif( !defined('EM_CACHE') || EM_CACHE ){
+		}else{
 			//check the cache first
 			$event_id = false;
 			if( is_numeric($id) ){
@@ -548,7 +548,7 @@ class EM_Event extends EM_Object{
 			//load meta data and other related information
 			if( $event_post->post_status != 'auto-draft' ){
 			    $event_meta = $this->get_event_meta($search_by);
-			    if( !empty($event_meta['_event_location_type']) ) $this->event_location_type = $event_meta['_event_location_type']; //load this directly so we know further down whether this has an event location type to load
+			    
 				//Get custom fields and post meta
 				
 				foreach($event_meta as $event_meta_key => $event_meta_val){
@@ -601,7 +601,7 @@ class EM_Event extends EM_Object{
 	
 	function get_event_meta($blog_id = false){
 		
-		if( !empty($this->blog_id) ) $blog_id = $this->blog_id; //if there's a blog id already, there's no doubt where to look for
+		
 		if( empty($this->post_id) ) return array();
 		
 		$event_meta = get_post_meta($this->post_id);
@@ -641,39 +641,31 @@ class EM_Event extends EM_Object{
 		do_action('em_event_get_post_meta_pre', $this);
 		
 		//Check if this is recurring or not early on so we can take appropriate action further down
-		if( !empty($_POST['recurring']) ){
-			$this->recurrence = 1;
-			$this->post_type = 'event-recurring';
-		}
-		//Set Event Timezone to supplied value or alternatively use blog timezone value by default.
-		if( !empty($_REQUEST['event_timezone']) ){
-			$this->event_timezone = EM_DateTimeZone::create($_REQUEST['event_timezone'])->getName();
-		}elseif( empty($this->event_timezone ) ){ //if timezone was already set but not supplied, we don't change it
-			$this->event_timezone = EM_DateTimeZone::create()->getName();
-		}
-		//Dates and Times - dates ignored if event is recurring being updated (not new) and not specifically chosen to reschedule event
-		$this->event_start = $this->event_end = null;
-		if( !$this->is_recurring() || (empty($this->event_id) || !empty($_REQUEST['event_reschedule'])) ){
-			//Event Dates
-			$this->event_start_date = get_post_meta($this->post_id, '_event_start_date', true);
-			$this->event_end_date = get_post_meta($this->post_id, '_event_end_date', true);
-		}
+		$this->recurrence = get_post_type($this->post_id) == 'event-recurring' ? 1:0;
+		$this->post_type = $this->recurrence ? 'event-recurring':EM_POST_TYPE_EVENT;
 		
-		$this->event_rsvp_time = $_REQUEST['event_rsvp_time'];
+		$this->event_timezone = EM_DateTimeZone::create()->getName();
+		
+		$this->event_start = $this->event_end = null;
+
+		
+		$this->event_start_date = get_post_meta($this->post_id, '_event_start_date', true) ?? date('Y-m-d')	;
+		$this->event_end_date = get_post_meta($this->post_id, '_event_end_date', true) ?? date('Y-m-d')	;
+		
+		$this->event_rsvp_time = get_post_meta($this->post_id, '_event_rsvp_time', true);
 		$this->event_all_day = get_post_meta($this->post_id, '_event_all_day', true);
 		
 		$this->event_start_time = $this->event_all_day ? "00:00:00" : get_post_meta($this->post_id, '_event_start_time', true);
 		$this->event_end_time = $this->event_all_day ? "23:59:59" : get_post_meta($this->post_id, '_event_end_time', true);
-		$this->event_start = $this->start()->date;
-		$this->event_end = $this->end()->date;
+		$this->event_start = $this->start()->getTimestamp();
+		$this->event_end = $this->end()->getTimestamp();
 		
 		//Get Location Info
 		$this->location_id = get_option('dbem_locations_enabled') ? get_post_meta($this->post_id, '_location_id', true) : 0;
 		
-		
-		//Bookings
 		$can_manage_bookings = $this->can_manage('manage_bookings','manage_others_bookings');
-		$preview_autosave = is_admin() && !empty($_REQUEST['wp-preview']) && $_REQUEST['wp-preview'] == 'dopreview'; //we shouldn't save new data during a preview auto-save
+		$preview_autosave = is_admin() && !empty($_REQUEST['wp-preview']) && $_REQUEST['wp-preview'] == 'dopreview'; 
+		//we shouldn't save new data during a preview auto-save
 		if( !$preview_autosave && $can_manage_bookings && !empty($_POST['event_rsvp']) && $_POST['event_rsvp'] ){
 			//get tickets only if event is new, non-recurring, or recurring but specifically allowed to reschedule by user
 			if( !$this->is_recurring() || (empty($this->event_id) || !empty($_REQUEST['event_recreate_tickets'])) || !$this->event_rsvp ){
@@ -707,48 +699,25 @@ class EM_Event extends EM_Object{
 		if( $this->is_recurring() ){
 			$this->recurrence = 1; //just in case
 			
-			//If event is new or reschedule is requested, then proceed with new time pattern
-			if( empty($this->event_id) || !empty($_REQUEST['event_reschedule']) ){
-				//dates and time schedules of events
-				$this->recurrence_freq = ( !empty($_POST['recurrence_freq']) && in_array($_POST['recurrence_freq'], array('daily','weekly','monthly','yearly')) ) ? $_POST['recurrence_freq']:'daily';
-				if( !empty($_POST['recurrence_bydays']) && $this->recurrence_freq == 'weekly' && is_array($_POST['recurrence_bydays']) && array_is_list($_POST['recurrence_bydays']) ){
-					$this->recurrence_byday = str_replace(' ', '', implode( ",", $_POST['recurrence_bydays'] ));
-				}elseif( isset($_POST['recurrence_byday']) && $this->recurrence_freq == 'monthly' ){
-					$this->recurrence_byday = wp_kses_data($_POST['recurrence_byday']);
-				}else{
-					$this->recurrence_byday = null;
-				}
-				$this->recurrence_interval = ( !empty($_POST['recurrence_interval']) && is_numeric($_POST['recurrence_interval']) ) ? $_POST['recurrence_interval']:1;
-				$this->recurrence_byweekno = ( !empty($_POST['recurrence_byweekno']) ) ? wp_kses_data($_POST['recurrence_byweekno']):'';
-				$this->recurrence_days = ( !empty($_POST['recurrence_days']) && is_numeric($_POST['recurrence_days']) ) ? (int) $_POST['recurrence_days']:0;
-			}
+			$this->recurrence_freq = get_post_meta($this->post_id, '_recurrence_freq', true) ?? 'daily';
+			$this->recurrence_interval = get_post_meta($this->post_id, '_recurrence_interval', true) ?? 1;
+			if($this->recurrence_interval == 0) $this->recurrence_interval = 1; // prevent loop
+			$this->recurrence_byweekno = get_post_meta($this->post_id, '_recurrence_byweekno', true) ?? '';
+			$this->recurrence_days = get_post_meta($this->post_id, '_recurrence_days', true) ?? 0;
+			$this->recurrence_byday = get_post_meta($this->post_id, '_recurrence_byday', true) ?? null;
+		
 			
 			//here we do a comparison between new and old event data to see if we are to reschedule events or recreate bookings
 			if( $this->event_id ){ //only needed if this is an existing event needing rescheduling/recreation
 				//Get original recurring event so we can tell whether event recurrences or bookings will be recreated or just modified
-				$EM_Event = new EM_Event($this->event_id);
 				
-				//first check event times
-				$recurring_event_dates = array(
-						'event_start_date' => $EM_Event->event_start_date,
-						'event_end_date' => $EM_Event->event_end_date,
-						'recurrence_byday' => $EM_Event->recurrence_byday,
-						'recurrence_byweekno' => $EM_Event->recurrence_byweekno,
-						'recurrence_days' => $EM_Event->recurrence_days,
-						'recurrence_freq' => $EM_Event->recurrence_freq,
-						'recurrence_interval' => $EM_Event->recurrence_interval
-				);
-				//check previously saved event info compared to current recurrence info to see if we need to reschedule
-				foreach($recurring_event_dates as $k => $v){
-					if( $this->$k != $v ){
-						$this->recurring_reschedule = true; //something changed, so we reschedule
-					}
-				}
+				$this->recurring_reschedule = $this->check_reschedule();
+				
 				
 				//now check tickets if we don't already have to reschedule
 				if( !$this->recurring_reschedule && $this->event_rsvp ){
 					//@TODO - ideally tickets could be independent of events, it'd make life easier here for comparison and editing without rescheduling
-					$EM_Tickets = $EM_Event->get_tickets();
+					$EM_Tickets = $this->get_tickets();
 					//we compare tickets
 					foreach( $this->get_tickets()->tickets as $EM_Ticket ){
 						if( !empty($EM_Ticket->ticket_id) && !empty($EM_Tickets->tickets[$EM_Ticket->ticket_id]) ){
@@ -811,13 +780,41 @@ class EM_Event extends EM_Object{
 
 		$this->event_audience = get_post_meta($this->post_id, '_event_audience', "");
 		
-		$this->speaker_id = intval($_POST['speaker_id']) ?? 0;
+		
+		$this->speaker_id = intval(get_post_meta($this->post_id, '_speaker_id', true)) ?? 0	;
 
 		return apply_filters('em_event_get_post_meta', count($this->errors) == 0, $this);
 
 	}
 
-	
+	function check_reschedule() {
+		global $wpdb;
+		$result = $wpdb->get_row( $wpdb->prepare("SELECT * FROM ". EM_EVENTS_TABLE ." WHERE event_id=%d", $this->event_id) );
+		if(!$result) return true;
+
+	//first check event times
+		$recurring_event_dates = array(
+				'event_start_date' => $result->event_start_date,
+				'event_end_date' => $result->event_end_date,
+				'event_start_time' => $result->event_start_time,
+				'event_end_time' => $result->event_end_time,
+				'recurrence_byday' => $result->recurrence_byday,
+				'recurrence_byweekno' => $result->recurrence_byweekno,
+				'recurrence_days' => $result->recurrence_days,
+				'recurrence_freq' => $result->recurrence_freq,
+				'recurrence_interval' => $result->recurrence_interval
+		);
+		
+		$reschedule = false;
+		//check previously saved event info compared to current recurrence info to see if we need to reschedule
+		foreach($recurring_event_dates as $k => $v){
+			if( $this->$k != $v ){
+				$reschedule = true; //something changed, so we reschedule
+			}
+		}
+
+		return $reschedule;
+	}
 	
 	function validate(){
 		$validate_post = true;
@@ -1018,7 +1015,7 @@ class EM_Event extends EM_Object{
 					delete_post_meta($this->post_id, '_'.$key);
 				}
 			}
-			$this->speaker_id = intval($_POST['speaker_id']) ?? 0;
+			
 			
 			//update timestamps, dates and times
 			update_post_meta($this->post_id, '_event_start_local', $this->start()->getDateTime());
@@ -1128,7 +1125,7 @@ class EM_Event extends EM_Object{
 		$EM_Event->post_id = null;
 		$EM_Event->ID = null;
 		$EM_Event->post_name = '';
-		$EM_Event->location_id = empty($EM_Event->location_id) ? 0 : $EM_Event->location_id;
+		$EM_Event->location_id = $EM_Event->location_id ?? 0;
 		$EM_Event->get_bookings()->event_id = null;
 		$EM_Event->get_bookings()->get_tickets()->event_id = null;
 		//if bookings reset ticket ids and duplicate tickets
@@ -1368,9 +1365,8 @@ class EM_Event extends EM_Object{
 
 		if(!$this->$when_date || !$this->$when_time) {
 			$time = $this->$when_time ?: '00:00:00';
-			return new EM_DateTime('1970-01-01 '.$time, $this->event_timezone);
-		}
-		
+			return new EM_DateTime('2023-01-01 '.$time, $this->event_timezone);
+		}		
 			/* @var EM_DateTime $EM_DateTime */
 		$EM_DateTime = new EM_DateTime($this->$when_date . " " . $this->$when_time);
 		
@@ -1378,6 +1374,7 @@ class EM_Event extends EM_Object{
 		$tz = $utc_timezone ? 'UTC' : $this->event_timezone;
 		$EM_DateTime->setTimezone($tz);
 		return $EM_DateTime;
+		
 	}
 	
 	function get_status($db = false){
@@ -1440,7 +1437,7 @@ class EM_Event extends EM_Object{
 			$this->location = $EM_Location;
 		}else{
 			if( !is_object($this->location) || $this->location->location_id != $this->location_id ){
-				$this->location = apply_filters('em_event_get_location', em_get_location($this->location_id), $this);
+				$this->location = apply_filters('em_event_get_location', EM_Location::get($this->location_id), $this);
 			}
 		}
 		return $this->location;
@@ -2132,6 +2129,7 @@ class EM_Event extends EM_Object{
 	 */
 	function save_events() {
 		global $wpdb;
+		
 		if( !$this->can_manage('edit_events','edit_others_events') ) return apply_filters('em_event_save_events', false, $this, array(), array());
 		$event_ids = $post_ids = $event_dates = $events = array();
 		if( $this->is_published() || 'future' == $this->post_status ){
@@ -2175,8 +2173,10 @@ class EM_Event extends EM_Object{
 			//First thing - times. If we're changing event times, we need to delete all events and recreate them with the right times, no other way
 			
 			if( $this->recurring_reschedule ){
+				
 				$this->delete_events(); //Delete old events beforehand, this will change soon
 				$matching_days = $this->get_recurrence_days(); //Get days where events recur
+				
 				$event['event_date_created'] = current_time('mysql'); //since the recurrences are recreated
 				unset($event['event_date_modified']);
 				if( count($matching_days) > 0 ){
@@ -2329,7 +2329,7 @@ class EM_Event extends EM_Object{
 			 	}
 			}
 		 	//Next - Bookings. If we're completely rescheduling or just recreating bookings, we're deleting them and starting again
-		 	if( ($this->recurring_reschedule || $this->recurring_recreate_bookings) && $this->recurring_recreate_bookings !== false && EM_ML::is_original($this) ){ //if set specifically to false, we skip bookings entirely (ML translations for example)
+		 	if( ($this->recurring_reschedule || $this->recurring_recreate_bookings) && $this->recurring_recreate_bookings !== false ){ //if set specifically to false, we skip bookings entirely (ML translations for example)
 			 	//first, delete all bookings & tickets if we haven't done so during the reschedule above - something we'll want to change later if possible so bookings can be modified without losing all data
 			 	if( !$this->recurring_reschedule ){
 				 	//create empty EM_Bookings and EM_Tickets objects to circumvent extra loading of data and SQL queries
@@ -2518,7 +2518,7 @@ class EM_Event extends EM_Object{
 		//get timestampes for start and end dates, both at 12AM
 		$start_date = $this->start()->copy()->setTime(0,0,0)->getTimestamp();
 		$end_date = $this->end()->copy()->setTime(0,0,0)->getTimestamp();
-		
+			
 		$weekdays = explode(",", $this->recurrence_byday); //what days of the week (or if monthly, one value at index 0)
 		$matching_days = array(); //the days we'll be returning in timestamps
 		
@@ -2538,18 +2538,24 @@ class EM_Event extends EM_Object{
 				//then get the timestamps of weekdays during this first week, regardless if within event range
 				$start_weekday_dates = array(); //Days in week 1 where there would events, regardless of event date range
 				for($i = 0; $i < 7; $i++){
+					
 					if( in_array( $current_date->format('w'), $weekdays) ){
 						$start_weekday_dates[] = $current_date->getTimestamp(); //it's in our starting week day, so add it
 					}
 					$current_date->add(new DateInterval('P1D')); //add a day
-				}					
+				}	
+							
 				//for each day of eventful days in week 1, add 7 days * weekly intervals
 				foreach ($start_weekday_dates as $weekday_date){
 					//Loop weeks by interval until we reach or surpass end date
+					
 					$current_date->setTimestamp($weekday_date);
 					while($current_date->getTimestamp() <= $end_date){
+						
 						if( $current_date->getTimestamp() >= $start_date && $current_date->getTimestamp() <= $end_date ){
+							if(count($matching_days) > 100) break; //limit to 1000 days (just in case
 							$matching_days[] = $current_date->getTimestamp();
+							
 						}
 						$current_date->add(new DateInterval('P'. ($this->recurrence_interval * 7 ) .'D'));
 					}
@@ -2604,6 +2610,8 @@ class EM_Event extends EM_Object{
 				break;
 		}
 		sort($matching_days);
+		
+		
 		return apply_filters('em_events_get_recurrence_days', $matching_days, $this);
 	}
 	
