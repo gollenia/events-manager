@@ -2,8 +2,8 @@
  * WordPress Dependencies
  */
 
-const TerserPlugin = require('terser-webpack-plugin');
-const defaultConfig = require('@wordpress/scripts/config/webpack.config.js');
+const TerserPlugin = require( 'terser-webpack-plugin' );
+const defaultConfig = require( '@wordpress/scripts/config/webpack.config.js' );
 
 module.exports = {
 	...defaultConfig,
@@ -11,20 +11,34 @@ module.exports = {
 		module: {
 			...defaultConfig.module,
 			rules: [
+				...defaultConfig.module.rules,
 				{
 					test: /\.tsx?$/,
-					use: "ts-loader",
-					exclude: /node_modules/,
+					use: [
+						{
+							loader: 'ts-loader',
+							options: {
+								configFile: 'tsconfig.json',
+								transpileOnly: true,
+							},
+						},
+					],
 				},
-				...defaultConfig.module.rules,
+			],
+		},
+		resolve: {
+			extensions: [
+				'.ts',
+				'.tsx',
+				...( defaultConfig.resolve ? defaultConfig.resolve.extensions || [ '.js', '.jsx' ] : [] ),
 			],
 		},
 		watchOptions: {
-		    ignored: /node_modules/,
+			ignored: /node_modules/,
 		},
 		optimization: {
 			minimizer: [
-				new TerserPlugin({
+				new TerserPlugin( {
 					terserOptions: {
 						output: {
 							comments: /translators:/i,
@@ -34,10 +48,10 @@ module.exports = {
 							drop_console: true,
 						},
 						mangle: {
-							reserved: ['__', '_n', '_nx', '_x'],
+							reserved: [ '__', '_n', '_nx', '_x' ],
 						},
 					},
-				}),
+				} ),
 			],
 		},
 	},
