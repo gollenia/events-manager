@@ -1,4 +1,7 @@
 <?php
+
+use Contexis\Events\Blocks\Block;
+
 class EM_Booking_Form {
 	static $validate;
 	/**
@@ -42,7 +45,7 @@ class EM_Booking_Form {
     		self::$form_template = apply_filters('em_booking_form_get_form_template', array (
     			'first_name' => array ( 'label' => __('First Name','events-manager'), 'type' => 'name', 'fieldid'=>'user_name', 'required'=>1 ),
 				'last_name' => array ( 'label' => __('Last Name','events-manager'), 'type' => 'name', 'fieldid'=>'last_name', 'required'=>1 ),
-    			'user_email' => array ( 'label' => __('Email','events-manager'), 'type' => 'user_email', 'fieldid'=>'user_email', 'required'=>1 ),
+    			'user_email' => array ( 'label' => __('Email','events-manager'), 'type' => 'email', 'fieldid'=>'user_email', 'required'=>1 ),
     		  	'booking_comment' => array ( 'label' => __('Comment','events-manager'), 'type' => 'textarea', 'fieldid'=>'booking_comment' ),
     		));        
 	    }
@@ -52,97 +55,37 @@ class EM_Booking_Form {
 	/**
 	 * @param EM_Booking $EM_Booking
 	 */
-	public static function get_form( $EM_Event = false, $custom_form_id = false ){
+	public static function get_form( $EM_Event = false ){
 	    //make sure we don't need to get another form rather than the one already stored in this object
-	    
-		$reload = (is_numeric($EM_Event) && $EM_Event != self::$event_id) || 
-			( !empty($EM_Event->event_id) && $EM_Event->event_id != self::$event_id ) ||
-			( empty($EM_Event) && $custom_form_id && $custom_form_id != self::$form_id );
-	    //get the right form
-
-		if( empty(self::$form) || $reload ){
+		if( empty(self::$form) ){
 
 			if(is_numeric($EM_Event)){ $EM_Event = EM_Event::find($EM_Event); }
-			
 
 			self::$form_id = $EM_Event ? get_post_meta($EM_Event->post_id, '_booking_form', true) : 0;
 
-			$form_data = self::get_form_data($EM_Event);
+			$form_data = EM_Form::get_form_data(self::$form_id);
 
 			if(empty($form_data)) {
 				$form_data = array('form' => self::get_form_template());
 				self::$form_name = __('Default','em-pro');
 			}
-
-			self::$form = new EM_Form($form_data['form'], 'em_bookings_form');
+			self::$form_name = get_the_title(self::$form_id);
+			self::$form = new EM_Form($form_data, 'em_bookings_form');
 			self::$form->form_required_error = __('Please fill in the field: %s','em-pro');
-
-			
 		}
         
 		return self::$form;
 	}
 
-	public static function get_form_data($event) {
-
-		if(!$event) return [];
-		
-		if( is_numeric($event) ){ 
-			$event = EM_Event::find($event); 
-		}
-		
-		$form_id = get_post_meta($event->post_id, '_booking_form', true);
-
-		if(!$form_id) return [];
-
-		$form = get_post(self::$form_id);
-
-		if (!$form) return [];
-
-		$blocks = parse_blocks( $form->post_content );
-
-		if(count($blocks) < 1) return [];
-			
-		if(!array_key_exists('innerBlocks', $blocks[0])) return [];
-			
-		self::$event_id = !empty($EM_Event) ? $EM_Event->event_id:false;
-		self::$form_name = $form->post_title;
-		$form_data = array('form' => [], 'name' => $form->post_title);
-		
-		foreach( $blocks[0]['innerBlocks'] as $block ){
-
-			if(substr($block['blockName'], strripos($block['blockName'], '-') + 1) == 'html') continue;
-				$type = (in_array($block['attrs']['fieldid'], self::get_form_template()) ? $block['attrs']['fieldid'] : substr($block['blockName'], strripos($block['blockName'], '-') + 1));
-				$form_data['form'][$block['attrs']['fieldid']] = $block['attrs'];
-				$form_data['form'][$block['attrs']['fieldid']]['type'] = $type;
-			
-		}
-		return $form_data;
-
-	}
+	
 
 	public static function get_booking_form($event_id){
 		$form_id = get_post_meta($event_id, '_booking_form', true);
-		
-		$form = get_post(intval($form_id));
-		
-		$blocks = parse_blocks( $form->post_content );
-		
-		if(count($blocks) < 1) return false;
-		if(!array_key_exists('innerBlocks', $blocks[0])) return false;
-		
-		$form_data = array();
-		foreach( $blocks[0]['innerBlocks'] as $block ){
-			
-			$type = substr($block['blockName'], strripos($block['blockName'], '-') + 1);
-			$value = $type == 'html' ? render_block($block) : (array_key_exists('default', $block['attrs']) ? $block['attrs']['default'] : null);
-			$options = $type == "country" ? \Contexis\Events\Intl\Countries::get() : (array_key_exists('options', $block['attrs']) ? $block['attrs']['options'] : null);	
-			$type = $type == "country" ? "select" : $type;
-			array_push($form_data, array_merge($block['attrs'], array('value' => $value, 'type' => $type, 'options' => $options)));
-			
-		}
+		$form_data = EM_Form::get_form_data($form_id, false);
 		return $form_data;
 	}
+
+	
 	
 	
 	/**
@@ -340,19 +283,15 @@ class EM_Booking_Form {
 	}
 
 	public static function data_privacy_export( $export_item, EM_Booking $EM_Booking ){
-		$EM_Form = EM_Booking_Form::get_form( $EM_Booking->event_id, $EM_Booking );
+		$EM_Form = EM_Booking_Form::get_form( $EM_Booking->event_id );
 		foreach( $EM_Form->form_fields as $fieldid => $field ){
-			if( !array_key_exists($fieldid, $EM_Form->user_fields) && !in_array($fieldid, array('user_email','user_name')) && $field['type'] != 'html' && $field['type'] != 'captcha' ){
-				//get value of field
-				$field_value = (isset($EM_Booking->booking_meta['booking'][$fieldid])) ? $EM_Booking->booking_meta['booking'][$fieldid]:'';
-				//account for the free version and the booking_comment field so that old booking info still shows
-				if( empty($field_value) && $fieldid == 'booking_comment' && !empty($EM_Booking->booking_comment)){
-					$field_value = $EM_Booking->booking_comment;
-				}
-				if( $field_value !== '' ){
-    				$export_item['data'][] = array( 'name' => $field['label'], 'value' => $EM_Form->get_formatted_value($field, $field_value) );
-                }
+			if( isset($field['data_privacy']) && $field['data_privacy'] == 1 ) continue;
+			//get value of field
+			$field_value = (isset($EM_Booking->booking_meta['booking'][$fieldid])) ? $EM_Booking->booking_meta['booking'][$fieldid]:'';
+			if( !empty($field_value) ){
+				$export_item['data'][] = array( 'name' => $field['label'], 'value' => $EM_Form->get_formatted_value($field, $field_value) );
 			}
+			
 		}
         return $export_item;
     }
