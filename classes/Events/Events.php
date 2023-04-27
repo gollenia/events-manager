@@ -252,7 +252,7 @@ class EM_Events extends EM_Object {
 	 * @param unknown_type $id_array
 	 */
 	public static function delete( $array ){
-		global $wpdb;
+		
 		//Detect array type and generate SQL for event IDs
 		$results = array();
 		if( !empty($array) && @get_class(current($array)) != 'EM_Event' ){
@@ -354,26 +354,7 @@ class EM_Events extends EM_Object {
 		}
 
 		// event locations
-		if( !empty($args['event_location_type']) ){
-			$event_location_types = explode(',', $args['event_location_type']);
-			$event_locations_search = array();
-			// generate array of clean and enabled event location types
-			foreach( $event_location_types as $event_location_type ){
-				$event_location_type = trim($event_location_type);
-				if( Event_Locations::is_enabled($event_location_type) ){
-					$event_locations_search[] = $event_location_type;
-				}
-			}
-			// add condition if at least one valid/clean type supplied
-			if( !empty($event_locations_search) ){
-				if( count($event_locations_search) === 1 ){
-					$event_location = current($event_locations_search);
-					$conditions['event_location'] = "event_location_type='$event_location'";
-				}else{
-					$conditions['event_location'] = "event_location_type IN ('". implode("','", $event_locations_search) ."')";
-				}
-			}
-		}
+		
 		if( isset($args['has_event_location']) && $args['has_event_location'] !== false ){
 			if( $args['has_event_location'] ){
 				$conditions['has_event_location'] = "event_location_type IS NOT NULL";
