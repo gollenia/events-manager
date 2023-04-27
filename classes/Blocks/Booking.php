@@ -4,54 +4,31 @@ namespace Contexis\Events\Blocks;
 
 use Contexis\Events\Assets;
 
-class Booking
+class Booking extends Block
 {
 
 	public array $args;
 
-	public $blockname = 'details';
+	public $blockname = 'booking';
 
 	public static function init()
 	{
-
 		$instance = new self;
 		$instance->args = Assets::$args;
-
 		add_action('init', [$instance, 'register_block']);
-
 		add_action('wp_enqueue_scripts', [$instance, 'register_scripts']);
 		//add_action( 'admin_enqueue_scripts', [$instance, 'admin_enqueue_scripts'] );
-
 	}
 
-	public function get_block_meta()
-	{
-
-		$filename = \Events::DIR . "/src/blocks/booking/block.json";
-
-		if (!file_exists($filename)) {
-			return false;
-		}
-		$string = file_get_contents($filename);
-
-		return array_merge(json_decode($string, true), $this->args);
-	}
-
-	function register_block()
-	{
-		$meta = $this->get_block_meta();
-		$meta['render_callback'] = [$this, 'render'];
-		register_block_type($meta['name'], $meta);
-	}
+	
 
 	/**
 	 * Register Scripts for frontend and add the event data  for booking
 	 *
 	 * @return void
 	 */
-	public function register_scripts()
+	public function register_scripts($test)
 	{
-
 		$script_asset = require(\Events::DIR . "/includes/booking.asset.php");
 		wp_enqueue_script(
 			'booking',
@@ -74,11 +51,12 @@ class Booking
 
 	/**
 	 * Return the DOM Element that the booking app mounts on - or not
+	 * This should become a REST Route!
 	 *
 	 * @param array $attribures
 	 * @return string HTML
 	 */
-	public static function render($attributes)
+	public function render($attributes, $content, $full_data) : string
 	{
 		global $post;
 
@@ -88,7 +66,14 @@ class Booking
 			wp_enqueue_script('booking');
 		});
 
+		if ($full_data->parsed_block['attrs']) $styles = get_block_wrapper_attributes() ?? '';
+		if(!isset($styles)) $styles = '';
+		$attributes['className'] = preg_match('/class="([^"]+)"/', $styles, $matches) ? $matches[1] : '';
+		$attributes['style'] = preg_match('/style="([^"]+)"/', $styles, $matches) ? $matches[1] : '';
 
+		if(!$event->can_book()) {
+			return "";
+		}
 
 		$priceFormatter = new \Contexis\Events\Intl\Price(0);
 
@@ -102,7 +87,6 @@ class Booking
 			'attendee_fields' => \EM_Attendees_Form::get_attendee_form($event->post_id),
 			'available_tickets' => $event->get_tickets_rest(),
 			'available_gateways' => \EM_Gateways::get_rest(),
-			'form' => \EM_Booking_Form::get_booking_form($event->post_id),
 			'l10n' => [
 				"consent" => get_option("dbem_privacy_message"),
 				"currency" => $priceFormatter->get_currency_code(),
@@ -111,12 +95,9 @@ class Booking
 			]
 		];
 
-		if(!$event->can_book()) {
-			return "";
-		}
-
 		$result = Assets::output_to_script_tag($data, 'booking_data');
 		$result .= "<div id='booking_app'></div>";
+		$result .= '<style>.booking-button { '.$attributes['style'] . '}</style>';
 
 		return $result;
 	}

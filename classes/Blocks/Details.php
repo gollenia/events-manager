@@ -4,40 +4,19 @@ namespace Contexis\Events\Blocks;
 use Contexis\Events\Intl\Price;
 use Contexis\Events\Assets;
 
-class Details {
+class Details extends Block {
 
 	public array $args;
 	
 	public $blockname = 'details';
 
     public static function init() {
-
 		$instance = new self;
-        $instance->args = Assets::$args;
-		
+		$instance->args = Assets::$args;
 		add_action('init', [$instance, 'register_block']);
-        
-       
     }
 
-	public function get_block_meta() {
-		$filename = \Events::DIR . "/src/blocks/details/block.json";
-		
-		if(!file_exists($filename)) {    
-			return false;
-		}
-		$string = file_get_contents($filename);
-		
-		return array_merge(json_decode($string, true), $this->args);
-		
-	}
-
-	function register_block() {	
-		$meta = $this->get_block_meta();
-		$meta['render_callback'] = [$this,'render'];
-		register_block_type($meta['name'], $meta);
-	}     
-
+	
 	/**
 	 * Undocumented function
 	 *
@@ -70,23 +49,9 @@ class Details {
 		return $price;
 
 	}
-    public function get_template($name) : string { 
-        $filename = substr($name, strpos($name, "/")+1) . ".twig";
-        
-        if(file_exists(get_template_directory() . "/plugins/events/" . $filename)) {
-            return get_template_directory() . '/plugins/events/' . $filename;
-        }
-		
-		if(file_exists(get_stylesheet_directory() . "/plugins/events/templates/blocks/" . $filename)) {
-			return get_stylesheet_directory() . '/plugins/events/templates/blocks/' . $filename;
-		}
-
-        return \Events::DIR . '/templates/blocks/' . $filename;
-    }
-    
+     
     private function get_event() {
 
-		$tax_query = [];
 		global $post;
 		$events = \EM_Events::get_rest(['post_id' => $post->id]);
 		if(count($events) > 0) {

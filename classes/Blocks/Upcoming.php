@@ -3,7 +3,7 @@ namespace Contexis\Events\Blocks;
 
 use Contexis\Events\Assets;
 
-class Upcoming {
+class Upcoming extends Block {
 
 	public array $args;
 	
@@ -12,31 +12,12 @@ class Upcoming {
     public static function init() {
 
 		$instance = new self;
-        $instance->args = Assets::$args;
-		
+		$instance->args = Assets::$args;
 		add_action('init', [$instance, 'register_block']);
-        
-       
-    }
-
-	public function get_block_meta() {
-		
-		$filename = \Events::DIR . "/src/blocks/upcoming/block.json";
-		
-		if(!file_exists($filename)) {    
-			return false;
-		}
-		$string = file_get_contents($filename);
-		
-		return array_merge(json_decode($string, true), $this->args);
-		
+	
 	}
+    
 
-	function register_block() {	
-		$meta = $this->get_block_meta();
-		$meta['render_callback'] = [$this,'render'];
-		register_block_type($meta['name'], $meta);
-	}     
 
 	/**
 	 * Undocumented function
