@@ -1,6 +1,9 @@
 <?php
 
 namespace Contexis\Events;
+
+use Contexis\Events\Intl\Date;
+
 /**
  * Controls how events are queried and displayed via the WordPress Custom Post APIs
  * @author marcus
@@ -38,6 +41,114 @@ class EventPost {
 	}
 
 	public function register_meta() {
+
+		$metadata = [
+			[
+				"name" => "_event_rsvp_date",
+				"type" => "string",
+				"default" => "",
+				"post_type" => ['event']
+			],
+			[
+				"name" => "_booking_form",
+				"type" => "number",
+				"default" => 0,
+				"post_type" => ['event']
+			],
+			[
+				"name" => "_booking_form",
+				"type" => "number",
+				"default" => 0,
+				"post_type" => ['event']
+			],
+			[
+				"name" => "_attendee_form",
+				"type" => "number",
+				"default" => 0,
+				"post_type" => ['event']
+			],
+			[
+				"name" => "_speaker_id",
+				"type" => "number",
+				"default" => 0,
+				"post_type" => ['event']
+			],
+			[
+				"name" => "_event_audience",
+				"type" => "string",
+				"default" => "",
+				"post_type" => ['event']
+			],
+			[
+				"name" => "_event_start_date",
+				"type" => "string",
+				"default" => date("Y-m-d"),
+				"post_type" => ['event', 'event-recurring']
+			],
+			[
+				"name" => "_event_end_date",
+				"type" => "string",
+				"default" => date("Y-m-d"),
+				"post_type" => ['event', 'event-recurring']
+			],
+			[
+				"name" => "_event_start_time",
+				"type" => "string",
+				"default" => "00:00:00",
+				"post_type" => ['event', 'event-recurring']
+			],
+			[
+				"name" => "_event_end_time",
+				"type" => "string",
+				"default" => "00:00:00",
+				"post_type" => ['event', 'event-recurring']
+			],
+			[
+				"name" => "_event_all_day",
+				"type" => "boolean",
+				"default" => false,
+				"post_type" => ['event', 'event-recurring']
+			],
+			[
+				"name" => "_event_location_id",
+				"type" => "number",
+				"default" => 0,
+				"post_type" => ['event', 'event-recurring']
+			],
+			[
+				"name" => "_recurrence_interval",
+				"type" => "number",
+				"default" => 1,
+				"post_type" => ['event-recurring']
+			],
+			[
+				"name" => "_recurrence_byweekno",
+				"type" => "number",
+				"default" => 1,
+				"post_type" => ['event-recurring']
+			],
+			[
+				"name" => "_recurrence_byday",
+				"type" => "string",
+				"default" => "",
+				"post_type" => ['event-recurring']
+			],
+			[
+				"name" => "_recurrence_days",
+				"type" => "number",
+				"default" => 0,
+				"post_type" => ['event-recurring']
+
+			],
+			[
+				"name" => "_recurrence_freq",
+				"type" => "string",
+				"default" => "weekly",
+				"post_type" => ['event-recurring']
+
+			]
+
+		];
 		
 		register_post_meta( 'event', '_event_rsvp_date', [
 			'type' => 'string',
@@ -55,161 +166,47 @@ class EventPost {
 			]
 		]);
 
-		register_post_meta( 'event', '_booking_form', [
-			'type' => 'integer',
-			'single'       => true,
-			'default' => 0,
-			'sanitize_callback' => 'absint',
-			'auth_callback' => function() {
-				return current_user_can( 'edit_posts' );
-			},
-			'show_in_rest' => [
-				'schema' => [
-					'default' => 0,
-					'style' => "integer"
+		foreach($metadata as $meta){
+			if(!in_array('event', $meta['post_type'])){
+				continue;
+			}
+			register_post_meta( 'event', $meta['name'], [
+				'type' => $meta['type'],
+				'single'       => true,
+				'default' => $meta['default'],
+				'sanitize_callback' => '',
+				'auth_callback' => function() {
+					return current_user_can( 'edit_posts' );
+				},
+				'show_in_rest' => [
+					'schema' => [
+						'default' => $meta['default'],
+						'style' => $meta['type']
+					]
 				]
-			]
-		]);
+			]);
+		}
 
-		register_post_meta( 'event', '_attendee_form', [
-			'type' => 'integer',
-			'single' => true,
-			'default' => 0,
-			'sanitize_callback' => 'absint',
-			'auth_callback' => function() {
-				return current_user_can( 'edit_posts' );
-			},
-			'show_in_rest' => [
-				'schema' => [
-					'default' => 0,
-					'style' => "integer"
+		foreach($metadata as $meta){
+			if(!in_array('event-recurring', $meta['post_type'])){
+				continue;
+			}
+			register_post_meta( 'event-recurring', $meta['name'], [
+				'type' => $meta['type'],
+				'single'       => true,
+				'default' => $meta['default'],
+				'sanitize_callback' => '',
+				'auth_callback' => function() {
+					return current_user_can( 'edit_posts' );
+				},
+				'show_in_rest' => [
+					'schema' => [
+						'default' => $meta['default'],
+						'style' => $meta['type']
+					]
 				]
-			]
-		]);
-
-		register_post_meta( 'event', '_speaker_id', [
-			'type' => 'integer',
-			'single' => true,
-			'default' => 0,
-			'sanitize_callback' => 'absint',
-			'auth_callback' => function() {
-				return current_user_can( 'edit_posts' );
-			},
-			'show_in_rest' => [
-				'schema' => [
-					'default' => 0,
-					'style' => "integer"
-				]
-			]
-		]);
-
-		register_post_meta( 'event', '_event_audience', [
-			'type' => 'string',
-			'single' => true,
-			'default' => "",
-			'auth_callback' => function() {
-				return current_user_can( 'edit_posts' );
-			},
-			'show_in_rest' => [
-				'schema' => [
-					'default' => "",
-					'style' => "string"
-				]
-			]
-		]);
-
-		register_post_meta( 'event', '_event_start_date', [
-			'type' => 'string',
-			'single' => true,
-			'default' => "",
-			'auth_callback' => function() {
-				return current_user_can( 'edit_posts' );
-			},
-			'show_in_rest' => [
-				'schema' => [
-					'default' => "",
-					'style' => "string"
-				]
-			]
-		]);
-
-		register_post_meta( 'event', '_event_end_date', [
-			'type' => 'string',
-			'single' => true,
-			'default' => "",
-			'auth_callback' => function() {
-				return current_user_can( 'edit_posts' );
-			},
-			'show_in_rest' => [
-				'schema' => [
-					'default' => "",
-					'style' => "string"
-				]
-			]
-		]);
-
-		register_post_meta( 'event', '_event_start_time', [
-			'type' => 'string',
-			'single' => true,
-			'default' => "",
-			'auth_callback' => function() {
-				return current_user_can( 'edit_posts' );
-			},
-			'show_in_rest' => [
-				'schema' => [
-					'default' => "",
-					'style' => "string"
-				]
-			]
-		]);
-
-		register_post_meta( 'event', '_event_end_time', [
-			'type' => 'string',
-			'single' => true,
-			'default' => "",
-			'auth_callback' => function() {
-				return current_user_can( 'edit_posts' );
-			},
-			'show_in_rest' => [
-				'schema' => [
-					'default' => "",
-					'style' => "string"
-				]
-			]
-		]);
-
-		register_post_meta( 'event', '_event_all_day', [
-			'type' => 'integer',
-			'single' => true,
-			'default' => 0,
-			'sanitize_callback' => 'absint',
-			'auth_callback' => function() {
-				return current_user_can( 'edit_posts' );
-			},
-			'show_in_rest' => [
-				'schema' => [
-					'default' => 0,
-					'style' => "integer"
-				]
-			]
-		]);
-
-		register_post_meta( 'event', '_location_id', [
-			'type' => 'integer',
-			'single' => true,
-			'default' => 0,
-			'sanitize_callback' => 'absint',
-			'auth_callback' => function() {
-				return current_user_can( 'edit_posts' );
-			},
-			'show_in_rest' => [
-				'schema' => [
-					'default' => 0,
-					'style' => "integer"
-				]
-			]
-		]);
-
+			]);
+		}
 	
 
 	}
