@@ -76,6 +76,19 @@ class EM_Form extends EM_Object {
 		}
 		return true;
 	}
+
+	public static function load_block_defaults($type) {
+		$defaults = [];
+		$file = Events::DIR . "/src/blocks/form/" . $type . "/block.json";
+		if(!$file) return $defaults;
+		$block_data = json_decode( file_get_contents($file) );
+		foreach($block_data->attributes as $key => $value) {
+			if(!property_exists($value, 'default')) continue;
+			$defaults[$key] = $value->default;
+		}
+		
+		return $defaults;
+	}
 	
 	function get_values(){
 		return $this->field_values;
@@ -173,7 +186,7 @@ class EM_Form extends EM_Object {
 			case 'country':
 			case 'multiselect':
 			case 'time':
-				//var_dump($field);
+				
 				$tip_type = $field['type'];
 				if( $field['type'] == 'textarea' ) $tip_type = 'text';
 				if( in_array($field['type'], array('select','multiselect')) ) $tip_type = 'select';
@@ -453,7 +466,7 @@ class EM_Form extends EM_Object {
 					
 					if( (!empty($value) && !in_array($value, $values)) || (empty($value) && !empty($field['required'])) ){
 						$error = (!empty($field['error'])) ? $field['error']:$err;
-						$this->add_error_array(["value" => $value, "form" => $this->form_name, "field" => $field['fieldid'], "error" => $error, "attendee" => $attendee]);
+						$this->add_error_array(["value" => $field, "form" => $this->form_name, "field" => $field['fieldid'], "error" => $error, "attendee" => $attendee]);
 						$result = false;
 					}		
 					break;
@@ -695,4 +708,45 @@ class EM_Form extends EM_Object {
 		return false;
 	}
 
+	
+	public static function get_form_data($form_id = 0, $associative = true) {
+
+		if(!$form_id) return [];
+
+		$blocks = self::get_form_post($form_id);
+
+		if(empty($blocks)) return [];
+		
+		foreach( $blocks as $key => $block ) {
+			$type = self::get_type_from_blockname($block['blockName']);
+			$value = $type == 'html' ? render_block($block) : (array_key_exists('default', $block['attrs']) ? $block['attrs']['default'] : null);
+			$block['attrs'] = array_merge(EM_Form::load_block_defaults($type), $block['attrs'], ['type' => $type]);
+			if($type == 'html') {
+				$block['attrs']['value'] = render_block($block);
+				$block['attrs']['fieldid'] = 'html_' . random_int(100,999);
+			}
+			$index = $associative ? $block['attrs']['fieldid'] : $key;
+			$form_data[$index] = $block['attrs'];
+			$form_data[$index]['type'] = $type;
+		}
+
+		return $form_data;
+
+	}
+
+	public static function get_form_post($form_id = 0) {
+		if(!$form_id) return [];
+		$form = get_post(intval($form_id));
+		
+		$blocks = parse_blocks( $form->post_content );
+		
+		if(count($blocks) == 0) return [];
+		if(!array_key_exists('innerBlocks', $blocks[0])) return [];
+
+		return $blocks[0]['innerBlocks'];
+	}
+
+	public static function get_type_from_blockname($blockname) {
+		return substr($blockname, strripos($blockname, '-') + 1);
+	}
 }
