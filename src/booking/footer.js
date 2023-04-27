@@ -1,5 +1,4 @@
 import { __ } from '@wordpress/i18n';
-import React from 'react';
 import sendOrder from './modules/sendOrder';
 
 const Footer = ( { state, dispatch } ) => {
@@ -47,7 +46,7 @@ const Footer = ( { state, dispatch } ) => {
 				{ /* Back Button  */ }
 				{ wizzard.step > ( wizzard.steps.tickets.enabled ? 0 : 1 ) && wizzard.step < 3 && (
 					<button
-						className="button button--secondary"
+						className="button button--secondary booking-button wp-block-events-manager-booking"
 						onClick={ () => {
 							dispatch( { type: 'DECREMENT_WIZZARD' } );
 						} }
@@ -61,7 +60,7 @@ const Footer = ( { state, dispatch } ) => {
 					<button
 						type="button"
 						disabled={ ERROR }
-						className="button button--primary"
+						className="button button--primary booking-button wp-block-events-manager-booking"
 						onClick={ () => {
 							dispatch( { type: 'INCREMENT_WIZZARD' } );
 						} }

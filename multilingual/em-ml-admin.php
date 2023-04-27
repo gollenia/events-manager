@@ -27,15 +27,7 @@ class EM_ML_Admin{
 		    remove_meta_box('em-event-bookings', 'event-recurring', 'normal');
 		    remove_meta_box('em-event-group', EM_POST_TYPE_EVENT, 'side');
 		    remove_meta_box('em-event-group', 'event-recurring', 'side');
-		    foreach( array('em-event-recurring', 'em-event-when-recurring', 'em-event-group') as $box_name ){
-		    	foreach( array(EM_POST_TYPE_EVENT, 'event-recurring') as $type ){
-		    		$screen_name = convert_to_screen($type)->id;
-			        foreach( array('core', 'default', 'high', 'low') as $priority ){
-				        if( isset($wp_meta_boxes[$screen_name]['side'][$priority][$box_name]) ) unset($wp_meta_boxes[$screen_name]['side'][$priority][$box_name]);
-				        if( isset($wp_meta_boxes[$screen_name]['normal'][$priority][$box_name]) ) unset($wp_meta_boxes[$screen_name]['normal'][$priority][$box_name]);
-			        }
-			    }
-		    }
+		   
 
 		    //add translation-specific meta boxes
 		    add_meta_box('em-event-translation', __('Translated Event Information','events-manager'), 'EM_ML_Admin::meta_box_translated_event',EM_POST_TYPE_EVENT, 'side','high');

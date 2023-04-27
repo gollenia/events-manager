@@ -13,35 +13,16 @@ class EM_Location_Post_Admin{
 		add_action('trashed_post',array('EM_Location_Post_Admin','trashed_post'),10,1);
 		add_action('untrash_post',array('EM_Location_Post_Admin','untrash_post'),10,1);
 		add_action('untrashed_post',array('EM_Location_Post_Admin','untrashed_post'),10,1);
-		//Notices
-		add_action('admin_notices',array('EM_Location_Post_Admin','admin_notices'));
-		add_action('post_updated_messages',array('EM_Location_Post_Admin','admin_notices_filter'),1,1);
+		
 	}
 	
 	public static function admin_head(){
 		global $post, $EM_Location;
 		if( !empty($post) && $post->post_type == EM_POST_TYPE_LOCATION ){
-			$EM_Location = em_get_location($post);
+			$EM_Location = EM_Location::get($post);
 		}
 	}
 	
-	public static function admin_notices(){
-		//When editing
-		global $post, $EM_Notices;
-		if( !empty($post) && $post->post_type == EM_POST_TYPE_LOCATION){
-		}
-	}
-	
-	public static function admin_notices_filter($messages){
-		//When editing
-		global $post, $EM_Notices;
-		if( $post->post_type == EM_POST_TYPE_LOCATION ){
-			if ( $EM_Notices->count_errors() > 0 ) {
-				unset($_GET['message']);
-			}
-		}
-		return $messages;
-	}
 	
 	
 	/**
@@ -60,16 +41,15 @@ class EM_Location_Post_Admin{
 	}
 
 	public static function before_delete_post($post_id){
-		if(get_post_type($post_id) == EM_POST_TYPE_LOCATION){
-			$EM_Location = em_get_location($post_id,'post_id');
-			$EM_Location->delete_meta();
-		}
+		if(get_post_type($post_id) !== EM_POST_TYPE_LOCATION) return;
+		$EM_Location = EM_Location::get($post_id,'post_id');
+		$EM_Location->delete_meta();
 	}
 	
 	public static function trashed_post($post_id){
 		if(get_post_type($post_id) == EM_POST_TYPE_LOCATION){
 			global $EM_Notices;
-			$EM_Location = em_get_location($post_id,'post_id');
+			$EM_Location = EM_Location::get($post_id,'post_id');
 			$EM_Location->set_status(-1);
 			$EM_Notices->remove_all(); //no validation/notices needed
 		}

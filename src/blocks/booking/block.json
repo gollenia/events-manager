@@ -20,7 +20,32 @@
 		"buttonIcon": {
 			"type": "string",
 			"default": ""
+		},
+		"iconRight": {
+			"type": "boolean",
+			"default": false
 		}
 	},
-	"usesContext": [ "postType" ]
+	"usesContext": [ "postType" ],
+	"supports": {
+		"anchor": true,
+		"html": false,
+
+		"__experimentalBorder": {
+			"color": false,
+			"radius": true,
+			"style": false,
+			"width": false,
+			"__experimentalDefaultControls": {
+				"radius": true,
+				"style": false,
+				"width": true,
+				"linked": false
+			}
+		}
+	},
+	"styles": [
+		{ "name": "fill", "label": "Fill", "isDefault": true },
+		{ "name": "outline", "label": "Outline" }
+	]
 }

@@ -1,5 +1,4 @@
-import React from 'react';
-import InputField from './inputField';
+import InputField from './InputField';
 import Summary from './summary';
 
 const UserRegistration = ( props ) => {
@@ -11,15 +10,18 @@ const UserRegistration = ( props ) => {
 	const { data, request, response } = state;
 
 	if ( ! data.registration_fields ) return <></>;
+
 	return (
 		<div className="grid xl:grid--columns-2 grid--gap-12">
 			<Summary { ...props } />
 			<div>
 				<form className="form--trap form grid xl:grid--columns-6 grid--gap-8" id="user-registration-form">
-					{ data.registration_fields.map( ( field, key ) => (
+					{ data.registration_fields.map( ( field, index ) => (
 						<InputField
-							key={ key }
-							field={ field }
+							disabled={ status == 'SUBMITTING' }
+							key={ index }
+							type={ field.type }
+							settings={ field }
 							value={ state.request.registration[ field.fieldid ] }
 							onChange={ ( event ) => {
 								dispatch( {
@@ -31,6 +33,7 @@ const UserRegistration = ( props ) => {
 					) ) }
 					{ data.event.is_free && data.l10n.consent && (
 						<InputField
+							type="checkbox"
 							onChange={ ( event ) => {
 								dispatch( {
 									type: 'SET_FIELD',
@@ -38,7 +41,7 @@ const UserRegistration = ( props ) => {
 								} );
 							} }
 							value={ request.registration.data_privacy_consent }
-							field={ {
+							settings={ {
 								name: 'data_privacy_consent',
 								help: data.l10n.consent,
 								type: 'checkbox',

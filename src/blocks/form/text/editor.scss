@@ -6,22 +6,34 @@
 	box-sizing: border-box;
 	max-width: 1200px !important;
 
-	&--3 {
+	&--6 {
+		grid-column: auto / span 6;
+	}
+
+	&--5 {
+		grid-column: auto / span 5;
+	}
+
+	&--4 {
 		grid-column: auto / span 4;
 	}
 
-	&--2 {
+	&--3 {
 		grid-column: auto / span 3;
 	}
 
-	&--1 {
+	&--2 {
 		grid-column: auto / span 2;
 	}
 
-	input[type="text"] {
+	&--1 {
+		grid-column: auto / span 1;
+	}
+
+	input[type='text'] {
 		width: 100%;
-		color:#999;
-	} 
+		color: #999;
+	}
 
 	&--error {
 		background: #fcf4f4 !important;
@@ -46,7 +58,7 @@
 	}
 
 	&__label {
-		font-size: .8rem;
+		font-size: 0.8rem;
 		color: #999;
 	}
 
@@ -60,11 +72,10 @@
 .ctx\:event-details {
 	&__label--lock {
 		display: flex;
-		align-items:center;
+		align-items: center;
 
 		svg {
 			margin-left: 5px;
 		}
 	}
 }
-

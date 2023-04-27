@@ -3,15 +3,15 @@
 	"apiVersion": 2,
 	"title": "Select",
 	"description": "Lets the user select something",
-	"category": "widgets", 
+	"category": "widgets",
 	"attributes": {
 		"fieldid": {
 			"type": "string",
 			"default": ""
 		},
 		"width": {
-			"type": "string",
-			"default": true
+			"type": "number",
+			"default": 6
 		},
 		"required": {
 			"type": "boolean",
@@ -30,8 +30,8 @@
 			"default": ""
 		},
 		"placeholder": {
-			"type": "boolean",
-			"default": false
+			"type": "string",
+			"default": ""
 		},
 		"help": {
 			"type": "string",
@@ -41,7 +41,6 @@
 			"type": "string",
 			"default": ""
 		}
-		
 	},
 	"parent": [ "events-manager/form-container" ]
 }

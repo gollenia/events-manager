@@ -3,7 +3,7 @@ import { __ } from '@wordpress/i18n';
 import PropTypes from 'prop-types';
 import Coupon from './coupon';
 
-import InputField from './inputField';
+import InputField from './InputField';
 import Summary from './summary';
 
 const Payment = ( props ) => {
@@ -35,7 +35,8 @@ const Payment = ( props ) => {
 							onChange={ ( event ) => {
 								dispatch( { type: 'SET_GATEWAY', payload: event } );
 							} }
-							field={ {
+							type={ 'select' }
+							settings={ {
 								name: 'gateway',
 								label: __( 'Payment method', 'event' ),
 								type: 'select',
@@ -53,8 +54,9 @@ const Payment = ( props ) => {
 									payload: { form: 'registration', field: 'data_privacy_consent', value: event },
 								} );
 							} }
+							type={ 'checkbox' }
 							value={ request.registration.data_privacy_consent }
-							field={ {
+							settings={ {
 								name: 'data_privacy_consent',
 								help: data.l10n.consent,
 								type: 'checkbox',

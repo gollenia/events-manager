@@ -66,6 +66,8 @@ const edit = ( props ) => {
 		className: [ 'ctx:event-details' ].filter( Boolean ).join( ' ' ),
 	} );
 
+	console.log( meta );
+
 	const startFormatted = () => {
 		return event?.start && event?.end ? formatDateRange( event.start, event.end ) : '';
 	};

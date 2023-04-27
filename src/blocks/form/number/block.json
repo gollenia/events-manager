@@ -1,0 +1,58 @@
+{
+	"name": "gutenberg-form/number",
+	"apiVersion": 2,
+	"title": "Number Field",
+	"description": "Lets the user give a number or a range of numbers",
+	"category": "widgets",
+	"attributes": {
+		"fieldid": {
+			"type": "string",
+			"default": ""
+		},
+		"width": {
+			"type": "number",
+			"default": 6
+		},
+		"required": {
+			"type": "boolean",
+			"default": false
+		},
+		"label": {
+			"type": "string",
+			"default": ""
+		},
+		"placeholder": {
+			"type": "number",
+			"default": 0
+		},
+		"min": {
+			"type": "number",
+			"default": 0
+		},
+		"max": {
+			"type": "number",
+			"default": 10
+		},
+		"step": {
+			"type": "number",
+			"default": 1
+		},
+		"range": {
+			"type": "boolean",
+			"default": false
+		},
+		"defaultValue": {
+			"type": "number",
+			"default": 0
+		},
+		"hasLabels": {
+			"type": "boolean",
+			"default": true
+		},
+		"hasTicks": {
+			"type": "boolean",
+			"default": false
+		}
+	},
+	"parent": [ "gutenberg-form/form-fields" ]
+}

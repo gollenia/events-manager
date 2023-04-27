@@ -1,5 +1,4 @@
 import { __ } from '@wordpress/i18n';
-import React from 'react';
 
 /*
  *   Simple renderer for a given gateway

@@ -45,7 +45,7 @@ class EM_Location_Post {
 	}
 
 	public static function add_id_to_rest($object) {
-		$EM_Location = em_get_location($object["id"], 'post_id');
+		$EM_Location = EM_Location::get($object["id"], 'post_id');
 		return $EM_Location->location_id;
 	}
 	
@@ -61,18 +61,15 @@ class EM_Location_Post {
 	 * Once the post is saved, saves EM meta data
 	 * @param int $post_id
 	 */
-	public static function save_post(\WP_Post $post, \WP_REST_Request $request = null, bool $creating = false) : void {
+	public static function save_post(\WP_Post $post) : void {
+		
 		global $wpdb, $EM_Location;
-
 		$post_id = $post->ID;
 		
-		$doing_add_meta_ajax = defined('DOING_AJAX') && DOING_AJAX && !empty($_REQUEST['action']) && $_REQUEST['action'] == 'add-meta' && check_ajax_referer( 'add-meta', '_ajax_nonce-add-meta', false ); //we don't need to save anything here, we don't use this action
-		$saving_status = !in_array(get_post_status($post_id), array('trash','auto-draft')) && !defined('DOING_AUTOSAVE') && !$doing_add_meta_ajax;
-		$is_post_type = get_post_type($post_id) == EM_POST_TYPE_LOCATION;
+		$saving_status = !in_array(get_post_status($post_id), array('trash','auto-draft'));
 		
-		if(defined('UNTRASHING_'.$post_id) || !$is_post_type || !$saving_status) return;
+		if(defined('UNTRASHING_'.$post_id) || !$saving_status) return;
 			
-		//do a quick and dirty update
 		$EM_Location = new EM_Location($post_id, 'post_id');
 		
 		do_action('em_location_save_pre', $EM_Location);

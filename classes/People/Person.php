@@ -116,7 +116,7 @@ class EM_Person extends WP_User {
 
 	function get_name(){
 		$full_name = $this->first_name  . " " . $this->last_name ;
-		//var_dump($this);
+		
 		$full_name = wp_kses_data(trim($full_name));
 		$name = !empty($full_name) ? $full_name : $this->display_name;
 		return apply_filters('em_person_get_name',$name, $this);

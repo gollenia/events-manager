@@ -2,7 +2,7 @@
  *   External dependecies
  */
 import { __ } from '@wordpress/i18n';
-import React, { useEffect, useReducer } from 'react';
+import { useEffect, useReducer } from 'react';
 
 import { ErrorBoundary } from 'react-error-boundary';
 
@@ -19,6 +19,7 @@ import Success from './success';
 import TicketList from './ticketList';
 import UserRegistration from './userRegistration';
 
+console.log( 'hi' );
 // TEST
 
 // this function  is suposed to open the modal from the parent component
@@ -40,6 +41,8 @@ const Booking = () => {
 			</span>
 		);
 
+	console.log( state );
+
 	useEffect( () => {
 		if ( ! wizzard.checkValidity ) return;
 		dispatch( {
@@ -53,13 +56,11 @@ const Booking = () => {
 		} );
 	}, [ state ] );
 
-	console.log( 'state', state );
-
 	return (
 		<div>
 			<ErrorBoundary FallbackComponent={ ErrorFallback }>
 				<button
-					className="button button--primary"
+					className={ data.attributes.className + ' booking-button button--primary button' }
 					onClick={ () => {
 						dispatch( { type: 'SET_MODAL', payload: true } );
 					} }

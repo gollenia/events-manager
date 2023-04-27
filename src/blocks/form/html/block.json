@@ -3,14 +3,12 @@
 	"apiVersion": 2,
 	"title": "Text Block",
 	"description": "Headline or text block",
-	"category": "widgets", 
+	"category": "widgets",
 	"attributes": {
-		
 		"width": {
-			"type": "integer",
-			"default": 4
+			"type": "number",
+			"default": 6
 		}
-		
 	},
 	"parent": [ "events-manager/form-container" ]
 }

@@ -3,14 +3,14 @@
 	"apiVersion": 2,
 	"title": "Checkbox",
 	"description": "Lets the user check something",
-	"category": "widgets", 
+	"category": "widgets",
 	"attributes": {
 		"fieldid": {
 			"type": "string",
 			"default": ""
 		},
 		"width": {
-			"type": "integer",
+			"type": "number",
 			"default": 4
 		},
 		"required": {
@@ -37,7 +37,6 @@
 			"type": "string",
 			"default": "checkbox"
 		}
-		
 	},
 	"parent": [ "events-manager/form-container" ]
 }

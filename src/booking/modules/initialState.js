@@ -1,11 +1,15 @@
 import { __ } from '@wordpress/i18n';
 import eventData from './eventData';
 
-let tempForm = {};
-for ( let field of eventData.registration_fields ) {
-	tempForm[ field.name ] = field.value;
-}
-tempForm[ 'data_privacy_consent' ] = '';
+const getTempForm = () => {
+	let tempForm = {};
+	if ( ! eventData ) return tempForm;
+	for ( let field of eventData.registration_fields ) {
+		tempForm[ field.name ] = field.value;
+	}
+	tempForm[ 'data_privacy_consent' ] = '';
+	return tempForm;
+};
 
 let requiredTickets = [];
 for ( let ticketKey in eventData.tickets ) {
@@ -15,8 +19,6 @@ for ( let ticketKey in eventData.tickets ) {
 		requiredTickets.push( ticket );
 	}
 }
-
-console.log( window.location.hash );
 
 const initialState = {
 	modal: {
@@ -40,10 +42,10 @@ const initialState = {
 				valid: document.getElementById( 'user-registration-form' )?.checkValidity(),
 			},
 			payment: {
-				enabled: ! eventData?.event?.price.free,
+				enabled: ! eventData?.event?.price?.free,
 				step: 2,
 				label: __( 'Payment', 'events' ),
-				valid: eventData?.event.is_free,
+				valid: eventData?.event?.is_free,
 			},
 			success: {
 				enabled: true,
@@ -53,7 +55,7 @@ const initialState = {
 			},
 		},
 		keys: [ 'tickets', 'registration', 'payment', 'success' ],
-		step: eventData.attendee_fields.length === 0 ? 1 : 0,
+		step: eventData?.attendee_fields?.length === 0 ? 1 : 0,
 		checkValidity: true,
 	},
 	response: {
@@ -68,7 +70,7 @@ const initialState = {
 	},
 	request: {
 		tickets: requiredTickets,
-		registration: tempForm,
+		registration: getTempForm(),
 		gateway: 'offline',
 		coupon: '',
 	},

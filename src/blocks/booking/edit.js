@@ -16,26 +16,37 @@ import Inspector from './inspector.js';
  */
 const edit = ( props ) => {
 	const {
-		attributes: { buttonTitle },
+		attributes: { buttonTitle, iconRight },
 		setAttributes,
 		buttonColor,
+		className,
 	} = props;
 
 	const blockProps = useBlockProps( {
 		className: [ 'ctx-event-booking' ].filter( Boolean ).join( ' ' ),
 	} );
 
-	const textColor = buttonColor.color == undefined || colord( buttonColor.color ).isLight() ? '#000000' : '#ffffff';
+	const backgroundColor =
+		buttonColor.color == undefined || buttonColor.color == '' ? 'var(--primary)' : buttonColor.color;
+	const textColor = buttonColor == undefined || colord( buttonColor.color ).isLight() ? '#000000' : '#ffffff';
+
+	const isOutline = blockProps.className?.includes( 'is-style-outline' );
 
 	const style = {
-		background: buttonColor.color,
-		color: textColor,
+		...blockProps.style,
+		backgroundColor: isOutline ? 'transparent' : backgroundColor,
+		boxShadow: isOutline ? 'inset 0px 0px 0px 2px ' + backgroundColor : 'none',
+		color: isOutline ? backgroundColor : textColor,
 	};
+
+	const buttonClasses = [ className || false, 'ctx-button', iconRight ? 'reverse' : false ]
+		.filter( Boolean )
+		.join( ' ' );
 
 	return (
 		<div { ...blockProps }>
 			<Inspector { ...props } />
-			<span style={ style } className="events ctx-button">
+			<span style={ style } className={ buttonClasses }>
 				<RichText
 					tagName="span"
 					value={ buttonTitle }

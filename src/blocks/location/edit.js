@@ -2,10 +2,10 @@
  * Wordpress dependencies
  */
 import { useBlockProps } from '@wordpress/block-editor';
-import { Flex, FlexItem, TextControl } from '@wordpress/components';
+import { Flex, FlexItem, SelectControl, TextControl } from '@wordpress/components';
 import { useEntityProp } from '@wordpress/core-data';
 import { useSelect } from '@wordpress/data';
-import { useEffect } from '@wordpress/element';
+import { useEffect, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import 'leaflet/dist/leaflet.css';
 import { CircleMarker, MapContainer, TileLayer } from 'react-leaflet';
@@ -28,12 +28,51 @@ const edit = ( props ) => {
 		className: [ 'location-edit' ].filter( Boolean ).join( ' ' ),
 	} );
 
+	const [ countries, setCountries ] = useState( [] );
+
 	useEffect( () => {
-		if ( ! meta._location_latitude || ! meta._location_longitude ) {
-			getGeoPosition();
+		if ( ! meta._location_country ) {
+			setMeta( {
+				...meta,
+				_location_country: window.EM.country,
+			} );
 		}
 	}, [] );
+
+	const fetchCountries = async () => {
+		const response = await fetch( 'https://countries.kids-team.com/countries/world/' + 'de' );
+		const data = await response.json();
+		const items = Object.entries( data ).map( ( [ key, value ] ) => {
+			return {
+				value: key,
+				label: value,
+			};
+		} );
+		items.unshift( {
+			value: '',
+			label: __( 'Select Country', 'events' ),
+		} );
+		setCountries( items );
+	};
+
+	useEffect( () => {
+		fetchCountries();
+		if ( ! meta._location_country ) {
+			{
+				countries.map( ( country, index ) => {
+					if ( ! country ) return <></>;
+					return (
+						<option key={ index } value={ country.value } selected={ placeholder == country.value }>
+							{ country.label }
+						</option>
+					);
+				} );
+			}
+		}
+	}, [] );
+
 	const position = [ meta._location_latitude, meta._location_longitude ];
+
 	const getGeoPosition = () => {
 		if ( ! meta._location_address || ! meta._location_town ) return;
 
@@ -51,6 +90,7 @@ const edit = ( props ) => {
 				}
 			} );
 	};
+
 	return (
 		<div>
 			<div className="location-edit__admin">
@@ -100,9 +140,10 @@ const edit = ( props ) => {
 					</FlexItem>
 				</Flex>
 
-				<TextControl
+				<SelectControl
 					label={ __( 'Country', 'events' ) }
 					value={ meta._location_country }
+					options={ countries }
 					onBlur={ ( value ) => {
 						getGeoPosition();
 					} }

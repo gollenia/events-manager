@@ -1,47 +1,5 @@
 <?php
-/**
- * Get a location in a db friendly way, by checking globals, cache and passed variables to avoid extra class instantiations.
- * @param mixed $id
- * @param mixed $search_by
- * @return EM_Location
- */
-function em_get_location($id = false, $search_by = 'location_id') {
-	global $EM_Location;
-	//check if it's not already global so we don't instantiate again
-	if( is_object($EM_Location) && get_class($EM_Location) == 'EM_Location' ){
-		if( is_object($id) && $EM_Location->post_id == $id->ID ){
-			return apply_filters('em_get_location', $EM_Location);
-		}elseif( !is_object($id) ){
-			if( $search_by == 'location_id' && $EM_Location->location_id == $id ){
-				return apply_filters('em_get_location', $EM_Location);
-			}elseif( $search_by == 'post_id' && $EM_Location->post_id == $id ){
-				return apply_filters('em_get_location', $EM_Location);
-			}
-		}
-	}
-	if( is_object($id) && get_class($id) == 'EM_Location' ){
-		return apply_filters('em_get_location', $id);
-	}elseif( !defined('EM_CACHE') || EM_CACHE ){
-		//check the cache first
-		$location_id = false;
-		if( is_numeric($id) ){
-			if( $search_by == 'location_id' ){
-				$location_id = $id;
-			}elseif( $search_by == 'post_id' ){
-				$location_id = wp_cache_get($id, 'em_locations_ids');
-			}
-		}elseif( !empty($id->ID) && !empty($id->post_type) && $id->post_type == EM_POST_TYPE_LOCATION ){
-			$location_id = wp_cache_get($id->ID, 'em_locations_ids');
-		}
-		if( $location_id ){
-			$location = wp_cache_get($location_id, 'em_locations');
-			if( is_object($location) && !empty($location->location_id) && $location->location_id){
-				return apply_filters('em_get_location', $location);
-			}
-		}
-	}
-	return apply_filters('em_get_location', new EM_Location($id,$search_by));
-}
+
 /**
  * Object that holds location info and related functions
  *
@@ -55,6 +13,9 @@ function em_get_location($id = false, $search_by = 'location_id') {
  * @property int $status             ID of post status, shorthand for location_status
  */
 class EM_Location extends EM_Object {
+
+	const POST_TYPE = EM_POST_TYPE_LOCATION;
+	
 	//DB Fields
 	var $location_id = '';
 	var $post_id = '';
@@ -165,7 +126,6 @@ class EM_Location extends EM_Object {
 	 * @param $search_by - Can be post_id or a number for a blog id if in ms mode with global tables, default is location_id
 	 */
 	function __construct($id = false,  $search_by = 'location_id' ) {
-		global $wpdb;
 		//Initialize
 		$this->required_fields = array("location_address" => __('The location address', 'events-manager'), "location_town" => __('The location town', 'events-manager'), "location_country" => __('The country', 'events-manager'));
 		//Get the post_id/location_id
@@ -178,11 +138,22 @@ class EM_Location extends EM_Object {
 		if( $is_post || absint($id) > 0 ){ //only load info if $id is a number
 			$location_post = false;
 			if($search_by == 'location_id' && !$is_post){
-				//search by location_id, get post_id and blog_id (if in ms mode) and load the post
-				$results = $wpdb->get_row($wpdb->prepare("SELECT post_id, blog_id FROM ".EM_LOCATIONS_TABLE." WHERE location_id=%d",$id), ARRAY_A);
-				if( !empty($results['post_id']) ){
-				    $this->post_id = $results['post_id'];
-					$location_post = get_post($results['post_id']);
+				
+				$args = array(
+					'post_type'         => 'location',
+					'meta_query' => array(
+						array(
+							'key' => '_location_id',
+							'value' => $id,
+						)
+					)
+				);
+				 
+				$query = new WP_Query( $args );
+
+				
+				if ($query->have_posts()) {
+					$location_post = $query->posts[0];
 				}
 			}else{
 				if(!$is_post){
@@ -201,6 +172,50 @@ class EM_Location extends EM_Object {
 			wp_cache_set($this->post_id, $this->location_id, 'em_locations_ids');
 		}
 		do_action('em_location', $this, $id, $search_by);
+	}
+
+	/**
+	 * Get a location in a db friendly way, by checking globals, cache and passed variables to avoid extra class instantiations.
+	 * @param mixed $id
+	 * @param mixed $search_by
+	 * @return EM_Location
+	 */
+	static function get($id = false, $search_by = 'location_id') {
+		global $EM_Location;
+	//check if it's not already global so we don't instantiate again
+		if( is_object($EM_Location) && get_class($EM_Location) == 'EM_Location' ){
+			if( is_object($id) && $EM_Location->post_id == $id->ID ){
+				return apply_filters('em_get_location', $EM_Location);
+			}elseif( !is_object($id) ){
+				if( $search_by == 'location_id' && $EM_Location->location_id == $id ){
+					return apply_filters('em_get_location', $EM_Location);
+				}elseif( $search_by == 'post_id' && $EM_Location->post_id == $id ){
+					return apply_filters('em_get_location', $EM_Location);
+				}
+			}
+		}
+		if( is_object($id) && get_class($id) == 'EM_Location' ){
+			return apply_filters('em_get_location', $id);
+		}else{
+			//check the cache first
+			$location_id = false;
+			if( is_numeric($id) ){
+				if( $search_by == 'location_id' ){
+					$location_id = $id;
+				}elseif( $search_by == 'post_id' ){
+					$location_id = wp_cache_get($id, 'em_locations_ids');
+				}
+			}elseif( !empty($id->ID) && !empty($id->post_type) && $id->post_type == EM_POST_TYPE_LOCATION ){
+				$location_id = wp_cache_get($id->ID, 'em_locations_ids');
+			}
+			if( $location_id ){
+				$location = wp_cache_get($location_id, 'em_locations');
+				if( is_object($location) && !empty($location->location_id) && $location->location_id){
+					return apply_filters('em_get_location', $location);
+				}
+			}
+		}
+		return apply_filters('em_get_location', new EM_Location($id,$search_by));
 	}
 	
 	function load_postdata($location_post, $search_by = false){
@@ -262,7 +277,7 @@ class EM_Location extends EM_Object {
 	}
 
 	/**
-	 * Retrieve event post meta information via POST, which should be always be called when saving the event custom post via WP.
+	 * Since the post object has already been saved by the Gutenberg REST, we can safely get the post meta from the database.
 	 * @param boolean $validate whether or not to run validation, default is true
 	 * @return mixed
 	 */
@@ -280,11 +295,8 @@ class EM_Location extends EM_Object {
 		$this->location_latitude = get_post_meta($this->post_id, '_location_latitude', true);
 		$this->location_longitude = get_post_meta($this->post_id, '_location_longitude', true);
 	
-		
-		//the line below should be deleted one day and we move validation out of this function, when that happens check otherfunctions like EM_ML_IO::get_post_meta function which force validation again 
-		
 		$this->compat_keys();
-		return apply_filters('em_location_get_post_meta',true, $this, $validate); //if making a hook, assume that eventually $validate won't be passed on
+		return apply_filters('em_location_get_post_meta',true, $this, true); //if making a hook, assume that eventually $validate won't be passed on
 	}
 	
 	function validate(){
@@ -296,135 +308,80 @@ class EM_Location extends EM_Object {
 
 		return apply_filters('em_location_validate', $validate_post, $this );		
 	}
-	
 
-	
-	function save(){
+	/**
+	 * Checks if the location has be correctly stored previously
+	 * @return boolean
+	 */
+	function location_exists() : bool {
+		global $wpdb;
 		
-		global $wpdb, $current_user, $blog_id, $EM_SAVING_LOCATION;
-		$EM_SAVING_LOCATION = true; //this flag prevents our dashboard save_post hooks from going further
-		//TODO shuffle filters into right place
-		if( !$this->can_manage('edit_locations', 'edit_others_locations') && empty($this->location_id) ){
-			return apply_filters('em_location_save', false, $this);
-		}
-		do_action('em_location_save_pre', $this);
-		$post_array = array();
-		//Deal with updates to a location
-		if( !empty($this->post_id) ){
-			//get the full array of post data so we don't overwrite anything.
-			$post_array = (array) get_post($this->post_id);
-			
-		}
-		//Overwrite new post info
-		$post_array['post_type'] = EM_POST_TYPE_LOCATION;
-		$post_array['post_title'] = $this->location_name;
-		$post_array['post_content'] = $this->post_content;
-		//decide on post status
-		if( count($this->errors) == 0 ){
-			$post_array['post_status'] = $this->can_manage('publish_locations') ? 'publish':'pending';
-		}else{
-			$post_array['post_status'] = 'draft';
-		}
-		if( !empty($this->force_status) ){
-			$post_array['post_status'] = $this->force_status;
-		}
+		if(empty($this->location_id)) return false;
 		
-		//Save post and continue with meta
-		$post_id = wp_insert_post($post_array);
-		$post_save = false;
-		$meta_save = false;
-		if( !is_wp_error($post_id) && !empty($post_id) ){
-			$post_save = true;			
-			//refresh this event with wp post
-			$post_data = get_post($post_id);
-			$this->post_id = $this->ID = $post_id;
-			$this->post_type = $post_data->post_type;
-			$this->location_slug = $post_data->post_name;
-			$this->location_owner = $post_data->post_author;
-			$this->post_status = $post_data->post_status;
-			$this->get_status();
+		if( !empty($this->orphaned_location) && !empty($this->post_id) ) return true;
 			
-			//save the image, errors here will surface during $this->save_meta()
-			//now save the meta
-			$meta_save = $this->save_meta();
-		}elseif(is_wp_error($post_id)){
-			//location not saved, add an error
-			$this->add_error($post_id->get_error_message());
-		}
-		$return = apply_filters('em_location_save', $post_save && $meta_save, $this );
-		$EM_SAVING_LOCATION = false;
-		//reload post data and add this location to the cache, after any other hooks have done their thing
-		//cache refresh when saving via admin area is handled in EM_Event_Post_Admin::save_post/refresh_cache
-		if( $post_save && $meta_save ){
-			$this->load_postdata($post_data);
-			if( $this->is_published() ){
-				//we won't depend on hooks, if we saved the event and it's still published in its saved state, refresh the cache regardless
-				wp_cache_set($this->location_id, $this, 'em_locations');
-				wp_cache_set($this->post_id, $this->location_id, 'em_locations_ids');
-			}
-		}
-		return $return;
+		return $wpdb->get_var('SELECT post_id FROM '.EM_LOCATIONS_TABLE." WHERE location_id={$this->location_id}") == $this->post_id;
 	}
 	
-	function save_meta(){
-		//echo "<pre>"; print_r($this); echo "</pre>"; die();
-		global $wpdb;
-		if( $this->can_manage('edit_locations','edit_others_locations') ){
-			do_action('em_location_save_meta_pre', $this);
-			
-			if( !$this->location_language ) $this->location_language = EM_ML::$current_language;
-			
-			//refresh status
-			$this->get_status();
-			$this->location_status = (count($this->errors) == 0) ? $this->location_status:null; //set status at this point, it's either the current status, or if validation fails, null
-			//Save to em_locations table
-			$location_array = $this->to_array(true);
 
-					
+	function save_meta(){
+		
+		if (!$this->can_manage('edit_locations','edit_others_locations')) return false;
+		
+		do_action('em_location_save_meta_pre', $this);
+		
+		if( !$this->location_language ) $this->location_language = EM_ML::$current_language;
+		
+		//refresh status
+		$this->get_status();
+		$this->location_status = (count($this->errors) == 0) ? $this->location_status:null; //set status at this point, it's either the current status, or if validation fails, null
+		
+		//Save to em_locations table
+		$location_array = $this->to_array(true);
+		unset($location_array['location_id']);
+		$location_array['location_private'] = ( $this->post_status == 'private' ) ? 1:0;
+		
+		//check if location truly exists, meaning the location_id is actually a valid location id
+		$location_exists = $this->location_exists();
+		
+		//save all the meta
+		if( empty($this->location_id) || !$location_exists ){
 			
-        
-			unset($location_array['location_id']);
-			//decide whether or not event is private at this point
-			$location_array['location_private'] = ( $this->post_status == 'private' ) ? 1:0;
-			//check if location truly exists, meaning the location_id is actually a valid location id
-			if( !empty($this->location_id) ){
-			    if( !empty($this->orphaned_location) && !empty($this->post_id) ){
-			    	//we're dealing with an orphaned event in wp_em_locations table, so we want to update the post_id and give it a post parent
-			    	$loc_truly_exists = true;
-			    }else{
-					$loc_truly_exists = $wpdb->get_var('SELECT post_id FROM '.EM_LOCATIONS_TABLE." WHERE location_id={$this->location_id}") == $this->post_id;
-			    }
-			}else{
-				$loc_truly_exists = false;
-			}
-			//save all the meta
-			if( empty($this->location_id) || !$loc_truly_exists ){
-				$this->previous_status = 0; //for sure this was previously status 0
-				if ( !$wpdb->insert(EM_LOCATIONS_TABLE, $location_array) ){
-					$this->add_error( sprintf(__('Something went wrong saving your %s to the index table. Please inform a site administrator about this.','events-manager'),__('location','events-manager')));
-				}else{
-					//success, so link the event with the post via an event id meta value for easy retrieval
-					$this->location_id = $wpdb->insert_id;
-					update_post_meta($this->post_id, '_location_id', $this->location_id);
-					$this->feedback_message = sprintf(__('Successfully saved %s','events-manager'),__('Location','events-manager'));
-				}	
-			}else{
-				$this->get_previous_status();
-				if ( $wpdb->update(EM_LOCATIONS_TABLE, $location_array, array('location_id'=>$this->location_id)) === false ){
-					$this->add_error( sprintf(__('Something went wrong updating your %s to the index table. Please inform a site administrator about this.','events-manager'),__('location','events-manager')));			
-				}else{
-					$this->feedback_message = sprintf(__('Successfully saved %s','events-manager'),__('Location','events-manager'));
-					//Also set the status here if status != previous status
-					if( $this->previous_status != $this->get_status() ) $this->set_status($this->get_status());
-				}
-				
-			}
+			$this->insert_db($location_array);
 		}else{
-			$this->add_error( sprintf(__('You do not have permission to create/edit %s.','events-manager'), __('locations','events-manager')) );
+			$this->update_db($location_array);	
 		}
+
+		
+		
 		$this->compat_keys();
 		
 		return apply_filters('em_location_save_meta', count($this->errors) == 0, $this);
+	}
+
+	function update_db($location_array) {
+		global $wpdb;
+		$this->get_previous_status();
+
+		$success = $wpdb->update(EM_LOCATIONS_TABLE, $location_array, array('location_id'=>$this->location_id));
+		
+		if( $success === true ){
+			//Also set the status here if status != previous status
+			if( $this->previous_status != $this->get_status() ) $this->set_status($this->get_status());
+		}
+	}
+
+	function insert_db($location_array) {
+		global $wpdb;
+		$this->previous_status = 0; //for sure this was previously status 0
+
+		$success = $wpdb->insert(EM_LOCATIONS_TABLE, $location_array);
+		
+		if($success) {
+			$this->location_id = $wpdb->insert_id;
+			update_post_meta($this->post_id, '_location_id', $this->location_id);
+			$this->feedback_message = sprintf(__('Successfully saved %s','events-manager'),__('Location','events-manager'));
+		}
 	}
 	
 	function delete($force_delete = false){
@@ -461,6 +418,7 @@ class EM_Location extends EM_Object {
 		$result = false;
 		if( $this->can_manage('delete_locations','delete_others_locations') ){
 			do_action('em_location_delete_meta_pre', $this);
+			
 			$result = $wpdb->query ( $wpdb->prepare("DELETE FROM ". EM_LOCATIONS_TABLE ." WHERE location_id=%d", $this->location_id) );
 		}
 		return apply_filters('em_location_delete_meta', $result !== false, $this);
@@ -523,7 +481,7 @@ class EM_Location extends EM_Object {
 	 */
 	public function get_parent(){
 		if( $this->location_parent ){
-			return em_get_location( $this->location_parent );
+			return self::get( $this->location_parent );
 		}
 		return null;
 	}

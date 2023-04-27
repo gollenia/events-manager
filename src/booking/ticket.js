@@ -1,6 +1,5 @@
 import { __ } from '@wordpress/i18n';
-import React from 'react';
-import InputField from './inputField';
+import InputField from './InputField';
 
 /*
  *	Renders a single ticket with it's form fields
@@ -24,7 +23,8 @@ const Ticket = ( props ) => {
 						return (
 							<InputField
 								key={ key }
-								field={ field }
+								type={ field.type }
+								settings={ field }
 								value={ ticket.fields[ field.fieldid ] }
 								onChange={ ( value ) =>
 									dispatch( {

@@ -3,15 +3,15 @@
 	"apiVersion": 2,
 	"title": "Text Field",
 	"description": "Lets the user type a short text",
-	"category": "widgets", 
+	"category": "widgets",
 	"attributes": {
 		"fieldid": {
 			"type": "string",
 			"default": ""
 		},
 		"width": {
-			"type": "integer",
-			"default": 4
+			"type": "number",
+			"default": 6
 		},
 		"required": {
 			"type": "boolean",
@@ -37,7 +37,6 @@
 			"type": "string",
 			"default": ""
 		}
-		
 	},
 	"parent": [ "events-manager/form-container" ]
 }

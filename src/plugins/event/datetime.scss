@@ -10,6 +10,10 @@
 	width: 7rem;
 }
 
+.em-time-input input {
+	width: 100% !important;
+}
+
 .components-text-control__input[type='time'] {
 	width: auto;
 }

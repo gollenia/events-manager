@@ -3,15 +3,15 @@
 	"apiVersion": 2,
 	"title": "Phone Field",
 	"description": "Lets the user type a phone number.",
-	"category": "widgets", 
+	"category": "widgets",
 	"attributes": {
 		"fieldid": {
 			"type": "string",
 			"default": "email"
 		},
 		"width": {
-			"type": "integer",
-			"default": 4
+			"type": "number",
+			"default": 6
 		},
 		"required": {
 			"type": "boolean",
@@ -33,7 +33,6 @@
 			"type": "string",
 			"default": ""
 		}
-		
 	},
 	"parent": [ "events-manager/form-container" ]
 }

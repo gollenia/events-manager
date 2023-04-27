@@ -49,7 +49,7 @@ class EM_ML_Search {
 	    if( !EM_ML_Search::$active ) return $defaults;
         if( !empty($defaults['location']) ){
             //check that this location ID is the original one, given that all events of any language will refer to the location_id of the original
-            $EM_Location = em_get_location($defaults['location']);
+            $EM_Location = EM_Location::get($defaults['location']);
             if( !EM_ML::is_original($EM_Location) ){
                 $defaults['location'] = EM_ML::get_original_location($EM_Location)->location_id;
             }

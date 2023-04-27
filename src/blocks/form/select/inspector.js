@@ -55,7 +55,7 @@ const Inspector = ( props ) => {
 					label={ __( 'Width', 'events' ) }
 					help={ __( 'Number of columns the input field will occupy', 'events' ) }
 					value={ width }
-					max={ 4 }
+					max={ 6 }
 					min={ 1 }
 					onChange={ ( value ) => setAttributes( { width: value } ) }
 				/>

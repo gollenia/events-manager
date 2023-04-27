@@ -1,106 +1,123 @@
 /**
  * Wordpress dependencies
  */
-import { ToggleControl, RichText, useBlockProps } from '@wordpress/block-editor';
-import { __ } from '@wordpress/i18n'; 
-import { useSelect } from '@wordpress/data';
+import { RichText, useBlockProps } from '@wordpress/block-editor';
+import { Icon } from '@wordpress/components';
 import { useEffect, useState } from '@wordpress/element';
-import { store as coreStore } from '@wordpress/core-data';
-import { select } from "@wordpress/data";
-
-
+import { __ } from '@wordpress/i18n';
 
 /**
  * Internal dependencies
  */
+import icon from './icon.js';
 import Inspector from './inspector.js';
-
 
 /**
  * @param {Props} props
  * @return {JSX.Element} Element
  */
-const edit = (props) => {
-
+const edit = ( props ) => {
 	const {
-		attributes: {
-			width,
-			required,
-			pattern,
-			label,
-			fieldid,
-			help,
-			error
-		},
-		setAttributes
-		
+		attributes: { width, required, placeholder, label, fieldid, region },
+		setAttributes,
 	} = props;
 
-	const countries = () => {
-		
-	}
+	const [ countries, setCountries ] = useState( [] );
+
+	const fetchCountries = async () => {
+		const response = await fetch( 'https://countries.kids-team.com/countries/' + region + '/' + 'de' );
+		const data = await response.json();
+		const items = Object.entries( data ).map( ( [ key, value ] ) => {
+			return {
+				value: key,
+				label: value,
+			};
+		} );
+		setCountries( items );
+	};
+
+	useEffect( () => {
+		fetchCountries();
+	}, [ region ] );
 
 	const validFieldId = () => {
-		const validPattern = new RegExp('([a-zA-Z0-9_]){3,40}');
-		return (validPattern.test(fieldid));
-	}
+		const validPattern = new RegExp( '([a-zA-Z0-9_]){3,40}' );
+		return validPattern.test( fieldid );
+	};
 
-	const setFieldId = (value) => {
-		value = value.toLowerCase()
-		value = value.replace(/\s/g, '-')
-		setAttributes({ fieldid: value.toLowerCase() });
-	}
+	const setFieldId = ( value ) => {
+		value = value.toLowerCase();
+		value = value.replace( /\s/g, '-' );
+		setAttributes( { fieldid: value.toLowerCase() } );
+	};
 
-	const blockProps = useBlockProps({
+	const blockProps = useBlockProps( {
 		className: [
-			"ctx:event-field",
-			"ctx:event-field--" + width,
-			validFieldId() == false ? "ctx:event-field--error" : ""
-		].filter(Boolean).join(" ")
-	});
-
-	
+			'ctx:form-field',
+			'ctx:form-field--' + width,
+			validFieldId() == false || label === '' ? 'ctx:form-field--error' : '',
+		]
+			.filter( Boolean )
+			.join( ' ' ),
+	} );
 
 	return (
-		<div {...blockProps}>
-			<Inspector {...props} />
-			
-			<div className="ctx:event-field__caption">
-			<div>
-			<RichText
-				tagName="span"
-				className="ctx:event-details__label"
-				value={label}
-				placeholder={__("Label", "events")}
-				onChange={(value) => setAttributes({ label: value })}
-			/>
-			<span>{(required ? "*": "")}</span><br/>
-			<span className="ctx:event-field__label">{__("Label for the field", "events")}</span>
-			</div>
-			
-			<div className="ctx:event-field__name">
-			<RichText
-				tagName="p"
-				className="ctx:event-details__label"
-				value={fieldid}
-				
-				placeholder={__("Slug", "events")}
-				onChange={(value) => setFieldId( value )}
-			/>
-			{ validFieldId() == false && <span className="ctx:event-field__error-message">{__("Please type in a unique itentifier for the field", "events")}</span> }
-			{ validFieldId() && <span className="ctx:event-field__label">{__("Unique identifier", "events")}</span> }
-			</div>
+		<div { ...blockProps }>
+			<Inspector { ...props } />
 
+			<div className="ctx:form-field__caption">
+				<div className="ctx:form-field__info">
+					<Icon icon={ icon } />
+					<div className="ctx:form-field__description">
+						<span>
+							<RichText
+								tagName="span"
+								className="ctx:form-details__label"
+								value={ label }
+								placeholder={ __( 'Label', 'events' ) }
+								onChange={ ( value ) => setAttributes( { label: value } ) }
+							/>
+
+							<span>{ required ? '*' : '' }</span>
+						</span>
+						<span className="ctx:form-field__label">{ __( 'Label for the field', 'events' ) }</span>
+					</div>
+				</div>
+
+				<div className="ctx:form-field__name">
+					<RichText
+						tagName="p"
+						className="ctx:form-details__label"
+						value={ fieldid }
+						placeholder={ __( 'Slug', 'events' ) }
+						onChange={ ( value ) => setFieldId( value ) }
+					/>
+					{ validFieldId() == false && (
+						<span className="ctx:form-field__error-message">
+							{ __( 'Please type in a unique itentifier for the field', 'events' ) }
+						</span>
+					) }
+					{ validFieldId() && (
+						<span className="ctx:form-field__label">{ __( 'Unique identifier', 'events' ) }</span>
+					) }
+				</div>
 			</div>
-			<select>
-			{ Object.keys(window.eventBlocksLocalization?.countries).map((country) => {
-				return <option value={country}>{window.eventBlocksLocalization?.countries[country]}</option>
-			})}
+			<select
+				onChange={ ( event ) => {
+					setAttributes( { placeholder: event.target.value } );
+				} }
+			>
+				{ countries.map( ( country, index ) => {
+					if ( ! country ) return <></>;
+					return (
+						<option key={ index } value={ country.value } selected={ placeholder == country.value }>
+							{ country.label }
+						</option>
+					);
+				} ) }
 			</select>
 		</div>
 	);
-
-}
-
+};
 
 export default edit;

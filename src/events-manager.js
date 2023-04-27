@@ -38,38 +38,7 @@ jQuery( document ).ready( function ( $ ) {
 	} );
 	//Event Editor
 	//Recurrence Warnings
-	$( '#event-form.em-event-admin-recurring' ).on( 'submit', function ( event ) {
-		let form = $( this );
-		if ( form.find( 'input[name="event_reschedule"]' ).first().val() == 1 ) {
-			let warning_text = EM.event_reschedule_warning;
-		} else if ( form.find( 'input[name="event_recreate_tickets"]' ).first().val() == 1 ) {
-			let warning_text = EM.event_recurrence_bookings;
-		} else {
-			let warning_text = EM.event_recurrence_overwrite;
-		}
-		let confirmation = confirm( warning_text );
-		if ( confirmation == false ) {
-			event.preventDefault();
-		}
-	} );
-	//Buttons for recurrence warnings within event editor forms
-	$( '.em-reschedule-trigger' ).on( 'click', function ( e ) {
-		e.preventDefault();
-		let trigger = $( this );
-		trigger
-			.closest( '.em-recurrence-reschedule' )
-			.find( trigger.data( 'target' ) )
-			.removeClass( 'reschedule-hidden' );
-		trigger.siblings( '.em-reschedule-value' ).val( 1 );
-		trigger.addClass( 'reschedule-hidden' ).siblings( 'a' ).removeClass( 'reschedule-hidden' );
-	} );
-	$( '.em-reschedule-cancel' ).on( 'click', function ( e ) {
-		e.preventDefault();
-		let trigger = $( this );
-		trigger.closest( '.em-recurrence-reschedule' ).find( trigger.data( 'target' ) ).addClass( 'reschedule-hidden' );
-		trigger.siblings( '.em-reschedule-value' ).val( 0 );
-		trigger.addClass( 'reschedule-hidden' ).siblings( 'a' ).removeClass( 'reschedule-hidden' );
-	} );
+
 	//Tickets & Bookings
 	if ( $( '#em-tickets-form' ).length > 0 ) {
 		//Enable/Disable Bookings
