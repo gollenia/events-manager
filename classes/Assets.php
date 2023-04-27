@@ -46,7 +46,7 @@ class Assets {
 		}
 		$index_js = '../includes/backend.js';
 		$script_asset = require( $script_asset_path );
-		wp_register_script(
+		wp_enqueue_script(
 			'events-block-editor',
 			plugins_url( $index_js, __FILE__ ),
 			$script_asset['dependencies'],
@@ -65,7 +65,7 @@ class Assets {
 		
 		$editor_css = '../includes/backend.css';
 
-		wp_register_style(
+		wp_enqueue_style(
 			'events-block-style',
 			plugins_url( $editor_css, __FILE__ ),
 			array(),
@@ -106,7 +106,6 @@ class Assets {
 		wp_enqueue_script('events-manager', plugins_url('../includes/events-manager.js',__FILE__), array('jquery', 'jquery-ui-core','jquery-ui-widget','jquery-ui-position','jquery-ui-sortable','jquery-ui-datepicker','jquery-ui-autocomplete','jquery-ui-dialog','wp-color-picker'), \Events::VERSION);		
 		wp_enqueue_script('events-manager-admin-script', plugins_url('../includes/admin.js',__FILE__), array('jquery'), \Events::VERSION);		
 		wp_enqueue_style('events-manager-admin', plugins_url('../includes/admin.css',__FILE__), array(), \Events::VERSION);
-		//wp_enqueue_style('events-manager-pro-admin', plugins_url('includes/events-manager-pro.css',__FILE__), array(), \Events::VERSION);
 		$this->localize_admin_script();
 	}
 
@@ -115,13 +114,14 @@ class Assets {
 	 */
 	public function localize_admin_script(){
 		global $em_localized_js;
-		$locale_code = substr ( get_locale(), 0, 2 );
+		$locale_code = explode( '_', get_locale() );
 		//Localize
 		$em_localized_js = array(
 			'ajaxurl' => admin_url('admin-ajax.php'),
 			'locationajaxurl' => admin_url('admin-ajax.php?action=locations_search'),
 			'firstDay' => get_option('start_of_week'),
-			'locale' => $locale_code,
+			'locale' => $locale_code[0],
+			'country' => $locale_code[1],
 			'ui_css' => plugins_url('includes/jquery-ui.min.css', __FILE__),
 			'is_ssl' => is_ssl(),
 		);
