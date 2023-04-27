@@ -170,18 +170,8 @@ function em_init_actions() {
 			$EM_Location = new EM_Location();
 		}
 		if( $_REQUEST['action'] == 'location_save' && $EM_Location->can_manage('edit_locations','edit_others_locations') ){
-			//Check Nonces
-			em_verify_nonce('location_save');
-			//Grab and validate submitted data
-			if ( $EM_Location->get_post() && $EM_Location->save() ) { //EM_location gets the location if submitted via POST and validates it (safer than to depend on JS)
-				$EM_Notices->add_confirm($EM_Location->feedback_message, true);
-				$redirect = !empty($_REQUEST['redirect_to']) ? $_REQUEST['redirect_to'] : em_wp_get_referer();
-				wp_safe_redirect( $redirect );
-				exit();
-			}else{
-				$EM_Notices->add_error( $EM_Location->get_errors() );
-				$result = false;		
-			}
+			// Check Nonces
+			// We don't support submitting locations anymore
 		}elseif( !empty($_REQUEST['action']) && $_REQUEST['action'] == "location_delete" ){
 			//delete location
 			//get object or objects			
