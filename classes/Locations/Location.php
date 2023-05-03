@@ -601,7 +601,7 @@ class EM_Location extends EM_Object {
 	}
 	
 	function output($format, $target="html") {
-		return apply_filters('em_location_output', "", $this, $format, $target);	
+		return $format;
 	}
 	
 	function get_country(){
