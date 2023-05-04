@@ -253,7 +253,7 @@ class EM_Booking_Form {
 		foreach($EM_Form->form_fields as $field_id => $field ){
 		    if( $EM_Form->is_normal_field($field_id) ){ //user fields already handled, htmls shouldn't show
 		    	$field = $EM_Form->translate_field($field);
-    			$template[$field_id] = $field['label'];
+    			$template[$field_id] = $field['label'] ?? '';
 		    }
 		}
 		return $template;
