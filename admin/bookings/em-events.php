@@ -65,7 +65,7 @@ function em_bookings_events_table() {
 						}
 						?>
 					</select>
-					<input id="post-query-submit" class="button-secondary" type="submit" value="<?php esc_html_e( 'Filter' )?>" />
+					<button id="post-query-submit" class="button-secondary" type="" value="" ><?php esc_attr_e( 'Filter' )?>
 				</div>
 				<!--
 				<div class="view-switch">

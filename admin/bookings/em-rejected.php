@@ -55,7 +55,7 @@ function em_bookings_rejected_table(){
 								<?php _e('Decline', 'events-manager'); ?>
 							</option>
 						</select> 
-						<input type="submit" id="post-query-submit" value="Filter" class="button-secondary" />
+						<button id="post-query-submit" class="button-secondary" type="" value="" ><?php esc_attr_e( 'Filter' )?>
 					</div>
 					-->
 					<!--
