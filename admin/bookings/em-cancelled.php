@@ -65,7 +65,7 @@ function em_bookings_cancelled_table(){
 					-->
 					<?php 
 					if ( $bookings_count >= $limit ) {
-						$bookings_nav = em_admin_paginate( $bookings_count, $limit, $page, array('em_ajax'=>0, 'em_obj'=>'em_bookings_confirmed_table'));
+						$bookings_nav = Contexis\Events\Admin\Pagination::paginate( $bookings_count, $limit, $page, array('em_ajax'=>0, 'em_obj'=>'em_bookings_confirmed_table'));
 						echo $bookings_nav;
 					}
 					?>
