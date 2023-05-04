@@ -1037,6 +1037,7 @@ class EM_Object {
 	 * @return string
 	 */
 	function email_send($subject, $body, $email, $attachments = array()){
+		
 		global $EM_Mailer;
 		if( !empty($subject) ){
 			if( !is_object($EM_Mailer) ){

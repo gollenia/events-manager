@@ -5,6 +5,7 @@ class EM_Custom_Emails{
 	 * Initializes custom emails by hooking into booking email filters and modifying the recpipients and message content accordingly 
 	 */
 	public static function init(){
+		
 		//hooks for gateway-specific emails
 		if( get_option('dbem_custom_emails_gateways') ){
 		    add_filter('em_booking_email_messages', 'EM_Custom_Emails::gateway_email_messages',100,2);
