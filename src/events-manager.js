@@ -332,6 +332,7 @@ jQuery( document ).ready( function ( $ ) {
 					text: EM.bookings_settings_save,
 					click: function ( e ) {
 						e.preventDefault();
+						e.bubbles = false;
 						//we know we'll deal with cols, so wipe hidden value from main
 						let match = $( '#em-bookings-table form.bookings-filter [name=cols]' ).val( '' );
 						let booking_form_cols = $( 'form#em-bookings-table-settings-form input.em-bookings-col-item' );
@@ -431,9 +432,13 @@ jQuery( document ).ready( function ( $ ) {
 				.disableSelection();
 			load_ui_css = true;
 		}
+
 		//Widgets and filter submissions
-		$( document ).on( 'submit', '#em-bookings-table form.bookings-filter', function ( e ) {
-			let el = $( this );
+		$( document ).on( 'click', '#post-query-submit', function ( e ) {
+			let el = $( e.target ).closest( 'form' );
+			console.log( el );
+			e.preventDefault();
+
 			//append loading spinner
 			el.parents( '#em-bookings-table' ).find( '.table-wrap' ).first().append( '<div id="em-loading" />' );
 			//ajax call
@@ -445,7 +450,6 @@ jQuery( document ).ready( function ( $ ) {
 				$( '#em-bookings-table-export input[name=status]' ).val( root.find( 'select[name=status]' ).val() );
 				jQuery( document ).triggerHandler( 'em_bookings_filtered', [ data, root, el ] );
 			} );
-			return false;
 		} );
 		//Approve/Reject Links
 		$( document ).on(
@@ -545,8 +549,6 @@ jQuery( document ).ready( function ( $ ) {
 		}
 		return false;
 	} );
-
-	if ( load_ui_css ) em_load_jquery_css();
 
 	//previously in em-admin.php
 	function updateIntervalDescriptor() {
