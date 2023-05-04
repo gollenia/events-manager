@@ -411,7 +411,7 @@ class EM_Bookings_Table{
 							?>
 						</select>
 						<input name="pno" type="hidden" value="1" />
-						<input id="post-query-submit" class="button-secondary" type="submit" value="<?php esc_attr_e( 'Filter' )?>" />
+						<button id="post-query-submit" class="button-secondary" type="" value="" ><?php esc_attr_e( 'Filter' )?>
 						
 					</div>
 					<?php 
