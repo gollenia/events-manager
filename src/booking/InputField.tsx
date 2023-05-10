@@ -39,7 +39,7 @@ const InputField: FC< InputFieldProps > = ( props ) => {
 				return <NumberInput { ...settings } onChange={ onChange } disabled={ disabled } />;
 			case 'textarea':
 				return <TextArea { ...settings } onChange={ onChange } disabled={ disabled } />;
-			case 'tel':
+			case 'phone':
 				return <Telephone { ...settings } onChange={ onChange } disabled={ disabled } />;
 			case 'checkbox':
 				return <Checkbox { ...settings } onChange={ onChange } disabled={ disabled } />;
