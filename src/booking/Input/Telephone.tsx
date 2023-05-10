@@ -1,5 +1,3 @@
-import { useRef } from 'react';
-
 type TextInputProps = {
 	label: string;
 	placeholder: string;
@@ -11,30 +9,14 @@ type TextInputProps = {
 	onChange: ( value: string ) => void;
 };
 
-const TextInput = ( props: TextInputProps ) => {
-	const {
-		value,
-		label,
-		placeholder,
-		name,
-		required,
-		width,
-		onChange,
-		disabled,
-	} = props;
-	const textInputRef = useRef( null );
+const PhoneInput = ( props: TextInputProps ) => {
+	const { value, label, placeholder, name, required, width, onChange, disabled } = props;
 
-	const onChangeHandler = (
-		event: React.ChangeEvent< HTMLInputElement >
-	) => {
+	const onChangeHandler = ( event: React.ChangeEvent< HTMLInputElement > ) => {
 		onChange( event.target.value );
 	};
 
-	const classes = [
-		'input',
-		'grid__column--span-' + width,
-		required ? 'input--required' : '',
-	].join( ' ' );
+	const classes = [ 'input', 'grid__column--span-' + width, required ? 'input--required' : '' ].join( ' ' );
 
 	return (
 		<div className={ classes }>
@@ -52,7 +34,7 @@ const TextInput = ( props: TextInputProps ) => {
 	);
 };
 
-TextInput.defaultProps = {
+PhoneInput.defaultProps = {
 	label: '',
 	placeholder: '',
 	name: '',
@@ -60,4 +42,4 @@ TextInput.defaultProps = {
 	width: 6,
 };
 
-export default TextInput;
+export default PhoneInput;
