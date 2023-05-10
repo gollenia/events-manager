@@ -10,7 +10,7 @@ const ErrorFallback = ( { error, resetErrorBoundary } ) => {
 
 	const url = new URL( window.booking_data.rest_url );
 	url.search = new URLSearchParams( request ).toString();
-
+	
 	useEffect( () => {
 		fetch( url )
 			.then( ( response ) => response.json() )
