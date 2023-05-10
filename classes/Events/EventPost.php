@@ -110,7 +110,7 @@ class EventPost {
 				"post_type" => ['event', 'event-recurring']
 			],
 			[
-				"name" => "_event_location_id",
+				"name" => "_location_id",
 				"type" => "number",
 				"default" => 0,
 				"post_type" => ['event', 'event-recurring']
