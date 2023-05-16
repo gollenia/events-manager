@@ -307,8 +307,12 @@ jQuery( document ).ready( function ( $ ) {
 	//Manageing Bookings
 	if ( $( '#em-bookings-table' ).length > 0 ) {
 		//Pagination link clicks
-		$( document ).on( 'click', '#em-bookings-table .tablenav-pages a', function () {
-			let el = $( this );
+		document.addEventListener( 'click', function ( event ) {
+			if ( ! event.target.matches( '#em-bookings-table .tablenav-pages a' ) ) return;
+			event.preventDefault();
+			console.log( 'clicky' );
+			event.stopImmediatePropagation();
+			let el = $( event.target );
 			let form = el.parents( '#em-bookings-table form.bookings-filter' );
 			//get page no from url, change page, submit form
 			let match = el.attr( 'href' ).match( /#[0-9]+/ );
@@ -318,7 +322,18 @@ jQuery( document ).ready( function ( $ ) {
 			} else {
 				form.find( 'input[name=pno]' ).val( 1 );
 			}
-			form.trigger( 'submit' );
+			console.log( match );
+
+			el.parents( '#em-bookings-table' ).find( '.table-wrap' ).first().append( '<div id="em-loading" />' );
+			//ajax call
+			$.post( EM.ajaxurl, form.serializeArray(), function ( data ) {
+				let root = el.parents( '#em-bookings-table' ).first();
+				root.replaceWith( data );
+				//recreate overlays
+				$( '#em-bookings-table-export input[name=scope]' ).val( root.find( 'select[name=scope]' ).val() );
+				$( '#em-bookings-table-export input[name=status]' ).val( root.find( 'select[name=status]' ).val() );
+				jQuery( document ).triggerHandler( 'em_bookings_filtered', [ data, root, el ] );
+			} );
 			return false;
 		} );
 		//Overlay Options
@@ -436,7 +451,6 @@ jQuery( document ).ready( function ( $ ) {
 		//Widgets and filter submissions
 		$( document ).on( 'click', '#post-query-submit', function ( e ) {
 			let el = $( e.target ).closest( 'form' );
-			console.log( el );
 			e.preventDefault();
 
 			//append loading spinner
@@ -465,29 +479,6 @@ jQuery( document ).ready( function ( $ ) {
 				return false;
 			}
 		);
-	}
-	//Old Bookings Table - depreciating soon
-	if ( $( '.em_bookings_events_table' ).length > 0 ) {
-		//Widgets and filter submissions
-		$( document ).on( 'submit', '.em_bookings_events_table form', function ( e ) {
-			let el = $( this );
-			let url = em_ajaxify( el.attr( 'action' ) );
-			el.parents( '.em_bookings_events_table' ).find( '.table-wrap' ).first().append( '<div id="em-loading" />' );
-			$.get( url, el.serializeArray(), function ( data ) {
-				el.parents( '.em_bookings_events_table' ).first().replaceWith( data );
-			} );
-			return false;
-		} );
-		//Pagination link clicks
-		$( document ).on( 'click', '.em_bookings_events_table .tablenav-pages a', function () {
-			let el = $( this );
-			let url = em_ajaxify( el.attr( 'href' ) );
-			el.parents( '.em_bookings_events_table' ).find( '.table-wrap' ).first().append( '<div id="em-loading" />' );
-			$.get( url, function ( data ) {
-				el.parents( '.em_bookings_events_table' ).first().replaceWith( data );
-			} );
-			return false;
-		} );
 	}
 
 	//Manual Booking
@@ -786,62 +777,6 @@ function em_esc_attr( str ) {
 	if ( typeof str !== 'string' ) return '';
 	return str.replace( /</gi, '&lt;' ).replace( />/gi, '&gt;' );
 }
-
-// TODO: Put this in extra file
-let EventsManager = {
-	init: () => {
-		EventsManager.autofillDate();
-		EventsManager.autofillTime();
-		EventsManager.lockTime();
-	},
-
-	getElementByName: ( element ) => {
-		let elements = document.getElementsByName( element );
-		if ( elements.length ) {
-			return elements[ 0 ];
-		} else {
-			return false;
-		}
-	},
-
-	autofillDate: () => {
-		const dateStartSelector = EventsManager.getElementByName( 'event_start_date' );
-		const dateEndSelector = EventsManager.getElementByName( 'event_end_date' );
-		if ( dateStartSelector && dateEndSelector ) {
-			dateStartSelector.addEventListener( 'change', ( event ) => {
-				if ( dateEndSelector.value == '' ) {
-					dateEndSelector.value = dateStartSelector.value;
-				}
-			} );
-		}
-	},
-
-	autofillTime: () => {
-		const timeStartSelector = EventsManager.getElementByName( 'event_start_time' );
-		const timeEndSelector = EventsManager.getElementByName( 'event_end_time' );
-		if ( timeStartSelector && timeEndSelector ) {
-			timeStartSelector.addEventListener( 'change', ( event ) => {
-				if ( timeEndSelector.value == '00:00' ) {
-					timeEndSelector.value = timeStartSelector.value;
-				}
-			} );
-		}
-	},
-
-	lockTime: () => {
-		const allDaySelector = EventsManager.getElementByName( 'event_all_day' );
-		const timeStartSelector = EventsManager.getElementByName( 'event_start_time' );
-		const timeEndSelector = EventsManager.getElementByName( 'event_end_time' );
-		if ( allDaySelector ) {
-			allDaySelector.addEventListener( 'change', ( event ) => {
-				timeStartSelector.disabled = allDaySelector.checked;
-				timeEndSelector.disabled = allDaySelector.checked;
-			} );
-		}
-	},
-};
-
-document.addEventListener( 'DOMContentLoaded', EventsManager.init, false );
 
 function em_custom_mails() {
 	let trigger_selector = document.querySelectorAll( '.em-nav-item' );
