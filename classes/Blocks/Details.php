@@ -28,7 +28,7 @@ class Details extends Block {
     public function render($attributes, $content, $full_data) : string {
         $attributes['event'] = $this->get_event();
 		
-		$attributes['overwrittenPrice'] = $this->get_overwrite_price($attributes['priceOverwrite']);
+		$attributes['overwrittenPrice'] = array_key_exists('overwrittenPrice', $attributes) ? $this->get_overwrite_price($attributes['priceOverwrite']) : '';
 		
 		$attributes['is_daterange'] = wp_date('jY', $attributes['event']['start']) !== wp_date('jY', $attributes['event']['end']);
 		$template = $this->get_template($full_data->name);

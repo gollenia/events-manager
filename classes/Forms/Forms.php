@@ -136,7 +136,9 @@ class EM_Form extends EM_Object {
 	 */
 	public function is_normal_field( $field_or_id ){
         $field_id = is_array($field_or_id) ? $field_or_id['fieldid'] : $field_or_id;
-	    return array_key_exists($field_id, $this->form_fields) && !array_key_exists($field_id, $this->user_fields) && !in_array($field_id, array('user_email','user_name')) && $this->form_fields[$field_id]['type'] != 'html';
+	    return array_key_exists($field_id, $this->form_fields) 
+		&& !array_key_exists($field_id, $this->user_fields) 
+		&& !in_array($field_id, array('user_email','user_name'));
 	}
 	
 	/**

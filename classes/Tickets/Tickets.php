@@ -270,6 +270,8 @@ class EM_Tickets extends EM_Object implements Iterator, Countable {
         $var = current($this->tickets);
         return $var;
     }  
+
+	#[\ReturnTypeWillChange]
     public function key(){
         $var = key($this->tickets);
         return $var;

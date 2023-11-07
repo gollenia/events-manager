@@ -1,0 +1,7 @@
+.description-editable {
+	&:focus {
+		outline: 2px solid #007cba;
+		background-color: #fff;
+		border-radius: 2px;
+	}
+}

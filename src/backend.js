@@ -9,7 +9,21 @@ import { registerPlugin } from '@wordpress/plugins';
  */
 import * as booking from './blocks/booking/index.js';
 import * as details from './blocks/details';
+import * as detailsAudience from './blocks/details/audience/index.js';
+import * as detailsDate from './blocks/details/date/index.js';
+import * as detailsItem from './blocks/details/item/index.js';
+import * as detailsLocation from './blocks/details/location/index.js';
+import * as detailsPrice from './blocks/details/price/index.js';
+import * as detailsShutdown from './blocks/details/shutdown/index.js';
+import * as detailsSpaces from './blocks/details/spaces/index.js';
+import * as detailsSpeaker from './blocks/details/speaker/index.js';
+import * as detailsTime from './blocks/details/time/index.js';
+
 import * as featured from './blocks/featured';
+
+/**
+ * Form dependencies.
+ */
 import * as formCheckbox from './blocks/form/checkbox/index.js';
 import * as formContainer from './blocks/form/container/index.js';
 import * as formCountry from './blocks/form/country/index.js';
@@ -51,6 +65,16 @@ let blocks = [
 	formRadio,
 	formHTML,
 	locationEditor,
+	details,
+	detailsAudience,
+	detailsDate,
+	detailsLocation,
+	detailsSpeaker,
+	detailsPrice,
+	detailsItem,
+	detailsTime,
+	detailsShutdown,
+	detailsSpaces,
 ];
 
 let plugins = [];

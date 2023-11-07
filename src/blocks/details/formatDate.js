@@ -1,68 +1,70 @@
 /**
  * Formats two dates to a date range
- * @param {Date} start 
- * @param {Date} end 
+ * @param {Date} start
+ * @param {Date} end
  * @returns string formatted date
  */
-function formatDateRange(start, end = false) {
-
+function formatDateRange( start, end = false ) {
 	const locale = window.eventBlocksLocalization?.locale;
-	
-	start = new Date(start * 1000);
-	end = end ? new Date(end * 1000) : start;
 
-	const sameDay = start.getFullYear() === end.getFullYear() &&
+	start = new Date( start );
+	end = end ? new Date( end ) : start;
+
+	const sameDay =
+		start.getFullYear() === end.getFullYear() &&
 		start.getMonth() === end.getMonth() &&
 		start.getDate() === end.getDate();
-	
 
 	let dateFormat = {
 		year: 'numeric',
 		month: 'long',
 		day: 'numeric',
-		
 	};
 
-	if(sameDay) {
+	if ( sameDay ) {
 		dateFormat = {
 			year: 'numeric',
 			month: 'long',
 			day: 'numeric',
 			hour: 'numeric',
-    		minute: 'numeric'
+			minute: 'numeric',
 		};
 	}
 
-	const dateFormatObject  = new Intl.DateTimeFormat(locale, dateFormat);
-	
-	return dateFormatObject.formatRange(start, end);
-	
-	
+	const dateFormatObject = new Intl.DateTimeFormat( locale, dateFormat );
+
+	return dateFormatObject.formatRange( start, end );
 }
 
 /**
  * format date by goiven format object
- * @param {Date} date 
- * @param {object} format 
+ * @param {Date} date
+ * @param {object} format
  * @returns string formated date
  */
-function formatDate(date, format) {
+function formatDate( date, format = false ) {
+	if ( ! format ) format = { year: 'numeric', month: 'long', day: 'numeric' };
+	console.log( date );
+	const dateObject = new Date( date );
+	console.log( dateObject );
 	const locale = window.eventBlocksLocalization?.locale;
-	const dateFormatObject  = new Intl.DateTimeFormat(locale, format);
-	return dateFormatObject.format(date);
+	const dateFormatObject = new Intl.DateTimeFormat( locale, format );
+	return dateFormatObject.format( dateObject );
 }
 
-
-function formatTime(time) {
+function formatTime( start, end = false ) {
 	const locale = window.eventBlocksLocalization?.locale;
 
 	const timeFormat = {
 		hour: 'numeric',
-		minute: 'numeric'
+		minute: 'numeric',
 	};
 
-	const timeFormatObject  = new Intl.DateTimeFormat(locale, timeFormat);
-	return timeFormatObject.format(time * 1000);
+	const startDate = new Date( start );
+
+	const timeFormatObject = new Intl.DateTimeFormat( locale, timeFormat );
+	console.log( timeFormatObject.format( startDate ) );
+	return timeFormatObject.format( startDate );
 }
 
 export { formatDateRange, formatDate, formatTime };

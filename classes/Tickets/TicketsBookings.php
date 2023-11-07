@@ -291,6 +291,8 @@ class EM_Tickets_Bookings extends EM_Object implements Iterator, Countable {
 	}
 
 	//Iterator Implementation
+
+	#[\ReturnTypeWillChange]
     public function rewind(){
         reset($this->tickets_bookings);
     }
@@ -298,6 +300,8 @@ class EM_Tickets_Bookings extends EM_Object implements Iterator, Countable {
 	/**
 	 * @return EM_Ticket_Booking
 	 */
+
+	 #[\ReturnTypeWillChange]
     public function current(){
         $var = current($this->tickets_bookings);
         return $var;
@@ -305,6 +309,8 @@ class EM_Tickets_Bookings extends EM_Object implements Iterator, Countable {
 	/**
 	 * @return int Ticket ID
 	 */
+
+	 #[\ReturnTypeWillChange]
     public function key(){
         $var = key($this->tickets_bookings);
         return $var;
@@ -312,16 +318,22 @@ class EM_Tickets_Bookings extends EM_Object implements Iterator, Countable {
 	/**
 	 * @return EM_Ticket_Booking
 	 */
+
+	 #[\ReturnTypeWillChange]
 	public function next(){
         $var = next($this->tickets_bookings);
         return $var;
     }
+
+	#[\ReturnTypeWillChange]
 	public function valid(){
         $key = key($this->tickets_bookings);
         $var = ($key !== NULL && $key !== FALSE);
         return $var;
     }
     //Countable Implementation
+
+	#[\ReturnTypeWillChange]
     public function count(){
 		return count($this->tickets_bookings);
     }

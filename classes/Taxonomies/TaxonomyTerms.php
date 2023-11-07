@@ -283,26 +283,37 @@ class EM_Taxonomy_Terms extends EM_Object implements Iterator, Countable{
 	}
 	
 	//Iterator Implementation
+	#[\ReturnTypeWillChange]
     public function rewind(){
         reset($this->terms);
     }  
+
+	#[\ReturnTypeWillChange]
     public function current(){
         $var = current($this->terms);
         return $var;
     }  
+
+	#[\ReturnTypeWillChange]
     public function key(){
         $var = key($this->terms);
         return $var;
-    }  
+    } 
+	
+	#[\ReturnTypeWillChange]
     public function next(){
         $var = next($this->terms);
         return $var;
     }  
+
+	#[\ReturnTypeWillChange]
     public function valid(){
         $key = key($this->terms);
         $var = ($key !== NULL && $key !== FALSE);
         return $var;
     }
+
+	#[\ReturnTypeWillChange]
     public function count(){
     	return count($this->terms);
     }

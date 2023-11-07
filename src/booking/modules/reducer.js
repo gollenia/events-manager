@@ -86,7 +86,6 @@ const reducer = ( state = {}, action ) => {
 
 		case 'RESET':
 			console.log( 'resetting...' );
-
 			return initializer();
 
 		default:

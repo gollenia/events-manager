@@ -1,0 +1,24 @@
+{
+	"name": "events-manager/details-shutdown",
+	"apiVersion": 2,
+	"title": "Event Booking End",
+	"description": "Show the event booking end",
+	"category": "widgets",
+	"attributes": {
+		"icon": {
+			"type": "string",
+			"default": "euro"
+		},
+		"roundImage": {
+			"type": "boolean",
+			"default": true
+		},
+		"format": {
+			"type": "string",
+			"default": ""
+		}
+	},
+
+	"parents": [ "events-manager/details", "ctx-blocks/description-list" ],
+	"usesContext": [ "postType" ]
+}

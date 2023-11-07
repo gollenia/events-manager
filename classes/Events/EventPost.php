@@ -368,6 +368,7 @@ class EventPost {
 
 	public function register_rest() {
 		register_rest_route( 'events/v2', '/events/', ['method' => 'GET', 'callback' => [$this, 'get_rest_data'], 'permission_callback' => '__return_true'], true );
+		register_rest_route( 'events/v2', '/bookinginfo/(?P<id>\d+)', ['method' => 'GET', 'callback' => [$this, 'get_rest_bookinginfo'], 'permission_callback' => '__return_true'], true );
 	}
 
 	
@@ -388,6 +389,30 @@ class EventPost {
 		
 		return \EM_Events::get_rest($args);
 		
+		
+	}
+
+	public function get_rest_bookinginfo($request) {
+		$result = [
+			'success' => false,
+		];
+
+		$id = $request->get_param('id');
+		if(!$id) return $result;
+		
+		$event = new \EM_Event($id, 'post_id');
+		
+		$result['success'] = true;
+
+		$data = [
+			'price' => $event->get_price(true),
+			'available_spaces' => $event->get_bookings()->get_available_spaces(),
+			'booked_spaces' => $event->get_bookings()->get_booked_spaces(),
+		];
+
+		$result['data'] = $data;
+
+		return $result;
 		
 	}
 }

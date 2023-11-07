@@ -297,6 +297,8 @@ class EM_Event extends EM_Object{
 	var $comment_count;
 	var $ancestors;
 	var $filter;
+
+	var $status_array;
 	
 	/**
 	 * Initialize an event. You can provide event data in an associative array (using database table field names), an id number, or false (default) to create empty event.
@@ -1613,6 +1615,24 @@ class EM_Event extends EM_Object{
 			}
 		}
 		return apply_filters('em_event_is_free',$free, $this, $now);
+	}
+
+	function get_price(){
+		$price = 0;
+		$tickets = $this->get_tickets();
+		
+		foreach($this->get_tickets() as $EM_Ticket){
+		    /* @var $EM_Ticket EM_Ticket */
+			if( $EM_Ticket->get_price() > 0 ){
+				if( $EM_Ticket->is_available() ){	
+				    return $EM_Ticket->get_price();
+				}
+			}
+		}
+
+		return 0;
+		
+		return apply_filters('em_event_get_price',$price, $this);
 	}
 	
 	/**

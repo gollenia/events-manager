@@ -1,6 +1,6 @@
 <?php
 //Builds a table of bookings, still work in progress...
-class EM_Bookings_Table{
+class EM_Bookings_Table {
 	/**
 	 * associative array of columns that'll be shown in order from left to right
 	 * 
@@ -378,8 +378,8 @@ class EM_Bookings_Table{
 				
 				<div class='tablenav'>
 					<div class="alignleft actions">
-						<a href="#" class="em-bookings-table-export button-secondary" id="em-bookings-table-export-trigger" rel="#em-bookings-table-export" title="<?php _e('Export these bookings.','events-manager'); ?>"><span class="dashicons dashicons-database-export"></span></a>
-						<a href="#" class="em-bookings-table-settings button-secondary" id="em-bookings-table-settings-trigger" rel="#em-bookings-table-settings"><span class="dashicons dashicons-editor-table"></a>
+						<a href="#" class="em-bookings-table-export button-secondary" id="em-bookings-table-export-trigger" rel="#em-bookings-table-export" title="<?php _e('Export these bookings.','events-manager'); ?>"><i class="material-symbols-outlined">export_notes</i></a>
+						<a href="#" class="em-bookings-table-settings button-secondary" id="em-bookings-table-settings-trigger" rel="#em-bookings-table-settings"><i class="material-symbols-outlined">table</i></a>
 						<?php if( $EM_Event === false ): ?>
 						<select name="scope">
 							<?php

@@ -1,74 +1,33 @@
 {
+	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"name": "events-manager/details",
 	"apiVersion": 2,
 	"title": "Event Details",
+	"keywords": [ "list", "table" ],
 	"description": "Show a list with selected details of the event",
+	"textdomain": "events",
 	"category": "widgets",
 	"attributes": {
-		"showLocation": {
-			"type": "boolean",
-			"default": ""
-		},
-		"showAudience": {
-			"type": "boolean",
-			"default": true
-		},
-		"showSpeaker": {
-			"type": "boolean",
-			"default": true
-		},
-		"showDate": {
-			"type": "boolean",
-			"default": true
-		},
-		"showTime": {
-			"type": "boolean",
-			"default": true
-		},
-		"showPrice": {
+		"dividers": {
 			"type": "boolean",
 			"default": false
-		},
-		"showBookingEnd": {
-			"type": "boolean",
-			"default": false
-		},
-		"audienceDescription": {
-			"type": "string",
-			"default": ""
-		},
-		"audienceIcon": {
-			"type": "string",
-			"default": "groups"
-		},
-		"locationLink": {
-			"type": "boolean",
-			"default": true
-		},
-		"speakerDescription": {
-			"type": "string",
-			"default": ""
-		},
-		"speakerIcon": {
-			"type": "string",
-			"default": ""
-		},
-		"speakerLink": {
-			"type": "boolean",
-			"default": true
-		},
-		"priceOverwrite": {
-			"type": "string",
-			"default": ""
-		},
-		"bookedUpWarningThreshold": {
-			"type": "number",
-			"default": 5
-		},
-		"showBookedUp": {
-			"type": "boolean",
-			"default": true
 		}
 	},
-	"usesContext": [ "postType" ]
+	"supports": {
+		"__experimentalOnEnter": true,
+		"__experimentalSettings": true,
+		"spacing": {
+			"margin": true,
+			"padding": true,
+			"blockGap": true,
+			"__experimentalDefaultControls": {
+				"blockGap": true
+			}
+		},
+		"__experimentalLayout": {
+			"allowSizingOnChildren": true
+		}
+	},
+	"editorStyle": "wp-block-descriptiopn-list-editor",
+	"style": "wp-block-descriptiopn-list"
 }

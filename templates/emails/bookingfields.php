@@ -5,6 +5,7 @@ $form_fields = EM_Booking_Form::get_form($EM_Booking->event_id)->form_fields;
 $form_values = $EM_Booking->meta['booking'] ? array_merge($EM_Booking->meta['registration'], $EM_Booking->meta['booking']) : $EM_Booking->meta['registration'];
 
 foreach($form_fields as $name => $field) {
+	
 	$value = $form_values[$name];
 	if($field['type'] == "email") {
 		$value = "<a href='mailto:$value'>$value</a>";
@@ -17,9 +18,9 @@ foreach($form_fields as $name => $field) {
 	}
 	echo "<tr>";
 	if($name == "info") continue;
-	echo "<td><b>" . $field['label'] . "</b></td>";
+	echo "<td><b>" . ($field['label'] ?: $name) . "</b></td>";
 	echo "<td>" . $value . "</td>";
 	echo "</tr>";
 }
 ?>
-</table> 
+</table>

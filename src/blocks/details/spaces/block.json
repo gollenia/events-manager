@@ -1,0 +1,34 @@
+{
+	"name": "events-manager/details-spaces",
+	"apiVersion": 2,
+	"title": "Event Booking Spaces",
+	"description": "Show the open spaces",
+	"category": "widgets",
+	"attributes": {
+		"icon": {
+			"type": "string",
+			"default": "euro"
+		},
+		"roundImage": {
+			"type": "boolean",
+			"default": true
+		},
+		"limit": {
+			"type": "number",
+			"default": 5
+		},
+		"hideNumber": {
+			"type": "boolean",
+			"default": false
+		},
+		"showBookedUp": {
+			"type": "boolean",
+			"default": true
+		},
+		"bookedUpText": {
+			"type": "string",
+			"default": "Booked Up"
+		}
+	},
+	"parents": [ "events-manager/details", "ctx-blocks/description-list" ]
+}

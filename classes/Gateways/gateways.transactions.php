@@ -3,6 +3,11 @@ if(!class_exists('EM_Gateways_Transactions')) {
 class EM_Gateways_Transactions{
 	var $limit = 20;
 	var $total_transactions = 0;
+
+	var $order;
+	var $orderby;
+	var $page;
+	var $gateway;
 	
 	function __construct(){
 		$this->order = ( !empty($_REQUEST ['order']) ) ? $_REQUEST ['order']:'ASC';
@@ -173,7 +178,7 @@ class EM_Gateways_Transactions{
 						}
 						?>
 					</select>
-					<input id="post-query-submit" class="button-secondary" type="submit" value="<?php _e ( 'Filter' )?>" />
+					<button id="post-query-submit" class="button-secondary" type="" value="" ><?php esc_attr_e( 'Filter' )?>
 					<?php if( is_object($context) && get_class($context)=="EM_Event" ): ?>
 					<?php esc_html_e('Displaying Event','events-manager'); ?> : <?php echo $context->event_name; ?>
 					<?php elseif( is_object($context) && get_class($context)=="EM_Person" ): ?>
@@ -284,6 +289,7 @@ class EM_Gateways_Transactions{
 						<?php
 							if(!empty($transaction->transaction_status)) {
 								echo "<span class='em-label " . str_replace(" ", "-", strtolower($transaction->transaction_status)) . "'>"; 
+								echo '<i class="material-symbols-outlined">check_circle</i>';
 								_e($transaction->transaction_status, 'em-pro');
 								echo "</span>";
 							} else {

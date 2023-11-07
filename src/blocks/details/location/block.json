@@ -1,0 +1,38 @@
+{
+	"name": "events-manager/details-location",
+	"apiVersion": 2,
+	"title": "Event Location",
+	"description": "Show the event location",
+	"category": "widgets",
+	"attributes": {
+		"icon": {
+			"type": "string",
+			"default": ""
+		},
+		"roundImage": {
+			"type": "boolean",
+			"default": true
+		},
+		"showAddress": {
+			"type": "boolean",
+			"default": true
+		},
+		"showZip": {
+			"type": "boolean",
+			"default": true
+		},
+		"showCity": {
+			"type": "boolean",
+			"default": true
+		},
+		"showCountry": {
+			"type": "boolean",
+			"default": true
+		},
+		"showLink": {
+			"type": "boolean",
+			"default": true
+		}
+	},
+	"parents": [ "events-manager/details", "ctx-blocks/description-list" ]
+}
