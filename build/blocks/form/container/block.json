@@ -1,0 +1,21 @@
+{
+  "name": "events-manager/form-container",
+  "apiVersion": 3,
+  "title": "Form Container",
+  "description": "Show a list with selected details of the event",
+  "category": "layout",
+  "attributes": {
+    "dummy": {
+      "type": "string",
+      "default": ""
+    }
+  },
+  "usesContext": [
+    "postType"
+  ],
+  "supports": {
+    "html": false,
+    "reusable": false,
+    "className": false
+  }
+}

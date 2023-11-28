@@ -1,15 +1,17 @@
 /**
  * Internal dependencies
  */
-import Edit from './edit';
-import icons from './icons';
 import metadata from './block.json';
+import Edit from './edit';
 import './editor.scss';
+import icons from './icons';
+import save from './save';
+import './style.scss';
 
 /**
  * Wordpress dependencies
  */
-import { __ } from '@wordpress/i18n'; 
+import { __ } from '@wordpress/i18n';
 
 const { name, title } = metadata;
 
@@ -18,7 +20,7 @@ const settings = {
 	title: __( title, 'ctx-blocks' ),
 	icon: icons.posts,
 	edit: Edit,
-	save: () => { return null }
+	save,
 };
 
 export { name, settings };

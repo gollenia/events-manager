@@ -5,6 +5,7 @@ import { __ } from '@wordpress/i18n';
 import { useEffect, useReducer } from 'react';
 
 import { ErrorBoundary } from 'react-error-boundary';
+import './style.scss';
 
 /*
  *   Internal dependecies
@@ -19,31 +20,27 @@ import Success from './success';
 import TicketList from './ticketList';
 import UserRegistration from './userRegistration';
 
-console.log( 'hi' );
-// TEST
-
+console.log( 'booking app loaded' );
 // this function  is suposed to open the modal from the parent component
 
-const Booking = () => {
+const Booking = ( { post, open } ) => {
 	// if no spaces are left, nothing is shown
-	if ( window.booking_data.event?.bookings?.spaces === 0 ) {
-		return <></>;
-	}
 
 	const [ state, dispatch ] = useReducer( reducer, initialState );
 
 	const { wizzard, modal, data, request, response } = state;
 
-	if ( Object.keys( data ).length == 0 )
-		return (
-			<span className="button button--error button--pseudo">
-				{ __( 'Error: No connection to server.', 'events' ) }
-			</span>
-		);
-
-	console.log( state );
+	useEffect( () => {
+		fetch( `/wp-json/events/v2/bookingdata/${ post }` )
+			.then( ( response ) => response.json() )
+			.then( ( data ) => {
+				console.log( data );
+				dispatch( { type: 'SET_DATA', payload: data.data } );
+			} );
+	}, [] );
 
 	useEffect( () => {
+		if ( ! data ) return;
 		if ( ! wizzard.checkValidity ) return;
 		dispatch( {
 			type: 'VALIDITY',
@@ -51,61 +48,66 @@ const Booking = () => {
 				tickets: document.getElementById( 'user-attendee-form' )?.checkValidity() && request.tickets.length > 0,
 				registration:
 					document.getElementById( 'user-registration-form' )?.checkValidity() && request.tickets.length > 0,
-				payment: ! data.l10n.consent || ( data.l10n.consent && request.registration.data_privacy_consent ),
+				payment: ! data?.l10n?.consent || ( data?.l10n?.consent && request.registration.data_privacy_consent ),
 			},
 		} );
 	}, [ state ] );
 
+	console.log( open );
+
+	console.log( data );
+	if ( ! data ) return <></>;
+
 	return (
 		<div>
 			<ErrorBoundary FallbackComponent={ ErrorFallback }>
-				<button
-					className={ data.attributes.className + ' booking-button button--primary button' }
-					onClick={ () => {
-						dispatch( { type: 'SET_MODAL', payload: true } );
-					} }
-				>
-					{ data?.attributes?.buttonTitle !== ''
-						? data?.attributes?.buttonTitle
-						: __( 'Registration', 'events' ) }
-				</button>
-
-				<div className={ `modal wizzard modal--fullscreen ${ modal.visible ? 'modal--open' : '' }` }>
+				<div className={ `event-modal wizzard ${ open ? 'event-modal--open' : '' }` }>
 					{ modal.loading > 0 && (
-						<div className="modal__overlay">
+						<div className="event-modal-overlay">
 							<aside>
 								<div className="spinning-loader"></div>
 								<h4>{ __( 'Please wait', 'events' ) }</h4>
 								<h5>{ __( 'Your booking is beeing processed.', 'events' ) }</h5>
 								{ modal.loading > 1 && (
 									<div className="alert alert--warning">
-										{ __(
-											'The request is lasting longer than expected. Please check your Internet connection or try again later.',
-											'events'
-										) }
+										{ modal.loading == 2 &&
+											__(
+												'Please hang on a little longer. This can take a few seconds.',
+												'events'
+											) }
+										{ modal.loading == 3 &&
+											__(
+												'The request is lasting longer than expected. We try our best',
+												'events'
+											) }
+										{ modal.loading == 4 &&
+											__(
+												'Something seems to be wrong. Maybe your internet connection is interrupted or our server is overloaded. Please try again later',
+												'events'
+											) }
 									</div>
 								) }
 							</aside>
 						</div>
 					) }
-					<div className="modal__dialog">
-						<div className="modal__header">
+					<div className="event-modal-dialog">
+						<div className="event-modal-header">
 							<div className="container flex xl:flex--center flex--column xl:flex--row">
 								<div className="flex--1">
 									<b className="margin--0">Anmeldung</b>
-									<h3 className="margin--0">{ data.event.title }</h3>
+									<h3 className="margin--0">{ data?.event?.title }</h3>
 								</div>
 								<Guide state={ state } />
 							</div>
 							<button
-								className="modal__close"
+								className="event-modal-close"
 								onClick={ () => {
 									dispatch( { type: 'SET_MODAL', payload: false } );
 								} }
 							></button>
 						</div>
 
-						<div className="modal__content">
+						<div className="event-modal-content">
 							<div className="wizzard__steps">
 								{ wizzard.steps.tickets.enabled && (
 									<div
@@ -113,11 +115,7 @@ const Booking = () => {
 											wizzard.step == 0 ? ' wizzard__step--active' : ''
 										} ${ wizzard.step == 1 ? ' wizzard__step--prev' : '' }` }
 									>
-										<div className="container">
-											<div className="section">
-												<TicketList { ...{ state, dispatch } } />
-											</div>
-										</div>
+										<TicketList { ...{ state, dispatch } } />
 									</div>
 								) }
 								<div
@@ -125,9 +123,7 @@ const Booking = () => {
 										wizzard.step == 2 && ! data.event.is_free ? ' wizzard__step--prev' : ''
 									} ${ wizzard.step == 0 ? ' wizzard__step--next' : '' }` }
 								>
-									<div className="container">
-										<UserRegistration { ...{ state, dispatch } } />
-									</div>
+									<UserRegistration { ...{ state, dispatch } } />
 								</div>
 
 								<div
@@ -135,9 +131,7 @@ const Booking = () => {
 										wizzard.step == 3 ? '' : ''
 									} ${ wizzard.step == 1 ? ' wizzard__step--next' : '' }` }
 								>
-									<div className="container">
-										<Payment { ...{ state, dispatch } } />
-									</div>
+									<Payment { ...{ state, dispatch } } />
 								</div>
 
 								<div
@@ -145,13 +139,11 @@ const Booking = () => {
 										wizzard.step == 2 ? ' ' : ''
 									}` }
 								>
-									<div className="container">
-										<Success { ...{ state, dispatch } } />
-									</div>
+									<Success { ...{ state, dispatch } } />
 								</div>
 							</div>
 						</div>
-						<div className="modal__footer">
+						<div className="event-modal-footer">
 							<Footer { ...{ state, dispatch } } />
 						</div>
 					</div>

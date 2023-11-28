@@ -6,8 +6,9 @@ const Guide = ( { state } ) => {
 	const steps = () => {
 		let badgeNumber = 0;
 
-		let result = Object.keys( wizzard?.steps ).map( ( step, index ) => {
+		let result = Object.keys( wizzard.steps ).map( ( step, index ) => {
 			if ( ! wizzard.steps[ step ].enabled ) {
+				console.log( 'disabled', wizzard.steps[ step ] );
 				return <></>;
 			}
 			const classes = [

@@ -1,5 +1,5 @@
 import { __ } from '@wordpress/i18n';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 const ErrorFallback = ( { error, resetErrorBoundary } ) => {
 	const [ errorSent, setErrorSent ] = useState( false );
@@ -8,20 +8,6 @@ const ErrorFallback = ( { error, resetErrorBoundary } ) => {
 		error,
 	};
 
-	const url = new URL( window.booking_data.rest_url );
-	url.search = new URLSearchParams( request ).toString();
-	
-	useEffect( () => {
-		fetch( url )
-			.then( ( response ) => response.json() )
-			.then( ( response ) => {
-				console.log( response );
-				if ( response.result ) {
-					setErrorSent( true );
-					return;
-				}
-			} );
-	}, [] );
 	return (
 		<div className="alert bg-error" role="alert">
 			<h4>{ __( 'An error occured in our booking system.', 'events' ) }</h4>

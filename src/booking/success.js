@@ -101,7 +101,7 @@ const Success = ( props ) => {
 						</tr>
 						<tr>
 							<th className="text-left">{ __( 'Amount', 'events' ) }</th>
-							<td>{ formatCurrency( paymentInfo.amount ) }</td>
+							<td>{ formatCurrency( paymentInfo.amount, data.l10n.locale, data.l10n.currency ) }</td>
 						</tr>
 					</table>
 				</div>

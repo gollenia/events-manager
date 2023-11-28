@@ -2,7 +2,7 @@
 
 namespace Contexis\Events\Intl;
 
-use IntlDateFormatter;
+use \IntlDateFormatter;
 
 class Date {
 
@@ -15,7 +15,7 @@ class Date {
 		$this->end = $end;
 
 		if($is_time) {
-			$this->fmt = new IntlDateFormatter(
+			$this->fmt = new \IntlDateFormatter(
 				get_locale(), 
 				IntlDateFormatter::NONE, 
 				IntlDateFormatter::SHORT,
@@ -24,7 +24,7 @@ class Date {
 			return;
 		}
 
-		$this->fmt = new IntlDateFormatter(
+		$this->fmt = new \IntlDateFormatter(
 			get_locale(), 
 			IntlDateFormatter::LONG, 
 			IntlDateFormatter::NONE,

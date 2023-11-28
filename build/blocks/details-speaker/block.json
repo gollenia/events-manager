@@ -1,0 +1,37 @@
+{
+  "name": "events-manager/details-speaker",
+  "apiVersion": 2,
+  "title": "Event Speaker",
+  "description": "Show the event speaker",
+  "category": "widgets",
+  "attributes": {
+    "showPortrait": {
+      "type": "boolean",
+      "default": true
+    },
+    "icon": {
+      "type": "string",
+      "default": ""
+    },
+    "description": {
+      "type": "string",
+      "default": ""
+    },
+    "showLink": {
+      "type": "boolean",
+      "default": true
+    },
+    "url": {
+      "type": "string",
+      "default": ""
+    },
+    "customSpeakerId": {
+      "type": "number",
+      "default": 0
+    }
+  },
+  "parents": [
+    "events-manager/details"
+  ],
+  "render": "file:./render.php"
+}

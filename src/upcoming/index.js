@@ -1,23 +1,20 @@
 import apiFetch from '@wordpress/api-fetch';
 import { __ } from '@wordpress/i18n';
-import { React, useEffect, useState } from 'react';
-
-import EventCard from './cards';
-import DescriptionItem from './descriptionItem';
-import EventList from './list';
+import { useEffect, useState } from 'react';
+import CardView from './CardView';
+import ListView from './ListView';
+import TableView from './Table';
+import './style.scss';
 
 function Upcoming( props ) {
-	if ( ! document.event_block_data ) return <></>;
 	const {
-		columnsSmall,
-		columnsMedium,
-		columnsLarge,
 		showImages,
 		showCategory,
 		showLocation,
 		showBookedUp,
+		userStylePicker,
 		bookedUpWarningThreshold,
-		style,
+		view,
 		limit,
 		order,
 		selectedCategory,
@@ -31,13 +28,14 @@ function Upcoming( props ) {
 		showCategoryFilter,
 		showTagFilter,
 		showSearch,
-		filterPosition,
 		excludeCurrent,
-	} = document.event_block_data[ props.block ];
+	} = props.attributes;
 
 	const [ events, setEvents ] = useState( [] );
 	const [ categories, setCategories ] = useState( {} );
 	const [ tags, setTags ] = useState( {} );
+	const [ filterMobileVisible, setFilterMobileVisible ] = useState( false );
+	const [ customView, setCustomView ] = useState( '' );
 	const [ filter, setFilter ] = useState( {
 		category: 0,
 		tags: [],
@@ -71,8 +69,8 @@ function Upcoming( props ) {
 		const params = [
 			limit > 0 ? `limit=${ limit }` : false,
 			'order=' + order,
-			selectedCategory != 0 ? `category=${ selectedCategory.join( ',' ) }` : false,
-			selectedTags.length ? `tag=${ selectedTags.join( ',' ) }` : false,
+			selectedCategory ? `category=${ selectedCategory.join( ',' ) }` : false,
+			selectedTags?.length ? `tag=${ selectedTags.join( ',' ) }` : false,
 			scope != '' ? `scope=${ scope }` : false,
 			selectedLocation ? `location=${ selectedLocation }` : false,
 			excludeCurrent ? `exclude=${ window.eventBlocksLocalization?.current_id }` : false,
@@ -101,7 +99,7 @@ function Upcoming( props ) {
 		} );
 	}, [] );
 
-	const getFilteredEvents = () => {
+	const getFilteredEvents = ( sort = '' ) => {
 		let filtered = events;
 		if ( filter.category == 0 && filter.string == '' && filter.tags.length == 0 ) return filtered;
 
@@ -127,129 +125,135 @@ function Upcoming( props ) {
 			} );
 		}
 
+		if ( sort == 'asc' ) {
+			filtered.sort( ( a, b ) => {
+				return new Date( a.start ) - new Date( b.start );
+			} );
+		}
+
 		return filtered;
 	};
 
-	const containerClass = [
-		style == 'mini' ? 'description' : 'grid',
-		style == 'mini' && ! showImages ? 'description--dates' : false,
-		'grid--gap-12',
-		filterPosition ? 'grid__column--span-3' : false,
-		'xl:grid--columns-' + columnsLarge,
-		'md:grid--columns-' + columnsMedium,
-		'grid--columns-' + columnsSmall,
-	]
-		.filter( Boolean )
-		.join( ' ' );
+	const currentView = customView != '' ? customView : view;
+
+	console.log( getFilteredEvents() );
+
+	const showFilters = showCategoryFilter || showTagFilter || showSearch;
 
 	return (
-		<div className={ filterPosition == 'side' ? 'grid xl:grid--columns-4 grid--gap-12' : '' }>
-			<aside className="filters">
-				{ showSearch && (
-					<div class="filter__search">
-						<div class="input">
-							<label>{ __( 'Search', 'events' ) }</label>
-							<input
-								type="text"
-								onChange={ ( event ) => {
-									changeFilter( 'string', event.target.value );
-								} }
-							/>
+		<div className={ `upcoming__events ${ showFilters ? 'has-filters' : '' }` }>
+			{ showFilters && (
+				<aside className="event-filters">
+					<div className="event-filters-header">
+						{ showSearch && (
+							<div class="filter__search">
+								<div class="input">
+									<label>{ __( 'Search', 'events' ) }</label>
+									<input
+										type="text"
+										onChange={ ( event ) => {
+											changeFilter( 'string', event.target.value );
+										} }
+									/>
+								</div>
+							</div>
+						) }
+
+						{ userStylePicker && (
+							<div className="view-switcher">
+								<button
+									onClick={ () => setCustomView( 'cards' ) }
+									className={ currentView == 'cards' ? 'button active' : 'button' }
+								>
+									<i className="material-icons">grid_view</i>
+								</button>
+								<button
+									onClick={ () => setCustomView( 'list' ) }
+									className={ currentView == 'list' ? 'button active' : 'button' }
+								>
+									<i className="material-icons">view_agenda</i>
+								</button>
+								<button
+									onClick={ () => setCustomView( 'table' ) }
+									className={ currentView == 'table' ? 'button active' : 'button' }
+								>
+									<i className="material-icons">format_list_bulleted</i>
+								</button>
+							</div>
+						) }
+
+						<div className="event-filter-toggle">
+							<button
+								className="button"
+								onClick={ () => setFilterMobileVisible( ! filterMobileVisible ) }
+							>
+								<i className="material-icons">filter_list</i>
+							</button>
 						</div>
 					</div>
-				) }
-				{ showCategoryFilter && (
-					<div className="filter">
-						<span className="filter__title">{ __( 'Select category', 'events' ) }</span>
-						<a
-							class={ 'filter__pill ' + ( filter.category == 0 ? 'filter__pill--active' : '' ) }
-							onClick={ () => {
-								changeFilter( 'category', 0 );
-							} }
-						>
-							{ __( 'All', 'events' ) }
-						</a>
-						{ Object.keys( categories ).map( ( item, index ) => (
-							<a
-								className={
-									'filter__pill ' +
-									( filter.category == parseInt( item ) ? 'filter__pill--active' : '' )
-								}
-								onClick={ () => {
-									changeFilter( 'category', parseInt( item ) );
-								} }
-							>
-								{ categories[ item ].name }
-							</a>
-						) ) }
-					</div>
-				) }
-				{ showTagFilter && (
-					<div className={ 'filter ' + ( filterPosition == 'side' ? 'filter--columns' : '' ) }>
-						<span className="filter__title">{ __( 'Select tags', 'events' ) }</span>
-
-						{ Object.keys( tags ).map( ( item, index ) => (
-							<div className="filter__box checkbox">
-								<label>
-									<input
-										type="checkbox"
-										name={ item }
-										onClick={ ( event ) => {
-											toggleTag( item );
+					<div
+						className={
+							filterMobileVisible ? 'event-filters-advanced' : 'event-filters-advanced mobile-hidden'
+						}
+					>
+						{ showCategoryFilter && Object.keys( categories ).length > 0 && (
+							<div>
+								<h5 className="event-filters-title">{ __( 'Select category', 'events' ) }</h5>
+								<div className="event-filter-pills">
+									<button
+										class={ filter.category == 0 ? 'active' : '' }
+										onClick={ () => {
+											changeFilter( 'category', 0 );
 										} }
-										checked={ filter.tags.includes( item ) }
-									/>
-									{ tags[ item ].name }
-								</label>
+									>
+										{ __( 'All', 'events' ) }
+									</button>
+									{ Object.keys( categories ).map( ( item, index ) => (
+										<button
+											className={ filter.category == parseInt( item ) ? 'active' : '' }
+											onClick={ () => {
+												changeFilter( 'category', parseInt( item ) );
+											} }
+										>
+											{ categories[ item ].name }
+										</button>
+									) ) }
+								</div>
 							</div>
-						) ) }
+						) }
+						{ showTagFilter && Object.keys( tags ).length > 0 && (
+							<div className="">
+								<h5 className="event-filters-title">{ __( 'Select tags', 'events' ) }</h5>
+
+								{ Object.keys( tags ).map( ( item, index ) => (
+									<div className="filter__box checkbox">
+										<label>
+											<input
+												type="checkbox"
+												name={ item }
+												onClick={ ( event ) => {
+													toggleTag( item );
+												} }
+												checked={ filter.tags.includes( item ) }
+											/>
+											{ tags[ item ].name }
+										</label>
+									</div>
+								) ) }
+							</div>
+						) }
 					</div>
+				</aside>
+			) }
+			<>
+				{ currentView == 'cards' && (
+					<CardView attributes={ props.attributes } events={ getFilteredEvents() } />
 				) }
-			</aside>
-			<div className={ containerClass }>
-				{ getFilteredEvents().map( ( item, index ) => (
-					<>
-						{ style == 'cards' && (
-							<EventCard
-								item={ item }
-								showImages={ showImages }
-								showCategory={ showCategory }
-								showLocation={ showLocation }
-								excerptLength={ excerptLength }
-								showBookedUp={ showBookedUp }
-								bookedUpWarningThreshold={ bookedUpWarningThreshold }
-								textAlignment={ textAlignment }
-								showAudience={ showAudience }
-								showSpeaker={ showSpeaker }
-							/>
-						) }
-						{ style == 'list' && (
-							<EventList
-								item={ item }
-								showImages={ showImages }
-								showCategory={ showCategory }
-								showLocation={ showLocation }
-								excerptLength={ excerptLength }
-								textAlignment={ textAlignment }
-								showAudience={ showAudience }
-								showSpeaker={ showSpeaker }
-							/>
-						) }
-						{ style == 'mini' && (
-							<DescriptionItem
-								item={ item }
-								showImages={ showImages }
-								showCategory={ showCategory }
-								showLocation={ showLocation }
-								excerptLength={ excerptLength }
-								textAlignment={ textAlignment }
-								showAudience={ showAudience }
-								showSpeaker={ showSpeaker }
-							/>
-						) }
-					</>
-				) ) }
-			</div>
+				{ currentView == 'list' && <ListView attributes={ props.attributes } events={ getFilteredEvents() } /> }
+				{ currentView == 'table' && (
+					<TableView attributes={ props.attributes } events={ getFilteredEvents() } />
+				) }
+			</>
 		</div>
 	);
 }

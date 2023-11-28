@@ -6308,3 +6308,25 @@ msgstr "Formulaires d'inscription"
 
 msgid "Create"
 msgstr "Créer"
+
+msgid "No spaces left"
+msgstr "Plus de places"
+
+msgid "Only few spaces left"
+msgstr "Seulement quelques places"
+
+msgid "Plenty of spaces left"
+msgstr "Beaucoup de places"
+
+msgid "Free spaces"
+msgstr "Places libres"
+
+msgid "Only %s space left"
+msgid_plural "Only %s spaces left"
+msgstr[0] "Seulement %s place restante"
+msgstr[1] "Seulement %s places restantes"
+
+msgid "%s space left"
+msgid_plural "%s spaces left"
+msgstr[0] "%s place restante"
+msgstr[1] "%s places restantes"

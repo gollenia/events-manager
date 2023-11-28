@@ -21,4 +21,10 @@
 		color: #fff;
 		border-radius: 99px;
 	}
+
+	&.has-divider .event-details-item:not( :last-child ) {
+		border-bottom: 1px solid rgba( 0, 0, 0, 0.1 );
+		padding-bottom: 1rem;
+		margin-bottom: 1rem;
+	}
 }

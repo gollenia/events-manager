@@ -1,0 +1,49 @@
+{
+  "name": "events-manager/details-spaces",
+  "apiVersion": 2,
+  "title": "Event Booking Spaces",
+  "description": "Show the open spaces",
+  "category": "widgets",
+  "attributes": {
+    "icon": {
+      "type": "string",
+      "default": "euro"
+    },
+    "description": {
+      "type": "string",
+      "default": ""
+    },
+    "warningThreshold": {
+      "type": "number",
+      "default": 5
+    },
+    "warningText": {
+      "type": "string",
+      "default": ""
+    },
+    "okText": {
+      "type": "string",
+      "default": ""
+    },
+    "showNumber": {
+      "type": "boolean",
+      "default": false
+    },
+    "showBookedUp": {
+      "type": "boolean",
+      "default": true
+    },
+    "bookedUpText": {
+      "type": "string",
+      "default": ""
+    }
+  },
+  "parents": [
+    "events-manager/details"
+  ],
+  "usesContext": [
+    "postType",
+    "postId"
+  ],
+  "render": "file:./render.php"
+}

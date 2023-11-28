@@ -19,7 +19,7 @@ const Footer = ( { state, dispatch } ) => {
 	const PAYMENT_MISSING = PAYMENT && request.gateway == '';
 	const ONLINE_PAYMENT = request.gateway != 'offline';
 	const PRIVACY_MISSING =
-		data.l10n.consent &&
+		data?.l10n?.consent &&
 		( ( PAYMENT && ! request.registration.data_privacy_consent ) ||
 			( ! wizzard.steps.payment.enabled && REGISTRATION && ! request.registration.data_privacy_consent ) );
 
@@ -77,7 +77,7 @@ const Footer = ( { state, dispatch } ) => {
 							sendOrder( state, dispatch );
 						} }
 					>
-						{ data.attributes?.bookNow !== '' ? data.attributes?.bookNow : __( 'Book now', 'events' ) }
+						{ __( 'Book now', 'events' ) }
 					</button>
 				) }
 				{ SUCCESS && (

@@ -1,0 +1,10 @@
+.events-manager-speaker-item {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+
+	.icon-round {
+		border-radius: 99px;
+		background-color: #ddd;
+	}
+}

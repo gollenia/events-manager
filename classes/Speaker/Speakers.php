@@ -7,6 +7,7 @@ class EM_Speakers {
         
         add_action( 'init', array($instance, 'register_post_type') );
         add_action( 'add_meta_boxes', array($instance, 'add_meta_boxes') );
+		add_action( 'rest_api_init', array($instance, 'register_metadata'));
         add_action( 'save_post', array($instance, 'save'), 1, 2 );
         add_filter( 'manage_event-speaker_posts_columns', array($instance, 'set_custom_columns') );
         add_action( 'manage_event-speaker_posts_custom_column' , array($instance, 'custom_column'), 10, 2 );
@@ -75,6 +76,19 @@ class EM_Speakers {
 
     }
 
+	public function register_metadata() {
+		
+		register_post_meta( 'event-speaker', 'email', [
+			'type' => 'string',
+			'show_in_rest' => true,
+			'single'       => true,
+			'default'      => 'hihi',
+			'auth_callback' => function() {
+				return current_user_can( 'edit_posts' );
+			}
+		]);
+	}
+
     public function save( $post_id, $post ) {
 
         if($post->post_type != "event-speaker" || ! current_user_can( 'edit_post', $post_id )) {
@@ -106,25 +120,6 @@ class EM_Speakers {
         }
     
     }
-
-	private function get_image($id) {
-
-		$thumbnail = get_post_thumbnail_id($id);
-
-		if(!$thumbnail) return false;
-
-		$attachment = [
-			'attachment_id' => $thumbnail,
-			'sizes' => []
-		];
-		
-		foreach(get_intermediate_image_sizes($thumbnail) as $size) {
-			$attachment['sizes'][$size] = array_combine(['url', 'width',  'height', 'resized'], wp_get_attachment_image_src( $thumbnail, $size) );
-		}
-		
-		return $attachment;
-		
-	}
     
     
     public function set_custom_columns($columns) {

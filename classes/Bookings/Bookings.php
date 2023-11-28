@@ -655,7 +655,7 @@ class EM_Bookings extends EM_Object implements Iterator {
 				<?php
 					//we call the segmented JS files and include them here
 					$include_path = dirname(dirname(__FILE__)); //get path to parent directory
-					include($include_path.'/includes/js/bookingsform.js'); 
+					include($include_path.'/build/js/bookingsform.js'); 
 					do_action('em_gateway_js'); //deprecated use em_booking_js below instead
 					do_action('em_booking_js'); //use this instead
 				?>							

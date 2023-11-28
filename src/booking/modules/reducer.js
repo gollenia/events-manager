@@ -6,6 +6,13 @@ const reducer = ( state = {}, action ) => {
 	const { type, payload } = action;
 	const { data } = state;
 	switch ( type ) {
+		case 'SET_DATA':
+			state.data = payload;
+			state.wizzard.steps.tickets.enabled = payload?.attendee_fields?.length > 0;
+			state.wizzard.steps.payment.enabled = ! payload?.event?.price?.free;
+			state.wizzard.step = payload?.attendee_fields?.length === 0 ? 1 : 0;
+			return { ...state };
+
 		case 'SET_WIZZARD':
 			state.wizzard.step = payload;
 			state.wizzard.checkValidity = true;

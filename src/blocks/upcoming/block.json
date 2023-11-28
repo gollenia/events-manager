@@ -4,20 +4,8 @@
 	"description": "Shows a list or cards of upcoming events",
 	"text-domain": "events-manager",
 	"apiVersion": 2,
-	"category": "widgets", 
+	"category": "widgets",
 	"attributes": {
-		"columnsSmall": {
-			"type": "number",
-			"default": 1
-		},
-		"columnsMedium": {
-			"type": "number",
-			"default": 2
-		},
-		"columnsLarge": {
-			"type": "number",
-			"default": 3
-		},
 		"showImages": {
 			"type": "boolean",
 			"default": true
@@ -38,13 +26,13 @@
 			"type": "string",
 			"default": ""
 		},
-		"style": {
+		"view": {
 			"type": "string",
 			"default": "cards"
 		},
 		"limit": {
 			"type": "number",
-			"default": 12
+			"default": 99
 		},
 		"order": {
 			"type": "string",
@@ -65,10 +53,6 @@
 		"excerptLength": {
 			"type": "number",
 			"default": 20
-		},
-		"textAlignment": {
-			"type": "string",
-			"default": "left"
 		},
 		"showAudience": {
 			"type": "boolean",
@@ -94,9 +78,9 @@
 			"type": "string",
 			"default": "pills"
 		},
-		"filterPosition": {
-			"type": "string",
-			"default": "top"
+		"userStylePicker": {
+			"type": "boolean",
+			"default": false
 		},
 		"scope": {
 			"type": "string",
@@ -114,5 +98,21 @@
 			"type": "boolean",
 			"default": true
 		}
-	}
+	},
+	"supports": {
+		"align": [ "wide", "full" ],
+		"anchor": true,
+		"spacing": {
+			"margin": [ "top", "bottom" ],
+			"padding": [ "left", "right" ],
+			"blockGap": true,
+			"__experimentalDefaultControls": {
+				"padding": true,
+				"blockGap": true
+			}
+		}
+	},
+	"style": "events-frontend-style",
+	"viewScript": "events-frontend-view",
+	"editorStyle": "events-block-editor-style"
 }

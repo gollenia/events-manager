@@ -11,44 +11,41 @@ const Ticket = ( props ) => {
 
 	const { attendee_fields } = state.data;
 
+	const attendee_name = attendee_fields.find( ( field ) => field.fieldid === 'name' );
+
 	return (
-		<div className="card card--no-image bg-white my-8 card--shadow">
-			<div className="card__content">
-				<div className="card__title mb-8">
-					{ ticket.name } { ticket.fields?.attendee_name ? __( 'for', 'events' ) : '' }{ ' ' }
-					{ ticket.fields?.attendee_name }
-				</div>
-				<div className="form  grid xl:grid--columns-6 grid--gap-8">
-					{ attendee_fields.map( ( field, key ) => {
-						return (
-							<InputField
-								key={ key }
-								type={ field.type }
-								settings={ field }
-								value={ ticket.fields[ field.fieldid ] }
-								onChange={ ( value ) =>
-									dispatch( {
-										type: 'SET_FIELD',
-										payload: { form: 'ticket', index, field: field.fieldid, value: value },
-									} )
-								}
-							/>
-						);
-					} ) }
-				</div>
-				<div className="card__footer mt-8">
-					<div className="card__actions"></div>
-					<div className="card__supplemental">
-						<button
-							href=""
-							className="button button--error button--icon button--pop"
-							onClick={ () => dispatch( { type: 'REMOVE_TICKET', payload: { index } } ) }
-							disabled={ ticket.min >= index + 1 }
-						>
-							<i class="material-icons">delete</i>
-						</button>
-					</div>
-				</div>
+		<div className="booking-ticket">
+			<div className="booking-ticket-title">
+				<h4>
+					{ ticket.name } { attendee_name ? __( 'for', 'events' ) : '' } { attendee_name }
+				</h4>
+				<button
+					href=""
+					className="button button--danger button--pop"
+					onClick={ () => dispatch( { type: 'REMOVE_TICKET', payload: { index } } ) }
+					disabled={ ticket.min >= index + 1 }
+				>
+					<i class="material-icons">delete</i>
+				</button>
+			</div>
+			<div className="booking-ticket-form">
+				{ attendee_fields.map( ( field, key ) => {
+					return (
+						<InputField
+							key={ key }
+							type={ field.type }
+							settings={ field }
+							value={ ticket.fields[ field.fieldid ] }
+							onChange={ ( value ) =>
+								dispatch( {
+									type: 'SET_FIELD',
+									payload: { form: 'ticket', index, field: field.fieldid, value: value },
+								} )
+							}
+							locale={ state.data.l10n.locale }
+						/>
+					);
+				} ) }
 			</div>
 		</div>
 	);

@@ -1,20 +1,19 @@
-import eventData from './eventData';
-
-const fullPrice = ( coupon ) => {
+/*
+const fullPrice = ( coupon, tickets ) => {
 	let sum = 0;
 
-	for ( let ticket in eventData.tickets ) {
+	for ( let ticket in tickets ) {
 		sum += ticketPrice( ticket );
 	}
 
 	if ( ! coupon.success ) return sum;
 	return coupon.percent ? sum - parseInt( coupon.discount ) : sum - ( sum / 100 ) * parseInt( coupon.discount );
 };
-
-const formatCurrency = ( price ) => {
-	return new Intl.NumberFormat( eventData.l10n.locale, {
+*/
+const formatCurrency = ( price, locale, currency ) => {
+	return new Intl.NumberFormat( locale, {
 		style: 'currency',
-		currency: eventData.l10n.currency,
+		currency,
 	} ).format( price );
 };
 
@@ -27,4 +26,4 @@ const ticketPrice = ( key, appState ) => {
 	);
 };
 
-export { fullPrice, ticketPrice, formatCurrency };
+export { formatCurrency, ticketPrice };

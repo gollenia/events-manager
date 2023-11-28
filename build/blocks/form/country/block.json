@@ -1,0 +1,44 @@
+{
+  "name": "events-manager/form-country",
+  "apiVersion": 2,
+  "title": "Country",
+  "description": "Lets the user select a country",
+  "category": "widgets",
+  "attributes": {
+    "fieldid": {
+      "type": "string",
+      "default": ""
+    },
+    "width": {
+      "type": "number",
+      "default": 6
+    },
+    "required": {
+      "type": "boolean",
+      "default": false
+    },
+    "label": {
+      "type": "string",
+      "default": ""
+    },
+    "defaultValue": {
+      "type": "string",
+      "default": ""
+    },
+    "help": {
+      "type": "string",
+      "default": ""
+    },
+    "error": {
+      "type": "string",
+      "default": ""
+    },
+    "region": {
+      "type": "string",
+      "default": "world"
+    }
+  },
+  "parent": [
+    "events-manager/form-container"
+  ]
+}

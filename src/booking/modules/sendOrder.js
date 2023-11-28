@@ -1,7 +1,7 @@
 import qs from 'qs';
 
 const sendOrder = ( state, dispatch ) => {
-	const [ FALSE, TRUE, DELAY ] = [ 0, 1, 2 ];
+	const [ FALSE, TRUE, DELAY, HUGE_DELAY, ERROR ] = [ 0, 1, 2, 3, 4 ];
 
 	const { request, data, response, modal } = state;
 	dispatch( { type: 'SET_LOADING', payload: TRUE } );
@@ -9,7 +9,18 @@ const sendOrder = ( state, dispatch ) => {
 	setTimeout( () => {
 		if ( modal.loading == 0 ) return;
 		dispatch( { type: 'SET_LOADING', payload: DELAY } );
-	}, 10000 );
+	}, 3000 );
+
+	setTimeout( () => {
+		if ( modal.loading == 0 ) return;
+		dispatch( { type: 'SET_LOADING', payload: HUGE_DELAY } );
+	}, 7000 );
+
+	setTimeout( () => {
+		if ( modal.loading == 0 ) return;
+		dispatch( { type: 'SET_LOADING', payload: ERROR } );
+	}, 9000 );
+
 	let fetchRequest = {
 		...request.registration,
 		_wpnonce: data._nonce,

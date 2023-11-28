@@ -252,7 +252,26 @@
 			"Thursday": [ "Donnerstag" ],
 			"Friday": [ "Freitag" ],
 			"Saturday": [ "Samstag" ],
-			"Sunday": [ "Sonntag" ]
+			"Sunday": [ "Sonntag" ],
+			"Free": [ "Kostenlos" ],
+
+			"Free Spaces": [ "Freie Plätze" ],
+			"Show Number": [ "Anzahl anzeigen" ],
+			"Warning Threshold": [ "Warnungsgrenze" ],
+			"Number of spaces when the warning message is shown": [
+				"Anzahl der Plätze, bei denen die Warnung angezeigt wird"
+			],
+			"Message when only few spaces are left": [ "Nachricht, wenn nur wenige Plätze verfügbar sind" ],
+			"Use %s as placeholder for the number of spaces left": [
+				"Verwenden Sie %s als Platzhalter für die Anzahl der verfügbaren Plätze"
+			],
+			"Only %s space left": [ "Nur noch %s Platz verfügbar", "Nur noch %s Plätze verfügbar" ],
+
+			"Message when enough spaces are free": [ "Nachricht, wenn genügend Plätze verfügbar sind" ],
+			"Enough free spaces left": [ "Genügend freie Plätze verfügbar" ],
+			"Message when event is booked up": [ "Nachricht, wenn das Event ausgebucht ist" ],
+			"Booked up": [ "Ausgebucht" ],
+			"few": [ "wenige" ]
 		}
 	}
 }

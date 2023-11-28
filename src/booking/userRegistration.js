@@ -9,7 +9,7 @@ const UserRegistration = ( props ) => {
 
 	const { data, request, response } = state;
 
-	if ( ! data.registration_fields ) return <></>;
+	if ( ! data || ! data.registration_fields ) return <></>;
 
 	return (
 		<div className="grid xl:grid--columns-2 grid--gap-12">
@@ -29,9 +29,10 @@ const UserRegistration = ( props ) => {
 									payload: { form: 'registration', field: field.fieldid, value: event },
 								} );
 							} }
+							locale={ data.l10n.locale }
 						/>
 					) ) }
-					{ data.event.is_free && data.l10n.consent && (
+					{ data.event?.is_free && data?.l10n?.consent && (
 						<InputField
 							type="checkbox"
 							onChange={ ( event ) => {
@@ -43,7 +44,7 @@ const UserRegistration = ( props ) => {
 							value={ request.registration.data_privacy_consent }
 							settings={ {
 								name: 'data_privacy_consent',
-								help: data.l10n.consent,
+								help: data?.l10n?.consent,
 								type: 'checkbox',
 							} }
 						/>

@@ -39,8 +39,8 @@ function Summary( { state, dispatch } ) {
 	const fullPrice = useMemo( () => calculateFullPrice(), [ response.coupon, ticketCount ] );
 
 	return (
-		<div>
-			<div className="list ">
+		<>
+			<div className="list ticket-summary">
 				{ Object.keys( data.available_tickets ).map( ( id, key ) => (
 					<div className="list__item" key={ key }>
 						<div className="list__content">
@@ -48,13 +48,17 @@ function Summary( { state, dispatch } ) {
 							<div className="list__subtitle">{ data.available_tickets[ id ].description }</div>
 							<div className="list__subtitle">
 								{ __( 'Base price:', 'events' ) }{ ' ' }
-								{ formatCurrency( data.available_tickets[ id ].price ) }
+								{ formatCurrency(
+									data.available_tickets[ id ].price,
+									data.l10n.locale,
+									data.l10n.currency
+								) }
 							</div>
 						</div>
 
 						<div className="list__actions">
 							<span className="button button--pseudo nowrap">
-								{ formatCurrency( ticketPrice( id ) ) }
+								{ formatCurrency( ticketPrice( id ), data.l10n.locale, data.l10n.currency ) }
 							</span>
 							{ data.attendee_fields.length == 0 && (
 								<div className="number-picker">
@@ -95,7 +99,7 @@ function Summary( { state, dispatch } ) {
 							<b className="button button--pseudo nowrap">
 								{ response.coupon.percent
 									? response.coupon.discount + ' %'
-									: formatCurrency( response.coupon.discount ) }
+									: formatCurrency( response.coupon.discount, data.l10n.locale, data.l10n.currency ) }
 							</b>
 							{ data.attendee_fields.length == 0 && (
 								<div className="number-picker invisible">
@@ -114,7 +118,9 @@ function Summary( { state, dispatch } ) {
 						</div>
 					</div>
 					<div className="list__actions">
-						<b className="button button--pseudo nowrap">{ formatCurrency( fullPrice ) }</b>
+						<b className="button button--pseudo nowrap">
+							{ formatCurrency( fullPrice, data.l10n.locale, data.l10n.currency ) }
+						</b>
 						{ data.attendee_fields.length == 0 && (
 							<div className="number-picker invisible">
 								<button className="button button--primary button--icon"></button>
@@ -135,7 +141,7 @@ function Summary( { state, dispatch } ) {
 					<Gateway state={ state } />
 				</div>
 			) }
-		</div>
+		</>
 	);
 }
 

@@ -15,7 +15,7 @@ const Payment = ( props ) => {
 
 	const gatewayOptions = () => {
 		const result = {};
-		if ( data.available_gateways == undefined ) return result;
+		if ( data?.available_gateways == undefined ) return result;
 		Object.keys( data.available_gateways ).forEach( ( id ) => {
 			result[ id ] = data.available_gateways[ id ].title;
 		} );
@@ -29,7 +29,7 @@ const Payment = ( props ) => {
 			</div>
 			<div>
 				<form className="form--trap form grid xl:grid--columns-6 grid--gap-8">
-					{ data.event.has_coupons && <Coupon state={ state } dispatch={ dispatch } /> }
+					{ data?.event?.has_coupons && <Coupon state={ state } dispatch={ dispatch } /> }
 					{ Object.keys( data.available_gateways ).length > 1 && (
 						<InputField
 							onChange={ ( event ) => {
@@ -43,10 +43,11 @@ const Payment = ( props ) => {
 								options: gatewayOptions(),
 							} }
 							value={ request.gateway }
+							locale={ data.l10n.locale }
 						/>
 					) }
 
-					{ data.l10n.consent && (
+					{ data?.l10n?.consent && (
 						<InputField
 							onChange={ ( event ) => {
 								dispatch( {
@@ -58,9 +59,10 @@ const Payment = ( props ) => {
 							value={ request.registration.data_privacy_consent }
 							settings={ {
 								name: 'data_privacy_consent',
-								help: data.l10n.consent,
+								help: data?.l10n?.consent,
 								type: 'checkbox',
 							} }
+							locale={ data.l10n.locale }
 						/>
 					) }
 

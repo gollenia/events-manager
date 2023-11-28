@@ -220,21 +220,7 @@ class EventPost {
 		return $template;
 	}
 
-	public static function get_speaker($EM_Event) {
-
-        if($EM_Event->speaker_id == 0) return false;
-
-        $args = [
-            'p' => $EM_Event->speaker_id,
-            'post_type' => 'event-speaker'
-        ];
-
-        $speakers = \Timber\Timber::get_posts( $args );
-        
-        if ($speakers) return $speakers[0];
-
-        return false;
-    }
+	
 	
 	public static function enable_the_content( $content ){
 		add_filter('the_content', array('EM_Event_Post','the_content'));
@@ -369,6 +355,7 @@ class EventPost {
 	public function register_rest() {
 		register_rest_route( 'events/v2', '/events/', ['method' => 'GET', 'callback' => [$this, 'get_rest_data'], 'permission_callback' => '__return_true'], true );
 		register_rest_route( 'events/v2', '/bookinginfo/(?P<id>\d+)', ['method' => 'GET', 'callback' => [$this, 'get_rest_bookinginfo'], 'permission_callback' => '__return_true'], true );
+		register_rest_route( 'events/v2', '/bookingdata/(?P<id>\d+)', ['method' => 'GET', 'callback' => [$this, 'get_rest_bookingdata'], 'permission_callback' => '__return_true'], true );
 	}
 
 	
@@ -392,6 +379,12 @@ class EventPost {
 		
 	}
 
+	/**
+	 * Returns price and free spaces for a given event
+	 *
+	 * @param [type] $request
+	 * @return void
+	 */
 	public function get_rest_bookinginfo($request) {
 		$result = [
 			'success' => false,
@@ -410,6 +403,42 @@ class EventPost {
 			'booked_spaces' => $event->get_bookings()->get_booked_spaces(),
 		];
 
+		$result['data'] = $data;
+
+		return $result;
+	}
+
+
+	public function get_rest_bookingdata($request) {
+		$result = [
+			'success' => false,
+		];
+
+		$id = $request->get_param('id');
+		if(!$id) return array_merge(["error" => __("Event not found", "events-manager")], $result);
+		
+		$event = new \EM_Event($id, 'post_id');
+
+		$priceFormatter = new \Contexis\Events\Intl\Price(0);
+
+		$data = [
+			'_nonce' => wp_create_nonce('booking_add'),
+			'rest_url' => get_rest_url(),
+			'booking_url' => admin_url('admin-ajax.php'),
+			'event' => \EM_Events::get_rest(['event' => $event->id])[0],
+			'registration_fields' => \EM_Booking_Form::get_booking_form($event->post_id),
+			'attendee_fields' => \EM_Attendees_Form::get_attendee_form($event->post_id),
+			'available_tickets' => $event->get_tickets_rest(),
+			'available_gateways' => \EM_Gateways::get_rest(),
+			'l10n' => [
+				"consent" => get_option("dbem_privacy_message"),
+				"currency" => $priceFormatter->get_currency_code(),
+				"locale" => str_replace('_', '-', get_locale()),
+				"countries" => \Contexis\Events\Intl\Countries::get()
+			]
+		];
+
+		$result['success'] = true;
 		$result['data'] = $data;
 
 		return $result;

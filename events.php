@@ -41,14 +41,6 @@ if( !defined('EM_AJAX') ){
 
 require_once( plugin_dir_path( __FILE__ ) . '/vendor/autoload.php');
 
-require_once('classes/Twig.php');
-$EM_Twig = \EM_Twig::init();
-
-add_filter( 'timber/locations', function($paths) use ($EM_Twig) {
-	$paths[] = $EM_Twig->locations;
-	return $paths;
-});
-
 
 define('EM_LOGS_DIR' , '/var/www/vhosts/kids-team.internal/log/');
 
@@ -384,4 +376,6 @@ function em_cron_schedules($schedules){
 }
 add_filter('cron_schedules','em_cron_schedules',10,1);
 
-require_once('classes/Blocks/Block.php');
+require_once('classes/Block.php');
+
+

@@ -1,0 +1,25 @@
+{
+  "name": "events-manager/details-time",
+  "apiVersion": 2,
+  "title": "Event Time",
+  "description": "Show the event Time",
+  "category": "widgets",
+  "attributes": {
+    "icon": {
+      "type": "string",
+      "default": ""
+    },
+    "roundImage": {
+      "type": "boolean",
+      "default": true
+    },
+    "format": {
+      "type": "string",
+      "default": ""
+    }
+  },
+  "parents": [
+    "events-manager/details"
+  ],
+  "render": "file:./render.php"
+}

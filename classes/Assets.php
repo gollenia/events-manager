@@ -5,107 +5,132 @@ namespace Contexis\Events;
 
 class Assets {
 
-	static array $args = [
-		'style'         => 'event-manager-blocks-block-style',
-		'editor_script' => 'events-block-editor',
-		'editor_style'  => 'events-block-style',
-	];
+	public static function init(){
+		$instance = new self;
+		add_action('init', [$instance, 'frontend_script']);
+		add_action('init', [$instance, 'booking_script']);
+		add_action('init', [$instance, 'editor_script']);
+		add_action('admin_enqueue_scripts', [$instance,'admin_enqueue']);
+		return $instance;
+	}
 
+	/*
+	 * Enqueues script for Upcoming and Featured Blocks
+	 */
 	public function frontend_script() {
-		$script_asset_path = \Events::DIR . "/includes/frontend.asset.php";
-		if ( ! file_exists( $script_asset_path ) ) {
-			throw new \Error(
-					'You need to run `npm start` or `npm run build` for the events-blocks first.'
-			);
+
+		$script_asset_path = \Events::DIR . "/build/frontend.asset.php";
+		$booking_asset_path = \Events::DIR . "/build/booking.asset.php";
+		if ( ! file_exists( $script_asset_path ) || ! file_exists( $booking_asset_path ) ) {
+			return;
 		}
-		$index_js     = '../includes/frontend.js';
+		
 		$script_asset = require( $script_asset_path );
 		wp_enqueue_script(
 			'events-block-frontend',
-			plugins_url( $index_js, __FILE__ ),
+			plugins_url( '../build/frontend.js', __FILE__ ),
 			$script_asset['dependencies'],
 			$script_asset['version']
 		);
+
+		wp_enqueue_style(
+			'events-frontend-style',
+			plugins_url( '../build/style-frontend.css', __FILE__ ),
+			[],
+			$script_asset['version'],
+			'all'
+		);
+
 		wp_set_script_translations( 'events-block-frontend', 'events', plugin_dir_path( __FILE__ ) . '../languages' );
 
 		wp_localize_script('events-block-frontend', 'eventBlocksLocalization', [
-			'locale' => str_replace('_', '-',get_locale()),
+			'locale' => str_replace('_', '-', get_locale()),
 			'rest_url' => get_rest_url(null, 'events/v2/events'),
 			'current_id' => get_the_ID(),
-			'post_type' => self::get_post_type()
 		]);
+	
 	}
 
-	public function backend_script() {
+
+	/*
+	 * Enqueues script for Booking Block
+	 */
+	public function booking_script() {
+
+		$script_asset_path = \Events::DIR . "/build/booking.asset.php";
 		
-		$script_asset_path = \Events::DIR . "/includes/backend.asset.php";
-		if ( ! file_exists( $script_asset_path ) ) {
-			throw new \WP_Error(
-				'You need to run `npm start` or `npm run build` for the "create-block/ctx-blocks" block first.'
-			);
-		}
-		$index_js = '../includes/backend.js';
+		if ( ! file_exists( $script_asset_path ) ) return;
+		
 		$script_asset = require( $script_asset_path );
+
+		wp_register_script(
+			'booking-view',
+			plugins_url('/../build/booking.js', __FILE__),
+			$script_asset['dependencies'],
+			$script_asset['version'],
+			true
+		);
+
+		wp_set_script_translations('booking-view', 'events', \Events::DIR  . '/languages');
+
+		wp_register_style(
+			'booking-style',
+			plugins_url('/../build/style-booking.css', __FILE__),
+			[],
+			$script_asset['version'],
+			'all'
+		);
+	}
+
+
+	/*
+	 * Enqueues script for Editor
+	 */
+	public function editor_script() {
+		
+		$script_asset_path = \Events::DIR . "/build/index.asset.php";
+		if ( ! file_exists( $script_asset_path ) ) return;
+		
+		$script_asset = require( $script_asset_path );
+
 		wp_enqueue_script(
 			'events-block-editor',
-			plugins_url( $index_js, __FILE__ ),
+			plugins_url( '../build/index.js', __FILE__ ),
 			$script_asset['dependencies'],
 			$script_asset['version']
 		);
+
 		wp_set_script_translations( 'events-block-editor', 'events', plugin_dir_path( __FILE__ ) . '../languages' );
 
 		wp_localize_script('events-block-editor', 'eventBlocksLocalization', [
 			'locale' => str_replace('_', '-',get_locale()),
 			'rest_url' => get_rest_url(null, 'events/v2/events'),
-			'current_id' => get_the_ID(),
-			'post_type' => self::get_post_type(),
 			'countries' => \Contexis\Events\Intl\Countries::get(),
 			'default_country' => get_option('dbem_location_default_country'),
 		]);
-		
-		$editor_css = '../includes/backend.css';
 
-		wp_enqueue_style(
+		wp_register_style(
 			'events-block-style',
-			plugins_url( $editor_css, __FILE__ ),
+			plugins_url( '../build/style-index.css', __FILE__ ),
+			array(),
+			$script_asset['version']
+		);
+
+		wp_register_style(
+			'events-block-editor-style',
+			plugins_url( '../build/index.css', __FILE__ ),
 			array(),
 			$script_asset['version']
 		);
 	}
 
-	public static function get_post_type () {
 
-		if(get_post_type()) return get_post_type();
-
-		if ( isset( $_REQUEST['post_type'] ) && post_type_exists( $_REQUEST['post_type'] ) ) {
-			return $_REQUEST['post_type'];
-		};
-
-		if(!function_exists('get_current_screen')) return 'post';
-
-		$screen = get_current_screen();
-		if(isset($screen->post_type)) return $screen->post_type;
-
-		
-		return '';
-	}
-
-	public static function output_to_script_tag($output, $variable_name) {
-		return sprintf('<script>%s = %s;</script>', $variable_name, json_encode($output));
-	}
-
-	public static function init(){
-		$instance = new self;
-		if( !is_admin()) add_action('wp_enqueue_scripts', [$instance, 'frontend_script']);
-		add_action('admin_enqueue_scripts', [$instance, 'backend_script']);
-		add_action('admin_enqueue_scripts', [$instance,'admin_enqueue']);
-		return $instance;
-	}
+	
 	
 	public function admin_enqueue( $hook_suffix = false ){
-		wp_enqueue_script('events-manager', plugins_url('../includes/events-manager.js',__FILE__), array('jquery', 'jquery-ui-core','jquery-ui-widget','jquery-ui-position','jquery-ui-sortable','jquery-ui-datepicker','jquery-ui-autocomplete','jquery-ui-dialog','wp-color-picker'), \Events::VERSION);		
-		wp_enqueue_script('events-manager-admin-script', plugins_url('../includes/admin.js',__FILE__), array('jquery'), \Events::VERSION);		
-		wp_enqueue_style('events-manager-admin', plugins_url('../includes/admin.css',__FILE__), array(), \Events::VERSION);
+		wp_enqueue_script('events-manager', plugins_url('../build/events-manager.js',__FILE__), array('jquery', 'jquery-ui-core','jquery-ui-widget','jquery-ui-position','jquery-ui-sortable','jquery-ui-datepicker','jquery-ui-autocomplete','jquery-ui-dialog','wp-color-picker'), \Events::VERSION);		
+		wp_enqueue_script('events-manager-admin-script', plugins_url('../build/admin.js',__FILE__), array('jquery'), \Events::VERSION);		
+		wp_enqueue_style('events-manager-admin', plugins_url('../build/admin.css',__FILE__), array(), \Events::VERSION);
 		$this->localize_admin_script();
 	}
 
@@ -122,7 +147,7 @@ class Assets {
 			'firstDay' => get_option('start_of_week'),
 			'locale' => $locale_code[0],
 			'country' => $locale_code[1],
-			'ui_css' => plugins_url('includes/jquery-ui.min.css', __FILE__),
+			'ui_css' => plugins_url('build/jquery-ui.min.css', __FILE__),
 			'is_ssl' => is_ssl(),
 		);
 

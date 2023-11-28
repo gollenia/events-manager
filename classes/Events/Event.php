@@ -325,8 +325,8 @@ class EM_Event extends EM_Object{
 				$results = $wpdb->get_row($wpdb->prepare("SELECT post_id, blog_id FROM ".EM_EVENTS_TABLE." WHERE event_id=%d",$id), ARRAY_A);
 				if( !empty($results['post_id']) ) { $this->post_id = $results['post_id']; $this->event_id = $id; }
 				if( $results['blog_id']=='' ){
-				    if( $results['blog_id']=='' )  $results['blog_id'] = get_current_site()->blog_id;
-					$event_post = get_blog_post($results['blog_id'], $results['post_id']);
+				    if( $results['blog_id']=='' )  $results['blog_id'] = '';
+					$event_post = get_post($results['blog_id'], $results['post_id']);
 					$search_by = $this->blog_id = $results['blog_id'];
 				}elseif( !empty($results['post_id']) ){
 					$event_post = get_post($results['post_id']);	
@@ -335,9 +335,9 @@ class EM_Event extends EM_Object{
 				//get post data based on ID and search context
 				if(!$is_post){
 					if( $search_by == '' ){
-					    if( $search_by == '' ) $search_by = get_current_site()->blog_id;
+					    if( $search_by == '' ) $search_by = 'post_id';
 						//we've been given a blog_id, so we're searching for a post id
-						$event_post = get_blog_post($search_by, $id);
+						$event_post = get_post($search_by, $id);
 						$this->blog_id = $search_by;
 					}else{
 						//search for the post id only
@@ -780,7 +780,8 @@ class EM_Event extends EM_Object{
 
 		$this->compat_keys(); //compatability
 
-		$this->event_audience = get_post_meta($this->post_id, '_event_audience', "");
+		$this->event_audience = get_post_meta($this->post_id, '_event_audience', true);
+		echo "Bimml";
 		
 		
 		$this->speaker_id = intval(get_post_meta($this->post_id, '_speaker_id', true)) ?? 0	;
@@ -1476,9 +1477,10 @@ class EM_Event extends EM_Object{
 			$can_book = false;
 		}
 		if( $this->get_spaces() <= 0 ){
+			
 			$can_book = false;
 		}
-
+		
 		return apply_filters('em_event_can_book', $can_book, $this);
 	}
 	
@@ -1605,34 +1607,27 @@ class EM_Event extends EM_Object{
 	}
 	
 	function is_free( $now = false ){
-		$free = true;
-		foreach($this->get_tickets() as $EM_Ticket){
-		    /* @var $EM_Ticket EM_Ticket */
-			if( $EM_Ticket->get_price() > 0 ){
-				if( !$now || $EM_Ticket->is_available() ){	
-				    $free = false;
-				}
-			}
-		}
-		return apply_filters('em_event_is_free',$free, $this, $now);
+		return $this->get_price() == 0;
 	}
 
 	function get_price(){
 		$price = 0;
-		$tickets = $this->get_tickets();
 		
 		foreach($this->get_tickets() as $EM_Ticket){
 		    /* @var $EM_Ticket EM_Ticket */
-			if( $EM_Ticket->get_price() > 0 ){
-				if( $EM_Ticket->is_available() ){	
-				    return $EM_Ticket->get_price();
-				}
+			if( $EM_Ticket->get_price() > 0 ){	
+				
+				$price = $EM_Ticket->get_price();
 			}
 		}
 
-		return 0;
 		
 		return apply_filters('em_event_get_price',$price, $this);
+	}
+
+	function get_formatted_price(){
+		$price = $this->get_price();
+		return new Contexis\Events\Intl\Price($price);
 	}
 	
 	/**
@@ -1802,6 +1797,9 @@ class EM_Event extends EM_Object{
 				case '#_EVENTTIMES':
 					//get format of time to show
 					$replace = $this->output_times();
+					break;
+				case '#_EVENTPRICE':
+					$replace = $this->get_formatted_price();
 					break;
 				case '#_EVENTDATES':
 					//get format of time to show

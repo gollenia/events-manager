@@ -1,0 +1,28 @@
+{
+	"name": "events-manager/details-audience",
+	"apiVersion": 3,
+	"title": "Event Audience",
+	"description": "Show the event audience",
+	"category": "widgets",
+	"attributes": {
+		"icon": {
+			"type": "string",
+			"default": ""
+		},
+		"roundImage": {
+			"type": "boolean",
+			"default": true
+		},
+		"description": {
+			"type": "string",
+			"default": ""
+		},
+		"eventId": {
+			"type": "string",
+			"default": ""
+		}
+	},
+	"usesContext": [ "postType" ],
+	"parents": [ "events-manager/details" ],
+	"render": "file:./render.php"
+}

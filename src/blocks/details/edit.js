@@ -27,9 +27,7 @@ export default function Edit( { ...props } ) {
 		className,
 	} = props;
 
-	const classes = [ 'ctx:description__wrapper', className, dividers ? 'ctx-description--divider' : false ]
-		.filter( Boolean )
-		.join( ' ' );
+	const classes = [ 'event-details', className, dividers ? 'has-divider' : false ].filter( Boolean ).join( ' ' );
 
 	const template = [
 		[ 'events-manager/details-audience' ],
@@ -44,14 +42,12 @@ export default function Edit( { ...props } ) {
 
 	const blockProps = useBlockProps( { className: classes } );
 
-	const innerBlockProps = useInnerBlocksProps( {}, { allowedBlocks, template, templateLock: false } );
+	const innerBlocksProps = useInnerBlocksProps( {}, { allowedBlocks, template, templateLock: false } );
 
 	return (
 		<div { ...blockProps }>
 			<Inspector { ...props } />
-			<div className="event-details">
-				<div { ...innerBlockProps }></div>
-			</div>
+			<div { ...innerBlocksProps }></div>
 		</div>
 	);
 }

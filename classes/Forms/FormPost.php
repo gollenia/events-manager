@@ -48,8 +48,8 @@ class Post {
 				'template' => [
 					['events-manager/form-container', [], [
 						['events-manager/form-email', ["lock" => ["remove" => true, "move" => false], "required" => true, "label" => __('Email', 'events'), "fieldid" => 'user_email']],
-						['events-manager/form-text', ["lock" => ["remove" => true, "move" => false], "required" => true, "width" => 2, "label" => __('First Name', 'events'), "fieldid" => 'first_name']],
-						['events-manager/form-text', ["lock" => ["remove" => true, "move" => false], "required" => true, "width" => 2, "label" => __('Last Name', 'events'), "fieldid" => 'last_name']]]]
+						['events-manager/form-text', ["lock" => ["remove" => true, "move" => false], "required" => true, "width" => 3, "label" => __('First Name', 'events'), "fieldid" => 'first_name']],
+						['events-manager/form-text', ["lock" => ["remove" => true, "move" => false], "required" => true, "width" => 3, "label" => __('Last Name', 'events'), "fieldid" => 'last_name']]]]
 				],
 				'labels' => [
 					'name' => __('Booking Form','events-manager'),
@@ -88,7 +88,7 @@ class Post {
 				'description' => __('Display forms on your blog.','events-manager'),
 				'template' => [
 					['events-manager/form-container', [], [
-						['events-manager/form-text', ["required" => true, "width" => 2, "label" => __('Name', 'events'), "fieldid" => 'name']]
+						['events-manager/form-text', ["required" => true, "width" => 3, "label" => __('Name', 'events'), "fieldid" => 'name']]
 					]]
 				],
 				'labels' => [

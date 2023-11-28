@@ -1,12 +1,12 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"name": "events-manager/details",
-	"apiVersion": 2,
+	"apiVersion": 3,
 	"title": "Event Details",
 	"keywords": [ "list", "table" ],
 	"description": "Show a list with selected details of the event",
 	"textdomain": "events",
-	"category": "widgets",
+	"category": "layout",
 	"attributes": {
 		"dividers": {
 			"type": "boolean",
@@ -14,20 +14,42 @@
 		}
 	},
 	"supports": {
-		"__experimentalOnEnter": true,
-		"__experimentalSettings": true,
+		"anchor": true,
+		"align": [ "wide", "full" ],
+		"html": false,
+		"layout": {
+			"allowSwitching": false,
+			"allowInheriting": false,
+			"allowEditing": false,
+			"default": {
+				"type": "flex",
+				"orientation": "vertical",
+				"flexWrap": "wrap"
+			}
+		},
+		"__experimantalLayout": {
+			"default": {
+				"default": {
+					"type": "flex",
+					"orientation": "vertical",
+					"flexWrap": "wrap"
+				}
+			}
+		},
 		"spacing": {
 			"margin": true,
 			"padding": true,
-			"blockGap": true,
+			"blockGap": {
+				"__experimentalDefault": "2em",
+				"sides": [ "horizontal" ]
+			},
 			"__experimentalDefaultControls": {
+				"padding": true,
 				"blockGap": true
 			}
-		},
-		"__experimentalLayout": {
-			"allowSizingOnChildren": true
 		}
 	},
-	"editorStyle": "wp-block-descriptiopn-list-editor",
-	"style": "wp-block-descriptiopn-list"
+
+	"editorStyle": "events-block-editor-style",
+	"style": "events-block-style"
 }

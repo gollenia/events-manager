@@ -1,0 +1,43 @@
+{
+	"name": "events-manager/details-location",
+	"apiVersion": 2,
+	"title": "Event Location",
+	"description": "Show the event location",
+	"category": "widgets",
+	"attributes": {
+		"icon": {
+			"type": "string",
+			"default": ""
+		},
+		"description": {
+			"type": "string",
+			"default": ""
+		},
+		"showAddress": {
+			"type": "boolean",
+			"default": true
+		},
+		"showZip": {
+			"type": "boolean",
+			"default": true
+		},
+		"showCity": {
+			"type": "boolean",
+			"default": true
+		},
+		"showCountry": {
+			"type": "boolean",
+			"default": true
+		},
+		"showLink": {
+			"type": "boolean",
+			"default": true
+		},
+		"url": {
+			"type": "string",
+			"default": ""
+		}
+	},
+	"parents": [ "events-manager/details" ],
+	"render": "file:./render.php"
+}

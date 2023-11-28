@@ -1,0 +1,25 @@
+.event-details__icon img {
+	aspect-ratio: 1/1;
+	object-fit: cover;
+}
+
+.events-manager-speaker-select li {
+	background-size: 2rem 2rem;
+	background-repeat: no-repeat;
+	padding-left: 3rem;
+	background-position: 7px 7px;
+}
+
+.event-details-text {
+	flex: 1;
+}
+
+.event-details-action {
+	a {
+		display: grid;
+		place-items: center;
+		background: #c3c4c7;
+		padding: 3px;
+		border-radius: 99px;
+	}
+}

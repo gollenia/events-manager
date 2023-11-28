@@ -6755,3 +6755,25 @@ msgstr "Registrierungsformulare"
 
 msgid "Create"
 msgstr "Erstellen"
+
+msgid "No spaces left"
+msgstr "Keine Plätze mehr frei"
+
+msgid "Only few spaces left"
+msgstr "Nur noch wenige Plätze frei"
+
+msgid "Plenty of spaces left"
+msgstr "Genug Plätze frei"
+
+msgid "Free spaces"
+msgstr "Freie Plätze"
+
+msgid "Only %s space left"
+msgid_plural "Only %s spaces left"
+msgstr[0] "Nur noch %s Platz frei"
+msgstr[1] "Nur noch %s Plätze frei"
+
+msgid "%s space left"
+msgid_plural "%s spaces left"
+msgstr[0] "%s Platz frei"
+msgstr[1] "%s Plätze frei"
