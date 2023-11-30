@@ -14,8 +14,13 @@ jobs:
               with:
                   args: --ignore-platform-reqs
             - run: sudo composer update --ignore-platform-req=ext-gd
+            - uses: actions/setup-node@v3
+              with:
+                  node-version: '20.x'
+            - run: npm ci
+            - run: npm run build
             - name: rsync deployments
-              uses: burnett01/rsync-deployments@5.1
+              uses: burnett01/rsync-deployments@6.0.0
               with:
                   switches: -avzr --delete --exclude .git --exclude .github --exclude assets/src --exclude package.json --exclude package-lock.json --exclude .gitignore --exclude .eslintrc.js --exclude .eslintignore --exclude lang.js --exclude .prettierrc --exclude DOCKER_ENV --exclude docker_tag --exclude output.log
                   path: /
