@@ -43,6 +43,7 @@ import datetimeSelector from './plugins/event/datetime.js';
 import locationSelector from './plugins/event/location.js';
 import peopleSelector from './plugins/event/people.js';
 import recurrenceSettings from './plugins/event/recurrence.js';
+import contactData from './plugins/speaker/contact.js';
 
 const registerBlock = ( block ) => {
 	if ( ! block ) return;
@@ -95,6 +96,11 @@ registerPlugin( 'plugin-select-people', {
 	render: peopleSelector,
 } );
 
+registerPlugin( 'plugin-contact-data', {
+	icon: null,
+	render: contactData,
+} );
+
 registerPlugin( 'plugin-booking-options', {
 	icon: null,
 	render: bookingOptions,
@@ -104,6 +110,8 @@ registerPlugin( 'plugin-recurrence-settings', {
 	icon: null,
 	render: recurrenceSettings,
 } );
+
+const postType = window.wp.data.select( 'core/editor' ).getCurrentPostType();
 
 export const registerBlocks = () => {
 	blocks.forEach( registerBlock );

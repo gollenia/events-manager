@@ -1,9 +1,9 @@
 <?php 
 
 $id = get_the_ID();
-$event = EM_Event::find($id);
-$date = \Contexis\Events\Intl\Date::get_date($event->rsvp_end()->getTimestamp())
-
+$event = EM_Event::find($id, 'post_id');
+$date = \Contexis\Events\Intl\Date::get_date($event->rsvp_end()->getTimestamp());
+if(!$event->event_rsvp) return;
 ?>
 
 <div class="event-details-item">

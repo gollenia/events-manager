@@ -20,6 +20,10 @@
     "iconRight": {
       "type": "boolean",
       "default": false
+    },
+    "iconOnly": {
+      "type": "boolean",
+      "default": false
     }
   },
   "usesContext": [
@@ -29,7 +33,7 @@
     "anchor": true,
     "html": false,
     "color": {
-      "link": true,
+      "link": false,
       "text": true,
       "background": true
     },

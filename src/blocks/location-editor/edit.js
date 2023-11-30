@@ -8,7 +8,7 @@ import { useSelect } from '@wordpress/data';
 import { useEffect, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 import 'leaflet/dist/leaflet.css';
-import { CircleMarker, MapContainer, TileLayer } from 'react-leaflet';
+import { CircleMarker, MapContainer, TileLayer, useMap } from 'react-leaflet';
 /**
  * Internal dependencies
  */
@@ -21,7 +21,7 @@ const edit = ( props ) => {
 	const { context } = props;
 
 	const postType = useSelect( ( select ) => select( 'core/editor' ).getCurrentPostType(), [] );
-
+	if ( postType !== 'location' ) return <></>;
 	const [ meta, setMeta ] = useEntityProp( 'postType', postType, 'meta' );
 
 	const blockProps = useBlockProps( {
@@ -90,6 +90,12 @@ const edit = ( props ) => {
 				}
 			} );
 	};
+
+	function ChangeView( { center, zoom } ) {
+		const map = useMap();
+		map.setView( center, zoom );
+		return null;
+	}
 
 	return (
 		<div>
@@ -179,11 +185,12 @@ const edit = ( props ) => {
 			</div>
 			<div className="ctx-map-container">
 				<MapContainer center={ position } zoom={ 16 } scrollWheelZoom={ false }>
+					<ChangeView center={ position } zoom={ 16 } />
 					<TileLayer
 						attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 						url="https://{s}.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png"
 					/>
-					<CircleMarker center={ position } radius={ 10 } color="#007cba" />
+					<CircleMarker center={ position } radius={ 10 } color="#992244" />
 				</MapContainer>
 			</div>
 		</div>

@@ -15,6 +15,7 @@ class EM_Location_Post {
 		
 		add_action('parse_query', array('EM_Location_Post','parse_query'));
 		add_action( 'init', ['EM_Location_Post', "register_meta"] );
+		
 	}	
 	
 	/**
@@ -118,6 +119,8 @@ class EM_Location_Post {
 			["_location_latitude", "number", 0],
 			["_location_longitude", "number", 0]
 		];
+
+		
 
 		foreach($meta_array as $meta) {
 			register_post_meta( 'location', $meta[0], [

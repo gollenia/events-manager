@@ -324,8 +324,8 @@ class EM_Event extends EM_Object{
 				//search by event_id, get post_id and blog_id (if in ms mode) and load the post
 				$results = $wpdb->get_row($wpdb->prepare("SELECT post_id, blog_id FROM ".EM_EVENTS_TABLE." WHERE event_id=%d",$id), ARRAY_A);
 				if( !empty($results['post_id']) ) { $this->post_id = $results['post_id']; $this->event_id = $id; }
-				if( $results['blog_id']=='' ){
-				    if( $results['blog_id']=='' )  $results['blog_id'] = '';
+				if( !array_key_exists('blog_id', $results) || $results['blog_id']=='' ){
+				    $results['blog_id'] = '';
 					$event_post = get_post($results['blog_id'], $results['post_id']);
 					$search_by = $this->blog_id = $results['blog_id'];
 				}elseif( !empty($results['post_id']) ){

@@ -3,7 +3,6 @@
  */
 import { RichText, useBlockProps } from '@wordpress/block-editor';
 import { __ } from '@wordpress/i18n';
-import { colord } from 'colord';
 
 /**
  * Internal dependencies
@@ -18,17 +17,14 @@ const edit = ( props ) => {
 	const {
 		attributes: { buttonTitle, iconRight },
 		setAttributes,
-		buttonColor,
 		className,
+		backgroundColor,
+		textColor,
 	} = props;
 
 	const blockProps = useBlockProps( {
 		className: [ 'ctx-event-booking' ].filter( Boolean ).join( ' ' ),
 	} );
-
-	const backgroundColor =
-		buttonColor.color == undefined || buttonColor.color == '' ? 'var(--primary)' : buttonColor.color;
-	const textColor = buttonColor == undefined || colord( buttonColor.color ).isLight() ? '#000000' : '#ffffff';
 
 	const isOutline = blockProps.className?.includes( 'is-style-outline' );
 
@@ -39,9 +35,7 @@ const edit = ( props ) => {
 		color: isOutline ? backgroundColor : textColor,
 	};
 
-	const buttonClasses = [ className || false, 'ctx-button', iconRight ? 'reverse' : false ]
-		.filter( Boolean )
-		.join( ' ' );
+	const buttonClasses = [ className || false, iconRight ? 'reverse' : false ].filter( Boolean ).join( ' ' );
 
 	return (
 		<div { ...blockProps }>

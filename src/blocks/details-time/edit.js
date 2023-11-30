@@ -24,6 +24,11 @@ const edit = ( props ) => {
 
 	if ( postType !== 'event' ) return <></>;
 
+	const {
+		attributes: { description },
+		setAttributes,
+	} = props;
+
 	const [ meta, setMeta ] = useEntityProp( 'postType', postType, 'meta' );
 
 	const {
@@ -33,7 +38,6 @@ const edit = ( props ) => {
 	const blockProps = useBlockProps( { className: 'event-details-item' } );
 
 	const timeFormatted = () => {
-		console.log( meta._event_start_time );
 		if ( ! meta ) return;
 		const start =
 			meta._event_start_date && meta._event_start_time

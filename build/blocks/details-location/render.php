@@ -1,8 +1,8 @@
 <?php
 $id = get_the_ID();
-$event = EM_Event::find($id);
+$event = EM_Event::find($id, 'post_id');
 $location = $event->get_location();
-
+if(empty($location->id)) return;
 ?>
 
 <div class="event-details-item">
@@ -13,7 +13,7 @@ $location = $event->get_location();
 		<h4><?php echo $attributes['description'] ?: __("Location", "events-manager") ?></h4>
 		
 		<address class="event-details-data">
-			<?php if($attributes['showName']) echo $location->location_name . '<br />' ?>
+			<?php if($attributes['showTitle']) echo $location->location_name . '<br />' ?>
 			<?php if($attributes['showAddress']) echo $location->location_address . '<br />' ?>
 			<?php if($attributes['showZip']) echo $location->location_postcode ?> <?php if($attributes['showCity']) echo $location->location_town  . '<br />' ?>
 			<?php if($attributes['showCountry']) echo $location->location_country ?>

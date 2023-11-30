@@ -27,7 +27,7 @@ icons.mini = (
 		fillRule="evenodd"
 		clipRule="evenodd"
 		strokeLinejoin="round"
-		strokeMiterlimit={2}
+		strokeMiterlimit={ 2 }
 	>
 		<path d="M30 24v2H2.429v-2h27.57zm0-10v2H2.429v-2h27.57zm0-10v2H2.429V4h27.57z" fillRule="nonzero" />
 		<path
@@ -64,28 +64,28 @@ icons.cards = (
 		clipRule="evenodd"
 		viewBox="0 0 32 32"
 	>
-		{' '}
+		{ ' ' }
 		<path
 			fill="#E5E5E5"
 			d="M2.274 1.794H10.702000000000002V16.772H2.274z"
 			transform="matrix(1.52569 0 0 1.59368 -1.304 1.206)"
-		></path>{' '}
-		<path d="M10 24H30V26H10z" transform="matrix(.4577 0 0 .96245 -.566 -6.375)"></path>{' '}
-		<circle cx="4.773" cy="7" r="3" transform="translate(1.306 -.773) scale(1.52569)"></circle>{' '}
-		<path fill="#919191" d="M10 7H26.472V10H10z" transform="matrix(.55574 0 0 1.52569 -1.546 10.482)"></path>{' '}
+		></path>{ ' ' }
+		<path d="M10 24H30V26H10z" transform="matrix(.4577 0 0 .96245 -.566 -6.375)"></path>{ ' ' }
+		<circle cx="4.773" cy="7" r="3" transform="translate(1.306 -.773) scale(1.52569)"></circle>{ ' ' }
+		<path fill="#919191" d="M10 7H26.472V10H10z" transform="matrix(.55574 0 0 1.52569 -1.546 10.482)"></path>{ ' ' }
 		<path
 			fill="#E5E5E5"
 			d="M2.274 1.794H10.702000000000002V16.772H2.274z"
 			transform="matrix(1.52569 0 0 1.59368 13.507 1.206)"
-		></path>{' '}
-		<path d="M10 24H30V26H10z" transform="matrix(.4577 0 0 .96245 14.245 -6.375)"></path>{' '}
-		<circle cx="4.773" cy="7" r="3" transform="translate(16.117 -.773) scale(1.52569)"></circle>{' '}
-		<path fill="#919191" d="M10 7H26.472V10H10z" transform="matrix(.55574 0 0 1.52569 13.265 10.482)"></path>{' '}
+		></path>{ ' ' }
+		<path d="M10 24H30V26H10z" transform="matrix(.4577 0 0 .96245 14.245 -6.375)"></path>{ ' ' }
+		<circle cx="4.773" cy="7" r="3" transform="translate(16.117 -.773) scale(1.52569)"></circle>{ ' ' }
+		<path fill="#919191" d="M10 7H26.472V10H10z" transform="matrix(.55574 0 0 1.52569 13.265 10.482)"></path>{ ' ' }
 	</svg>
 );
 icons.marker = (
-	<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 96 960 960">
-		<path d="M480.089 566Q509 566 529.5 545.411q20.5-20.588 20.5-49.5Q550 467 529.411 446.5q-20.588-20.5-49.5-20.5Q451 426 430.5 446.589q-20.5 20.588-20.5 49.5Q410 525 430.589 545.5q20.588 20.5 49.5 20.5ZM480 897q133-121 196.5-219.5T740 504q0-117.79-75.292-192.895Q589.417 236 480 236t-184.708 75.105Q220 386.21 220 504q0 75 65 173.5T480 897Zm0 79Q319 839 239.5 721.5T160 504q0-150 96.5-239T480 176q127 0 223.5 89T800 504q0 100-79.5 217.5T480 976Zm0-472Z" />
+	<svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 -960 960 960" width="24">
+		<path d="M480-480q33 0 56.5-23.5T560-560q0-33-23.5-56.5T480-640q-33 0-56.5 23.5T400-560q0 33 23.5 56.5T480-480Zm0 294q122-112 181-203.5T720-552q0-109-69.5-178.5T480-800q-101 0-170.5 69.5T240-552q0 71 59 162.5T480-186Zm0 106Q319-217 239.5-334.5T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 100-79.5 217.5T480-80Zm0-480Z" />
 	</svg>
 );
 export default icons;

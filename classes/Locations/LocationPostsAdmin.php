@@ -14,6 +14,8 @@ class EM_Location_Posts_Admin{
 		}
 		add_filter('manage_'.EM_POST_TYPE_LOCATION.'_posts_columns' , array('EM_Location_Posts_Admin','columns_add'));
 		add_filter('manage_'.EM_POST_TYPE_LOCATION.'_posts_custom_column' , array('EM_Location_Posts_Admin','columns_output'),10,2 );
+		add_filter('manage_edit-'.EM_POST_TYPE_LOCATION.'_sortable_columns', array('EM_Location_Posts_Admin','columns_sortable'));
+			
 	}
 	
 	public static function admin_head(){
@@ -80,5 +82,14 @@ class EM_Location_Posts_Admin{
 				break;
 		}
 	}
+
+	public static function columns_sortable( $columns ) { 
+	   $columns['address'] = 'address';
+	   $columns['town'] = 'town';
+	   $columns['zip'] = 'zip';
+	   $columns['country'] = 'country';
+	   return $columns;
+	}
+ 
 }
 add_action('admin_init', array('EM_Location_Posts_Admin','init'));

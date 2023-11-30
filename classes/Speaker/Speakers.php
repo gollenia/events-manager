@@ -28,7 +28,7 @@ class EM_Speakers {
             'rewrite' => ['slug' => 'event-speaker', 'with_front'=>false],
             'query_var' => false,
             'has_archive' => false,
-            'supports' => ['title','thumbnail'],
+            'supports' => ['title','thumbnail', 'editor'],
             'label' => __('Speakers','events-manager'),
             'description' => __('Speakers for an event.','events-manager'),
             'labels' => [
@@ -78,11 +78,41 @@ class EM_Speakers {
 
 	public function register_metadata() {
 		
-		register_post_meta( 'event-speaker', 'email', [
+		register_post_meta( 'event-speaker', '_email', [
 			'type' => 'string',
 			'show_in_rest' => true,
 			'single'       => true,
-			'default'      => 'hihi',
+			'default'      => '',
+			'auth_callback' => function() {
+				return current_user_can( 'edit_posts' );
+			}
+		]);
+
+		register_post_meta('event-speaker', '_phone', [
+			'type' => 'string',
+			'show_in_rest' => true,
+			'single'       => true,
+			'default'      => '',
+			'auth_callback' => function() {
+				return current_user_can( 'edit_posts' );
+			}
+		]);
+
+		register_post_meta('event-speaker', '_gender', [
+			'type' => 'string',
+			'show_in_rest' => true,
+			'single'       => true,
+			'default'      => 'male',
+			'auth_callback' => function() {
+				return current_user_can( 'edit_posts' );
+			}
+		]);
+
+		register_post_meta('event-speaker', '_role', [
+			'type' => 'string',
+			'show_in_rest' => true,
+			'single'       => true,
+			'default'      => '',
 			'auth_callback' => function() {
 				return current_user_can( 'edit_posts' );
 			}
@@ -124,6 +154,7 @@ class EM_Speakers {
     
     public function set_custom_columns($columns) {
         $columns['email'] = __( 'E-Mail', 'ctx-theme' );
+
         return $columns;
     }
 

@@ -13,6 +13,10 @@
 			"type": "string",
 			"default": ""
 		},
+		"showTitle": {
+			"type": "boolean",
+			"default": true
+		},
 		"showAddress": {
 			"type": "boolean",
 			"default": true

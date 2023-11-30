@@ -1,7 +1,8 @@
 <?php 
 
 $id = get_the_ID();
-$event = EM_Event::find($id);
+$event = EM_Event::find($id, 'post_id');
+if(!$event->speaker_id) return;
 $speaker = \Contexis\Events\Speaker::get($event->speaker_id);
 
 ?>

@@ -4,11 +4,16 @@ import { __ } from '@wordpress/i18n';
 
 const Inspector = ( props ) => {
 	const { attributes, setAttributes } = props;
-	const { showAddress, showCity, showZip, showCountry, showLink, url } = attributes;
+	const { showAddress, showCity, showZip, showCountry, showLink, showTitle, url } = attributes;
 
 	return (
 		<InspectorControls>
 			<PanelBody title={ __( 'Appearance', 'ctx-blocks' ) } initialOpen={ true }>
+				<CheckboxControl
+					label={ __( 'Show Title', 'ctx-blocks' ) }
+					checked={ showTitle }
+					onChange={ ( value ) => setAttributes( { showTitle: value } ) }
+				/>
 				<CheckboxControl
 					label={ __( 'Show Address', 'ctx-blocks' ) }
 					checked={ showAddress }

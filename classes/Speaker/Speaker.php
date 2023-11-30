@@ -7,6 +7,8 @@ class Speaker {
 	var int $id = 0;
 	var $name = "";
 	var $email = "";
+	var $gender = "";
+	var $phone = "";
 	var $image = [];
 	var $slug = "";
 	var $role = "";

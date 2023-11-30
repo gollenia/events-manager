@@ -1,49 +1,48 @@
 {
-    "name": "contexis/event-manager-pro",
-    "version": "6.4.0",
-    "description": "Events Manager",
-    "type": "project",
-    "homepage": "http://www.kids-team.at",
-    "readme": "readme.md",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Thomas Gollenia",
-            "email": "thomas@gollenia.at",
-            "homepage": "http://www.gollenia.at",
-            "role": "Developer"
-        },
-        {
-            "name": "Laura Emeder",
-            "email": "laura@kids-team.at",
-            "role": "Designer"
-        },
-        {
-            "name": "Matthias Demmin",
-            "email": "matthias@kids-team.at",
-            "role": "Manager"
-        }
-    ],
-    "config": {
-        "platform":{
-            "php":"7.4"
-        },
-        "allow-plugins": {
-            "composer/installers": true
-        }
-    },
-    "require": {
-        "timber/timber": "^2.0.0-alpha.2",
-        "shuchkin/simplexlsxgen": "^1.0",
-        "smhg/sepa-qr-data": "^1.1",
-        "chillerlan/php-qrcode": "dev-main#06730361508c283a02bbf9cbc9e4b55e7b3bc88b",
-        "mpdf/mpdf": "^8.0"
-    },
-    "autoload": {
-        "psr-4": {
-            "Contexis\\Events\\Blocks\\": "classes/Blocks/",
+	"name": "contexis/event-manager-pro",
+	"version": "6.4.0",
+	"description": "Events Manager",
+	"type": "project",
+	"homepage": "http://www.kids-team.at",
+	"readme": "readme.md",
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Thomas Gollenia",
+			"email": "thomas@gollenia.at",
+			"homepage": "http://www.gollenia.at",
+			"role": "Developer"
+		},
+		{
+			"name": "Laura Emeder",
+			"email": "laura@kids-team.at",
+			"role": "Designer"
+		},
+		{
+			"name": "Matthias Demmin",
+			"email": "matthias@kids-team.at",
+			"role": "Manager"
+		}
+	],
+	"config": {
+		"platform": {
+			"php": "7.4"
+		},
+		"allow-plugins": {
+			"composer/installers": true
+		}
+	},
+	"require": {
+		"shuchkin/simplexlsxgen": "^1.0",
+		"smhg/sepa-qr-data": "^1.1",
+		"chillerlan/php-qrcode": "dev-main#06730361508c283a02bbf9cbc9e4b55e7b3bc88b",
+		"mpdf/mpdf": "^8.0"
+	},
+	"autoload": {
+		"psr-4": {
+			"Contexis\\Events\\Blocks\\": "classes/Blocks/",
 			"Contexis\\Events\\Intl\\": "classes/Intl/",
 			"Contexis\\Events\\Admin\\": "classes/Admin/"
-        }
-    }
+		}
+	}
 }

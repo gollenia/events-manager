@@ -1,7 +1,8 @@
 <?php 
 
 $id = get_the_ID();
-$event = EM_Event::find($id);
+$event = EM_Event::find($id, 'post_id');
+if(!$event->event_rsvp) return;
 $spaces = $event->get_bookings()->get_available_spaces();
 
 $icon = $spaces == 0 ? 'sentiment_dissatisfied' : ( $attributes['warningThreshold'] < $spaces ? 'done' : 'report_problem' );

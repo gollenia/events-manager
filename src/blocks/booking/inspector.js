@@ -1,5 +1,5 @@
 import { InspectorControls } from '@wordpress/block-editor';
-import { CheckboxControl, PanelBody, TextControl } from '@wordpress/components';
+import { PanelBody, TextControl } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 
 const Inspector = ( props ) => {
@@ -7,7 +7,7 @@ const Inspector = ( props ) => {
 		buttonColor,
 		setButtonColor,
 		setAttributes,
-		attributes: { buttonIcon, iconRight, bookNow },
+		attributes: { buttonIcon, iconRight, bookNow, customButtonColor },
 	} = props;
 
 	return (
@@ -19,13 +19,6 @@ const Inspector = ( props ) => {
 						value={ buttonIcon }
 						onChange={ ( value ) => {
 							setAttributes( { buttonIcon: value } );
-						} }
-					/>
-					<CheckboxControl
-						label={ __( 'Button Icon Suffix', 'events' ) }
-						checked={ iconRight }
-						onChange={ ( value ) => {
-							setAttributes( { iconRight: value } );
 						} }
 					/>
 				</PanelBody>

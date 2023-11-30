@@ -27,7 +27,7 @@ const edit = ( props ) => {
 	const [ meta, setMeta ] = useEntityProp( 'postType', postType, 'meta' );
 
 	const {
-		attributes: { roundImage, format, description, showAddress, showZip, showCity, showCountry },
+		attributes: { roundImage, format, description, showAddress, showZip, showCity, showCountry, showTitle },
 		setAttributes,
 	} = props;
 
@@ -63,6 +63,7 @@ const edit = ( props ) => {
 						} }
 					/>
 					<div className="event-details_audience description-editable">
+						{ location?._location_title && showTitle && <div>{ location?._location_title }</div> }
 						{ location?._location_address && showAddress && <div>{ location?._location_address }</div> }
 						<div>
 							{ location?._location_postcode && showZip && <span>{ location?._location_postcode }</span> }

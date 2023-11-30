@@ -5,17 +5,17 @@
 /**
  * WordPress dependencies
  */
-import { TextControl } from '@wordpress/components';
+import { SelectControl, TextControl } from '@wordpress/components';
 import { select } from '@wordpress/data';
 import { PluginDocumentSettingPanel } from '@wordpress/edit-post';
 
 import { useEntityProp } from '@wordpress/core-data';
 import { __ } from '@wordpress/i18n';
 
-const peopleSelector = () => {
+const contactData = () => {
 	const postType = select( 'core/editor' ).getCurrentPostType();
 
-	if ( postType !== 'event' ) return <></>;
+	if ( postType !== 'event-speaker' ) return <></>;
 
 	const [ meta, setMeta ] = useEntityProp( 'postType', postType, 'meta' );
 
@@ -39,11 +39,29 @@ const peopleSelector = () => {
 				label={ __( 'Telephone', 'events' ) }
 				value={ meta._tel }
 				onChange={ ( value ) => {
-					setMeta( { _tel: value } );
+					setMeta( { _phone: value } );
 				} }
+			/>
+
+			<SelectControl
+				label={ __( 'Gender', 'events' ) }
+				value={ meta._gender }
+				onChange={ ( value ) => {
+					setMeta( { _gender: value } );
+				} }
+				options={ [
+					{
+						label: __( 'Male', 'events' ),
+						value: 'male',
+					},
+					{
+						label: __( 'Female', 'events' ),
+						value: 'female',
+					},
+				] }
 			/>
 		</PluginDocumentSettingPanel>
 	);
 };
 
-export default peopleSelector;
+export default contactData;

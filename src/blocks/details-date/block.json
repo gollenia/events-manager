@@ -1,6 +1,6 @@
 {
 	"name": "events-manager/details-date",
-	"apiVersion": 2,
+	"apiVersion": 3,
 	"title": "Event Date",
 	"description": "Show the event date",
 	"category": "widgets",
@@ -22,6 +22,6 @@
 			"default": false
 		}
 	},
-	"parents": [ "events-manager/details" ],
+	"parents": ["events-manager/details"],
 	"render": "file:./render.php"
 }
