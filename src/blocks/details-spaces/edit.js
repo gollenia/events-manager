@@ -3,7 +3,6 @@
  */
 import apiFetch from '@wordpress/api-fetch';
 import { RichText, useBlockProps } from '@wordpress/block-editor';
-import { Icon } from '@wordpress/components';
 import { useState } from '@wordpress/element';
 import { __, _n, sprintf } from '@wordpress/i18n';
 
@@ -11,7 +10,6 @@ import { __, _n, sprintf } from '@wordpress/i18n';
  * Internal dependencies
  */
 
-import icons from './icons.js';
 import Inspector from './inspector.js';
 
 /**
@@ -53,13 +51,13 @@ const edit = ( props ) => {
 
 			<div className="event-details__item">
 				<div className="event-details__icon">
-					<Icon
-						icon={
-							spaces === 0 ? icons.danger : spaces > warningThreshold ? icons.thumbsup : icons.warning
-						}
-						size={ 32 }
-						roundImage={ roundImage }
-					/>
+					<i className="material-icons">
+						{ spaces === 0
+							? 'sentiment_dissatisfied'
+							: spaces > warningThreshold
+							? 'groups'
+							: 'report_problem' }
+					</i>
 				</div>
 				<div>
 					<RichText

@@ -28,6 +28,14 @@
 		"customSpeakerId": {
 			"type": "number",
 			"default": 0
+		},
+		"linkTo": {
+			"type": "string",
+			"default": "mail"
+		},
+		"customLinkIcon": {
+			"type": "string",
+			"default": ""
 		}
 	},
 	"parents": [ "events-manager/details" ],

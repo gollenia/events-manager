@@ -2,7 +2,6 @@
  * Wordpress dependencies
  */
 import { RichText, useBlockProps } from '@wordpress/block-editor';
-import { Icon } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 
 import { useEntityProp } from '@wordpress/core-data';
@@ -11,7 +10,6 @@ import { formatDate } from '../../common/formatDate.js';
  * Internal dependencies
  */
 
-import icon from './icon.js';
 import Inspector from './inspector.js';
 /**
  * @param {Props} props
@@ -41,7 +39,7 @@ const edit = ( props ) => {
 
 			<div className="event-details__item">
 				<div className="event-details__icon">
-					<Icon icon={ icon } size={ 32 } roundImage={ roundImage } />
+					<i className="material-icons">event_busy</i>
 				</div>
 				<div>
 					<RichText

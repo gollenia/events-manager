@@ -1,5 +1,5 @@
-import { InspectorControls, URLInput } from '@wordpress/block-editor';
-import { CheckboxControl, ComboboxControl, Icon, PanelBody } from '@wordpress/components';
+import { InspectorControls } from '@wordpress/block-editor';
+import { CheckboxControl, ComboboxControl, Icon, PanelBody, SelectControl, TextControl } from '@wordpress/components';
 import { store } from '@wordpress/core-data';
 import { __ } from '@wordpress/i18n';
 import icons from './icons';
@@ -9,7 +9,7 @@ import { useSelect } from '@wordpress/data';
 const Inspector = ( props ) => {
 	const { attributes, setAttributes } = props;
 
-	const { showLink, customSpeakerId, url } = attributes;
+	const { showLink, customSpeakerId, url, linkTo, showPortrait } = attributes;
 
 	const { speakers, hasResolved } = useSelect( ( select ) => {
 		const query = {
@@ -43,14 +43,33 @@ const Inspector = ( props ) => {
 		<InspectorControls>
 			<PanelBody title={ __( 'Appearance', 'events-manager' ) } initialOpen={ true }>
 				<CheckboxControl
+					label={ __( 'Show Portrait if possible', 'events-manager' ) }
+					checked={ showPortrait }
+					onChange={ ( value ) => setAttributes( { showPortrait: value } ) }
+				/>
+				<CheckboxControl
 					label={ __( 'Show Link', 'events-manager' ) }
 					checked={ showLink }
 					onChange={ ( value ) => setAttributes( { showLink: value } ) }
 				/>
-				<URLInput
-					label={ __( 'Link', 'events-manager' ) }
+				<SelectControl
+					label={ __( 'Link to', 'events-manager' ) }
+					value={ linkTo }
+					onChange={ ( value ) => setAttributes( { linkTo: value } ) }
+					options={ [
+						{ label: __( 'E-Mail', 'events-manager' ), value: 'mail' },
+						{ label: __( 'Phone', 'events-manager' ), value: 'call' },
+						{ label: __( 'Website', 'events-manager' ), value: 'public' },
+						{ label: __( 'Custom URL', 'events-manager' ), value: 'custom' },
+					] }
+					disabled={ ! showLink }
+				/>
+
+				<TextControl
+					label={ __( 'Custom URL', 'events-manager' ) }
 					value={ url }
 					onChange={ ( value ) => setAttributes( { url: value } ) }
+					disabled={ linkTo !== 'custom' || ! showLink }
 				/>
 			</PanelBody>
 			<PanelBody title={ __( 'Data', 'events-manager' ) } initialOpen={ true }>

@@ -6,7 +6,7 @@
 	"keywords": [ "list", "table" ],
 	"description": "Show a list with selected details of the event",
 	"textdomain": "events",
-	"category": "layout",
+	"category": "event",
 	"attributes": {
 		"dividers": {
 			"type": "boolean",

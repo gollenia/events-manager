@@ -5,7 +5,7 @@
 /**
  * WordPress dependencies
  */
-import { SelectControl, TextControl } from '@wordpress/components';
+import { TextControl } from '@wordpress/components';
 import { select } from '@wordpress/data';
 import { PluginDocumentSettingPanel } from '@wordpress/edit-post';
 
@@ -22,7 +22,7 @@ const contactData = () => {
 	return (
 		<PluginDocumentSettingPanel
 			name="events-location-settings"
-			title={ __( 'Persons', 'events' ) }
+			title={ __( 'Contact', 'events' ) }
 			className="events-location-settings"
 		>
 			<TextControl
@@ -37,28 +37,10 @@ const contactData = () => {
 			<TextControl
 				type="tel"
 				label={ __( 'Telephone', 'events' ) }
-				value={ meta._tel }
+				value={ meta._phone }
 				onChange={ ( value ) => {
 					setMeta( { _phone: value } );
 				} }
-			/>
-
-			<SelectControl
-				label={ __( 'Gender', 'events' ) }
-				value={ meta._gender }
-				onChange={ ( value ) => {
-					setMeta( { _gender: value } );
-				} }
-				options={ [
-					{
-						label: __( 'Male', 'events' ),
-						value: 'male',
-					},
-					{
-						label: __( 'Female', 'events' ),
-						value: 'female',
-					},
-				] }
 			/>
 		</PluginDocumentSettingPanel>
 	);

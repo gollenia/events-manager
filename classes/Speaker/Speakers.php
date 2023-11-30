@@ -24,11 +24,11 @@ class EM_Speakers {
             'show_in_menu' => 'edit.php?post_type=event',
             'show_in_nav_menus'=>true,
             'can_export' => true,
-            'publicly_queryable' => false,
+            'publicly_queryable' => true,
             'rewrite' => ['slug' => 'event-speaker', 'with_front'=>false],
             'query_var' => false,
             'has_archive' => false,
-            'supports' => ['title','thumbnail', 'editor'],
+            'supports' => ['title','thumbnail', 'editor', 'excerpt', 'custom-fields'],
             'label' => __('Speakers','events-manager'),
             'description' => __('Speakers for an event.','events-manager'),
             'labels' => [
@@ -80,7 +80,12 @@ class EM_Speakers {
 		
 		register_post_meta( 'event-speaker', '_email', [
 			'type' => 'string',
-			'show_in_rest' => true,
+			'show_in_rest' => [
+				'schema' => [
+					'default' => '',
+					'style' => "string"
+				]
+				],
 			'single'       => true,
 			'default'      => '',
 			'auth_callback' => function() {
@@ -90,7 +95,12 @@ class EM_Speakers {
 
 		register_post_meta('event-speaker', '_phone', [
 			'type' => 'string',
-			'show_in_rest' => true,
+			'show_in_rest' => [
+				'schema' => [
+					'default' => '',
+					'style' => "string"
+				]
+				],
 			'single'       => true,
 			'default'      => '',
 			'auth_callback' => function() {
@@ -100,7 +110,12 @@ class EM_Speakers {
 
 		register_post_meta('event-speaker', '_gender', [
 			'type' => 'string',
-			'show_in_rest' => true,
+			'show_in_rest' => [
+				'schema' => [
+					'default' => '',
+					'style' => "string"
+				]
+				],
 			'single'       => true,
 			'default'      => 'male',
 			'auth_callback' => function() {
@@ -110,7 +125,12 @@ class EM_Speakers {
 
 		register_post_meta('event-speaker', '_role', [
 			'type' => 'string',
-			'show_in_rest' => true,
+			'show_in_rest' => [
+				'schema' => [
+					'default' => '',
+					'style' => "string"
+				]
+				],
 			'single'       => true,
 			'default'      => '',
 			'auth_callback' => function() {

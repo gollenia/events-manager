@@ -398,7 +398,8 @@ class EventPost {
 		$result['success'] = true;
 
 		$data = [
-			'price' => $event->get_price(true),
+			'price_float' => $event->get_price(),
+			'formatted_price' => $event->get_formatted_price(),
 			'available_spaces' => $event->get_bookings()->get_available_spaces(),
 			'booked_spaces' => $event->get_bookings()->get_booked_spaces(),
 		];

@@ -44,6 +44,7 @@ import locationSelector from './plugins/event/location.js';
 import peopleSelector from './plugins/event/people.js';
 import recurrenceSettings from './plugins/event/recurrence.js';
 import contactData from './plugins/speaker/contact.js';
+import personalData from './plugins/speaker/personal.js';
 
 const registerBlock = ( block ) => {
 	if ( ! block ) return;
@@ -81,7 +82,7 @@ let blocks = [
 
 let plugins = [];
 
-registerPlugin( 'plugin-location-datetime', {
+registerPlugin( 'plugin-select-location', {
 	icon: null,
 	render: locationSelector,
 } );
@@ -101,6 +102,11 @@ registerPlugin( 'plugin-contact-data', {
 	render: contactData,
 } );
 
+registerPlugin( 'plugin-personal-data', {
+	icon: null,
+	render: personalData,
+} );
+
 registerPlugin( 'plugin-booking-options', {
 	icon: null,
 	render: bookingOptions,
@@ -111,10 +117,19 @@ registerPlugin( 'plugin-recurrence-settings', {
 	render: recurrenceSettings,
 } );
 
-const postType = window.wp.data.select( 'core/editor' ).getCurrentPostType();
-
-export const registerBlocks = () => {
+const registerBlocks = () => {
 	blocks.forEach( registerBlock );
 };
 
 registerBlocks();
+
+import { unregisterBlockType } from '@wordpress/blocks';
+import domReady from '@wordpress/dom-ready';
+
+domReady( function () {
+	if ( window.typenow !== 'event' ) unregisterBlockType( 'events-manager/details' );
+	if ( window.typenow !== 'event' ) unregisterBlockType( 'events-manager/booking' );
+	if ( window.typenow !== 'location' ) unregisterBlockType( 'events-manager/locationeditor' );
+	if ( window.typenow !== 'bookingform' && window.typenow !== 'attendeeform' )
+		unregisterBlockType( 'events-manager/form-container' );
+} );

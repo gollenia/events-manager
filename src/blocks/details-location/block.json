@@ -43,5 +43,6 @@
 		}
 	},
 	"parents": [ "events-manager/details" ],
+	"usesContext": [ "postId" ],
 	"render": "file:./render.php"
 }

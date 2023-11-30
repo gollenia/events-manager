@@ -35,6 +35,8 @@ class Block {
 			register_block_type(__DIR__ . '/../build/blocks/' . $block);
 		}
 	}
+	
+	
 
 }
 

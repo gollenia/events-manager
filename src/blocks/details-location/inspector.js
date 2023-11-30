@@ -20,15 +20,16 @@ const Inspector = ( props ) => {
 					onChange={ ( value ) => setAttributes( { showAddress: value } ) }
 				/>
 				<CheckboxControl
-					label={ __( 'Show City', 'ctx-blocks' ) }
-					checked={ showCity }
-					onChange={ ( value ) => setAttributes( { showCity: value } ) }
-				/>
-				<CheckboxControl
 					label={ __( 'Show Zip', 'ctx-blocks' ) }
 					checked={ showZip }
 					onChange={ ( value ) => setAttributes( { showZip: value } ) }
 				/>
+				<CheckboxControl
+					label={ __( 'Show City', 'ctx-blocks' ) }
+					checked={ showCity }
+					onChange={ ( value ) => setAttributes( { showCity: value } ) }
+				/>
+
 				<CheckboxControl
 					label={ __( 'Show Country', 'ctx-blocks' ) }
 					checked={ showCountry }

@@ -9,10 +9,6 @@
 			"type": "string",
 			"default": ""
 		},
-		"buttonColor": {
-			"type": "string",
-			"default": "primary"
-		},
 		"buttonIcon": {
 			"type": "string",
 			"default": ""

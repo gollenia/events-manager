@@ -3,7 +3,6 @@
  */
 import apiFetch from '@wordpress/api-fetch';
 import { RichText, useBlockProps } from '@wordpress/block-editor';
-import { Icon } from '@wordpress/components';
 import { useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 
@@ -11,7 +10,6 @@ import { __ } from '@wordpress/i18n';
  * Internal dependencies
  */
 
-import icon from './icon.js';
 import Inspector from './inspector.js';
 
 /**
@@ -29,7 +27,8 @@ const edit = ( props ) => {
 	const blockProps = useBlockProps( { className: 'event-details-item' } );
 
 	apiFetch( { path: `/events/v2/bookinginfo/${ postId }` } ).then( ( data ) => {
-		setPrice( data.price );
+		console.log( data );
+		setPrice( data.data?.formatted_price.format );
 	} );
 
 	return (
@@ -38,7 +37,7 @@ const edit = ( props ) => {
 
 			<div className="event-details__item">
 				<div className="event-details__icon">
-					<Icon icon={ icon } size={ 32 } roundImage={ roundImage } />
+					<i className="material-icons">savings</i>
 				</div>
 				<div>
 					<RichText

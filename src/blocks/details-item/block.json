@@ -1,20 +1,28 @@
 {
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"name": "events-manager/details-item",
-	"apiVersion": 2,
-	"title": "Description Item",
+	"apiVersion": 3,
+	"title": "Other Item",
 	"keywords": [ "list", "table" ],
-	"description": "Singel item of a description list",
+	"description": "Create your very own description item with icon, image and custom content.",
 	"textdomain": "events",
 	"category": "common",
 	"attributes": {
-		"image": {
-			"type": "object",
-			"default": null
+		"imageUrl": {
+			"type": "string",
+			"default": ""
+		},
+		"imageAlt": {
+			"type": "string",
+			"default": ""
+		},
+		"imageId": {
+			"type": "number",
+			"default": 0
 		},
 		"icon": {
 			"type": "string",
-			"default": "done"
+			"default": "label"
 		},
 		"styleVariation": {
 			"type": "string",
@@ -23,6 +31,10 @@
 		"url": {
 			"type": "string",
 			"default": ""
+		},
+		"urlNewTab": {
+			"type": "boolean",
+			"default": false
 		},
 		"urlIcon": {
 			"type": "string",
@@ -64,12 +76,24 @@
 		"color": {
 			"background": true,
 			"text": true
+		},
+		"__experimentalBorder": {
+			"color": true,
+			"radius": true,
+			"style": true,
+			"width": true,
+			"__experimentalDefaultControls": {
+				"color": true,
+				"radius": true,
+				"style": true,
+				"width": true
+			}
 		}
 	},
 	"selectors": {
-		"root": ".wp-block-ctx-blocks-description-item",
-		"color": ".wp-block-ctx-blocks-description-item > .ctx__description-item__icon"
+		"color": ".wp-block-ctx-blocks-description-item .ctx__description-item-image",
+		"border": ".wp-block-ctx-blocks-description-item .ctx__description-item-image"
 	},
-	"editorStyle": "ctx-description-item-editor-style",
+	"editorStyle": "events-block-editor-style",
 	"style": "events-block-style"
 }

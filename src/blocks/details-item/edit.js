@@ -2,39 +2,65 @@
  * Internal dependencies
  */
 import Inspector from './inspector';
-
+import Toolbar from './toolbar';
 /**
  * WordPress dependencies
  */
-import { getColorClassName, useBlockProps, useInnerBlocksProps, withColors } from '@wordpress/block-editor';
+import {
+	getColorClassName,
+	useBlockProps,
+	__experimentalUseBorderProps as useBorderProps,
+	useInnerBlocksProps,
+	withColors,
+} from '@wordpress/block-editor';
 import { compose } from '@wordpress/compose';
+
+import { useRef } from '@wordpress/element';
 
 function ItemEdit( { ...props } ) {
 	const {
-		attributes: { image, icon, roundImage, styleVariation, url, urlIcon },
-
+		attributes: { icon, url, urlIcon, imageUrl },
 		iconColor,
 		customIconColor,
 		customIconBackgroundColor,
 		iconBackgroundColor,
 		className,
+		setAttributes,
+		backgroundColor,
 	} = props;
 
-	const classes = [ className, 'ctx__description-item', 'event-description-item' ].filter( Boolean ).join( ' ' );
+	console.log( imageUrl );
+
+	const imageRef = useRef();
+
+	const onSelectMedia = ( media ) => {
+		if ( ! media || ! media.url ) {
+			setAttributes( { imageUrl: undefined, imageId: undefined } );
+			return;
+		}
+		setAttributes( {
+			imageUrl: media.sizes?.thumbnail?.url ?? media.url,
+			imageId: media.id,
+		} );
+	};
+
+	const classes = [ className, 'event-details__item' ].filter( Boolean ).join( ' ' );
 
 	const blockProps = useBlockProps( {
 		className: classes,
 	} );
 
-	const iconStyle = {
+	console.log( blockProps );
+
+	const borderProps = useBorderProps( props.attributes );
+	const imageStyle = {
+		...borderProps.style,
 		color: iconColor?.color ?? customIconColor ?? 'none',
 		backgroundColor: iconBackgroundColor?.color ?? customIconBackgroundColor ?? 'none',
-		borderRadius: roundImage ? '50%' : '0',
 	};
 
-	const iconClasses = [
-		styleVariation === 'icon' && 'ctx__description-item__icon',
-		styleVariation === 'bullet' && 'ctx__description-item__bullet',
+	const imageClasses = [
+		'event-details__icon',
 		getColorClassName( 'color', iconColor ),
 		getColorClassName( 'background-color', iconBackgroundColor ),
 	].join( ' ' );
@@ -44,49 +70,42 @@ function ItemEdit( { ...props } ) {
 			'core/heading',
 			{
 				placeholder: 'Title',
-				level: 4,
-				className: 'title',
+				level: 5,
+				className: 'event-details_title',
 				style: { spacing: { margin: { top: '0px', bottom: '0px' } } },
 			},
 		],
-		[ 'core/paragraph', { placeholder: 'Description' } ],
+		[ 'core/paragraph', { placeholder: 'Description', className: 'event-details_text' } ],
 	];
 	const innerBlockProps = useInnerBlocksProps(
-		{ className: 'ctx__description-item__content' },
+		{ className: 'event-details__item-content' },
 		{
 			template: TEMPLATE,
 			allowedBlocks: [ 'core/paragraph', 'core/heading' ],
 		}
 	);
 
+	console.log( borderProps );
 	return (
 		<>
-			<div { ...blockProps }>
+			<div
+				{ ...blockProps }
+				style={ {
+					...blockProps.style,
+					backgroundColor: 'none !important',
+				} }
+			>
 				<Inspector { ...props } />
+				<Toolbar { ...props } onSelectMedia={ onSelectMedia } />
+				<div className={ imageClasses } style={ imageStyle }>
+					{ imageUrl && <img src={ imageUrl } ref={ imageRef } /> }
 
-				{ styleVariation == 'image' && image && image.subtype != 'svg+xml' && (
-					<img
-						className={ roundImage ? 'round' : '' }
-						src={ image.sizes.thumbnail.url }
-						style={ iconStyle }
-					/>
-				) }
+					{ ! imageUrl && <i className="material-icons">{ icon }</i> }
+				</div>
 
-				{ styleVariation == 'icon' && (
-					<div className={ iconClasses } style={ iconStyle }>
-						<i className="material-icons">{ icon }</i>
-					</div>
-				) }
-
-				{ styleVariation == 'bullet' && (
-					<div className={ iconClasses } style={ iconStyle }>
-						<i className="material-icons">{ icon ? icon : 'label' }</i>
-					</div>
-				) }
-
-				<div className="ctx__description-item__content" { ...innerBlockProps }></div>
+				<div className="event-details__item-content" { ...innerBlockProps }></div>
 				{ url && (
-					<div class="ctx__description-item__action">
+					<div class="event-details__item-action">
 						<b>
 							<i class="material-icons">{ urlIcon }</i>
 						</b>

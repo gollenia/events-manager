@@ -43,8 +43,10 @@ class Speaker {
 		$data = $result[0];
 		$speaker->image = self::get_image($speaker->id);
 		$speaker->name = $data->post_title;
-		$speaker->email = get_post_meta($speaker->id,'email', true);
-		$speaker->role = get_post_meta($speaker->id,'role', true);
+		$speaker->email = get_post_meta($speaker->id,'_email', true);
+		$speaker->phone = get_post_meta($speaker->id,'_phone', true);
+		$speaker->role = get_post_meta($speaker->id,'_role', true);
+		$speaker->gender = get_post_meta($speaker->id,'_gender', true);
 		$speaker->slug = $data->post_name;
 		return $speaker;
 	}
