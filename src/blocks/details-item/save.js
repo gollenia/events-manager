@@ -29,7 +29,7 @@ export default function Save( props ) {
 		className,
 	} = props;
 
-	const classes = [ className, 'ctx__description-item' ].filter( Boolean ).join( ' ' );
+	const classes = [ className, 'event-details-item' ].filter( Boolean ).join( ' ' );
 
 	const blockProps = useBlockProps.save( {
 		className: classes,
@@ -46,7 +46,7 @@ export default function Save( props ) {
 
 	const imageClasses = [
 		borderProps.classes,
-		'event-details__item-image',
+		'event-details-image',
 		getColorClassName( 'color', iconColor ),
 		getColorClassName( 'background-color', iconBackgroundColor ),
 	].join( ' ' );
@@ -63,10 +63,10 @@ export default function Save( props ) {
 				{ ! imageUrl && <i className="material-icons">{ icon }</i> }
 			</div>
 
-			<div { ...innerBlocksProps } className="event-details__item-content"></div>
+			<div { ...innerBlocksProps } className="event-details-text"></div>
 
 			{ url && (
-				<a className="event-details__item-action" href={ url } target="_blank" rel="noopener noreferrer">
+				<a className="event-details-action" href={ url } target="_blank" rel="noopener noreferrer">
 					{ urlIcon && <i className="material-icons">{ urlIcon }</i> }
 				</a>
 			) }
