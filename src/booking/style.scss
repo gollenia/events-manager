@@ -606,3 +606,113 @@
 		border-color: #38a169;
 	}
 }
+
+.number-picker {
+	padding: 0.25rem;
+	border-radius: 999px;
+	display: inline-flex;
+	align-items: center;
+	background: #bbb;
+
+	button {
+		vertical-align: middle;
+		-webkit-transform: perspective( 1px ) translateZ( 0 );
+		transform: perspective( 1px ) translateZ( 0 );
+
+		&:active {
+			-webkit-animation-name: ctx-pop;
+			animation-name: ctx-pop;
+			-webkit-animation-duration: 0.3s;
+			animation-duration: 0.3s;
+			-webkit-animation-timing-function: linear;
+			animation-timing-function: linear;
+			-webkit-animation-iteration-count: 1;
+			animation-iteration-count: 1;
+		}
+
+		border-radius: 999px;
+		background: var( --primary );
+		color: var( --primary-contrast );
+		cursor: pointer;
+		background-position: center;
+		background-repeat: no-repeat;
+		width: 1.75rem;
+		height: 1.75rem;
+		display: grid;
+		place-items: center;
+		padding: 0;
+		font-weight: bold;
+
+		&:disabled {
+			background-color: #bbb;
+			color: #999;
+		}
+
+		@media ( min-width: 1024px ) {
+			width: 1.75rem;
+			height: 1.75rem;
+		}
+
+		&:first-child::before {
+			content: 'remove';
+			font-family: 'material-icons';
+		}
+
+		&:last-child::before {
+			content: 'add';
+			font-family: 'material-icons';
+		}
+	}
+
+	input {
+		padding: 0 0.25rem;
+		width: 2rem;
+		margin: 0 0.25rem;
+		text-align: center;
+		background: transparent;
+		font-weight: 600;
+	}
+
+	&--large {
+		button {
+			height: 2rem;
+			width: 2rem;
+		}
+	}
+
+	&__select {
+		position: relative;
+
+		&::after {
+			content: 'keyboard_arrow_down';
+			-font-feature-settings: 'liga';
+			-webkit-font-smoothing: antialiased;
+			direction: ltr;
+			display: inline-block;
+			font-family: 'material-icons';
+			font-size: 24px;
+			font-style: normal;
+			letter-spacing: normal;
+			line-height: 1;
+			text-transform: none;
+			white-space: nowrap;
+			position: absolute;
+			right: 13px;
+			top: 7px;
+		}
+
+		color: black;
+		width: 2rem;
+		height: 2rem;
+		display: grid;
+		place-content: center;
+	}
+
+	&--dropdown {
+		background: #fff;
+
+		ul {
+			display: none;
+		}
+	}
+}
