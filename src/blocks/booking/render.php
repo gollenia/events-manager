@@ -6,11 +6,6 @@ if(!$event->can_book()) {
 	return;
 }
 
-if ($full_data->parsed_block['attrs']) $styles = get_block_wrapper_attributes() ?? '';
-if(!isset($styles)) $styles = '';
-$attributes['className'] = preg_match('/class="([^"]+)"/', $styles, $matches) ? $matches[1] : '';
-$attributes['style'] = preg_match('/style="([^"]+)"/', $styles, $matches) ? $matches[1] : '';
-
 $classNames = [
 	'ctx__button',
 	$attributes['iconOnly'] ? 'ctx__button--icon-only' : '',
@@ -23,11 +18,11 @@ $block_attributes = get_block_wrapper_attributes(['class' => join(" ", $classNam
 
 <button <?php echo $block_attributes ?> id="booking_button">
 <?php
-if($attributes['icon']) {
-	echo "<i class=\"material-icons\">{$attributes['icon']}</i>";
+if($attributes['buttonIcon']) {
+	echo "<i class=\"material-icons\">{$attributes['buttonIcon']}</i>";
 } 
 if(!$attributes['iconOnly']) {
-	echo "{$attributes['buttonTitle']}";
+	echo $attributes['buttonTitle'] ?: __("Log In", "events-manager");
 }
 ?>
 </button>
