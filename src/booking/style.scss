@@ -85,9 +85,9 @@
 
 	&__guide--done {
 		.wizzard__badge {
-			background: var( --success );
+			background: #017a47;
 		}
-		color: var( --success );
+		color: #017a47;
 	}
 
 	&__guide--invalid {
@@ -278,7 +278,7 @@
 
 	&--success {
 		.event-modal-header {
-			background: var( --success );
+			background: #017a47;
 		}
 	}
 
@@ -365,7 +365,7 @@
 			.modal-header {
 				background: var( --success-light );
 				h2 {
-					background: var( --success );
+					background: #017a47;
 					color: var( --success-contrast );
 				}
 			}
@@ -612,7 +612,7 @@
 	border-radius: 999px;
 	display: inline-flex;
 	align-items: center;
-	background: #bbb;
+	background: #00000008;
 
 	button {
 		vertical-align: middle;
