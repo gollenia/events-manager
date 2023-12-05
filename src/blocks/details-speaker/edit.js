@@ -50,9 +50,9 @@ const edit = ( props ) => {
 	const link = ( () => {
 		switch ( linkTo ) {
 			case 'mail':
-				return `mailto:${ speaker?.meta._email }`;
+				return `mailto:${ speaker?.meta?._email }`;
 			case 'call':
-				return `tel:${ speaker?.meta._phone }`;
+				return `tel:${ speaker?.meta?._phone }`;
 			case 'public':
 				return speaker?.link;
 			case 'custom':
