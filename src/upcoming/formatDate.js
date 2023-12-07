@@ -15,21 +15,9 @@ function formatDateRange( start, end ) {
 		start.getMonth() === end.getMonth() &&
 		start.getDate() === end.getDate();
 
-	let dateFormat = {
-		year: 'numeric',
-		month: 'long',
-		day: 'numeric',
-	};
-
-	if ( sameDay ) {
-		dateFormat = {
-			year: 'numeric',
-			month: 'long',
-			day: 'numeric',
-			hour: 'numeric',
-			minute: 'numeric',
-		};
-	}
+	const dateFormat = sameDay
+		? { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' }
+		: { year: 'numeric', month: 'long', day: 'numeric' };
 
 	const dateFormatObject = new Intl.DateTimeFormat( locale, dateFormat );
 	return dateFormatObject.formatRange( start, end );
@@ -47,4 +35,4 @@ function formatDate( date, format ) {
 	return dateFormatObject.format( date * 1000 );
 }
 
-export { formatDateRange, formatDate };
+export { formatDate, formatDateRange };

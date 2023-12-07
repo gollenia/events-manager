@@ -31,7 +31,7 @@
 		},
 		"showCountry": {
 			"type": "boolean",
-			"default": true
+			"default": false
 		},
 		"showLink": {
 			"type": "boolean",

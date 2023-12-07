@@ -15,6 +15,8 @@ class EM_Location_Post {
 		
 		add_action('parse_query', array('EM_Location_Post','parse_query'));
 		add_action( 'init', ['EM_Location_Post', "register_meta"] );
+		add_action('init', array('EM_Location_Post', 'meta_query_filter'));
+
 		
 	}	
 	
@@ -43,6 +45,21 @@ class EM_Location_Post {
 			'location_id', //New Field Name in JSON RESPONSEs
 			['get_callback' => ['EM_Location_Post','add_id_to_rest']]
 		);
+	}
+
+	public static function meta_query_filter() {
+		add_filter(
+			'rest_location_query',
+			function ($args, $request) {
+			  if ($meta_key = $request->get_param('metaKey')) {
+				$args['meta_key'] = $meta_key;
+				$args['meta_value'] = $request->get_param('metaValue');
+			  }
+			  return $args;
+			},
+			10,
+			2
+		  );
 	}
 
 	public static function add_id_to_rest($object) {

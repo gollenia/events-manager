@@ -70,7 +70,7 @@ function ItemEdit( { ...props } ) {
 			'core/heading',
 			{
 				placeholder: 'Title',
-				level: 5,
+				level: 4,
 				className: 'event-details_title',
 				style: { spacing: { margin: { top: '0px', bottom: '0px' } } },
 			},

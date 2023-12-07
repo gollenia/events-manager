@@ -18,15 +18,22 @@ function EventCards( props ) {
 			showBookedUp,
 			bookedUpWarningThreshold,
 			excerptLength,
-			textAlignment,
 			showAudience,
 			showSpeaker,
+			animateOnScroll,
+			animationType,
 		},
 		events,
 	} = props;
 
+	const className = [
+		'event-grid',
+		animateOnScroll ? 'ctx-animate-children' : '',
+		animationType ? `ctx-${ animationType }` : '',
+	].join( ' ' );
+
 	return (
-		<div className="event-grid">
+		<ul className={ className }>
 			{ events.map( ( item, index ) => {
 				const location =
 					item.location && [ 'city', 'name' ].includes( showLocation ) ? item.location[ showLocation ] : '';
@@ -47,7 +54,7 @@ function EventCards( props ) {
 				};
 
 				return (
-					<div className="event-card" key={ index }>
+					<li className="event-card" key={ index }>
 						{ showImages && (
 							<a href={ item.link } className="event-card-image">
 								<img src={ item.image?.sizes?.large?.url } />
@@ -77,10 +84,10 @@ function EventCards( props ) {
 								</div>
 							) }
 						</div>
-					</div>
+					</li>
 				);
 			} ) }
-		</div>
+		</ul>
 	);
 }
 

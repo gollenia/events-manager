@@ -231,9 +231,7 @@ function Upcoming( props ) {
 											<input
 												type="checkbox"
 												name={ item }
-												onClick={ ( event ) => {
-													toggleTag( item );
-												} }
+												onClick={ () => toggleTag( item ) }
 												checked={ filter.tags.includes( item ) }
 											/>
 											{ tags[ item ].name }

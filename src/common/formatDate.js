@@ -7,6 +7,7 @@
 function formatDateRange( start, end = false ) {
 	const locale = window.eventBlocksLocalization?.locale;
 
+	if ( ! start ) return '';
 	start = new Date( start );
 	end = end ? new Date( end ) : start;
 

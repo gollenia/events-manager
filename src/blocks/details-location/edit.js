@@ -33,10 +33,14 @@ const edit = ( props ) => {
 		per_page: 1,
 		_embed: true,
 		metaKey: '_location_id',
-		metaValue: meta._location_id ?? 0,
+		metaValue: meta._location_id,
 	};
 
+	console.log( 'query', query );
+
 	const post = useSelect( ( select ) => select( 'core' ).getEntityRecords( 'postType', 'location', query ) );
+
+	console.log( 'locs', post );
 
 	const location = post?.length ? post[ 0 ] : null;
 
