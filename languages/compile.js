@@ -3,7 +3,6 @@ const fs = require( 'fs' );
 const { exec } = require( 'child_process' );
 
 fs.readdir( testFolder, ( err, files ) => {
-	console.log( files );
 	files.forEach( ( file ) => {
 		if ( file.slice( -2 ) === 'po' ) {
 			const basename = file.slice( 0, -2 );

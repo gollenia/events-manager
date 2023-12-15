@@ -48,7 +48,7 @@ $unchanged= $EM_Event->event_end_date ? 0 : 1;
 		$('#event_start_date').on('change',function(){
 			
 			let end_date = $('#event_end_date');
-			console.log(end_date.data('unchanged'));
+			
 			if(end_date.data('unchanged')){
 				$('#event_end_date').val($(this).val());
 			}

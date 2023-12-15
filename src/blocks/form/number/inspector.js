@@ -3,46 +3,30 @@ import {
 	Button,
 	CheckboxControl,
 	Icon,
+	__experimentalNumberControl as NumberControl,
 	PanelBody,
 	RangeControl,
 	ToggleControl,
-	__experimentalNumberControl as NumberControl,
 } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import icons from './icons.js';
 
 const Inspector = ( props ) => {
 	const {
-		attributes: {
-			width,
-			required,
-			fieldid,
-			range,
-			min,
-			max,
-			step,
-			placeholder,
-			hasLabels,
-			hasTicks,
-		},
+		attributes: { width, required, fieldid, range, min, max, step, placeholder, hasLabels, hasTicks },
 		setAttributes,
 	} = props;
 
 	const lockFieldId = [ 'first_name', 'last_name' ].includes( fieldid );
-	console.log( min, max );
+
 	return (
 		<InspectorControls>
-			<PanelBody
-				title={ __( 'Data', 'gutenberg-form' ) }
-				initialOpen={ true }
-			>
+			<PanelBody title={ __( 'Data', 'gutenberg-form' ) } initialOpen={ true }>
 				<ToggleControl
 					label={ __( 'Required', 'gutenberg-form' ) }
 					checked={ required }
 					disabled={ lockFieldId }
-					onChange={ ( value ) =>
-						setAttributes( { required: value } )
-					}
+					onChange={ ( value ) => setAttributes( { required: value } ) }
 				/>
 
 				<div className="ctx:form__panel-row">
@@ -74,26 +58,13 @@ const Inspector = ( props ) => {
 					onChange={ ( value ) => setAttributes( { step: value } ) }
 				/>
 			</PanelBody>
-			<PanelBody
-				title={ __( 'Appearance', 'gutenberg-form' ) }
-				initialOpen={ true }
-			>
+			<PanelBody title={ __( 'Appearance', 'gutenberg-form' ) } initialOpen={ true }>
 				<div className="styleSelector">
-					<Button
-						onClick={ () => setAttributes( { range: false } ) }
-						className={ range ? '' : 'active' }
-					>
-						<Icon
-							size="40"
-							className="icon"
-							icon={ icons.number }
-						/>
+					<Button onClick={ () => setAttributes( { range: false } ) } className={ range ? '' : 'active' }>
+						<Icon size="40" className="icon" icon={ icons.number } />
 						<span>{ __( 'Input', 'gutenberg-form' ) }</span>
 					</Button>
-					<Button
-						onClick={ () => setAttributes( { range: true } ) }
-						className={ range ? 'active' : '' }
-					>
+					<Button onClick={ () => setAttributes( { range: true } ) } className={ range ? 'active' : '' }>
 						<Icon size="40" className="icon" icon={ icons.range } />
 
 						<span>{ __( 'Range', 'gutenberg-form' ) }</span>
@@ -103,25 +74,18 @@ const Inspector = ( props ) => {
 				<CheckboxControl
 					label={ __( 'Show labels', 'gutenberg-form' ) }
 					checked={ hasLabels }
-					onChange={ ( value ) =>
-						setAttributes( { hasLabels: value } )
-					}
+					onChange={ ( value ) => setAttributes( { hasLabels: value } ) }
 				/>
 
 				<CheckboxControl
 					label={ __( 'Show ticks', 'gutenberg-form' ) }
 					checked={ hasTicks }
-					onChange={ ( value ) =>
-						setAttributes( { hasTicks: value } )
-					}
+					onChange={ ( value ) => setAttributes( { hasTicks: value } ) }
 				/>
 
 				<RangeControl
 					label={ __( 'Width', 'gutenberg-form' ) }
-					help={ __(
-						'Number of columns the input field will occupy',
-						'gutenberg-form'
-					) }
+					help={ __( 'Number of columns the input field will occupy', 'gutenberg-form' ) }
 					value={ width }
 					max={ 6 }
 					min={ 1 }

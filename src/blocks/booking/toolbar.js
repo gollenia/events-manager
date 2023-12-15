@@ -20,7 +20,6 @@ const Toolbar = ( props ) => {
 				<AlignmentControl
 					value={ iconRight ? 'right' : 'left' }
 					onChange={ ( event ) => {
-						console.log( event );
 						setAttributes( {
 							iconRight: event === 'right',
 						} );

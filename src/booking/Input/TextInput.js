@@ -23,7 +23,7 @@ const TextInput = ( props ) => {
 
 	const setInvalidity = ( event ) => {
 		if ( ! props.error ) return;
-		console.log( event );
+
 		event.target.setCustomValidity( props.error );
 	};
 

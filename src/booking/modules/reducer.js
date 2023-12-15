@@ -92,11 +92,9 @@ const reducer = ( state = {}, action ) => {
 			return { ...state };
 
 		case 'RESET':
-			console.log( 'resetting...' );
 			return initializer();
 
 		default:
-			console.log( 'UNKNOWN ACTION', action );
 	}
 
 	return { ...state };

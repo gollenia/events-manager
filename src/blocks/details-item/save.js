@@ -53,8 +53,6 @@ export default function Save( props ) {
 
 	const innerBlocksProps = useInnerBlocksProps.save();
 
-	console.log( props );
-
 	return (
 		<li { ...blockProps }>
 			<div className={ imageClasses } style={ imageStyle }>

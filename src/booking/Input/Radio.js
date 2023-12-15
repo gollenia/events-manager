@@ -14,8 +14,6 @@ const Radio = ( props ) => {
 		onChange( event.target.value );
 	};
 
-	console.log( selection );
-
 	return (
 		<div className={ classes }>
 			<fieldset name={ props.name }>

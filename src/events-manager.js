@@ -310,7 +310,7 @@ jQuery( document ).ready( function ( $ ) {
 		document.addEventListener( 'click', function ( event ) {
 			if ( ! event.target.matches( '#em-bookings-table .tablenav-pages a' ) ) return;
 			event.preventDefault();
-			console.log( 'clicky' );
+
 			event.stopImmediatePropagation();
 			let el = $( event.target );
 			let form = el.parents( '#em-bookings-table form.bookings-filter' );
@@ -322,7 +322,6 @@ jQuery( document ).ready( function ( $ ) {
 			} else {
 				form.find( 'input[name=pno]' ).val( 1 );
 			}
-			console.log( match );
 
 			el.parents( '#em-bookings-table' ).find( '.table-wrap' ).first().append( '<div id="em-loading" />' );
 			//ajax call

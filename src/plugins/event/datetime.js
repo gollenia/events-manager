@@ -22,7 +22,7 @@ const datetimeSelector = () => {
 
 	const getNow = () => {
 		let endDate = new Date();
-		console.log( 'getNow' );
+
 		return endDate.toISOString().split( 'T' )[ 0 ];
 	};
 

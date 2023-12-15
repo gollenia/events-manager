@@ -136,8 +136,6 @@ function Upcoming( props ) {
 
 	const currentView = customView != '' ? customView : view;
 
-	console.log( getFilteredEvents() );
-
 	const showFilters = showCategoryFilter || showTagFilter || showSearch;
 
 	return (

@@ -23,8 +23,6 @@ const NumberInput = ( props ) => {
 		backgroundSize: ( ( rangeValue - min ) * 100 ) / ( max - min ) + '% 100%',
 	};
 
-	console.log( min, max, rangeValue );
-
 	return (
 		<>
 			{ range ? (

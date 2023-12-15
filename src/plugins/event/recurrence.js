@@ -34,13 +34,12 @@ const datetimeSelector = () => {
 
 	const toggleDay = ( day ) => {
 		let days = meta._recurrence_byday ? meta._recurrence_byday.split( ',' ) : [];
-		console.log( days );
+
 		if ( days.includes( day ) )
 			days = days.filter( function ( value, index, arr ) {
 				return value != day;
 			} );
 		else days.push( day );
-		console.log( days );
 		setMeta( { _recurrence_byday: days.join( ',' ) } );
 	};
 
@@ -63,8 +62,6 @@ const datetimeSelector = () => {
 		{ label: __( 'Friday', 'events' ), value: '5' },
 		{ label: __( 'Saturday', 'events' ), value: '6' },
 	];
-
-	console.log( 'meta', meta );
 
 	return (
 		<>

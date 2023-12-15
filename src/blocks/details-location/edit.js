@@ -36,17 +36,11 @@ const edit = ( props ) => {
 		metaValue: meta._location_id,
 	};
 
-	console.log( 'query', query );
-
 	const post = useSelect( ( select ) => select( 'core' ).getEntityRecords( 'postType', 'location', query ) );
-
-	console.log( 'locs', post );
 
 	const location = post?.length ? post[ 0 ] : null;
 
 	const blockProps = useBlockProps( { className: 'event-details-item' } );
-
-	console.log( location );
 
 	return (
 		<div { ...blockProps }>

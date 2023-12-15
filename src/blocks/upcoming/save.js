@@ -2,7 +2,6 @@ import { useBlockProps } from '@wordpress/block-editor';
 
 function SaveUpcoming( props ) {
 	const blockProps = useBlockProps.save( { className: 'events-upcoming-block' } );
-	console.log( blockProps );
 
 	const classes = [ 'events-upcoming-block' ].join( ' ' );
 

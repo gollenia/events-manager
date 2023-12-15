@@ -45,9 +45,9 @@ function formatDateRange( start, end = false ) {
  */
 function formatDate( date, format = false ) {
 	if ( ! format ) format = { year: 'numeric', month: 'long', day: 'numeric' };
-	console.log( date );
+
 	const dateObject = new Date( date );
-	console.log( dateObject );
+
 	const locale = window.eventBlocksLocalization?.locale;
 	const dateFormatObject = new Intl.DateTimeFormat( locale, format );
 	return dateFormatObject.format( dateObject );
@@ -65,7 +65,7 @@ function formatTime( start, end = false ) {
 	const startDate = new Date( start );
 
 	const timeFormatObject = new Intl.DateTimeFormat( locale, timeFormat );
-	console.log( timeFormatObject.format( startDate ) );
+
 	return timeFormatObject.format( startDate );
 }
 

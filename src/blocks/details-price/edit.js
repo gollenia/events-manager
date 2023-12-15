@@ -27,7 +27,6 @@ const edit = ( props ) => {
 	const blockProps = useBlockProps( { className: 'event-details-item' } );
 
 	apiFetch( { path: `/events/v2/bookinginfo/${ postId }` } ).then( ( data ) => {
-		console.log( data );
 		setPrice( data.data?.formatted_price.format );
 	} );
 

@@ -82,17 +82,14 @@ const Inspector = ( props ) => {
 					options={ speakerSelection }
 					__experimentalRenderItem={ ( { item } ) => {
 						return (
-							console.log( item ),
-							(
-								<div className="events-manager-speaker-item">
-									{ item.media ? (
-										<img className="icon-round" width="24px" height="24px" src={ item.media } />
-									) : (
-										<Icon className="icon-round" icon={ icons.person } height={ 24 } width={ 24 } />
-									) }
-									{ item.label }
-								</div>
-							 )
+							<div className="events-manager-speaker-item">
+								{ item.media ? (
+									<img className="icon-round" width="24px" height="24px" src={ item.media } />
+								) : (
+									<Icon className="icon-round" icon={ icons.person } height={ 24 } width={ 24 } />
+								) }
+								{ item.label }
+							</div>
 						);
 					} }
 				/>

@@ -20,7 +20,6 @@ import Success from './success';
 import TicketList from './ticketList';
 import UserRegistration from './userRegistration';
 
-console.log( 'booking app loaded' );
 // this function  is suposed to open the modal from the parent component
 
 const Booking = ( { post, open } ) => {
@@ -34,7 +33,6 @@ const Booking = ( { post, open } ) => {
 		fetch( `/wp-json/events/v2/bookingdata/${ post }` )
 			.then( ( response ) => response.json() )
 			.then( ( data ) => {
-				console.log( data );
 				dispatch( { type: 'SET_DATA', payload: data.data } );
 			} );
 	}, [] );
@@ -53,9 +51,6 @@ const Booking = ( { post, open } ) => {
 		} );
 	}, [ state ] );
 
-	console.log( open );
-
-	console.log( data );
 	if ( ! data ) return <></>;
 
 	return (

@@ -54,8 +54,6 @@ const sendOrder = ( state, dispatch ) => {
 			dispatch( { type: 'SET_LOADING', payload: FALSE } );
 			dispatch( { type: 'BOOKING_RESPONSE', payload: apiResponse } );
 
-			console.log( 'apiResponse', apiResponse );
-
 			if ( ! apiResponse.result ) {
 				return;
 			}
