@@ -2,7 +2,7 @@ import { __ } from '@wordpress/i18n';
 import sendOrder from './modules/sendOrder';
 
 const Footer = ( { state, dispatch } ) => {
-	const { data, request, wizzard } = state;
+	const { data, request, wizzard, modal } = state;
 
 	const [ TICKETS, REGISTRATION, PAYMENT, SUCCESS ] = [
 		wizzard.step == 0,
@@ -71,7 +71,9 @@ const Footer = ( { state, dispatch } ) => {
 
 				{ wizzard.step == FINAL_STEP && (
 					<button
-						disabled={ ! wizzard.steps.registration.valid || ! wizzard.steps.payment.valid }
+						disabled={
+							! wizzard.steps.registration.valid || ! wizzard.steps.payment.valid || modal.loading > 0
+						}
 						className="button button--primary"
 						onClick={ () => {
 							sendOrder( state, dispatch );
