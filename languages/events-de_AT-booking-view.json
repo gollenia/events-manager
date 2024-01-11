@@ -36,8 +36,14 @@
 			"Purpose": [ "Verwendungszweck" ],
 			"Scan to pay": [ "Mit Bank-App scannen" ],
 			"Amount": [ "Betrag" ],
-			"The request is lasting longer than expected. Please check your Internet connection or try again later.": [
-				"Die Anfrage dauert länger als erwartet. Bitte überprüfe deine Internetverbindung oder versuch es später noch einmal."
+			"Please hang on a little longer. This can take a few seconds.": [
+				"Bitte warte noch einen Moment. Das kann ein paar Sekunden dauern."
+			],
+			"The request is lasting longer than expected. We try our best": [
+				"Die Anfrage dauert länger als erwartet. Wir geben unser Bestes!"
+			],
+			"Something seems to be wrong. Maybe your internet connection is interrupted or our server is overloaded. Please try again later.": [
+				"Da ist etwas schief gelaufen. Vielleicht ist deine Internetverbindung unterbrochen oder unser Server ist überlastet. Bitte versuche es später noch einmal."
 			],
 			"Your booking is beeing processed.": [ "Deine Buchung wird bearbeitet." ],
 			"Please wait": [ "Bitte warten" ],
