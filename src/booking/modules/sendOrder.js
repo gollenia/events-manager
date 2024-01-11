@@ -19,7 +19,7 @@ const sendOrder = ( state, dispatch ) => {
 	setTimeout( () => {
 		if ( modal.loading == 0 ) return;
 		dispatch( { type: 'SET_LOADING', payload: ERROR } );
-	}, 9000 );
+	}, 14000 );
 
 	let fetchRequest = {
 		...request.registration,

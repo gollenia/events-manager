@@ -66,9 +66,9 @@ const Success = ( props ) => {
 			<h4>{ gateway.title }</h4>
 			<div className="grid md:grid--columns-3 xl:grid--columns-4 grid--gap-12">
 				<div>
-					<div className="card card--no-image card--shadow bg-white card--center">
+					<div className="iban-scan">
 						<div className="card__content">
-							<div className="card__title">{ __( 'Scan to pay', 'events' ) }</div>
+							<h4>{ __( 'Scan to pay', 'events' ) }</h4>
 							<SVG
 								className="w-full"
 								src={ `/wp-admin/admin-ajax.php?action=em_qr_code&booking_id=${ response.booking.booking_id }` }
