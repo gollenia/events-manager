@@ -1841,7 +1841,7 @@ class EM_Event extends EM_Object{
 					}	 
 					break;
 				case '#_AVAILABLESPACES':
-					$replace = $this->event_rsvp && get_option('dbem_rsvp_enabled') ?  : "0";
+					$replace = $this->event_rsvp && get_option('dbem_rsvp_enabled') ? $this->get_bookings()->get_available_spaces() : "0";
 					break;
 				case '#_BOOKEDSPACES':
 					//This placeholder is actually a little misleading, as it'll consider reserved (i.e. pending) bookings as 'booked'
