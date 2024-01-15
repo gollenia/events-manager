@@ -26,7 +26,7 @@ class ExportAdmin {
 		<div class="postbox closed">
 			<div class="handlediv" title=""><br></div>
 			<h3><?php _e($this->plugin_name) ?></h3>
-			<div class="inside">
+			<div class="">
 				<p class="em-boxheader"><?php _e("Here you can edit the settings for PDF Export") ?></p>
 				<table class="form-table"><tbody>
 					<tr><th>Logo</th><td><div class="em-media-select" style="display: flex; gap: 1rem;"><input id="em_export_logo" type="text" name="em_export_logo" value="<?php echo get_option('em_export_logo'); ?>" />

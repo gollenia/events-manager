@@ -1840,15 +1840,9 @@ class EM_Event extends EM_Object{
 						}
 					}	 
 					break;
-				case '#_AVAILABLESEATS': //deprecated
 				case '#_AVAILABLESPACES':
-					if ($this->event_rsvp && get_option('dbem_rsvp_enabled')) {
-					   $replace = $this->get_bookings()->get_available_spaces();
-					} else {
-						$replace = "0";
-					}
+					$replace = $this->event_rsvp && get_option('dbem_rsvp_enabled') ?  : "0";
 					break;
-				case '#_BOOKEDSEATS': //deprecated
 				case '#_BOOKEDSPACES':
 					//This placeholder is actually a little misleading, as it'll consider reserved (i.e. pending) bookings as 'booked'
 					if ($this->event_rsvp && get_option('dbem_rsvp_enabled')) {
@@ -1861,13 +1855,8 @@ class EM_Event extends EM_Object{
 					}
 					break;
 				case '#_PENDINGSPACES':
-					if ($this->event_rsvp && get_option('dbem_rsvp_enabled')) {
-					   $replace = $this->get_bookings()->get_pending_spaces();
-					} else {
-						$replace = "0";
-					}
+					$replace = $this->event_rsvp && get_option('dbem_rsvp_enabled') ? $this->get_bookings()->get_pending_spaces() : "0";
 					break;
-				case '#_SEATS': //deprecated
 				case '#_SPACES':
 					$replace = $this->get_spaces();
 					break;

@@ -199,7 +199,7 @@ function em_bookings_single(){
 					<h2 class="title">
 						<?php esc_html_e( 'Event Details', 'events-manager'); ?>
 					</h2>
-					<div class="inside">
+					<div class="">
 						<?php
 						
 						$EM_Event = $EM_Booking->get_event();
@@ -221,7 +221,7 @@ function em_bookings_single(){
 					<h2 class="title">
 						<?php esc_html_e( 'Personal Details', 'events-manager'); ?>
 					</h2>
-					<div class="inside">
+					<div class="">
 						<div class="em-booking-person-details"><table class="form-table"><tbody></tbody>
 						<?php $form_fields = EM_Booking_Form::get_form($EM_Event)->form_fields; ?>
 							<?php foreach($EM_Booking->booking_meta["registration"] as $key => $value) {
@@ -273,7 +273,7 @@ function em_bookings_single(){
 					<h2 class="title">
 						<?php esc_html_e( 'Booking Details', 'events-manager'); ?>
 					</h2>
-					<div class="inside">
+					<div class="">
 						<?php
 						$EM_Event = $EM_Booking->get_event();
 						$shown_tickets = array();
@@ -459,7 +459,7 @@ function em_bookings_single(){
 					<h2 class="title">
 						<?php esc_html_e( 'Booking Notes', 'events-manager'); ?>
 					</h2>
-					<div class="inside">
+					<div class="">
 						<p><?php esc_html_e('You can add private notes below for internal reference that only event managers will see.','events-manager'); ?></p>
 						<?php foreach( $EM_Booking->get_notes() as $note ):
 							$user = new EM_Person($note['author']);
@@ -527,7 +527,7 @@ function em_bookings_person(){
 						<h3>
 							<?php esc_html_e( 'Personal Details', 'events-manager'); ?>
 						</h3>
-						<div class="inside">
+						<div class="">
 							<?php echo $EM_Person->display_summary(); ?>
 						</div>
 					</div> 

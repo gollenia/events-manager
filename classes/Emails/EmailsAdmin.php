@@ -27,7 +27,7 @@ class EM_Emails_Admin {
 	    ?>
 		<div  class="postbox " id="em-opt-email-reminders" >
 		<div class="handlediv" title="<?php esc_attr_e('Click to toggle', 'events-manager'); ?>"><br /></div><h3><?php _e ( 'Event Email Reminders', 'em-pro' ); ?></h3>
-		<div class="inside">
+		<div class="">
 			<table class='form-table'>
 				<tr class="em-boxheader"><td colspan='2'>
 					<p>
@@ -74,7 +74,7 @@ class EM_Emails_Admin {
 	    ?>
 		<div  class="postbox " id="em-opt-custom-emails" >
 		<div class="handlediv" title="<?php esc_attr_e('Click to toggle', 'events-manager'); ?>"><br /></div><h3><?php _e ( 'Custom Booking Email Templates', 'em-pro' ); ?></h3>
-		<div class="inside">
+		<div class="">
 			<table class='form-table'>
 				<tr class="em-boxheader"><td colspan='2'>
 					<p><?php _e( 'You can customize the email templates sent when users make a booking for one of your events.', 'em-pro' );  ?></p>

@@ -37,7 +37,7 @@ use Mpdf\Tag\Option;
 	<?php if( get_option('dbem_rsvp_enabled') ): ?>
 	<div  class="postbox "  id="em-opt-booking-emails">
 	<div class="handlediv" title="<?php __('Click to toggle', 'events-manager'); ?>"><br /></div><h3><span><?php _e ( 'Booking Email Templates', 'events-manager'); ?> </span></h3>
-	<div class="inside">
+	<div class="">
 	    <?php do_action('em_options_page_booking_email_templates_options_top'); ?>
 		<table class='form-table'>
 			<?php

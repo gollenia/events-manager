@@ -311,7 +311,7 @@ class EM_User_Fields {
 						<h3>
 							<span><?php _e ( 'User Fields', 'em-pro' ); ?></span>
 						</h3>
-						<div class="inside">
+						<div class="">
 							<p><?php echo sprintf( __('Registration fields are only shown to guest visitors. If you add new fields here and save, they will then be available as custom registrations in your bookings editor, and this information will be accessible and editable on each user <a href="%s">profile page</a>.', 'em-pro' ), 'profile.php'); ?></p>
 							<p><?php _e ( '<strong>Important:</strong> When editing this form, to make sure your current user information is displayed, do not change their field names.', 'em-pro' )?></p>
 							<?php echo $EM_Form->editor(false, true, false); ?>

@@ -412,7 +412,7 @@ class EM_Gateways {
 							<h3>
 								<span><?php _e ( 'Common User Fields for Gateways', 'em-pro' ); ?></span>
 							</h3>
-							<div class="inside">
+							<div class="">
 								<p><?php _e('In many cases, customer address information is required by gateways for verification. This section connects your custom fields to commonly used customer information fields.', 'em-pro' ); ?></p>
 								<p><?php _e('After creating user fields above, you should link them up in here so some gateways can make use of them when processing payments.', 'em-pro' ); ?></p>
 								<form action="#gateway_customer_fields" method="post">
