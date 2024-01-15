@@ -13,6 +13,7 @@ import './style.scss';
 import ErrorFallback from './error';
 import Footer from './footer';
 import Guide from './guide';
+import { subscribe } from './modules/events.js';
 import initialState from './modules/initialState.js';
 import reducer from './modules/reducer.js';
 import Payment from './payment';
@@ -38,6 +39,10 @@ const Booking = ( { post, open } ) => {
 	}, [] );
 
 	useEffect( () => {
+		subscribe( 'showBooking', ( state ) => dispatch( { type: 'SET_MODAL', payload: state } ) );
+	}, [] );
+
+	useEffect( () => {
 		if ( ! data ) return;
 		if ( ! wizzard.checkValidity ) return;
 		dispatch( {
@@ -56,7 +61,7 @@ const Booking = ( { post, open } ) => {
 	return (
 		<div>
 			<ErrorBoundary FallbackComponent={ ErrorFallback }>
-				<div className={ `event-modal wizzard ${ open ? 'event-modal--open' : '' }` }>
+				<div className={ `event-modal wizzard ${ modal.visible ? 'event-modal--open' : '' }` }>
 					<div className="event-modal-dialog">
 						<div className="event-modal-header">
 							<div className="container flex xl:flex--center flex--column xl:flex--row">
@@ -70,6 +75,7 @@ const Booking = ( { post, open } ) => {
 								className="event-modal-close"
 								onClick={ () => {
 									dispatch( { type: 'SET_MODAL', payload: false } );
+									open = false;
 								} }
 							></button>
 						</div>
