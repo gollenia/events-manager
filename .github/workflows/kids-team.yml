@@ -13,7 +13,7 @@ jobs:
             - uses: php-actions/composer@v6
               with:
                   args: --ignore-platform-reqs
-            - run: sudo composer update --ignore-platform-req=ext-gd
+            - run: sudo composer update --ignore-platform-reqs
             - uses: actions/setup-node@v3
               with:
                   node-version: '20.x'
