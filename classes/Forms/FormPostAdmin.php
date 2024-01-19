@@ -19,7 +19,7 @@ class Admin {
 		echo "<div class='wrap'>";
 		echo "<h1 class='wp-heading-inline' style='margin-bottom: 1rem'>" . esc_html__( 'Booking Forms', 'events-manager' ) . "</h1>";
 		?><a href="<?php echo esc_url( admin_url( 'post-new.php?post_type=bookingform')); ?>" class="page-title-action"><?php _e("Create", "events-manager") ?></a><?php
-		$the_query = new \WP_Query( ['post_type' => 'bookingform'] );
+		$the_query = new \WP_Query( ['post_type' => 'bookingform', 'posts_per_page'=>-1] );
 		?>
 		<table class="wp-list-table widefat fixed striped table-view-list posts">
 			<thead>
@@ -54,7 +54,7 @@ class Admin {
 		<?php
 		echo "<h1 class='wp-heading-inline' style='margin-top: 2rem; margin-bottom: 1rem'>" . esc_html__( 'Attendee Forms', 'events-manager' ) . "</h1>";
 		?><a href="<?php echo esc_url( admin_url( 'post-new.php?post_type=attendeeform')); ?>" class="page-title-action"><?php _e("Create", "events-manager") ?></a><?php
-		$the_query = new \WP_Query( ['post_type' => 'attendeeform'] );
+		$the_query = new \WP_Query( ['post_type' => 'attendeeform', 'posts_per_page'=>-1] );
 		
 		?>
 		<hr class="wp-header-end">
