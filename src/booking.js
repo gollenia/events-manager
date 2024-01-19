@@ -4,7 +4,6 @@ import { publish } from './booking/modules/events.js';
 const rootElement = document.getElementById( 'booking_app' );
 
 const bookingButtons = document.getElementsByClassName( 'wp-block-events-manager-booking' );
-console.log( bookingButtons );
 
 if ( rootElement ) {
 	const root = createRoot( document.getElementById( 'booking_app' ) );
