@@ -1,8 +1,6 @@
-# This workflow runs composer and deploys the theme on a server
+name: Deploy on kids-team Server
 
-name: Deploy on GMU Server
-
-on: workflow_dispatch
+on: [push, workflow_dispatch]
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
     # This workflow contains a single job called "greet"
@@ -13,8 +11,14 @@ jobs:
             - uses: php-actions/composer@v6
               with:
                   args: --ignore-platform-reqs
+            - run: sudo composer update --ignore-platform-reqs
+            - uses: actions/setup-node@v3
+              with:
+                  node-version: '20.x'
+            - run: npm ci
+            - run: npm run build
             - name: rsync deployments
-              uses: burnett01/rsync-deployments@5.1
+              uses: burnett01/rsync-deployments@6.0.0
               with:
                   switches: -avzr --delete --exclude .git --exclude .github --exclude assets/src --exclude package.json --exclude package-lock.json --exclude .gitignore --exclude .eslintrc.js --exclude .eslintignore --exclude lang.js --exclude .prettierrc --exclude DOCKER_ENV --exclude docker_tag --exclude output.log
                   path: /
