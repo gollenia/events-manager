@@ -54,7 +54,7 @@ if($attributes['linkTo'] == 'custom') {
 
 <div class="event-details-item">
 	<div class="event-details-image">
-		<i class="material-icons">
+		<i class="material-icons material-symbols-outlined">
 			<?php if ($attributes['showPortrait'] && $speaker->image) : ?>
 				<img class="event-details-image" src="<?php echo $speaker->image['sizes']['thumbnail']['url'] ?>" alt="<?php echo $speaker->name ?>">
 			<?php else : ?>
@@ -68,7 +68,7 @@ if($attributes['linkTo'] == 'custom') {
 	</div>
 	<?php if($attributes['showLink'] && $url) : ?>
 	<div class="event-details-action">
-		<a target="_blank" href="<?php echo $url ?>"><i class="material-icons"><?php echo $linkIcon; ?></i></a>
+		<a target="_blank" href="<?php echo $url ?>"><i class="material-icons material-symbols-outlined"><?php echo $linkIcon; ?></i></a>
 	</div>
 	<?php endif; ?>
 </div> 

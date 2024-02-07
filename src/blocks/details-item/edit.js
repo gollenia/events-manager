@@ -95,14 +95,14 @@ function ItemEdit( { ...props } ) {
 				<div className={ imageClasses } style={ imageStyle }>
 					{ imageUrl && <img src={ imageUrl } ref={ imageRef } /> }
 
-					{ ! imageUrl && <i className="material-icons">{ icon }</i> }
+					{ ! imageUrl && <i className="material-icons material-symbols-outlined">{ icon }</i> }
 				</div>
 
 				<div className="event-details__item-content" { ...innerBlockProps }></div>
 				{ url && (
 					<div class="event-details__item-action">
 						<b>
-							<i class="material-icons">{ urlIcon }</i>
+							<i class="material-icons  material-symbols-outlined">{ urlIcon }</i>
 						</b>
 					</div>
 				) }

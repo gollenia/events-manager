@@ -51,7 +51,7 @@ const edit = ( props ) => {
 
 			<div className="event-details__item">
 				<div className="event-details__icon">
-					<i className="material-icons">
+					<i className="material-icons material-symbols-outlined">
 						{ spaces === 0
 							? 'sentiment_dissatisfied'
 							: spaces > warningThreshold

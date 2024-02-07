@@ -11,7 +11,7 @@ $icon = $spaces == 0 ? 'sentiment_dissatisfied' : ( $attributes['warningThreshol
 
 <div class="event-details-item">
 	<div class="event-details-image">
-		<i class="material-icons"><?php echo $icon ?></i>
+		<i class="material-icons material-symbols-outlined"><?php echo $icon ?></i>
 	</div>
 	<div class="event-details-text">
 		<h4><?php echo $attributes['description'] ?: __("Free spaces", "events-manager") ?></h4>

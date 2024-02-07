@@ -8,7 +8,7 @@ if(!$event->event_rsvp) return;
 
 <div class="event-details-item">
 		<div class="event-details-image">
-			<i class="event-details-icon material-icons">event_busy</i>
+			<i class="event-details-icon material-icons material-symbols-outlined">event_busy</i>
 		</div>
 		<div class="event-details-text">
 			<h4><?php echo $attributes['description'] ?: __("Booking end", "em-pro") ?></h4>

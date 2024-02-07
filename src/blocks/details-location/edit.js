@@ -48,7 +48,7 @@ const edit = ( props ) => {
 
 			<div className="event-details__item">
 				<div className="event-details__icon">
-					<i className="material-icons">place</i>
+					<i className="material-icons material-symbols-outlined">place</i>
 				</div>
 				<div>
 					<RichText

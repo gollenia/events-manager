@@ -163,19 +163,19 @@ function Upcoming( props ) {
 									onClick={ () => setCustomView( 'cards' ) }
 									className={ currentView == 'cards' ? 'button active' : 'button' }
 								>
-									<i className="material-icons">grid_view</i>
+									<i className="material-icons material-symbols-outlined">grid_view</i>
 								</button>
 								<button
 									onClick={ () => setCustomView( 'list' ) }
 									className={ currentView == 'list' ? 'button active' : 'button' }
 								>
-									<i className="material-icons">view_agenda</i>
+									<i className="material-icons material-symbols-outlined">view_agenda</i>
 								</button>
 								<button
 									onClick={ () => setCustomView( 'table' ) }
 									className={ currentView == 'table' ? 'button active' : 'button' }
 								>
-									<i className="material-icons">format_list_bulleted</i>
+									<i className="material-icons material-symbols-outlined">format_list_bulleted</i>
 								</button>
 							</div>
 						) }
@@ -185,7 +185,7 @@ function Upcoming( props ) {
 								className="button"
 								onClick={ () => setFilterMobileVisible( ! filterMobileVisible ) }
 							>
-								<i className="material-icons">filter_list</i>
+								<i className="material-icons material-symbols-outlined">filter_list</i>
 							</button>
 						</div>
 					</div>

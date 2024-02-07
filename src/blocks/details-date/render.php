@@ -8,7 +8,7 @@ $date = \Contexis\Events\Intl\Date::get_date($event->start()->getTimestamp(), $e
 
 <div class="event-details-item">
 	<div class="event-details-image">
-		<i class="material-icons"><?php echo $attributes['icon'] ?: 'event' ?></i>
+		<i class="material-icons material-symbols-outlined"><?php echo $attributes['icon'] ?: 'event' ?></i>
 	</div>
 	<div class="event-details-text">
 		<h4><?php echo $attributes['description'] ?: __("Date", "em-pro") ?></h4>

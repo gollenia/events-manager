@@ -72,8 +72,8 @@ function Coupon( { state, dispatch } ) {
 				className={ buttonClass }
 			>
 				{ status < LOADING && __( 'Check coupon', 'events' ) }
-				{ status == ERROR && <i class="material-icons">close</i> }
-				{ status == SUCCESS && <i class="material-icons">done</i> }
+				{ status == ERROR && <i class="material-icons material-symbols-outlined">close</i> }
+				{ status == SUCCESS && <i class="material-icons material-symbols-outlined">done</i> }
 			</button>
 		</div>
 	);

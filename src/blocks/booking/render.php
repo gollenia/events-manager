@@ -19,7 +19,7 @@ $block_attributes = get_block_wrapper_attributes(['class' => join(" ", $classNam
 <button <?php echo $block_attributes ?> id="booking_button">
 <?php
 if($attributes['buttonIcon']) {
-	echo "<i class=\"material-icons\">{$attributes['buttonIcon']}</i>";
+	echo "<i class=\"material-icons material-symbols-outlined\">{$attributes['buttonIcon']}</i>";
 } 
 if(!$attributes['iconOnly']) {
 	echo $attributes['buttonTitle'] ?: __("Log In", "events-manager");

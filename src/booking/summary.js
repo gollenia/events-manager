@@ -81,7 +81,7 @@ function Summary( { state, dispatch } ) {
 										className="button button--primary button--icon"
 										onClick={ () => dispatch( { type: 'ADD_TICKET', payload: id } ) }
 									>
-										<i className="material-icons">add_circle</i>
+										<i className="material-icons material-symbols-outlined">add_circle</i>
 									</button>
 								</>
 							) }
@@ -130,7 +130,7 @@ function Summary( { state, dispatch } ) {
 						) }
 						{ wizzard.step == 0 && (
 							<button className="button button--primary button--icon invisible">
-								<i className="material-icons">add_circle</i>
+								<i className="material-icons material-symbols-outlined">add_circle</i>
 							</button>
 						) }
 					</div>

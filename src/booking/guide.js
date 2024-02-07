@@ -23,8 +23,9 @@ const Guide = ( { state } ) => {
 				if ( wizzard.steps[ step ].step >= wizzard.step ) {
 					return <span>{ badgeNumber }</span>;
 				}
-				if ( wizzard.steps[ step ].valid ) return <i className="material-icons">done</i>;
-				return <i className="material-icons">close</i>;
+				if ( wizzard.steps[ step ].valid )
+					return <i className="material-icons material-symbols-outlined">done</i>;
+				return <i className="material-icons material-symbols-outlined">close</i>;
 			};
 
 			badgeNumber++;

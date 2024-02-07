@@ -6,7 +6,7 @@ $id = get_the_ID();
 
 <div class="event-details-item">
 	<div class="event-details-image">
-		<i class="material-icons"><?php echo $attributes['icon'] ?: 'male' ?></i>
+		<i class="material-icons material-symbols-outlined"><?php echo $attributes['icon'] ?: 'male' ?></i>
 	</div>
 	<div class="event-details-text">
 	<h4><?php echo $attributes['description'] ?: __("Audience", "events-manager") ?></h4>

@@ -7,7 +7,7 @@ if(empty($location->id)) return;
 
 <div class="event-details-item">
 	<div class="event-details-image">
-		<i class="material-icons"><?php echo $attributes['icon'] ?: 'place' ?></i>
+		<i class="material-icons material-symbols-outlined"><?php echo $attributes['icon'] ?: 'place' ?></i>
 	</div>
 	<div class="event-details-text">
 		<h4><?php echo $attributes['description'] ?: __("Location", "events-manager") ?></h4>
@@ -23,7 +23,7 @@ if(empty($location->id)) return;
 
 	<?php if($attributes['showLink'] ): ?>
 		<div class="event-details-action">
-			<a target="_blank" href="<?php echo $attributes['url'] ?: $location->location_url ?>"><i class="material-icons">navigation</i></a>
+			<a target="_blank" href="<?php echo $attributes['url'] ?: $location->location_url ?>"><i class="material-icons material-symbols-outlined">navigation</i></a>
 		</div>
 	<?php endif; ?>
 </div> 

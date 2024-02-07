@@ -89,7 +89,7 @@ const edit = ( props ) => {
 				{ showPortrait && image ? (
 					<img src={ image } />
 				) : (
-					<i className="material-icons">{ speaker?.gender ?? 'male' }</i>
+					<i className="material-icons material-symbols-outlined">{ speaker?.gender ?? 'male' }</i>
 				) }
 			</div>
 			<div className="event-details-text">
@@ -107,7 +107,7 @@ const edit = ( props ) => {
 			{ showLink && link && (
 				<div className="event-details-action">
 					<a href="#">
-						<i className="material-icons">{ LinkIcon }</i>
+						<i className="material-icons material-symbols-outlined">{ LinkIcon }</i>
 					</a>
 				</div>
 			) }
