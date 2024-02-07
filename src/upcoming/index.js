@@ -21,6 +21,7 @@ function Upcoming( props ) {
 		selectedLocation,
 		selectedTags,
 		scope,
+		filterPosition,
 		excerptLength,
 		textAlignment,
 		showAudience,
@@ -139,9 +140,9 @@ function Upcoming( props ) {
 	const showFilters = showCategoryFilter || showTagFilter || showSearch;
 
 	return (
-		<div className={ `upcoming__events ${ showFilters ? 'has-filters' : '' }` }>
+		<div className={ `upcoming__events ${ showFilters ? 'has-filters' : '' } event-filters-${ filterPosition }` }>
 			{ showFilters && (
-				<aside className="event-filters">
+				<aside className={ `event-filters` }>
 					<div className="event-filters-header">
 						{ showSearch && (
 							<div class="filter__search">
@@ -246,7 +247,7 @@ function Upcoming( props ) {
 					<CardView attributes={ props.attributes } events={ getFilteredEvents() } />
 				) }
 				{ currentView == 'list' && <ListView attributes={ props.attributes } events={ getFilteredEvents() } /> }
-				{ currentView == 'table' && (
+				{ currentView == 'mini' && (
 					<TableView attributes={ props.attributes } events={ getFilteredEvents() } />
 				) }
 			</>

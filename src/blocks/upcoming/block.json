@@ -26,6 +26,10 @@
 			"type": "string",
 			"default": ""
 		},
+		"filterPosition": {
+			"type": "string",
+			"default": "top"
+		},
 		"view": {
 			"type": "string",
 			"default": "cards"

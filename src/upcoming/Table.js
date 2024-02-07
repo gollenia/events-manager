@@ -26,7 +26,7 @@ function Table( props ) {
 	} = props;
 
 	return (
-		<table className="event-table">
+		<table className="event-table" cellPadding={ 0 } cellSpacing={ 0 }>
 			{ events.map( ( item, index ) => {
 				const location =
 					item.location && [ 'city', 'name' ].includes( showLocation ) ? item.location[ showLocation ] : '';
@@ -47,7 +47,13 @@ function Table( props ) {
 				};
 
 				return (
-					<tr className="event-row" key={ index }>
+					<tr
+						className="event-row"
+						key={ index }
+						onClick={ () => {
+							window.location = item.link;
+						} }
+					>
 						<td class="event-table-subtitle">
 							<div className="description__date">
 								<span className="date__day--numeric">
@@ -77,19 +83,13 @@ function Table( props ) {
 							</a>
 							<div className="event-table-subtitle">{ formatDateRange( item.start, item.end ) }</div>
 						</td>
-						{ item.category && showCategory && <td class="event-table-label">{ item.category.name }</td> }
+						{ showCategory && <td class="event-table-label">{ item.category.name }</td> }
 
 						<td className="event-table-text">{ truncate( item.excerpt, excerptLength ) }</td>
 
-						{ showAudience && item.audience?.length > 0 && (
-							<td className="pills__item event__audience">{ item.audience }</td>
-						) }
-						{ showSpeaker == 'name' && item.speaker?.id && (
-							<td className="pills__item event__speaker">{ item.speaker.name }</td>
-						) }
-						{ showLocation && item.location?.ID && (
-							<td className="pills__item event__location">{ location }</td>
-						) }
+						{ showAudience && <td className="pills__item event__audience">{ item.audience }</td> }
+						{ showSpeaker && <td className="pills__item event__speaker">{ item.speaker.name }</td> }
+						{ showLocation && <td className="pills__item event__location">{ location }</td> }
 						{ showBookedUp && <td>{ item.bookings && bookingWarning() } </td> }
 					</tr>
 				);

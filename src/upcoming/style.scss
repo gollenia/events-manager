@@ -136,6 +136,8 @@
 
 .event-table {
 	align-self: flex-start;
+	border-spacing: 0;
+	width: 100%;
 
 	img {
 		height: 3rem;
@@ -146,10 +148,49 @@
 
 	tr {
 		border-bottom: 1px solid #e9e9e9;
+		cursor: pointer;
+		&:hover {
+			background-color: #f9f9f9;
+		}
 	}
 
 	td {
-		padding: 0rem;
+		padding: 1rem 0.5rem;
+	}
+
+	.description__date {
+		position: relative;
+		display: flex;
+		flex-direction: column-reverse;
+		align-items: center;
+	}
+
+	.date {
+		&__day--numeric {
+			font-size: 2rem;
+			font-weight: bold;
+			display: block;
+			line-height: 1.7rem;
+			text-align: center;
+		}
+
+		&__month--short {
+			font-size: 0.8rem;
+			/* display: inline-block; */
+			text-align: center;
+			flex-shrink: inherit;
+			background: #3e3e3f;
+			color: #fff;
+			width: fit-content;
+			padding: 0 0.3rem;
+		}
+
+		&__day--short,
+		&__day--long,
+		&__month--long,
+		&__month--numeric {
+			display: none;
+		}
 	}
 }
 
@@ -226,9 +267,20 @@
 
 	.upcoming__events {
 		flex-direction: row;
+
+		&.event-filters-top {
+			flex-direction: column;
+		}
 	}
+
 	.event-filters {
 		width: 30%;
+	}
+
+	.event-filters-top {
+		.event-filters {
+			width: 100%;
+		}
 	}
 
 	.event-grid {
