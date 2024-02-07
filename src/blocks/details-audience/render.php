@@ -1,8 +1,11 @@
 <?php
 $id = get_the_ID();
 
+$audience = get_post_meta($id, '_event_audience', true);
 
+if(!$audience) return;
 ?>
+
 
 <div class="event-details-item">
 	<div class="event-details-image">
