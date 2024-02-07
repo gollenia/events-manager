@@ -154,6 +154,14 @@
 		}
 	}
 
+	&-title {
+		width: 100%;
+	}
+
+	&-text {
+		white-space: nowrap;
+	}
+
 	td {
 		padding: 1rem 0.5rem;
 	}

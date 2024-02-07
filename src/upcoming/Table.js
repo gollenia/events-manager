@@ -54,7 +54,7 @@ function Table( props ) {
 							window.location = item.link;
 						} }
 					>
-						<td class="event-table-subtitle">
+						<td class="event-table-date">
 							<div className="description__date">
 								<span className="date__day--numeric">
 									{ formatDate( item.start, { day: 'numeric' } ) }
@@ -77,7 +77,7 @@ function Table( props ) {
 							</div>
 						</td>
 
-						<td>
+						<td class="event-table-title">
 							<a href={ item.link }>
 								<b className="event-table-title">{ item.title }</b>
 							</a>
@@ -87,9 +87,11 @@ function Table( props ) {
 
 						<td className="event-table-text">{ truncate( item.excerpt, excerptLength ) }</td>
 
-						{ showAudience && <td className="pills__item event__audience">{ item.audience }</td> }
-						{ showSpeaker && <td className="pills__item event__speaker">{ item.speaker.name }</td> }
-						{ showLocation && <td className="pills__item event__location">{ location }</td> }
+						{ showAudience && <td className="event-table-text event-table-audience">{ item.audience }</td> }
+						{ showSpeaker && (
+							<td className="event-table-text event-table-speaker">{ item.speaker.name }</td>
+						) }
+						{ showLocation && <td className="event-table-text event-table-location">{ location }</td> }
 						{ showBookedUp && <td>{ item.bookings && bookingWarning() } </td> }
 					</tr>
 				);
