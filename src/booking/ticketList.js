@@ -15,7 +15,7 @@ const TicketList = ( props ) => {
 			{ data.attendee_fields.length > 0 && (
 				<form className="ticket-grid-form" role="form" ref={ form } id="user-attendee-form">
 					{ request.tickets.map( ( ticket, index ) => (
-						<Ticket ticket={ ticket } index={ index } state={ state } dispatch={ dispatch } />
+						<Ticket key={ index } ticket={ ticket } index={ index } state={ state } dispatch={ dispatch } />
 					) ) }
 				</form>
 			) }
