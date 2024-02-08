@@ -3,6 +3,7 @@
 	"scripts": {
 		"build": "wp-scripts build src/events-manager.js src/admin.js src/index.js src/frontend.js src/booking.js",
 		"start": "wp-scripts start src/events-manager.js src/admin.js src/index.js src/frontend.js src/booking.js",
+		"dev": "wp-scripts start --no-watch src/events-manager.js src/admin.js src/index.js src/frontend.js src/booking.js",
 		"lang": "node languages/compile.js"
 	},
 	"dependencies": {
