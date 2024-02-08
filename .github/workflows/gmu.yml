@@ -16,7 +16,7 @@ jobs:
               with:
                   node-version: '20.x'
             - run: npm ci
-            - run: npm run dev
+            - run: npm run build
             - name: rsync deployments
               uses: burnett01/rsync-deployments@6.0.0
               with:
