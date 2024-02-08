@@ -10,8 +10,6 @@ const Ticket = ( props ) => {
 
 	const { attendee_fields } = state.data;
 
-	const attendee_name = attendee_fields.find( ( field ) => field.fieldid === 'name' );
-	console.log( ticket );
 	return (
 		<div className="booking-ticket">
 			<div className="booking-ticket-title">
