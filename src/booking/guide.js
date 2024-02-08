@@ -31,8 +31,8 @@ const Guide = ( { state } ) => {
 			badgeNumber++;
 
 			return (
-				<div className={ classes }>
-					<div class="wizzard__badge">{ badgeContent() }</div>
+				<div key={ index } className={ classes }>
+					<div className="wizzard__badge">{ badgeContent() }</div>
 					<span key={ index }>{ wizzard.steps[ step ].label }</span>
 				</div>
 			);
