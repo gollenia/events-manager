@@ -22,7 +22,7 @@ const Ticket = ( props ) => {
 					onClick={ () => dispatch( { type: 'REMOVE_TICKET', payload: { index } } ) }
 					disabled={ ticket.min >= index + 1 }
 				>
-					<i class="material-icons material-symbols-outlined">delete</i>
+					<i className="material-icons material-symbols-outlined">delete</i>
 				</button>
 			</div>
 			<div className="booking-ticket-form">
