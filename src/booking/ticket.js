@@ -1,4 +1,3 @@
-import { __ } from '@wordpress/i18n';
 import InputField from './InputField';
 
 /*
@@ -16,9 +15,7 @@ const Ticket = ( props ) => {
 	return (
 		<div className="booking-ticket">
 			<div className="booking-ticket-title">
-				<h4>
-					{ ticket.name } { attendee_name ? __( 'for', 'events' ) : '' } { attendee_name }
-				</h4>
+				<h4>{ ticket.name }</h4>
 				<button
 					href=""
 					className="button button--danger button--pop"
