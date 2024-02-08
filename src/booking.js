@@ -1,4 +1,4 @@
-import { createRoot } from '@wordpress/element';
+import { createRoot } from 'react';
 import Booking from './booking/index.js';
 import { publish } from './booking/modules/events.js';
 const rootElement = document.getElementById( 'booking_app' );
