@@ -273,6 +273,18 @@
 			background: #ffffff;
 			border-bottom-right-radius: 2rem;
 		}
+
+		&-buttons {
+			display: flex;
+			justify-content: flex-end;
+			align-items: center;
+			gap: 1rem;
+
+			span {
+				display: inline-block;
+				flex: 1;
+			}
+		}
 	}
 
 	&--success {

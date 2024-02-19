@@ -39,60 +39,58 @@ const Footer = ( { state, dispatch } ) => {
 		return '';
 	};
 	return (
-		<div className="section">
-			<div className="container button-group button-group--right">
-				{ message() != '' && <span className="button--pseudo">{ __( message(), 'events' ) }</span> }
+		<div className="event-modal-footer-buttons">
+			{ message() != '' && <span className="button--pseudo">{ __( message(), 'events' ) }</span> }
 
-				{ /* Back Button  */ }
-				{ wizzard.step > ( wizzard.steps.tickets.enabled ? 0 : 1 ) && wizzard.step < 3 && (
-					<button
-						className="button button--secondary booking-button wp-block-events-manager-booking"
-						onClick={ () => {
-							dispatch( { type: 'DECREMENT_WIZZARD' } );
-						} }
-					>
-						{ __( 'Back', 'events' ) }
-					</button>
-				) }
+			{ /* Back Button  */ }
+			{ wizzard.step > ( wizzard.steps.tickets.enabled ? 0 : 1 ) && wizzard.step < 3 && (
+				<button
+					className="button button--secondary booking-button wp-block-events-manager-booking"
+					onClick={ () => {
+						dispatch( { type: 'DECREMENT_WIZZARD' } );
+					} }
+				>
+					{ __( 'Back', 'events' ) }
+				</button>
+			) }
 
-				{ /* Next Button */ }
-				{ wizzard.step < FINAL_STEP && (
-					<button
-						type="button"
-						disabled={ ERROR }
-						className="button button--primary booking-button wp-block-events-manager-booking"
-						onClick={ () => {
-							dispatch( { type: 'INCREMENT_WIZZARD' } );
-						} }
-					>
-						{ __( 'Next', 'events' ) }
-					</button>
-				) }
+			{ /* Next Button */ }
+			{ wizzard.step < FINAL_STEP && (
+				<button
+					type="button"
+					disabled={ ERROR }
+					className="button button--primary booking-button wp-block-events-manager-booking"
+					onClick={ () => {
+						dispatch( { type: 'INCREMENT_WIZZARD' } );
+					} }
+				>
+					{ __( 'Next', 'events' ) }
+				</button>
+			) }
 
-				{ wizzard.step == FINAL_STEP && (
-					<button
-						disabled={
-							! wizzard.steps.registration.valid || ! wizzard.steps.payment.valid || modal.loading > 0
-						}
-						className="button button--primary"
-						onClick={ () => {
-							sendOrder( state, dispatch );
-						} }
-					>
-						{ __( 'Book now', 'events' ) }
-					</button>
-				) }
-				{ SUCCESS && (
-					<button
-						className="button button--success"
-						onClick={ () => {
-							dispatch( { type: 'RESET' } );
-						} }
-					>
-						{ __( 'Close', 'events' ) }
-					</button>
-				) }
-			</div>
+			{ wizzard.step == FINAL_STEP && (
+				<button
+					disabled={
+						! wizzard.steps.registration.valid || ! wizzard.steps.payment.valid || modal.loading > 0
+					}
+					className="button button--primary"
+					onClick={ () => {
+						sendOrder( state, dispatch );
+					} }
+				>
+					{ __( 'Book now', 'events' ) }
+				</button>
+			) }
+			{ SUCCESS && (
+				<button
+					className="button button--success"
+					onClick={ () => {
+						dispatch( { type: 'RESET' } );
+					} }
+				>
+					{ __( 'Close', 'events' ) }
+				</button>
+			) }
 		</div>
 	);
 };
