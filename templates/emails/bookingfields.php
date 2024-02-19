@@ -7,6 +7,9 @@ $form_values = $EM_Booking->meta['booking'] ? array_merge($EM_Booking->meta['reg
 foreach($form_fields as $name => $field) {
 	
 	$value = $form_values[$name];
+	if($field['type'] == "html") {
+		continue;
+	}
 	if($field['type'] == "email") {
 		$value = "<a href='mailto:$value'>$value</a>";
 	}
