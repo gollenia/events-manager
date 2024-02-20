@@ -25,7 +25,7 @@ $is_free = $event->is_free();
 <?php else : ?>
 	<div class="event-details-item">
 		<div class="event-details-image">
-			<i class="event-details-icon material-icons material-symbols-outlined"><?php echo $price->currency ?></i>
+			<i class="event-details-icon material-icons material-symbols-outlined">payments</i>
 		</div>
 		<div class="event-details-text">
 			<h4><?php echo $attributes['description'] ? $attributes['description'] : __("Price", "em-pro") ?></h4>
