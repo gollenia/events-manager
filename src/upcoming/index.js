@@ -26,6 +26,7 @@ function Upcoming( props ) {
 		textAlignment,
 		showAudience,
 		showSpeaker,
+		altText,
 		showCategoryFilter,
 		showTagFilter,
 		showSearch,
@@ -34,6 +35,7 @@ function Upcoming( props ) {
 
 	const [ events, setEvents ] = useState( [] );
 	const [ categories, setCategories ] = useState( {} );
+	const [ status, setStatus ] = useState( 'LOADING' );
 	const [ tags, setTags ] = useState( {} );
 	const [ filterMobileVisible, setFilterMobileVisible ] = useState( false );
 	const [ customView, setCustomView ] = useState( '' );
@@ -97,6 +99,7 @@ function Upcoming( props ) {
 
 			setTags( tags );
 			setCategories( categories );
+			setStatus( 'LOADED' );
 		} );
 	}, [] );
 
@@ -138,6 +141,10 @@ function Upcoming( props ) {
 	const currentView = customView != '' ? customView : view;
 
 	const showFilters = showCategoryFilter || showTagFilter || showSearch;
+
+	if ( events.length == 0 && status == 'LOADED' ) {
+		return <div>{ altText }</div>;
+	}
 
 	return (
 		<div className={ `upcoming__events ${ showFilters ? 'has-filters' : '' } event-filters-${ filterPosition }` }>
@@ -244,11 +251,13 @@ function Upcoming( props ) {
 			) }
 			<>
 				{ currentView == 'cards' && (
-					<CardView attributes={ props.attributes } events={ getFilteredEvents() } />
+					<CardView attributes={ props.attributes } events={ getFilteredEvents() } status={ status } />
 				) }
-				{ currentView == 'list' && <ListView attributes={ props.attributes } events={ getFilteredEvents() } /> }
+				{ currentView == 'list' && (
+					<ListView attributes={ props.attributes } events={ getFilteredEvents() } status={ status } />
+				) }
 				{ currentView == 'mini' && (
-					<TableView attributes={ props.attributes } events={ getFilteredEvents() } />
+					<TableView attributes={ props.attributes } events={ getFilteredEvents() } status={ status } />
 				) }
 			</>
 		</div>

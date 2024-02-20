@@ -101,6 +101,10 @@
 		"excludeCurrent": {
 			"type": "boolean",
 			"default": true
+		},
+		"altText": {
+			"type": "string",
+			"default": ""
 		}
 	},
 	"supports": {

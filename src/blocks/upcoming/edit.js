@@ -1,7 +1,7 @@
 /**
  * Wordpress dependencies
  */
-import { AlignmentToolbar, BlockControls, useBlockProps } from '@wordpress/block-editor';
+import { AlignmentToolbar, BlockControls, RichText, useBlockProps } from '@wordpress/block-editor';
 import { store as coreStore } from '@wordpress/core-data';
 import { useSelect } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
@@ -17,7 +17,7 @@ import Inspector from './inspector.js';
  */
 const EditUpcoming = ( props ) => {
 	const {
-		attributes: { textAlignment, selectedTags },
+		attributes: { textAlignment, selectedTags, altText },
 		setAttributes,
 	} = props;
 
@@ -104,7 +104,14 @@ const EditUpcoming = ( props ) => {
 					<div className="components-placeholder__label">{ __( 'Upcoming Events', 'events' ) }</div>
 
 					<div className="components-placeholder__instructions">
-						{ __( 'See for settings in the inspector. The result can be seen in the frontend', 'events' ) }
+						<RichText
+							tagName="p"
+							placeholder={ __( 'Set a text here to show when no events are visible', 'events' ) }
+							value={ altText }
+							onChange={ ( value ) => {
+								setAttributes( { altText: value } );
+							} }
+						/>
 					</div>
 				</div>
 			</div>
