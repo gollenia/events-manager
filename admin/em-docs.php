@@ -190,11 +190,11 @@ function em_docs_init($force_init = false){
 						'desc' => 'Information pertaining to speicifc gateways.',
 						'placeholders' => array(
 							'#_BOOKINGTXNID' => array( 'desc' => '<em>Online Payments Only</em> - Prints the transaction ID of this booking if available.' ),
-							'#_IBAN' => array( 'desc' => __('Shows the IBAN number for Offline Payments.', 'em-pro') ),
-							'#_BENEFICIARY' => array( 'desc' => __('Displays the beneficiary name.', 'em-pro') ),
-							'#_REFERENCE' => array( 'desc' => __('Payment reference (auto generated)', 'em-pro') ),
-							'#_BANK' => array( 'desc' => __('Name of the Bank', 'em-pro') ),
-							'#_PAYMENTDEADLINE' => array( 'desc' => __('Show the date until the payment has to be done', 'em-pro') ),
+							'#_IBAN' => array( 'desc' => __('Shows the IBAN number for Offline Payments.', 'events') ),
+							'#_BENEFICIARY' => array( 'desc' => __('Displays the beneficiary name.', 'events') ),
+							'#_REFERENCE' => array( 'desc' => __('Payment reference (auto generated)', 'events') ),
+							'#_BANK' => array( 'desc' => __('Name of the Bank', 'events') ),
+							'#_PAYMENTDEADLINE' => array( 'desc' => __('Show the date until the payment has to be done', 'events') ),
 						)
 					),
 					'Coupon Information' => array(
