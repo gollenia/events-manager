@@ -104,6 +104,16 @@ function wp_events_plugin_init(){
 		'rewrite' => ['slug' => EM_POST_TYPE_EVENT_SLUG,'with_front'=>false],
 		'has_archive' => false,
 		'supports' => ['title','editor','excerpt','thumbnail','author','custom-fields'],
+		'template' => [
+				['ctx-blocks/grid-row', [], [
+					['ctx-blocks/grid-column', ['widthLarge' => 2], [['core/paragraph', ['placeholder' => 'Event-Beschreibung']],]],
+					['ctx-blocks/grid-column', ['widthLarge' => 1], [
+						['events-manager/details', []],
+					]]
+				]],
+				['core/separator'],
+				['core/group', ['type' => 'flex', 'flexWrap' => 'nowrap'], [['events-manager/booking', ['title' => 'Anmeldung']]]]
+		],
 		'capability_type' => 'event',
 		'capabilities' => [
 			'publish_posts' => 'publish_events',
