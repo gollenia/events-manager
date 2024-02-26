@@ -412,6 +412,30 @@ div.em-location-data .em-location-map-404 {
 .em-tickets {
 	margin-bottom: 20px;
 }
+
+#coupons-filter {
+	.actions {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+	}
+}
+
+.em-coupons-table-export {
+	display: flex !important;
+	align-items: center;
+}
+
+.em-flex {
+	display: flex;
+	align-items: center;
+	gap: 1rem;
+
+	h1 {
+		margin: 0;
+		padding: 0;
+	}
+}
 /* Message Errors */
 div.em-booking-message {
 	margin: 10px 0px;
