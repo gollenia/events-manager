@@ -311,7 +311,7 @@ class EM_Coupons_Admin {
 		}
 		?>
 		<div class='wrap nosubsub'>
-			<div class="em-flex"><h1><?php _e('Coupon Usage History','em-pro'); ?></h1> <a href="/wp-json/events/v2/coupons/export/coupon_id=<?php echo $EM_Coupon->id; ?>" class="em-coupons-table-export button-secondary" id="em-coupons-table-export-trigger" rel="#em-coupons-table-export" title="Diese Buchungen exportieren."><i class="material-symbols-outlined">export_notes</i></a>	</div>
+			<div class="em-flex"><h1><?php _e('Coupon Usage History','em-pro'); ?></h1> <a href="/wp-json/events/v2/coupons/export_single/<?php echo $EM_Coupon->id; ?>" class="em-coupons-table-export button-secondary" id="em-coupons-table-export-trigger" rel="#em-coupons-table-export" title="Diese Buchungen exportieren."><i class="material-symbols-outlined">export_notes</i></a>	</div>
 			<?php echo $EM_Notices; ?>
 			<p><?php echo sprintf(__('You are viewing the details of coupon %s - <a href="%s">edit</a>','em-pro'),'<code>'.$EM_Coupon->coupon_code.'</code>', add_query_arg(array('action'=>'edit'))); ?></p>
 			<p>
