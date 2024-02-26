@@ -3,8 +3,9 @@ use Contexis\Events\Options;
 
 class EM_Coupons_Admin {
     static function init(){
-		include('CouponAdmin.php');
-        //coupon admin add/edit page
+		require_once('CouponAdmin.php');
+		$instance = new self();
+		
         add_action('em_create_events_submenu', 'EM_Coupons_Admin::admin_menu',10,1);
     }
     
@@ -190,10 +191,14 @@ class EM_Coupons_Admin {
 			</h1>
 			<?php echo $EM_Notices; ?>
 			<form id='coupons-filter' method='post' action=''>
+				
 				<input type='hidden' name='pno' value='<?php echo $page ?>' />
 				<div class="tablenav">			
+
 					<div class="alignleft actions">
-						<div class="subsubsub">
+					<a href="/wp-json/events/v2/coupons/export" class="em-coupons-table-export button-secondary" id="em-coupons-table-export-trigger" rel="#em-coupons-table-export" title="Diese Buchungen exportieren."><i class="material-symbols-outlined">export_notes</i></a>	
+					<div class="">
+						
 							<a href='<?php echo em_add_get_params($_SERVER['REQUEST_URI'], array('view'=>null, 'pno'=>null)); ?>' <?php echo ( empty($_REQUEST['view']) ) ? 'class="current"':''; ?>><?php echo sprintf( __( 'My %s', 'events-manager'), __('Coupons','em-pro')); ?> <span class="count">(<?php echo $coupons_mine_count; ?>)</span></a>
 							<?php if( current_user_can('manage_others_bookings') ): ?>
 							&nbsp;|&nbsp;
@@ -306,7 +311,7 @@ class EM_Coupons_Admin {
 		}
 		?>
 		<div class='wrap nosubsub'>
-			<h1><?php _e('Coupon Usage History','em-pro'); ?></h1>
+			<div class="em-flex"><h1><?php _e('Coupon Usage History','em-pro'); ?></h1> <a href="/wp-json/events/v2/coupons/export/coupon_id=<?php echo $EM_Coupon->id; ?>" class="em-coupons-table-export button-secondary" id="em-coupons-table-export-trigger" rel="#em-coupons-table-export" title="Diese Buchungen exportieren."><i class="material-symbols-outlined">export_notes</i></a>	</div>
 			<?php echo $EM_Notices; ?>
 			<p><?php echo sprintf(__('You are viewing the details of coupon %s - <a href="%s">edit</a>','em-pro'),'<code>'.$EM_Coupon->coupon_code.'</code>', add_query_arg(array('action'=>'edit'))); ?></p>
 			<p>
@@ -506,6 +511,34 @@ class EM_Coupons_Admin {
 			</form>
 		</div> <!-- wrap -->
 		<?php
-    }    
+    }  
+	
+	public static function register_rest_routes() {
+		
+		register_rest_route( 'events/v2', '/coupons/export', array(
+			'methods' => 'GET',
+			'callback' => 'EM_Coupons_Admin::rest_get_coupons',
+			'permission_callback' => function () {
+				return current_user_can('manage_others_bookings');
+			},
+		) );
+	}
+
+	public static function rest_get_coupons() {
+		$coupons = EM_Coupons::get();
+		$csv = "Code,Name,Description,Discount,Uses\n";
+		foreach($coupons as $coupon) {
+			$csv .= $coupon->coupon_code . ",";
+			$csv .= $coupon->coupon_name . ",";
+			$csv .= $coupon->coupon_description . ",";
+			$csv .= $coupon->get_discount_text() . ",";
+			$csv .= $coupon->get_count() . "\n";
+		}
+		header('Content-Type: text/csv');
+		header('Content-Disposition: attachment; filename="coupons.csv"');
+		echo $csv;
+		exit;
+	}
 }
+
 EM_Coupons_Admin::init();

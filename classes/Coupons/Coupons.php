@@ -1,15 +1,16 @@
 <?php
 //TODO make coupons stackable
 //TODO add logging of coupon useage in seperate log table
-include('Coupon.php');
+require_once('Coupon.php');
+if( is_admin() ){
+	require_once('CouponsAdmin.php');
+}
 class EM_Coupons extends EM_Object {
     
     static public $can_manage = 'manage_others_bookings';
     
 	public static function init(){
-	    if( is_admin() ){
-	        include('CouponsAdmin.php');
-	    }
+	    
 		//add field to booking form and ajax
 		
 		add_action('em_booking_form_footer', array('EM_Coupons', 'em_booking_form_footer'),1,2);
@@ -18,7 +19,7 @@ class EM_Coupons extends EM_Object {
 		add_filter('em_event_save_meta',array('EM_Coupons', 'em_event_save_meta'),10,2);
 		add_filter('em_event_save_events',array('EM_Coupons', 'em_event_save_events'),10,3);
 		add_filter('em_event_delete_meta',array('EM_Coupons', 'em_event_delete_meta'),10,2);
-		add_action('rest_api_init', ['EM_Coupons', 'register_rest_route']);
+		add_action('rest_api_init', ['EM_Coupons', 'register_rest_routes']);
 		//hook into booking submission to add discount and coupon info
 		add_filter('em_booking_get_post', array('EM_Coupons', 'em_booking_get_post'), 10, 2);
 		add_filter('em_booking_validate', array('EM_Coupons', 'em_booking_validate'), 10, 2);
@@ -249,8 +250,22 @@ class EM_Coupons extends EM_Object {
 		return apply_filters('em_coupons_em_booking_validate', $result, $EM_Booking);
 	}
 
-	public static function register_rest_route() {
+	public static function register_rest_routes() {
 		register_rest_route('events/v2', '/check_coupon', ['method' => 'GET', 'callback' => ['EM_Coupons', 'coupon_validate'], 'permission_callback' => fn() => true ]);
+		register_rest_route( 'events/v2', '/coupons/export', array(
+			'methods' => 'GET',
+			'callback' => ['EM_Coupons', 'coupon_export'],
+			'permission_callback' => function() {
+				return true;
+			}
+		) );
+		register_rest_route( 'events/v2', '/coupons/export_single/(?P<id>\d+)', array(
+			'methods' => 'GET',
+			'callback' => ['EM_Coupons', 'coupon_export_single'],
+			'permission_callback' => function() {
+				return true;
+			}
+		) );
 	}
 
 	/**
@@ -289,6 +304,100 @@ class EM_Coupons extends EM_Object {
 		return  $result;
 		
 	}
+
+	public static function coupon_export() {
+		$coupons = EM_Coupons::get();
+
+		$array = [
+			[
+				'<b>' . __("Name", "em-pro") .'</b>',
+				'<b>' . __("Code", "em-pro") .'</b>',
+				'<b>' . __("Description", "em-pro") .'</b>',
+				'<b>' . __("Discount", "em-pro") .'</b>',
+				'<b>' . __("Uses", "em-pro") .'</b>',
+				'<b>' . __("Count", "events-manager") .'</b>'
+			]
+		];
+
+		foreach($coupons as $coupon) {
+
+			$discount = ($coupon->coupon_type == "#" ? '€' : '') . $coupon->coupon_discount . ($coupon->coupon_type == "%" ? '%' : '');
+			$array[] = [
+				$coupon->coupon_name,
+				$coupon->coupon_code,
+				$coupon->coupon_description,
+				$discount,
+				$coupon->get_count(),
+				$coupon->coupon_max
+			];
+		}
+
+		
+		$xlsx = Shuchkin\SimpleXLSXGen::fromArray( $array );
+		$xlsx->downloadAs('coupons.xlsx');
+
+	}
+
+	public static function coupon_export_single($request) {	
+		global $EM_Notices, $EM_Coupon, $wpdb;	
+		$EM_Coupon = new EM_Coupon($request->get_param('id'));
+		
+		$limit = ( !empty($_GET['limit']) ) ? $_GET['limit'] : 20;//Default limit
+		$page = ( !empty($_GET['pno']) ) ? $_GET['pno']:1;
+		$offset = ( $page > 1 ) ? ($page-1)*$limit : 0;
+		/* @todo change how coupon-booking relations are stored */
+		$coupon_search = str_replace('a:1:{', '', serialize(array('coupon_code'=>$EM_Coupon->coupon_code)));
+		$coupon_search = substr($coupon_search, 0, strlen($coupon_search)-1 );
+		$bookings = $wpdb->get_col('SELECT booking_id FROM '.EM_BOOKINGS_TABLE." WHERE booking_meta LIKE '%{$coupon_search}%' LIMIT {$limit} OFFSET {$offset}");
+		//FIXME : coupon count not syncing correctly, using this as a fallback
+		$coupons_count = $EM_Coupon->recount();
+		$bookings_count = 0;
+		$EM_Bookings = array(
+			[
+				"<b>" . __("ID", "em-pro") . "</b>",
+				"<b>" . __("Event", "em-pro") . "</b>",
+				"<b>" . __("Booking Date", "events-manager") . "</b>",
+				"<b>" . __("Price", "em-pro") . "</b>",
+				"<b>" . __("Booker", "events-manager") . "</b>",
+				"<b>" . __("Email", "events-manager") . "</b>",
+				"<b>" . __('Spaces', 'events-manager') . "</b>",
+				"<b>" . __("Coupon Name", "em-pro") . "</b>",
+				"<b>" . __('Original Total Price','em-pro', "em-pro") . "</b>",
+				"<b>" . __("Discount", "em-pro") . "</b>",
+				"<b>" . __("Final Price", "em-pro") . "</b>"
+				
+			]
+		);
+		foreach($bookings as $booking_id){ 
+			$EM_Booking = EM_Booking::find($booking_id);
+
+			if( !empty($EM_Booking->booking_meta['coupon']) ){
+				$coupon = new EM_Coupon($EM_Booking->booking_meta['coupon']);
+				if($EM_Coupon->coupon_code == $coupon->coupon_code && $EM_Coupon->coupon_id == $coupon->coupon_id){
+					$original_price = $EM_Booking->get_price_post_taxes(false, false);
+							$base_price = $EM_Coupon->coupon_tax == 'pre' ? $EM_Booking->get_price_pre_taxes(false, false) : $original_price;
+					$bookings_count++;
+					$EM_Bookings[] = [
+						$EM_Booking->booking_id,
+						$EM_Booking->get_event()->event_name,
+						\Contexis\Events\Intl\Date::get_date($EM_Booking->date()->getTimestamp()),
+						$EM_Booking->get_price(),
+						$EM_Booking->get_person()->get_name(),
+						$EM_Booking->get_person()->user_email,
+						$EM_Booking->get_spaces(),
+						$coupon->coupon_name,
+						$EM_Booking->get_price_post_taxes(true, false),
+						\Contexis\Events\Intl\Price::format($EM_Coupon->get_discount($base_price)),
+						\Contexis\Events\Intl\Price::format($EM_Booking->get_price()),
+					];
+				}
+			}
+		}
+
+		$xlsx = Shuchkin\SimpleXLSXGen::fromArray( $EM_Bookings );
+		$xlsx->downloadAs('coupons.xlsx');
+	}
+
 	
 	public static function em_booking_save($result, $EM_Booking){
 		if( $result ){
