@@ -23,7 +23,7 @@ const Inspector = ( props ) => {
 					value={ warningThreshold }
 					onChange={ ( value ) => setAttributes( { warningThreshold: value } ) }
 					min={ 1 }
-					max={ 10 }
+					max={ 40 }
 				/>
 
 				<TextControl
