@@ -513,32 +513,7 @@ class EM_Coupons_Admin {
 		<?php
     }  
 	
-	public static function register_rest_routes() {
-		
-		register_rest_route( 'events/v2', '/coupons/export', array(
-			'methods' => 'GET',
-			'callback' => 'EM_Coupons_Admin::rest_get_coupons',
-			'permission_callback' => function () {
-				return current_user_can('manage_others_bookings');
-			},
-		) );
-	}
-
-	public static function rest_get_coupons() {
-		$coupons = EM_Coupons::get();
-		$csv = "Code,Name,Description,Discount,Uses\n";
-		foreach($coupons as $coupon) {
-			$csv .= $coupon->coupon_code . ",";
-			$csv .= $coupon->coupon_name . ",";
-			$csv .= $coupon->coupon_description . ",";
-			$csv .= $coupon->get_discount_text() . ",";
-			$csv .= $coupon->get_count() . "\n";
-		}
-		header('Content-Type: text/csv');
-		header('Content-Disposition: attachment; filename="coupons.csv"');
-		echo $csv;
-		exit;
-	}
+	
 }
 
 EM_Coupons_Admin::init();
