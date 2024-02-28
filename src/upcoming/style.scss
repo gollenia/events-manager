@@ -42,6 +42,16 @@
 			border-right: 1px solid #bbb;
 		}
 	}
+
+	&-pill-error {
+		background: #c12;
+		color: #fff;
+		padding: 3px 8px;
+		margin-left: auto;
+		font-weight: bold;
+		border-top-left-radius: 9px;
+		border-bottom-right-radius: 9px;
+	}
 }
 
 .event-grid {
@@ -130,16 +140,6 @@
 			width: 100%;
 			aspect-ratio: 1 / 1;
 			object-fit: cover;
-		}
-
-		&-pill-error {
-			background: #c12;
-			color: #fff;
-			padding: 3px 8px;
-			margin-left: auto;
-			font-weight: bold;
-			border-top-left-radius: 9px;
-			border-bottom-right-radius: 9px;
 		}
 	}
 }
