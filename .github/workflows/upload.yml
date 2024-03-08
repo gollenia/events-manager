@@ -1,6 +1,6 @@
 # This workflow runs composer and deploys the theme on a server
 
-name: Deploy on kids-team Server
+name: Deploy on package Server
 
 on: [push, workflow_dispatch]
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
@@ -31,9 +31,9 @@ jobs:
             - name: rsync deployments
               uses: burnett01/rsync-deployments@6.0.0
               with:
-                  switches: -avzr --delete --include events.zip --include version.txt --include "readme.md" --include "changelog.md" --exclude "*" 
+                  switches: -avzr --delete --include events.zip --include version.txt --include "readme.md" --include "changelog.md" --exclude "*"
                   path: /
-                  remote_path: ${{ secrets.ALLINCL_PATH }}
+                  remote_path: ${{ secrets.PACKAGE_PATH }}
                   remote_host: ${{ secrets.ALLINCL_SERVER }}
                   remote_user: ${{ secrets.ALLINCL_USER }}
                   remote_key: ${{ secrets.ALLINCL_KEY }}
