@@ -505,7 +505,7 @@ class EM_Bookings_Table {
 				if( $csv ){
 					$v = self::sanitize_spreadsheet_cell($v);
 				}
-				$headers[$col] = $v;
+				$headers[$col] = $csv ? '<b>' . $v . '</b>' : $v;
 			}
 		}
 		return apply_filters('em_bookings_table_get_headers', $headers, $csv, $this);
