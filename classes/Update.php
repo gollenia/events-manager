@@ -1,6 +1,6 @@
 <?php
 
-namespace Contexis;
+namespace Contexis\Events;
 
 defined( 'ABSPATH' ) || exit;
 

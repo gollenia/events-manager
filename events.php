@@ -87,6 +87,7 @@ require_once('classes/People/People.php');
 require_once('classes/People/Person.php');
 require_once('classes/Permalinks.php');
 require_once('classes/Speaker/Speakers.php');
+require_once('classes/Update.php');
 
 require_once('classes/Tags/Tag.php');
 require_once('classes/Tags/Tags.php');
@@ -122,6 +123,8 @@ if( is_admin() ){
 	require_once('admin/bookings/em-rejected.php');
 	require_once('admin/bookings/em-pending.php');
 	require_once('admin/bookings/em-person.php');
+
+	Contexis\Events\Update::init('events');
 }
 
 require_once('classes/Speaker/Speaker.php');
