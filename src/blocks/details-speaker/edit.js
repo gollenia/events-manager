@@ -47,8 +47,6 @@ const edit = ( props ) => {
 		[ id ]
 	);
 
-	console.log( speaker?.meta );
-
 	const link = ( () => {
 		switch ( linkTo ) {
 			case 'mail':
