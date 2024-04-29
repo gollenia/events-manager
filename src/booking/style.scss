@@ -594,13 +594,13 @@
 .button {
 	&--danger {
 		background-color: #e53e3e;
-		color: #fff;
+		color: #fff !important;
 		border-color: #e53e3e;
 	}
 
 	&--success {
 		background-color: #38a169;
-		color: #fff;
+		color: #fff !important;
 		border-color: #38a169;
 	}
 }
