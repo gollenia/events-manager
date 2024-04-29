@@ -16,7 +16,7 @@ const TextInput = ( props ) => {
 				return '[a-zA-Z0-9\\u00C0-\\u024F\\-\\.\\s]+';
 		}
 	};
-
+ 
 	const onChangeHandler = ( event ) => {
 		onChange( event.target.value );
 	};
