@@ -8,7 +8,7 @@ const UserRegistration = ( props ) => {
 	const { registration } = state.request;
 
 	const { data, request, response } = state;
-
+ 
 	if ( ! data || ! data.registration_fields ) return <></>;
 
 	return (
