@@ -44,7 +44,6 @@ const Success = ( props ) => {
 	}, [] );
 
 	if ( paymentInfo.error ) {
-		console.log( 'error: ', paymentInfo.error );
 	}
 
 	if ( Object.keys( paymentInfo ).length == 0 ) {
