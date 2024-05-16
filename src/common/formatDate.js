@@ -8,6 +8,7 @@ function formatDateRange( start, end = false ) {
 	const locale = window.eventBlocksLocalization?.locale;
 
 	if ( ! start ) return '';
+	if ( start == end ) end = false;
 	start = new Date( start );
 	end = end ? new Date( end ) : start;
 
@@ -27,8 +28,6 @@ function formatDateRange( start, end = false ) {
 			year: 'numeric',
 			month: 'long',
 			day: 'numeric',
-			hour: 'numeric',
-			minute: 'numeric',
 		};
 	}
 
@@ -55,6 +54,7 @@ function formatDate( date, format = false ) {
 
 function formatTime( start, end = false ) {
 	if ( ! start ) return;
+	if ( start == end ) end = false;
 	const locale = window.eventBlocksLocalization?.locale;
 
 	const timeFormat = {
