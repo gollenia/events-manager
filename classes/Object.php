@@ -1072,7 +1072,10 @@ class EM_Object {
 	 * Adds an error to the object
 	 */
 	function add_error($errors){
-		
+			
+		if(!is_array($errors) && !empty($errors)){
+			$this->errors[] = $errors;
+		}
 		foreach($errors as $error){
 			$this->errors[] = $error;
 		}

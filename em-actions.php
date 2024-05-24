@@ -2,7 +2,7 @@
 /**
  * Performs actions on init. This works for both ajax and normal requests, the return results depends if an em_ajax flag is passed via POST or GET.
  * 
- * TODO: This whole file mus be split up and the official wp_ajax_ functions should be used instead.
+ * TODO: This whole file must be split up and the wp_ajax_ functions should be replaced with the REST API
  */
 function em_init_actions() {
 	global $wpdb,$EM_Notices,$EM_Event; 
@@ -68,7 +68,7 @@ function em_init_actions() {
 			$EM_Event = new EM_Event();
 		}
 		//Save Event, only via BP or via [event_form]
-		if( $_REQUEST['action'] == 'event_save' && $EM_Event->can_manage('edit_events','edit_others_events') ){
+		/* if( $_REQUEST['action'] == 'event_save' && $EM_Event->can_manage('edit_events','edit_others_events') ){
 			//Check Nonces
 			if( !wp_verify_nonce($_REQUEST['_wpnonce'], 'wpnonce_event_save') ) exit('Trying to perform an illegal action.');
 			//Set server timezone to UTC in case other plugins are doing something naughty
@@ -98,7 +98,7 @@ function em_init_actions() {
 			}
 			//Set server timezone back, even though it should be UTC anyway
 			date_default_timezone_set($server_timezone);
-		}
+		} */
 		if ( $_REQUEST['action'] == 'event_duplicate' && wp_verify_nonce($_REQUEST['_wpnonce'],'event_duplicate_'.$EM_Event->event_id) ) {
 			$event = $EM_Event->duplicate();
 			if( $event === false ){
@@ -161,7 +161,7 @@ function em_init_actions() {
 	}
 	
 	//Location Actions
-	if( !empty($_REQUEST['action']) && substr($_REQUEST['action'],0,8) == 'location' ){
+	/*if( !empty($_REQUEST['action']) && substr($_REQUEST['action'],0,8) == 'location' ){
 		global $EM_Location, $EM_Notices;
 		//Load the location object, with saved event if requested
 		if( !empty($_REQUEST['location_id']) ){
@@ -238,7 +238,7 @@ function em_init_actions() {
 			echo json_encode($return);
 			die();
 		}
-	}
+	} */
 	
 	//Booking Actions
 	if( !empty($_REQUEST['action']) && substr($_REQUEST['action'],0,7) == 'booking' && (is_user_logged_in() || ($_REQUEST['action'] == 'booking_add')) ){
@@ -536,7 +536,7 @@ function em_init_actions() {
 	
 	
 		
-		$EM_Bookings_Table->limit = 150; //if you're having server memory issues, try messing with this number
+		$EM_Bookings_Table->limit = 350; //if you're having server memory issues, try messing with this number
 		$EM_Bookings = $EM_Bookings_Table->get_bookings();
 		
 		$excel_sheet = [$EM_Bookings_Table->get_headers(true)];

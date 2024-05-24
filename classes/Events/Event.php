@@ -924,6 +924,7 @@ class EM_Event extends EM_Object{
 			if( count($this->errors) == 0 ){
 				$post_array['post_status'] = ( $this->can_manage('publish_events','publish_events') ) ? 'publish':'pending';
 			}else{
+				file_put_contents('/var/www/vhosts/kids-team.internal/log/debug.log', print_r($this->errors, true), FILE_APPEND);
 				$post_array['post_status'] = 'draft';
 				
 			}
@@ -1020,7 +1021,7 @@ class EM_Event extends EM_Object{
 			}
 			
 			
-			//update timestamps, dates and times
+			// make sure we have a valid start and end date
 			update_post_meta($this->post_id, '_event_start_local', $this->start()->getDateTime());
 			update_post_meta($this->post_id, '_event_end_local', $this->end()->getDateTime());
 			update_post_meta($this->post_id, '_event_start', $this->start()->getDateTime());
@@ -1365,19 +1366,14 @@ class EM_Event extends EM_Object{
 		//Initialize EM_DateTime if not already initialized, or if previously initialized object is invalid (e.g. draft event with invalid dates being resubmitted)
 		$when_date = 'event_'.$when.'_date';
 		$when_time = 'event_'.$when.'_time';
-
-		if(!$this->$when_date || !$this->$when_time) {
-			$time = $this->$when_time ?: '00:00:00';
-			return new EM_DateTime('2023-01-01 '.$time, $this->event_timezone);
-		}		
+	
 			/* @var EM_DateTime $EM_DateTime */
-		$EM_DateTime = new EM_DateTime($this->$when_date . " " . $this->$when_time);
+		$EM_DateTime = new EM_DateTime(($this->$when_date ?: date('Y-m-d')) . " " . ($this->$when_time ?: '00:00:00'));
 		
 		//Set to UTC timezone if requested, local by default
 		$tz = $utc_timezone ? 'UTC' : $this->event_timezone;
 		$EM_DateTime->setTimezone($tz);
 		return $EM_DateTime;
-		
 	}
 	
 	function get_status($db = false){

@@ -241,7 +241,9 @@ class EM_Booking extends EM_Object{
 	}
 
 	function get_booking_date() {
-		return $this->booking_date;
+		$booking_date_int = strtotime($this->booking_date);
+		$booking_time = date("H:i", $booking_date_int);
+		return \Contexis\Events\Intl\Date::get_date($booking_date_int) . " " . __('at', 'events-manager') . ' ' . $booking_time;
 	}
 	
 	

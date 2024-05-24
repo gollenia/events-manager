@@ -325,31 +325,29 @@ class EM_Form extends EM_Object {
 				break;
 			case 'radio':
 				echo "<fieldset><legend class='screen-reader-text'></legend>";
-				$values = explode("\r\n",$field['options_selection_values']);
+				
 				foreach($field['options'] as $options){
 					echo '<label class="radio-inline">';
 					echo '<input type="radio" name="' . $field['name'] . '" class="' . $field['fieldid'] . '" value="' . esc_attr($options) . '"' . (($options == $default) ? 'checked="checked"' : '') . '/>';
 					echo  '<span>' . $options . '</span></label><br>';
-				}
+				} 
 				echo "</fieldset>";
 				break;
 			case 'select':
-			
+				var_dump($field);
 				$values = $field['options'];
 				$multi = $field['type'] == 'multiselect';
 				if($multi && !is_array($default)) $default = (empty($default)) ? []:array($default);
 				
 				echo '<select name="' . $field['name'] . (($multi) ? '[]':'') . '" class="' . $field['fieldid'] . '" ' . ($required ? "required " : "") . '>';
 
-				if( !$field['options_select_default'] ){
-					
-					echo '<option value="">' . esc_html($field['options_select_default_text']) . '</option>';
-					
+				if(key_exists('hasEmptyOption',  $field) && $field['hasEmptyOption']) {
+					echo '<option value="">' . '</option>';
 				}
 					
 				foreach($values as $key => $value) {
 					$value = trim($value);
-					echo '<option ' . (( ($key == 1 && $field['options_select_default']) || ($multi && in_array($value, $default)) || ($value == $default) ) ? 'selected="selected"' : '' ) . '>' . esc_html($value) . '</option>';
+					echo '<option ' . (( ($multi && in_array($value, $default)) || ($value == $default) ) ? 'selected="selected"' : '' ) . '>' . esc_html($value) . '</option>';
 				}
 				
 				echo '</select>';

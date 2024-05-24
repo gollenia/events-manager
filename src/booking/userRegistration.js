@@ -1,4 +1,5 @@
-import InputField from './InputField';
+//import { InputField } from '@contexis/wp-react-form';
+import InputField from './__experimantalForm/InputField';
 import Summary from './summary';
 
 const UserRegistration = ( props ) => {
@@ -8,7 +9,7 @@ const UserRegistration = ( props ) => {
 	const { registration } = state.request;
 
 	const { data, request, response } = state;
- 
+
 	if ( ! data || ! data.registration_fields ) return <></>;
 
 	return (
@@ -18,10 +19,11 @@ const UserRegistration = ( props ) => {
 				<form className="form--trap form grid xl:grid--columns-6 grid--gap-8" id="user-registration-form">
 					{ data.registration_fields.map( ( field, index ) => (
 						<InputField
-							disabled={ status == 'SUBMITTING' }
+							{ ...field }
+							name={ field.fieldid }
+							disabled={ state.state == 'SUBMITTING' }
 							key={ index }
 							type={ field.type }
-							settings={ field }
 							value={ state.request.registration[ field.fieldid ] }
 							onChange={ ( event ) => {
 								dispatch( {

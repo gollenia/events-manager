@@ -46,104 +46,87 @@ class EventPost {
 			[
 				"name" => "_event_rsvp_date",
 				"type" => "string",
-				"default" => "",
 				"post_type" => ['event']
 			],
 			[
 				"name" => "_booking_form",
 				"type" => "number",
-				"default" => 0,
 				"post_type" => ['event']
 			],
 			[
 				"name" => "_booking_form",
 				"type" => "number",
-				"default" => 0,
 				"post_type" => ['event']
 			],
 			[
 				"name" => "_attendee_form",
 				"type" => "number",
-				"default" => 0,
 				"post_type" => ['event']
 			],
 			[
 				"name" => "_speaker_id",
 				"type" => "number",
-				"default" => 0,
 				"post_type" => ['event']
 			],
 			[
 				"name" => "_event_audience",
 				"type" => "string",
-				"default" => "",
 				"post_type" => ['event']
 			],
 			[
 				"name" => "_event_start_date",
 				"type" => "string",
-				"default" => date("Y-m-d"),
 				"post_type" => ['event', 'event-recurring']
 			],
 			[
 				"name" => "_event_end_date",
 				"type" => "string",
-				"default" => date("Y-m-d"),
 				"post_type" => ['event', 'event-recurring']
 			],
 			[
 				"name" => "_event_start_time",
 				"type" => "string",
-				"default" => "00:00:00",
 				"post_type" => ['event', 'event-recurring']
 			],
 			[
 				"name" => "_event_end_time",
 				"type" => "string",
-				"default" => "00:00:00",
 				"post_type" => ['event', 'event-recurring']
 			],
 			[
 				"name" => "_event_all_day",
 				"type" => "boolean",
-				"default" => false,
 				"post_type" => ['event', 'event-recurring']
 			],
 			[
 				"name" => "_location_id",
 				"type" => "number",
-				"default" => 0,
 				"post_type" => ['event', 'event-recurring']
 			],
 			[
 				"name" => "_recurrence_interval",
 				"type" => "number",
-				"default" => 1,
 				"post_type" => ['event-recurring']
 			],
 			[
 				"name" => "_recurrence_byweekno",
 				"type" => "number",
-				"default" => 1,
 				"post_type" => ['event-recurring']
 			],
 			[
 				"name" => "_recurrence_byday",
 				"type" => "string",
-				"default" => "",
 				"post_type" => ['event-recurring']
 			],
 			[
 				"name" => "_recurrence_days",
 				"type" => "number",
-				"default" => 0,
 				"post_type" => ['event-recurring']
 
 			],
 			[
 				"name" => "_recurrence_freq",
 				"type" => "string",
-				"default" => "weekly",
 				"post_type" => ['event-recurring']
 
 			]
@@ -153,14 +136,12 @@ class EventPost {
 		register_post_meta( 'event', '_event_rsvp_date', [
 			'type' => 'string',
 			'single'       => true,
-			'default' => '',
 			'sanitize_callback' => '',
 			'auth_callback' => function() {
 				return current_user_can( 'edit_posts' );
 			},
 			'show_in_rest' => [
 				'schema' => [
-					'default' => '',
 					'style' => "string"
 				]
 			]
@@ -173,14 +154,14 @@ class EventPost {
 			register_post_meta( 'event', $meta['name'], [
 				'type' => $meta['type'],
 				'single'       => true,
-				'default' => $meta['default'],
+				
 				'sanitize_callback' => '',
 				'auth_callback' => function() {
 					return current_user_can( 'edit_posts' );
 				},
 				'show_in_rest' => [
 					'schema' => [
-						'default' => $meta['default'],
+						
 						'style' => $meta['type']
 					]
 				]
@@ -194,14 +175,12 @@ class EventPost {
 			register_post_meta( 'event-recurring', $meta['name'], [
 				'type' => $meta['type'],
 				'single'       => true,
-				'default' => $meta['default'],
 				'sanitize_callback' => '',
 				'auth_callback' => function() {
 					return current_user_can( 'edit_posts' );
 				},
 				'show_in_rest' => [
 					'schema' => [
-						'default' => $meta['default'],
 						'style' => $meta['type']
 					]
 				]
@@ -356,6 +335,7 @@ class EventPost {
 		register_rest_route( 'events/v2', '/events/', ['method' => 'GET', 'callback' => [$this, 'get_rest_data'], 'permission_callback' => '__return_true'], true );
 		register_rest_route( 'events/v2', '/bookinginfo/(?P<id>\d+)', ['method' => 'GET', 'callback' => [$this, 'get_rest_bookinginfo'], 'permission_callback' => '__return_true'], true );
 		register_rest_route( 'events/v2', '/bookingdata/(?P<id>\d+)', ['method' => 'GET', 'callback' => [$this, 'get_rest_bookingdata'], 'permission_callback' => '__return_true'], true );
+		register_rest_route( 'events/v2', '/booking/(?P<id>\d+)', ['method' => 'GET', 'callback' => [$this, 'get_rest_booking'], 'permission_callback' => '__return_true'], true );
 	}
 
 	
@@ -445,5 +425,56 @@ class EventPost {
 		return $result;
 		
 	}
+
+	public function get_rest_booking($request) {
+		$result = [
+			'success' => false,
+			'data' => 'no id given'
+		];
+
+		$id = $request->get_param('id');
+		if(!$id) return $result;
+		
+		$booking = new \EM_Booking($id);
+		$event = new \EM_Event($booking->event_id);
+
+		$data = [
+			'registrationFields' => \EM_Booking_Form::get_booking_form($event->post_id),
+		    'attendeeFields' => \EM_Attendees_Form::get_attendee_form($event->post_id),
+			'availableTickets' => $event->get_tickets_rest(),
+			'registration' => array_merge($booking->booking_meta['registration'], $booking->booking_meta['booking']),
+			'attendees' => $this->get_attendees($booking),
+			'event' => \EM_Events::get_rest(['event' => $event->id])[0],
+			'price' => $booking->booking_id,
+			'success' => true,
+			'booking' => [
+				'date' => $booking->get_booking_date(),
+				'id' => $booking->booking_id,
+				'status' => $booking->status,
+				'status_array' => $booking->status_array,
+				'price' => $booking->get_price(),
+				'paid' => $booking->get_price_summary_array()
+			],
+			'rest_url' => get_rest_url(),
+			'booking_url' => admin_url('admin-ajax.php')
+		];
+
+		$result['success'] = true;
+		$result['data'] = $data;
+
+		return $result;
+	}
+
+	public function get_attendees($booking) {
+		$result = [];
+		$tickets = $booking->booking_meta['attendees'];
+		foreach($tickets as $key => $ticket) {
+			foreach ($ticket as $attendee) {
+				$result[] = [ 'ticket' => $key, 'fields' => $attendee ];
+			}
+		}
+		return $result;
+	}
+
 }
 EventPost::init();

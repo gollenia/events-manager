@@ -25,15 +25,24 @@ if( ! class_exists( 'Update' ) ) {
 			$this->plugin_slug = $plugin_slug;
 			$this->version = $data['Version'];
 			$this->cache_key = 'ctx_plugin_update_' . $this->plugin_slug;
-			$this->cache_allowed = false;
+			$this->cache_allowed = !$this->is_plugin_page();
 			
 			add_filter( 'plugins_api', array( $this, 'info' ), 20, 3 );
 			add_filter( 'site_transient_update_plugins', array( $this, 'transient_update' ) );
 			add_action( 'upgrader_process_complete', array( $this, 'purge' ), 10, 2 );
 			
-
 		}
 
+		/*
+		 * Check if we are on the plugins page
+		 */
+		public function is_plugin_page() {
+			return isset( $_SERVER['SCRIPT_NAME']) && $_SERVER['SCRIPT_NAME'] === '/wp-admin/plugins.php';
+		}
+
+		/*
+		 * Get the plugin information from the API
+		 */
 		public function request(){
 
 			$remote = get_transient( $this->cache_key );
@@ -68,7 +77,9 @@ if( ! class_exists( 'Update' ) ) {
 
 		}
 
-
+		/*
+		 * Get the plugin information from the API
+		 */
 		function info( $res, $action, $args ) {		 
 
 			// do nothing if you're not getting plugin information right now

@@ -16,6 +16,21 @@ class Admin {
 			'callback' => array($this, 'get_bookings'),
 			'permission_callback' => array($this, 'can_get_bookings'),
 		));
+
+		register_rest_route( 'bookings/v2', '/booking/(?P<id>\d+)', array(
+			'methods' => 'GET',
+			'callback' => array($this, 'get_booking'),
+			'permission_callback' => array($this, 'can_get_bookings'),
+		));
+	}
+
+	public function get_booking($request) {
+		$id = $request['id'];
+		$booking = \EM_Bookings::get(array(
+			'booking_id' => $id,
+			'limit' => 1,
+		));
+		return $booking;
 	}
 
 	public function can_get_bookings() {

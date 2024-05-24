@@ -131,6 +131,7 @@ class Assets {
 		wp_enqueue_script('events-manager', plugins_url('../build/events-manager.js',__FILE__), array('jquery', 'jquery-ui-core','jquery-ui-widget','jquery-ui-position','jquery-ui-sortable','jquery-ui-datepicker','jquery-ui-autocomplete','jquery-ui-dialog','wp-color-picker'), \Events::VERSION);		
 		wp_enqueue_script('events-manager-admin-script', plugins_url('../build/admin.js',__FILE__), array('jquery'), \Events::VERSION);		
 		wp_enqueue_style('events-manager-admin', plugins_url('../build/admin.css',__FILE__), array(), \Events::VERSION);
+		wp_enqueue_style('events-manager-admin-booking', plugins_url('../build/style-admin.css',__FILE__), array(), \Events::VERSION);
 		$this->localize_admin_script();
 	}
 
