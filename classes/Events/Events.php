@@ -207,7 +207,6 @@ class EM_Events extends EM_Object {
 					'city' => $location->location_town,
 					'name' => $location->location_name,
 					'url' => $location->location_url,
-					'excerpt' => $location->location_excerpt,
 					'country' => $location->location_country,
 					'state' => $location->location_state,
 				],
@@ -224,6 +223,8 @@ class EM_Events extends EM_Object {
 				'title' => $event->post_title,
 				'speaker' => $speaker,
 				'tags' => $tags->terms,
+				'allowDonation' => get_metadata('post', $event->ID, '_event_rsvp_donation', true) == "1",
+				'bookingStart' => get_post_meta($event->ID, '_event_rsvp_start', true),
 				'bookingEnd' => $event->rsvp_end()->getTimestamp() * 1000,
 				'bookingEndFormatted' => \Contexis\Events\Intl\Date::get_date($event->rsvp_end()->getTimestamp())
 			]);

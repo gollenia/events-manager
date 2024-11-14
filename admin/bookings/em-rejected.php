@@ -5,17 +5,15 @@
  * @param int $event_id
  */
 function em_bookings_rejected_table(){
-	global $EM_Event, $EM_Ticket, $wpdb, $current_user;
-	
+	global $EM_Event;
+	$ticket = new \Contexis\Events\Tickets\Ticket();
 	$action_scope = ( !empty($_REQUEST['em_obj']) && $_REQUEST['em_obj'] == 'em_bookings_confirmed_table' );
-	$action = ( $action_scope && !empty($_GET ['action']) ) ? $_GET ['action']:'';
-	$order = ( $action_scope && !empty($_GET ['order']) ) ? $_GET ['order']:'ASC';
 	$limit = ( $action_scope && !empty($_GET['limit']) ) ? $_GET['limit'] : 20;//Default limit
 	$page = ( $action_scope && !empty($_GET['pno']) ) ? $_GET['pno']:1;
 	$offset = ( $action_scope && $page > 1 ) ? ($page-1)*$limit : 0;
 	
-	if( is_object($EM_Ticket) ){
-		$EM_Bookings = $EM_Ticket->get_bookings()->get_rejected_bookings();
+	if( is_object($ticket) ){
+		$EM_Bookings = $ticket->get_bookings()->get_rejected_bookings();
 	}else{
 		if( is_object($EM_Event) ){
 			$EM_Bookings = $EM_Event->get_bookings()->get_rejected_bookings();
@@ -28,41 +26,10 @@ function em_bookings_rejected_table(){
 		<div class='wrap em_bookings_pending_table em_obj'>
 			<form id='bookings-filter' method='get' action='<?php bloginfo('wpurl') ?>/wp-admin/edit.php'>
 				<input type="hidden" name="em_obj" value="em_bookings_pending_table" />
-				<!--
-				<ul class="subsubsub">
-					<li>
-						<a href='edit.php?post_type=post' class="current">All <span class="count">(1)</span></a> |
-					</li>
-				</ul>
-				<p class="search-box">
-					<label class="screen-reader-text" for="post-search-input"><?php _e('Search', 'events-manager'); ?>:</label>
-					<input type="text" id="post-search-input" name="em_search" value="<?php echo (!empty($_GET['em_search'])) ? esc_attr($_GET['em_search']):''; ?>" />
-					<input type="submit" value="<?php _e('Search', 'events-manager'); ?>" class="button" />
-				</p>
-				-->
+			
 				<?php if ( $bookings_count >= $limit ) : ?>
 				<div class='tablenav'>
-					<!--
-					<div class="alignleft actions">
-						<select name="action">
-							<option value="-1" selected="selected">
-								<?php _e('Bulk Actions', 'events-manager'); ?>
-							</option>
-							<option value="approve">
-								<?php _e('Approve', 'events-manager'); ?>
-							</option>
-							<option value="decline">
-								<?php _e('Decline', 'events-manager'); ?>
-							</option>
-						</select> 
-						<button id="post-query-submit" class="button-secondary" type="" value="" ><?php esc_attr_e( 'Filter' )?>
-					</div>
-					-->
-					<!--
-					<div class="view-switch">
-						<a href="/wp-admin/edit.php?mode=list"><img class="current" id="view-switch-list" src="http://wordpress.lan/wp-includes/images/blank.gif" width="20" height="20" title="List View" alt="List View" name="view-switch-list" /></a> <a href="/wp-admin/edit.php?mode=excerpt"><img id="view-switch-excerpt" src="http://wordpress.lan/wp-includes/images/blank.gif" width="20" height="20" title="Excerpt View" alt="Excerpt View" name="view-switch-excerpt" /></a>
-					</div>
-					-->
+					
 					<?php 
 					if ( $bookings_count >= $limit ) {
 						$bookings_nav = Contexis\Events\Admin\Pagination::paginate( $bookings_count, $limit, $page, array('em_ajax'=>0, 'em_obj'=>'em_bookings_confirmed_table'));
@@ -104,9 +71,9 @@ function em_bookings_rejected_table(){
 									<td><?php echo $EM_Booking->get_spaces() ?></td>
 									<td>
 										<?php
-										$approve_url = em_add_get_params($_SERVER['REQUEST_URI'], array('action'=>'bookings_approve', 'booking_id'=>$EM_Booking->booking_id));
-										$delete_url = em_add_get_params($_SERVER['REQUEST_URI'], array('action'=>'bookings_delete', 'booking_id'=>$EM_Booking->booking_id));
-										$edit_url = em_add_get_params($_SERVER['REQUEST_URI'], array('booking_id'=>$EM_Booking->booking_id, 'em_ajax'=>null, 'em_obj'=>null));
+										$approve_url = add_query_arg(['action'=>'bookings_approve', 'booking_id'=>$EM_Booking->booking_id], $_SERVER['REQUEST_URI']);
+										$delete_url = add_query_arg(['action'=>'bookings_delete', 'booking_id'=>$EM_Booking->booking_id], $_SERVER['REQUEST_URI']);
+										$edit_url = add_query_arg(['booking_id'=>$EM_Booking->booking_id, 'em_ajax'=>null, 'em_obj'=>null], $_SERVER['REQUEST_URI']);
 										?>
 										<a class="em-bookings-approve" href="<?php echo $approve_url ?>"><?php _e('Approve','events-manager'); ?></a> |
 										<a class="em-bookings-edit" href="<?php echo $edit_url ?>"><?php _e('Edit/View','events-manager'); ?></a> |

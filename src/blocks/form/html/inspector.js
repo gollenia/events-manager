@@ -1,39 +1,27 @@
 import { InspectorControls } from '@wordpress/block-editor';
-import { CheckboxControl, TextControl, ToggleControl, RangeControl, PanelBody, PanelRow, SelectControl, FormTokenField, Icon, Button } from '@wordpress/components';
-import { __ } from '@wordpress/i18n'; 
+import { PanelBody, RangeControl } from '@wordpress/components';
+import { __ } from '@wordpress/i18n';
 
-
-
-const Inspector = (props) => {
-	
+const Inspector = ( props ) => {
 	const {
-		attributes: {
-			width
-		},
+		attributes: { width },
 		setAttributes,
-		
 	} = props;
 
-  	return (
+	return (
 		<InspectorControls>
-		
-		<PanelBody
-			title={__('Appearance', 'events')}
-			initialOpen={true}
-		>
-			<RangeControl
-				label={ __("Width", 'events')}
-				help={__("Number of columns the input field will occupy", 'events')}
-				value={ width }
-				max={4}
-				min={1}
-				onChange={ (value) => setAttributes({ width: value }) }
-			/>
-			
-		</PanelBody>
-		
+			<PanelBody title={ __( 'Appearance', 'events-manager' ) } initialOpen={ true }>
+				<RangeControl
+					label={ __( 'Width', 'events-manager' ) }
+					help={ __( 'Number of columns the input field will occupy', 'events-manager' ) }
+					value={ width }
+					max={ 4 }
+					min={ 1 }
+					onChange={ ( value ) => setAttributes( { width: value } ) }
+				/>
+			</PanelBody>
 		</InspectorControls>
-  	);
+	);
 };
 
 export default Inspector;

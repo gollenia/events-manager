@@ -29,8 +29,19 @@ const edit = ( props ) => {
 
 	const blockProps = useBlockProps( { className: 'event-details-item' } );
 
+	const endFormatted = () => {
+		return meta[ '_event_rsvp_end' ] ? formatDate( meta[ '_event_rsvp_end' ] ) : '';
+	};
+
+	const start = new Date( meta[ '_event_rsvp_start' ] );
+	const end = new Date( meta[ '_event_rsvp_end' ] );
+	const now = new Date();
+
+	const bookingEnded = end < now;
+	const bookingStarted = start < now;
+
 	const startFormatted = () => {
-		return meta[ '_event_rsvp_date' ] ? formatDate( meta[ '_event_rsvp_date' ] ) : '';
+		return meta[ '_event_rsvp_start' ] ? formatDate( meta[ '_event_rsvp_start' ] ) : '';
 	};
 
 	return (
@@ -45,13 +56,19 @@ const edit = ( props ) => {
 					<RichText
 						tagName="h5"
 						className="event-details_title description-editable"
-						placeholder={ __( 'Booking end', 'events' ) }
+						placeholder={ __( 'Booking end', 'events-manager' ) }
 						value={ description }
 						onChange={ ( value ) => {
 							setAttributes( { description: value } );
 						} }
 					/>
-					<span className="event-details_audience description-editable">{ startFormatted() }</span>
+					<span className="event-details_audience description-editable">
+						{ bookingEnded
+							? 'Booking ended'
+							: bookingStarted
+							? `Booking ends ${ endFormatted() }`
+							: 'Booking starts at ' + startFormatted() }
+					</span>
 				</div>
 			</div>
 		</div>

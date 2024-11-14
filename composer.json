@@ -1,6 +1,6 @@
 {
-	"name": "contexis/event-manager-pro",
-	"version": "6.4.0",
+	"name": "contexis/events",
+	"version": "6.7.0",
 	"description": "Events Manager",
 	"type": "project",
 	"homepage": "http://www.kids-team.at",
@@ -14,11 +14,6 @@
 			"role": "Developer"
 		},
 		{
-			"name": "Laura Emeder",
-			"email": "laura@kids-team.at",
-			"role": "Designer"
-		},
-		{
 			"name": "Matthias Demmin",
 			"email": "matthias@kids-team.at",
 			"role": "Manager"
@@ -26,18 +21,19 @@
 	],
 	"config": {
 		"platform": {
-			"php": "7.4"
+			"php": "8.1"
 		},
 		"allow-plugins": {
 			"composer/installers": true
 		}
 	},
 	"require": {
-		"shuchkin/simplexlsxgen": "^1.0",
-		"smhg/sepa-qr-data": "^1.1",
-		"mpdf/mpdf": "^8.0",
-		"timber/timber": "^2.0",
-		"chillerlan/php-qrcode": "^5.0"
+		"shuchkin/simplexlsxgen": "^1.4.11",
+		"smhg/sepa-qr-data": "^2.0.1",
+		"mpdf/mpdf": "^8.2.4",
+		"timber/timber": "^2.2.0",
+		"chillerlan/php-qrcode": "^5.0.2",
+		"mollie/mollie-api-php": "^2.68.0"
 	},
 	"autoload": {
 		"psr-4": {

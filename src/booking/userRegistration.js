@@ -1,5 +1,5 @@
 //import { InputField } from '@contexis/wp-react-form';
-import InputField from './__experimantalForm/InputField';
+import InputField from '../__experimantalForm/InputField';
 import Summary from './summary';
 
 const UserRegistration = ( props ) => {

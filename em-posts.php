@@ -192,7 +192,7 @@ function wp_events_plugin_init(){
 		]);
 	}
 	if( get_option('dbem_locations_enabled', true) ){
-		$location_post_type = apply_filters('em_cpt_location', [	
+		$location_post_type = apply_filters('em_cpt_location', [	 
 			'public' => true,
 			'hierarchical' => false,
 			'show_in_rest' => true,

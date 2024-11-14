@@ -38,7 +38,7 @@ class EM_Tags extends EM_Taxonomy_Terms {
 		if( $prop == 'tags' ){
 			return !empty($this->terms);
 		}
-		return parent::__isset( $prop );
+		return isset($this->$prop);
 	}
 	
 	//Functions we won't need when PHP 5.3 minimum allows for use of LSB

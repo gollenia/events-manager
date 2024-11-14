@@ -1,5 +1,15 @@
 <?php
 use Contexis\Events\Options;
+
+
+use SepaQr\Data;
+
+use chillerlan\QRCode\{QRCode, QROptions};
+use chillerlan\QRCode\Data\QRMatrix;
+use chillerlan\QRCode\Output\QROutputInterface;
+use chillerlan\QRCode\Common\EccLevel;
+use chillerlan\QRCode\Output\QRMarkupSVG;
+
 /**
  * This Gateway is slightly special, because as well as providing functions that need to be activated, there are offline payment functions that are always there e.g. adding manual payments.
  * @author marcus
@@ -19,6 +29,8 @@ class EM_Gateway_Offline extends EM_Gateway {
 	function __construct() {
 		parent::__construct();
 		add_action('init',array(&$this, 'actions'),10);
+		add_action('rest_api_init', array($this, 'register_rest_route'));
+		
 		//Booking Interception
 		add_filter('em_booking_set_status',array(&$this,'em_booking_set_status'),1,2);
 		add_filter('em_bookings_pending_count', array(&$this, 'em_bookings_pending_count'),1,1);
@@ -28,7 +40,6 @@ class EM_Gateway_Offline extends EM_Gateway {
 		add_action('em_admin_event_booking_options', array(&$this, 'event_booking_options'),10);
 		add_action('em_bookings_single_metabox_footer', array(&$this, 'add_payment_form'),1,1); //add payment to booking
 		add_action('em_bookings_manual_booking', array(&$this, 'add_booking_form'),1,1);
-		add_filter('em_booking_get_post', array(&$this,'em_booking_get_post'),1,2);
 		add_filter('em_booking_validate', array(&$this,'em_booking_validate'),9,2); //before EM_Bookings_Form hooks in
 	}
 	
@@ -44,18 +55,18 @@ class EM_Gateway_Offline extends EM_Gateway {
 			if( $_REQUEST['action'] == 'gateway_add_payment' && is_object($EM_Booking) && wp_verify_nonce($_REQUEST['_wpnonce'], 'gateway_add_payment') ){
 				if( !empty($_REQUEST['transaction_total_amount']) && is_numeric($_REQUEST['transaction_total_amount']) ){
 					$this->record_transaction($EM_Booking, $_REQUEST['transaction_total_amount'], get_option('dbem_bookings_currency'), current_time('mysql'), '', 'Completed', $_REQUEST['transaction_note']);
-					$string = __('Payment has been registered.','em-pro');
+					$string = __('Payment has been registered.','events-manager');
 					$total = $EM_Booking->get_total_paid();
 					if( $total >= $EM_Booking->get_price() ){
 						$EM_Booking->approve();
-						$string .= " ". __('Booking is now fully paid and confirmed.','em-pro');
+						$string .= " ". __('Booking is now fully paid and confirmed.','events-manager');
 					}
 					$EM_Notices->add_confirm($string,true);
 					do_action('em_payment_processed', $EM_Booking, $this);
-					wp_redirect(em_wp_get_referer());
+					wp_redirect(wp_validate_redirect(wp_get_raw_referer(), false ));
 					exit();
 				}else{
-					$EM_Notices->add_error(__('Please enter a valid payment amount. Numbers only, use negative number to credit a booking.','em-pro'));
+					$EM_Notices->add_error(__('Please enter a valid payment amount. Numbers only, use negative number to credit a booking.','events-manager'));
 					unset($_REQUEST['action']);
 					unset($_POST['action']);
 				}
@@ -65,7 +76,7 @@ class EM_Gateway_Offline extends EM_Gateway {
 	
 	function em_wp_localize_script($vars){
 		if( is_user_logged_in() && get_option('dbem_rsvp_enabled') ){
-			$vars['offline_confirm'] = __('Be aware that by approving a booking awaiting payment, a full payment transaction will be registered against this booking, meaning that it will be considered as paid.','em-pro');
+			$vars['offline_confirm'] = __('Be aware that by approving a booking awaiting payment, a full payment transaction will be registered against this booking, meaning that it will be considered as paid.','events-manager');
 		}
 		return $vars;
 	}
@@ -83,19 +94,52 @@ class EM_Gateway_Offline extends EM_Gateway {
 	 * @param EM_Booking $EM_Booking
 	 * @return array
 	 */
-	function booking_form_feedback( $return, $EM_Booking = false ){
-		if( !empty($return['result']) && !empty($EM_Booking->booking_meta['gateway']) && !empty($EM_Booking->booking_status) ){ //check emtpies
-			if( $EM_Booking->booking_status == EM_Booking::AWAITING_PAYMENT && $this->uses_gateway($EM_Booking) ){ //check values
-				$return['message'] = get_option('em_'.$this->gateway.'_booking_feedback');
-				if( !empty($EM_Booking->email_not_sent) ){
-					$return['message'] .=  ' '.__('However, there were some problems whilst sending confirmation emails to you and/or the event contact person. You may want to contact them directly and letting them know of this error.', 'events-manager');
-				}
-				$return['booking_id'] = $EM_Booking->id;
-				return apply_filters('em_gateway_offline_booking_add', $return, $EM_Booking->get_event(), $EM_Booking);
-			}
-		}						
-		return $return;
+	function booking_form_feedback( $result, EM_Booking $booking ){
+		if(!get_option("em_offline_iban", true)) return [
+			'success' => false,
+			'error' => "No IBAN available. Please add an IBAN in the offline payment gateway"
+		];
+		
+		$event = EM_Event::find($booking->event_id);
+
+		$result['gateway'] = [
+			"purpose" => $booking->booking_id . "-" . $event->post_name . "-" . $booking->booking_meta['registration']['last_name'],
+			"iban" => get_option("em_offline_iban", true),
+			"beneficiary" => get_option("em_offline_beneficiary", true),
+			"bic" => get_option("em_offline_bic", true),
+			"bank" => get_option("em_offline_bank", true),
+			"amount" => $booking->booking_price,
+			"qr_code" => $this->generate_qr_code($booking),
+			"deadline" => get_option("em_offline_deadline", true),
+			"title" => $this->title,
+			"message" => get_option("em_offline_booking_feedback", true)
+		];			
+		return $result;
 	}
+
+	private function generate_qr_code($booking) {
+		
+		$event = EM_Event::find($booking->event_id); 
+		$data = Data::create()
+			->setName(get_option("em_offline_beneficiary", true))
+			->setIban(get_option("em_offline_iban", true))
+			->setRemittanceText($_REQUEST['booking_id'] . "-" . $event->post_name . "-" . $booking->booking_meta['registration']['last_name'])
+			->setAmount($booking->get_price());
+		$options = new QROptions([
+			'version' => 7,
+			'eccLevel' => EccLevel::M, // required by EPC standard
+			'imageBase64' => false,
+			'addQuietzone'           => true,
+			'imageTransparent'       => false,
+			'keepAsSquare' => [QRMatrix::M_FINDER|QRMatrix::M_DARKMODULE, QRMatrix::M_LOGO, QRMatrix::M_FINDER_DOT, QRMatrix::M_ALIGNMENT|QRMatrix::M_DARKMODULE],
+			'drawCircularModules' => true,
+			'circleRadius' => 0.4,
+			'outputInterface' => QRMarkupSVG::class,
+			'connectPaths' => true
+		]);
+		$qrcode = new QRCode($options);
+		return $qrcode->render($data);
+    }
 	
 	/**
 	 * Sets booking status and records a full payment transaction if new status is from pending payment to completed. 
@@ -132,10 +176,10 @@ class EM_Gateway_Offline extends EM_Gateway {
 	 */
 	function bookings_table_actions( $actions, $EM_Booking ){
 		return array(
-			'approve' => '<a class="em-bookings-approve em-bookings-approve-offline" href="'.em_add_get_params($_SERVER['REQUEST_URI'], array('action'=>'bookings_approve', 'booking_id'=>$EM_Booking->booking_id)).'">'.__('Approve','events-manager').'</a>',
-			'reject' => '<a class="em-bookings-reject" href="'.em_add_get_params($_SERVER['REQUEST_URI'], array('action'=>'bookings_reject', 'booking_id'=>$EM_Booking->booking_id)).'">'.__('Reject','events-manager').'</a>',
-			'delete' => '<span class="trash"><a class="em-bookings-delete" href="'.em_add_get_params($_SERVER['REQUEST_URI'], array('action'=>'bookings_delete', 'booking_id'=>$EM_Booking->booking_id)).'">'.__('Delete','events-manager').'</a></span>',
-			'edit' => '<a class="em-bookings-edit" href="'.em_add_get_params($EM_Booking->get_event()->get_bookings_url(), array('booking_id'=>$EM_Booking->booking_id, 'em_ajax'=>null, 'em_obj'=>null)).'">'.__('Edit/View','events-manager').'</a>',
+			'approve' => '<a class="em-bookings-approve em-bookings-approve-offline" href="'.add_query_arg(['action'=>'bookings_approve', 'booking_id'=>$EM_Booking->booking_id], $_SERVER['REQUEST_URI']).'">'.__('Approve','events-manager').'</a>',
+			'reject' => '<a class="em-bookings-reject" href="'.add_query_arg(['action'=>'bookings_reject', 'booking_id'=>$EM_Booking->booking_id], $_SERVER['REQUEST_URI']).'">'.__('Reject','events-manager').'</a>',
+			'delete' => '<span class="trash"><a class="em-bookings-delete" href="'.add_query_arg(['action'=>'bookings_delete', 'booking_id'=>$EM_Booking->booking_id], $_SERVER['REQUEST_URI']).'">'.__('Delete','events-manager').'</a></span>',
+			'edit' => '<a class="em-bookings-edit" href="'.add_query_arg(['booking_id'=>$EM_Booking->booking_id, 'em_ajax'=>null, 'em_obj'=>null], $EM_Booking->get_event()->get_bookings_url()).'">'.__('Edit/View','events-manager').'</a>',
 		);
 	}
 	
@@ -145,7 +189,7 @@ class EM_Gateway_Offline extends EM_Gateway {
 	function event_booking_options_buttons(){
 		global $EM_Event;
         $header_button_classes = is_admin() ? 'page-title-action':'button add-new-h2';
-		?><a href="<?php echo em_add_get_params($EM_Event->get_bookings_url(), array('action'=>'manual_booking','event_id'=>$EM_Event->event_id)); ?>" class="<?php echo $header_button_classes; ?>"><?php _e('Add Booking','em-pro') ?></a><?php	
+		?><a href="<?php echo add_query_arg(['action'=>'manual_booking','event_id'=>$EM_Event->event_id], $EM_Event->get_bookings_url()); ?>" class="<?php echo $header_button_classes; ?>"><?php _e('Add Booking','events-manager') ?></a><?php	
 	}
 	
 	/**
@@ -153,7 +197,7 @@ class EM_Gateway_Offline extends EM_Gateway {
 	 */
 	function event_booking_options(){
 		global $EM_Event;
-		?><a href="<?php echo em_add_get_params($EM_Event->get_bookings_url(), array('action'=>'manual_booking','event_id'=>$EM_Event->event_id)); ?>"><?php _e('add booking','em-pro') ?></a><?php	
+		?><a href="<?php echo add_query_arg(['action'=>'manual_booking','event_id'=>$EM_Event->event_id], $EM_Event->get_bookings_url()); ?>"><?php _e('add booking','events-manager') ?></a><?php	
 	}
 	
 	/**
@@ -163,7 +207,7 @@ class EM_Gateway_Offline extends EM_Gateway {
 		?>
 		<div id="em-gateway-payment" class="">
 			<h2 class="title">
-				<?php _e('Add Offline Payment', 'em-pro'); ?>
+				<?php _e('Add Offline Payment', 'events-manager'); ?>
 			</h2>
 			<div class="">
 				<div>
@@ -171,14 +215,14 @@ class EM_Gateway_Offline extends EM_Gateway {
 						<table class="form-table">
 							<tbody>
 							  <tr valign="top">
-								  <th scope="row"><?php _e('Amount', 'em-pro') ?></th>
+								  <th scope="row"><?php _e('Amount', 'events-manager') ?></th>
 									  <td><input type="text" name="transaction_total_amount" value="<?php if(!empty($_REQUEST['transaction_total_amount'])) echo esc_attr($_REQUEST['transaction_total_amount']); ?>" />
 									  <br />
-									  <em><?php _e('Please enter a valid payment amount (e.g. 10.00). Use negative numbers to credit a booking.','em-pro'); ?></em>
+									  <em><?php _e('Please enter a valid payment amount (e.g. 10.00). Use negative numbers to credit a booking.','events-manager'); ?></em>
 								  </td>
 							  </tr>
 							  <tr valign="top">
-								  <th scope="row"><?php _e('Comments', 'em-pro') ?></th>
+								  <th scope="row"><?php _e('Comments', 'events-manager') ?></th>
 								  <td>
 										<textarea name="transaction_note"><?php if(!empty($_REQUEST['transaction_note'])) echo esc_attr($_REQUEST['transaction_note']); ?></textarea>
 								  </td>
@@ -187,8 +231,8 @@ class EM_Gateway_Offline extends EM_Gateway {
 						</table>
 						<input type="hidden" name="action" value="gateway_add_payment" />
 						<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce('gateway_add_payment'); ?>" />
-						<input type="hidden" name="redirect_to" value="<?php echo (!empty($_REQUEST['redirect_to'])) ? $_REQUEST['redirect_to']:em_wp_get_referer(); ?>" />
-						<input type="submit" class="<?php if( is_admin() ) echo 'button-primary'; ?>" value="<?php _e('Add Offline Payment', 'em-pro'); ?>" />
+						<input type="hidden" name="redirect_to" value="<?php echo (!empty($_REQUEST['redirect_to'])) ? $_REQUEST['redirect_to']:wp_validate_redirect(wp_get_raw_referer(), false ); ?>" />
+						<input type="submit" class="<?php if( is_admin() ) echo 'button-primary'; ?>" value="<?php _e('Add Offline Payment', 'events-manager'); ?>" />
 					</form>
 				</div>					
 			</div>
@@ -212,7 +256,7 @@ class EM_Gateway_Offline extends EM_Gateway {
 		//force all user fields to be loaded
 		EM_Bookings::$force_registration = EM_Bookings::$disable_restrictions = true;
 		//make all tickets available
-		foreach( $EM_Event->get_bookings()->get_tickets() as $EM_Ticket ) $EM_Ticket->is_available = true; //make all tickets available
+		foreach( $EM_Event->get_bookings()->get_tickets() as $ticket ) $ticket->is_available = true; //make all tickets available
 		//remove unecessary footer payment stuff and add our own 
 		remove_action('em_booking_form_footer', array('EM_Gateways','booking_form_footer'),10,2);
 		remove_action('em_booking_form_footer', array('EM_Gateways','event_booking_form_footer'),10,2);
@@ -226,13 +270,13 @@ class EM_Gateway_Offline extends EM_Gateway {
 		?>
 		<div class='wrap'>
             <?php if( is_admin() ): ?>
-				<h1 class="wp-heading-inline"><?php echo sprintf(__('Add Booking For &quot;%s&quot;','em-pro'), $EM_Event->name); ?></h1>
-				<a href="<?php echo esc_url($EM_Event->get_bookings_url()); ?>" class="<?php echo $header_button_classes; ?>"><?php echo esc_html(sprintf(__('Go back to &quot;%s&quot; bookings','em-pro'), $EM_Event->name)) ?></a>
+				<h1 class="wp-heading-inline"><?php echo sprintf(__('Add Booking For &quot;%s&quot;','events-manager'), $EM_Event->event_name); ?></h1>
+				<a href="<?php echo esc_url($EM_Event->get_bookings_url()); ?>" class="<?php echo $header_button_classes; ?>"><?php echo esc_html(sprintf(__('Go back to &quot;%s&quot; bookings','events-manager'), $EM_Event->event_name)) ?></a>
                 <hr class="wp-header-end" />
 			<?php else: ?>
 				<h2>
-					<?php echo sprintf(__('Add Booking For &quot;%s&quot;','em-pro'), $EM_Event->name); ?>
-					<a href="<?php echo esc_url($EM_Event->get_bookings_url()); ?>" class="<?php echo $header_button_classes; ?>"><?php echo esc_html(sprintf(__('Go back to &quot;%s&quot; bookings','em-pro'), $EM_Event->name)) ?></a>
+					<?php echo sprintf(__('Add Booking For &quot;%s&quot;','events-manager'), $EM_Event->event_name); ?>
+					<a href="<?php echo esc_url($EM_Event->get_bookings_url()); ?>" class="<?php echo $header_button_classes; ?>"><?php echo esc_html(sprintf(__('Go back to &quot;%s&quot; bookings','events-manager'), $EM_Event->event_name)) ?></a>
                 </h2>
             <?php endif; ?>
 			<?php echo $EM_Event->output('#_BOOKINGFORM'); ?>
@@ -282,22 +326,22 @@ class EM_Gateway_Offline extends EM_Gateway {
 	 * @param EM_Booking $EM_Booking
 	 * @param boolean $post_validation
 	 */
-	function booking_add($EM_Event,$EM_Booking, $post_validation = false){
+	function booking_add($EM_Booking, $post_validation = false){
 		global $wpdb, $wp_rewrite, $EM_Notices;
 		//manual bookings
-		if( !empty($_REQUEST['manual_booking']) && wp_verify_nonce($_REQUEST['manual_booking'], 'em_manual_booking_'.$_REQUEST['event_id']) ){
-			//validate post
-			if( !empty($_REQUEST['payment_amount']) && !is_numeric($_REQUEST['payment_amount'])){
-				$EM_Booking->add_error( 'Invalid payment amount, please provide a number only.', 'em-pro' );
-			}
-			//add em_event_save filter to log transactions etc.
-			add_filter('em_booking_save', array(&$this, 'em_booking_save'), 10, 2);
-			//set flag that we're manually booking here, and set gateway to offline
-			if( empty($_REQUEST['person_id']) || $_REQUEST['person_id'] < 0 ){
-				EM_Bookings::$force_registration = EM_Bookings::$disable_restrictions = true;
-			}
+		
+		//validate post
+		if( !empty($_REQUEST['payment_amount']) && !is_numeric($_REQUEST['payment_amount'])){
+			$EM_Booking->add_error( 'Invalid payment amount, please provide a number only.', 'events-manager' );
 		}
-		parent::booking_add($EM_Event, $EM_Booking, $post_validation);
+		//add em_event_save filter to log transactions etc.
+		add_filter('em_booking_save', array(&$this, 'em_booking_save'), 10, 2);
+		//set flag that we're manually booking here, and set gateway to offline
+		if( empty($_REQUEST['person_id']) || $_REQUEST['person_id'] < 0 ){
+			EM_Bookings::$force_registration = EM_Bookings::$disable_restrictions = true;
+		}
+		
+		parent::booking_add($EM_Booking, $post_validation);
 	}
 	
 	/**
@@ -310,10 +354,10 @@ class EM_Gateway_Offline extends EM_Gateway {
 			remove_filter('em_booking_set_status',array(&$this,'em_booking_set_status'),1,2);
 			if( !empty($_REQUEST['payment_full']) ){
 				$price = ( !empty($_REQUEST['payment_amount']) && is_numeric($_REQUEST['payment_amount']) ) ? $_REQUEST['payment_amount']:$EM_Booking->get_price(false, false, true);
-				$this->record_transaction($EM_Booking, $price, get_option('dbem_bookings_currency'), current_time('mysql'), '', 'Completed', __('Manual booking.','em-pro'));
+				$this->record_transaction($EM_Booking, $price, get_option('dbem_bookings_currency'), current_time('mysql'), '', 'Completed', __('Manual booking.','events-manager'));
 				$EM_Booking->set_status(1,false);
 			}elseif( !empty($_REQUEST['payment_amount']) && is_numeric($_REQUEST['payment_amount']) ){
-				$this->record_transaction($EM_Booking, $_REQUEST['payment_amount'], get_option('dbem_bookings_currency'), current_time('mysql'), '', 'Completed', __('Manual booking.','em-pro'));
+				$this->record_transaction($EM_Booking, $_REQUEST['payment_amount'], get_option('dbem_bookings_currency'), current_time('mysql'), '', 'Completed', __('Manual booking.','events-manager'));
 				if( $_REQUEST['payment_amount'] >= $EM_Booking->get_price(false, false, true) ){
 					$EM_Booking->set_status(1,false);
 				}
@@ -333,17 +377,7 @@ class EM_Gateway_Offline extends EM_Gateway {
 		return $result;
 	}
 	
-	/**
-	 * @param boolean $result
-	 * @param EM_Booking $EM_Booking
-	 */
-	function em_booking_get_post( $result, $EM_Booking ){
-		if( $result && !empty($_REQUEST['manual_booking']) && wp_verify_nonce($_REQUEST['manual_booking'], 'em_manual_booking_'.$_REQUEST['event_id']) ){
-			$EM_Booking->person = new EM_Person(0);
-			$EM_Booking->person_id = 0;
-		}
-		return $result;
-	}
+	
 	
 	/**
 	 * Called before EM_Forms fields are added, when a manual booking is being made
@@ -363,7 +397,7 @@ class EM_Gateway_Offline extends EM_Gateway {
 				if( !empty( $users ) ){
 					echo '<select name="person_id" id="person_id">';
 					$_selected = selected( 0, $person_id, false );
-					echo "\t<option value='0'$_selected>" . esc_html__( "Select a user, or enter a new one below.", 'em-pro' ) . "</option>\n";
+					echo "\t<option value='0'$_selected>" . esc_html__( "Select a user, or enter a new one below.", 'events-manager' ) . "</option>\n";
 					foreach ( (array) $users as $user ) {
 						$display = sprintf( _x( '%1$s (%2$s)', 'user dropdown' ), $user->display_name, $user->user_login );
 						$_selected = selected( $user->ID, $person_id, false );
@@ -372,7 +406,7 @@ class EM_Gateway_Offline extends EM_Gateway {
 					}
 					echo '</select>';
 				}
-				//wp_dropdown_users ( array ('name' => 'person_id', 'show_option_none' => __ ( "Select a user, or enter a new one below.", 'em-pro' ), 'selected' => $person_id  ) );
+				//wp_dropdown_users ( array ('name' => 'person_id', 'show_option_none' => __ ( "Select a user, or enter a new one below.", 'events-manager' ), 'selected' => $person_id  ) );
 			?>
 		</p>
 		<?php
@@ -389,10 +423,10 @@ class EM_Gateway_Offline extends EM_Gateway {
 			<input type="hidden" name="gateway" value="<?php echo $this->gateway; ?>" />
 			<input type="hidden" name="manual_booking" value="<?php echo wp_create_nonce('em_manual_booking_'.$EM_Event->event_id); ?>" />
 			<p class="em-booking-gateway" id="em-booking-gateway">
-				<label><?php _e('Amount Paid','em-pro'); ?></label>
+				<label><?php _e('Amount Paid','events-manager'); ?></label>
 				<input type="text" name="payment_amount" id="em-payment-amount" value="<?php if(!empty($_REQUEST['payment_amount'])) echo esc_attr($_REQUEST['payment_amount']); ?>">
-				<?php _e('Fully Paid','em-pro'); ?> <input type="checkbox" name="payment_full" id="em-payment-full" value="1"><br />
-				<em><?php _e('If you check this as fully paid, and leave the amount paid blank, it will be assumed the full payment has been made.' ,'em-pro'); ?></em>
+				<?php _e('Fully Paid','events-manager'); ?> <input type="checkbox" name="payment_full" id="em-payment-full" value="1"><br />
+				<em><?php _e('If you check this as fully paid, and leave the amount paid blank, it will be assumed the full payment has been made.' ,'events-manager'); ?></em>
 			</p>
 			<?php
 		}
@@ -414,12 +448,12 @@ class EM_Gateway_Offline extends EM_Gateway {
 		<table class="form-table">
 		<tbody>
 		  <?php 
-		  	  Options::input( esc_html__('Success Message', 'em-pro'), 'em_'. $this->gateway . '_booking_feedback', esc_html__('The message that is shown to a user when a booking with offline payments is successful.','em-pro') );
-			  Options::input( esc_html__('IBAN', 'em-pro'), 'em_'. $this->gateway . '_iban', esc_html__('In order to generate a QR Code for payment, you have to provide a valid IBAN','em-pro'), ["class" => 'regular-text code', 'pattern' => '[A-Z0-9]'] );
-			  Options::input( esc_html__('BIC', 'em-pro'), 'em_'. $this->gateway . '_bic', esc_html__('Though not needed, some banks are only happy if you provide a BIC','em-pro'), ["class" => 'regular-text code', 'pattern' => '[A-Z0-9]'] );			  
-			  Options::input( esc_html__('Bank', 'em-pro'), 'em_'. $this->gateway . '_bank', esc_html__('Same goes with Bank name.','em-pro') );
-			  Options::input( esc_html__('Beneficiary', 'em-pro'), 'em_'. $this->gateway . '_beneficiary', esc_html__('In some countries you need to specify a beneficiary. This Data is added to the QR Code.','em-pro') );
-			  Options::input( esc_html__('Payment Deadline', 'em-pro'), 'em_'. $this->gateway . '_deadline', esc_html__('Number of days until payment has to be made','em-pro'), ["placeholder" => "10", "type" => Options::NUMBER, "class" => 'regular-text code', 'pattern' => '[0-9]'] );
+		  	  Options::input( esc_html__('Success Message', 'events-manager'), 'em_'. $this->gateway . '_booking_feedback', esc_html__('The message that is shown to a user when a booking with offline payments is successful.','events-manager') );
+			  Options::input( esc_html__('IBAN', 'events-manager'), 'em_'. $this->gateway . '_iban', esc_html__('In order to generate a QR Code for payment, you have to provide a valid IBAN','events-manager'), ["class" => 'regular-text code', 'pattern' => '[A-Z0-9]'] );
+			  Options::input( esc_html__('BIC', 'events-manager'), 'em_'. $this->gateway . '_bic', esc_html__('Though not needed, some banks are only happy if you provide a BIC','events-manager'), ["class" => 'regular-text code', 'pattern' => '[A-Z0-9]'] );			  
+			  Options::input( esc_html__('Bank', 'events-manager'), 'em_'. $this->gateway . '_bank', esc_html__('Same goes with Bank name.','events-manager') );
+			  Options::input( esc_html__('Beneficiary', 'events-manager'), 'em_'. $this->gateway . '_beneficiary', esc_html__('In some countries you need to specify a beneficiary. This Data is added to the QR Code.','events-manager') );
+			  Options::input( esc_html__('Payment Deadline', 'events-manager'), 'em_'. $this->gateway . '_deadline', esc_html__('Number of days until payment has to be made','events-manager'), ["placeholder" => "10", "type" => Options::NUMBER, "class" => 'regular-text code', 'pattern' => '[0-9]'] );
 		  ?>
 		</tbody>
 		</table>
@@ -451,6 +485,26 @@ class EM_Gateway_Offline extends EM_Gateway {
 	    //for all intents and purposes, if there's no gateway assigned but this booking status matches, we assume it's offline
 		return parent::uses_gateway($EM_Booking) || ( empty($EM_Booking->booking_meta['gateway']) && $EM_Booking->booking_status == $this->status );
 	}
+
+
+	function register_rest_route() {
+		register_rest_route( 'events/v2', '/gateway/payment(?:/(?P<id>\d+))?', [
+			'methods' => WP_REST_Server::READABLE,
+			'callback' => [$this, 'get_payment_info'],
+			'permission_callback' => function ( \WP_REST_Request $request ) {
+                return true;
+            }
+		]);
+	}
+
+	
+
+	function get_payment_info($booking) {
+		
+		
+	}
 }
 EM_Gateways::register_gateway('offline', 'EM_Gateway_Offline');
+
+require_once('QRCode.php')
 ?>

@@ -40,118 +40,46 @@ class EventPost {
 		}
 	}
 
+
+	/**
+	 * Returns price and free spaces for a given event
+	 *
+	 * @param [type] $request
+	 * @return void
+	 */
+	public function get_rest_bookinginfo($request) {
+		$result = [
+			'success' => false,
+		];
+
+		$id = $request->get_param('id');
+		if(!$id) return $result;
+		
+		$event = new \EM_Event($id, 'post_id');
+		
+		$result['success'] = true;
+
+		$data = [
+			'price_float' => $event->get_price(),
+			'formatted_price' => $event->get_formatted_price(),
+			'available_spaces' => $event->get_bookings()->get_available_spaces(),
+			'booked_spaces' => $event->get_bookings()->get_booked_spaces(),
+		];
+
+		$result['data'] = $data;
+
+		return $result;
+	}
+
 	public function register_meta() {
 
-		$metadata = [
-			[
-				"name" => "_event_rsvp_date",
-				"type" => "string",
-				"post_type" => ['event']
-			],
-			[
-				"name" => "_booking_form",
-				"type" => "number",
-				"post_type" => ['event']
-			],
-			[
-				"name" => "_booking_form",
-				"type" => "number",
-				"post_type" => ['event']
-			],
-			[
-				"name" => "_attendee_form",
-				"type" => "number",
-				"post_type" => ['event']
-			],
-			[
-				"name" => "_speaker_id",
-				"type" => "number",
-				"post_type" => ['event']
-			],
-			[
-				"name" => "_event_audience",
-				"type" => "string",
-				"post_type" => ['event']
-			],
-			[
-				"name" => "_event_start_date",
-				"type" => "string",
-				"post_type" => ['event', 'event-recurring']
-			],
-			[
-				"name" => "_event_end_date",
-				"type" => "string",
-				"post_type" => ['event', 'event-recurring']
-			],
-			[
-				"name" => "_event_start_time",
-				"type" => "string",
-				"post_type" => ['event', 'event-recurring']
-			],
-			[
-				"name" => "_event_end_time",
-				"type" => "string",
-				"post_type" => ['event', 'event-recurring']
-			],
-			[
-				"name" => "_event_all_day",
-				"type" => "boolean",
-				"post_type" => ['event', 'event-recurring']
-			],
-			[
-				"name" => "_location_id",
-				"type" => "number",
-				"post_type" => ['event', 'event-recurring']
-			],
-			[
-				"name" => "_recurrence_interval",
-				"type" => "number",
-				"post_type" => ['event-recurring']
-			],
-			[
-				"name" => "_recurrence_byweekno",
-				"type" => "number",
-				"post_type" => ['event-recurring']
-			],
-			[
-				"name" => "_recurrence_byday",
-				"type" => "string",
-				"post_type" => ['event-recurring']
-			],
-			[
-				"name" => "_recurrence_days",
-				"type" => "number",
-				"post_type" => ['event-recurring']
-
-			],
-			[
-				"name" => "_recurrence_freq",
-				"type" => "string",
-				"post_type" => ['event-recurring']
-
-			]
-
-		];
-		
-		register_post_meta( 'event', '_event_rsvp_date', [
-			'type' => 'string',
-			'single'       => true,
-			'sanitize_callback' => '',
-			'auth_callback' => function() {
-				return current_user_can( 'edit_posts' );
-			},
-			'show_in_rest' => [
-				'schema' => [
-					'style' => "string"
-				]
-			]
-		]);
+		$metadata = json_decode(file_get_contents(__DIR__ . '/metadata.json'), true);
 
 		foreach($metadata as $meta){
 			if(!in_array('event', $meta['post_type'])){
 				continue;
 			}
-			register_post_meta( 'event', $meta['name'], [
+			register_meta( 'event', $meta['name'], [
 				'type' => $meta['type'],
 				'single'       => true,
 				
@@ -172,7 +100,7 @@ class EventPost {
 			if(!in_array('event-recurring', $meta['post_type'])){
 				continue;
 			}
-			register_post_meta( 'event-recurring', $meta['name'], [
+			register_meta( 'event-recurring', $meta['name'], [
 				'type' => $meta['type'],
 				'single'       => true,
 				'sanitize_callback' => '',
@@ -334,11 +262,9 @@ class EventPost {
 	public function register_rest() {
 		register_rest_route( 'events/v2', '/events/', ['method' => 'GET', 'callback' => [$this, 'get_rest_data'], 'permission_callback' => '__return_true'], true );
 		register_rest_route( 'events/v2', '/bookinginfo/(?P<id>\d+)', ['method' => 'GET', 'callback' => [$this, 'get_rest_bookinginfo'], 'permission_callback' => '__return_true'], true );
-		register_rest_route( 'events/v2', '/bookingdata/(?P<id>\d+)', ['method' => 'GET', 'callback' => [$this, 'get_rest_bookingdata'], 'permission_callback' => '__return_true'], true );
-		register_rest_route( 'events/v2', '/booking/(?P<id>\d+)', ['method' => 'GET', 'callback' => [$this, 'get_rest_booking'], 'permission_callback' => '__return_true'], true );
+
 	}
 
-	
 	public function get_rest_data() {
 
 		$args = [
@@ -356,121 +282,15 @@ class EventPost {
 		
 		return \EM_Events::get_rest($args);
 		
-		
 	}
 
-	/**
-	 * Returns price and free spaces for a given event
-	 *
-	 * @param [type] $request
-	 * @return void
-	 */
-	public function get_rest_bookinginfo($request) {
-		$result = [
-			'success' => false,
-		];
-
-		$id = $request->get_param('id');
-		if(!$id) return $result;
-		
-		$event = new \EM_Event($id, 'post_id');
-		
-		$result['success'] = true;
-
-		$data = [
-			'price_float' => $event->get_price(),
-			'formatted_price' => $event->get_formatted_price(),
-			'available_spaces' => $event->get_bookings()->get_available_spaces(),
-			'booked_spaces' => $event->get_bookings()->get_booked_spaces(),
-		];
-
-		$result['data'] = $data;
-
-		return $result;
-	}
-
-
-	public function get_rest_bookingdata($request) {
-		$result = [
-			'success' => false,
-		];
-
-		$id = $request->get_param('id');
-		if(!$id) return array_merge(["error" => __("Event not found", "events-manager")], $result);
-		
-		$event = new \EM_Event($id, 'post_id');
-
-		$priceFormatter = new \Contexis\Events\Intl\Price(0);
-
-		$data = [
-			'_nonce' => wp_create_nonce('booking_add'),
-			'rest_url' => get_rest_url(),
-			'booking_url' => admin_url('admin-ajax.php'),
-			'event' => \EM_Events::get_rest(['event' => $event->id])[0],
-			'registration_fields' => \EM_Booking_Form::get_booking_form($event->post_id),
-			'attendee_fields' => \EM_Attendees_Form::get_attendee_form($event->post_id),
-			'available_tickets' => $event->get_tickets_rest(),
-			'available_gateways' => \EM_Gateways::get_rest(),
-			'l10n' => [
-				"consent" => get_option("dbem_privacy_message"),
-				"currency" => $priceFormatter->get_currency_code(),
-				"locale" => str_replace('_', '-', get_locale()),
-				"countries" => \Contexis\Events\Intl\Countries::get()
-			]
-		];
-
-		$result['success'] = true;
-		$result['data'] = $data;
-
-		return $result;
-		
-	}
-
-	public function get_rest_booking($request) {
-		$result = [
-			'success' => false,
-			'data' => 'no id given'
-		];
-
-		$id = $request->get_param('id');
-		if(!$id) return $result;
-		
-		$booking = new \EM_Booking($id);
-		$event = new \EM_Event($booking->event_id);
-
-		$data = [
-			'registrationFields' => \EM_Booking_Form::get_booking_form($event->post_id),
-		    'attendeeFields' => \EM_Attendees_Form::get_attendee_form($event->post_id),
-			'availableTickets' => $event->get_tickets_rest(),
-			'registration' => array_merge($booking->booking_meta['registration'], $booking->booking_meta['booking']),
-			'attendees' => $this->get_attendees($booking),
-			'event' => \EM_Events::get_rest(['event' => $event->id])[0],
-			'price' => $booking->booking_id,
-			'success' => true,
-			'booking' => [
-				'date' => $booking->get_booking_date(),
-				'id' => $booking->booking_id,
-				'status' => $booking->status,
-				'status_array' => $booking->status_array,
-				'price' => $booking->get_price(),
-				'paid' => $booking->get_price_summary_array()
-			],
-			'rest_url' => get_rest_url(),
-			'booking_url' => admin_url('admin-ajax.php')
-		];
-
-		$result['success'] = true;
-		$result['data'] = $data;
-
-		return $result;
-	}
 
 	public function get_attendees($booking) {
 		$result = [];
 		$tickets = $booking->booking_meta['attendees'];
 		foreach($tickets as $key => $ticket) {
 			foreach ($ticket as $attendee) {
-				$result[] = [ 'ticket' => $key, 'fields' => $attendee ];
+				$result[] = [ 'id' => $key, 'fields' => $attendee ];
 			}
 		}
 		return $result;

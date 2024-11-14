@@ -22,8 +22,8 @@ class EM_Gateways {
 		
 		//Normal Bookings mode, or manual booking
 		add_action('em_booking_add', array('EM_Gateways', 'em_booking_add'), 10, 3);
-		add_filter('em_booking_get_post',array('EM_Gateways', 'em_booking_get_post'), 10, 2);
-		add_filter('em_action_booking_add', array('EM_Gateways','em_action_booking_add'),10,2); //adds gateway var to feedback
+		
+		//add_filter('em_action_booking_add', array('EM_Gateways','em_action_booking_add'),10,2); //adds gateway var to feedback
 		//Booking Form Modifications
 		//buttons only way, oudated but still possible, will eventually depreciated this once an API is out, so use the latter pls
 		add_filter('em_booking_form_buttons', array('EM_Gateways','booking_form_buttons'),10,2); //Replace button with booking buttons
@@ -36,15 +36,15 @@ class EM_Gateways {
 		add_action('admin_init',array('EM_Gateways', 'customer_fields_admin_actions'),9); //before bookings
 		add_action('emp_forms_admin_page',array('EM_Gateways', 'customer_fields_admin'),30);
 		self::$customer_fields = array(
-			'address' => __('Address','em-pro'),
-			'address_2' => __('Address Line 2','em-pro'),
-			'city' => __('City','em-pro'),
-			'state' => __('State/County','em-pro'),
-			'zip' => __('Zip/Post Code','em-pro'),
-			'country' => __('Country','em-pro'),
-			'phone' => __('Phone','em-pro'),
-			'fax' => __('Fax','em-pro'),
-			'company' => __('Company','em-pro')
+			'address' => __('Address','events-manager'),
+			'address_2' => __('Address Line 2','events-manager'),
+			'city' => __('City','events-manager'),
+			'state' => __('State/County','events-manager'),
+			'zip' => __('Zip/Post Code','events-manager'),
+			'country' => __('Country','events-manager'),
+			'phone' => __('Phone','events-manager'),
+			'fax' => __('Fax','events-manager'),
+			'company' => __('Company','events-manager')
 		);
 		//data privacy - transaction history
         add_filter('em_data_privacy_export_bookings_items_after_item', 'EM_Gateways::data_privacy_export', 10, 3);
@@ -52,15 +52,15 @@ class EM_Gateways {
 	
 	static function em_wp_localize_script( $vars ){
 		if( is_user_logged_in() && get_option('dbem_rsvp_enabled') ){
-		    $vars['booking_delete'] .= ' '.__('All transactional history associated with this booking will also be deleted.','em-pro');
-		    $vars['transaction_delete'] = __('Are you sure you want to delete? This may make your transaction history out of sync with your payment gateway provider.', 'em-pro');
+		    $vars['booking_delete'] .= ' '.__('All transactional history associated with this booking will also be deleted.','events-manager');
+		    $vars['transaction_delete'] = __('Are you sure you want to delete? This may make your transaction history out of sync with your payment gateway provider.', 'events-manager');
 		}
 	    return $vars;
 	}
 	
 	static function em_bookings_table($EM_Bookings_Table){
-		$EM_Bookings_Table->statuses['awaiting-online'] = array('label'=>__('Awaiting Online Payment','em-pro'), 'search'=>4);
-		$EM_Bookings_Table->statuses['awaiting-payment'] = array('label'=>__('Awaiting Offline Payment','em-pro'), 'search'=>5);
+		$EM_Bookings_Table->statuses['awaiting-online'] = array('label'=>__('Awaiting Online Payment','events-manager'), 'search'=>4);
+		$EM_Bookings_Table->statuses['awaiting-payment'] = array('label'=>__('Awaiting Offline Payment','events-manager'), 'search'=>5);
 		$EM_Bookings_Table->statuses['needs-attention']['search'] = array(0,4,5);
 		if( !get_option('dbem_bookings_approval') ){
 			$EM_Bookings_Table->statuses['needs-attention']['search'] = array(5);
@@ -102,6 +102,10 @@ class EM_Gateways {
 		return $gateways;
 	}
 
+	/**
+	 * Returns an array of all registered gateway objects
+	 * @return array
+	 */
 	static function get_rest() {
 		global $EM_Gateways;
 		$gateways = array();
@@ -142,35 +146,7 @@ class EM_Gateways {
 		return new EM_Gateway(); //returns a blank EM_Gateway regardless to avoid fatal errors
 	}
 
-	/* 
-	 * --------------------------------------------------
-	 * Booking Interception - functions that modify booking object behaviour
-	 * --------------------------------------------------
-	 */
-	/**
-	 * Hooks into em_booking_get_post filter and makes sure that if there's an active gateway for new bookings, if no $_REQUEST['gateway'] is supplied (i.e. hacking, spammer, or js problem with booking button mode).
-	 * @param boolean $result
-	 * @param EM_Booking $EM_Booking
-	 * @return boolean
-	 */
-	static function em_booking_get_post($result, $EM_Booking){
-	    if( !empty($_REQUEST['manual_booking']) && wp_verify_nonce($_REQUEST['manual_booking'], 'em_manual_booking_'.$_REQUEST['event_id']) ){
-	    	return $result;
-	    }
-	 
-	    if( empty($EM_Booking->booking_id) && (empty($_REQUEST['gateway']) || !array_key_exists($_REQUEST['gateway'], self::active_gateways())) && $EM_Booking->get_price() > 0 && count(EM_Gateways::active_gateways()) > 0 ){
-	        //spammer or hacker trying to get around no gateway selection
-	    	$error = __('Choice of payment method not recognized. If you are seeing this error and selecting a method of payment, we apologize for the inconvenience. Please contact us and we\'ll help you make a booking as soon as possible.','em-pro');
-	    	$EM_Booking->add_error($error);
-	    	$result = false;
-	    	if( defined('DOING_AJAX') ){
-	    		$return = array('result'=>false, 'message'=>$error, 'errors'=>$error);
-	    		echo json_encode($return);
-	    		die();
-	    	}
-	    }
-	    return $result;
-	}
+	
 	
 	/**
 	 * Intercepted when a booking is about to be added and saved, calls the relevant booking gateway action provided gateway is provided in submitted request variables.
@@ -178,14 +154,11 @@ class EM_Gateways {
 	 * @param EM_Booking $EM_Booking the new booking to be added
 	 * @param boolean $post_validation
 	 */
-	static function em_booking_add($EM_Event, $EM_Booking, $post_validation = false){
+	static function em_booking_add($booking, $post_validation = false){
 		global $EM_Gateways;
-		if( !empty($_REQUEST['gateway']) && array_key_exists($_REQUEST['gateway'], $EM_Gateways) ){
-			//we haven't been told which gateway to use, revert to offline payment, since it's closest to pending
-			$EM_Booking->booking_meta['gateway'] = addslashes($_REQUEST['gateway']);
+		$gateway = $booking->booking_meta['gateway'];
 			//Individual gateways will hook into this function
-			$EM_Gateways[$_REQUEST['gateway']]->booking_add($EM_Event, $EM_Booking, $post_validation);
-		}
+		$EM_Gateways[$gateway]->booking_add($booking, $post_validation);
 	}
 	
 	static function event_booking_form_footer( $EM_Event ){
@@ -326,14 +299,14 @@ class EM_Gateways {
 				$gateway = EM_Gateways::get_gateway($EM_Booking->booking_meta['gateway']);
 				$value = $gateway->title;
 			}else{
-				$value = __('None','em-pro');
+				$value = __('None','events-manager');
 			}
 		}
 		return $value;
 	}
 	
 	public static function em_bookings_table_cols_template($template, $EM_Bookings_Table){
-		$template['gateway'] = __('Gateway Used','em-pro');
+		$template['gateway'] = __('Gateway Used','events-manager');
 		return $template;
 	}
 
@@ -386,7 +359,6 @@ class EM_Gateways {
 	
 	static function customer_fields_admin_actions() {
 		global $EM_Notices;
-		$EM_Form = EM_User_Fields::get_form();
 		if( !empty($_REQUEST['page']) && $_REQUEST['page'] == 'events-manager-forms-editor' ){
 			if( !empty($_REQUEST['form_name']) && 'gateway_customer_fields' == $_REQUEST['form_name'] && wp_verify_nonce($_REQUEST['_wpnonce'], 'gateway_customer_fields_'.get_current_user_id()) ){
 				//save values
@@ -395,7 +367,7 @@ class EM_Gateways {
 					$gateway_fields[$field_key] = ( !empty($_REQUEST[$field_key]) ) ? $_REQUEST[$field_key]:'';
 				}
 				update_option('emp_gateway_customer_fields',$gateway_fields);
-				$EM_Notices->add_confirm(__('Changes Saved','em-pro'));
+				$EM_Notices->add_confirm(__('Changes Saved','events-manager'));
 			}
 		}
 		
@@ -410,21 +382,21 @@ class EM_Gateways {
 						<div id="em-booking-form-editor" class="postbox">
 							<div class="handlediv" title=""><br></div>
 							<h3>
-								<span><?php _e ( 'Common User Fields for Gateways', 'em-pro' ); ?></span>
+								<span><?php _e ( 'Common User Fields for Gateways', 'events-manager' ); ?></span>
 							</h3>
 							<div class="">
-								<p><?php _e('In many cases, customer address information is required by gateways for verification. This section connects your custom fields to commonly used customer information fields.', 'em-pro' ); ?></p>
-								<p><?php _e('After creating user fields above, you should link them up in here so some gateways can make use of them when processing payments.', 'em-pro' ); ?></p>
+								<p><?php _e('In many cases, customer address information is required by gateways for verification. This section connects your custom fields to commonly used customer information fields.', 'events-manager' ); ?></p>
+								<p><?php _e('After creating user fields above, you should link them up in here so some gateways can make use of them when processing payments.', 'events-manager' ); ?></p>
 								<form action="#gateway_customer_fields" method="post">
 									<table class="form-table">
-										<tr><td><?php _e('Name (first/last)','em-pro'); ?></td><td><em><?php _e('Generated accordingly from user first/last name or full name field. If a name field isn\'t provided in your booking form, the username will be used instead.','em-pro')?></em></td></tr>
-										<tr><td><?php _e('Email','em-pro'); ?></td><td><em><?php _e('Uses the WordPress account email associated with the user.', 'em-pro')?></em></td></tr>
+										<tr><td><?php _e('Name (first/last)','events-manager'); ?></td><td><em><?php _e('Generated accordingly from user first/last name or full name field. If a name field isn\'t provided in your booking form, the username will be used instead.','events-manager')?></em></td></tr>
+										<tr><td><?php _e('Email','events-manager'); ?></td><td><em><?php _e('Uses the WordPress account email associated with the user.', 'events-manager')?></em></td></tr>
 										<?php foreach( self::$customer_fields as $field_key => $field_val ): ?>
 										<tr>
 											<td><?php echo $field_val; ?></td>
 											<td>
 												<select name="<?php echo $field_key; ?>">
-													<option value="0"><?php echo _e('none selected','em-pro'); ?></option>
+													<option value="0"><?php echo _e('none selected','events-manager'); ?></option>
 													<?php foreach( $EM_Form->user_fields as $field_id => $field_name ): ?>
 													<option value="<?php echo $field_id; ?>" <?php echo ($field_id == $current_values[$field_key]) ?'selected="selected"':''; ?>><?php echo $field_name; ?></option>
 													<?php endforeach; ?>
@@ -437,7 +409,7 @@ class EM_Gateways {
 										<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce('gateway_customer_fields_'.get_current_user_id()); ?>">
 										<input type="hidden" name="form_action" value="form_fields">
 										<input type="hidden" name="form_name" value="gateway_customer_fields" />
-										<input type="submit" name="events_update" value="<?php _e('Save Form','em-pro'); ?>" class="button-primary">
+										<input type="submit" name="events_update" value="<?php _e('Save Form','events-manager'); ?>" class="button-primary">
 									</p>
 								</form>
 							</div>
@@ -505,14 +477,14 @@ class EM_Gateways {
 			    );
 			    
 				$EM_Event = $EM_Booking->get_event(); //handle potentially deleted events in a MB booking
-				$event_string = !empty($EM_Event->post_id) ? $EM_Event->output('#_EVENTLINK - #_EVENTDATES @ #_EVENTTIMES') : __('Deleted Event', 'em-pro');
-				$transactions_item['data'][] = array('name' => __('Event','em-pro'), 'value' => $event_string );
+				$event_string = !empty($EM_Event->post_id) ? $EM_Event->output('#_EVENTLINK - #_EVENTDATES @ #_EVENTTIMES') : __('Deleted Event', 'events-manager');
+				$transactions_item['data'][] = array('name' => __('Event','events-manager'), 'value' => $event_string );
                 
-			    $transactions_item['data'][] = array('name' => __('Status','em-pro'), 'value' => $transaction->transaction_status );
-			    $transactions_item['data'][] = array('name' => __('Gateway','em-pro'), 'value' => $transaction->transaction_gateway );
-			    $transactions_item['data'][] = array('name' => __('Date','em-pro'), 'value' => $transaction->transaction_total_amount .' '.$transaction->transaction_currency);
-			    $transactions_item['data'][] = array('name' => __('Transaction ID','em-pro'), 'value' => $transaction->transaction_gateway_id );
-			    $transactions_item['data'][] = array('name' => __('Notes','em-pro'), 'value' => $transaction->transaction_note );
+			    $transactions_item['data'][] = array('name' => __('Status','events-manager'), 'value' => $transaction->transaction_status );
+			    $transactions_item['data'][] = array('name' => __('Gateway','events-manager'), 'value' => $transaction->transaction_gateway );
+			    $transactions_item['data'][] = array('name' => __('Date','events-manager'), 'value' => $transaction->transaction_total_amount .' '.$transaction->transaction_currency);
+			    $transactions_item['data'][] = array('name' => __('Transaction ID','events-manager'), 'value' => $transaction->transaction_gateway_id );
+			    $transactions_item['data'][] = array('name' => __('Notes','events-manager'), 'value' => $transaction->transaction_note );
             }
             $export_items[] = $transactions_item;
         }
@@ -528,8 +500,8 @@ if( is_admin() ){
 function emp_register_gateway($gateway, $class) { EM_Gateways::register_gateway($gateway, $class); } //compatibility, use EM_Gateways directly
 }
 
-include('gateway.php');
-include('gateways.transactions.php');
+require_once('gateway.php');
+require_once('gateways.transactions.php');
 do_action('em_gateways_init');
-include('gateway.offline.php');
-include('gateway-qr-code.php');
+require_once('gateway.offline.php');
+require_once('gateway.mollie.php');

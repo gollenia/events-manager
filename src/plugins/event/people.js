@@ -7,7 +7,7 @@
  */
 import { ComboboxControl, Icon, TextControl } from '@wordpress/components';
 import { select, useSelect } from '@wordpress/data';
-import { PluginDocumentSettingPanel } from '@wordpress/edit-post';
+import { PluginDocumentSettingPanel } from '@wordpress/editor';
 
 import { store as coreStore, useEntityProp } from '@wordpress/core-data';
 import { __ } from '@wordpress/i18n';
@@ -23,16 +23,16 @@ const peopleSelector = () => {
 
 	const speakerList = useSelect( ( select ) => {
 		const { getEntityRecords } = select( coreStore );
-		const query = { per_page: -1 };
+		const query = { per_page: -1, _embedded: true };
 		const list = getEntityRecords( 'postType', 'event-speaker', query );
 
-		let speakerArray = [];
+		let speakers = [];
 		if ( ! list ) {
-			return speakerArray;
+			return speakers;
 		}
 
 		list.map( ( speaker ) => {
-			speakerArray.push( {
+			speakers.push( {
 				value: speaker.id,
 				label: speaker.title.raw,
 				media:
@@ -43,20 +43,20 @@ const peopleSelector = () => {
 			} );
 		} );
 
-		return speakerArray;
+		return speakers;
 	}, [] );
 
 	return (
 		<PluginDocumentSettingPanel
 			name="events-location-settings"
-			title={ __( 'Persons', 'events' ) }
+			title={ __( 'Persons', 'events-manager' ) }
 			className="events-location-settings"
 		>
 			<ComboboxControl
-				label={ __( 'Select a speaker', 'events' ) }
+				label={ __( 'Select a speaker', 'events-manager' ) }
 				value={ meta._speaker_id }
 				onChange={ ( value ) => {
-					setMeta( { _speaker_id: value } );
+					setMeta( { _speaker_id: value || 0 } );
 				} }
 				options={ speakerList }
 				__experimentalRenderItem={ ( { item } ) => {
@@ -66,7 +66,7 @@ const peopleSelector = () => {
 							{ item.media ? (
 								<img className="icon-round" width="24px" height="24px" src={ item.media } />
 							) : (
-								<Icon className="icon-round" icon={ icons.person } height={ 24 } width={ 24 } />
+								<Icon className="icon-round" icon={ icons.person } height={ 16 } width={ 16 } />
 							) }
 							{ item.label }
 						</div>
@@ -75,7 +75,7 @@ const peopleSelector = () => {
 			/>
 
 			<TextControl
-				label={ __( 'Audience', 'events' ) }
+				label={ __( 'Audience', 'events-manager' ) }
 				value={ meta._event_audience }
 				onChange={ ( value ) => {
 					setMeta( { _event_audience: value } );

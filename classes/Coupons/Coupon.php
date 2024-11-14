@@ -15,13 +15,11 @@ class EM_Coupon extends EM_Object {
 	var $coupon_end;
 	var $coupon_max;
 	var $coupon_type = '';
-	var $coupon_tax = '';
 	var $coupon_discount = 0;
 	var $coupon_eventwide = false;
-	var $coupon_sitewide = false;
 	var $coupon_private = false;
 	//Other Vars
-	var $fields = array( 
+	public array $fields = array( 
 		'coupon_id' => array('name'=>'id','type'=>'%d'),
 		'coupon_owner' => array('name'=>'owner','type'=>'%d'),
 		'blog_id' => array('name'=>'blog_id','type'=>'%d', 'null'=>true),
@@ -32,14 +30,12 @@ class EM_Coupon extends EM_Object {
 		'coupon_end' => array('name'=>'end','type'=>'%s','null'=>true),
 		'coupon_max' => array('name'=>'max','type'=>'%d', 'null'=>true),
 		'coupon_type' => array('name'=>'type','type'=>'%s'),
-		'coupon_tax' => array('name'=>'tax','type'=>'%s', 'null'=>true),
 		'coupon_discount' => array('name'=>'discount','type'=>'%f'),
 		'coupon_private' => array('name'=>'private','type'=>'%d', 'null'=>true),
-		'coupon_eventwide' => array('name'=>'eventwide','type'=>'%d', 'null'=>true),
-		'coupon_sitewide' => array('name'=>'sitewide','type'=>'%d', 'null'=>true),
+		'coupon_eventwide' => array('name'=>'eventwide','type'=>'%d', 'null'=>true)
 	);
-	var $required_fields = array();
-	var $feedback_message = ""; 
+	public array $required_fields = array();
+	public string $feedback_message = ""; 
 	var array $errors = array();
 	var $count = 0;
 	/**
@@ -57,7 +53,7 @@ class EM_Coupon extends EM_Object {
 	function __construct($id = false, $search_by = 'id') {
 		global $wpdb;
 		//Initialize
-		$this->required_fields = array("coupon_name" => __('Name', 'events-manager'), "coupon_discount" => __('Discount', 'em-pro'), "coupon_code" => __('Code', 'em-pro'));
+		$this->required_fields = array("coupon_name" => __('Name', 'events-manager'), "coupon_discount" => __('Discount', 'events-manager'), "coupon_code" => __('Code', 'events-manager'));
 		//Get the array/coupon_id
 		if( is_numeric($id) && $search_by == 'id' ){
 			//search by coupon_id, get post_id and blog_id (if in ms mode) and load the post
@@ -75,14 +71,7 @@ class EM_Coupon extends EM_Object {
 		}
 		$this->id = $this->coupon_id;
 		$this->owner = $this->coupon_owner;
-		if( empty($this->coupon_tax) ){
-			//special tax consideration for EM <5.4
-		    if( get_option('dbem_legacy_bookings_tax_auto_add', 'x') !== 'x' ){
-		        $this->coupon_tax = get_option('dbem_legacy_bookings_tax_auto_add') ? 'post':'pre';
-		    }else{
-		        $this->coupon_tax = get_option('dbem_bookings_tax_auto_add') ? 'post':'pre';   
-		    }
-		}
+	
 		
 		do_action('em_coupon', $this, $id);
 	}
@@ -177,14 +166,25 @@ class EM_Coupon extends EM_Object {
 		switch($this->coupon_type){
 			case '%':
 				//discount by percent
-				$text = sprintf(__('%s Off','em-pro'), number_format($this->coupon_discount, 2).'%');
+				$text = sprintf(__('%s Off','events-manager'), number_format($this->coupon_discount, 2).'%');
 				break;
 			case '#' :
 				//discount by price
-				$text = sprintf(__('%s Off','em-pro'), \Contexis\Events\Intl\Price::format($this->coupon_discount));
+				$text = sprintf(__('%s Off','events-manager'), \Contexis\Events\Intl\Price::format($this->coupon_discount));
 				break;
 		}
 		return apply_filters('em_coupon_get_discount_text', $text, $this);
+	}
+
+	function get_option_field(){
+		
+		return [
+			'value' => $this->coupon_code,
+			'label' => $this->coupon_code . ' - ' . $this->coupon_name . ' (' . $this->get_discount_text() . ')',
+			'code' => $this->coupon_code,
+			'discount' => floatVal($this->coupon_discount),
+			'type' => $this->coupon_type,
+		];
 	}
 	
 	function has_events(){

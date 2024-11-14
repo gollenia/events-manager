@@ -1,37 +1,43 @@
 import { __ } from '@wordpress/i18n';
+import { STATES } from './constants';
 
 const initialState = {
 	modal: {
 		visible: window.location.hash.indexOf( 'booking' ) != -1 ? true : false,
 		title: document.title,
 		originalDocumentTitle: document.title,
-		loading: 0,
+		orderState: STATES.IDLE,
+		initState: STATES.IDLE,
 	},
-	wizzard: {
+	wizard: {
 		steps: {
 			tickets: {
 				enabled: true,
 				step: 0,
-				label: __( 'Tickets', 'events' ),
+				label: __( 'Tickets', 'events-manager' ),
 				valid: false,
+				isLast: false,
 			},
 			registration: {
 				enabled: true,
 				step: 1,
-				label: __( 'Registration', 'events' ),
+				label: __( 'Registration', 'events-manager' ),
 				valid: false,
+				isLast: false,
 			},
 			payment: {
 				enabled: true,
 				step: 2,
-				label: __( 'Payment', 'events' ),
+				label: __( 'Payment', 'events-manager' ),
 				valid: false,
+				isLast: false,
 			},
 			success: {
 				enabled: true,
 				step: 3,
-				label: __( 'Done', 'events' ),
-				valid: true,
+				label: __( 'Done', 'events-manager' ),
+				valid: false,
+				isLast: true,
 			},
 		},
 		keys: [ 'tickets', 'registration', 'payment', 'success' ],

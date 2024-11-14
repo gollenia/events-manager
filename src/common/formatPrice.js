@@ -1,9 +1,16 @@
-function formatPrice(price, locale = 'en-GB', currency = 'EUR') {
-  const priceFormat = {
-	style: 'currency',
-	currency,
-	minimumFractionDigits: 2
-  };
-  const priceFormatObject = new Intl.NumberFormat(locale, priceFormat);
-  return priceFormatObject.format(price);
-}
+const getBrowserLanguage = () => {
+	if ( navigator.languages !== undefined ) {
+		return navigator.languages[ 0 ];
+	}
+	return navigator.language;
+};
+
+const formatPrice = ( value, currency = 'USD' ) => {
+	const lang = getBrowserLanguage();
+	return new Intl.NumberFormat( lang, {
+		style: 'currency',
+		currency: currency,
+	} ).format( value );
+};
+
+export { formatPrice };

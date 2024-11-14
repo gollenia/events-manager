@@ -1,0 +1,112 @@
+[
+	{
+		"name": "_booking_form",
+		"type": "number",
+		"post_type": [ "event" ]
+	},
+	{
+		"name": "_booking_form",
+		"type": "number",
+		"post_type": [ "event" ]
+	},
+	{
+		"name": "_attendee_form",
+		"type": "number",
+		"post_type": [ "event" ]
+	},
+	{
+		"name": "_speaker_id",
+		"type": "number",
+		"post_type": [ "event" ]
+	},
+	{
+		"name": "_event_audience",
+		"type": "string",
+		"post_type": [ "event" ]
+	},
+	{
+		"name": "_event_start_date",
+		"type": "string",
+		"post_type": [ "event", "event-recurring" ]
+	},
+	{
+		"name": "_event_end_date",
+		"type": "string",
+		"post_type": [ "event", "event-recurring" ]
+	},
+	{
+		"name": "_event_start_time",
+		"type": "string",
+		"post_type": [ "event", "event-recurring" ]
+	},
+	{
+		"name": "_event_end_time",
+		"type": "string",
+		"post_type": [ "event", "event-recurring" ]
+	},
+	{
+		"name": "_event_all_day",
+		"type": "boolean",
+		"post_type": [ "event", "event-recurring" ]
+	},
+	{
+		"name": "_location_id",
+		"type": "number",
+		"post_type": [ "event", "event-recurring" ]
+	},
+	{
+		"name": "_recurrence_interval",
+		"type": "number",
+		"post_type": [ "event-recurring" ]
+	},
+	{
+		"name": "_recurrence_byweekno",
+		"type": "number",
+		"post_type": [ "event-recurring" ]
+	},
+	{
+		"name": "_recurrence_byday",
+		"type": "string",
+		"post_type": [ "event-recurring" ]
+	},
+	{
+		"name": "_recurrence_days",
+		"type": "number",
+		"post_type": [ "event-recurring" ]
+	},
+	{
+		"name": "_recurrence_freq",
+		"type": "string",
+		"post_type": [ "event-recurring" ]
+	},
+	{
+		"name": "_event_rsvp_end",
+		"type": "string",
+		"post_type": [ "event" ]
+	},
+	{
+		"name": "_event_rsvp_start",
+		"type": "string",
+		"post_type": [ "event" ]
+	},
+	{
+		"name": "_event_rsvp",
+		"type": "boolean",
+		"post_type": [ "event" ]
+	},
+	{
+		"name": "_event_spaces",
+		"type": "number",
+		"post_type": [ "event" ]
+	},
+	{
+		"name": "_event_rsvp_spaces",
+		"type": "number",
+		"post_type": [ "event" ]
+	},
+	{
+		"name": "_event_rsvp_donation",
+		"type": "boolean",
+		"post_type": [ "event" ]
+	}
+]

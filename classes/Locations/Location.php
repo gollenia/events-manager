@@ -21,6 +21,7 @@ class EM_Location extends EM_Object {
 	var $post_id = '';
 	var $blog_id = 0;
 	var $location_parent;
+	var $location_private = 0;
 	var $location_slug = '';
 	var $location_name = '';
 	var $location_address = '';
@@ -42,7 +43,7 @@ class EM_Location extends EM_Object {
 	var $owner_name;
 	var $owner_email;
 	//Other Vars
-	var $fields = array( 
+	public array $fields = array( 
 		'location_id' => array('name'=>'id','type'=>'%d'),
 		'post_id' => array('name'=>'post_id','type'=>'%d'),
 		'blog_id' => array('name'=>'blog_id','type'=>'%d'),
@@ -68,7 +69,8 @@ class EM_Location extends EM_Object {
 	 * Associative array mapping shorter to full property names in this class, used in EM_Object magic access methods, allowing for interchangeable use when dealing with different object types such as locations and events.
 	 * @var array
 	 */
-	protected $shortnames = array(
+	/*
+	 protected $shortnames = array(
 		// common EM CPT object variables
 		'language' => 'location_language',
 		'translation' => 'location_translation',
@@ -79,12 +81,11 @@ class EM_Location extends EM_Object {
 		'status' => 'location_status',
 		'owner' => 'location_owner',
 	);
+	*/
 	var $post_fields = array('post_id','location_slug','location_status', 'location_name','post_content','location_owner');
 	var $location_attributes = array();
 	var $image_url = '';
-	var $required_fields = array();
-	var $feedback_message = "";
-	var $mime_types = array(1 => 'gif', 2 => 'jpg', 3 => 'png'); 
+	public string $feedback_message = "";
 	var array $errors = array();
 	/**
 	 * previous status of location
@@ -165,7 +166,7 @@ class EM_Location extends EM_Object {
 			}
 			$this->load_postdata($location_post, $search_by);
 		}
-		$this->compat_keys();
+		//$this->compat_keys();
 		//add this location to the cache
 		if( $this->location_id && $this->post_id ){
 			wp_cache_set($this->location_id, $this, 'em_locations');
@@ -253,9 +254,8 @@ class EM_Location extends EM_Object {
 			global $wpdb;
 		    $location_array = $wpdb->get_row($wpdb->prepare("SELECT * FROM ".EM_LOCATIONS_TABLE." WHERE post_id=%d",$this->post_id), ARRAY_A);
 		    if( is_array($location_array) ){
-				$this->orphaned_location = true;
 				$this->post_id = $this->ID = $event_array['post_id'] = null; //reset post_id because it doesn't really exist
-				$this->to_object($location_array);
+				$this->from_array($location_array);
 		    }
 		}
 	}
@@ -272,7 +272,7 @@ class EM_Location extends EM_Object {
 		$this->get_post_meta(false);
 		
 		$result = $validate ? $this->validate():true; //validate both post and meta, otherwise return true
-		$this->compat_keys();
+		//$this->compat_keys();
 		return apply_filters('em_location_get_post', $result, $this);		
 	}
 
@@ -295,7 +295,7 @@ class EM_Location extends EM_Object {
 		$this->location_latitude = get_post_meta($this->post_id, '_location_latitude', true);
 		$this->location_longitude = get_post_meta($this->post_id, '_location_longitude', true);
 	
-		$this->compat_keys();
+		//$this->compat_keys();
 		return apply_filters('em_location_get_post_meta',true, $this, true); //if making a hook, assume that eventually $validate won't be passed on
 	}
 	
@@ -330,8 +330,6 @@ class EM_Location extends EM_Object {
 		
 		do_action('em_location_save_meta_pre', $this);
 		
-		if( !$this->location_language ) $this->location_language = EM_ML::$current_language;
-		
 		//refresh status
 		$this->get_status();
 		$this->location_status = (count($this->errors) == 0) ? $this->location_status:null; //set status at this point, it's either the current status, or if validation fails, null
@@ -354,7 +352,7 @@ class EM_Location extends EM_Object {
 
 		
 		
-		$this->compat_keys();
+		//$this->compat_keys();
 		
 		return apply_filters('em_location_save_meta', count($this->errors) == 0, $this);
 	}
@@ -534,7 +532,7 @@ class EM_Location extends EM_Object {
 			//$wpdb->show_errors(true);
 			$location = $wpdb->get_row($prepared_sql, ARRAY_A);
 			if( is_array($location) ){
-				$this->to_object($location);
+				$this->from_array($location);
 			}
 			return apply_filters('em_location_load_similar', $location, $this);
 		}
@@ -568,7 +566,7 @@ class EM_Location extends EM_Object {
 		if( !empty($wp_rewrite) && $wp_rewrite->using_permalinks() ){
 			$return = trailingslashit($this->get_permalink()).'ical/';
 		}else{
-			$return = em_add_get_params($this->get_permalink(), array('ical'=>1));
+			$return = add_query_arg(['ical'=>1], $this->get_permalink());
 		}
 		return apply_filters('em_location_get_ical_url', $return);
 	}
@@ -578,7 +576,7 @@ class EM_Location extends EM_Object {
 		if( !empty($wp_rewrite) && $wp_rewrite->using_permalinks() ){
 			$return = trailingslashit($this->get_permalink()).'feed/';
 		}else{
-			$return = em_add_get_params($this->get_permalink(), array('feed'=>1));
+			$return = add_query_arg(['feed'=>1], $this->get_permalink());
 		}
 		return apply_filters('em_location_get_rss_url', $return);
 	}

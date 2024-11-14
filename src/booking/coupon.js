@@ -1,15 +1,14 @@
 import { __ } from '@wordpress/i18n';
 import { React, useState } from 'react';
+import { STATES } from './modules/constants';
 
 function Coupon( { state, dispatch } ) {
 	const { data } = state;
 
-	const [ INIT, READY, LOADING, SUCCESS, ERROR ] = [ 0, 1, 2, 3, 4 ];
-
-	const [ status, setStatus ] = useState( INIT );
+	const [ status, setStatus ] = useState( STATES.IDLE );
 
 	const checkCouponCode = async () => {
-		setStatus( LOADING );
+		setStatus( STATES.LOADING );
 		const params = {
 			event_id: data.event.event_id,
 			code: state.request.coupon,
@@ -21,30 +20,31 @@ function Coupon( { state, dispatch } ) {
 		await fetch( url, {} )
 			.then( ( response ) => response.json() )
 			.then( ( response ) => {
-				setStatus( LOADING );
+				setStatus( STATES.LOADING );
 				if ( response.success ) {
 					dispatch( { type: 'COUPON_RESPONSE', payload: response } );
-					setStatus( SUCCESS );
+					setStatus( STATES.SUCCESS );
 					return;
 				}
-				setStatus( ERROR );
+				setStatus( STATES.ERROR );
 				setTimeout( () => {
-					setStatus( READY );
+					setStatus( STATES.IDLE );
 				}, 3000 );
 			} );
 	};
 
 	const setCouponCode = ( code ) => {
-		setStatus( code == '' ? INIT : READY );
+		setStatus( STATES.IDLE );
 		dispatch( { type: 'SET_COUPON', payload: code } );
 	};
 
 	const buttonClass = [
 		'button',
-		status < LOADING ? 'button--primary' : 'button--icon',
-		status == LOADING ? 'button--loading' : false,
-		status == ERROR ? 'button--error' : false,
-		status == SUCCESS ? 'button--success' : false,
+		status < STATES.LOADING ? 'button--primary' : 'button--icon',
+		status == STATES.LOADING ? 'button--loading' : false,
+		status == STATES.ERROR ? 'button--error' : false,
+		status == STATES.SUCCESS ? 'button--success' : false,
+		status == STATES.IDLE && state.request.coupon != '' ? 'button--breathing' : false,
 	]
 		.filter( Boolean )
 		.join( ' ' );
@@ -52,12 +52,13 @@ function Coupon( { state, dispatch } ) {
 	return (
 		<div className="input-group grid__column--span-6">
 			<div className="input input-group__main">
-				<label>{ __( 'Coupon code', 'events' ) }</label>
+				<label>{ __( 'Coupon code', 'events-manager' ) }</label>
 				<input
 					value={ state.request.coupon }
 					onChange={ ( event ) => {
 						setCouponCode( event.target.value );
 					} }
+					disabled={ status === STATES.LOADING || status === STATES.SUCCESS }
 					type="text"
 					label="coupon"
 					name="coupon_code"
@@ -65,15 +66,15 @@ function Coupon( { state, dispatch } ) {
 			</div>
 			<button
 				type="button"
-				disabled={ status == INIT }
+				disabled={ state.request.coupon.length < 1 }
 				onClick={ () => {
 					checkCouponCode();
 				} }
 				className={ buttonClass }
 			>
-				{ status < LOADING && __( 'Check coupon', 'events' ) }
-				{ status == ERROR && <i class="material-icons material-symbols-outlined">close</i> }
-				{ status == SUCCESS && <i class="material-icons material-symbols-outlined">done</i> }
+				{ status < STATES.LOADING && __( 'Check coupon', 'events-manager' ) }
+				{ status == STATES.ERROR && <i class="material-icons material-symbols-outlined">close</i> }
+				{ status == STATES.SUCCESS && <i class="material-icons material-symbols-outlined">done</i> }
 			</button>
 		</div>
 	);

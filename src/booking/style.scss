@@ -1,19 +1,27 @@
-.wizzard {
+.wizard {
+	display: flex;
+	flex-direction: column;
+	height: 80vh;
+	flex: 1;
 	&__steps {
 		position: relative;
 		width: 100%;
 		overflow: hidden;
 		clear: both;
+		flex-grow: 1;
 	}
 
 	&__step {
-		position: relative;
-		display: none;
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		display: block;
 		float: left;
 		width: 100%;
 		height: 1px;
 		margin-right: -100%;
 		backface-visibility: hidden;
+		padding: 3rem 1.5rem;
 		transition: -webkit-transform 0.6s ease;
 		transition: all 0.6s ease;
 		transition:
@@ -22,13 +30,12 @@
 	}
 
 	&__step--active {
-		display: block;
 		height: auto;
-	}
 
-	&__step--next {
-		transform: translateX( 100% );
-		display: block;
+		+ .wizard__step {
+			transform: translateX( 100% );
+			display: block;
+		}
 	}
 
 	&__step--prev {
@@ -84,36 +91,45 @@
 	}
 
 	&__guide--done {
-		.wizzard__badge {
+		.wizard__badge {
 			background: #017a47;
 		}
 		color: #017a47;
 	}
 
 	&__guide--invalid {
-		.wizzard__badge {
+		.wizard__badge {
 			background: var( --error );
 		}
 		color: var( --error );
 	}
 
 	&__guide--pending {
-		.wizzard__badge {
+		.wizard__badge {
 			background: var( --gray-700 );
 		}
 		color: var( --gray-700 );
 	}
 
 	&__guide--active {
-		.wizzard__badge {
+		.wizard__badge {
 			background: var( --primary );
 		}
 		color: var( --primary );
 	}
+
+	&__controls {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		gap: 1rem;
+		padding: 1rem;
+		background-color: #eaeaea;
+	}
 }
 
 @media screen and ( min-width: 768px ) {
-	.wizzard {
+	.wizard {
 		&__guides {
 			flex-direction: row;
 			gap: 0;
@@ -152,12 +168,9 @@
 	right: 0;
 	opacity: 0;
 	bottom: 0;
-
 	z-index: 9999;
-
 	pointer-events: none;
 	place-content: center;
-
 	background: var( --white );
 	display: block;
 	/* include right-shift class */
@@ -236,7 +249,7 @@
 		margin-top: 5rem;
 		min-height: 75px;
 		height: auto;
-		padding: 1rem;
+		padding: 1.5rem;
 		color: var( --black );
 
 		&--primary {
@@ -253,37 +266,22 @@
 		max-width: 768px;
 		color: var( --black );
 		overflow-y: auto;
-
+		display: flex;
+		flex-direction: column;
 		flex: 1;
 		min-width: 100%;
 		width: 100%;
-		padding: 5rem 1rem;
+
 		background-color: var( --gray-100 );
 	}
 
-	&-footer {
-		padding: 2rem;
-		background: var( --gray-200 );
-
-		&--seperator {
-			border-top: 4px dotted rgba( 0, 0, 0, 0.3 );
+	&-caption {
+		h3 {
+			margin: 0;
 		}
 
-		&--white {
-			background: #ffffff;
-			border-bottom-right-radius: 2rem;
-		}
-
-		&-buttons {
-			display: flex;
-			justify-content: flex-end;
-			align-items: center;
-			gap: 1rem;
-
-			span {
-				display: inline-block;
-				flex: 1;
-			}
+		b {
+			color: var( --gray-700 );
 		}
 	}
 
@@ -338,11 +336,6 @@
 ***************************************************************/
 
 	&--fullscreen {
-		.modal-footer {
-			padding: 2rem;
-			background: var( --gray-200 );
-		}
-
 		aside {
 			display: flex;
 			flex-direction: column;
@@ -415,7 +408,7 @@
 		align-items: center;
 		gap: 1rem;
 
-		&:not( :last-child ) {
+		&--dotted:not( :last-child ) {
 			border-bottom: 4px dotted #bbb;
 		}
 
@@ -487,7 +480,6 @@
 		overflow: hidden;
 		text-overflow: ellipsis;
 		color: #999;
-		text-transform: uppercase;
 
 		&--ellipsis {
 			line-height: 1.25rem;
@@ -551,13 +543,6 @@
 	background: #fff;
 	box-shadow: 0px 2px 4px rgba( 0, 0, 0, 0.1 );
 	border-radius: 1rem;
-	mask:
-		radial-gradient( var( --r ) at 0 0, var( --g ) ) 0 0,
-		radial-gradient( var( --r ) at 100% 0, var( --g ) ) 100% 0,
-		radial-gradient( var( --r ) at 0 100%, var( --g ) ) 0 100%,
-		radial-gradient( var( --r ) at 100% 100%, var( --g ) ) 100% 100%;
-	mask-size: 51% 51%;
-	mask-repeat: no-repeat;
 
 	&-form {
 		grid-column: span 8 / span 8;
@@ -720,11 +705,23 @@
 	box-shadow: 0px 2px 4px rgba( 0, 0, 0, 0.1 );
 	border-top-left-radius: 1rem;
 	border-bottom-right-radius: 1rem;
+	padding: 1rem;
 
-	h3 {
-		display: inline-block;
+	h2 {
 		font-family: var( --wp--preset--font-family--fuzzy-bubbles ) !important;
-		margin-left: 2rem;
-		font-weight: 600;
+		text-align: center;
+		padding-top: 1rem;
+		margin: 0;
 	}
+
+	h4 {
+		text-align: center;
+		margin-top: 0;
+		margin-bottom: 0;
+	}
+}
+
+.invisible {
+	opacity: 0;
+	pointer-events: none;
 }

@@ -13,7 +13,7 @@ import {
 	TextControl,
 } from '@wordpress/components';
 import { select } from '@wordpress/data';
-import { PluginDocumentSettingPanel } from '@wordpress/edit-post';
+import { PluginDocumentSettingPanel } from '@wordpress/editor';
 
 import './datetime.scss';
 
@@ -44,43 +44,52 @@ const datetimeSelector = () => {
 	};
 
 	const dayArray = [
-		{ label: __( 'Sun', 'events' ), value: '0' },
-		{ label: __( 'Mon', 'events' ), value: '1' },
-		{ label: __( 'Tue', 'events' ), value: '2' },
-		{ label: __( 'Wed', 'events' ), value: '3' },
-		{ label: __( 'Thu', 'events' ), value: '4' },
-		{ label: __( 'Fri', 'events' ), value: '5' },
-		{ label: __( 'Sat', 'events' ), value: '6' },
+		{ label: __( 'Sun', 'events-manager' ), value: '0' },
+		{ label: __( 'Mon', 'events-manager' ), value: '1' },
+		{ label: __( 'Tue', 'events-manager' ), value: '2' },
+		{ label: __( 'Wed', 'events-manager' ), value: '3' },
+		{ label: __( 'Thu', 'events-manager' ), value: '4' },
+		{ label: __( 'Fri', 'events-manager' ), value: '5' },
+		{ label: __( 'Sat', 'events-manager' ), value: '6' },
 	];
 
 	const longDayArray = [
-		{ label: __( 'Sunday', 'events' ), value: '0' },
-		{ label: __( 'Monday', 'events' ), value: '1' },
-		{ label: __( 'Tuesday', 'events' ), value: '2' },
-		{ label: __( 'Wednesday', 'events' ), value: '3' },
-		{ label: __( 'Thursday', 'events' ), value: '4' },
-		{ label: __( 'Friday', 'events' ), value: '5' },
-		{ label: __( 'Saturday', 'events' ), value: '6' },
+		{ label: __( 'Sunday', 'events-manager' ), value: '0' },
+		{ label: __( 'Monday', 'events-manager' ), value: '1' },
+		{ label: __( 'Tuesday', 'events-manager' ), value: '2' },
+		{ label: __( 'Wednesday', 'events-manager' ), value: '3' },
+		{ label: __( 'Thursday', 'events-manager' ), value: '4' },
+		{ label: __( 'Friday', 'events-manager' ), value: '5' },
+		{ label: __( 'Saturday', 'events-manager' ), value: '6' },
 	];
+
+	const addOneDay = ( date ) => {
+		let newDate = new Date( date );
+		newDate.setDate( newDate.getDate() + 1 );
+		console.log( newDate.toISOString().split( 'T' )[ 0 ] );
+		return newDate.toISOString().split( 'T' )[ 0 ];
+	};
+
+	const minEndDate = meta._event_start_date ? addOneDay( meta._event_start_date ) : getNow();
 
 	return (
 		<>
 			<PluginDocumentSettingPanel
 				name="events-datetime-settings"
-				title={ __( 'Time and Date', 'events' ) }
+				title={ __( 'Time and Date', 'events-manager' ) }
 				className="events-datetime-settings"
 			>
 				<div className="em-date-row">
-					<h3>{ __( 'Date', 'events' ) }</h3>
+					<h3>{ __( 'Date', 'events-manager' ) }</h3>
 					<PanelRow>
-						<label for="em-from-date">{ __( 'First time', 'events' ) }</label>
+						<label for="em-from-date">{ __( 'First time', 'events-manager' ) }</label>
 						<div>
 							<TextControl
 								value={ meta._event_start_date ? meta._event_start_date : getNow() }
 								onChange={ ( value ) => {
 									setMeta( { _event_start_date: value } );
-									if ( ! meta._event_end_date ) {
-										setMeta( { _event_end_date: value } );
+									if ( ! meta._event_end_date || meta._event_end_date < value ) {
+										setMeta( { _event_end_date: addOneDay( value ) } );
 									}
 								} }
 								name="em-from-date"
@@ -90,7 +99,7 @@ const datetimeSelector = () => {
 						</div>
 					</PanelRow>
 					<PanelRow>
-						<label for="em-to-date">{ __( 'Last time', 'events' ) }</label>
+						<label for="em-to-date">{ __( 'Last time', 'events-manager' ) }</label>
 						<div>
 							<TextControl
 								value={ meta._event_end_date }
@@ -105,7 +114,7 @@ const datetimeSelector = () => {
 						</div>
 					</PanelRow>
 				</div>
-				<h3>{ __( 'Time', 'events' ) }</h3>
+				<h3>{ __( 'Time', 'events-manager' ) }</h3>
 				<PanelRow className="em-time-row">
 					<TextControl
 						className="em-time-input"
@@ -113,7 +122,7 @@ const datetimeSelector = () => {
 						onChange={ ( value ) => {
 							setMeta( { _event_start_time: value } );
 						} }
-						label={ __( 'Start', 'events' ) }
+						label={ __( 'Start', 'events-manager' ) }
 						disabled={ meta._event_all_day }
 						type="time"
 					/>
@@ -124,8 +133,9 @@ const datetimeSelector = () => {
 						onChange={ ( value ) => {
 							setMeta( { _event_end_time: value } );
 						} }
+						min={ minEndDate }
 						disabled={ meta._event_all_day }
-						label={ __( 'End', 'events' ) }
+						label={ __( 'End', 'events-manager' ) }
 						type="time"
 					/>
 				</PanelRow>
@@ -135,22 +145,22 @@ const datetimeSelector = () => {
 					onChange={ ( value ) => {
 						setMeta( { _event_all_day: value ? 1 : 0 } );
 					} }
-					label={ __( 'All day', 'events' ) }
+					label={ __( 'All day', 'events-manager' ) }
 				/>
 			</PluginDocumentSettingPanel>
 			<PluginDocumentSettingPanel
 				name="events-recurrence-settings"
-				title={ __( 'Recurrence', 'events' ) }
+				title={ __( 'Recurrence', 'events-manager' ) }
 				className="events-recurrence-settings"
 			>
 				<SelectControl
-					label={ __( 'Recurring', 'events' ) }
+					label={ __( 'Recurring', 'events-manager' ) }
 					options={ [
-						{ label: __( 'None', 'events' ), value: '' },
-						{ label: __( 'Daily', 'events' ), value: 'daily' },
-						{ label: __( 'Weekly', 'events' ), value: 'weekly' },
-						{ label: __( 'Monthly', 'events' ), value: 'monthly' },
-						{ label: __( 'Yearly', 'events' ), value: 'yearly' },
+						{ label: __( 'None', 'events-manager' ), value: '' },
+						{ label: __( 'Daily', 'events-manager' ), value: 'daily' },
+						{ label: __( 'Weekly', 'events-manager' ), value: 'weekly' },
+						{ label: __( 'Monthly', 'events-manager' ), value: 'monthly' },
+						{ label: __( 'Yearly', 'events-manager' ), value: 'yearly' },
 					] }
 					value={ meta._recurrence_freq }
 					onChange={ ( value ) => {
@@ -159,8 +169,8 @@ const datetimeSelector = () => {
 				/>
 
 				{ meta._recurrence_freq == 'weekly' && (
-					<PanelRow className="mt-4">
-						{ dayArray.map( ( day, index ) => (
+					<div className="mt-4">
+						{ longDayArray.map( ( day, index ) => (
 							<CheckboxControl
 								key={ index }
 								checked={ meta._recurrence_byday.includes( day.value ) }
@@ -170,11 +180,11 @@ const datetimeSelector = () => {
 								label={ day.label }
 							/>
 						) ) }
-					</PanelRow>
+					</div>
 				) }
 				<NumberControl
 					className="mt-4"
-					label={ __( 'Interval', 'events' ) }
+					label={ __( 'Interval', 'events-manager' ) }
 					value={ meta._recurrence_interval }
 					min={ 1 }
 					onChange={ ( value ) => {
@@ -185,14 +195,14 @@ const datetimeSelector = () => {
 					<>
 						<PanelRow className="mt-4">
 							<SelectControl
-								label={ __( 'Every', 'events' ) }
+								label={ __( 'Every', 'events-manager' ) }
 								options={ [
-									{ label: __( 'First', 'events' ), value: '1' },
-									{ label: __( 'Second', 'events' ), value: '2' },
-									{ label: __( 'Third', 'events' ), value: '3' },
-									{ label: __( 'Fourth', 'events' ), value: '4' },
-									{ label: __( 'Fifth', 'events' ), value: '5' },
-									{ label: __( 'Last', 'events' ), value: '-1' },
+									{ label: __( 'First', 'events-manager' ), value: '1' },
+									{ label: __( 'Second', 'events-manager' ), value: '2' },
+									{ label: __( 'Third', 'events-manager' ), value: '3' },
+									{ label: __( 'Fourth', 'events-manager' ), value: '4' },
+									{ label: __( 'Fifth', 'events-manager' ), value: '5' },
+									{ label: __( 'Last', 'events-manager' ), value: '-1' },
 								] }
 								value={ meta._recurrence_byweekno }
 								onChange={ ( value ) => {
@@ -201,7 +211,7 @@ const datetimeSelector = () => {
 							/>
 
 							<SelectControl
-								label={ __( 'Weekday', 'events' ) }
+								label={ __( 'Weekday', 'events-manager' ) }
 								options={ longDayArray }
 								value={ meta._recurrence_byday }
 								onChange={ ( value ) => {

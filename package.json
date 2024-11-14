@@ -1,10 +1,11 @@
 {
-	"version": "6.4.0",
+	"version": "6.7.0",
 	"scripts": {
 		"build": "wp-scripts build src/events-manager.js src/admin.js src/index.js src/frontend.js src/booking.js",
 		"start": "wp-scripts start src/events-manager.js src/admin.js src/index.js src/frontend.js src/booking.js",
-		"dev": "wp-scripts start --no-watch src/events-manager.js src/admin.js src/index.js src/frontend.js src/booking.js",
-		"lang": "node languages/compile.js"
+		"make-pot": "wp i18n make-pot . languages/events-manager.pot --slug=events-manager --domain=events-manager --exclude=node_modules,src",
+		"make-json": "wp i18n make-json languages/ --no-purge",
+		"packages-update": "wp-scripts packages-update"
 	},
 	"dependencies": {
 		"@contexis/wp-react-form": "^1.0.14",

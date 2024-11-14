@@ -4,15 +4,14 @@
  *
  */
 class EM_Object {
-	var $fields = array();
+	public array $fields = [];
 	/**
 	 * @var array Associative array of shortname => property names for this object. For example, an EM_Event object will have a 'language' key to 'event_language' value.
 	 */
-	protected $shortnames = array();
-	var $required_fields = array();
-	var $feedback_message = "";
+	//protected $shortnames = array();
+	public array $required_fields = [];
+	public string $feedback_message = "";
 	var array $errors = array();
-	var $mime_types = array(1 => 'gif', 2 => 'jpg', 3 => 'png');
 	
 	private static $taxonomies_array; //see self::get_taxonomies()
 	
@@ -71,7 +70,7 @@ class EM_Object {
 			'near'=>false, //lat,lng coordinates in array or comma-separated format
 			'near_unit'=>get_option('dbem_search_form_geo_unit_default'), //mi or km
 			'near_distance'=>get_option('dbem_search_form_geo_distance_default'), //distance from near coordinates - currently the default is the same as for the search form
-			'ajax'=> (defined('EM_AJAX') && EM_AJAX), //considered during pagination
+			'ajax'=> true, //considered during pagination
 			'language' => null, //for language searches in ML mode
 		);
 		//auto-add taxonomies to defaults
@@ -133,12 +132,7 @@ class EM_Object {
 					$array['timezone'] = explode(',', $array['timezone']);
 				}
 			}
-			// Language
-			if( isset($array['language']) ){
-				if( $array['language'] !== false && !in_array($array['language'], EM_ML::$langs) ){
-					unset($array['language']);
-				}
-			}
+
 			//return clean array
 			$defaults = array_merge ( $defaults, $array ); //No point using WP's cleaning function, we're doing it already.
 		}
@@ -600,14 +594,6 @@ class EM_Object {
 			$conditions['owner'] = 'event_owner IN ('.implode(',',$owner).')';
 		}
 		
-		// Language searches, only relevant if ML is activated via a third party plugin
-		if( EM_ML::$is_ml && $args['language'] ){ // language ignored if null or false
-			if( static::$context == 'event'){
-				$conditions['language'] = $wpdb->prepare('event_language = %s', EM_ML::$current_language);
-			}elseif( static::$context == 'location'){
-				$conditions['language'] = $wpdb->prepare('location_language = %s', EM_ML::$current_language);
-			}
-		}
 		//return values
 		return apply_filters('em_object_build_sql_conditions', $conditions);
 	}
@@ -798,7 +784,7 @@ class EM_Object {
 	}
 	
 
-	
+	/*
 	public function __get( $shortname ){
 		if( !empty($this->shortnames[$shortname]) ){
 			$property = $this->shortnames[$shortname];
@@ -826,11 +812,15 @@ class EM_Object {
 		}
 		return !empty($this->{$prop});
 	}
+	*/
 	
 	/**
 	 * Returns the id of a particular object in the table it is stored, be it Event (event_id), Location (location_id), Tag, Booking etc.
 	 * @return int 
+	 * @since 5.5.0
+	 * @deprecated version 5.5.0
 	 */
+	/*
 	function get_id(){
 	    switch( get_class($this) ){
 	        case 'EM_Event':
@@ -841,13 +831,13 @@ class EM_Object {
 	            return $this->term_id;
 	        case 'EM_Tag':
 	            return $this->term_id;
-	        case 'EM_Ticket':
+	        case 'Ticket':
 	            return $this->ticket_id;
-	        case 'EM_Ticket_Booking':
+	        case 'TicketBooking':
 	            return $this->ticket_booking_id;
 	    }
 	    return 0;
-	}
+	} */
 	
 	/**
 	 * Returns the user id for the owner (author) of a particular object in the table it is stored, be it Event (event_owner) or Location (location_owner).
@@ -906,38 +896,30 @@ class EM_Object {
 		return $can_manage;
 	}
 	
-	/**
-	 * Save an array into this class.
-	 * If you provide a record from the database table corresponding to this class type it will add the data to this object.
-	 * @param array $array
-	 * @return null
-	 */
-	function to_object( $array = array(), $addslashes = false ){
-		//Save core data
-		if( is_array($array) ){
-			$array = apply_filters('em_to_object', $array);
-			foreach ( array_keys($this->fields) as $key ) {
-				if(array_key_exists($key, $array)){
-					if( !is_object($array[$key]) && !is_array($array[$key]) ){
-						$array[$key] = ($addslashes) ? wp_unslash($array[$key]):$array[$key];
-					}elseif( is_array($array[$key]) ){
-						$array[$key] = ($addslashes) ? wp_unslash($array[$key]):$array[$key];
-					}
-					$this->$key = $array[$key];
-				}
+
+	function from_array( array $array = array(), $addslashes = false ) : void 
+	{
+		if(!is_array($array)) return;	
+		foreach ( array_keys($this->fields) as $key ) {
+			if(!array_key_exists($key, $array)) continue;
+			if( !is_object($array[$key]) && !is_array($array[$key]) ){
+				$array[$key] = ($addslashes) ? wp_unslash($array[$key]):$array[$key];
+			}elseif( is_array($array[$key]) ){
+				$array[$key] = ($addslashes) ? wp_unslash($array[$key]):$array[$key];
 			}
+			$this->$key = $array[$key];
 		}
 	}
 	
 	/**
 	 * Copies all the properties to shorter property names for compatability, do not use the old properties.
 	 */
-	function compat_keys(){
+	function compat_keys()
+	{
 		foreach($this->fields as $key => $fieldinfo){
-			if( !empty($fieldinfo['name']) ){
-			    $field_name = $fieldinfo['name'];
-				if(!empty($this->$key)) $this->$field_name = $this->$key;
-			}
+			if( empty($fieldinfo['name']) ) continue;
+			$field_name = $fieldinfo['name'];
+			if(!empty($this->$key)) $this->$field_name = $this->$key;
 		}
 	}
 
@@ -1027,6 +1009,30 @@ class EM_Object {
 		}
 		return $array;
 	}
+
+	static function get_scopes(){
+		global $wp_locale;
+		$start_of_week = get_option('start_of_week');
+		$end_of_week_name = $start_of_week > 0 ? $wp_locale->get_weekday($start_of_week-1) : $wp_locale->get_weekday(6);
+		$start_of_week_name = $wp_locale->get_weekday($start_of_week);
+		return array(
+			'all' => __('All events','events-manager'),
+			'future' => __('Future events','events-manager'),
+			'past' => __('Past events','events-manager'),
+			'today' => __('Today\'s events','events-manager'),
+			'tomorrow' => __('Tomorrow\'s events','events-manager'),
+			'week' => sprintf(__('Events this whole week (%s to %s)','events-manager'), $wp_locale->get_weekday_abbrev($start_of_week_name), $wp_locale->get_weekday_abbrev($end_of_week_name)),
+			'this-week' => sprintf(__('Events this week (today to %s)','events-manager'), $wp_locale->get_weekday_abbrev($end_of_week_name)),
+			'month' => __('Events this month','events-manager'),
+			'this-month' => __('Events this month (today onwards)', 'events-manager'),
+			'next-month' => __('Events next month','events-manager'),
+			'1-months'  => __('Events current and next month','events-manager'),
+			'2-months'  => __('Events within 2 months','events-manager'),
+			'3-months'  => __('Events within 3 months','events-manager'),
+			'6-months'  => __('Events within 6 months','events-manager'),
+			'12-months' => __('Events within 12 months','events-manager')
+		);
+	}
 		
 	/**
 	 * Send an email and log errors in this object
@@ -1064,7 +1070,6 @@ class EM_Object {
 	 * @return array 
 	 */
 	function get_errors() {
-		
 		return $this->errors;
 	}
 	
@@ -1072,10 +1077,14 @@ class EM_Object {
 	 * Adds an error to the object
 	 */
 	function add_error($errors){
-			
-		if(!is_array($errors) && !empty($errors)){
+		
+		if(empty($errors)) return;
+
+		if(!is_array($errors)) {
 			$this->errors[] = $errors;
+			return;
 		}
+
 		foreach($errors as $error){
 			$this->errors[] = $error;
 		}
@@ -1129,16 +1138,5 @@ class EM_Object {
 		return \Contexis\Events\Intl\Price::format( $price );
 	}
 	
-	/**
-	 * Returns contextual tax rate of object, which may be global or instance-specific. By default a number representing percentage is provided, e.g. 21% returns 21. 
-	 * If $decimal is set to true, 21% is returned as 0.21  
-	 * @param boolean $decimal If set to true, a decimal representation will be returned.
-	 * @return float
-	 */
-	function get_tax_rate( $decimal = false ){
-		$tax_rate = get_option('dbem_bookings_tax');
-		$tax_rate = ($tax_rate > 0) ? $tax_rate : 0;
-		if( $decimal && $tax_rate > 0 ) $tax_rate = $tax_rate / 100;
-		return $tax_rate;
-	}
+	
 }

@@ -11,24 +11,24 @@ const Inspector = ( props ) => {
 
 	return (
 		<InspectorControls>
-			<PanelBody title={ __( 'Data', 'events' ) } initialOpen={ true }>
+			<PanelBody title={ __( 'Data', 'events-manager' ) } initialOpen={ true }>
 				<ToggleControl
-					label={ __( 'Required', 'events' ) }
+					label={ __( 'Required', 'events-manager' ) }
 					checked={ required }
 					onChange={ ( value ) => setAttributes( { required: value } ) }
 				/>
 
 				<TextControl
-					label={ __( 'Error message', 'events' ) }
-					help={ __( 'Text to inform the user that this checkbox must be checked', 'events' ) }
+					label={ __( 'Error message', 'events-manager' ) }
+					help={ __( 'Text to inform the user that this checkbox must be checked', 'events-manager' ) }
 					value={ error }
 					onChange={ ( value ) => setAttributes( { error: value } ) }
 				/>
 			</PanelBody>
-			<PanelBody title={ __( 'Appearance', 'events' ) } initialOpen={ true }>
+			<PanelBody title={ __( 'Appearance', 'events-manager' ) } initialOpen={ true }>
 				<div>
 					<label className="components-base-control__label" htmlFor="inspector-range-control-4">
-						{ __( 'Style', 'events' ) }
+						{ __( 'Style', 'events-manager' ) }
 					</label>
 					<div className="styleSelector">
 						<Button
@@ -36,21 +36,21 @@ const Inspector = ( props ) => {
 							className={ style == 'checkbox' ? 'active' : '' }
 						>
 							<Icon size="64" className="icon" icon={ icons.checkbox } />
-							<div>{ __( 'Box', 'events' ) }</div>
+							<div>{ __( 'Box', 'events-manager' ) }</div>
 						</Button>
 						<Button
 							onClick={ () => setAttributes( { style: 'toggle' } ) }
 							className={ style == 'toggle' ? 'active' : '' }
 						>
 							<Icon size="64" className="icon" icon={ icons.toggle } />
-							<div>{ __( 'Toggle', 'events' ) }</div>
+							<div>{ __( 'Toggle', 'events-manager' ) }</div>
 						</Button>
 					</div>
 				</div>
 
 				<RangeControl
-					label={ __( 'Width', 'events' ) }
-					help={ __( 'Number of columns the input field will occupy', 'events' ) }
+					label={ __( 'Width', 'events-manager' ) }
+					help={ __( 'Number of columns the input field will occupy', 'events-manager' ) }
 					value={ width }
 					max={ 6 }
 					min={ 1 }

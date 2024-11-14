@@ -100,13 +100,7 @@ class EM_Emails {
 	    	    /* @var $EM_Booking EM_Booking */
 	    	    if( is_email($EM_Booking->get_person()->user_email) ){
 	    	    	do_action('em_booking_email_before_send', $EM_Booking);
-	    	    	if( EM_ML::$is_ml ){
-		    	    	if( $EM_Booking->language && EM_ML::$current_language != $EM_Booking->language ){
-		    	    		$lang = $EM_Booking->language;
-		    	    		$subject_format = EM_ML_Options::get_option('dbem_emp_emails_reminder_subject', $lang);
-		    	    		$message_format = EM_ML_Options::get_option('dbem_emp_emails_reminder_body', $lang);
-		    	    	}
-	    	    	}
+	    	    	
 	    	    	if( empty($subject_format) ){
 		    	    	$subject_format = get_option('dbem_emp_emails_reminder_subject');
 		    	    	$message_format = get_option('dbem_emp_emails_reminder_body');

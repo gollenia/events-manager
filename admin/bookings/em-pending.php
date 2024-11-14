@@ -7,8 +7,9 @@
  * @param int $event_id
  */
 function em_bookings_pending_table($event_id = false){
-	global $EM_Event, $EM_Ticket, $wpdb, $current_user;
+	global $EM_Event;
 	
+	$ticket = new \Contexis\Events\Tickets\Ticket();
 	if( get_option('dbem_bookings_approval') == 0 ){
 		return false;
 	}
@@ -20,8 +21,8 @@ function em_bookings_pending_table($event_id = false){
 	$page = ( $action_scope && !empty($_GET['pno']) ) ? $_GET['pno']:1;
 	$offset = ( $action_scope && $page > 1 ) ? ($page-1)*$limit : 0;
 	
-	if( is_object($EM_Ticket) ){
-		$EM_Bookings = $EM_Ticket->get_bookings()->get_pending_bookings();
+	if( is_object($ticket) ){
+		$EM_Bookings = $ticket->get_bookings()->get_pending_bookings();
 	}else{
 		if( is_object($EM_Event) ){
 			$EM_Bookings = $EM_Event->get_bookings()->get_pending_bookings();
@@ -57,27 +58,7 @@ function em_bookings_pending_table($event_id = false){
 				-->
 				<?php if ( $bookings_count >= $limit ) : ?>
 				<div class='tablenav'>
-					<!--
-					<div class="alignleft actions">
-						<select name="action">
-							<option value="-1" selected="selected">
-								<?php _e('Bulk Actions', 'events-manager'); ?>
-							</option>
-							<option value="approve">
-								<?php _e('Approve', 'events-manager'); ?>
-							</option>
-							<option value="decline">
-								<?php _e('Decline', 'events-manager'); ?>
-							</option>
-						</select> 
-						<input type="submit" id="post-query-submit" value="Filter" class="button-secondary" />
-					</div>
-					-->
-					<!--
-					<div class="view-switch">
-						<a href="/wp-admin/edit.php?mode=list"><img class="current" id="view-switch-list" src="http://wordpress.lan/wp-includes/images/blank.gif" width="20" height="20" title="List View" alt="List View" name="view-switch-list" /></a> <a href="/wp-admin/edit.php?mode=excerpt"><img id="view-switch-excerpt" src="http://wordpress.lan/wp-includes/images/blank.gif" width="20" height="20" title="Excerpt View" alt="Excerpt View" name="view-switch-excerpt" /></a>
-					</div>
-					-->
+					
 					<?php 
 					if ( $bookings_count >= $limit ) {
 						$bookings_nav = Contexis\Events\Admin\Pagination::paginate( $bookings_count, $limit, $page, array('em_ajax'=>0, 'em_obj'=>'em_bookings_pending_table'));
@@ -97,7 +78,7 @@ function em_bookings_pending_table($event_id = false){
 								<input class='select-all' type="checkbox" value='1' />
 							</th>
 							<th class='manage-column' scope='col'><?php _e('Booker', 'events-manager'); ?></th>
-							<?php if( !is_object($EM_Event) && !is_object($EM_Ticket) ): ?>
+							<?php if( !is_object($EM_Event) && !is_object($ticket) ): ?>
 							<th class='manage-column' scope="col"><?php _e('Event', 'events-manager'); ?></th>
 							<?php endif; ?>
 							<th class='manage-column' scope='col'><?php _e('E-mail', 'events-manager'); ?></th>
@@ -117,7 +98,7 @@ function em_bookings_pending_table($event_id = false){
 								<tr>
 									<th scope="row" class="check-column" style="padding:7px 0px 7px;"><input type='checkbox' value='<?php echo $EM_Booking->booking_id ?>' name='bookings[]'/></th>
 									<td><a href="<?php echo EM_ADMIN_URL; ?>&amp;page=events-manager-bookings&amp;person_id=<?php echo $EM_Booking->person->ID; ?>"><?php echo $EM_Booking->person->get_name() ?></a></td>
-									<?php if( !is_object($EM_Event) && !is_object($EM_Ticket) ): ?>
+									<?php if( !is_object($EM_Event) && !is_object($ticket) ): ?>
 									<td><a href="<?php echo EM_ADMIN_URL; ?>&amp;page=events-manager-bookings&amp;event_id=<?php echo $EM_Booking->event_id; ?>"><?php echo $events[$EM_Booking->event_id]->name ?></a></td>
 									<?php endif; ?>
 									<td><?php echo $EM_Booking->person->user_email ?></td>
@@ -125,9 +106,9 @@ function em_bookings_pending_table($event_id = false){
 									<td><?php echo $EM_Booking->get_spaces() ?></td>
 									<td>
 										<?php
-										$approve_url = em_add_get_params($_SERVER['REQUEST_URI'], array('action'=>'bookings_approve', 'booking_id'=>$EM_Booking->booking_id));
-										$reject_url = em_add_get_params($_SERVER['REQUEST_URI'], array('action'=>'bookings_reject', 'booking_id'=>$EM_Booking->booking_id));
-										$delete_url = em_add_get_params($_SERVER['REQUEST_URI'], array('action'=>'bookings_delete', 'booking_id'=>$EM_Booking->booking_id));
+										$approve_url = add_query_arg(['action'=>'bookings_approve', 'booking_id'=>$EM_Booking->booking_id], $_SERVER['REQUEST_URI']);
+										$reject_url = add_query_arg(['action'=>'bookings_reject', 'booking_id'=>$EM_Booking->booking_id], $_SERVER['REQUEST_URI']);
+										$delete_url = add_query_arg(['action'=>'bookings_delete', 'booking_id'=>$EM_Booking->booking_id], $_SERVER['REQUEST_URI']);
 										?>
 										<a class="em-bookings-approve" href="<?php echo $approve_url ?>"><?php _e('Approve','events-manager'); ?></a> |
 										<a class="em-bookings-reject" href="<?php echo $reject_url ?>"><?php _e('Reject','events-manager'); ?></a> |

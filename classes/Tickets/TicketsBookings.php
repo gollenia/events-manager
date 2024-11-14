@@ -1,19 +1,21 @@
 <?php
+
+namespace Contexis\Events\Tickets;
 /**
  * Deals with the each ticket booked in a single booking
  * @author marcus
  *
  */
-class EM_Tickets_Bookings extends EM_Object implements Iterator, Countable {
+class TicketsBookings extends \EM_Object implements \Iterator, \Countable {
 	
 	/**
-	 * Array of EM_Ticket_Booking objects for a specific event
-	 * @var array[EM_Ticket_Booking]
+	 * Array of TicketBooking objects for a specific event
+	 * @var array[TicketBooking]
 	 */
 	var $tickets_bookings = array();
 	/**
 	 * When adding existing booked tickets via add() with 0 spaces, they get slotted here for deletion during save() so they circumvent validation.
-	 * @var array[EM_Ticket_Booking]
+	 * @var array[TicketBooking]
 	 */
 	var $tickets_bookings_deleted = array();
 	/**
@@ -24,14 +26,14 @@ class EM_Tickets_Bookings extends EM_Object implements Iterator, Countable {
 	var $booking_id;
 	/**
 	 * This object belongs to this booking object
-	 * @var EM_Ticket
+	 * @var Ticket
 	 */
 	var $ticket;
 	var $spaces;
 	var $price;
 	
 	/**
-	 * Creates an EM_Tickets instance, 
+	 * Creates an Tickets instance, 
 	 * @param mixed $object
 	 */
 	function __construct( $object = false ){
@@ -48,10 +50,10 @@ class EM_Tickets_Bookings extends EM_Object implements Iterator, Countable {
 			}
 			$tickets_bookings = $wpdb->get_results($sql, ARRAY_A);
 			//Get tickets belonging to this tickets booking.
-			foreach ($tickets_bookings as $ticket_booking){
-				$EM_Ticket_Booking = new EM_Ticket_Booking($ticket_booking);
-				$EM_Ticket_Booking->booking = $this->booking; //save some calls
-				$this->tickets_bookings[$ticket_booking['ticket_id']] = $EM_Ticket_Booking;
+			foreach ($tickets_bookings as $item){
+				$ticket_booking = new TicketBooking($item);
+				$ticket_booking->booking = $this->booking; //save some calls
+				$this->tickets_bookings[$item['ticket_id']] = $ticket_booking;
 			}
 		}
 		do_action('em_tickets_bookings',$this, $object);
@@ -64,17 +66,17 @@ class EM_Tickets_Bookings extends EM_Object implements Iterator, Countable {
 	function save(){
 		do_action('em_tickets_bookings_save_pre',$this);
 		//save/update tickets
-		foreach( $this->tickets_bookings as $EM_Ticket_Booking ){
-			$result = $EM_Ticket_Booking->save();
+		foreach( $this->tickets_bookings as $ticket_booking ){
+			$result = $ticket_booking->save();
 			if(!$result){
-				$this->errors = array_merge($this->errors, $EM_Ticket_Booking->get_errors());
+				$this->errors = array_merge($this->errors, $ticket_booking->get_errors());
 			}
 		}
 		//delete old tickets if set to 0 in an update
-		foreach($this->tickets_bookings_deleted as $EM_Ticket_Booking ){
-			$result = $EM_Ticket_Booking->delete();
+		foreach($this->tickets_bookings_deleted as $ticket_booking ){
+			$result = $ticket_booking->delete();
 			if(!$result){
-				$this->errors = array_merge($this->errors, $EM_Ticket_Booking->get_errors());
+				$this->errors = array_merge($this->errors, $ticket_booking->get_errors());
 			}
 		}
 		//return result
@@ -88,49 +90,49 @@ class EM_Tickets_Bookings extends EM_Object implements Iterator, Countable {
 	
 	/**
 	 * Add a booking into this event object, checking that there's enough space for the event
-	 * @param EM_Ticket_Booking $EM_Ticket_Booking
+	 * @param TicketBooking $ticket_booking
 	 * @param boolean $override
 	 * @return boolean
 	 */
-	function add( $EM_Ticket_Booking, $override = false ){ //note, $override was a quick fix, not necessarily permanent, so don't depend on it just yet
+	function add( $ticket_booking, $override = false ){ //note, $override was a quick fix, not necessarily permanent, so don't depend on it just yet
 		global $wpdb,$EM_Mailer;
 		//Does the ticket we want to book have enough spaeces? 
-		if ( $override || $EM_Ticket_Booking->get_ticket()->get_available_spaces() >= $EM_Ticket_Booking->get_spaces() ) {  
-			$ticket_booking_key = $this->has_ticket($EM_Ticket_Booking->ticket_id);
+		if ( $override || $ticket_booking->get_ticket()->get_available_spaces() >= $ticket_booking->get_spaces() ) {  
+			$ticket_booking_key = $this->has_ticket($ticket_booking->ticket_id);
 			$this->price = 0; //so price calculations are reset
-			if( $ticket_booking_key !== false && is_object($this->tickets_bookings[$EM_Ticket_Booking->ticket_id]) ){
-				if( $EM_Ticket_Booking->get_spaces() > 0 ){
+			if( $ticket_booking_key !== false && is_object($this->tickets_bookings[$ticket_booking->ticket_id]) ){
+				if( $ticket_booking->get_spaces() > 0 ){
 					//previously booked ticket, so let's just reset spaces/prices and replace it
-					$this->tickets_bookings[$EM_Ticket_Booking->ticket_id]->ticket_booking_spaces = $EM_Ticket_Booking->get_spaces();
-					$this->tickets_bookings[$EM_Ticket_Booking->ticket_id]->ticket_booking_price = $EM_Ticket_Booking->get_price();
+					$this->tickets_bookings[$ticket_booking->ticket_id]->ticket_booking_spaces = $ticket_booking->get_spaces();
+					$this->tickets_bookings[$ticket_booking->ticket_id]->ticket_booking_price = $ticket_booking->get_price();
 				}else{
 					//remove ticket from bookings and set for deletion if this is saved
-					unset($this->tickets_bookings[$EM_Ticket_Booking->ticket_id]);
-					$this->tickets_bookings_deleted[$EM_Ticket_Booking->ticket_id] = $EM_Ticket_Booking;
+					unset($this->tickets_bookings[$ticket_booking->ticket_id]);
+					$this->tickets_bookings_deleted[$ticket_booking->ticket_id] = $ticket_booking;
 				}
-				return apply_filters('em_tickets_bookings_add', true, $this, $EM_Ticket_Booking);
-			}elseif( $EM_Ticket_Booking->get_spaces() > 0 ){
+				return apply_filters('em_tickets_bookings_add', true, $this, $ticket_booking);
+			}elseif( $ticket_booking->get_spaces() > 0 ){
 				//new ticket in booking
-				$this->tickets_bookings[$EM_Ticket_Booking->ticket_id] = $EM_Ticket_Booking;
+				$this->tickets_bookings[$ticket_booking->ticket_id] = $ticket_booking;
 				$this->get_spaces(true);
 				$this->get_price();
-				return apply_filters('em_tickets_bookings_add', true, $this, $EM_Ticket_Booking);
+				return apply_filters('em_tickets_bookings_add', true, $this, $ticket_booking);
 			}
 		} else {
 			$this->add_error(get_option('dbem_booking_feedback_full'));
-			return apply_filters('em_tickets_bookings_add', false, $this, $EM_Ticket_Booking);
+			return apply_filters('em_tickets_bookings_add', false, $this, $ticket_booking);
 		}
-		return apply_filters('em_tickets_bookings_add', false, $this, $EM_Ticket_Booking);
+		return apply_filters('em_tickets_bookings_add', false, $this, $ticket_booking);
 	}
 	
 	/**
-	 * Checks if this set has a specific ticket booked, returning the key of the ticket in the EM_Tickets_Bookings->ticket_bookings array
+	 * Checks if this set has a specific ticket booked, returning the key of the ticket in the TicketsBookings->ticket_bookings array
 	 * @param int $ticket_id
 	 * @return mixed
 	 */
 	function has_ticket( $ticket_id ){
-		foreach ($this->tickets_bookings as $key => $EM_Ticket_Booking){
-			if( $EM_Ticket_Booking->ticket_id == $ticket_id ){
+		foreach ($this->tickets_bookings as $key => $ticket_booking){
+			if( $ticket_booking->ticket_id == $ticket_id ){
 				return apply_filters('em_tickets_has_ticket',$key,$this);
 			}
 		}
@@ -149,9 +151,9 @@ class EM_Tickets_Bookings extends EM_Object implements Iterator, Countable {
 			$this->booking = $EM_Booking;
 		}else{
 			if(is_numeric($booking_id)){
-				$this->booking = EM_Booking::find($booking_id);
+				$this->booking = \EM_Booking::find($booking_id);
 			}else{
-				$this->booking = EM_Booking::find();
+				$this->booking = \EM_Booking::find();
 			}
 		}
 		return apply_filters('em_tickets_bookings_get_booking', $this->booking, $this);;
@@ -159,8 +161,8 @@ class EM_Tickets_Bookings extends EM_Object implements Iterator, Countable {
 	
 	function get_booking_id(){
 		if( empty($this->booking_id) && count($this->tickets_bookings) > 0 ){
-			foreach($this->tickets_bookings as $EM_Ticket_Booking){ break; } //get first array item
-			$this->booking_id = $EM_Ticket_Booking->get_booking()->booking_id;
+			foreach($this->tickets_bookings as $ticket_booking){ break; } //get first array item
+			$this->booking_id = $ticket_booking->get_booking()->booking_id;
 			return apply_filters('em_tickets_bookings_get_booking_id', $this->booking_id, $this);
 		}
 		return apply_filters('em_tickets_bookings_get_booking_id', $this->booking_id, $this);
@@ -179,9 +181,9 @@ class EM_Tickets_Bookings extends EM_Object implements Iterator, Countable {
 		}else{
 			//FIXME ticket bookings
 			$ticket_ids = array();
-			foreach( $this->tickets_bookings as $EM_Ticket_Booking ){
-				if( $EM_Ticket_Booking->can_manage() ){
-					$tickets_bookings_ids[] = $EM_Ticket_Booking->booking_id;
+			foreach( $this->tickets_bookings as $ticket_booking ){
+				if( $ticket_booking->can_manage() ){
+					$tickets_bookings_ids[] = $ticket_booking->booking_id;
 				}else{
 					$this->errors[] = sprintf(__('You do not have the rights to manage this %s.','events-manager'),__('Booking','events-manager'));					
 				}
@@ -198,8 +200,8 @@ class EM_Tickets_Bookings extends EM_Object implements Iterator, Countable {
 	 */
 	function validate(){
 		$errors = array();
-		foreach($this->tickets_bookings as $EM_Ticket_Booking){
-			$errors[] = $EM_Ticket_Booking->validate();
+		foreach($this->tickets_bookings as $ticket_booking){
+			$errors[] = $ticket_booking->validate();
 		}
 		return apply_filters('em_tickets_bookings_validate', !in_array(false, $errors), $this);
 	}
@@ -212,9 +214,9 @@ class EM_Tickets_Bookings extends EM_Object implements Iterator, Countable {
 	function get_spaces( $force_refresh=false ){
 		if($force_refresh || $this->spaces == 0){
 			$spaces = 0;
-			foreach($this->tickets_bookings as $EM_Ticket_Booking){
-			    /* @var $EM_Ticket_Booking EM_Ticket_Booking */
-				$spaces += $EM_Ticket_Booking->get_spaces();
+			foreach($this->tickets_bookings as $ticket_booking){
+			    
+				$spaces += $ticket_booking->get_spaces();
 			}
 			$this->spaces = $spaces;
 		}
@@ -226,17 +228,15 @@ class EM_Tickets_Bookings extends EM_Object implements Iterator, Countable {
 	 * @param boolean $format
 	 * @return float
 	 */
-	function get_price( $format = false ){
+	function get_price(){
 		if( $this->price == 0 ){
 			$price = 0;
-			foreach($this->tickets_bookings as $EM_Ticket_Booking){
-				$price += $EM_Ticket_Booking->get_price();
+			foreach($this->tickets_bookings as $ticket_booking){
+				$price += $ticket_booking->get_price();
 			}
 			$this->price = apply_filters('em_tickets_bookings_get_price', $price, $this);
 		}
-		if($format){
-			return $this->format_price($this->price);
-		}
+
 		return $this->price;
 	}
 	
@@ -244,8 +244,8 @@ class EM_Tickets_Bookings extends EM_Object implements Iterator, Countable {
 	 * Goes through each ticket and populates it with the bookings made
 	 */
 	function get_ticket_bookings(){
-		foreach( $this->tickets as $EM_Ticket ){
-			$EM_Ticket->get_bookings();
+		foreach( $this->tickets as $ticket ){
+			$ticket->get_bookings();
 		}
 	}	
 	
@@ -298,7 +298,7 @@ class EM_Tickets_Bookings extends EM_Object implements Iterator, Countable {
     }
 	
 	/**
-	 * @return EM_Ticket_Booking
+	 * @return TicketBooking
 	 */
 
 	 #[\ReturnTypeWillChange]
@@ -316,7 +316,7 @@ class EM_Tickets_Bookings extends EM_Object implements Iterator, Countable {
         return $var;
     }
 	/**
-	 * @return EM_Ticket_Booking
+	 * @return Ticket_Booking
 	 */
 
 	 #[\ReturnTypeWillChange]
@@ -332,9 +332,7 @@ class EM_Tickets_Bookings extends EM_Object implements Iterator, Countable {
         return $var;
     }
     //Countable Implementation
-
-	#[\ReturnTypeWillChange]
-    public function count(){
+    public function count() : int {
 		return count($this->tickets_bookings);
     }
 }

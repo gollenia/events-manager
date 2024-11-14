@@ -1,5 +1,5 @@
 //import { InputField } from '@contexis/wp-react-form';
-import InputField from './__experimantalForm/InputField';
+import InputField from '../__experimantalForm/InputField';
 
 /*
  *	Renders a single ticket with it's form fields
@@ -33,12 +33,12 @@ const Ticket = ( props ) => {
 							key={ key }
 							type={ field.type }
 							value={ ticket.fields[ field.fieldid ] }
-							onChange={ ( value ) =>
+							onChange={ ( value ) => {
 								dispatch( {
 									type: 'SET_FIELD',
 									payload: { form: 'ticket', index, field: field.fieldid, value: value },
-								} )
-							}
+								} );
+							} }
 							locale={ state.data.l10n.locale }
 						/>
 					);

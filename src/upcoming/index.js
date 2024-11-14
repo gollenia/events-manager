@@ -76,14 +76,16 @@ function Upcoming( props ) {
 			selectedTags?.length ? `tag=${ selectedTags.join( ',' ) }` : false,
 			scope != '' ? `scope=${ scope }` : false,
 			selectedLocation ? `location=${ selectedLocation }` : false,
-			excludeCurrent ? `exclude=${ window.eventBlocksLocalization?.current_id }` : false,
+			excludeCurrent && window.eventBlocksLocalization?.current_id
+				? `exclude=${ window.eventBlocksLocalization?.current_id }`
+				: false,
 		]
 			.filter( Boolean )
 			.join( '&' );
-
+		console.log( getUrl( params ) );
 		apiFetch( { url: getUrl( params ) } ).then( ( posts ) => {
 			setEvents( posts );
-
+			console.log( posts );
 			let categories = {};
 			let tags = {};
 			posts.map( ( event ) => {
@@ -154,7 +156,7 @@ function Upcoming( props ) {
 						{ showSearch && (
 							<div class="filter__search">
 								<div class="input">
-									<label>{ __( 'Search', 'events' ) }</label>
+									<label>{ __( 'Search', 'events-manager' ) }</label>
 									<input
 										type="text"
 										onChange={ ( event ) => {
@@ -204,7 +206,7 @@ function Upcoming( props ) {
 					>
 						{ showCategoryFilter && Object.keys( categories ).length > 0 && (
 							<div>
-								<h5 className="event-filters-title">{ __( 'Select category', 'events' ) }</h5>
+								<h5 className="event-filters-title">{ __( 'Select category', 'events-manager' ) }</h5>
 								<div className="event-filter-pills">
 									<button
 										class={ filter.category == 0 ? 'active' : '' }
@@ -212,7 +214,7 @@ function Upcoming( props ) {
 											changeFilter( 'category', 0 );
 										} }
 									>
-										{ __( 'All', 'events' ) }
+										{ __( 'All', 'events-manager' ) }
 									</button>
 									{ Object.keys( categories ).map( ( item, index ) => (
 										<button
@@ -229,7 +231,7 @@ function Upcoming( props ) {
 						) }
 						{ showTagFilter && Object.keys( tags ).length > 0 && (
 							<div className="">
-								<h5 className="event-filters-title">{ __( 'Select tags', 'events' ) }</h5>
+								<h5 className="event-filters-title">{ __( 'Select tags', 'events-manager' ) }</h5>
 
 								{ Object.keys( tags ).map( ( item, index ) => (
 									<div className="filter__box checkbox">

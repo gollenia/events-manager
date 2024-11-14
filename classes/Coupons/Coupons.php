@@ -21,7 +21,7 @@ class EM_Coupons extends EM_Object {
 		add_filter('em_event_delete_meta',array('EM_Coupons', 'em_event_delete_meta'),10,2);
 		add_action('rest_api_init', ['EM_Coupons', 'register_rest_routes']);
 		//hook into booking submission to add discount and coupon info
-		add_filter('em_booking_get_post', array('EM_Coupons', 'em_booking_get_post'), 10, 2);
+		
 		add_filter('em_booking_validate', array('EM_Coupons', 'em_booking_validate'), 10, 2);
 		add_filter('em_booking_save', array('EM_Coupons', 'em_booking_save'), 10, 2);
 		//add ajax response for coupon code queries
@@ -46,20 +46,18 @@ class EM_Coupons extends EM_Object {
 	}
 	
 	public static function em_booking_get_price_adjustments( $adjustments, $type, $EM_Booking ){
-		if( $type == 'discounts' ){
-		    $coupons = self::booking_get_coupons($EM_Booking);
-		    if( is_array($coupons) && count($coupons) > 0 ){
-		        //merge coupons into discounts array in new discounts format
-				foreach($coupons as $EM_Coupon){ /* @var $EM_Coupon EM_Coupon */
-				    $adjustments[] = array(
-				    	'name' => $EM_Coupon->coupon_code . ' - '. $EM_Coupon->get_discount_text(),
-				    	'type'=> $EM_Coupon->coupon_type,
-				    	'amount'=> $EM_Coupon->coupon_discount,
-				    	'desc' => $EM_Coupon->coupon_name,
-				    	'tax'=> $EM_Coupon->coupon_tax
-				    );
-				}
-		    }
+		if( $type != 'discounts' ) return $adjustments;
+		$coupons = self::booking_get_coupons($EM_Booking);
+		if( is_array($coupons) && count($coupons) > 0 ){
+			//merge coupons into discounts array in new discounts format
+			foreach($coupons as $EM_Coupon){ /* @var $EM_Coupon EM_Coupon */
+				$adjustments[] = array(
+					'name' => $EM_Coupon->coupon_code . ' - '. $EM_Coupon->get_discount_text(),
+					'type'=> $EM_Coupon->coupon_type,
+					'amount'=> $EM_Coupon->coupon_discount,
+					'desc' => $EM_Coupon->coupon_name,
+				);
+			}
 		}
 	    return $adjustments;
 	}
@@ -104,7 +102,7 @@ class EM_Coupons extends EM_Object {
 	    		$EM_Event->coupons = array();
 	    	}
 	    }
-	    return $EM_Event->coupons;
+	    return $EM_Event->coupons; 
 	}
 	
 	/**
@@ -150,18 +148,11 @@ class EM_Coupons extends EM_Object {
 	 */
 	public static function booking_get_coupons($EM_Booking){
 	    $coupons = array();
-	    if( !empty($EM_Booking->booking_meta['coupon']) ){
-	        $EM_Coupon = new EM_Coupon($EM_Booking->booking_meta['coupon']);
-	        $coupons[$EM_Coupon->coupon_id] = $EM_Coupon;
-	    }
-	    /* Use this when stacking coupons
-	    if( !empty($EM_Booking->booking_meta['coupons']) && is_array($EM_Booking->booking_meta['coupons']) ){
-	        foreach($EM_Booking->booking_meta['coupons'] as $coupon){
-	        	$EM_Coupon = new EM_Coupon($EM_Booking->booking_meta[$coupon]);
-				$coupons[$EM_Coupon->coupon_id] = $EM_Coupon;
-	        }
-	    }
-	    */
+	    if( empty($EM_Booking->booking_meta['coupon']) ) return $coupons;
+	
+	    $EM_Coupon = new EM_Coupon($EM_Booking->booking_meta['coupon']);
+	    $coupons[$EM_Coupon->coupon_id] = $EM_Coupon;
+	    
 	    return $coupons;
 	}
 	
@@ -183,21 +174,21 @@ class EM_Coupons extends EM_Object {
 		global $EM_Notices;
 		if(!empty($_REQUEST['coupon_code'])){
 			if( !self::cart_coupon_apply($_REQUEST['coupon_code']) ){
-				$EM_Notices->add_error(__('Coupon Invalid','em-pro'));
+				$EM_Notices->add_error(__('Coupon Invalid','events-manager'));
 			}
 		}else{
-			$EM_Notices->add_error(__('Coupon Not Found', 'em-pro'));
+			$EM_Notices->add_error(__('Coupon Not Found', 'events-manager'));
 		}
 	}
 	
 	public static function cart_coupon_apply_ajax(){
-	    $response = array('result'=>false, 'message'=> __('Coupon Not Found', 'em-pro'));
+	    $response = array('result'=>false, 'message'=> __('Coupon Not Found', 'events-manager'));
 		if(!empty($_REQUEST['coupon_code'])){
 			if( self::cart_coupon_apply($_REQUEST['coupon_code']) ){
 				$response['result'] = true;
 				$response['message'] = '';
 			}else{
-				$response['message'] = __('Coupon Invalid','em-pro');
+				$response['message'] = __('Coupon Invalid','events-manager');
 			}
 		}
         header('Content-Type: text/javascript; charset=utf-8'); //to prevent MIME type errors in MultiSite environments
@@ -209,40 +200,16 @@ class EM_Coupons extends EM_Object {
 	 * MODIFYING BOOKING Functions 
 	 */	
 	
-	/**
-	 * @param boolean $result
-	 * @param EM_Booking $EM_Booking
-	 * @return boolean
-	 */
-	public static function em_booking_get_post( $result, $EM_Booking){ 
-		if( !empty($_REQUEST['coupon_code']) ){
-			$EM_Coupon = EM_Coupons::event_get_coupon($_REQUEST['coupon_code'], $EM_Booking->get_event());
-			if( $EM_Coupon === false && !empty($EM_Booking->booking_id) ){ //if a previously saved booking, account for the fact it may not work
-				$EM_Coupon = new EM_Coupon($EM_Booking->booking_meta['coupon']);
-			}
-			if( $EM_Coupon !== false ){
-				$EM_Booking->booking_meta['coupon'] = $EM_Coupon->to_array(); //we add an clean a coupon array here for the first time
-				$EM_Booking->calculate_price(); //refresh price
-			}else{
-				$EM_Booking->booking_meta['coupon'] = array('coupon_code'=>$_REQUEST['coupon_code']); //will not validate later
-			}
-		}
-		return apply_filters('em_coupons_em_booking_get_post', $result, $EM_Booking);
-	}
+	
 	
 	public static function em_booking_validate($result, $EM_Booking){
 		if( !empty($EM_Booking->booking_meta['coupon']) ){
 			$EM_Coupon = self::event_get_coupon($EM_Booking->booking_meta['coupon']['coupon_code'], $EM_Booking->get_event());
 			if( $EM_Coupon === false && !empty($EM_Booking->booking_id) ){ //if a previously saved booking, account for the fact it may not work
 				$EM_Coupon = new EM_Coupon($EM_Booking->booking_meta['coupon']);
-			}elseif( $EM_Coupon === false && get_class($EM_Booking) == 'EM_Multiple_Booking'){ //multiple bookings have no event-specific coupons, so use this 
-				$EM_Coupon = new EM_Coupon($EM_Booking->booking_meta['coupon']['coupon_id']);
-				if( $EM_Coupon->coupon_code != $EM_Booking->booking_meta['coupon']['coupon_code'] ){
-					$EM_Coupon = false;
-				}
 			}
 			if( $EM_Coupon === false || !$EM_Coupon->is_valid() ){
-				$EM_Booking->add_error(__('Invalid coupon code provided','em-pro'));
+				$EM_Booking->add_error(__('Invalid coupon code provided','events-manager'));
 				unset($EM_Booking->booking_meta['coupon']);
 				return false;
 			}
@@ -278,7 +245,7 @@ class EM_Coupons extends EM_Object {
 		
 		$result = [
 			'success'=>false, 
-			'message'=> __('Coupon Not Found', 'em-pro'),
+			'message'=> __('Coupon Not Found', 'events-manager'),
 			'discount' => 0,
 			'percent' => false,
 			'code' => ''
@@ -286,12 +253,12 @@ class EM_Coupons extends EM_Object {
 
 		$event_id = $request->get_param( 'event_id' );
 
-		if(!$event_id) return array_merge($result, ["message" => __('No event given','em-pro')]);
+		if(!$event_id) return array_merge($result, ["message" => __('No event given','events-manager')]);
 	
 		$EM_Event = new EM_Event($event_id);
 		$EM_Coupon = self::event_get_coupon($request->get_param('code'), $EM_Event);
 
-		if (empty($EM_Event->event_id) || !is_object($EM_Coupon)) return array_merge($result, ["message" => __('Coupon Invalid','em-pro')]);
+		if (empty($EM_Event->event_id) || !is_object($EM_Coupon)) return array_merge($result, ["message" => __('Coupon Invalid','events-manager')]);
 
 		if(!$EM_Coupon->is_valid()) return $result;
 	
@@ -310,11 +277,11 @@ class EM_Coupons extends EM_Object {
 
 		$array = [
 			[
-				'<b>' . __("Name", "em-pro") .'</b>',
-				'<b>' . __("Code", "em-pro") .'</b>',
-				'<b>' . __("Description", "em-pro") .'</b>',
-				'<b>' . __("Discount", "em-pro") .'</b>',
-				'<b>' . __("Uses", "em-pro") .'</b>',
+				'<b>' . __("Name", "events-manager") .'</b>',
+				'<b>' . __("Code", "events-manager") .'</b>',
+				'<b>' . __("Description", "events-manager") .'</b>',
+				'<b>' . __("Discount", "events-manager") .'</b>',
+				'<b>' . __("Uses", "events-manager") .'</b>',
 				'<b>' . __("Count", "events-manager") .'</b>'
 			]
 		];
@@ -354,44 +321,44 @@ class EM_Coupons extends EM_Object {
 		$bookings_count = 0;
 		$EM_Bookings = array(
 			[
-				"<b>" . __("ID", "em-pro") . "</b>",
-				"<b>" . __("Event", "em-pro") . "</b>",
+				"<b>" . __("ID", "events-manager") . "</b>",
+				"<b>" . __("Event", "events-manager") . "</b>",
 				"<b>" . __("Booking Date", "events-manager") . "</b>",
-				"<b>" . __("Price", "em-pro") . "</b>",
+				"<b>" . __("Price", "events-manager") . "</b>",
 				"<b>" . __("Booker", "events-manager") . "</b>",
 				"<b>" . __("Email", "events-manager") . "</b>",
 				"<b>" . __('Spaces', 'events-manager') . "</b>",
-				"<b>" . __("Coupon Name", "em-pro") . "</b>",
-				"<b>" . __('Original Total Price','em-pro', "em-pro") . "</b>",
-				"<b>" . __("Discount", "em-pro") . "</b>",
-				"<b>" . __("Final Price", "em-pro") . "</b>"
+				"<b>" . __("Coupon Name", "events-manager") . "</b>",
+				"<b>" . __('Original Total Price','events-manager', "events-manager") . "</b>",
+				"<b>" . __("Discount", "events-manager") . "</b>",
+				"<b>" . __("Final Price", "events-manager") . "</b>"
 				
 			]
 		);
 		foreach($bookings as $booking_id){ 
 			$EM_Booking = EM_Booking::find($booking_id);
 
-			if( !empty($EM_Booking->booking_meta['coupon']) ){
-				$coupon = new EM_Coupon($EM_Booking->booking_meta['coupon']);
-				if($EM_Coupon->coupon_code == $coupon->coupon_code && $EM_Coupon->coupon_id == $coupon->coupon_id){
-					$original_price = $EM_Booking->get_price_post_taxes(false, false);
-							$base_price = $EM_Coupon->coupon_tax == 'pre' ? $EM_Booking->get_price_pre_taxes(false, false) : $original_price;
-					$bookings_count++;
-					$EM_Bookings[] = [
-						$EM_Booking->booking_id,
-						$EM_Booking->get_event()->event_name,
-						\Contexis\Events\Intl\Date::get_date($EM_Booking->date()->getTimestamp()),
-						$EM_Booking->get_price(),
-						$EM_Booking->get_person()->get_name(),
-						$EM_Booking->get_person()->user_email,
-						$EM_Booking->get_spaces(),
-						$coupon->coupon_name,
-						$EM_Booking->get_price_post_taxes(true, false),
-						\Contexis\Events\Intl\Price::format($EM_Coupon->get_discount($base_price)),
-						\Contexis\Events\Intl\Price::format($EM_Booking->get_price()),
-					];
-				}
+			if( empty($EM_Booking->booking_meta['coupon']) ) continue;
+			
+			$coupon = new EM_Coupon($EM_Booking->booking_meta['coupon']);
+			if($EM_Coupon->coupon_code == $coupon->coupon_code && $EM_Coupon->coupon_id == $coupon->coupon_id){
+				$base_price = $EM_Booking->get_price();
+				$bookings_count++;
+				$EM_Bookings[] = [
+					$EM_Booking->booking_id,
+					$EM_Booking->get_event()->event_name,
+					\Contexis\Events\Intl\Date::get_date($EM_Booking->date()->getTimestamp()),
+					$EM_Booking->get_price(),
+					$EM_Booking->get_person()->get_name(),
+					$EM_Booking->get_person()->user_email,
+					$EM_Booking->get_spaces(),
+					$coupon->coupon_name,
+					\Contexis\Events\Intl\Price::format( $EM_Booking->get_price()),
+					\Contexis\Events\Intl\Price::format($EM_Coupon->get_discount($base_price)),
+					\Contexis\Events\Intl\Price::format($EM_Booking->get_price()),
+				];
 			}
+			
 		}
 
 		$xlsx = Shuchkin\SimpleXLSXGen::fromArray( $EM_Bookings );
@@ -464,7 +431,7 @@ class EM_Coupons extends EM_Object {
 			$inserts = array();
 			foreach(self::event_get_coupons($EM_Event) as $EM_Coupon){
 				//save record of coupons
-				if( !$EM_Coupon->coupon_sitewide && !$EM_Coupon->coupon_eventwide ){
+				if( !$EM_Coupon->coupon_eventwide ){
 					$inserts[] = $wpdb->prepare("( %d, 'event-coupon', %d )", array($EM_Event->event_id, $EM_Coupon->coupon_id));
 				}
 			}
@@ -575,7 +542,7 @@ class EM_Coupons extends EM_Object {
 		if( !$EM_Event->is_free(true) && EM_Coupons::event_has_coupons($EM_Event) > 0){
 			?>
 			<p class="em-bookings-form-coupon input-text my-8">
-				<label><?php _e('Coupon Code','em-pro'); ?></label>
+				<label><?php _e('Coupon Code','events-manager'); ?></label>
 				<input type="text" name="coupon_code" class="input em-coupon-code" />
 			</p>
 			<?php
@@ -587,7 +554,7 @@ class EM_Coupons extends EM_Object {
 	
 	
 	public static function coupon_check_ajax(){
-		$result = array('result'=>false, 'message'=> __('Coupon Not Found', 'em-pro'));
+		$result = array('result'=>false, 'message'=> __('Coupon Not Found', 'events-manager'));
 		if(!empty($_REQUEST['event_id'])){
 			$EM_Event = new EM_Event($_REQUEST['event_id']);
 			$EM_Coupon = self::event_get_coupon($_REQUEST['coupon_code'], $EM_Event);
@@ -596,7 +563,7 @@ class EM_Coupons extends EM_Object {
 					$result['result'] = true;
 					$result['message'] = $EM_Coupon->get_discount_text();
 				}else{
-					$result['message'] = __('Coupon Invalid','em-pro');
+					$result['message'] = __('Coupon Invalid','events-manager');
 				}
 			}
 		}
@@ -692,7 +659,7 @@ class EM_Coupons extends EM_Object {
 	 */
 	
 	public static function em_bookings_table_cols_template($template){
-		$template['coupon'] = __('Coupon Code','em-pro');
+		$template['coupon'] = __('Coupon Code','events-manager');
 		return $template;
 	}
 	
@@ -736,13 +703,7 @@ class EM_Coupons extends EM_Object {
 					}
 				}
 			}
-			//search sitewide coupons by default or if requested
-			if( !empty($args['sitewide']) ){
-				//sitewide shouldn't have an event requested with it if you only want sitewide events
-				$conditions['event'] .= ' OR coupon_sitewide=1 ';
-			}else{
-				$conditions['sitewide'] = 'coupon_sitewide=1';
-			}
+			
 			$conditions['event'] = '('.$conditions['event'].')';
 		}else{
 			//blog ownership
@@ -758,18 +719,7 @@ class EM_Coupons extends EM_Object {
 						//only need to include eventwide searches if 0, since event-wide searches would also appear if owner is set to 1
 						$conditions['eventwide'] = "coupon_eventwide=0";
 					}
-	    			if( $args['sitewide'] === 1 || $args['sitewide'] === true ){
-						//include sitewide coupons
-						if( $args['eventwide'] === 1 || $args['eventwide'] === true ){
-							//we'll never do an AND search for site-wide/event-wide because it would just negate all coupons that are one or the other
-	    					$conditions['owner'] .= " OR coupon_sitewide=1";
-	    				}else{
-							$conditions['sitewide'] = "coupon_sitewide=1";
-						}
-	    			}elseif( !$args['sitewide'] ) {
-						//exclude sitewide coupons
-						$conditions['sitewide'] = "coupon_sitewide=0";
-					}
+	    			
     			}else{
 	    			//no owner, so we're looking for either event/site wide coupons
 	    			if( $args['eventwide'] === 1 || $args['eventwide'] === true ){
@@ -777,18 +727,6 @@ class EM_Coupons extends EM_Object {
 	    			}elseif( !$args['eventwide'] ){
 						//only need to include eventwide searches if 0, since event-wide searches would also appear if owner is set to 1
 						$conditions['eventwide'] = "coupon_eventwide=0";
-					}
-	    			if( $args['sitewide'] === 1 || $args['sitewide'] === true ){
-						//explicitly filter sitewide coupons
-	    				if( $args['eventwide'] === 1 || $args['eventwide'] === true ){
-							//we'll never do an AND search for site-wide/event-wide because it would just negate all coupons that are one or the other
-	    					$conditions['eventwide'] .= " OR coupon_sitewide=1";
-	    				}else{ 
-	    					$conditions['sitewide'] = "coupon_sitewide=1";
-	    				}
-	    			}elseif( !$args['sitewide'] ){
-						//must not be a sitewide coupon
-						$conditions['sitewide'] = "coupon_sitewide=0";
 					}
 				}
 			
@@ -817,6 +755,15 @@ class EM_Coupons extends EM_Object {
 			$defaults = array_merge($defaults, $array_or_defaults);
 		}
 		return apply_filters('em_events_get_default_search', parent::get_default_search($defaults,$array), $array, $defaults);
+	}
+
+
+	public static function get_options(\EM_Event $event) : array {
+		$coupons = [];
+		foreach(\EM_Coupons::event_get_coupons($event) as $coupon) {
+			$coupons[] = (array) $coupon->get_option_field();
+		}
+		return $coupons;
 	}
 }
 EM_Coupons::init();

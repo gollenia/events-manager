@@ -38,7 +38,6 @@ import * as formTextarea from './blocks/form/textarea/index.js';
 import * as locationEditor from './blocks/location-editor/index.js';
 import * as upcoming from './blocks/upcoming/index.js';
 
-import bookingOptions from './plugins/event/booking.js';
 import datetimeSelector from './plugins/event/datetime.js';
 import locationSelector from './plugins/event/location.js';
 import peopleSelector from './plugins/event/people.js';
@@ -105,11 +104,6 @@ registerPlugin( 'plugin-contact-data', {
 registerPlugin( 'plugin-personal-data', {
 	icon: null,
 	render: personalData,
-} );
-
-registerPlugin( 'plugin-booking-options', {
-	icon: null,
-	render: bookingOptions,
 } );
 
 registerPlugin( 'plugin-recurrence-settings', {

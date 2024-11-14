@@ -2,7 +2,11 @@
 
 name: Deploy on package Server
 
-on: [push, workflow_dispatch]
+on:
+    push:
+        branches:
+            - master
+    workflow_dispatch:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
     # This workflow contains a single job called "greet"

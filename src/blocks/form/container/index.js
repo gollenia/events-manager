@@ -1,28 +1,28 @@
 /**
  * Internal dependencies
  */
-import Edit from './edit';
-import icon from './icon';
 import metadata from './block.json';
+import Edit from './edit';
 import './editor.scss';
+import icon from './icon';
 
 /**
  * Wordpress dependencies
  */
-import { __ } from '@wordpress/i18n'; 
 import { InnerBlocks } from '@wordpress/block-editor';
+import { __ } from '@wordpress/i18n';
 
 const { name, title, description } = metadata;
 
 const settings = {
 	...metadata,
-	title: __( title, 'events' ),
-	description: __( description, 'events' ),
+	title: __( title, 'events-manager' ),
+	description: __( description, 'events-manager' ),
 	icon,
 	edit: Edit,
-	save: () => { return ( <InnerBlocks.Content /> ); }
+	save: () => {
+		return <InnerBlocks.Content />;
+	},
 };
 
 export { name, settings };
-
-

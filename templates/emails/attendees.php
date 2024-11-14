@@ -20,7 +20,7 @@ $data = $EM_Booking->get_attendees();
 	</tr><?php
 	foreach($data as $ticket) {
 
-		$ticket_data = new EM_Ticket($ticket["ticket_id"]);
+		$ticket_data = new \Contexis\Events\Tickets\Ticket($ticket["ticket_id"]);
 		echo "<tr>" ;
 		echo "<td>" . $ticket_data->ticket_name . "</td>";
 		

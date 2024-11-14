@@ -14,11 +14,11 @@ export type NumberInputProps = {
 	hasLabels: boolean;
 	type: 'number' | 'range' | 'numberpicker';
 	onChange: ( value: string ) => void;
-	admin: boolean;
+	value: string;
 };
 
 const NumberInput = ( props: NumberInputProps ) => {
-	const { label, placeholder, name, required, width, min, max, disabled, hasTicks, hasLabels, onChange, admin } =
+	const { label, placeholder, name, required, width, min, max, disabled, hasTicks, hasLabels, onChange, value } =
 		props;
 
 	const [ rangeValue, setRangeValue ] = useState( parseInt( placeholder ) );
@@ -41,42 +41,6 @@ const NumberInput = ( props: NumberInputProps ) => {
 		backgroundSize: ( ( rangeValue - min ) * 100 ) / ( max - min ) + '% 100%',
 	};
 
-	if ( admin )
-		return (
-			<tr>
-				<td>
-					<label>{ label }</label>
-				</td>
-				<td>
-					<input
-						value={ rangeValue }
-						name={ name }
-						required={ required }
-						disabled={ disabled }
-						type="range"
-						max={ max }
-						min={ min }
-						style={ rangeStyle }
-						ref={ rangeRef }
-						onChange={ onChangeHandler }
-					/>
-					{ hasTicks && (
-						<div className="range__ticks">
-							{ [ ...Array( max - min + 1 ) ].map( ( e, i ) => {
-								return <div className="range__tick" key={ i }></div>;
-							} ) }
-						</div>
-					) }
-					{ hasLabels && (
-						<div className="range__labels">
-							<span className="range__label">{ min }</span>
-							<span className="range__label">{ max }</span>
-						</div>
-					) }
-				</td>
-			</tr>
-		);
-
 	return (
 		<div
 			className={ classes }
@@ -98,6 +62,7 @@ const NumberInput = ( props: NumberInputProps ) => {
 						style={ rangeStyle }
 						ref={ rangeRef }
 						onChange={ onChangeHandler }
+						value={ value }
 					/>
 					{ hasTicks && (
 						<div className="range__ticks">

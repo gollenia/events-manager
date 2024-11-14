@@ -42,7 +42,7 @@ const edit = ( props ) => {
 					<RichText
 						tagName="h5"
 						className="event-details_title description-editable"
-						placeholder={ __( 'Price', 'events' ) }
+						placeholder={ __( 'Price', 'events-manager' ) }
 						value={ description }
 						onChange={ ( value ) => {
 							setAttributes( { description: value } );
@@ -51,7 +51,7 @@ const edit = ( props ) => {
 					<RichText
 						tagName="span"
 						className="event-details_audience description-editable"
-						placeholder={ price ?? __( 'Free', 'events' ) }
+						placeholder={ price ?? __( 'Free', 'events-manager' ) }
 						value={ overwritePrice }
 						onChange={ ( value ) => {
 							setAttributes( { overwritePrice: value } );

@@ -1,18 +1,21 @@
 /*
  *   External dependecies
  */
+import apiFetch from '@wordpress/api-fetch';
 import { __ } from '@wordpress/i18n';
 import { useEffect, useReducer } from 'react';
+import { STATES } from './modules/constants.js';
 
-import { ErrorBoundary } from 'react-error-boundary';
 import './style.scss';
 
 /*
  *   Internal dependecies
  */
-import ErrorFallback from './error';
-import Footer from './footer';
-import Guide from './guide';
+import AwaitResponse from './AwaitResponse.js';
+import WizardControls from './WizardControls.js';
+import WizardGuide from './WizardGuide.js';
+import WizardStep from './WizardStep.js';
+import Wizard from './WizardSteps.js';
 import { subscribe } from './modules/events.js';
 import initialState from './modules/initialState.js';
 import reducer from './modules/reducer.js';
@@ -28,23 +31,27 @@ const Booking = ( { post, open } ) => {
 
 	const [ state, dispatch ] = useReducer( reducer, initialState );
 
-	const { wizzard, modal, data, request, response } = state;
+	const { wizard, modal, data, request, response } = state;
+
+	console.log( state );
 
 	useEffect( () => {
-		fetch( `/wp-json/events/v2/bookingdata/${ post }` )
-			.then( ( response ) => response.json() )
+		apiFetch( {
+			path: `/events/v2/booking?event_id=${ post }`,
+		} )
 			.then( ( data ) => {
-				dispatch( { type: 'SET_DATA', payload: data.data } );
+				dispatch( { type: 'SET_DATA', payload: data } );
+				dispatch( { type: 'SET_INIT_STATE', payload: STATES.LOADING } );
+			} )
+			.catch( ( error ) => {
+				dispatch( { type: 'SET_INIT_STATE', payload: STATES.ERROR } );
 			} );
-	}, [] );
-
-	useEffect( () => {
 		subscribe( 'showBooking', ( state ) => dispatch( { type: 'SET_MODAL', payload: state } ) );
 	}, [] );
 
 	useEffect( () => {
 		if ( ! data ) return;
-		if ( ! wizzard.checkValidity ) return;
+		if ( ! wizard.checkValidity ) return;
 		dispatch( {
 			type: 'VALIDITY',
 			payload: {
@@ -56,105 +63,78 @@ const Booking = ( { post, open } ) => {
 		} );
 	}, [ state ] );
 
+	if ( modal.initialState == STATES.ERROR )
+		return (
+			<div className="alert alert--error">{ __( 'An error occured. Please try again later.', 'events' ) }</div>
+		);
+
 	if ( ! data ) return <></>;
 
 	return (
 		<div>
-			<ErrorBoundary FallbackComponent={ ErrorFallback }>
-				<div className={ `event-modal wizzard ${ modal.visible ? 'event-modal--open' : '' }` }>
-					<div className="event-modal-dialog">
-						<div className="event-modal-header">
-							<div className="container flex xl:flex--center flex--column xl:flex--row">
-								<div className="flex--1">
-									<b className="margin--0">Anmeldung</b>
-									<h3 className="margin--0">{ data?.event?.title }</h3>
-								</div>
-								<Guide state={ state } />
+			<div className={ `event-modal ${ modal.visible ? 'event-modal--open' : '' }` }>
+				<div className="event-modal-dialog">
+					<div className="event-modal-header">
+						<div className="event-modal-caption">
+							<div className="">
+								<b className="margin--0">{ __( 'Booking', 'events-manager' ) }</b>
+								<h3 className="margin--0">{ data?.event?.title }</h3>
 							</div>
-							<button
-								className="event-modal-close"
-								onClick={ () => {
-									dispatch( { type: 'SET_MODAL', payload: false } );
-									open = false;
-								} }
-							></button>
+							<WizardGuide state={ state } />
 						</div>
+						<button
+							className="event-modal-close"
+							onClick={ () => {
+								dispatch( { type: 'SET_MODAL', payload: false } );
+								open = false;
+							} }
+						></button>
+					</div>
 
-						{ modal.loading > 0 ? (
+					{ modal.orderState > STATES.LOADING ? (
+						<>
 							<div className="event-modal-content">
-								<aside>
-									<div className="spinning-loader"></div>
-									<h3>{ __( 'Please wait', 'events' ) }</h3>
-									<h4>{ __( 'Your booking is beeing processed.', 'events' ) }</h4>
-									{ modal.loading > 1 && (
-										<div className="alert alert--warning">
-											{ modal.loading == 2 &&
-												__(
-													'Please hang on a little longer. This can take a few seconds.',
-													'events'
-												) }
-											{ modal.loading == 3 &&
-												__(
-													'The request is lasting longer than expected. We try our best',
-													'events'
-												) }
-											{ modal.loading == 4 &&
-												__(
-													'Something seems to be wrong. Maybe your internet connection is interrupted or our server is overloaded. Please try again later',
-													'events'
-												) }
-										</div>
-									) }
-								</aside>
+								<AwaitResponse state={ state } />
 							</div>
-						) : (
+							<div className="event-modal-footer"></div>
+						</>
+					) : (
+						<>
 							<div className="event-modal-content">
-								<div className="wizzard__steps">
-									{ wizzard.steps.tickets.enabled && (
-										<div
-											className={ `wizzard__step ${
-												wizzard.step == 0 ? ' wizzard__step--active' : ''
-											} ${ wizzard.step == 1 ? ' wizzard__step--prev' : '' }` }
+								<Wizard state={ state } dispatch={ dispatch }>
+									{ data.attendee_fields?.length > 0 && (
+										<WizardStep
+											valid={ wizard.steps.tickets.valid }
+											invalidMessage={
+												request.tickets.length == 0
+													? __( 'Please select at least one ticket', 'events-manager' )
+													: __( 'Please fill out all required fields', 'events-manager' )
+											}
 										>
 											<TicketList { ...{ state, dispatch } } />
-										</div>
+										</WizardStep>
 									) }
-									<div
-										className={ `wizzard__step ${
-											wizzard.step == 1 ? ' wizzard__step--active' : ''
-										} ${
-											wizzard.step == 2 && ! data.event.is_free ? ' wizzard__step--prev' : ''
-										} ${ wizzard.step == 0 ? ' wizzard__step--next' : '' }` }
+									<WizardStep
+										valid={ wizard.steps.registration.valid }
+										invalidMessage={ __( 'Please fill out all required fields', 'events-manager' ) }
 									>
 										<UserRegistration { ...{ state, dispatch } } />
-									</div>
-
-									<div
-										className={ `wizzard__step ${
-											wizzard.step == 2 ? ' wizzard__step--active' : ''
-										} ${ wizzard.step == 3 ? '' : '' } ${
-											wizzard.step == 1 ? ' wizzard__step--next' : ''
-										}` }
-									>
+									</WizardStep>
+									<WizardStep valid={ wizard.steps.payment.valid }>
 										<Payment { ...{ state, dispatch } } />
-									</div>
-
-									<div
-										className={ `wizzard__step ${
-											wizzard.step == 3 ? ' wizzard__step--active' : ''
-										} ${ wizzard.step == 2 ? ' ' : '' }` }
-									>
+									</WizardStep>
+									<WizardStep valid={ wizard.steps.success.valid }>
 										<Success { ...{ state, dispatch } } />
-									</div>
-								</div>
+									</WizardStep>
+								</Wizard>
 							</div>
-						) }
-						<div className="event-modal-footer">
-							<Footer { ...{ state, dispatch } } />
-						</div>
-					</div>
+							<div className="event-modal-footer">
+								<WizardControls state={ state } dispatch={ dispatch } />
+							</div>
+						</>
+					) }
 				</div>
-			</ErrorBoundary>
+			</div>
 		</div>
 	);
 };

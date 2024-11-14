@@ -141,7 +141,7 @@ class EM_Event_Posts_Admin{
 			<select name="scope">
 				<?php
 				$scope = (!empty($wp_query->query_vars['scope'])) ? $wp_query->query_vars['scope']:'future';
-				foreach ( em_get_scopes() as $key => $value ) {
+				foreach ( EM_Object::get_scopes() as $key => $value ) {
 					$selected = "";
 					if ($key == $scope)
 						$selected = "selected='selected'";
@@ -269,11 +269,11 @@ class EM_Event_Posts_Admin{
 					
 				
 					<?php
+					
 				}
 				break;
 			case 'booked':
-				if( get_option('dbem_rsvp_enabled') == 1 && !empty($EM_Event->event_rsvp) && $EM_Event->can_manage('manage_bookings','manage_others_bookings')){
-
+				if( get_option('dbem_rsvp_enabled') == 1 && !empty($EM_Event->event_rsvp) && $EM_Event->get_spaces()){
 					$booked_percent = $EM_Event->get_bookings()->get_booked_spaces() / ($EM_Event->get_spaces() / 100);
 					$pending_percent = $EM_Event->get_bookings()->get_pending_spaces() / ($EM_Event->get_spaces() / 100);
 					?>

@@ -151,241 +151,6 @@ class EM_Form extends EM_Object {
 	    return array_key_exists($field_id, $this->user_fields) || in_array($field_id, array('user_email','user_name'));
 	}
 	
-	/**
-	 * Prints html fields according to this field structure.
-	 * @param array $booking_form_fields
-	 */
-	function __toString(){
-		$return = '';
-		if( is_array($this->form_fields) ){
-			foreach($this->form_fields as $field){
-				$return .= self::output_field($field);
-			}
-		}
-		return apply_filters('emp_form_output',$return, $this);
-	}
-	
-	/**
-	 * Outputs a single field according to this field structure.
-	 * @param array $field
-	 * @return string
-	 * @deprecated since version 6.2.0
-	 */
-	function output_field($field, $post=true){
-		ob_start();
-		$required = "";
-		$field = $this->translate_field($field);
-		switch($field['type']){
-			case 'html':
-			     echo $this->output_field_input($field, $post);
-			     break;
-			case 'text':
-			case 'textarea':
-			case 'date':
-			case 'checkboxes':
-			case 'radio':
-			case 'select':
-			case 'country':
-			case 'multiselect':
-			case 'time':
-				
-				$tip_type = $field['type'];
-				if( $field['type'] == 'textarea' ) $tip_type = 'text';
-				if( in_array($field['type'], array('select','multiselect')) ) $tip_type = 'select';
-				if( in_array($field['type'], array('checkboxes','radio')) ) $tip_type = 'selection';
-				?>
-				<p class="input-group input-<?php echo $field['type']; ?> input-field-<?php echo $field['fieldid'] ?>">
-					<label for='<?php echo $field['fieldid'] ?>'>
-						<?php if( !empty($field['options_'.$tip_type.'_tip']) ): ?>
-							<span class="form-tip" title="<?php echo esc_attr($field['options_'.$tip_type.'_tip']); ?>">
-								<?php echo $field['label'] ?> 
-							</span>
-						<?php else: ?>
-							<?php echo $field['label'] ?> 
-						<?php endif; ?>
-					</label>
-					<?php echo $this->output_field_input($field, $post); ?>
-				</p>
-				<?php
-				break;
-			
-			case 'checkbox':
-				$tip_type = $field['type'];
-				?>
-				<p class="input-group input-<?php echo $field['type']; ?> input-field-<?php echo $field['fieldid'] ?>">
-					<label>
-						<?php echo $this->output_field_input($field, $post); ?>
-						<span></span><?php echo $field['label'] ?>
-					</label>
-				</p>
-				<?php
-			default:
-				if( array_key_exists($field['type'], $this->user_fields) && self::show_reg_fields($field) ){
-					if( array_key_exists($field['type'], $this->core_user_fields) ){
-						if( $field['type'] == 'user_password' ){
-							?>
-							<p class="input-<?php echo $field['type']; ?> input-group">
-								<label for='<?php echo $field['fieldid'] ?>'>
-									<?php if( !empty($field['options_reg_tip']) ): ?>
-										<span>
-											<?php echo $field['label'] ?> <?php echo $required  ?>
-										</span>
-									<?php else: ?>
-										<?php echo $field['label'] ?> <?php echo $required  ?>
-									<?php endif; ?>
-								</label>
-								<input type="password" name="<?php echo $field['fieldid'] ?>" />
-							</p>
-							<?php
-						}else{
-							//registration fields
-							
-							?>
-							<p class="input-<?php echo $field['type']; ?> input-group">
-								<label for='<?php echo $field['fieldid'] ?>'>
-									<?php if( !empty($field['options_reg_tip']) ): ?>
-										<span>
-											<?php echo $field['label'] ?> <?php echo $required  ?>
-										</span>
-									<?php else: ?>
-										<?php echo $field['label'] ?> <?php echo $required  ?>
-									<?php endif; ?>
-								</label> 
-								<?php echo $this->output_field_input($field, $post); ?>
-							</p>
-							<?php	
-						}
-					}elseif( array_key_exists($field['type'], $this->custom_user_fields) ) {
-						?>
-						<p class="input-<?php echo $field['type']; ?> input-group">
-							<label for='<?php echo $field['fieldid'] ?>'>
-								<?php if( !empty($field['options_reg_tip']) ): ?>
-									<span>
-										<?php echo $field['label'] ?> <?php echo $required  ?>
-									</span>
-								<?php else: ?>
-									<?php echo $field['label'] ?> <?php echo $required  ?>
-								<?php endif; ?>
-							</label>
-							<?php do_action('em_form_output_field_custom_'.$field['type'], $field, $post); ?>
-						</p>
-						<?php
-					}
-				}
-				break;
-		}	
-		return apply_filters('emp_forms_output_field', ob_get_clean(), $this, $field);	
-	}
-	
-	function output_field_input($field, $post=true){
-		
-		ob_start();
-		$default = '';
-		$default_html = '';
-		if($post === true && !empty($_REQUEST[$field['fieldid']])) {
-			$default = is_array($_REQUEST[$field['fieldid']]) ? $_REQUEST[$field['fieldid']]:esc_attr($_REQUEST[$field['fieldid']]);
-			$default_html = is_array($_REQUEST[$field['fieldid']]) ? $_REQUEST[$field['fieldid']] : esc_attr($_REQUEST[$field['fieldid']]);
-		}elseif( $post !== true && !empty($post) ){
-			$default = is_array($post) ? $post:esc_attr($post);
-			$default_html = is_array($post) ? $post : esc_attr($post);
-		}
-		
-		$field['name'] = !empty($field['name']) ? $field['name'] : $field['fieldid'];
-		$required = array_key_exists('required', $field) && $field['required'];
-		switch($field['type']){
-			case 'html':
-			    echo $field['options_html_content'];
-			    break;			
-			case 'text':
-				
-				if ($required) {
-					$error = $field['options_text_error'] ?? "";
-					$pattern = $field['options_text_regex'] ?? "";
-					echo "<input type='text' class='regular-text' data-text-error='{$error}' name='{$field['name']}' id='{$field['fieldid']}'  value='{$default}' ";
-					echo (' required ');
-					echo $pattern ? "pattern='{$pattern}'" : "";
-					echo " />";
-				} else {
-					echo '<input type="text" name="' . $field['name'] . '" id="' . $field['fieldid'] . '" class="regular-text" value="' . $default . '" ' . ' />';
-				}
-				break;	
-			case 'email':
-				echo '<input type="email" name="' . $field['name'] . '" id="' . $field['fieldid'] . '" class="regular-text" value="' . $default . '" ' . ($required ? "required " : "") . ' />';
-				break;	
-			case 'phone': 
-				echo '<input type="tel" name="' . $field['name'] . '" id="' . $field['fieldid'] . '" class="regular-text" value="' . $default . '" ' . ($required ? "required " : "") . ' />';
-				break;
-			case 'textarea':
-				$size = 'rows="2" cols="20"';				
-				echo '<textarea name="' . $field['name'] . '" id="' . $field['fieldid'] . '" class="regular-text code" ' . $size . ' ' . ($required ? " required" : "") . '>' . $default_html . '</textarea>';
-				break;
-			case 'checkbox':
-				$checked = ($default && $default != 'n/a');
-				echo '<label><input type="checkbox" name="' . $field['name'] . '" id="' . uniqid() . '" value="1" ' . ($checked ? 'checked="checked"' : '') . ($required ? "required " : "") . '/>' . $field['help'] . '</label>';
-				break;
-			case 'radio':
-				echo "<fieldset><legend class='screen-reader-text'></legend>";
-				
-				foreach($field['options'] as $options){
-					echo '<label class="radio-inline">';
-					echo '<input type="radio" name="' . $field['name'] . '" class="' . $field['fieldid'] . '" value="' . esc_attr($options) . '"' . (($options == $default) ? 'checked="checked"' : '') . '/>';
-					echo  '<span>' . $options . '</span></label><br>';
-				} 
-				echo "</fieldset>";
-				break;
-			case 'select':
-				var_dump($field);
-				$values = $field['options'];
-				$multi = $field['type'] == 'multiselect';
-				if($multi && !is_array($default)) $default = (empty($default)) ? []:array($default);
-				
-				echo '<select name="' . $field['name'] . (($multi) ? '[]':'') . '" class="' . $field['fieldid'] . '" ' . ($required ? "required " : "") . '>';
-
-				if(key_exists('hasEmptyOption',  $field) && $field['hasEmptyOption']) {
-					echo '<option value="">' . '</option>';
-				}
-					
-				foreach($values as $key => $value) {
-					$value = trim($value);
-					echo '<option ' . (( ($multi && in_array($value, $default)) || ($value == $default) ) ? 'selected="selected"' : '' ) . '>' . esc_html($value) . '</option>';
-				}
-				
-				echo '</select>';
-				break;
-			case 'country':
-				$countries = [
-					"de_DE" => "DE",
-					"de_AT" => "AT",
-					"de_CH" => "CH",
-					"fr_FR" => "CH"
-				];
-				echo '<select name="' . $field['name'] . '" class="' . $field['fieldid'] . '" ' . ($required ? "required " : "") . '>';
-				foreach(\Contexis\Events\Intl\Countries::get(__('none selected','em-pro')) as $country_key => $country_name) {
-						echo '<option text="' . '" value="' . $country_key .'" ' . (($country_key == $countries[get_locale()]) ? 'selected="selected"':'') . '>' . $country_name . '</option>';
-				}
-				echo '</select>';
-				
-				break;
-			case 'date':
-				echo '<input type="date" name="' . $field['name'] . '" id="' . $field['fieldid'] . '" class="regular-text" value="' . $default . '" ' . ($required ? "required " : "") . ($field['max'] ? " max='" . $field['max'] . "'" : "") . ($field['min'] ? " min='" . $field['min'] . "'" : "") . ' />';
-    			break;				
-			default:
-				if( array_key_exists($field['type'], $this->user_fields) && self::show_reg_fields() ){
-					//registration fields
-				    if( $field['type'] != 'user_login' || EM_Bookings::$force_registration || !is_user_logged_in() ){
-						if ($field['name'] == "user_email") {
-							echo '<input type="email" name="' . $field['name'] . '" id="' . $field['fieldid'] . '" class="regular-text" value="' . $default . '"' . ($required ? " required " : " ") . ' />';							
-						} else {					
-							echo '<input type="text" name="' . $field['name'] . '" id="' . $field['fieldid'] . '" class="regular-text" value="' . $default . '" ' . ($required ? ' required ' : "") . ' />';
-						}
-					}else{
-						echo $default;
-					}
-				}
-				break;
-		}	
-		return apply_filters('emp_forms_output_field_input', ob_get_clean(), $this, $field, $post);	
-	}
 
 
 	
@@ -415,7 +180,6 @@ class EM_Form extends EM_Object {
 	 */
 	function validate_field( $field_id, $value, $attendee = false ){
 		$field = array_key_exists($field_id, $this->form_fields) ? $this->form_fields[$field_id]:false;
-		$field = $this->translate_field($field);
 		$value = (is_array($value)) ? $value:trim($value);
 		if(!$field) return;
 		$err = sprintf($this->form_required_error, $field['label']);
@@ -491,7 +255,7 @@ class EM_Form extends EM_Object {
 				    
 					
 					
-					if( $field['min'] ) {
+					if( $field['min'] && !empty($field['required'] ) ) {
 						$current = strtotime($value);
 						$min = strtotime($field['min']);
 						if($current < $min) {
@@ -501,7 +265,7 @@ class EM_Form extends EM_Object {
 						}
 					}
 
-					if( $field['max'] ) {
+					if( $field['max'] && !empty($field['required']) ) {
 						$current = strtotime($value);
 						$max = strtotime($field['max']);
 						if($current > $max) {
@@ -523,7 +287,7 @@ class EM_Form extends EM_Object {
 				   
 				    if( !empty($value) ){
 						if( !preg_match('/^([01]\d|2[0-3]):([0-5]\d) ?(AM|PM)?$/', $value) ){
-							$this_err = (!empty($field['options_time_error_format'])) ? $field['options_time_error_format']:__('Please use the time picker provided to select the appropriate time format.','em-pro');
+							$this_err = (!empty($field['options_time_error_format'])) ? $field['options_time_error_format']:__('Please use the time picker provided to select the appropriate time format.','events-manager');
 							$this->add_error($this_err);
 							$result = false;
 						}
@@ -582,16 +346,117 @@ class EM_Form extends EM_Object {
 		}
 		return apply_filters('emp_form_validate_field',$result, $field, $value, $this);
 	}
-	
-	function translate_field( $field_data ){
-		if( EM_ML::$is_ml && !empty($field_data['ml']) ){
-			foreach($field_data['ml'] as $field_key => $translations){
-				if( array_key_exists($field_key, $field_data) && !empty($translations[get_locale()]) ){
-					$field_data[$field_key] = $translations[get_locale()];
-				}
-			}
+
+	function output_field_input($field, $post=true){
+		
+		ob_start();
+		$default = '';
+		$default_html = '';
+		if($post === true && !empty($_REQUEST[$field['fieldid']])) {
+			$default = is_array($_REQUEST[$field['fieldid']]) ? $_REQUEST[$field['fieldid']]:esc_attr($_REQUEST[$field['fieldid']]);
+			$default_html = is_array($_REQUEST[$field['fieldid']]) ? $_REQUEST[$field['fieldid']] : esc_attr($_REQUEST[$field['fieldid']]);
+		}elseif( $post !== true && !empty($post) ){
+			$default = is_array($post) ? $post:esc_attr($post);
+			$default_html = is_array($post) ? $post : esc_attr($post);
 		}
-		return $field_data;
+		
+		$field['name'] = !empty($field['name']) ? $field['name'] : $field['fieldid'];
+		$required = array_key_exists('required', $field) && $field['required'];
+		switch($field['type']){
+			case 'html':
+			    echo $field['options_html_content'];
+			    break;			
+			case 'text':
+				
+				if ($required) {
+					$error = $field['options_text_error'] ?? "";
+					$pattern = $field['options_text_regex'] ?? "";
+					echo "<input type='text' class='regular-text' data-text-error='{$error}' name='{$field['name']}' id='{$field['fieldid']}'  value='{$default}' ";
+					echo (' required ');
+					echo $pattern ? "pattern='{$pattern}'" : "";
+					echo " />";
+				} else {
+					echo '<input type="text" name="' . $field['name'] . '" id="' . $field['fieldid'] . '" class="regular-text" value="' . $default . '" ' . ' />';
+				}
+				break;	
+			case 'email':
+				echo '<input type="email" name="' . $field['name'] . '" id="' . $field['fieldid'] . '" class="regular-text" value="' . $default . '" ' . ($required ? "required " : "") . ' />';
+				break;	
+			case 'phone': 
+				echo '<input type="tel" name="' . $field['name'] . '" id="' . $field['fieldid'] . '" class="regular-text" value="' . $default . '" ' . ($required ? "required " : "") . ' />';
+				break;
+			case 'textarea':
+				$size = 'rows="2" cols="20"';				
+				echo '<textarea name="' . $field['name'] . '" id="' . $field['fieldid'] . '" class="regular-text code" ' . $size . ' ' . ($required ? " required" : "") . '>' . $default_html . '</textarea>';
+				break;
+			case 'checkbox':
+				$checked = ($default && $default != 'n/a');
+				echo '<label><input type="checkbox" name="' . $field['name'] . '" id="' . uniqid() . '" value="1" ' . ($checked ? 'checked="checked"' : '') . ($required ? "required " : "") . '/>' . $field['help'] . '</label>';
+				break;
+			case 'radio':
+				echo "<fieldset><legend class='screen-reader-text'></legend>";
+				$values = explode("\r\n",$field['options_selection_values']);
+				foreach($field['options'] as $options){
+					echo '<label class="radio-inline">';
+					echo '<input type="radio" name="' . $field['name'] . '" class="' . $field['fieldid'] . '" value="' . esc_attr($options) . '"' . (($options == $default) ? 'checked="checked"' : '') . '/>';
+					echo  '<span>' . $options . '</span></label><br>';
+				}
+				echo "</fieldset>";
+				break;
+			case 'select':
+			
+				$values = $field['options'];
+				$multi = $field['type'] == 'multiselect';
+				if($multi && !is_array($default)) $default = (empty($default)) ? []:array($default);
+				
+				echo '<select name="' . $field['name'] . (($multi) ? '[]':'') . '" class="' . $field['fieldid'] . '" ' . ($required ? "required " : "") . '>';
+
+				if( !$field['options_select_default'] ){
+					
+					echo '<option value="">' . esc_html($field['options_select_default_text']) . '</option>';
+					
+				}
+					
+				foreach($values as $key => $value) {
+					$value = trim($value);
+					echo '<option ' . (( ($key == 1 && $field['options_select_default']) || ($multi && in_array($value, $default)) || ($value == $default) ) ? 'selected="selected"' : '' ) . '>' . esc_html($value) . '</option>';
+				}
+				
+				echo '</select>';
+				break;
+			case 'country':
+				$countries = [
+					"de_DE" => "DE",
+					"de_AT" => "AT",
+					"de_CH" => "CH",
+					"fr_FR" => "CH"
+				];
+				echo '<select name="' . $field['name'] . '" class="' . $field['fieldid'] . '" ' . ($required ? "required " : "") . '>';
+				foreach(\Contexis\Events\Intl\Countries::get(__('none selected','em-pro')) as $country_key => $country_name) {
+						echo '<option text="' . '" value="' . $country_key .'" ' . (($country_key == $countries[get_locale()]) ? 'selected="selected"':'') . '>' . $country_name . '</option>';
+				}
+				echo '</select>';
+				
+				break;
+			case 'date':
+				echo '<input type="date" name="' . $field['name'] . '" id="' . $field['fieldid'] . '" class="regular-text" value="' . $default . '" ' . ($required ? "required " : "") . ($field['max'] ? " max='" . $field['max'] . "'" : "") . ($field['min'] ? " min='" . $field['min'] . "'" : "") . ' />';
+    			break;				
+			default:
+				if( array_key_exists($field['type'], $this->user_fields) && self::show_reg_fields() ){
+					//registration fields
+				    if( $field['type'] != 'user_login' || EM_Bookings::$force_registration || !is_user_logged_in() ){
+						if ($field['name'] == "user_email") {
+							echo '<input type="email" name="' . $field['name'] . '" id="' . $field['fieldid'] . '" class="regular-text" value="' . $default . '"' . ($required ? " required " : " ") . ' />';							
+						} else {					
+							echo '<input type="text" name="' . $field['name'] . '" id="' . $field['fieldid'] . '" class="regular-text" value="' . $default . '" ' . ($required ? ' required ' : "") . ' />';
+						}
+					}else{
+						echo $default;
+					}
+				}
+				break;
+		}	
+		return apply_filters('emp_forms_output_field_input', ob_get_clean(), $this, $field, $post);	
 	}
 	
 	/*
@@ -644,71 +509,6 @@ class EM_Form extends EM_Object {
 		return $validate && self::show_reg_fields( $field );
 	}
 	
-	
-	function editor_save(){
-		//Update Values
-		return update_option('em_booking_form_fields',$this->form_fields);
-	}
-	
-	function editor_get_post(){
-		if( !empty($_REQUEST['form_action']) && $_REQUEST['form_action'] == 'form_fields' && wp_verify_nonce($_REQUEST['_wpnonce'], 'form_fields') ){
-			//Booking form fields
-			//extract request info back into item lists, but first assign fieldids to new items and sanitize old ones
-			$field_ids = [];
-			foreach( $_REQUEST['fieldid'] as $fieldid_key => $fieldid ){
-				if( !$this->is_user_form && $_REQUEST['type'][$fieldid_key] == 'name' ){ //name field
-					$_REQUEST['fieldid'][$fieldid_key] = 'user_name';
-				}elseif( !$this->is_user_form && array_key_exists($_REQUEST['type'][$fieldid_key], $this->user_fields) ){ //other fields
-					$_REQUEST['fieldid'][$fieldid_key] = $_REQUEST['type'][$fieldid_key];
-				}else{
-					if( empty($fieldid) ){
-						$_REQUEST['fieldid'][$fieldid_key] = sanitize_title($_REQUEST['label'][$fieldid_key]); //assign unique id
-					}
-					//check for duplicate IDs and if they exist, change the latter one to avoid conflicts
-					if( in_array($_REQUEST['fieldid'][$fieldid_key], $field_ids) ){
-						$suffix = 2;
-						$field_id_raw = $_REQUEST['fieldid'][$fieldid_key];
-						if( preg_match('/_([0-9]+)$/', $field_id_raw, $suffix_match) ){
-							$field_id_raw = str_replace($suffix_match[0], '', $field_id_raw);
-							$suffix = $suffix_match[1] + 1;
-						}
-						while( in_array($field_id_raw.'_'.$suffix, $field_ids) ) $suffix++;
-						$_REQUEST['fieldid'][$fieldid_key] = $field_id_raw.'_'.$suffix;
-					}
-				}
-				$_REQUEST['fieldid'][$fieldid_key] = $field_ids[] = str_replace('.','_',$_REQUEST['fieldid'][$fieldid_key]);
-			}
-			//get field values
-			global $allowedposttags;
-			$this->form_fields = [];
-			foreach( $_REQUEST as $key => $value){
-				if( is_array($value) ){
-					foreach($value as $item_index => $item_value){
-						if( !empty($_REQUEST['fieldid'][$item_index]) ){
-							if( $key == 'options_text_regex' ){
-								//regex can contain 'invalid' html which will get stripped, so we allow raw unsanitized strings given they're never output to a user
-								if( isset($_REQUEST['em_fields_json']) ){
-									//if using the workaround for large forms, regexes seem to already be properly stripped
-									$item_value = preg_replace('/  +/', ' ', $item_value);
-								}else{
-									$item_value = preg_replace('/  +/', ' ', stripslashes($item_value));
-								}
-								$this->form_fields[$_REQUEST['fieldid'][$item_index]][$key] = $item_value;
-							}else{
-								$item_value = preg_replace('/  +/', ' ', stripslashes(wp_kses($item_value, $allowedposttags)));
-								$this->form_fields[$_REQUEST['fieldid'][$item_index]][$key] = $item_value;
-							}
-						}
-					}
-				}
-			}
-			
-			return true;
-		}
-		return false;
-	}
-
-	
 	public static function get_form_data($form_id = 0, $associative = true) {
 
 		if(!$form_id) return [];
@@ -719,11 +519,11 @@ class EM_Form extends EM_Object {
 		
 		foreach( $blocks as $key => $block ) {
 			$type = self::get_type_from_blockname($block['blockName']);
-			$value = $type == 'html' ? render_block($block) : (array_key_exists('default', $block['attrs']) ? $block['attrs']['default'] : null);
 			$block['attrs'] = array_merge(EM_Form::load_block_defaults($type), $block['attrs'], ['type' => $type]);
 			if($type == 'html') {
 				$block['attrs']['value'] = render_block($block);
-				$block['attrs']['fieldid'] = 'html_' . random_int(100,999);
+				$block['attrs']['fieldid'] = 'html_' . $key;
+				
 			}
 			$index = $associative ? $block['attrs']['fieldid'] : $key;
 			$form_data[$index] = $block['attrs'];

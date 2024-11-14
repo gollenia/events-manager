@@ -51,12 +51,14 @@ const edit = ( props ) => {
 						tagName="span"
 						className="ctx:event-details__label"
 						value={ label }
-						placeholder={ __( 'Label', 'events' ) }
+						placeholder={ __( 'Label', 'events-manager' ) }
 						onChange={ ( value ) => setAttributes( { label: value } ) }
 					/>
 					<span>{ required ? '*' : '' }</span>
 					<br />
-					<span className="ctx:event-field__label">{ __( 'Only for internal usage - place field text below', 'events' ) }</span>
+					<span className="ctx:event-field__label">
+						{ __( 'Only for internal usage - place field text below', 'events-manager' ) }
+					</span>
 				</div>
 
 				<div className="ctx:event-field__name">
@@ -64,16 +66,16 @@ const edit = ( props ) => {
 						tagName="p"
 						className="ctx:event-details__label"
 						value={ fieldid }
-						placeholder={ __( 'Slug', 'events' ) }
+						placeholder={ __( 'Slug', 'events-manager' ) }
 						onChange={ ( value ) => setFieldId( value ) }
 					/>
 					{ validFieldId() == false && (
 						<span className="ctx:event-field__error-message">
-							{ __( 'Please type in a unique itentifier for the field', 'events' ) }
+							{ __( 'Please type in a unique itentifier for the field', 'events-manager' ) }
 						</span>
 					) }
 					{ validFieldId() && (
-						<span className="ctx:event-field__label">{ __( 'Unique identifier', 'events' ) }</span>
+						<span className="ctx:event-field__label">{ __( 'Unique identifier', 'events-manager' ) }</span>
 					) }
 				</div>
 			</div>
@@ -97,7 +99,7 @@ const edit = ( props ) => {
 					className="ctx:event-details__label"
 					value={ help }
 					required
-					placeholder={ __( 'What should your visitor say "yes" to?', 'events' ) }
+					placeholder={ __( 'What should your visitor say "yes" to?', 'events-manager' ) }
 					onChange={ ( value ) => setAttributes( { help: value } ) }
 				/>
 			</div>

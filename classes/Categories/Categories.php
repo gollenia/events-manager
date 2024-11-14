@@ -39,7 +39,7 @@ class EM_Categories extends EM_Taxonomy_Terms {
 		if( $prop == 'categories' ){
 			return !empty($this->terms);
 		}
-		return parent::__isset( $prop );
+		return  $prop ;
 	}
 	
 	//Functions we won't need when PHP 5.3 minimum allows for use of LSB

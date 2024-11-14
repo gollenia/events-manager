@@ -1,12 +1,12 @@
 <?php
 /*
 Plugin Name: Events
-Version: 6.4
+Version: 6.7
 Plugin URI: https://github.com/gollenia/events-manager
 Description: Event registration and booking management for WordPress. Recurring events, locations, webinars, ical, booking registration and more!
 Author: Marcus Sykes, Thomas Gollenia
 Author URI: https://github.com/gollenia/events-manager
-Text Domain: events
+Text Domain: events-manager
 */
 
 /*
@@ -30,25 +30,16 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Setting constants
 
 class Events {
-	const VERSION = '6.4';
+	const VERSION = '6.7';
 	const DIR = __DIR__;
-}
-
-//temporarily disable AJAX by default, future updates will eventually have this turned on as we work out some kinks
-if( !defined('EM_AJAX') ){
-	define( 'EM_AJAX', true );
 }
 
 require_once( plugin_dir_path( __FILE__ ) . '/vendor/autoload.php');
 
-
-define('EM_LOGS_DIR' , '/var/www/vhosts/kids-team.internal/log/');
-
-
 // INCLUDES
 //Base classes
 require_once('polyfill.php');
-require_once('classes/Assets.php');
+require_once('Assets.php');
 require_once('classes/Options.php');
 require_once('classes/Object.php');
 require_once('classes/Datetime.php');
@@ -61,19 +52,19 @@ require_once('classes/Forms/FormPost.php');
 require_once("em-posts.php");
 //Template Tags & Template Logic
 require_once("em-actions.php");
-require_once("em-functions.php");
 require_once("em-ical.php");
-//require_once("em-data-privacy.php");
-require_once("multilingual/em-ml.php");
+
 
 //Classes
 require_once('classes/Bookings/Booking.php');
 require_once('classes/Bookings/Bookings.php');
 require_once("classes/Bookings/BookingsTable.php") ;
+require_once('classes/Bookings/BookingsRest.php');
+
 
 require_once('classes/Categories/Category.php');
 require_once('classes/Categories/Categories.php');
-//require_once('classes/Categories/CategoriesFrontend.php');
+
 require_once('classes/Events/Event.php');
 require_once('classes/Locations/EventLocations.php');
 require_once('classes/Events/EventPost.php');
@@ -87,15 +78,15 @@ require_once('classes/People/People.php');
 require_once('classes/People/Person.php');
 require_once('classes/Permalinks.php');
 require_once('classes/Speaker/Speakers.php');
-require_once('classes/Update.php');
+
 
 require_once('classes/Tags/Tag.php');
 require_once('classes/Tags/Tags.php');
-//require_once('classes/Tags/TagsFrontend.php');
 require_once('classes/Tickets/TicketBooking.php');
 require_once('classes/Tickets/Ticket.php');
 require_once('classes/Tickets/TicketsBookings.php');
 require_once('classes/Tickets/Tickets.php');
+require_once('classes/Tickets/TicketsController.php');
 //Admin Files
 if( is_admin() ){
 	
@@ -111,6 +102,7 @@ if( is_admin() ){
 	require_once('classes/Events/EventPostAdmin.php');
 	require_once('classes/Events/EventPostsAdmin.php');
 	
+	
 	require_once('classes/Locations/LocationPostAdmin.php');
 	require_once('classes/Locations/LocationPostsAdmin.php');
 	require_once('classes/Taxonomies/TaxonomyAdmin.php');
@@ -123,8 +115,6 @@ if( is_admin() ){
 	require_once('admin/bookings/em-rejected.php');
 	require_once('admin/bookings/em-pending.php');
 	require_once('admin/bookings/em-person.php');
-
-	Contexis\Events\Update::init('events');
 }
 
 require_once('classes/Speaker/Speaker.php');
@@ -221,7 +211,7 @@ function em_init(){
 		$rss_url = trailingslashit(home_url()). EM_POST_TYPE_EVENT_SLUG.'/feed/';
 		define('EM_RSS_URI', $rss_url); //RSS PAGE URI via CPT archives page
 	}else{
-		$rss_url = em_add_get_params(home_url(), array('post_type'=>EM_POST_TYPE_EVENT, 'feed'=>'rss2'));
+		$rss_url = add_query_arg(['post_type'=>EM_POST_TYPE_EVENT, 'feed'=>'rss2'], home_url());
 		define('EM_RSS_URI', $rss_url); //RSS PAGE URI
 	}
 	$EM_Mailer = new \EM_Mailer();
@@ -246,7 +236,7 @@ add_filter('init','em_init',1);
  * @return null
  */
 function em_load_event(){
-	global $EM_Event, $EM_Recurrences, $EM_Location, $EM_Person, $EM_Booking, $EM_Category, $EM_Ticket, $current_user;
+	global $EM_Event, $EM_Recurrences, $EM_Location, $EM_Person, $EM_Booking, $EM_Category;
 	if (defined('EM_LOADED')) return;
 	
 	$EM_Recurrences = array();
@@ -280,10 +270,6 @@ function em_load_event(){
 		$EM_Category = new \EM_Category( absint($_REQUEST['category_id']) );
 	}elseif( isset($_REQUEST['category_slug']) && !is_object($EM_Category) ){
 		$EM_Category = new \EM_Category( $_REQUEST['category_slug'] );
-	}
-
-	if( isset($_REQUEST['ticket_id']) && is_numeric($_REQUEST['ticket_id']) && !is_object($_REQUEST['ticket_id']) ){
-		$EM_Ticket = new \EM_Ticket( absint($_REQUEST['ticket_id']) );
 	}
 
 	define('EM_LOADED',true);
@@ -335,30 +321,17 @@ add_filter('em_event_save', 'em_modified_monitor', 10,1);
 add_filter('em_location_save', 'em_modified_monitor', 10,1);
 
 
-
-function em_activate() {
+register_activation_hook( __FILE__,function() {
 	update_option('dbem_flush_needed',1);
-}
-register_activation_hook( __FILE__,'em_activate');
+});
 
-/* Creating the wp_events table to store event data*/
-function em_deactivate() {
+register_deactivation_hook( __FILE__,function() {
 	global $wp_rewrite;
    	$wp_rewrite->flush_rules();
-}
-register_deactivation_hook( __FILE__,'em_deactivate');
+});
 
 
 
-
-/**
- * Load plugin textdomain.
- */
-function wpdocs_load_textdomain() {
-	load_plugin_textdomain('events-manager', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' ); 
-	load_plugin_textdomain('em-pro', false, dirname( plugin_basename( __FILE__ ) ).'/languages');
-}
-add_action( 'plugins_loaded', 'wpdocs_load_textdomain' );
 
 
 register_uninstall_hook(__FILE__, 'em_uninstall');
@@ -379,6 +352,35 @@ function em_cron_schedules($schedules){
 }
 add_filter('cron_schedules','em_cron_schedules',10,1);
 
-require_once('classes/Block.php');
 
+
+
+function em_register_blocks()
+{
+	
+	$blocks = [
+		'upcoming',
+		'details',
+		'details-audience',
+		'details-date',
+		'details-location',
+		'details-price',
+		'details-shutdown',
+		'details-spaces',
+		'details-time',
+		'details-speaker',
+		'booking'
+	];
+
+	foreach ($blocks as $block) {
+		register_block_type(__DIR__ . '/build/blocks/' . $block);
+	}
+}
+
+add_action('init', 'em_register_blocks');
+
+function em_load_textdomain() {
+	load_plugin_textdomain('events-manager', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' ); 
+}
+add_action( 'plugins_loaded', 'em_load_textdomain' );
 

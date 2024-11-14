@@ -74,13 +74,13 @@ const edit = ( props ) => {
 								tagName="span"
 								className="ctx:form-details__label"
 								value={ label }
-								placeholder={ __( 'Label', 'events' ) }
+								placeholder={ __( 'Label', 'events-manager' ) }
 								onChange={ ( value ) => setAttributes( { label: value } ) }
 							/>
 
 							<span>{ required ? '*' : '' }</span>
 						</span>
-						<span className="ctx:form-field__label">{ __( 'Label for the field', 'events' ) }</span>
+						<span className="ctx:form-field__label">{ __( 'Label for the field', 'events-manager' ) }</span>
 					</div>
 				</div>
 
@@ -89,16 +89,16 @@ const edit = ( props ) => {
 						tagName="p"
 						className="ctx:form-details__label"
 						value={ fieldid }
-						placeholder={ __( 'Slug', 'events' ) }
+						placeholder={ __( 'Slug', 'events-manager' ) }
 						onChange={ ( value ) => setFieldId( value ) }
 					/>
 					{ validFieldId() == false && (
 						<span className="ctx:form-field__error-message">
-							{ __( 'Please type in a unique itentifier for the field', 'events' ) }
+							{ __( 'Please type in a unique itentifier for the field', 'events-manager' ) }
 						</span>
 					) }
 					{ validFieldId() && (
-						<span className="ctx:form-field__label">{ __( 'Unique identifier', 'events' ) }</span>
+						<span className="ctx:form-field__label">{ __( 'Unique identifier', 'events-manager' ) }</span>
 					) }
 				</div>
 			</div>

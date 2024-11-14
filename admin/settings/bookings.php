@@ -10,10 +10,7 @@ if( !function_exists('current_user_can') || !current_user_can('manage_options') 
 		<?php 
 		Options::checkbox ( __( 'Approval Required?', 'events-manager'), 'dbem_bookings_approval', __( 'Bookings will not be confirmed until the event administrator approves it.', 'events-manager').' '.__( 'This setting is not applicable when using payment gateways, see individual gateways for approval settings.', 'events-manager'));
 		Options::checkbox ( __( 'Reserved unconfirmed spaces?', 'events-manager'), 'dbem_bookings_approval_reserved', __( 'By default, event spaces become unavailable once there are enough CONFIRMED bookings. To reserve spaces even if unapproved, choose yes.', 'events-manager') );
-		
 		Options::checkbox ( __( 'Allow overbooking when approving?', 'events-manager'), 'dbem_bookings_approval_overbooking', __( 'If you get a lot of pending bookings and you decide to allow more bookings than spaces allow, setting this to yes will allow you to override the event space limit when manually approving.', 'events-manager') );
-		
-		
 		?>
 	</table>
 
@@ -25,8 +22,6 @@ if( !function_exists('current_user_can') || !current_user_can('manage_options') 
 		<?php
 		/* Tax & Currency */
 		Options::select ( __( 'Currency', 'events-manager'), 'dbem_bookings_currency', \Contexis\Events\Intl\Price::currency_list()->names, __( 'Choose your currency for displaying event pricing.', 'events-manager') );
-		Options::input ( __( 'Tax Rate', 'events-manager'), 'dbem_bookings_tax', __( 'Add a tax rate to your ticket prices (entering 10 will add 10% to the ticket price).', 'events-manager') );
-		Options::checkbox ( __( 'Add tax to ticket price?', 'events-manager'), 'dbem_bookings_tax_auto_add', __( 'When displaying ticket prices and booking totals, include the tax automatically?', 'events-manager') );
 		
 		?>
 	</table>
@@ -41,6 +36,7 @@ if( !function_exists('current_user_can') || !current_user_can('manage_options') 
 		Options::input ( __( 'Successful pending booking', 'events-manager'), 'dbem_booking_feedback_pending', __( 'When a booking is registered but pending.', 'events-manager') );
 		Options::input ( __( 'Not enough spaces', 'events-manager'), 'dbem_booking_feedback_full', __( 'When a booking cannot be made due to lack of spaces.', 'events-manager') );
 		Options::textarea(__('Privacy Message', 'events-manager'), 'dbem_privacy_message', __('You can type any HTML Content here.', 'events-manager'));
+		Options::textarea(__('Donation Message', 'events-manager'), 'dbem_donation_message', __('A meaage that is displayed when a customer is asked to donate for other customers', 'events-manager'));
 		
 		?>
 	</table>

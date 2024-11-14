@@ -19,21 +19,6 @@ function em_init_actions() {
 			}
 			die();
 		}   
-	 	if( isset($_REQUEST['em_ajax_action']) && $_REQUEST['em_ajax_action'] == 'delete_ticket' ) {
-			if( isset($_REQUEST['id']) ){
-				$EM_Ticket = new EM_Ticket( absint($_REQUEST['id']) );
-				$result = $EM_Ticket->delete();
-				if( $result ){
-					$result = array('result'=>true);
-				}else{
-					$result = array('result'=>false, 'error'=>$EM_Ticket->feedback_message);
-				}
-			}else{
-				$result = array('result'=>false, 'error'=>__('No ticket id provided','events-manager'));	
-			}			
-		    echo json_encode($result);
-			die();
-		}
 		if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'GlobalMapData') {
 			$EM_Locations = EM_Locations::get( $_REQUEST );
 			$json_locations = array();
@@ -67,43 +52,12 @@ function em_init_actions() {
 		}else{
 			$EM_Event = new EM_Event();
 		}
-		//Save Event, only via BP or via [event_form]
-		/* if( $_REQUEST['action'] == 'event_save' && $EM_Event->can_manage('edit_events','edit_others_events') ){
-			//Check Nonces
-			if( !wp_verify_nonce($_REQUEST['_wpnonce'], 'wpnonce_event_save') ) exit('Trying to perform an illegal action.');
-			//Set server timezone to UTC in case other plugins are doing something naughty
-			$server_timezone = date_default_timezone_get();
-			date_default_timezone_set('UTC');
-			
-			//Grab and validate submitted data
-			if ( $EM_Event->get_post() && $EM_Event->save() ) { //EM_Event gets the event if submitted via POST and validates it (safer than to depend on JS)
-				$events_result = true;
-				//Success notice
-				if( is_user_logged_in() ){
-					if( empty($_REQUEST['event_id']) ){
-						$EM_Notices->add_confirm( $EM_Event->output(get_option('dbem_events_form_result_success')), true);
-					}else{
-					    $EM_Notices->add_confirm( $EM_Event->output(get_option('dbem_events_form_result_success_updated')), true);
-					}
-				}else{
-					$EM_Notices->add_confirm( $EM_Event->output(get_option('dbem_events_anonymous_result_success')), true);
-				}
-				$redirect = !empty($_REQUEST['redirect_to']) ? $_REQUEST['redirect_to'] : em_wp_get_referer();
-				$redirect = em_add_get_params($redirect, array('success'=>1), false, false);
-				wp_safe_redirect( $redirect );
-				exit();
-			}else{
-				$EM_Notices->add_error( $EM_Event->get_errors() );
-				$events_result = false;				
-			}
-			//Set server timezone back, even though it should be UTC anyway
-			date_default_timezone_set($server_timezone);
-		} */
+		
 		if ( $_REQUEST['action'] == 'event_duplicate' && wp_verify_nonce($_REQUEST['_wpnonce'],'event_duplicate_'.$EM_Event->event_id) ) {
 			$event = $EM_Event->duplicate();
 			if( $event === false ){
 				$EM_Notices->add_error($EM_Event->errors, true);
-				wp_safe_redirect( em_wp_get_referer() );
+				wp_safe_redirect( wp_validate_redirect(wp_get_raw_referer(), false ) );
 			}else{
 				$EM_Notices->add_confirm($event->feedback_message, true);
 				wp_safe_redirect( $event->get_edit_url() );
@@ -118,15 +72,15 @@ function em_init_actions() {
 			}elseif( is_object($EM_Event) ){
 				$events_result = $EM_Event->delete();
 			}		
-			$plural = (count($selectedEvents) > 1) ? __('Events','events-manager'):__('Event','events-manager');
+			$plural = (count($selectedEvents) > 1) ? __('Events','events'):__('Event','events');
 			if($events_result){
-				$message = ( !empty($EM_Event->feedback_message) ) ? $EM_Event->feedback_message : sprintf(__('%s successfully deleted.','events-manager'),$plural);
+				$message = ( !empty($EM_Event->feedback_message) ) ? $EM_Event->feedback_message : sprintf(__('%s successfully deleted.','events'),$plural);
 				$EM_Notices->add_confirm( $message, true );
 			}else{
-				$message = ( !empty($EM_Event->errors) ) ? $EM_Event->errors : sprintf(__('%s could not be deleted.','events-manager'),$plural);
+				$message = ( !empty($EM_Event->errors) ) ? $EM_Event->errors : sprintf(__('%s could not be deleted.','events'),$plural);
 				$EM_Notices->add_error( $message, true );		
 			}
-			wp_safe_redirect( em_wp_get_referer() );
+			wp_safe_redirect( wp_validate_redirect(wp_get_raw_referer(), false ) );
 			exit();
 		}elseif( $_REQUEST['action'] == 'event_detach' && wp_verify_nonce($_REQUEST['_wpnonce'],'event_detach_'.get_current_user_id().'_'.$EM_Event->event_id) ){ 
 			//Detach event and move on
@@ -135,7 +89,7 @@ function em_init_actions() {
 			}else{
 				$EM_Notices->add_error( $EM_Event->errors, true );			
 			}
-			wp_safe_redirect(em_wp_get_referer());
+			wp_safe_redirect(wp_validate_redirect(wp_get_raw_referer(), false ));
 			exit();
 		}elseif( $_REQUEST['action'] == 'event_attach' && !empty($_REQUEST['undo_id']) && wp_verify_nonce($_REQUEST['_wpnonce'],'event_attach_'.get_current_user_id().'_'.$EM_Event->event_id) ){ 
 			//Detach event and move on
@@ -144,7 +98,7 @@ function em_init_actions() {
 			}else{
 				$EM_Notices->add_error( $EM_Event->errors, true );
 			}
-			wp_safe_redirect(em_wp_get_referer());
+			wp_safe_redirect(wp_validate_redirect(wp_get_raw_referer(), false ));
 			exit();
 		}
 		
@@ -159,86 +113,7 @@ function em_init_actions() {
 			exit();
 		}
 	}
-	
-	//Location Actions
-	/*if( !empty($_REQUEST['action']) && substr($_REQUEST['action'],0,8) == 'location' ){
-		global $EM_Location, $EM_Notices;
-		//Load the location object, with saved event if requested
-		if( !empty($_REQUEST['location_id']) ){
-			$EM_Location = new EM_Location( absint($_REQUEST['location_id']) );
-		}else{
-			$EM_Location = new EM_Location();
-		}
-		if( $_REQUEST['action'] == 'location_save' && $EM_Location->can_manage('edit_locations','edit_others_locations') ){
-			// Check Nonces
-			// We don't support submitting locations anymore
-		}elseif( !empty($_REQUEST['action']) && $_REQUEST['action'] == "location_delete" ){
-			//delete location
-			//get object or objects			
-			if( !empty($_REQUEST['locations']) || !empty($_REQUEST['location_id']) ){
-				$args = false;
-				if( !empty($_REQUEST['locations']) && is_array($_REQUEST['locations']) && array_is_list($_REQUEST['locations']) ){
-					$args = $_REQUEST['locations'];
-				}elseif( !empty($_REQUEST['location_id']) ){
-					$args = absint($_REQUEST['location_id']);
-				}
-				if( !empty($args) ){
-					$locations = EM_Locations::get($args);
-					foreach($locations as $location) {
-						if( !$location->delete() ){
-							$EM_Notices->add_error($location->get_errors());
-							$errors = true;
-						}
-					}
-				}
-				if( empty($errors) ){
-					$result = true;
-					$location_term = ( count($locations) > 1 ) ?__('Locations', 'events-manager') : __('Location', 'events-manager'); 
-					$EM_Notices->add_confirm( sprintf(__('%s successfully deleted', 'events-manager'), $location_term) );
-				}else{
-					$result = false;
-				}
-			}
-		}elseif( !empty($_REQUEST['action']) && $_REQUEST['action'] == "locations_search" && (!empty($_REQUEST['term']) || !empty($_REQUEST['q'])) ){
-			$results = array();
-			if( is_user_logged_in() ){
-				$location_cond = (is_user_logged_in() && !current_user_can('read_others_locations')) ? "AND location_owner=".get_current_user_id() : '';
-				if( !current_user_can('read_private_locations') ){
-				    $location_cond = " AND location_private=0";
-				}
-				$location_cond = apply_filters('em_actions_locations_search_cond', $location_cond);
-				$term = (isset($_REQUEST['term'])) ? '%'.$wpdb->esc_like(wp_unslash($_REQUEST['term'])).'%' : '%'.$wpdb->esc_like(wp_unslash($_REQUEST['q'])).'%';
-				$sql = $wpdb->prepare("
-					SELECT 
-						location_id AS `id`,
-						Concat( location_name )  AS `label`,
-						location_name AS `value`,
-						location_address AS `address`, 
-						location_town AS `town`, 
-						location_state AS `state`,
-						location_region AS `region`,
-						location_postcode AS `postcode`,
-						location_country AS `country`,
-						location_latitude AS `latitude`,
-						location_longitude AS `longitude`
-					FROM ".EM_LOCATIONS_TABLE." 
-					WHERE ( `location_name` LIKE %s ) AND location_status=1 $location_cond LIMIT 10
-				", $term);
-				$results = $wpdb->get_results($sql);
-			}
-			echo json_encode($results);
-			die();
-		}
-		if( isset($result) && $result && !empty($_REQUEST['em_ajax']) ){
-			$return = array('result'=>true, 'message'=>$EM_Location->feedback_message);
-			echo json_encode($return);
-			die();
-		}elseif( isset($result) && !$result && !empty($_REQUEST['em_ajax']) ){
-			$return = array('result'=>false, 'message'=>$EM_Location->feedback_message, 'errors'=>$EM_Notices->get_errors());
-			echo json_encode($return);
-			die();
-		}
-	} */
+
 	
 	//Booking Actions
 	if( !empty($_REQUEST['action']) && substr($_REQUEST['action'],0,7) == 'booking' && (is_user_logged_in() || ($_REQUEST['action'] == 'booking_add')) ){
@@ -255,35 +130,9 @@ function em_init_actions() {
 		$allowed_actions = array('bookings_approve'=>'approve','bookings_reject'=>'reject','bookings_unapprove'=>'unapprove', 'bookings_delete'=>'delete');
 		$result = false;
 		$feedback = '';
-		if ( $_REQUEST['action'] == 'booking_add') {
-			//ADD/EDIT Booking
-			ob_start();
-			if( (!defined('WP_CACHE') || !WP_CACHE) && !isset($GLOBALS["wp_fastest_cache"]) );
 		
-			    $EM_Booking->get_post();
-				$post_validation = $EM_Booking->validate();
-				do_action('em_booking_add', $EM_Event, $EM_Booking, $post_validation);
-				if( $post_validation ){
-				    //register the user - or not depending - according to the booking
-					$EM_Bookings = $EM_Event->get_bookings();
-					if( $EM_Bookings->add($EM_Booking) ){
-						$result = true;
-						$EM_Notices->add_confirm( $EM_Bookings->feedback_message );		
-						$feedback = $EM_Bookings->feedback_message;
-					}else{
-						$result = false;
-						$EM_Notices->add_error( $EM_Booking->get_errors() );
-						$feedback = $EM_Booking->feedback_message;
-					}
-					global $em_temp_user_data; $em_temp_user_data = false; //delete registered user temp info (if exists)
-				}else{
-					$result = false;
-					$EM_Notices->add_error( $EM_Booking->get_errors() );
-				}
-			
-			ob_clean();
 		//TODO user action shouldn't check permission, booking object should.
-	  	}elseif( array_key_exists($_REQUEST['action'], $allowed_actions) && $EM_Event->can_manage('manage_bookings','manage_others_bookings') ){
+	  	if( array_key_exists($_REQUEST['action'], $allowed_actions) && $EM_Event->can_manage('manage_bookings','manage_others_bookings') ){
 	  		//Event Admin only actions
 			$action = $allowed_actions[$_REQUEST['action']];
 			//Just do it here, since we may be deleting bookings of different events.
@@ -318,38 +167,23 @@ function em_init_actions() {
 			        $EM_Notices->add_error($feedback);
 			    }
 			}
-		}elseif( $_REQUEST['action'] == 'booking_save' ){
-			em_verify_nonce('booking_save_'.$EM_Booking->booking_id);
-			do_action('em_booking_save', $EM_Event, $EM_Booking);
-			if( $EM_Booking->can_manage('manage_bookings','manage_others_bookings') ){
-				if ($EM_Booking->get_post(true) && $EM_Booking->validate(true) && $EM_Booking->save(false) ){
-					$EM_Notices->add_confirm( $EM_Booking->feedback_message, true );
-					$redirect = !empty($_REQUEST['redirect_to']) ? $_REQUEST['redirect_to'] : em_wp_get_referer();
-					wp_safe_redirect( $redirect );
-					exit();
-				}else{
-					$result = false;
-					$EM_Notices->add_error( $EM_Booking->get_errors() );			
-					$feedback = $EM_Booking->feedback_message;	
-				}	
-			}
 		}elseif( $_REQUEST['action'] == 'booking_set_status' ){
-			em_verify_nonce('booking_set_status_'.$EM_Booking->booking_id);
+			
 			if( $EM_Booking->can_manage('manage_bookings','manage_others_bookings') && $_REQUEST['booking_status'] != $EM_Booking->booking_status ){
 				if ( $EM_Booking->set_status($_REQUEST['booking_status'], false, true) ){
 					if( !empty($_REQUEST['send_email']) ){
 						if( $EM_Booking->email() ){
 						    if( $EM_Booking->mails_sent > 0 ) {
-						        $EM_Booking->feedback_message .= " ".__('Email Sent.','events-manager');
+						        $EM_Booking->feedback_message .= " ".__('Email Sent.','events');
 						    }else{
-						        $EM_Booking->feedback_message .= " "._x('No emails to send for this booking.', 'bookings', 'events-manager');
+						        $EM_Booking->feedback_message .= " "._x('No emails to send for this booking.', 'bookings', 'events');
 						    }
 						}else{
-							$EM_Booking->feedback_message .= ' <span style="color:red">'.__('ERROR : Email Not Sent.','events-manager').'</span>';
+							$EM_Booking->feedback_message .= ' <span style="color:red">'.__('ERROR : Email Not Sent.','events').'</span>';
 						}
 					}
 					$EM_Notices->add_confirm( $EM_Booking->feedback_message, true );
-					$redirect = !empty($_REQUEST['redirect_to']) ? $_REQUEST['redirect_to'] : em_wp_get_referer();
+					$redirect = !empty($_REQUEST['redirect_to']) ? $_REQUEST['redirect_to'] : wp_validate_redirect(wp_get_raw_referer(), false );
 					wp_safe_redirect( $redirect );
 					exit();
 				}else{
@@ -359,54 +193,22 @@ function em_init_actions() {
 				}	
 			}
 		}elseif( $_REQUEST['action'] == 'booking_resend_email' ){
-			em_verify_nonce('booking_resend_email_'.$EM_Booking->booking_id);
+			
 			if( $EM_Booking->can_manage('manage_bookings','manage_others_bookings') ){
 				if( $EM_Booking->email(false, true) ){
 				    if( $EM_Booking->mails_sent > 0 ) {
-				        $EM_Notices->add_confirm( __('Email Sent.','events-manager'), true );
+				        $EM_Notices->add_confirm( __('Email Sent.','events'), true );
 				    }else{
-				        $EM_Notices->add_confirm( _x('No emails to send for this booking.', 'bookings', 'events-manager'), true );
+				        $EM_Notices->add_confirm( _x('No emails to send for this booking.', 'bookings', 'events'), true );
 				    }
-					$redirect = !empty($_REQUEST['redirect_to']) ? $_REQUEST['redirect_to'] : em_wp_get_referer();
+					$redirect = !empty($_REQUEST['redirect_to']) ? $_REQUEST['redirect_to'] : wp_validate_redirect(wp_get_raw_referer(), false );
 					wp_safe_redirect( $redirect );
 					exit();
 				}else{
 					$result = false;
-					$EM_Notices->add_error( __('ERROR : Email Not Sent.','events-manager') );			
+					$EM_Notices->add_error( __('ERROR : Email Not Sent.','events') );			
 					$feedback = $EM_Booking->feedback_message;
 				}	
-			}
-		}elseif( $_REQUEST['action'] == 'booking_modify_person' ){
-			em_verify_nonce('booking_modify_person_'.$EM_Booking->booking_id);
-			if( $EM_Booking->can_manage('manage_bookings','manage_others_bookings') ){
-			    global $wpdb;
-				
-				$EM_Booking->get_post();
-				
-				if( //save just the booking meta, avoid extra unneccesary hooks and things to go wrong
-					$EM_Booking->is_no_user() && $EM_Booking->get_post() && 
-			    	$wpdb->update(EM_BOOKINGS_TABLE, array('booking_meta'=> serialize($EM_Booking->booking_meta)), array('booking_id'=>$EM_Booking->booking_id)) !== false
-				){
-					$EM_Notices->add_confirm( $EM_Booking->feedback_message, true );
-					$redirect = !empty($_REQUEST['redirect_to']) ? $_REQUEST['redirect_to'] : em_wp_get_referer();
-					wp_safe_redirect( $redirect );
-					exit();
-				}else{
-					$result = false;
-					$EM_Notices->add_error( $EM_Booking->get_errors() );			
-					$feedback = $EM_Booking->feedback_message;	
-				}	
-			}
-			do_action('em_booking_modify_person', $EM_Event, $EM_Booking);
-		}elseif( $_REQUEST['action'] == 'bookings_add_note' && $EM_Booking->can_manage('manage_bookings','manage_others_bookings') ) {
-			em_verify_nonce('bookings_add_note');
-			if( $EM_Booking->add_note(wp_unslash($_REQUEST['booking_note'])) ){
-				$EM_Notices->add_confirm($EM_Booking->feedback_message, true);
-				$redirect = !empty($_REQUEST['redirect_to']) ? $_REQUEST['redirect_to'] : em_wp_get_referer();
-				wp_safe_redirect( $redirect );
-				exit();
-			}else{
-				$EM_Notices->add_error($EM_Booking->errors);
 			}
 		}
 
@@ -545,8 +347,8 @@ function em_init_actions() {
 			foreach( $EM_Bookings->bookings as $EM_Booking ) { /* @var EM_Booking $EM_Booking */
 				//Display all values
 				if( $show_tickets ){
-					foreach($EM_Booking->get_tickets_bookings()->tickets_bookings as $EM_Ticket_Booking){ /* @var EM_Ticket_Booking $EM_Ticket_Booking */
-						$row = $EM_Bookings_Table->get_row_csv($EM_Ticket_Booking);
+					foreach($EM_Booking->get_tickets_bookings()->tickets_bookings as $ticket_booking){ 
+						$row = $EM_Bookings_Table->get_row_csv($ticket_booking);
 						array_push($excel_sheet, $row);
 					}
 				}else{
@@ -559,7 +361,7 @@ function em_init_actions() {
 			$EM_Bookings = $EM_Bookings_Table->get_bookings();
 		}
 		$xlsx = Shuchkin\SimpleXLSXGen::fromArray( $excel_sheet );
-		$xlsx->downloadAs($EM_Event->slug . '-bookings.xlsx');
+		$xlsx->downloadAs($EM_Event->event_slug . '-bookings.xlsx');
 		
 		exit();
 	}

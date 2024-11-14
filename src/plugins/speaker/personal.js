@@ -7,7 +7,7 @@
  */
 import { SelectControl, TextControl } from '@wordpress/components';
 import { select } from '@wordpress/data';
-import { PluginDocumentSettingPanel } from '@wordpress/edit-post';
+import { PluginDocumentSettingPanel } from '@wordpress/editor';
 
 import { useEntityProp } from '@wordpress/core-data';
 import { __ } from '@wordpress/i18n';
@@ -22,22 +22,22 @@ const personalData = () => {
 	return (
 		<PluginDocumentSettingPanel
 			name="events-location-settings"
-			title={ __( 'Personal Information', 'events' ) }
+			title={ __( 'Personal Information', 'events-manager' ) }
 			className="events-location-settings"
 		>
 			<SelectControl
-				label={ __( 'Gender', 'events' ) }
+				label={ __( 'Gender', 'events-manager' ) }
 				value={ meta._gender }
 				onChange={ ( value ) => {
 					setMeta( { _gender: value } );
 				} }
 				options={ [
 					{
-						label: __( 'Male', 'events' ),
+						label: __( 'Male', 'events-manager' ),
 						value: 'male',
 					},
 					{
-						label: __( 'Female', 'events' ),
+						label: __( 'Female', 'events-manager' ),
 						value: 'female',
 					},
 				] }
@@ -45,7 +45,7 @@ const personalData = () => {
 
 			<TextControl
 				type="date"
-				label={ __( 'Birthday', 'events' ) }
+				label={ __( 'Birthday', 'events-manager' ) }
 				value={ meta._birthday }
 				onChange={ ( value ) => {
 					setMeta( { _birthday: value } );

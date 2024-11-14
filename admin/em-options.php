@@ -46,7 +46,7 @@ function em_options_save(){
 		update_option('dbem_flush_needed',1);
 		do_action('em_options_save');
 		$EM_Notices->add_confirm('<strong>'.__('Changes saved.', 'events-manager').'</strong>', true);
-		$referrer = em_wp_get_referer();
+		$referrer = wp_validate_redirect(wp_get_raw_referer(), false );
 		//add tab hash path to url if supplied
 		if( !empty($_REQUEST['tab_path']) ){
 			$referrer_array = explode('#', $referrer);

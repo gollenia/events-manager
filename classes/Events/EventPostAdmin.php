@@ -154,6 +154,7 @@ class EM_Event_Post_Admin{
 			self::maybe_publish_location($EM_Event);
 			//Set server timezone back, even though it should be UTC anyway
 			date_default_timezone_set($server_timezone);
+			file_put_contents('/var/www/vhosts/kids-team.internal/log/wp_insert_post_data.log', print_r($EM_Notices, true));
 		}
 	}
 	

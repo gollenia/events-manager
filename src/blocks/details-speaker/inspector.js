@@ -74,7 +74,7 @@ const Inspector = ( props ) => {
 			</PanelBody>
 			<PanelBody title={ __( 'Data', 'events-manager' ) } initialOpen={ true }>
 				<ComboboxControl
-					label={ __( 'Select a speaker', 'events' ) }
+					label={ __( 'Select a speaker', 'events-manager' ) }
 					value={ customSpeakerId }
 					onChange={ ( value ) => {
 						setAttributes( { customSpeakerId: value } );

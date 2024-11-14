@@ -3,7 +3,7 @@ import { __ } from '@wordpress/i18n';
 import PropTypes from 'prop-types';
 import Coupon from './coupon';
 
-import InputField from './InputField';
+import InputField from '../__experimantalForm/InputField';
 import Summary from './summary';
 
 const Payment = ( props ) => {
@@ -32,21 +32,50 @@ const Payment = ( props ) => {
 					{ data?.event?.has_coupons && <Coupon state={ state } dispatch={ dispatch } /> }
 					{ Object.keys( data.available_gateways ).length > 1 && (
 						<InputField
+							label={ __( 'Payment Method', 'events-manager' ) }
+							options={ gatewayOptions() }
+							name={ 'gateway' }
 							onChange={ ( event ) => {
 								dispatch( { type: 'SET_GATEWAY', payload: event } );
 							} }
 							type={ 'select' }
-							settings={ {
-								name: 'gateway',
-								label: __( 'Payment method', 'event' ),
-								type: 'select',
-								options: gatewayOptions(),
-							} }
 							value={ request.gateway }
 							locale={ data.l10n.locale }
 						/>
 					) }
-
+					{ data.allow_donation && (
+						<div classNAme="donation">
+							<h4>{ __( 'Donation', 'events-manager' ) }</h4>
+							<p dangerouslySetInnerHTML={ { __html: data.l10n.donation } }></p>
+							<InputField
+								onChange={ ( event ) => {
+									dispatch( {
+										type: 'SET_FIELD',
+										payload: { form: 'registration', field: 'donation_ok', value: event },
+									} );
+								} }
+								type={ 'checkbox' }
+								value={ request.registration.data_privacy_consent }
+								name={ 'data_privacy_consent' }
+								help={ __( 'Yes, I want to donate', 'events-manager' ) }
+								locale={ data.l10n.locale }
+							/>
+							<InputField
+								label={ __( 'Amount', 'events-manager' ) }
+								onChange={ ( event ) => {
+									dispatch( {
+										type: 'SET_FIELD',
+										payload: { form: 'registration', field: 'donation', value: event },
+									} );
+								} }
+								type={ 'text' }
+								pattern={ '^[0-9]+(.[0-9]{1,2})?$' }
+								value={ request.donation }
+								name={ 'donation' }
+								locale={ data.l10n.locale }
+							/>
+						</div>
+					) }
 					{ data?.l10n?.consent && (
 						<InputField
 							onChange={ ( event ) => {
@@ -57,11 +86,8 @@ const Payment = ( props ) => {
 							} }
 							type={ 'checkbox' }
 							value={ request.registration.data_privacy_consent }
-							settings={ {
-								name: 'data_privacy_consent',
-								help: data?.l10n?.consent,
-								type: 'checkbox',
-							} }
+							name={ 'data_privacy_consent' }
+							help={ data?.l10n?.consent }
 							locale={ data.l10n.locale }
 						/>
 					) }

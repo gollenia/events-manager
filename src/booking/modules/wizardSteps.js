@@ -1,0 +1,8 @@
+const WIZARD_STEPS = {
+	TICKETS: 0,
+	USER_REGISTRATION: 1,
+	PAYMENT: 2,
+	SUCCESS: 3,
+};
+
+export default WIZARD_STEPS;

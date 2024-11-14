@@ -22,19 +22,19 @@ function dateDiff( date1, date2 ) {
 	//display result with custom text
 	const result =
 		( years_passed == 1
-			? `${ years_passed } ${ __( 'year', 'events' ) } `
+			? `${ years_passed } ${ __( 'year', 'events-manager' ) } `
 			: years_passed > 1
-			? `${ years_passed } ${ __( 'years', 'events' ) } `
+			? `${ years_passed } ${ __( 'years', 'events-manager' ) } `
 			: '' ) +
 		( months_passed == 1
-			? `${ months_passed } ${ __( 'month', 'events' ) } `
+			? `${ months_passed } ${ __( 'month', 'events-manager' ) } `
 			: months_passed > 1
-			? `${ months_passed } ${ __( 'months', 'events' ) } `
+			? `${ months_passed } ${ __( 'months', 'events-manager' ) } `
 			: '' ) +
 		( days_passed == 1
-			? `${ days_passed } ${ __( 'day', 'events' ) }`
+			? `${ days_passed } ${ __( 'day', 'events-manager' ) }`
 			: days_passed > 1
-			? `${ days_passed } ${ __( 'days', 'events' ) }`
+			? `${ days_passed } ${ __( 'days', 'events-manager' ) }`
 			: '' );
 
 	//return the result

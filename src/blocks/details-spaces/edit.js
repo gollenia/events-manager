@@ -63,7 +63,7 @@ const edit = ( props ) => {
 					<RichText
 						tagName="h5"
 						className="event-details_title description-editable"
-						placeholder={ __( 'Free Spaces', 'events' ) }
+						placeholder={ __( 'Free Spaces', 'events-manager' ) }
 						value={ description }
 						onChange={ ( value ) => {
 							setAttributes( { description: value } );
@@ -77,26 +77,29 @@ const edit = ( props ) => {
 								{ spaces <= warningThreshold && spaces > 0 && (
 									<span className="event-details_warning">
 										{ warningText
-											? sprintf( warningText, showNumber ? spaces : __( 'few', 'events' ) )
+											? sprintf(
+													warningText,
+													showNumber ? spaces : __( 'few', 'events-manager' )
+											  )
 											: sprintf(
 													_n(
 														'Only %s space left',
 														'Only %s spaces left',
-														showNumber ? spaces : __( 'few', 'events' ),
-														'events'
+														showNumber ? spaces : __( 'few', 'events-manager' ),
+														'events-manager'
 													),
-													showNumber ? spaces : __( 'few', 'events' )
+													showNumber ? spaces : __( 'few', 'events-manager' )
 											  ) }
 									</span>
 								) }
 								{ spaces === 0 && (
 									<span className="event-details_warning">
-										{ bookedUpText ? bookedUpText : __( 'Booked up', 'events' ) }
+										{ bookedUpText ? bookedUpText : __( 'Booked up', 'events-manager' ) }
 									</span>
 								) }
 								{ spaces > warningThreshold && (
 									<span className="event-details_ok">
-										{ okText ? okText : __( 'Enough free spaces left', 'events' ) }
+										{ okText ? okText : __( 'Enough free spaces left', 'events-manager' ) }
 									</span>
 								) }
 							</>

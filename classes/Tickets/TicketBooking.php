@@ -1,27 +1,30 @@
 <?php
-class EM_Ticket_Booking extends EM_Object{
+
+namespace Contexis\Events\Tickets;
+class TicketBooking extends \EM_Object{
 	//DB Fields
 	var $ticket_booking_id;
 	var $booking_id;
 	var $ticket_id;
 	var $ticket_booking_price;
 	var $ticket_booking_spaces;
-	var $fields = array(
+	public array $fields = array(
 		'ticket_booking_id' => array('name'=>'id','type'=>'%d'),
 		'ticket_id' => array('name'=>'ticket_id','type'=>'%d'),
 		'booking_id' => array('name'=>'booking_id','type'=>'%d'),
 		'ticket_booking_price' => array('name'=>'price','type'=>'%f'),
 		'ticket_booking_spaces' => array('name'=>'spaces','type'=>'%d')
 	);
+	/*
 	var $shortnames = array(
 		'id' => 'ticket_booking_id',
 		'price' => 'ticket_booking_price',
 		'spaces' => 'ticket_booking_spaces',
-	);
+	); */
 	//Other Vars
 	/**
 	 * Contains ticket object
-	 * @var EM_Ticket
+	 * @var Ticket
 	 */
 	var $ticket;
 	/**
@@ -29,7 +32,7 @@ class EM_Ticket_Booking extends EM_Object{
 	 * @var EM_Booking
 	 */
 	var $booking;
-	var $required_fields = array( 'ticket_id', 'ticket_booking_spaces');
+	public array $required_fields = array( 'ticket_id', 'ticket_booking_spaces');
 	
 	/**
 	 * Creates ticket object and retreives ticket data (default is a blank ticket object). Accepts either array of ticket data (from db) or a ticket id.
@@ -48,8 +51,8 @@ class EM_Ticket_Booking extends EM_Object{
 			  	$ticket = $wpdb->get_row($sql, ARRAY_A);
 			}
 			//Save into the object
-			$this->to_object($ticket);
-			$this->compat_keys();
+			$this->from_array($ticket);
+			//$this->compat_keys();
 		}
 	}
 	
@@ -98,7 +101,7 @@ class EM_Ticket_Booking extends EM_Object{
 				$this->feedback_message = __('There was a problem saving the ticket booking.', 'events-manager');
 				$this->errors[] = __('There was a problem saving the ticket booking.', 'events-manager');
 			}
-			$this->compat_keys();
+			//$this->compat_keys();
 			return apply_filters('em_ticket_booking_save', ( count($this->errors) == 0 ), $this);
 		}else{
 			$this->feedback_message = __('There was a problem saving the ticket booking.', 'events-manager');
@@ -141,38 +144,15 @@ class EM_Ticket_Booking extends EM_Object{
 	 * @param boolean $format
 	 * @return double|string
 	 */
-	function get_price( $format = false ){
+	function get_price( ){
 		if( $this->ticket_booking_price == 0 ){
-			//get the ticket, calculate price on spaces
-			$this->ticket_booking_price = $this->get_ticket()->get_price_without_tax() * $this->ticket_booking_spaces;
+			$this->ticket_booking_price = $this->get_ticket()->get_price() * $this->ticket_booking_spaces;
 			$this->ticket_booking_price = apply_filters('em_ticket_booking_get_price', $this->ticket_booking_price, $this);
 		}
-		$price = $this->ticket_booking_price;
-		//do some legacy checking here for bookings made prior to 5.4, due to how taxes are calculated
-		if( $this->ticket_booking_id > 0 ){
-		    $EM_Booking = $this->get_booking();
-		    if( !empty($EM_Booking->legacy_tax_rate) ){
-		        $tax_auto_add = get_option('dbem_legacy_bookings_tax_auto_add');
-		        
-		        if( $tax_auto_add && $EM_Booking->get_tax_rate() > 0 ){
-				    //this booking never had a tax rate fixed to it (i.e. prior to v5.4), and according to legacy settings, taxes were applied to this price
-				    //we now calculate price of ticket bookings without taxes, so remove the tax
-				    $price = $this->ticket_booking_price / (1 + $EM_Booking->get_tax_rate()/100 );
-		        }
-		    }
-		}
-		//return price formatted or not
-		if($format){
-			return $this->format_price($price);
-		}
-		return $price;
+		return $this->ticket_booking_price;
+
 	}
-	
-	function get_price_with_taxes( $format = false ){
-		$price = $this->get_price() * (1 + $this->get_booking()->get_event()->get_tax_rate()/100);
-	    if( $format ) return $this->format_price($price);
-	    return $price; 
-	}
+
 	
 	/**
 	 * Smart booking locator, saves a database read if possible.
@@ -186,9 +166,9 @@ class EM_Ticket_Booking extends EM_Object{
 			$this->booking = $EM_Booking;
 		}else{
 			if(is_numeric($this->booking_id)){
-				$this->booking = EM_Booking::find($this->booking_id);
+				$this->booking = \EM_Booking::find($this->booking_id);
 			}else{
-				$this->booking = EM_Booking::find();
+				$this->booking = \EM_Booking::find();
 			}
 		}
 		return apply_filters('em_ticket_booking_get_booking', $this->booking, $this);;
@@ -196,16 +176,17 @@ class EM_Ticket_Booking extends EM_Object{
 	
 	/**
 	 * Gets the ticket object this booking belongs to, saves a reference in ticket property
-	 * @return EM_Ticket
+	 * @return Ticket
 	 */
 	function get_ticket(){
-		global $EM_Ticket;
-		if( is_object($this->ticket) && get_class($this->ticket)=='EM_Ticket' && $this->ticket->ticket_id == $this->ticket_id ){
+		$ticket_id = key_exists('ticket_id', $_REQUEST) ? $_REQUEST['ticket_id'] : 0;
+		$ticket = new \Contexis\Events\Tickets\Ticket($ticket_id);
+		if( is_object($this->ticket) && get_class($this->ticket)=='Ticket' && $this->ticket->ticket_id == $this->ticket_id ){
 			return $this->ticket;
-		}elseif( is_object($EM_Ticket) && $EM_Ticket->ticket_id == $this->ticket_id ){
-			$this->ticket = $EM_Ticket;
+		}elseif( is_object($ticket) && $ticket->ticket_id == $this->ticket_id ){
+			$this->ticket = $ticket;
 		}else{
-			$this->ticket = new EM_Ticket($this->ticket_id);
+			$this->ticket = new \Contexis\Events\Tickets\Ticket($this->ticket_id);
 		}
 		return apply_filters('em_ticket_booking_get_ticket', $this->ticket, $this);
 	}
@@ -232,32 +213,7 @@ class EM_Ticket_Booking extends EM_Object{
 	}
 	
 
-	/**
-	 * Get the html options for quantities to go within a <select> container
-	 * @return string
-	 */
-	function get_spaces_options($zero_value = true){
-		$available_spaces = $this->get_available_spaces();
-		if( $available_spaces >= $this->min || ( empty($this->min) && $available_spaces > 0) ) {
-			ob_start();
-			?>
-			<select name="em_tickets[<?php echo $this->ticket_booking_id ?>][spaces]">
-				<?php 
-					$min = ($this->min > 0) ? $this->min:1;
-					$max = ($this->max > 0) ? $this->max:get_option('dbem_bookings_form_max');
-				?>
-				<?php if($zero_value) : ?><option>0</option><?php endif; ?>
-				<?php for( $i=$min; $i<=$max; $i++ ): ?>
-					<option><?php echo $i ?></option>
-				<?php endfor; ?>
-			</select>
-			<?php 
-			return ob_get_clean();
-		}else{
-			return false;
-		}
-			
-	}
+	
 	
 	/**
 	 * Can the user manage this event? 

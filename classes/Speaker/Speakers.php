@@ -28,7 +28,7 @@ class EM_Speakers {
             'rewrite' => ['slug' => 'event-speaker', 'with_front'=>false],
             'query_var' => false,
             'has_archive' => false,
-            'supports' => ['title','thumbnail', 'editor', 'excerpt', 'custom-fields'],
+            'supports' => ['title', 'thumbnail', 'editor', 'excerpt', 'custom-fields'],
             'label' => __('Speakers','events-manager'),
             'description' => __('Speakers for an event.','events-manager'),
             'labels' => [

@@ -63,7 +63,7 @@ if($attributes['linkTo'] == 'custom') {
 		</i>
 	</div>
 	<div class="event-details-text">
-		<h4><?php echo $attributes['description'] ?: __("Speaker", "em-pro") ?></h4>
+		<h4><?php echo $attributes['description'] ?: __("Speaker", "events-manager") ?></h4>
 		<div class="event-details-data"><?php echo $speaker->name ?></div> 
 	</div>
 	<?php if($attributes['showLink'] && $url) : ?>

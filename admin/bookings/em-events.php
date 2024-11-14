@@ -65,7 +65,7 @@ function em_bookings_events_table() {
 						}
 						?>
 					</select>
-					<button id="post-query-submit" class="button-secondary" type="" value="" ><?php esc_attr_e( 'Filter' )?>
+					<button id="post-query-submit" class="button-secondary" type="" value="" ><?php esc_attr_e( 'Filter hihi' )?>
 				</div>
 				<!--
 				<div class="view-switch">
@@ -94,6 +94,7 @@ function em_bookings_events_table() {
 						<th><?php esc_html_e( 'Available', 'events-manager'); ?></th>
 						<th><?php esc_html_e( 'Booked', 'events-manager'); ?></th>
 						<th><?php esc_html_e( 'Date and time', 'events-manager'); ?></th>
+						
 					</tr>
 				</thead>
 				<tbody>
@@ -121,7 +122,9 @@ function em_bookings_events_table() {
 							<td>
 								<strong>
 									<?php echo $EM_Event->output('#_BOOKINGSLINK'); ?>
-								</strong>
+									</strong>
+									<div class="row-actions "><span class="trash"><a href="https://kids-team.internal/wp-admin/post.php?post=27&amp;action=trash&amp;_wpnonce=8ebb708296" class="submitdelete" aria-label="„Teenagerfreizeit“ in den Papierkorb verschieben">Buchungen löschen</a> | </span><span class="trash"><a href="https://kids-team.internal/events/teenagerfreizeit/" rel="bookmark" aria-label="„Teenagerfreizeit“ ansehen">Absagen</a></span></div>
+								
 							</td>
 							<td>
 								
@@ -142,7 +145,7 @@ function em_bookings_events_table() {
 								</div>
 							</td>
 							<td>
-								<?php echo $EM_Event->output_dates(). '<br>' . $EM_Event->output_times(); ?>
+								<?php echo $EM_Event->output_dates() ?>
 							</td>
 						</tr>
 						<?php

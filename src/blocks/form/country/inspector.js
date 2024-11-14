@@ -29,31 +29,31 @@ const Inspector = ( props ) => {
 
 	return (
 		<InspectorControls>
-			<PanelBody title={ __( 'Data', 'events' ) } initialOpen={ true }>
+			<PanelBody title={ __( 'Data', 'events-manager' ) } initialOpen={ true }>
 				<ToggleControl
-					label={ __( 'Required', 'events' ) }
+					label={ __( 'Required', 'events-manager' ) }
 					checked={ required }
 					onChange={ ( value ) => setAttributes( { required: value } ) }
 				/>
 
 				<SelectControl
-					label={ __( 'Region', 'events' ) }
+					label={ __( 'Region', 'events-manager' ) }
 					value={ region }
 					options={ regions }
 					onChange={ ( value ) => setAttributes( { region: value } ) }
 				/>
 
 				<TextControl
-					label={ __( 'Empty option', 'events' ) }
-					help={ __( 'Text to display when no country is selected', 'events' ) }
+					label={ __( 'Empty option', 'events-manager' ) }
+					help={ __( 'Text to display when no country is selected', 'events-manager' ) }
 					value={ help }
 					onChange={ ( value ) => setAttributes( { help: value } ) }
 				/>
 			</PanelBody>
-			<PanelBody title={ __( 'Appearance', 'events' ) } initialOpen={ true }>
+			<PanelBody title={ __( 'Appearance', 'events-manager' ) } initialOpen={ true }>
 				<RangeControl
-					label={ __( 'Width', 'events' ) }
-					help={ __( 'Number of columns the input field will occupy', 'events' ) }
+					label={ __( 'Width', 'events-manager' ) }
+					help={ __( 'Number of columns the input field will occupy', 'events-manager' ) }
 					value={ width }
 					max={ 6 }
 					min={ 1 }

@@ -8,40 +8,38 @@ const reducer = ( state = {}, action ) => {
 	switch ( type ) {
 		case 'SET_DATA':
 			state.data = payload;
-			state.wizzard.steps.tickets.enabled = payload?.attendee_fields?.length > 0;
-			state.wizzard.steps.payment.enabled = ! payload?.event?.price?.free;
-			state.wizzard.step = payload?.attendee_fields?.length === 0 ? 1 : 0;
+			state.wizard.step = payload?.attendee_fields?.length === 0 ? 1 : 0;
 			return { ...state };
 
-		case 'SET_WIZZARD':
-			state.wizzard.step = payload;
-			state.wizzard.checkValidity = true;
+		case 'SET_WIZARD':
+			state.wizard.step = payload;
+			state.wizard.checkValidity = true;
 			return { ...state };
 
-		case 'INCREMENT_WIZZARD':
-			state.wizzard.step = state.wizzard.step + ( payload ? payload : 1 );
-			state.wizzard.checkValidity = true;
+		case 'INCREMENT_WIZARD':
+			state.wizard.step = state.wizard.step + ( payload ? payload : 1 );
+			state.wizard.checkValidity = true;
 			return { ...state };
 
-		case 'DECREMENT_WIZZARD':
-			state.wizzard.step = state.wizzard.step - ( payload ? payload : 1 );
-			state.wizzard.checkValidity = true;
+		case 'DECREMENT_WIZARD':
+			state.wizard.step = state.wizard.step - ( payload ? payload : 1 );
+			state.wizard.checkValidity = true;
 			return { ...state };
 
 		case 'SET_MODAL':
 			state.modal.visible = payload;
 			state.modal.title = payload
-				? `${ __( 'Registration', 'events' ) } ${ data.event.title }`
+				? `${ __( 'Registration', 'events-manager' ) } ${ data.event?.title }`
 				: state.originalDocumentTitle;
 			return { ...state };
 
-		case 'SET_LOADING':
-			state.modal.loading = payload;
+		case 'SET_INIT_STATE':
+			state.modal.initState = payload;
 			return { ...state };
 
 		case 'ADD_TICKET':
 			state.request.tickets.push( JSON.parse( JSON.stringify( state.data.available_tickets[ payload ] ) ) );
-			state.wizzard.checkValidity = true;
+			state.wizard.checkValidity = true;
 			return { ...state };
 
 		case 'SET_FIELD':
@@ -51,7 +49,7 @@ const reducer = ( state = {}, action ) => {
 			if ( payload.form === 'registration' ) {
 				state.request.registration[ payload.field ] = payload.value;
 			}
-			state.wizzard.checkValidity = true;
+			state.wizard.checkValidity = true;
 			return { ...state };
 
 		case 'REMOVE_TICKET':
@@ -60,7 +58,7 @@ const reducer = ( state = {}, action ) => {
 					? payload.index
 					: state.request.tickets.findIndex( ( ticket ) => ticket.id === payload.id );
 			state.request.tickets.splice( index, 1 );
-			state.wizzard.checkValidity = true;
+			state.wizard.checkValidity = true;
 			return { ...state };
 
 		case 'SET_COUPON':
@@ -76,19 +74,22 @@ const reducer = ( state = {}, action ) => {
 			return { ...state };
 
 		case 'BOOKING_RESPONSE':
-			state.response.booking = payload;
+			console.log( 'BOOKING_RESPONSE', payload );
+			state.response.booking = payload.response;
+			state.modal.orderState = payload.state;
+			state.wizard.step = state.wizard.step + 1;
 			return { ...state };
 
 		case 'SET_GATEWAY':
 			state.request.gateway = payload;
-			state.wizzard.checkValidity = true;
+			state.wizard.checkValidity = true;
 			return { ...state };
 
 		case 'VALIDITY':
 			for ( let key in payload ) {
-				state.wizzard.steps[ key ].valid = payload[ key ];
+				state.wizard.steps[ key ].valid = payload[ key ];
 			}
-			state.wizzard.checkValidity = false;
+			state.wizard.checkValidity = false;
 			return { ...state };
 
 		case 'RESET':

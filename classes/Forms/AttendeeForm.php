@@ -6,11 +6,6 @@
  */
 class EM_Attendee_Form extends EM_Form {
 	public $event_id;
-	/**
-	 * For use in output_field_input
-	 * @var unknown_type
-	 */
-	public $attendee_number = false;
 	
     /*
      * Extends the default function to search within a request variable which contains an array of attendee forms. The $ticket_id and $attendee_index is needed to locate the right form to process. 
@@ -42,7 +37,7 @@ class EM_Attendee_Form extends EM_Form {
     	return true;
     }
     
-    /* 
+	 /* 
      * Overrides default method by search/replacing a specific string of text located in the input field name - [%n] - which represents the number of the attendee for that ticket
      * @see EM_Form::output_field_input()
      */
@@ -59,5 +54,6 @@ class EM_Attendee_Form extends EM_Form {
     	}
     	return $output;
     }
+    
     
 }

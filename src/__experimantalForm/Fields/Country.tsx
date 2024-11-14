@@ -22,7 +22,7 @@ type CountryProps = {
 	formTouched: boolean;
 	customErrorMessage?: string;
 	onChange: ( value: string ) => void;
-	admin: boolean;
+	value: string;
 };
 
 type Option = {
@@ -33,7 +33,7 @@ type Option = {
 const browserLanguage = navigator.language.split( '-' )[ 0 ];
 
 const Country = ( props: CountryProps ) => {
-	const { onChange, disabled, placeholder, required, name, label, width, region, help, customErrorMessage, admin } =
+	const { onChange, disabled, placeholder, required, name, label, width, region, help, customErrorMessage, value } =
 		props;
 
 	const inputRef = useRef< HTMLSelectElement >( null );
@@ -42,19 +42,16 @@ const Country = ( props: CountryProps ) => {
 	const [ selectedCountry, setSelectedCountry ] = useState( placeholder );
 	const [ touched, setTouched ] = useState( false );
 
-	const fetchCountries = async () => {
-		const response = await fetch( `https://countries.kids-team.com/countries/${ region }/${ browserLanguage }` );
-		const data = await response.json();
-
-		const countryList = Object.entries( data ).map( ( [ key, name ], index ) => {
-			return { value: key, label: name };
-		} );
-
-		setCountries( countryList );
-	};
-
 	useEffect( () => {
-		fetchCountries();
+		fetch( `https://countries.kids-team.com/countries/${ region }/${ browserLanguage }` )
+			.then( ( response ) => response.json() )
+			.then( ( data ) => {
+				const countryList = Object.entries( data ).map( ( [ key, name ], index ) => {
+					return { value: key, label: name };
+				} );
+
+				setCountries( countryList );
+			} );
 	}, [] );
 
 	const onChangeHandler = ( event: any ) => {
@@ -71,40 +68,6 @@ const Country = ( props: CountryProps ) => {
 		props.required ? 'select--required' : '',
 		! inputRef?.current?.validity.valid && isTouched ? 'error' : '',
 	].join( ' ' );
-
-	if ( admin )
-		return (
-			<tr>
-				<td>{ label }</td>
-				<td>
-					<select
-						name={ name }
-						required={ required }
-						disabled={ disabled }
-						onBlur={ () => setTouched( true ) }
-						onChange={ onChangeHandler }
-						ref={ inputRef }
-						value={ selectedCountry }
-					>
-						<option value="" disabled>
-							{ help ?? 'Make a selection' }
-						</option>
-						{ countries.map( ( country: Option, index ) => {
-							return (
-								<option key={ index } value={ country.value }>
-									{ country.label }
-								</option>
-							);
-						} ) }
-					</select>
-					{ isTouched && ! inputRef?.current?.validity.valid && inputRef.current?.validationMessage && (
-						<span className="error-message">
-							{ customErrorMessage || inputRef.current?.validationMessage }
-						</span>
-					) }
-				</td>
-			</tr>
-		);
 
 	return (
 		<div

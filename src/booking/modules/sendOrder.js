@@ -1,73 +1,71 @@
-import qs from 'qs';
+import { STATES } from './constants';
 
 const sendOrder = ( state, dispatch ) => {
-	const [ FALSE, TRUE, DELAY, HUGE_DELAY, ERROR ] = [ 0, 1, 2, 3, 4 ];
+	const controller = new AbortController();
+	const signal = controller.signal;
 
 	const { request, data, response, modal } = state;
-	dispatch( { type: 'SET_LOADING', payload: TRUE } );
+	dispatch( { type: 'SET_ORDER_STATE', payload: STATES.LOADING } );
 
 	setTimeout( () => {
-		if ( modal.loading == 0 ) return;
-		dispatch( { type: 'SET_LOADING', payload: DELAY } );
+		if ( modal.orderState == STATES.IDLE ) return;
+		dispatch( { type: 'SET_ORDER_STATE', payload: STATES.DELAY } );
 	}, 3000 );
 
 	setTimeout( () => {
-		if ( modal.loading == 0 ) return;
-		dispatch( { type: 'SET_LOADING', payload: HUGE_DELAY } );
+		if ( modal.orderState == STATES.IDLE ) return;
+		dispatch( { type: 'SET_ORDER_STATE', payload: STATES.HUGE_DELAY } );
 	}, 7000 );
 
 	setTimeout( () => {
-		if ( modal.loading == 0 ) return;
-		dispatch( { type: 'SET_LOADING', payload: ERROR } );
-	}, 14000 );
+		if ( modal.orderState == STATES.IDLE ) return;
+		dispatch( { type: 'SET_ORDER_STATE', payload: STATES.ERROR } );
+		controller.abort();
+	}, 10000 );
 
 	let fetchRequest = {
-		...request.registration,
+		registration: request.registration,
 		_wpnonce: data._nonce,
+		gateway: request.gateway,
 		action: 'booking_add',
 		event_id: data.event.event_id,
-		em_attendee_fields: {},
-		em_tickets: [],
-		gateway: request.gateway,
+		attendees: {},
+		coupon: request.coupon,
 	};
 
 	for ( const id of Object.keys( data.available_tickets ) ) {
-		fetchRequest[ 'em_attendee_fields' ][ id ] = [];
-		fetchRequest[ 'em_tickets' ][ id ] = { spaces: 0 };
+		fetchRequest[ 'attendees' ][ id ] = [];
 	}
 
-	state.request.tickets.map( ( ticket ) => {
-		fetchRequest.em_attendee_fields[ ticket.id ].push( ticket.fields );
-		fetchRequest.em_tickets[ ticket.id ].spaces += 1;
+	request.tickets.map( ( ticket ) => {
+		fetchRequest.attendees[ ticket.id ].push( ticket.fields );
 	} );
 
-	if ( state.response.coupon.code != '' ) {
-		fetchRequest[ 'coupon_code' ] = response.coupon.code;
-	}
+	console.log( 'fetchRequest', fetchRequest );
 
-	const url = new URL( data.booking_url );
-	url.search = qs.stringify( fetchRequest );
-
-	fetch( url )
+	fetch( `/wp-json/events/v2/booking/${ data.event.event_id }`, {
+		method: 'POST',
+		body: JSON.stringify( fetchRequest ),
+		headers: new Headers( {
+			'Content-Type': 'application/json;charset=UTF-8',
+		} ),
+		beforeSend: function ( xhr ) {
+			xhr.setRequestHeader( 'X-WP-Nonce', data._nonce );
+		},
+	} )
 		.then( ( resp ) => resp.json() )
-		.then( ( apiResponse ) => {
-			dispatch( { type: 'SET_LOADING', payload: FALSE } );
-			dispatch( { type: 'BOOKING_RESPONSE', payload: apiResponse } );
-
-			if ( ! apiResponse.result ) {
-				return;
+		.then( ( response ) => {
+			console.log( 'response', response );
+			dispatch( { type: 'BOOKING_RESPONSE', payload: { state: STATES.SUCCESS, response } } );
+			if ( response.gateway_url ) {
+				window.location.replace( response.gateway_url );
 			}
-
-			// not good, hard coded
-			if ( apiResponse.gateway === 'mollie' ) {
-				window.location.replace( apiResponse.mollie_url );
-			}
-
-			if ( apiResponse.gateway === 'offline' ) {
-				dispatch( { type: 'BOOKING_RESPONSE', payload: apiResponse } );
-				dispatch( { type: 'SET_WIZZARD', payload: 3 } );
-			}
-			return;
+		} )
+		.catch( ( error ) => {
+			dispatch( {
+				type: 'BOOKING_RESPONSE',
+				payload: { state: STATES.ERROR, response: { result: false, message: error } },
+			} );
 		} );
 };
 

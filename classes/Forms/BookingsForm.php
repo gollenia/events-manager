@@ -67,11 +67,11 @@ class EM_Booking_Form {
 
 			if(empty($form_data)) {
 				$form_data = array('form' => self::get_form_template());
-				self::$form_name = __('Default','em-pro');
+				self::$form_name = __('Default','events-manager');
 			}
 			self::$form_name = get_the_title(self::$form_id);
 			self::$form = new EM_Form($form_data, 'em_bookings_form');
-			self::$form->form_required_error = __('Please fill in the field: %s','em-pro');
+			self::$form->form_required_error = __('Please fill in the field: %s','events-manager');
 		}
         
 		return self::$form;
@@ -211,8 +211,7 @@ class EM_Booking_Form {
 	    if( (!empty($EM_Booking->booking_meta['booking']) && is_array($EM_Booking->booking_meta['booking'])) || ($include_registration_info && !empty($EM_Booking->booking_meta['registration']) && is_array($EM_Booking->booking_meta['registration'])) ){
 			$EM_Form = self::get_form($EM_Booking->get_event());
 			foreach($EM_Form->form_fields as $fieldid => $field){
-				
-				$field = $EM_Form->translate_field($field);
+			
 				$input_value = $field_value = (isset($EM_Booking->booking_meta['booking'][$fieldid])) ? $EM_Booking->booking_meta['booking'][$fieldid]:'n/a';
 				if( !array_key_exists($fieldid, $EM_Form->user_fields) && !in_array($fieldid, array('user_email','user_name')) && $field['type'] != 'html' ){
 					if( in_array($field['type'], array('date','time')) && $input_value == 'n/a' ) $input_value = '';
@@ -252,7 +251,6 @@ class EM_Booking_Form {
 		$EM_Form = self::get_form($event_id);
 		foreach($EM_Form->form_fields as $field_id => $field ){
 		    if( $EM_Form->is_normal_field($field_id) ){ //user fields already handled, htmls shouldn't show
-		    	$field = $EM_Form->translate_field($field);
     			$template[$field_id] = $field['label'] ?? '';
 		    }
 		}
@@ -268,7 +266,6 @@ class EM_Booking_Form {
 		//if you want to mess with these values, intercept the em_bookings_single_custom instead
 		$EM_Form = self::get_form($EM_Booking->event_id, $EM_Booking);
 		foreach($EM_Form->form_fields as $fieldid => $field){
-			$field = $EM_Form->translate_field($field);
 			if( !array_key_exists($fieldid, $EM_Form->user_fields) && !in_array($fieldid, array('user_email','user_name')) && $field['type'] != 'html' && $field['type'] != 'captcha' ){
 				//get value of field
 				$input_value = $field_value = (isset($EM_Booking->booking_meta['booking'][$fieldid])) ? $EM_Booking->booking_meta['booking'][$fieldid]:'n/a';

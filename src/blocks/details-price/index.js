@@ -15,8 +15,8 @@ const { name, title, description } = metadata;
 
 const settings = {
 	...metadata,
-	title: __( title, 'events' ),
-	description: __( description, 'events' ),
+	title: __( title, 'events-manager' ),
+	description: __( description, 'events-manager' ),
 	icon,
 	edit,
 	save: () => {

@@ -36,7 +36,7 @@ class EM_Coupons_Admin {
 		$owner = empty($EM_Event->event_owner) ? get_current_user_id() : $EM_Event->event_owner;
 		?>
 		
-		<h3><?php _e('Coupons','em-pro'); ?></h3>
+		<h3><?php _e('Coupons','events-manager'); ?></h3>
 		
 		
     	<div id="em-event-bookings-coupons">
@@ -47,17 +47,17 @@ class EM_Coupons_Admin {
         //not in multiple bookings mode and can create their own coupons 
         ?>
 		
-    		<p><p class="description"><?php _e('Coupons selected here will be applied to bookings made for this event.','em-pro'); ?></p></p>
+    		<p><p class="description"><?php _e('Coupons selected here will be applied to bookings made for this event.','events-manager'); ?></p></p>
 
 			<table class="wp-list-table widefat fixed striped table-view-list">
 			<thead>
 				<tr>
 					<td id="cb" class="manage-column column-cb check-column"><input disabled id="cb-select-all-1" type="checkbox"></td>
-					<th class=""><?php _e("Code", "em-pro") ?></th>
-					<th class=""><?php _e("Name", "em-pro") ?></th>
-					<th class=""><?php _e("Discount", "em-pro") ?></th>
-					<th class=""><?php _e("Description", "em-pro") ?></th>
-					<th class=""><?php _e("Uses", "em-pro") ?></th>
+					<th class=""><?php _e("Code", "events-manager") ?></th>
+					<th class=""><?php _e("Name", "events-manager") ?></th>
+					<th class=""><?php _e("Discount", "events-manager") ?></th>
+					<th class=""><?php _e("Description", "events-manager") ?></th>
+					<th class=""><?php _e("Uses", "events-manager") ?></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -130,7 +130,7 @@ class EM_Coupons_Admin {
 	}
     
     static function admin_menu($plugin_pages){
-    	$plugin_pages[] = add_submenu_page('edit.php?post_type='.EM_POST_TYPE_EVENT, __('Coupons','em-pro'),__('Coupons Manager','em-pro'),'manage_others_bookings','events-manager-coupons','EM_Coupons_Admin::admin_page');
+    	$plugin_pages[] = add_submenu_page('edit.php?post_type='.EM_POST_TYPE_EVENT, __('Coupons','events-manager'),__('Coupons Manager','events-manager'),'manage_others_bookings','events-manager-coupons','EM_Coupons_Admin::admin_page');
     	return $plugin_pages; //use wp action/filters to mess with the menus
     }
     
@@ -158,7 +158,7 @@ class EM_Coupons_Admin {
     	//Display relevant page
     	if( !empty($_GET['action']) && $_GET['action']=='edit' ){
     		if( empty($_REQUEST['redirect_to']) ){
-    			$_REQUEST['redirect_to'] = em_add_get_params($_SERVER['REQUEST_URI'], array('action'=>null, 'coupon_id'=>null));
+    			$_REQUEST['redirect_to'] = add_query_arg(['action'=>null, 'coupon_id'=>null], $_SERVER['REQUEST_URI']);
     		}
     		self::edit_form();
     	}elseif( !empty($_GET['action']) && $_GET['action']=='view' ){
@@ -186,7 +186,7 @@ class EM_Coupons_Admin {
     	}
     	?>
 		<div class='wrap'>
-			<h1><?php _e('Edit Coupons','em-pro'); ?>
+			<h1><?php _e('Edit Coupons','events-manager'); ?>
 				<a href="<?php echo add_query_arg(array('action'=>'edit')); ?>" class="page-title-action"><?php esc_html_e('Add New','events-manager'); ?></a>
 			</h1>
 			<?php echo $EM_Notices; ?>
@@ -199,10 +199,10 @@ class EM_Coupons_Admin {
 					<a href="/wp-json/events/v2/coupons/export" class="em-coupons-table-export button-secondary" id="em-coupons-table-export-trigger" rel="#em-coupons-table-export" title="Diese Buchungen exportieren."><i class="material-symbols-outlined">export_notes</i></a>	
 					<div class="">
 						
-							<a href='<?php echo em_add_get_params($_SERVER['REQUEST_URI'], array('view'=>null, 'pno'=>null)); ?>' <?php echo ( empty($_REQUEST['view']) ) ? 'class="current"':''; ?>><?php echo sprintf( __( 'My %s', 'events-manager'), __('Coupons','em-pro')); ?> <span class="count">(<?php echo $coupons_mine_count; ?>)</span></a>
+							<a href='<?php echo add_query_arg(['view'=>null, 'pno'=>null], $_SERVER['REQUEST_URI']); ?>' <?php echo ( empty($_REQUEST['view']) ) ? 'class="current"':''; ?>><?php echo sprintf( __( 'My %s', 'events-manager'), __('Coupons','events-manager')); ?> <span class="count">(<?php echo $coupons_mine_count; ?>)</span></a>
 							<?php if( current_user_can('manage_others_bookings') ): ?>
 							&nbsp;|&nbsp;
-							<a href='<?php echo em_add_get_params($_SERVER['REQUEST_URI'], array('view'=>'others', 'pno'=>null)); ?>' <?php echo ( !empty($_REQUEST['view']) && $_REQUEST['view'] == 'others' ) ? 'class="current"':''; ?>><?php echo sprintf( __( 'All %s', 'events-manager'), __('Coupons','em-pro')); ?> <span class="count">(<?php echo $coupons_all_count; ?>)</span></a>
+							<a href='<?php echo add_query_arg(['view'=>'others', 'pno'=>null], $_SERVER['REQUEST_URI']); ?>' <?php echo ( !empty($_REQUEST['view']) && $_REQUEST['view'] == 'others' ) ? 'class="current"':''; ?>><?php echo sprintf( __( 'All %s', 'events-manager'), __('Coupons','events-manager')); ?> <span class="count">(<?php echo $coupons_all_count; ?>)</span></a>
 							<?php endif; ?>
 						</div>
 					</div>
@@ -218,21 +218,21 @@ class EM_Coupons_Admin {
 					<thead>
 						<tr>
 							<th><?php esc_html_e('Name', 'events-manager') ?></th>
-							<th><?php _e('Code', 'em-pro') ?></th>
-							<th><?php _e('Created By', 'em-pro') ?></th>
-							<th><?php _e('Description', 'em-pro') ?></th>  
-							<th><?php _e('Discount', 'em-pro') ?></th>   
-							<th><?php _e('Uses', 'em-pro') ?></th>       
+							<th><?php _e('Code', 'events-manager') ?></th>
+							<th><?php _e('Created By', 'events-manager') ?></th>
+							<th><?php _e('Description', 'events-manager') ?></th>  
+							<th><?php _e('Discount', 'events-manager') ?></th>   
+							<th><?php _e('Uses', 'events-manager') ?></th>       
 						</tr>
 					</thead>
 					<tfoot>
 						<tr>
 							<th><?php esc_html_e('Name', 'events-manager') ?></th>
-							<th><?php _e('Code', 'em-pro') ?></th>
-							<th><?php _e('Created By', 'em-pro') ?></th>
-							<th><?php _e('Description', 'em-pro') ?></th>  
-							<th><?php _e('Discount', 'em-pro') ?></th>   
-							<th><?php _e('Uses', 'em-pro') ?></th>
+							<th><?php _e('Code', 'events-manager') ?></th>
+							<th><?php _e('Created By', 'events-manager') ?></th>
+							<th><?php _e('Description', 'events-manager') ?></th>  
+							<th><?php _e('Discount', 'events-manager') ?></th>   
+							<th><?php _e('Uses', 'events-manager') ?></th>
 						</tr>
 					</tfoot>
 					<tbody>
@@ -241,7 +241,7 @@ class EM_Coupons_Admin {
 								<td>
 									<a href='<?php echo admin_url('edit.php?post_type='.EM_POST_TYPE_EVENT.'&amp;page=events-manager-coupons&amp;action=edit&amp;coupon_id='.$EM_Coupon->coupon_id); ?>'><?php echo $EM_Coupon->coupon_name ?></a>
 									<div class="row-actions">
-										<span class="trash"><a class="submitdelete" href="<?php echo add_query_arg(array('coupon_id'=>$EM_Coupon->coupon_id,'action'=>'coupon_delete','_wpnonce'=>wp_create_nonce('coupon_delete_'.$EM_Coupon->coupon_id))) ?>"><?php _e('Delete','em-pro')?></a></span>
+										<span class="trash"><a class="submitdelete" href="<?php echo add_query_arg(array('coupon_id'=>$EM_Coupon->coupon_id,'action'=>'coupon_delete','_wpnonce'=>wp_create_nonce('coupon_delete_'.$EM_Coupon->coupon_id))) ?>"><?php _e('Delete','events-manager')?></a></span>
 									</div>
 								</td>
 								<td class="code"><?php echo esc_html($EM_Coupon->coupon_code); ?></td>
@@ -267,7 +267,7 @@ class EM_Coupons_Admin {
 				</table>
 				<?php else: ?>
 				<br class="clear" />
-				<p><?php _e('No coupons have been inserted yet!', 'em-pro') ?></p>
+				<p><?php _e('No coupons have been inserted yet!', 'events-manager') ?></p>
 				<?php endif; ?>
 				
 				<?php if ( !empty($coupons_nav) ) echo '<div class="tablenav">'. $coupons_nav .'</div>'; ?>
@@ -282,7 +282,7 @@ class EM_Coupons_Admin {
 		//check that user can access this page
 		if( is_object($EM_Coupon) && !$EM_Coupon->can_manage('manage_bookings','manage_others_bookings') ){
 			?>
-			<div class="wrap"><h2><?php esc_html_e('Unauthorized Access','events-manager'); ?></h2><p><?php echo sprintf(esc_html('You do not have the rights to manage this %s.','events-manager'),__('coupon','em-pro')); ?></p></div>
+			<div class="wrap"><h2><?php esc_html_e('Unauthorized Access','events-manager'); ?></h2><p><?php echo sprintf(esc_html('You do not have the rights to manage this %s.','events-manager'),__('coupon','events-manager')); ?></p></div>
 			<?php
 			return false;
 		}elseif( !is_object($EM_Coupon) ){
@@ -311,16 +311,16 @@ class EM_Coupons_Admin {
 		}
 		?>
 		<div class='wrap nosubsub'>
-			<div class="em-flex"><h1><?php _e('Coupon Usage History','em-pro'); ?></h1> <a href="/wp-json/events/v2/coupons/export_single/<?php echo $EM_Coupon->id; ?>" class="em-coupons-table-export button-secondary" id="em-coupons-table-export-trigger" rel="#em-coupons-table-export" title="Diese Buchungen exportieren."><i class="material-symbols-outlined">export_notes</i></a>	</div>
+			<div class="em-flex"><h1><?php _e('Coupon Usage History','events-manager'); ?></h1> <a href="/wp-json/events/v2/coupons/export_single/<?php echo $EM_Coupon->id; ?>" class="em-coupons-table-export button-secondary" id="em-coupons-table-export-trigger" rel="#em-coupons-table-export" title="Diese Buchungen exportieren."><i class="material-symbols-outlined">export_notes</i></a>	</div>
 			<?php echo $EM_Notices; ?>
-			<p><?php echo sprintf(__('You are viewing the details of coupon %s - <a href="%s">edit</a>','em-pro'),'<code>'.$EM_Coupon->coupon_code.'</code>', add_query_arg(array('action'=>'edit'))); ?></p>
+			<p><?php echo sprintf(__('You are viewing the details of coupon %s - <a href="%s">edit</a>','events-manager'),'<code>'.$EM_Coupon->coupon_code.'</code>', add_query_arg(array('action'=>'edit'))); ?></p>
 			<p>
-				<strong><?php echo __('Uses', 'em-pro'); ?>:</strong> 
+				<strong><?php echo __('Uses', 'events-manager'); ?>:</strong> 
 				<?php
 				if( !empty($EM_Coupon->coupon_max) ){
 					echo esc_html($coupons_count .' / '. $EM_Coupon->coupon_max);
 				}else{
-					echo esc_html($coupons_count .'/'. __('Unlimited','em-pro'));
+					echo esc_html($coupons_count .'/'. __('Unlimited','events-manager'));
 				}
 				?>
 			</p>
@@ -342,9 +342,9 @@ class EM_Coupons_Admin {
 							<th class='manage-column' scope='col'><?php esc_html_e('Event', 'events-manager'); ?></th>
 							<th class='manage-column' scope='col'><?php esc_html_e('Booker', 'events-manager'); ?></th>
 							<th class='manage-column' scope='col'><?php esc_html_e('Spaces', 'events-manager'); ?></th>
-							<th><?php _e('Original Total Price','em-pro'); ?></th>
-							<th><?php _e('Coupon Discount','em-pro'); ?></th>
-							<th><?php _e('Final Price','em-pro'); ?></th>
+							<th><?php _e('Original Total Price','events-manager'); ?></th>
+							<th><?php _e('Coupon Discount','events-manager'); ?></th>
+							<th><?php _e('Final Price','events-manager'); ?></th>
 							<th>&nbsp;</th>
 						</tr>
 					</thead>
@@ -353,17 +353,16 @@ class EM_Coupons_Admin {
 							<th class='manage-column' scope='col'><?php esc_html_e('Event', 'events-manager'); ?></th>
 							<th class='manage-column' scope='col'><?php esc_html_e('Booker', 'events-manager'); ?></th>
 							<th class='manage-column' scope='col'><?php esc_html_e('Spaces', 'events-manager'); ?></th>
-							<th><?php _e('Original Total Price','em-pro'); ?></th>
-							<th><?php _e('Coupon Discount','em-pro'); ?></th>
-							<th><?php _e('Final Price','em-pro'); ?></th>
+							<th><?php _e('Original Total Price','events-manager'); ?></th>
+							<th><?php _e('Coupon Discount','events-manager'); ?></th>
+							<th><?php _e('Final Price','events-manager'); ?></th>
 							<th>&nbsp;</th>
 						</tr>
 					</tfoot>
 					<tbody>
 						<?php
 						foreach($EM_Bookings as $EM_Booking){ /* @var EM_Booking $EM_Booking */
-							$original_price = $EM_Booking->get_price_post_taxes(false, false);
-							$base_price = $EM_Coupon->coupon_tax == 'pre' ? $EM_Booking->get_price_pre_taxes(false, false) : $original_price;
+							$base_price = $EM_Booking->get_price();
 							?>
 							<tr>
 								<td>
@@ -372,12 +371,12 @@ class EM_Coupons_Admin {
 								</td>
 								<td><a href="<?php echo EM_ADMIN_URL; ?>&amp;page=events-manager-bookings&amp;person_id=<?php echo $EM_Booking->person_id; ?>"><?php echo $EM_Booking->person->get_name() ?></a></td>
 								<td><?php echo $EM_Booking->get_spaces() ?></td>
-								<td><?php echo $EM_Booking->get_price_post_taxes(true, false); ?></td>
+								<td><?php echo \Contexis\Events\Intl\Price::format($EM_Booking->get_price()); ?></td>
 								<td><?php echo \Contexis\Events\Intl\Price::format($EM_Coupon->get_discount($base_price)); ?> <p class="description">(<?php echo $EM_Coupon->get_discount_text(); ?>)</p></td>
 								<td><?php echo \Contexis\Events\Intl\Price::format($EM_Booking->get_price()); ?></td>
 								<td>										
 									<?php
-									$edit_url = em_add_get_params($EM_Booking->get_admin_url());
+									$edit_url = $EM_Booking->get_admin_url();
 									?>
 									<?php if( $EM_Booking->can_manage() ): ?>
 									<a class="em-bookings-edit" href="<?php echo $edit_url; ?>"><?php esc_html_e('Edit/View','events-manager'); ?></a>
@@ -391,7 +390,7 @@ class EM_Coupons_Admin {
 				</table>
 			</div> <!-- table-wrap -->
 			<?php else: ?>
-			<p><?php _e('Your coupon hasn\'t been used yet!','em-pro'); ?></p>
+			<p><?php _e('Your coupon hasn\'t been used yet!','events-manager'); ?></p>
 			<?php endif; ?>
 		</div> <!-- wrap -->
 		<?php
@@ -402,16 +401,16 @@ class EM_Coupons_Admin {
 		//check that user can access this page
 		if( is_object($EM_Coupon) && !$EM_Coupon->can_manage('manage_bookings','manage_others_bookings') ){
 			?>
-			<div class="wrap"><h2><?php esc_html_e('Unauthorized Access','events-manager'); ?></h2><p><?php echo sprintf(esc_html('You do not have the rights to manage this %s.','events-manager'),__('coupon','em-pro')); ?></p></div>
+			<div class="wrap"><h2><?php esc_html_e('Unauthorized Access','events-manager'); ?></h2><p><?php echo sprintf(esc_html('You do not have the rights to manage this %s.','events-manager'),__('coupon','events-manager')); ?></p></div>
 			<?php
 			return false;
 		}elseif( !is_object($EM_Coupon) ){
 			$EM_Coupon = new EM_Coupon();
 		}
-		$required = "<i>(".__('required','em-pro').")</i>";
+		$required = "<i>(".__('required','events-manager').")</i>";
 		?>
 		<div class='wrap nosubsub'>
-			<h1><?php _e('Edit Coupon','em-pro'); ?></h1>
+			<h1><?php _e('Edit Coupon','events-manager'); ?></h1>
 			<?php echo $EM_Notices; ?>
 			<form id='coupon-form' method='post' action=''>
 				<input type='hidden' name='action' value='coupon_save' />
@@ -420,22 +419,19 @@ class EM_Coupons_Admin {
 				<table class="form-table">
 					<tbody>
     					<tr valign="top">
-    						<th scope="row"><?php _e('Coupon Availability', 'em-pro') ?></th>
+    						<th scope="row"><?php _e('Coupon Availability', 'events-manager') ?></th>
     						<td>
     							<select name="coupon_availability">
-    								<option value=""><?php _e('Only on specific events that I own', 'em-pro') ?></option>
-    								<option value="eventwide" <?php if($EM_Coupon->coupon_eventwide && !$EM_Coupon->coupon_sitewide) echo 'selected="selected"'; ?>><?php _e('All my events', 'em-pro') ?></option>
-    								<?php if( current_user_can('manage_others_bookings') || is_super_admin() ): ?>
-    								<option value="sitewide" <?php if($EM_Coupon->coupon_sitewide) echo 'selected="selected"'; ?>><?php _e('All events on this site', 'em-pro'); ?></option>
-    								<?php endif; ?>
+    								<option value=""><?php _e('Only on specific events that I own', 'events-manager') ?></option>
+    								<option value="eventwide" <?php if($EM_Coupon->coupon_eventwide) echo 'selected="selected"'; ?>><?php _e('All my events', 'events-manager') ?></option>
     							</select>
-    							<p class="description"><?php _e('Choose whether to allow this coupon to be used only on events you choose, all your events or all events on this site.','em-pro'); ?></p>
+    							<p class="description"><?php _e('Choose whether to allow this coupon to be used only on events you choose, all your events or all events on this site.','events-manager'); ?></p>
     						</td>
     					</tr>
 					<tr valign="top">
-						<th scope="row"><label for="coupon_code"><?php _e('Coupon Code', 'em-pro') ?></label></th>
+						<th scope="row"><label for="coupon_code"><?php _e('Coupon Code', 'events-manager') ?></label></th>
 							<td><input required onblur="this.checkValidity();" class="regular-text code" type="text" name="coupon_code" value="<?php echo esc_attr($EM_Coupon->coupon_code); ?>" />
-							<p class="description"><?php _e('This is the code you give to users for them to use when booking.','em-pro'); ?></p>
+							<p class="description"><?php _e('This is the code you give to users for them to use when booking.','events-manager'); ?></p>
 						</td>
 					</tr>
 					<tr valign="top">
@@ -449,10 +445,10 @@ class EM_Coupons_Admin {
 						</td>
 					</tr>
 					<tr valign="top">
-						<th scope="row"><label for="coupon_max"><?php _e('Total Coupons', 'em-pro') ?></label></th>
+						<th scope="row"><label for="coupon_max"><?php _e('Total Coupons', 'events-manager') ?></label></th>
 							<td><input class="regular-text" type="number" name="coupon_max" value="<?php echo esc_attr($EM_Coupon->coupon_max); ?>" />
 							<br />
-							<p class="description"><?php _e('If set, this coupon will only be valid that many times.','em-pro'); ?></p>
+							<p class="description"><?php _e('If set, this coupon will only be valid that many times.','events-manager'); ?></p>
 						</td>
 					</tr>
 					<tbody class="em-date-range">
@@ -462,7 +458,7 @@ class EM_Coupons_Admin {
 								<input type="date" class="regular-text" />
 								<input type="hidden" class="em-date-input" name="coupon_start" value="<?php echo esc_attr(substr($EM_Coupon->coupon_start,0,10)); ?>" />
 								<br />
-								<p class="description"><?php _e('Coupons will only be valid from this date onwards.','em-pro'); ?></p>
+								<p class="description"><?php _e('Coupons will only be valid from this date onwards.','events-manager'); ?></p>
 							</td>
 						</tr>
 						<tr valign="top">
@@ -471,36 +467,25 @@ class EM_Coupons_Admin {
 								<input type="date" class="regular-text" />
 								<input type="hidden" class="em-date-input" name="coupon_end" value="<?php echo esc_attr(substr($EM_Coupon->coupon_end,0,10)); ?>" />
 								<br />
-								<p class="description"><?php _e('Coupons will not be valid after this date.','em-pro'); ?></p>
+								<p class="description"><?php _e('Coupons will not be valid after this date.','events-manager'); ?></p>
 							</td>
 						</tr>
 					</tbody>
 					<tr valign="top">
-						<th scope="row"><?php _e('Discount Type', 'em-pro') ?></th>
+						<th scope="row"><?php _e('Discount Type', 'events-manager') ?></th>
 						<td>
 							<select name="coupon_type">
-								<option value="%" <?php echo ($EM_Coupon->coupon_type == '%')?'selected="selected"':''; ?>><?php _e('Percentage','em-pro'); ?></option>
-								<option value="#" <?php echo ($EM_Coupon->coupon_type == '#')?'selected="selected"':''; ?>><?php _e('Fixed Amount', 'em-pro'); ?></option>
+								<option value="%" <?php echo ($EM_Coupon->coupon_type == '%')?'selected="selected"':''; ?>><?php _e('Percentage','events-manager'); ?></option>
+								<option value="#" <?php echo ($EM_Coupon->coupon_type == '#')?'selected="selected"':''; ?>><?php _e('Fixed Amount', 'events-manager'); ?></option>
 							</select>
 							<br />
 						</td>
 					</tr>
 					<tr valign="top">
-						<th scope="row"><?php _e('Apply Before/After Tax', 'em-pro') ?></th>
-						<td>
-							<select name="coupon_tax" <?php if(get_option('booking_tax_rate', 0) == 0) echo "disabled" ?> >
-								<option value="pre" <?php echo ($EM_Coupon->coupon_tax == 'pre')?'selected="selected"':''; ?>><?php _e('Before','em-pro'); ?></option>
-								<option value="post" <?php echo ($EM_Coupon->coupon_tax == 'post')?'selected="selected"':''; ?>><?php _e('After', 'em-pro'); ?></option>
-							</select>
-							<br />
-							<p class="description"><?php _e('Choose whether to apply this discount before or after tax has been added, if applicable.','em-pro'); ?></p>
-						</td>
-					</tr>
-					<tr valign="top">
-						<th scope="row"><?php _e('Discount Amount', 'em-pro') ?></th>
+						<th scope="row"><?php _e('Discount Amount', 'events-manager') ?></th>
 							<td><input required onblur="this.checkValidity();" class="regular-text" type="number" name="coupon_discount" value="<?php echo esc_attr($EM_Coupon->coupon_discount); ?>" />
 							<br />
-							<p class="description"><?php _e('Enter a number here only, decimals accepted.','em-pro'); ?></p>
+							<p class="description"><?php _e('Enter a number here only, decimals accepted.','events-manager'); ?></p>
 						</td>
 					</tr>
 					</tbody>

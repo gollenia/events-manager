@@ -78,7 +78,9 @@ class EM_Gateway {
 	 */
 	function __construct() {
 		// Actions and Filters, only if gateway is active
+		
 		if( $this->is_active() ){
+			add_filter('em_booking_response', [&$this, 'booking_form_feedback'], 10, 2);
 			add_filter('em_booking_output_placeholder',array(&$this, 'em_booking_output_placeholder'),1,4); //add booking placeholders
 			if( $this->payment_return ){
 				add_action('em_handle_payment_return_' . $this->gateway, array(&$this, 'handle_payment_return')); //handle return payment notifications
@@ -130,10 +132,10 @@ class EM_Gateway {
 	 * @param EM_Booking $EM_Booking
 	 * @param boolean $post_validation
 	 */
-	function booking_add($EM_Event,$EM_Booking, $post_validation = false){
-		global $wpdb, $wp_rewrite, $EM_Notices;
-		add_filter('em_action_booking_add',array(&$this, 'booking_form_feedback'),1,2);//modify the payment return
-		add_filter('em_action_emp_checkout',array(&$this, 'booking_form_feedback'),1,2);//modify the payment return
+	function booking_add($EM_Booking, $post_validation = false){
+		
+		
+
 		if( $EM_Booking->get_price() > 0 ){
 			$EM_Booking->booking_status = $this->status; //status 4 = awaiting online payment
 		}
@@ -145,7 +147,7 @@ class EM_Gateway {
 	 * @param EM_Booking $EM_Booking
 	 * @return array
 	 */
-	function booking_form_feedback( $return, $EM_Booking = false ){
+	function booking_form_feedback( $return, EM_Booking $booking ){
 		return $return; //remember this, it's a filter!	
 	}
 
@@ -158,6 +160,10 @@ class EM_Gateway {
 	 * Called by $this->settings(), override this to output your own gateway options on this gateway settings page  
 	 */
 	function mysettings(){}
+
+	function get_payment_info($booking){
+		return array();
+	}
 	
 	/**
 	 * Run by EM_Gateways_Admin::handle_gateways_panel_updates() if this gateway has been updated. You should capture the values of your new fields above and save them as options here.
@@ -175,6 +181,7 @@ class EM_Gateway {
 			add_filter('update_em_'.$this->gateway . '_button','wp_kses_post');
 		}
 		$options_wpkses[] = 'em_'.$this->gateway . '_option_name';		
+		$options_wpkses[] = 'em_'.$this->gateway . '_option_description';
 		$options_wpkses[] = 'em_'.$this->gateway . '_form';
 		//add filters for all $option_wpkses values so they go through wp_kses_post
 		foreach( $options_wpkses as $option_wpkses ) add_filter('gateway_update_'.$option_wpkses,'wp_kses_post');
@@ -319,20 +326,20 @@ class EM_Gateway {
 	/**
 	 * Modifies pending spaces calculations for individual tickets to include paypal bookings, but only if PayPal bookings are set to time-out (i.e. they'll get deleted after x minutes), therefore can be considered as 'pending' and can be reserved temporarily.
 	 * @param integer $count
-	 * @param EM_Ticket $EM_Ticket
+	 * @param EM_Ticket $ticket
 	 * @return integer
 	 */
-	function em_ticket_get_pending_spaces($count, $EM_Ticket, $force_refresh = false){
+	function em_ticket_get_pending_spaces($count, $ticket, $force_refresh = false){
 		global $wpdb;
-		if( empty($this->ticket_pending_spaces[$EM_Ticket->ticket_id]) || !array_key_exists($EM_Ticket->event_id, $this->ticket_pending_spaces[$EM_Ticket->ticket_id]) || $force_refresh ){
-			if( empty($this->ticket_pending_spaces[$EM_Ticket->ticket_id]) ) $this->ticket_pending_spaces[$EM_Ticket->ticket_id] = array();
+		if( empty($this->ticket_pending_spaces[$ticket->ticket_id]) || !array_key_exists($ticket->event_id, $this->ticket_pending_spaces[$ticket->ticket_id]) || $force_refresh ){
+			if( empty($this->ticket_pending_spaces[$ticket->ticket_id]) ) $this->ticket_pending_spaces[$ticket->ticket_id] = array();
 			$gateway_filter = '%s:7:"gateway";s:'.strlen($this->gateway).':"'.$this->gateway.'";%';
-			$booking_ids_sql = $wpdb->prepare('SELECT booking_id FROM '.EM_BOOKINGS_TABLE.' WHERE event_id=%d AND booking_status=%d AND booking_meta LIKE %s', $EM_Ticket->event_id, $this->status, $gateway_filter);
-			$sql = 'SELECT SUM(ticket_booking_spaces) FROM '.EM_TICKETS_BOOKINGS_TABLE. ' WHERE ticket_id='.absint($EM_Ticket->ticket_id).' AND booking_id IN ('.$booking_ids_sql.')';
+			$booking_ids_sql = $wpdb->prepare('SELECT booking_id FROM '.EM_BOOKINGS_TABLE.' WHERE event_id=%d AND booking_status=%d AND booking_meta LIKE %s', $ticket->event_id, $this->status, $gateway_filter);
+			$sql = 'SELECT SUM(ticket_booking_spaces) FROM '.EM_TICKETS_BOOKINGS_TABLE. ' WHERE ticket_id='.absint($ticket->ticket_id).' AND booking_id IN ('.$booking_ids_sql.')';
 			$pending_spaces = $wpdb->get_var( $sql );
-			$this->ticket_pending_spaces[$EM_Ticket->ticket_id][$EM_Ticket->event_id] = $pending_spaces > 0 ? $pending_spaces : 0;
+			$this->ticket_pending_spaces[$ticket->ticket_id][$ticket->event_id] = $pending_spaces > 0 ? $pending_spaces : 0;
 		}
-		return $count + $this->ticket_pending_spaces[$EM_Ticket->ticket_id][$EM_Ticket->event_id];
+		return $count + $this->ticket_pending_spaces[$ticket->ticket_id][$ticket->event_id];
 	}
 	
 		
@@ -527,7 +534,7 @@ class EM_Gateway {
 	 */
 	function em_gateways_transactions_table_gateway_id($transaction_id, $transaction ){
 		$gateway_url = ( get_option('em_'. $this->gateway . "_status" ) == 'live') ? $this->transaction_detail[0] : $this->transaction_detail[1];
-		$title = sprintf( esc_attr__('View this transaction on %s', 'events-manager-pro'), $this->transaction_detail[0]);
+		$title = sprintf( esc_attr__('View this transaction on %s', 'events-manager'), $this->transaction_detail[0]);
 		$transaction_id = '<a href="'. esc_url(sprintf($gateway_url,$transaction->transaction_gateway_id)) .'" target="_blank" title="'.$title.'">'. $transaction->transaction_gateway_id .'</a>';
 		return $transaction_id;
 	}
@@ -583,16 +590,16 @@ class EM_Gateway {
 	function settings() {
 		global $page, $action, $EM_Notices;
 		$gateway_link = admin_url('edit.php?post_type='.EM_POST_TYPE_EVENT.'&page=events-manager-options#bookings');
-		$messages['updated'] = esc_html__('Gateway updated.', 'em-pro');
-		$messages['error'] = esc_html__('Gateway not updated.', 'em-pro');
+		$messages['updated'] = esc_html__('Gateway updated.', 'events-manager');
+		$messages['error'] = esc_html__('Gateway not updated.', 'events-manager');
 		?>
 	    
 		<div class='wrap nosubsub'>
-			<h1><?php echo sprintf(__('Edit &quot;%s&quot; settings','em-pro'), esc_html($this->title) ); ?></h1>
+			<h1><?php echo sprintf(__('Edit %s settings','events-manager'), esc_html($this->title) ); ?></h1>
 			<?php
 			if ( isset($_GET['msg']) && !empty($messages[$_GET['msg']]) ){ 
 				echo '<div id="message" class="'.$_GET['msg'].' fade"><p>' . $messages[$_GET['msg']] . 
-				' <a href="'.em_add_get_params($_SERVER['REQUEST_URI'], array('action'=>null,'gateway'=>null, 'msg' => null)).'">'.esc_html__('Back to gateways','em-pro').'</a>'.
+				' <a href="'.add_query_arg(['action'=>null,'gateway'=>null, 'msg' => null], $_SERVER['REQUEST_URI']).'">'.esc_html__('Back to gateways','events-manager').'</a>'.
 				'</p></div>';
 			}
 			?>
@@ -605,30 +612,21 @@ class EM_Gateway {
 				<tbody>
                     <?php
                         //Gateway Title
-                        $desc = sprintf(__('Only if you have not enabled quick pay buttons in your <a href="%s">gateway settings</a>.', 'em-pro'),$gateway_link).' '.
-				  		__('The user will see this as the text option when choosing a payment method.','em-pro'); 
-                        Options::input(__('Gateway Title', 'em-pro'), 'em_'.$this->gateway.'_option_name', $desc);
+                        $desc = __('The user will see this as the text option when choosing a payment method.','events-manager'); 
+                        Options::input(__('Gateway Title', 'events-manager'), 'em_'.$this->gateway.'_option_name', $desc);
+
+						//Gateway Description
+						$desc = __('This message will be shown to the user when they select this gateway.','events-manager');
+						Options::textarea(__('Gateway Description', 'events-manager'), 'em_'.$this->gateway.'_option_description', $desc);
 
                         //Gateway booking form info
-                        $desc = sprintf(__('Only if you have not enabled quick pay buttons in your <a href="%s">gateway settings</a>.','em-pro'),$gateway_link).
-                    	' '.__('If a user chooses to pay with this gateway, or it is selected by default, this message will be shown just below the selection.', 'em-pro'); 
-                        Options::textarea(__('Booking Form Information', 'em-pro'), 'em_'.$this->gateway.'_form', $desc); 
+                        $desc = __('If a user chooses to pay with this gateway, or it is selected by default, this message will be shown just below the selection.', 'events-manager'); 
+                        Options::textarea(__('Booking Form Information', 'events-manager'), 'em_'.$this->gateway.'_form', $desc); 
                     ?>
 				</tbody>
 				</table>
 				<?php $this->mysettings(); ?>
-				<?php if($this->button_enabled): ?>
-				<h3><?php echo _e('Quick Pay Buttons','em-pro'); ?></h3>
-				<p><?php echo sprintf(__('If you have chosen to only use quick pay buttons in your <a href="%s">gateway settings</a>, these settings below will be used.','em-pro'), $gateway_link); ?></p>
-				<table class="form-table">
-				<tbody>
-				  <?php
-				      $desc = sprintf(__('Choose the button text. To use an image instead, enter the full url starting with %s or %s.', 'em-pro' ), '<code>http://...</code>','<code>https://...</code>');
-                      Options::input(__('Payment Button', 'em-pro'), 'em_'.$this->gateway.'_button', $desc); 
-				  ?>
-				</tbody>
-				</table>
-				<?php endif; ?>
+				
 				<?php do_action('em_gateway_settings_footer', $this); ?>
 				<p class="submit">
 					<input type="submit" name="Submit" class="button-primary" value="<?php esc_attr_e('Save Changes') ?>" />
@@ -639,25 +637,7 @@ class EM_Gateway {
 	}
 	
 	public function settings_sensitive_credentials( $api_cred_fields, $is_sandbox ){
-		if( !is_ssl() ){
-			?>
-			 <tr>
-				 <td colspan="2">
-					<?php
-						 echo '<p style="color:red;">';
-						 echo sprintf( esc_html__('Your site is not using SSL! Whilst not a requirement, if you\'re going to submit API information for a live %s account, we recommend you do so over a secure connection. If this is not possible, consider an alternative option of submitting your API information as covered in our %s.', 'em-pro'),
-							 $this->title, '<a href="http://wp-events-plugin.com/documentation/events-with-paypal/safe-encryption-api-keys/">'.esc_html__('documentation','events-manager').'</a>');
-						 echo '</p>';
-						 if( (!defined('EMP_GATEWAY_SSL_OVERRIDE') || !EMP_GATEWAY_SSL_OVERRIDE) && ($is_sandbox && empty($_REQUEST['show_keys'])) ){
-							 echo '<p>'.esc_html__('If you are only using testing credentials, you can display and save them safely.', 'em-pro');
-							 echo ' <a href="'. esc_url(add_query_arg('show_keys', wp_create_nonce('show_'. $this->gateway . '_creds'))) .'" class="button-secondary">'. esc_html__('Show API Keys', 'em-pro') .'</a>';
-							 echo '</p>';
-						 }
-					 ?>
-				 </td>
-			 </tr>
-			<?php
-		}
+		
 		 $api_options = get_option('em_'. $this->gateway . '_api');
 		 if( $this->settings_show_settings_credentials( $is_sandbox ) ) {
 		    foreach( $api_cred_fields as $api_cred_opt => $api_cred_label ){
@@ -691,7 +671,7 @@ class EM_Gateway {
 	}
 	
 	public function settings_show_settings_credentials( $is_sandbox = false ){
-		return is_ssl() || (defined('EMP_GATEWAY_SSL_OVERRIDE') && EMP_GATEWAY_SSL_OVERRIDE) || ($is_sandbox && !empty($_REQUEST['show_keys']) && wp_verify_nonce($_REQUEST['show_keys'], 'show_'. $this->gateway . '_creds'));
+		return is_ssl() || ($is_sandbox && !empty($_REQUEST['show_keys']) && wp_verify_nonce($_REQUEST['show_keys'], 'show_'. $this->gateway . '_creds'));
 	}
 }
 

@@ -2,12 +2,21 @@
 $id = get_the_ID();
 $event = EM_Event::find($id, 'post_id');
 $location = $event->get_location();
-if(empty($location->id)) return;
+if(empty($location->location_id)) return;
+$block_attributes = get_block_wrapper_attributes();
+
+$has_photo = strpos($block_attributes, 'is-style-photo') !== false;
+$photo = get_the_post_thumbnail_url( $location->post_id, "post-thumbnail" );
 ?>
 
 <div class="event-details-item">
 	<div class="event-details-image">
-		<i class="material-icons material-symbols-outlined"><?php echo $attributes['icon'] ?: 'place' ?></i>
+		<?php if ($has_photo && $photo) : ?>
+			
+			<img class="event-details-image" src="<?php echo $photo ?>" alt="<?php echo $speaker->name ?>">
+		<?php else: ?>
+			<i class="material-icons material-symbols-outlined"><?php echo $attributes['icon'] ?: 'place' ?></i>
+		<?php endif; ?>
 	</div>
 	<div class="event-details-text">
 		<h4><?php echo $attributes['description'] ?: __("Location", "events-manager") ?></h4>

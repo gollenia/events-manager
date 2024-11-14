@@ -1,0 +1,5911 @@
+# Copyright (C) 2024 Marcus Sykes, Thomas Gollenia
+# This file is distributed under the same license as the Events plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: Plugins - Events Manager - Stable (latest release)\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/events-manager\n"
+"Last-Translator: \n"
+"Language-Team: Deutsch (Österreich)\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2024-06-06T05:55:35+00:00\n"
+"PO-Revision-Date: 2024-09-17 18:02+0000\n"
+"X-Generator: Loco https://localise.biz/\n"
+"X-Domain: events-manager\n"
+"Language: de_AT\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Loco-Version: 2.6.6; wp-6.6.2"
+
+#: classes/Locations/Location.php:306
+msgid " is required."
+msgstr " ist erforderlich."
+
+#: classes/Bookings/Booking.php:950
+msgid "%s could not be deleted"
+msgstr "%s konnte nicht gelöscht werden"
+
+#: em-actions.php:126
+msgid "%s could not be deleted."
+msgstr "%s konnte nicht gelöscht werden."
+
+#: classes/Bookings/Bookings.php:168
+msgid "%s created."
+msgstr "%s erstellt."
+
+#: classes/Bookings/Booking.php:947
+msgid "%s deleted"
+msgstr "%s gelöscht"
+
+#: classes/Emails/CustomEmailsAdmin.php:387
+msgid "%s Gateway"
+msgstr "%s Gateway"
+
+#: classes/Events/EventPostsAdmin.php:181
+#: classes/Events/EventPostsAdmin.php:183
+#: classes/Events/EventPostsAdmin.php:384
+#: classes/Events/EventPostsAdmin.php:386
+#: classes/Locations/LocationPostsAdmin.php:49
+#: classes/Locations/LocationPostsAdmin.php:51
+msgid "%s ID"
+msgstr "%s ID"
+
+#: classes/Coupons/CouponAdmin.php:54 classes/Events/Event.php:826
+msgid "%s is required."
+msgstr "%s wird benötigt."
+
+#: classes/Coupons/Coupon.php:180 classes/Coupons/Coupon.php:184
+msgid "%s Off"
+msgstr "%s Nachlass"
+
+#: admin/settings/bookings.php:7 admin/settings/bookings.php:22
+#: admin/settings/bookings.php:49
+msgid "%s Options"
+msgstr "%s Optionen"
+
+#: classes/Bookings/BookingsTable.php:396
+msgid "%s Rows"
+msgstr "%s Zeilen"
+
+#: build/blocks/details-spaces/render.php:23
+msgid "%s space left"
+msgid_plural "%s spaces left"
+msgstr[0] "%s Platz frei"
+msgstr[1] "%s Plätze frei"
+
+#: admin/em-data-privacy.php:358 admin/em-data-privacy.php:383
+#: admin/em-data-privacy.php:450
+msgid "%s Status"
+msgstr "Status %s"
+
+#: em-actions.php:123
+msgid "%s successfully deleted."
+msgstr "%s erfolgreich gelöscht."
+
+#: classes/Events/Event.php:1145
+msgid "%s successfully duplicated."
+msgstr "%s erfolgreich kopiert."
+
+#: classes/Gateways/gateway.mollie.php:103
+#: classes/Gateways/gateway.mollie.php:337
+#: classes/Gateways/gateway.mollie.php:371
+msgid "%s tickets for %s"
+msgstr "%s Tickets für %s"
+
+#: admin/em-data-privacy.php:360 admin/em-data-privacy.php:385
+#: admin/em-data-privacy.php:452
+msgid "%s URL"
+msgstr "%s URL"
+
+#: admin/em-admin.php:104
+msgid ""
+"<p>Events Manager is ready to go! It is highly recommended you read the <a "
+"href='%s'>Getting Started</a> guide on our site, as well as checking out the "
+"<a href='%s'>Settings Page</a>. <a href='%s' title='Don't show this advice "
+"again'>Dismiss</a></p>"
+msgstr ""
+"<p>Events Manager ist bereit! Es wird empfohlen, den <a href='%s'>Getting "
+"Started</a> Guide auf deiner Seite zu lesen und die <a href='%s'>"
+"Einstellungen Seite</a> zu lesen. <a href='%s' title='Diesen Hinweis nicht "
+"mehr anzeigen.'>Ausblenden.</a></p>"
+
+#: classes/Bookings/Booking.php:878
+msgid "<strong>ERROR</strong>: Please type your e-mail address."
+msgstr "<strong>FEHLER</strong>: Bitte gib deine E-Mail-Adresse ein."
+
+#: classes/Bookings/Booking.php:881 classes/Forms/Forms.php:282
+#: classes/Forms/Forms.php:313
+msgid "<strong>ERROR</strong>: The email address isn&#8217;t correct."
+msgstr "<strong>FEHLER</strong>: Die E-Mail-Adresse ist nicht korrekt."
+
+#: classes/Emails/EmailsAdmin.php:37
+msgid ""
+"<strong>Important!</strong>, you should use SMTP as your email setup if you "
+"are sending automated emails in this way for optimal performance. Other "
+"methods are not suited to sending mass emails."
+msgstr ""
+"<strong>Wichtig!</strong> Verwende SMTP als Email Einstellung für beste "
+"Leistung, wenn Du auf diesem Weg automatische Emails senden willst. Andere "
+"Methoden sind nicht geeignet für Massen-Emails."
+
+#: classes/Forms/UserFields.php:199
+msgid ""
+"<strong>Important:</strong> When editing this form, to make sure your "
+"current user information is displayed, do not change their field names."
+msgstr ""
+"<strong>Wichtig:</strong>Wenn Du dieses Formular bearbeitest, ändere nicht "
+"die Feldnamen, um sicher zu stellen, dass die aktuellen "
+"Benutzerinformationen angezeigt werden."
+
+#: em-install.php:500
+msgid "[%s] Your username and password"
+msgstr "[%s] Dein Benutzername und Passwort"
+
+#: em-install.php:481
+msgid ""
+"A new event has been published by #_CONTACTNAME.<br/>Name : #_EVENTNAME <br/>"
+"Date : #_EVENTDATES <br/>Time : #_EVENTTIMES <br/>Edit this event - "
+"#_EDITEVENTURL <br/> View this event - #_EVENTURL"
+msgstr ""
+"#_CONTACTNAME hat eine neue Veranstaltung veröffentlicht.<br/>Name : "
+"#_EVENTNAME <br/>Datum : #_EVENTDATES <br/>Uhrzeit : #_EVENTTIMES <br/>Diese "
+"Veranstaltung bearbeiten - #_EDITEVENTURL <br/> Diese Veranstaltung anzeigen "
+"- #_EVENTURL"
+
+#: em-install.php:479
+msgid ""
+"A new event has been submitted by #_CONTACTNAME.<br/>Name : #_EVENTNAME <br/>"
+"Date : #_EVENTDATES <br/>Time : #_EVENTTIMES <br/>Please visit "
+"#_EDITEVENTURL to review this event for approval."
+msgstr ""
+"#_CONTACTNAME hat eine neue Veranstaltung eingereicht.<br/>Name: #_EVENTNAME "
+"<br/>Datum: #_EVENTDATES <br/>Uhrzeit: #_EVENTTIMES <br/>Bitte rufe  "
+"#_EDITEVENTURL auf, um diese Veranstaltung zu überprüfen und freizugeben."
+
+#: em-install.php:583
+msgid ""
+"A new user account has been created for you. Please check your email for "
+"access details."
+msgstr ""
+"Ein neues Benutzerkonto wurde für dich angelegt. Die Zugangsdaten wurden per "
+"E-Mail an dich verschickt."
+
+#: em-install.php:483
+msgid ""
+"A previously published event has been modified by #_CONTACTNAME, and this "
+"event is now unpublished and pending your approval.<br/>Name : #_EVENTNAME "
+"<br/>Date : #_EVENTDATES <br/>Time : #_EVENTTIMES <br/>Please visit "
+"#_EDITEVENTURL to review this event for approval."
+msgstr ""
+"Eine bereits veröffentlichte Veranstaltung wurde durch #_CONTACTNAME "
+"geändert. Diese Veranstaltung wartet auf erneute Genehmigung und ist so "
+"lange unveröffentlicht.<br/>Name : #_EVENTNAME <br/>Datum : #_EVENTDATES "
+"<br/>Uhrzeit : #_EVENTTIMES <br/>Bitte besuche #_EDITEVENTURL um diese "
+"Veranstaltung zu überprüfen und freizugeben."
+
+#: admin/settings/emails.php:18
+msgid "A test email will be sent to your account email - %s"
+msgstr "Eine Testnachricht wird an deine E-Mail-Adresse gesendet - %s"
+
+#: classes/Bookings/BookingsTable.php:116
+#: classes/Events/EventPostsAdmin.php:195
+msgid "Actions"
+msgstr "Aktionen"
+
+#: admin/settings/general.php:16
+msgid "Activate possibility to add locations to events"
+msgstr "Ortsangaben zu Veranstaltungen ermöglichen"
+
+#: classes/Gateways/gateways-admin.php:65
+#: classes/Gateways/gateways-admin.php:128
+msgid "Active"
+msgstr "Aktiv"
+
+#: templates/forms/event/bookings-ticket-form.php:41
+#: templates/forms/event/bookings-ticket-form.php:59
+msgid ""
+"Add a start or end date (or both) to impose time constraints on ticket "
+"availability. Leave either blank for no upper/lower limit."
+msgstr ""
+"Füge ein Start- und/oder Enddatum ein, um die Verfügbarkeit der Tickets "
+"einzuschränken. Lasse das Feld leer, um keine obere bzw. untere Grenze "
+"festzulegen."
+
+#: admin/settings/bookings.php:28
+msgid ""
+"Add a tax rate to your ticket prices (entering 10 will add 10% to the ticket "
+"price)."
+msgstr ""
+"Füge einen Steuersatz zu deinen Ticketpreisen hinzu (10 bedeutet, dass 10% "
+"dem Ticketpreis hinzugefügt werden)."
+
+#: build/admin.js:1
+msgid "Add Attendee"
+msgstr "Teilnehmer hinzufügen"
+
+#: classes/Gateways/gateway.offline.php:148
+msgid "Add Booking"
+msgstr "Buchung hinzufügen"
+
+#: classes/Gateways/gateway.offline.php:156
+msgid "add booking"
+msgstr "neue Buchung"
+
+#: classes/Gateways/gateway.offline.php:229
+#: classes/Gateways/gateway.offline.php:234
+msgid "Add Booking For &quot;%s&quot;"
+msgstr "Buchung hinzufügen für &quot;%s&quot;"
+
+#: classes/Forms/FormPost.php:58
+msgid "Add Booking Form"
+msgstr "Neues Buchungs-Formular"
+
+#: admin/settings/emails.php:28
+msgid "Add br tags to HTML emails?"
+msgstr "br Tags zu HTML E-Mails hinzufügen?"
+
+#: build/index.js:1
+msgid "Add Field"
+msgstr "Neues Feld"
+
+#: classes/Forms/FormPost.php:98
+msgid "Add Form"
+msgstr "Neues Formular"
+
+#: classes/Emails/EmailsAdmin.php:14
+msgid "Add iCal invite?"
+msgstr "iCal-Einladung hinzufügen"
+
+#: em-posts.php:231
+msgid "Add Location"
+msgstr "Neuer Ort"
+
+#: classes/Coupons/CouponsAdmin.php:190
+msgid "Add New"
+msgstr "Hinzufügen"
+
+#: em-posts.php:135
+msgid "Add New Event"
+msgstr "Neue Veranstaltung"
+
+#: em-posts.php:79
+msgid "Add New Event Category"
+msgstr "Veranstaltungskategorie hinzufügen"
+
+#: em-posts.php:44
+msgid "Add New Event Tag"
+msgstr "Veranstaltungsschlagwort hinzufügen"
+
+#: classes/Forms/FormPost.php:59 classes/Forms/FormPost.php:99
+msgid "Add New Form"
+msgstr "Formular hinzufügen"
+
+#: em-posts.php:232
+msgid "Add New Location"
+msgstr "Veranstaltungsort hinzufügen"
+
+#: em-posts.php:181
+msgid "Add New Recurring Event"
+msgstr "Neue wiederkehrende Veranstaltung hinzufügen"
+
+#: classes/Speaker/Speakers.php:39
+msgid "Add New Speaker"
+msgstr "Neuen Referent hinzufügen"
+
+#: templates/forms/event/bookings.php:58
+msgid "Add new ticket"
+msgstr "Neues Ticket hinzufügen"
+
+#: build/admin.js:1
+msgid "Add Note"
+msgstr "Notiz hinzufügen"
+
+#: classes/Gateways/gateway.offline.php:166
+#: classes/Gateways/gateway.offline.php:191
+msgid "Add Offline Payment"
+msgstr "Offline-Bezahlung hinzufügen"
+
+#: em-posts.php:47 em-posts.php:82
+msgid "Add or remove events"
+msgstr "Veranstaltung hinzufügen oder entfernen"
+
+#: em-posts.php:180 em-posts.php:186
+msgid "Add Recurring Event"
+msgstr "Wiederkehrende Veranstaltung hinzufügen"
+
+#: classes/Speaker/Speakers.php:38
+msgid "Add Speaker"
+msgstr "Neuer Referent"
+
+#: admin/settings/bookings.php:29
+msgid "Add tax to ticket price?"
+msgstr "Steuer zum Ticketpreis hinzufügen?"
+
+#: classes/Emails/CustomEmailsAdmin.php:313
+msgid ""
+"Additionally, you can also override these emails at an event level when "
+"editing an event. Should you choose not to, any overriden emails on this "
+"page will be considered the default email for this gateway."
+msgstr ""
+"Zusätzlich kannst du diese Emails auf Veranstaltungsebene überschreiben, "
+"indem du eine einzelne Veranstaltung bearbeitest. Solltest du dich dagegen "
+"entscheiden, wird jede überschriebene Email auf dieser Seite als Standard-"
+"Email für dieses Gateway behandelt."
+
+#: admin/em-data-privacy.php:381 admin/em-data-privacy.php:454
+#: classes/Gateways/Gateways.php:39 classes/Locations/LocationPostsAdmin.php:57
+#: em-install.php:657 em-install.php:681 build/index.js:1
+msgid "Address"
+msgstr "Adresse"
+
+#: classes/Gateways/Gateways.php:40 em-install.php:658
+msgid "Address Line 2"
+msgstr "Anschrift Zeile 2"
+
+#: classes/Emails/CustomEmails.php:274 classes/Emails/CustomEmails.php:291
+msgid "Admin Emails"
+msgstr "Admin E-Mails"
+
+#: classes/Coupons/CouponsAdmin.php:493
+#: templates/forms/event/bookings-ticket-form.php:52
+#: templates/forms/event/bookings-ticket-form.php:70
+#: templates/forms/event/bookings.php:179
+msgid "After"
+msgstr "nach"
+
+#: classes/Gateways/Gateways.php:421
+msgid ""
+"After creating user fields above, you should link them up in here so some "
+"gateways can make use of them when processing payments."
+msgstr ""
+"Nach dem Anlegen der Benutzerfelder oben solltest Du sie hier verlinken, so "
+"dass einige Gateways sie für die Zahlungsverarbeitung verwenden können."
+
+#: classes/Bookings/BookingsTable.php:64 classes/Options.php:276
+#: build/frontend.js:1
+msgid "All"
+msgstr "Alle"
+
+#: classes/Coupons/CouponsAdmin.php:205
+msgid "All %s"
+msgstr "Alle %s"
+
+#: admin/settings/general.php:64
+msgid "All Ascending"
+msgstr "Alle aufsteigend"
+
+#: em-install.php:531
+msgid "All Categories"
+msgstr "Alle Kategorien"
+
+#: em-install.php:544
+msgid "All Cities/Towns"
+msgstr "Alle Städte"
+
+#: em-install.php:535
+msgid "All Countries"
+msgstr "Alle Länder"
+
+#: classes/Events/EventPostsAdmin.php:237
+msgid "All Day"
+msgstr "Ganztägig"
+
+#: templates/forms/event/when-with-recurring.php:27
+#: templates/forms/event/when.php:32 build/index.js:1
+msgid "All day"
+msgstr "Ganztägig"
+
+#: admin/settings/general.php:67
+msgid "All Descending"
+msgstr "Alle absteigend"
+
+#: em-posts.php:74
+msgid "All Event Categories"
+msgstr "Alle Veranstaltungskategorien"
+
+#: em-posts.php:39
+msgid "All Event Tags"
+msgstr "Alle Veranstaltungsschlagwörter"
+
+#: admin/bookings/em-events.php:31
+msgid "All Events"
+msgstr "Alle Veranstaltungen"
+
+#: admin/bookings/em-events.php:13 em-functions.php:67
+msgid "All events"
+msgstr "Alle Veranstaltungen"
+
+#: classes/Coupons/CouponsAdmin.php:429
+msgid "All events on this site"
+msgstr "Alle Veranstaltungen auf dieser Site"
+
+#: Assets.php:184
+msgid "All events will be moved to trash."
+msgstr "Alle Veranstaltungen werden in den Papierkorb verschoben."
+
+#: classes/Coupons/CouponsAdmin.php:427
+#| msgid "all events"
+msgid "All my events"
+msgstr "alle Veranstaltungen"
+
+#: em-install.php:538
+msgid "All Regions"
+msgstr "Alle Regionen"
+
+#: em-install.php:541
+msgid "All States"
+msgstr "Alle Bundesstaaten"
+
+#: classes/Gateways/Gateways.php:55
+msgid ""
+"All transactional history associated with this booking will also be deleted."
+msgstr "Die Transaktionshistorie dieser Buchung wird ebenfalls gelöscht."
+
+#: multilingual/em-ml.php:92
+msgid ""
+"All translations of this event will be detached from the recurring event."
+msgstr ""
+"Alle Übersetzungen dieser Veranstaltung werden von der wiederkehrenden "
+"Veranstaltung getrennt."
+
+#: admin/settings/general.php:18
+msgid "Allow %s to appear in the built-in search results."
+msgstr "Erlaube %s in den eingebauten Suchergebnissen aufzutauchen."
+
+#: classes/Emails/EmailsAdmin.php:89
+msgid "Allow adding custom email addresses to be addded to individual events."
+msgstr ""
+"Erlaube, dass eigene Email-Adressen zu individuellen Veranstaltungen "
+"hinzugefügt werden."
+
+#: classes/Emails/EmailsAdmin.php:94
+msgid ""
+"Allow administrators of this blog to add additional admin email addresses "
+"for gateways inside each %s settings page."
+msgstr ""
+"Erlaube Administratoren dieses Blogs, weitere Administrator Emailadressen "
+"für Gateways innerhalb jeder %s Einstellungen Seite zu verwenden."
+
+#: classes/Emails/EmailsAdmin.php:93
+msgid ""
+"Allow administrators of this blog to configure custom booking email "
+"templates inside each %s settings page."
+msgstr ""
+"Erlaube Administratoren des Blogs, eigene Buchungsemail-Vorlagen innerhalb "
+"jeder %s Einstellungen Seite zu verwenden."
+
+#: admin/settings/general.php:15
+msgid "Allow bookings and tickets for events."
+msgstr "Buchungen und Tickets für Veranstaltungen erlauben."
+
+#: classes/Emails/EmailsAdmin.php:89
+msgid "Allow custom admin email addresses for events?"
+msgstr "Erlaube eigene Administrator-Emailadressen für Veranstaltungen?"
+
+#: classes/Emails/EmailsAdmin.php:94
+msgid "Allow custom admin email addresses for gateways?"
+msgstr "Erlaube eigene Administrator Emailadressen für Gateways?"
+
+#: classes/Emails/EmailsAdmin.php:88
+msgid ""
+"Allow custom booking email templates to be configured for individual events."
+msgstr ""
+"Erlaube, dass eigene Buchungsemail Vorlagen für individuelle Veranstaltungen "
+"konfiguriert werden können."
+
+#: classes/Emails/EmailsAdmin.php:88
+msgid "Allow custom emails for events?"
+msgstr ""
+"Erlaube, dass eigene Buchungsemail Vorlagen für individuelle Veranstaltungen "
+"konfiguriert werden können."
+
+#: classes/Emails/EmailsAdmin.php:93
+msgid "Allow custom emails for gateways?"
+msgstr "Erlaube eigene Emails für Gateways?"
+
+#: admin/settings/bookings.php:14
+msgid "Allow overbooking when approving?"
+msgstr "Überbuchung bei Genehmigung zulassen?"
+
+#: classes/Emails/CustomEmailsAdmin.php:96
+msgid "Also Send Event Owner Emails To:"
+msgstr "Also Send Event Owner Emails To:"
+
+#: build/index.js:1
+msgid "Alternate text for the empty option"
+msgstr "Alternativer text für die leere Option"
+
+#: classes/Gateways/gateway.offline.php:174
+#: classes/Gateways/gateways.transactions.php:131 build/booking.js:1
+msgid "Amount"
+msgstr "Betrag"
+
+#: classes/Gateways/gateway.offline.php:392
+msgid "Amount Paid"
+msgstr "Betrag bezahlt"
+
+#: admin/settings/emails.php:69
+msgid ""
+"An email will be sent to the event contact if someone cancels their booking."
+msgstr ""
+"Wenn jemand eine Buchung storniert, wird eine E-Mail an die Kontaktperson "
+"geschickt."
+
+#: build/index.js:1
+msgid "An empty option ist shown and selected as default"
+msgstr "Eine leere Option wird hinzugefügt und als Standard gesetzt"
+
+#: build/booking.js:1
+msgid "An error occured in our booking system."
+msgstr "Ein Fehler trat in unserem buchungssystem auf."
+
+#: classes/Bookings/Bookings.php:359
+msgid "An error occurred."
+msgstr "Es ist ein Fehler aufgetreten."
+
+#: classes/Emails/CustomEmailsAdmin.php:347
+#: classes/Emails/CustomEmailsAdmin.php:504
+msgid ""
+"An invalid admin email was supplied for your custom emails and was not saved "
+"in your settings."
+msgstr ""
+"Eine ungültige Email Admin-Emailadresse wurde für Deine individuellen Emails "
+"verwendet und daher nicht gespeichert."
+
+#: em-install.php:529
+msgid "and"
+msgstr "und"
+
+#: build/index.js:1
+msgid "Appearance"
+msgstr "Darstellung"
+
+#: classes/Gateways/gateway.mollie.php:463
+msgid "Apple Pay"
+msgstr "Apple Pay"
+
+#: classes/Gateways/gateways-admin.php:55
+msgid "Apply"
+msgstr "Anwenden"
+
+#: classes/Coupons/CouponsAdmin.php:489
+msgid "Apply Before/After Tax"
+msgstr "Vor oder nach der Steuer anwenden"
+
+#: admin/settings/bookings.php:11
+msgid "Approval Required?"
+msgstr "Genehmigung erforderlich?"
+
+#: admin/bookings/em-cancelled.php:52 admin/bookings/em-confirmed.php:53
+#: admin/bookings/em-pending.php:67 admin/bookings/em-pending.php:132
+#: admin/bookings/em-person.php:54 admin/bookings/em-person.php:115
+#: admin/bookings/em-rejected.php:52 admin/bookings/em-rejected.php:111
+#: classes/Bookings/BookingsTable.php:642
+#: classes/Bookings/BookingsTable.php:659
+#: classes/Bookings/BookingsTable.php:668
+#: classes/Gateways/gateway.offline.php:135
+msgid "Approve"
+msgstr "Genehmigen"
+
+#: classes/Bookings/Booking.php:132 classes/Events/Event.php:362
+#: classes/Gateways/gateway.mollie.php:188
+msgid "Approved"
+msgstr "Freigegeben"
+
+#: classes/Emails/EmailsAdmin.php:54
+msgid "Approved email"
+msgstr "Genehmigte E-Mail"
+
+#: Assets.php:175 Assets.php:177 Assets.php:180
+msgid "Are you sure you want to continue?"
+msgstr "Bist du sicher?"
+
+#: Assets.php:185
+msgid "Are you sure you want to delete all recurrences of this event?"
+msgstr ""
+"Bist du sicher, dass du alle Wiederholungen dieser Veranstaltung löschen "
+"willst?"
+
+#: Assets.php:162
+msgid "Are you sure you want to delete?"
+msgstr "Bist du dir sicher, dass du es löschen möchtest?"
+
+#: classes/Gateways/Gateways.php:56
+msgid ""
+"Are you sure you want to delete? This may make your transaction history out "
+"of sync with your payment gateway provider."
+msgstr ""
+"Bist Du sicher, dass Du löschen willst? Die Transaktionshistorie mit Deinem "
+"Zahlungsgateway Betreiber gerät dadurch eventuell durcheinander."
+
+#: Assets.php:183
+msgid ""
+"Are you sure you want to detach this event? By doing so, this event will be "
+"independent of the recurring set of events."
+msgstr ""
+"Bist du sicher, dass du diese sich wiederholende Veranstaltung herauslösen "
+"willst? Wenn du dies tun, verlierst du alle Buchungsinformationen und die "
+"alten wiederkehrenden Veranstaltung werden gelöscht."
+
+#: Assets.php:188
+msgid ""
+"Are you sure you want to disable bookings? If you do this and save, you will "
+"lose all previous bookings. If you wish to prevent further bookings, reduce "
+"the number of spaces available to the amount of bookings you currently have"
+msgstr ""
+"Bist du sicher, dass du Buchungen deaktivieren willst? Wenn du das tust und "
+"speicherst, wirst du alle bisherigen Buchungen verlieren. Wenn du nur "
+"weitere Buchungen verhindern willst, reduziere die Anzahl der verfügbaren "
+"Plätze auf die Anzahl der bisherigen Buchungen."
+
+#: admin/settings/general.php:61 build/index.js:1
+msgid "Ascending"
+msgstr "Aufsteigend"
+
+#: classes/Bookings/Booking.php:227 templates/forms/event/bookings.php:181
+msgid "at"
+msgstr "bei"
+
+#: build/index.js:1
+msgid "at best"
+msgstr "höchstens"
+
+#: build/index.js:1
+msgid "at least"
+msgstr "mindestens"
+
+#: classes/Emails/EmailsAdmin.php:42
+msgid "Attach ical invite?"
+msgstr "Hänge ical Einladung an?"
+
+#: classes/Forms/AttendeeForms.php:295
+msgid "Attendee"
+msgstr "Teilnehmer"
+
+#: classes/Forms/AttendeeForms.php:121 classes/Forms/AttendeeForms.php:145
+#: classes/Forms/AttendeeForms.php:160 classes/Forms/AttendeeForms.php:235
+msgid "Attendee %s"
+msgstr "Teilnehmer %s"
+
+#: classes/Emails/CustomEmailsAdmin.php:184
+#: classes/Emails/CustomEmailsAdmin.php:400
+msgid "Attendee Emails"
+msgstr "Teilnehmer E-Mails"
+
+#: classes/Forms/FormPost.php:95 build/index.js:1
+msgid "Attendee Form"
+msgstr "Teilnehmerformular"
+
+#: classes/Forms/FormPostAdmin.php:55
+msgid "Attendee Forms"
+msgstr "Teilnehmerformulare"
+
+#: classes/Forms/AttendeeForms.php:402 build/admin.js:1
+msgid "Attendees"
+msgstr "Teilnehmer"
+
+#: build/blocks/details-audience/render.php:15
+#: templates/forms/event/people.php:20 build/index.js:1
+msgid "Audience"
+msgstr "Zielgruppe"
+
+#: classes/Intl/Countries.php:15
+msgid "Austria"
+msgstr "Österreich"
+
+#: classes/Gateways/gateway.mollie.php:484
+msgid "Austrian Payment Service"
+msgstr "Österreichischer Bezahldienst"
+
+#: templates/forms/event/bookings.php:51
+msgid "Avail. Spaces"
+msgstr "Verfügbare Plätze"
+
+#: admin/em-bookings.php:99
+msgid "Availability"
+msgstr "Verfügbarkeit"
+
+#: admin/bookings/em-events.php:94 classes/Events/EventPostsAdmin.php:193
+#: templates/templates/bookings-event-printable.php:49
+msgid "Available"
+msgstr "Verfügbar"
+
+#: templates/forms/event/bookings-ticket-form.php:84
+msgid "Available for"
+msgstr "Verfügbar für"
+
+#: templates/forms/event/bookings-ticket-form.php:42
+msgid "Available from"
+msgstr "Verfügbar ab"
+
+#: templates/forms/event/booking-stats.php:12
+msgid "Available Spaces"
+msgstr "Freie Plätze"
+
+#: admin/em-bookings.php:102
+msgid "Available spaces"
+msgstr "Verfügbare Plätze"
+
+#: templates/forms/event/bookings-ticket-form.php:60
+msgid "Available until"
+msgstr "Verfügbar bis"
+
+#: classes/Emails/CustomEmailsAdmin.php:413
+#: classes/Emails/CustomEmailsAdmin.php:414 classes/Gateways/Gateways.php:63
+msgid "Awaiting Offline Payment"
+msgstr "Offline Zahlung ausstehend"
+
+#: classes/Bookings/Booking.php:135 classes/Gateways/Gateways.php:62
+msgid "Awaiting Online Payment"
+msgstr "Online Zahlung ausstehend"
+
+#: classes/Bookings/Booking.php:136
+msgid "Awaiting Payment"
+msgstr "Bezahlung ausstehend"
+
+#: build/booking.js:1
+msgid "Back"
+msgstr "Zurück"
+
+#: classes/Gateways/gateway.php:596
+msgid "Back to gateways"
+msgstr "Zurück zu Gateways"
+
+#: classes/Gateways/gateway.mollie.php:464
+msgid "Bancontact"
+msgstr "Bancontact"
+
+#: classes/Gateways/gateway.offline.php:420 build/booking.js:1
+msgid "Bank"
+msgstr "Bank"
+
+#: build/booking.js:1
+msgid "Base price:"
+msgstr "Grundpreis:"
+
+#: templates/forms/event/bookings.php:43
+msgid "Basic HTML is allowed in ticket labels and descriptions."
+msgstr ""
+"Grundlegendes HTML ist bei den Ticket Labels und Beschreibungen erlaubt."
+
+#: classes/Gateways/gateway.offline.php:68
+msgid ""
+"Be aware that by approving a booking awaiting payment, a full payment "
+"transaction will be registered against this booking, meaning that it will be "
+"considered as paid."
+msgstr ""
+"Beachte, dass durch die Genehmigung noch nicht bezahlten Buchung, eine volle "
+"Zahlung für diese Buchung registriert wird, d.h. die Buchung wird als "
+"gezahlt betrachtet."
+
+#: classes/Coupons/CouponsAdmin.php:492
+#: templates/forms/event/bookings-ticket-form.php:51
+#: templates/forms/event/bookings-ticket-form.php:69
+#: templates/forms/event/bookings.php:178
+msgid "Before"
+msgstr "vor"
+
+#: templates/forms/event/bookings-ticket-form.php:51
+#: templates/forms/event/bookings-ticket-form.php:52
+#: templates/forms/event/bookings-ticket-form.php:69
+#: templates/forms/event/bookings-ticket-form.php:70
+#: templates/forms/event/bookings.php:178
+#: templates/forms/event/bookings.php:179
+msgctxt "before or after"
+msgid "%s the event starts"
+msgstr "%s Veranstaltung beginnt"
+
+#: admin/settings/emails.php:17
+msgid ""
+"Before you save your changes, you can quickly send yourself a test email by "
+"clicking this button."
+msgstr ""
+"Bevor du deine Änderungen speicherst, kannst du dir schnell selber eine Test "
+"E-Mail schicken, indem du auf diesen Knopf drückst."
+
+#: classes/Intl/Date.php:62
+msgid "Begins at:"
+msgstr "Beginnt um:"
+
+#: multilingual/em-ml-admin.php:80
+msgid ""
+"Below are translations for your tickets. If left blank, the language of the "
+"original event will be used."
+msgstr ""
+"Unten sind Übersetzungen Deiner Tickets. Wenn leer gelassen, wird die "
+"Sprache der Originalveranstaltung verwendet."
+
+#: classes/Emails/CustomEmailsAdmin.php:312
+#: classes/Emails/CustomEmailsAdmin.php:468
+msgid ""
+"Below you can modify the emails that are sent when bookings are made. This "
+"will override the default emails located in your %s settings page."
+msgstr ""
+"Unten kannst Du Emails modifizieren, die versandt werden, wenn Buchungen "
+"durchgeführt werden. Dies überstimmt die Standardemail in Deiner %s "
+"Einstellungen Seite."
+
+#: build/booking.js:1
+msgid "Beneficial"
+msgstr "Begünstigter"
+
+#: classes/Gateways/gateway.offline.php:421
+msgid "Beneficiary"
+msgstr "Begünstigter"
+
+#: classes/Gateways/gateway.offline.php:419 build/booking.js:1
+msgid "BIC"
+msgstr "BIC"
+
+#: build/index.js:1
+msgid "Birthday"
+msgstr "Geburtstag"
+
+#: build/blocks/booking/block.json
+msgctxt "block description"
+msgid "Add a button that allows the user to book tickets for an event."
+msgstr ""
+"Button hinzufügen, der dem Benutzer erlaubt, ein Ticket für eine "
+"Veranstaltung zu buchen"
+
+#: build/blocks/location-editor/block.json
+msgctxt "block description"
+msgid "Edit a location's metadata."
+msgstr "Metadaten für einen Ort bearbeiten"
+
+#: build/blocks/form/html/block.json
+msgctxt "block description"
+msgid "Headline or text block"
+msgstr "Überschrift oder Text-Block"
+
+#: build/blocks/form/checkbox/block.json build/blocks/form/radio/block.json
+msgctxt "block description"
+msgid "Lets the user check something"
+msgstr "Lässt den Benutzer etwas abhaken"
+
+#: build/blocks/form/number/block.json
+msgctxt "block description"
+msgid "Lets the user give a number or a range of numbers"
+msgstr "Der Benutzer kann eine Zahl angeben"
+
+#: build/blocks/form/country/block.json
+msgctxt "block description"
+msgid "Lets the user select a country"
+msgstr "Der Benutzer kann ein Landauswählen"
+
+#: build/blocks/form/select/block.json
+msgctxt "block description"
+msgid "Lets the user select something"
+msgstr "Der Benutzer kann etwas auswählen"
+
+#: build/blocks/form/date/block.json
+msgctxt "block description"
+msgid "Lets the user specify a date"
+msgstr "Der Benutzer kann ein Datum angeben"
+
+#: build/blocks/form/textarea/block.json
+msgctxt "block description"
+msgid "Lets the user type a longer text"
+msgstr "Der Benutzer kann einen längeren Text eingeben"
+
+#: build/blocks/form/phone/block.json
+msgctxt "block description"
+msgid "Lets the user type a phone number."
+msgstr "Der benutzer kann eine Telefonnummer angeben"
+
+#: build/blocks/form/text/block.json
+msgctxt "block description"
+msgid "Lets the user type a short text"
+msgstr "Lässt den Benutzer einen Text angeben"
+
+#: build/blocks/form/email/block.json
+msgctxt "block description"
+msgid "Lets the user type an email address."
+msgstr "Der Benutzer kann eine E-Mail-Adresse eingeben"
+
+#: build/blocks/form/container/block.json
+msgctxt "block description"
+msgid "Show a list with selected details of the event"
+msgstr "Zeigt eine Liste mit Event-Details"
+
+#: build/blocks/details-audience/block.json
+msgctxt "block description"
+msgid "Show the event audience"
+msgstr "Zeigt die Zielgruppe der Veranstaltung"
+
+#: build/blocks/details-shutdown/block.json
+msgctxt "block description"
+msgid "Show the event booking end"
+msgstr "Zeigt das Buchungsende der Veranstaltung"
+
+#: build/blocks/details-date/block.json
+msgctxt "block description"
+msgid "Show the event date"
+msgstr "Zeigt das Datum der Veranstaltung"
+
+#: build/blocks/details-location/block.json
+msgctxt "block description"
+msgid "Show the event location"
+msgstr "Zeigt den Ort der Veranstaltung"
+
+#: build/blocks/details-price/block.json
+msgctxt "block description"
+msgid "Show the event price"
+msgstr "Zeigt den Preis der Veranstaltung"
+
+#: build/blocks/details-speaker/block.json
+msgctxt "block description"
+msgid "Show the event speaker"
+msgstr "Zeigt den Referent oder Organisator der Veranstaltung"
+
+#: build/blocks/details-time/block.json
+msgctxt "block description"
+msgid "Show the event Time"
+msgstr "Zeigt die Zeit der Veranstaltung"
+
+#: build/blocks/details-spaces/block.json
+msgctxt "block description"
+msgid "Show the open spaces"
+msgstr "Zeigt die übrigen Plätze"
+
+#: build/blocks/upcoming/block.json
+msgctxt "block description"
+msgid "Shows a list or cards of upcoming events"
+msgstr "Zeigt eine Liste oder Karten mit den kommenden Veranstaltungen"
+
+#: build/blocks/booking/block.json
+msgctxt "block style label"
+msgid "Fill"
+msgstr "Füllen"
+
+#: build/blocks/booking/block.json
+msgctxt "block style label"
+msgid "Outline"
+msgstr "Außenlinie"
+
+#: build/blocks/form/checkbox/block.json
+msgctxt "block title"
+msgid "Checkbox"
+msgstr "Checkbox"
+
+#: build/blocks/form/country/block.json
+msgctxt "block title"
+msgid "Country"
+msgstr "Land"
+
+#: build/blocks/form/date/block.json
+msgctxt "block title"
+msgid "Date Field"
+msgstr "Datum"
+
+#: build/blocks/form/email/block.json
+msgctxt "block title"
+msgid "Email Field"
+msgstr "E-Mail"
+
+#: build/blocks/details-audience/block.json
+msgctxt "block title"
+msgid "Event Audience"
+msgstr "Zielgruppe"
+
+#: build/blocks/booking/block.json
+msgctxt "block title"
+msgid "Event Booking"
+msgstr "Veranstaltungs-Buchung"
+
+#: build/blocks/details-shutdown/block.json
+msgctxt "block title"
+msgid "Event Booking End"
+msgstr "Buchungsende"
+
+#: build/blocks/details-spaces/block.json
+msgctxt "block title"
+msgid "Event Booking Spaces"
+msgstr "Freie Plätze"
+
+#: build/blocks/details-date/block.json
+msgctxt "block title"
+msgid "Event Date"
+msgstr "Veranstaltungs-Datum"
+
+#: build/blocks/details-location/block.json
+msgctxt "block title"
+msgid "Event Location"
+msgstr "Veranstaltungsort"
+
+#: build/blocks/details-price/block.json
+msgctxt "block title"
+msgid "Event Price"
+msgstr "Preis der Veranstaltung"
+
+#: build/blocks/details-speaker/block.json
+msgctxt "block title"
+msgid "Event Speaker"
+msgstr "Redner"
+
+#: build/blocks/details-time/block.json
+msgctxt "block title"
+msgid "Event Time"
+msgstr "Veranstaltungsteit"
+
+#: build/blocks/featured/block.json
+msgctxt "block title"
+msgid "Featured"
+msgstr "Im Vordergrund"
+
+#: build/blocks/form/container/block.json
+msgctxt "block title"
+msgid "Form Container"
+msgstr "Formular-Container"
+
+#: build/blocks/location-editor/block.json
+msgctxt "block title"
+msgid "Location Editor"
+msgstr "Ort bearbeiten"
+
+#: build/blocks/form/number/block.json
+msgctxt "block title"
+msgid "Number Field"
+msgstr "Nummernfeld"
+
+#: build/blocks/form/phone/block.json
+msgctxt "block title"
+msgid "Phone Field"
+msgstr "Telefonfeld"
+
+#: build/blocks/form/radio/block.json
+msgctxt "block title"
+msgid "Radio Select"
+msgstr "Radio-Auswahl"
+
+#: build/blocks/form/select/block.json
+msgctxt "block title"
+msgid "Select"
+msgstr "Auswahl"
+
+#: build/blocks/form/textarea/block.json
+msgctxt "block title"
+msgid "Text Area"
+msgstr "Nachricht"
+
+#: build/blocks/form/html/block.json
+msgctxt "block title"
+msgid "Text Block"
+msgstr "Textblock"
+
+#: build/blocks/form/text/block.json
+msgctxt "block title"
+msgid "Text Field"
+msgstr "Textfeld"
+
+#: build/blocks/upcoming/block.json
+msgctxt "block title"
+msgid "Upcoming Events"
+msgstr "Anstehende Veranstaltungen"
+
+#: classes/Export/ExportAdmin.php:38
+msgid "Bold Font"
+msgstr "Fettschrift"
+
+#: build/booking.js:1
+msgid "Book now"
+msgstr "Jetzt buchen"
+
+#: admin/bookings/em-events.php:95 classes/Events/EventPostsAdmin.php:194
+#: templates/templates/bookings-event-printable.php:44
+msgid "Booked"
+msgstr "Gebucht"
+
+#: templates/forms/event/bookings.php:52
+msgid "Booked Spaces"
+msgstr "Gebuchte Plätze"
+
+#: build/frontend.js:1 build/index.js:1
+msgid "Booked up"
+msgstr "Ausgebucht"
+
+#: admin/settings/emails.php:84
+msgid "Booked User Emails"
+msgstr "E-Mails der buchenden Benutzer"
+
+#: admin/bookings/em-cancelled.php:84 admin/bookings/em-confirmed.php:85
+#: admin/bookings/em-pending.php:99 admin/bookings/em-rejected.php:84
+#: classes/Coupons/Coupons.php:354 classes/Coupons/CouponsAdmin.php:343
+#: classes/Coupons/CouponsAdmin.php:354
+msgid "Booker"
+msgstr "Bucher"
+
+#: classes/Bookings/Booking.php:291 classes/Bookings/Booking.php:947
+#: classes/Bookings/Booking.php:950 classes/Bookings/Bookings.php:168
+#: classes/Tickets/TicketsBookings.php:186
+msgid "Booking"
+msgstr "Buchung"
+
+#: classes/Bookings/Booking.php:1006
+msgid "Booking %s."
+msgstr "Buchung %s."
+
+#: em-install.php:594 em-install.php:602
+msgid "Booking Cancelled"
+msgstr "Buchung storniert"
+
+#: admin/settings/emails.php:68 admin/settings/emails.php:103
+#: classes/Emails/CustomEmailsAdmin.php:180
+#: classes/Emails/CustomEmailsAdmin.php:190
+#: classes/Emails/CustomEmailsAdmin.php:396
+#: classes/Emails/CustomEmailsAdmin.php:406
+msgid "Booking cancelled"
+msgstr "Buchung storniert"
+
+#: admin/settings/emails.php:73 admin/settings/emails.php:108
+msgid "Booking cancelled email"
+msgstr "Inhalt der E-Mail bei Stornierung"
+
+#: admin/settings/emails.php:72 admin/settings/emails.php:107
+msgid "Booking cancelled email subject"
+msgstr "Betreff der E-Mail bei Stornierung"
+
+#: em-install.php:582
+msgid "Booking cannot be made, not enough spaces available!"
+msgstr ""
+"Buchung kann nicht vorgenommen werden, es sind nicht genug Plätze frei!"
+
+#: classes/Bookings/BookingsTable.php:101
+msgid "Booking Comment"
+msgstr "Buchungskommentar"
+
+#: em-install.php:590 em-install.php:600
+msgid "Booking Confirmed"
+msgstr "Buchung bestätigt"
+
+#: admin/settings/emails.php:57 admin/settings/emails.php:92
+msgid "Booking confirmed email"
+msgstr "E-Mail Inhalt bei Buchungsbestätigung"
+
+#: admin/settings/emails.php:56 admin/settings/emails.php:91
+msgid "Booking confirmed email subject"
+msgstr "Betreff der E-Mail für Buchungsbestätigung"
+
+#: classes/Bookings/Booking.php:1021 classes/Bookings/Booking.php:1022
+msgid "Booking could not be %s."
+msgstr "Buchung konnte nicht %s."
+
+#: classes/Bookings/Bookings.php:151 classes/Gateways/gateway.mollie.php:203
+msgid "Booking could not be created"
+msgstr "Buchung konnte nicht erstellt werden"
+
+#: templates/forms/event/bookings.php:167
+msgid "Booking Cut-Off Date"
+msgstr "Buchungsende-Datum"
+
+#: classes/Bookings/BookingsTable.php:98 classes/Coupons/Coupons.php:352
+msgid "Booking Date"
+msgstr "Buchungsdatum"
+
+#: em-install.php:489
+msgid "Booking Details"
+msgstr "Buchungsdetails"
+
+#: admin/settings/emails.php:39 classes/Emails/CustomEmailsAdmin.php:311
+msgid "Booking Email Templates"
+msgstr "E-Mail-Vorlagen für die Buchung"
+
+#: build/blocks/details-shutdown/render.php:14 build/index.js:1
+msgid "Booking end"
+msgstr "Buchungsende"
+
+#: classes/Forms/FormPost.php:55
+msgid "Booking Form"
+msgstr "Buchungsformular"
+
+#: classes/Gateways/gateway.php:618
+msgid "Booking Form Information"
+msgstr "Buchungsformular-Informationen"
+
+#: classes/Forms/FormPostAdmin.php:20
+msgid "Booking Forms"
+msgstr "Registrierungsformulare"
+
+#: classes/Bookings/BookingsTable.php:100 build/admin.js:1
+msgid "Booking ID"
+msgstr "Buchungs ID"
+
+#: classes/Gateways/gateway.offline.php:51
+msgid "Booking is now fully paid and confirmed."
+msgstr "Buchung ist nun voll bezahlt und bestätigt."
+
+#: em-install.php:588 em-install.php:596
+msgid "Booking Pending"
+msgstr "Buchung in Bearbeitung"
+
+#: admin/settings/emails.php:65 admin/settings/emails.php:100
+msgid "Booking pending email"
+msgstr "E-Mail bei nicht bestätigter Buchung"
+
+#: admin/settings/emails.php:64 admin/settings/emails.php:99
+msgid "Booking pending email subject"
+msgstr "Betreff der E-Mail für nicht bestätigte Buchung"
+
+#: em-install.php:592 em-install.php:598
+msgid "Booking Rejected"
+msgstr "Buchung abgelehnt"
+
+#: admin/settings/emails.php:81 admin/settings/emails.php:116
+msgid "Booking rejected email"
+msgstr "Inhalt der E-Mail, wenn die Buchung abgelehnt wurde"
+
+#: admin/settings/emails.php:80 admin/settings/emails.php:115
+msgid "Booking rejected email subject"
+msgstr "Betreff der E-Mail, wenn die Buchung abgelehnt wurde."
+
+#: admin/em-help.php:29
+msgid "Booking Related Placeholders"
+msgstr "Platzhalter für Buchungen"
+
+#: em-install.php:580
+msgid ""
+"Booking successful, pending confirmation (you will also receive an email "
+"once confirmed)."
+msgstr ""
+"Buchung erfolgreich. Du wirst eine E-Mail erhalten, sobald die Buchung "
+"bestätigt wird."
+
+#: em-install.php:581 em-install.php:653
+msgid "Booking successful."
+msgstr "Buchung erfolgreich."
+
+#: classes/Gateways/Gateways.php:506
+msgid "Booking Transactions"
+msgstr "Buchungs-Transaktionen"
+
+#: admin/em-admin.php:38 admin/em-admin.php:138 admin/em-bookings.php:118
+#: admin/em-bookings.php:166 admin/em-data-privacy.php:38
+#: admin/em-data-privacy.php:189 admin/em-data-privacy.php:258
+#: admin/em-options.php:86 admin/settings/general.php:15
+#: classes/Events/EventPostsAdmin.php:297 classes/Forms/AttendeeForms.php:330
+#: build/index.js:1
+msgid "Bookings"
+msgstr "Buchungen"
+
+#: events.php:176 events.php:177
+msgid "bookings"
+msgstr "Buchungen"
+
+#: em-actions.php:345 em-actions.php:368
+msgctxt "bookings"
+msgid "No emails to send for this booking."
+msgstr "Für diese Buchung gibt es keine Nachrichten zu senden."
+
+#: classes/Bookings/Bookings.php:349 classes/Bookings/Bookings.php:355
+msgid "Bookings %s. Mails Sent."
+msgstr "Buchung %s. E-Mails wurden versendet."
+
+#: templates/templates/bookings-event-printable.php:21
+msgid "Bookings data"
+msgstr "Buchungsinformationen"
+
+#: templates/templates/bookings-event-printable.php:13
+#: templates/templates/bookings-event-printable.php:18
+msgid "Bookings for %s"
+msgstr "Buchungen für %s"
+
+#: classes/Bookings/Booking.php:436
+msgid "Bookings have closed (e.g. event has started)."
+msgstr ""
+"Buchungsmöglichkeit wurde bereits geschlossen (z.B. Veranstaltung hat "
+"bereits begonnen)."
+
+#: classes/Bookings/BookingsTable.php:265
+msgid "Bookings Table Settings"
+msgstr "Einstellungen Buchungstabelle"
+
+#: Assets.php:179 classes/Events/EventPostAdmin.php:40
+#: classes/Events/EventPostsAdmin.php:352
+msgid ""
+"Bookings to individual event recurrences will be preserved if event times "
+"and ticket settings are not modified."
+msgstr ""
+"Wenn die Veranstaltungszeiten und Ticket-Einstellungen nicht verändert "
+"werden, bleiben die Buchungen einzelner Serientermine erhalten."
+
+#: admin/settings/bookings.php:11
+msgid ""
+"Bookings will not be confirmed until the event administrator approves it."
+msgstr ""
+"Eine Buchung wird erst bestätigt, wenn ein Administrator der Veranstaltung "
+"diese genehmigt."
+
+#: classes/Events/EventPostAdmin.php:231 classes/Events/EventPostAdmin.php:422
+#: multilingual/em-ml-admin.php:35 multilingual/em-ml-admin.php:36
+msgid "Bookings/Registration"
+msgstr "Buchung/Anmeldung"
+
+#: build/index.js:1
+msgid "Box"
+msgstr "Box"
+
+#: admin/bookings/em-cancelled.php:49 admin/bookings/em-confirmed.php:50
+#: admin/bookings/em-pending.php:64 admin/bookings/em-person.php:51
+#: admin/bookings/em-rejected.php:49
+msgid "Bulk Actions"
+msgstr "Sammelaktionen"
+
+#: build/index.js:1
+msgid "Button Icon"
+msgstr "Button-Symbol"
+
+#: build/index.js:1
+msgid "Button Settings"
+msgstr "Button-Einstellungen"
+
+#: classes/Gateways/gateway.mollie.php:345
+msgid ""
+"By default Events Manager will send the Booking Cancelled Email if a payment "
+"had failed or is incomplete. This can lead to confusion if the user rebooks "
+"right after with a successful payment. This option lets you disable sending "
+"the automatic Booking Cancelled Email. (Setting this option to \"no\" will "
+"not affect the email if you change the booking status manually.)"
+msgstr ""
+"Standardmäßig sendet der Events Manager die E-Mail \"Buchung storniert\", "
+"wenn eine Zahlung fehlgeschlagen ist oder unvollständig bleibt. Dies kann zu "
+"Verwirrung führen, wenn der Benutzer die Buchung direkt danach mit einer "
+"erfolgreichen Zahlung erneut vornimmt. Diese Option ermöglicht es Ihnen, das "
+"automatische Senden der E-Mail \"Buchung storniert\" zu deaktivieren. (Das "
+"Deaktivieren dieser Option hat keine Auswirkungen auf die E-Mail, wenn Sie "
+"den Buchungsstatus manuell ändern.)"
+
+#: admin/settings/bookings.php:12
+msgid ""
+"By default, event spaces become unavailable once there are enough CONFIRMED "
+"bookings. To reserve spaces even if unapproved, choose yes."
+msgstr ""
+"Standardmäßig sind Tickets nicht mehr verfügbar, sobald es genügend "
+"BESTÄTIGTE Buchungen gibt. Um auch Plätze für noch unbestätigte Buchungen zu "
+"buchen, wähle Ja aus."
+
+#: templates/forms/event/bookings.php:137
+msgid "Cancel Ticket Recreation"
+msgstr "Ticket-Erneuerung abbrechen"
+
+#: classes/Gateways/gateway.mollie.php:446
+msgid "canceled"
+msgstr "abgebrochen"
+
+#: classes/Bookings/Booking.php:134 classes/Bookings/BookingsTable.php:67
+#: classes/Gateways/gateway.mollie.php:190 em-install.php:496
+msgid "Cancelled"
+msgstr "Abgesagt"
+
+#: build/index.js:1
+msgid "Cards"
+msgstr "Karten"
+
+#: events.php:202 events.php:203
+msgid "categories"
+msgstr "Kategorien"
+
+#: em-install.php:532 build/index.js:1
+msgid "Category"
+msgstr "Kategorie"
+
+#: classes/Gateways/Gateways.php:402
+msgid "Changes Saved"
+msgstr "Änderungen gespeichert"
+
+#: classes/Bookings/Booking.php:255 classes/Tickets/Ticket.php:214
+#: classes/Tickets/TicketBooking.php:82
+msgid "Changes saved"
+msgstr "Änderungen gespeichert"
+
+#: admin/em-options.php:48
+msgid "Changes saved."
+msgstr "Änderungen gespeichert."
+
+#: classes/Gateways/gateway.mollie.php:450
+msgid "chargeback"
+msgstr "rückzahlung"
+
+#: classes/Gateways/gateway.mollie.php:277
+msgid "Charged back"
+msgstr "Zurück gezahlt"
+
+#: build/booking.js:1
+msgid "Check coupon"
+msgstr "Gutschein prüfen"
+
+#: admin/settings/emails.php:46
+msgid ""
+"Check this option if you want the event contact to receive an email when "
+"someone books places. An email will be sent when a booking is first made "
+"(regardless if confirmed or pending)"
+msgstr ""
+"Aktiviere diese Option, wenn du willst, dass die Kontaktperson von der "
+"Veranstaltung bei jeder Buchung eine E-Mail erhalten soll. Die E-Mail wird "
+"bei der Buchung verschickt (unabhängig davon ob diese bestätigt oder in "
+"Bearbeitung ist)."
+
+#: classes/Gateways/Gateways.php:167
+msgid ""
+"Choice of payment method not recognized. If you are seeing this error and "
+"selecting a method of payment, we apologize for the inconvenience. Please "
+"contact us and we'll help you make a booking as soon as possible."
+msgstr ""
+"Zahlungsmethode nicht erkannt. Wenn Du diese Fehlermeldung siehst, "
+"kontaktiere uns und wir helfen Dir, Deine Buchung so schnell wie möglich "
+"durchzuführen. Entschuldigung für die Unannehmlichkeiten."
+
+#: classes/Taxonomies/TaxonomyAdmin.php:79
+#: classes/Taxonomies/TaxonomyAdmin.php:92
+msgid ""
+"Choose a color for your %s. You can access this using the %s placeholder."
+msgstr ""
+"Wähle eine Farbe für deine %s aus. Du kannst mit Hilfe des %s Platzhalters "
+"darauf zugreifen."
+
+#: em-posts.php:83
+msgid "Choose from most used event categories"
+msgstr "Wähle aus den am häufigsten verwendeten Veranstaltungskategorien"
+
+#: em-posts.php:48
+msgid "Choose from most used event tags"
+msgstr ""
+"Wähle aus den am häufigsten verwendeten Veranstaltungsschlagwörtern aus"
+
+#: classes/Coupons/CouponsAdmin.php:432
+msgid ""
+"Choose whether to allow this coupon to be used only on events you choose, "
+"all your events or all events on this site."
+msgstr ""
+"Wähle, ob dieser Gutschein nur für ausgewählte Veranstaltungen gültig sein "
+"soll, oder für alle Veranstaltungen auf dieser Site."
+
+#: classes/Coupons/CouponsAdmin.php:496
+msgid ""
+"Choose whether to apply this discount before or after tax has been added, if "
+"applicable."
+msgstr ""
+"Wenn zutreffend, Auswahl, ob dieser Nachlass vor oder nach Steuern abgezogen "
+"wird."
+
+#: admin/settings/bookings.php:61
+msgid "Choose which order your tickets appear."
+msgstr ""
+"Wähle aus, in welcher Reihenfolge deine Tickets angezeigt werden sollen."
+
+#: admin/settings/bookings.php:27
+msgid "Choose your currency for displaying event pricing."
+msgstr "Wähle die Währung für die Anzeige der Veranstaltungspreise."
+
+#: classes/Gateways/Gateways.php:41 build/index.js:1
+msgid "City"
+msgstr "Ort"
+
+#: em-install.php:545 em-install.php:659 em-install.php:682
+msgid "City/Town"
+msgstr "Ort"
+
+#: classes/Emails/CustomEmailsAdmin.php:315
+#: classes/Emails/CustomEmailsAdmin.php:472
+msgid ""
+"Click on the title texts with a plus (+) next to them to reveal further "
+"options, and the minus (-) sign to hide them."
+msgstr ""
+"Klicke auf die Titeltexte mit einem Plus (+) daneben, um weitere Optionen zu "
+"zeigen, oder auf das Minus (-), um sie zu verbergen."
+
+#: admin/settings/emails.php:14 admin/settings/emails.php:39
+#: classes/Emails/EmailsAdmin.php:29 classes/Emails/EmailsAdmin.php:76
+msgid "Click to toggle"
+msgstr "Klicken zum Umschalten"
+
+#: build/booking.js:1
+msgid "Close"
+msgstr "Schließen"
+
+#: templates/forms/event/bookings.php:121
+msgid "Close Ticket Editor"
+msgstr "Ticket Editor schließen"
+
+#: classes/Coupons/Coupon.php:60 classes/Coupons/Coupons.php:307
+#: classes/Coupons/CouponsAdmin.php:56 classes/Coupons/CouponsAdmin.php:221
+#: classes/Coupons/CouponsAdmin.php:231
+#| msgid "Scope"
+msgid "Code"
+msgstr "Zeitraum"
+
+#: Assets.php:196
+msgid "Collapse All"
+msgstr "Alle zusammenklappen"
+
+#: classes/Taxonomies/TaxonomyAdmin.php:76
+#: classes/Taxonomies/TaxonomyAdmin.php:90
+msgid "Color"
+msgstr "Farbe"
+
+#: classes/Bookings/BookingsTable.php:304
+msgid "Columns to export"
+msgstr "Zu exportierende Spalten"
+
+#: classes/Bookings/BookingsTable.php:270
+msgid "Columns to show"
+msgstr "Anzuzeigende Spalten"
+
+#: classes/Forms/BookingsForm.php:49 em-install.php:687
+#: templates/templates/bookings-event-printable.php:28
+msgid "Comment"
+msgstr "Kommentar"
+
+#: classes/Gateways/gateway.offline.php:181
+msgid "Comments"
+msgstr "Kommentare"
+
+#: classes/Gateways/Gateways.php:417
+msgid "Common User Fields for Gateways"
+msgstr "Allgemeine Benutzerfelder für Gateways"
+
+#: classes/Gateways/Gateways.php:47 em-install.php:665
+msgid "Company"
+msgstr "Firma"
+
+#: classes/Bookings/Booking.php:1252
+msgid ""
+"Confirmation email could not be sent to admin. Registrant should have gotten "
+"their email (only admin see this warning)."
+msgstr ""
+"Bestätigung per E-Mail konnte nicht an den Administrator gesendet werden. "
+"Registrierender sollte seine E-Mail bekommen haben (nur Administratoren "
+"sehen diese Warnung)."
+
+#: classes/Bookings/BookingsTable.php:66 em-install.php:494
+msgid "Confirmed"
+msgstr "Bestätigt"
+
+#: admin/settings/emails.php:52 admin/settings/emails.php:87
+#: classes/Emails/CustomEmailsAdmin.php:178
+#: classes/Emails/CustomEmailsAdmin.php:188
+#: classes/Emails/CustomEmailsAdmin.php:394
+#: classes/Emails/CustomEmailsAdmin.php:404
+msgid "Confirmed booking email"
+msgstr "E-Mail für Buchungsbestätigungen"
+
+#: templates/forms/event/booking-stats.php:13
+msgid "Confirmed Spaces"
+msgstr "Bestätigte Plätze"
+
+#: build/index.js:1
+msgid "Contact"
+msgstr "Kontaktieren"
+
+#: classes/Gateways/gateway.mollie.php:218
+msgid "Continue"
+msgstr "Weiter"
+
+#: admin/em-data-privacy.php:382 admin/em-data-privacy.php:455
+msgid "Coordinates"
+msgstr "Koordinaten"
+
+#: classes/Coupons/Coupons.php:311
+msgid "Count"
+msgstr "Anzahl"
+
+#: classes/Gateways/Gateways.php:44 classes/Locations/LocationPostsAdmin.php:60
+#: em-install.php:536 em-install.php:662 em-install.php:685 build/index.js:1
+msgid "Country"
+msgstr "Land"
+
+#: classes/Coupons/CouponAdmin.php:77 classes/Coupons/CouponAdmin.php:81
+#: classes/Coupons/CouponAdmin.php:86 classes/Coupons/CouponAdmin.php:88
+#: classes/Coupons/CouponAdmin.php:108 build/booking.js:1
+msgid "Coupon"
+msgstr "Gutschein"
+
+#: classes/Coupons/CouponsAdmin.php:285 classes/Coupons/CouponsAdmin.php:405
+msgid "coupon"
+msgstr "Gutschein"
+
+#: classes/Coupons/CouponsAdmin.php:423
+msgid "Coupon Availability"
+msgstr "Gutschein-Verfügbarkeit"
+
+#: classes/Coupons/Coupons.php:571 classes/Coupons/Coupons.php:688
+#: classes/Coupons/CouponsAdmin.php:436 build/admin.js:1
+msgid "Coupon Code"
+msgstr "Gutscheincode"
+
+#: build/booking.js:1
+msgid "Coupon code"
+msgstr "Gutscheincode"
+
+#: classes/Coupons/CouponsAdmin.php:346 classes/Coupons/CouponsAdmin.php:357
+msgid "Coupon Discount"
+msgstr "Rabattgutschein"
+
+#: classes/Coupons/Coupons.php:179 classes/Coupons/Coupons.php:193
+#: classes/Coupons/Coupons.php:287 classes/Coupons/Coupons.php:592
+msgid "Coupon Invalid"
+msgstr "Ungültiger Gutschein"
+
+#: classes/Coupons/Coupons.php:357
+msgid "Coupon Name"
+msgstr "Gutscheinname"
+
+#: classes/Coupons/Coupons.php:182 classes/Coupons/Coupons.php:187
+#: classes/Coupons/Coupons.php:274 classes/Coupons/Coupons.php:583
+msgid "Coupon Not Found"
+msgstr "Gutschein nicht gefunden"
+
+#: classes/Coupons/CouponsAdmin.php:314
+msgid "Coupon Usage History"
+msgstr "Gutschein Verwendungsverlauf"
+
+#: classes/Coupons/CouponsAdmin.php:39 classes/Coupons/CouponsAdmin.php:133
+#: classes/Coupons/CouponsAdmin.php:202 classes/Coupons/CouponsAdmin.php:205
+msgid "Coupons"
+msgstr "Gutscheine"
+
+#: classes/Coupons/CouponsAdmin.php:133
+msgid "Coupons Manager"
+msgstr "Gutscheinverwaltung"
+
+#: classes/Coupons/CouponsAdmin.php:50
+msgid "Coupons selected here will be applied to bookings made for this event."
+msgstr ""
+"Hier ausgewählte Gutscheine werden für Buchungen für diese Veranstaltung "
+"verwendet."
+
+#: classes/Coupons/CouponsAdmin.php:474
+msgid "Coupons will not be valid after this date."
+msgstr "Gutscheine werden nach diesem Datum ungültig."
+
+#: classes/Coupons/CouponsAdmin.php:465
+msgid "Coupons will only be valid from this date onwards."
+msgstr "Gutscheine sind erst ab diesem Zeitpunkt gültig."
+
+#: classes/Forms/FormPostAdmin.php:21 classes/Forms/FormPostAdmin.php:56
+msgid "Create"
+msgstr "Erstellen"
+
+#: classes/Coupons/CouponsAdmin.php:222 classes/Coupons/CouponsAdmin.php:232
+msgid "Created By"
+msgstr "Erstellt von"
+
+#: classes/Gateways/gateway.mollie.php:465
+msgid "Credit Card"
+msgstr "Kreditkarte"
+
+#: admin/settings/bookings.php:27
+msgid "Currency"
+msgstr "Währung"
+
+#: admin/settings/general.php:17
+#| msgid "Current events"
+msgid "Current Events"
+msgstr "Laufende Veranstaltungen"
+
+#: admin/settings/general.php:17
+msgid "Currently running events should be treated as already passed"
+msgstr "Aktuell laufende Veranstaltungen werden als bereits vorbei behandelt"
+
+#: classes/Emails/CustomEmailsAdmin.php:454
+#: classes/Emails/CustomEmailsAdmin.php:455
+msgid "Custom Automated Emails"
+msgstr "Eigene automatisierte Emails"
+
+#: classes/Emails/CustomEmailsAdmin.php:310 classes/Emails/EmailsAdmin.php:76
+#: classes/Emails/EmailsAdmin.php:83
+msgid "Custom Booking Email Templates"
+msgstr "Eigene Buchungs Email-Vorlagen"
+
+#: build/index.js:1
+msgid "Custom URL"
+msgstr "Eigene URL"
+
+#: admin/settings/bookings.php:36
+msgid "Customize Feedback Messages"
+msgstr "Feedback Nachrichten Anpassen"
+
+#: templates/forms/event/when-with-recurring.php:35 build/index.js:1
+msgid "Daily"
+msgstr "Täglich"
+
+#: build/index.js:1
+msgid "Data"
+msgstr "Daten"
+
+#: admin/em-bookings.php:106 admin/em-data-privacy.php:274
+#: build/blocks/details-date/render.php:14 classes/Forms/FormPostAdmin.php:29
+#: classes/Forms/FormPostAdmin.php:71 classes/Gateways/Gateways.php:517
+#: classes/Gateways/gateways.transactions.php:130 build/admin.js:1
+#: build/index.js:1
+msgid "Date"
+msgstr "Datum"
+
+#: classes/Events/EventPostsAdmin.php:190
+#: classes/Events/EventPostsAdmin.php:393
+msgid "Date and Time"
+msgstr "Datum und Uhrzeit"
+
+#: admin/bookings/em-events.php:96
+msgid "Date and time"
+msgstr "Datum und Uhrzeit"
+
+#: em-install.php:528
+msgid "Dates"
+msgstr "Daten"
+
+#: classes/Events/Event.php:858 classes/Events/Event.php:865
+msgid ""
+"Dates must have correct formatting. Please use the date picker provided."
+msgstr ""
+"Daten müssen richtig formatiert werden. Bitte benutze die Datumsauswahl."
+
+#: templates/forms/event/when-with-recurring.php:41 build/index.js:1
+msgid "day"
+msgstr "Tag"
+
+#: templates/forms/event/bookings-ticket-form.php:49
+#: templates/forms/event/bookings-ticket-form.php:67
+#: templates/forms/event/bookings.php:100
+#: templates/forms/event/bookings.php:105
+#: templates/forms/event/bookings.php:176
+msgid "day(s)"
+msgstr "Tage"
+
+#: templates/forms/event/when-with-recurring.php:42 build/index.js:1
+msgid "days"
+msgstr "Tage"
+
+#: classes/Emails/EmailsAdmin.php:41
+msgid "Days before reminder"
+msgstr "Tage vor der Erinnerung"
+
+#: em-install.php:502
+msgid ""
+"Dear #_BOOKINGNAME, <br />This is a reminder about your #_BOOKINGSPACES "
+"space/spaces reserved for #_EVENTNAME.<br />When : #_EVENTDATES @ "
+"#_EVENTTIMES<br />Where : #_LOCATIONNAME - #_LOCATIONFULLLINE<br />We look "
+"forward to seeing you there!<br />Yours faithfully,<br />#_CONTACTNAME"
+msgstr ""
+"Hallo #_BOOKINGNAME, <br />Dies ist eine Erinnerungs-Email an Deine Buchung "
+"für #_EVENTNAME.<br />Gebuchte Plätze: #_BOOKINGSPACES<br />Wann: "
+"#EVENTDATES @ _#EVENTTIMES<br />Wo: #_LOCATIONNAME - #LOCATIONFULLLINE<br />"
+"Wir freuen uns auf Deinen Besuch!<br />Viele Grüße,<br />#_CONTACTNAME"
+
+#: em-install.php:475
+msgid ""
+"Dear #_BOOKINGNAME, <br/>You have requested #_BOOKINGSPACES space/spaces for "
+"#_EVENTNAME.<br/>When : #_EVENTDATES @ #_EVENTTIMES<br/>Where : "
+"#_LOCATIONNAME - #_LOCATIONFULLLINE<br/>Your booking is currently pending "
+"approval by our administrators. Once approved you will receive an automatic "
+"confirmation.<br/>Yours faithfully,<br/>#_CONTACTNAME"
+msgstr ""
+"Liebe/Lieber #_BOOKINGNAME, <br/>Du hast für die Veranstaltung #_EVENTNAME "
+"#_BOOKINGSPACES Platz/Plätze angefragt.<br/>Wann : #_EVENTDATES @ "
+"#_EVENTTIMES<br/>Wo : #_LOCATIONNAME - #_LOCATIONFULLLINE<br/>Deine Buchung "
+"muss noch von den Administratoren genehmigt werden. Nach der Genehmigung "
+"wirst du automatisch eine Bestätigung erhalten.<br/>Mit freundlichen Grüßen, "
+"<br/>#_CONTACTNAME"
+
+#: em-install.php:474
+msgid ""
+"Dear #_BOOKINGNAME, <br/>You have successfully reserved #_BOOKINGSPACES "
+"space/spaces for #_EVENTNAME.<br/>When : #_EVENTDATES @ #_EVENTTIMES<br/>"
+"Where : #_LOCATIONNAME - #_LOCATIONFULLLINE<br/>Yours faithfully,<br/>"
+"#_CONTACTNAME"
+msgstr ""
+"Liebe/r #_BOOKINGNAME, <br/>Du hast erfolgreich #_BOOKINGSPACES Platz/Plätze "
+"für #_EVENTNAME gebucht.<br/>Wann : #_EVENTDATES @ #_EVENTTIMES<br/>Wo : "
+"#_LOCATIONNAME - #_LOCATIONFULLLINE<br/>Mit freundlichen Grüßen, <br/>"
+"#_CONTACTNAME"
+
+#: em-install.php:477
+msgid ""
+"Dear #_BOOKINGNAME, <br/>Your requested booking for #_BOOKINGSPACES spaces "
+"at #_EVENTNAME on #_EVENTDATES has been cancelled.<br/>Yours faithfully,<br/>"
+"#_CONTACTNAME"
+msgstr ""
+"Liebe/Lieber #_BOOKINGNAME, <br/>Deine Buchung für die Veranstaltung "
+"#_EVENTNAME mit  #_BOOKINGSPACES Plätzen am #_EVENTDATES wurde storniert."
+"<br/>Mit freundlichen Grüßen, <br/>#_CONTACTNAME"
+
+#: em-install.php:476
+msgid ""
+"Dear #_BOOKINGNAME, <br/>Your requested booking for #_BOOKINGSPACES spaces "
+"at #_EVENTNAME on #_EVENTDATES has been rejected.<br/>Yours faithfully,<br/>"
+"#_CONTACTNAME"
+msgstr ""
+"Liebe/Lieber #_BOOKINGNAME, <br/>Deine Buchung für die Veranstaltung "
+"#_EVENTNAME mit  #_BOOKINGSPACES Plätzen am #_EVENTDATES wurde abgewiesen."
+"<br/>Mit freundlichen Grüßen, <br/>#_CONTACTNAME"
+
+#: admin/bookings/em-cancelled.php:55 admin/bookings/em-confirmed.php:56
+#: admin/bookings/em-pending.php:70 admin/bookings/em-person.php:57
+#: admin/bookings/em-rejected.php:55
+msgid "Decline"
+msgstr "Ablehnen"
+
+#: classes/Emails/CustomEmailsAdmin.php:126
+#: classes/Emails/CustomEmailsAdmin.php:171 classes/Forms/AttendeeForms.php:57
+#: classes/Forms/BookingsForm.php:70 em-install.php:678
+msgid "Default"
+msgstr "Standard"
+
+#: admin/settings/general.php:42
+msgid "Default event list ordering"
+msgstr "Standard Sortierung der Veranstaltungsliste"
+
+#: admin/settings/general.php:35
+msgid "Default Location"
+msgstr "Standard-Veranstaltungsort"
+
+#: admin/settings/general.php:36
+msgid "Default Location Country"
+msgstr "Standard-Land"
+
+#: admin/bookings/em-cancelled.php:113 admin/bookings/em-confirmed.php:118
+#: admin/bookings/em-pending.php:134 admin/bookings/em-person.php:127
+#: admin/bookings/em-rejected.php:113 classes/Bookings/BookingsTable.php:644
+#: classes/Bookings/BookingsTable.php:653
+#: classes/Bookings/BookingsTable.php:660
+#: classes/Bookings/BookingsTable.php:669 classes/Coupons/CouponsAdmin.php:244
+#: classes/Events/EventPostsAdmin.php:249 classes/Forms/FormPostAdmin.php:42
+#: classes/Forms/FormPostAdmin.php:84 classes/Gateways/gateway.offline.php:137
+#: classes/Gateways/gateways.transactions.php:311
+#: templates/forms/event/bookings.php:82
+msgid "Delete"
+msgstr "Löschen"
+
+#: admin/bookings/em-events.php:54
+msgid "Delete selected"
+msgstr "Lösche ausgewählte"
+
+#: admin/em-bookings.php:237
+msgid "Delete User"
+msgstr "Benutzer löschen"
+
+#: classes/Gateways/Gateways.php:512
+msgid "Deleted Event"
+msgstr "Gelöschte Veranstaltung"
+
+#: admin/settings/emails.php:27
+msgid ""
+"Depending on server settings, some sending methods may ignore this settings."
+msgstr ""
+"Abhängig von den Server Einstellungen, können manche Sendemethoden diese "
+"Einstellungen ignorieren."
+
+#: admin/settings/general.php:62 build/index.js:1
+msgid "Descending"
+msgstr "Absteigend"
+
+#: admin/em-bookings.php:156 classes/Coupons/Coupons.php:308
+#: classes/Coupons/CouponsAdmin.php:59 classes/Coupons/CouponsAdmin.php:223
+#: classes/Coupons/CouponsAdmin.php:233 classes/Coupons/CouponsAdmin.php:447
+#: classes/Forms/FormPostAdmin.php:28 classes/Forms/FormPostAdmin.php:70
+#: multilingual/em-ml-admin.php:86
+#: templates/forms/event/bookings-ticket-form.php:18
+msgid "Description"
+msgstr "Beschreibung"
+
+#: classes/Events/EventPostsAdmin.php:246
+msgid "Detach"
+msgstr "Herauslösen"
+
+#: build/index.js:1
+msgid "Details about how to fill this field"
+msgstr "Details zum Ausfüllen dieses Feldes"
+
+#: classes/Gateways/gateway.mollie.php:481
+msgid "Digital Payment Service"
+msgstr "Digitaler Bezahldienstleister"
+
+#: classes/Gateways/gateway.mollie.php:466
+msgid "Direct Debit"
+msgstr "Direct Debit"
+
+#: classes/Emails/CustomEmailsAdmin.php:128
+msgid "Disabled"
+msgstr "Deaktiviert"
+
+#: classes/Coupons/Coupon.php:60 classes/Coupons/Coupons.php:309
+#: classes/Coupons/Coupons.php:359 classes/Coupons/CouponsAdmin.php:58
+#: classes/Coupons/CouponsAdmin.php:224 classes/Coupons/CouponsAdmin.php:234
+#: build/admin.js:1
+#| msgid "Disconnect"
+msgid "Discount"
+msgstr "Rabatt"
+
+#: classes/Coupons/CouponsAdmin.php:500
+msgid "Discount Amount"
+msgstr "Rabattbetrag"
+
+#: classes/Coupons/CouponsAdmin.php:479
+msgid "Discount Type"
+msgstr "Rabatt-Art"
+
+#: admin/em-data-privacy.php:265 templates/emails/bookingsummary.php:52
+msgid "Discounts (After Taxes)"
+msgstr "Nachlässe (nach Steuern)"
+
+#: admin/em-data-privacy.php:263 templates/emails/bookingsummary.php:29
+msgid "Discounts Before Taxes"
+msgstr "Nachlässe vor Steuern"
+
+#: em-posts.php:130
+msgid "Display events on your blog."
+msgstr "Veranstaltungen auf dem Haupt-Blog anzeigen?"
+
+#: classes/Gateways/gateway.mollie.php:328
+#: classes/Gateways/gateway.mollie.php:370
+msgid "Display Feedback Messages"
+msgstr ""
+"Rückmeldungen anzeigen\n"
+"\n"
+"\n"
+"\n"
+"\n"
+"\n"
+"\n"
+
+#: classes/Forms/FormPost.php:47 classes/Forms/FormPost.php:88
+msgid "Display forms on your blog."
+msgstr "Zeige Formulare auf dem Blog"
+
+#: em-posts.php:226
+msgid "Display locations on your blog."
+msgstr "Veranstaltungsorte im Blog anzeigen"
+
+#: classes/Gateways/gateway.mollie.php:364
+msgid "Display Payment Methods"
+msgstr "Zahlungsmethoden anzeigen"
+
+#: classes/Gateways/gateway.mollie.php:314
+#: classes/Gateways/gateway.mollie.php:368
+msgid "Display Payment Status"
+msgstr "Zahlungsstatus anzeigen"
+
+#: classes/Gateways/gateway.mollie.php:364
+msgid ""
+"Display small images of the activated payment methods on your booking form?"
+msgstr ""
+"Kleine Bilder der aktivierten Zahlungsmethoden in Ihrem Buchungsformular "
+"anzeigen?"
+
+#: classes/Gateways/gateway.mollie.php:331
+#: classes/Gateways/gateway.mollie.php:370
+msgid ""
+"Display the booking feedback messages as set in your <a href=%s "
+"target=\"_blank\">Events Manager Settings</a>?"
+msgstr ""
+"Die Buchungs-Rückmeldungen wie in Ihren <a href=%s target=\"_blank\">Events "
+"Manager Einstellungen</a> festgelegt anzeigen?"
+
+#: classes/Gateways/gateway.mollie.php:317
+#: classes/Gateways/gateway.mollie.php:368
+msgid "Display the payment status on the Return Page?"
+msgstr "Den Zahlungsstatus auf der Rückmeldeseite anzeigen?"
+
+#: classes/Admin/Pagination.php:30
+msgid "Displaying %1$s&#8211;%2$s of %3$s"
+msgstr "Anzeige %1$s&#8211;%2$s von %3$s"
+
+#: classes/Gateways/gateways.transactions.php:183
+msgid "Displaying Event"
+msgstr "Zeige Veranstaltung"
+
+#: classes/Gateways/gateways.transactions.php:185
+msgid "Displaying User"
+msgstr "Zeige Benutzer"
+
+#: admin/em-docs.php:193
+msgid "Displays the beneficiary name."
+msgstr "Zeigt den namen des Begünstigten"
+
+#: classes/Gateways/gateway.php:641
+msgid "documentation"
+msgstr "Dokumentation"
+
+#: build/index.js:1
+msgid "Don't show"
+msgstr "Nicht anzeigen"
+
+#: build/booking.js:1
+msgid "Done"
+msgstr "Fertig"
+
+#: classes/Bookings/BookingsTable.php:271
+msgid "Drag items to or from the left column to add or remove them."
+msgstr ""
+"Felder von oder zur linken Spalte ziehen, um sie hinzuzufügen oder zu "
+"entfernen."
+
+#: build/index.js:1
+msgid "Drop shadow"
+msgstr "Schatten anzeigen"
+
+#: classes/Events/EventPostsAdmin.php:307
+#: classes/Events/EventPostsAdmin.php:444
+msgid "Duplicate"
+msgstr "Duplizieren"
+
+#: classes/Events/EventPostsAdmin.php:307
+#: classes/Events/EventPostsAdmin.php:444
+msgid "Duplicate %s"
+msgstr "%s duplizieren "
+
+#: classes/Speaker/Speakers.php:72 build/index.js:1
+msgid "E-Mail"
+msgstr "E-Mail"
+
+#: admin/bookings/em-cancelled.php:85 admin/bookings/em-confirmed.php:86
+#: admin/bookings/em-pending.php:103 admin/bookings/em-rejected.php:85
+#: classes/Bookings/BookingsTable.php:94
+#: templates/templates/bookings-event-printable.php:25
+msgid "E-mail"
+msgstr "E-Mail"
+
+#: admin/settings/general.php:19
+msgid "e.g. %s - you can use / Separators too"
+msgstr "z.B. %s - kannst du / Seperatoren ebenfalls verwenden"
+
+#: build/index.js:1
+msgid "e.g. maximal age for an attendee"
+msgstr "z.B. das Höchstalter für Teilnehmer"
+
+#: build/index.js:1
+msgid "e.g. minimal age for an attendee"
+msgstr "z.B. das Mindestalter für Teilnehmer"
+
+#: templates/forms/event/when-with-recurring.php:69
+msgid "Each event spans %s day(s)"
+msgstr "Jede Veranstaltung dauert %s Tage."
+
+#: classes/Forms/FormPost.php:60 classes/Forms/FormPost.php:100
+#: classes/Forms/FormPostAdmin.php:41 classes/Forms/FormPostAdmin.php:83
+#: classes/Speaker/Speakers.php:40 em-posts.php:136 em-posts.php:182
+#: em-posts.php:233 templates/forms/event/bookings.php:80
+msgid "Edit"
+msgstr "Bearbeiten"
+
+#: admin/settings/emails.php:18
+msgid "edit"
+msgstr "Bearbeiten"
+
+#: admin/em-bookings.php:89
+msgid "Edit %s"
+msgstr "Bearbeiten %s"
+
+#: classes/Gateways/gateway.php:592
+msgid "Edit %s settings"
+msgstr "%s Einstellungen bearbeiten"
+
+#: classes/Bookings/Booking.php:1142
+msgid "Edit Booking"
+msgstr "Buchung bearbeiten"
+
+#: admin/em-admin.php:43
+msgid "Edit booking and attendee forms"
+msgstr "Buchungs- und Teilnehmerformulare bearbeiten"
+
+#: admin/em-bookings.php:197
+msgid "Edit Booking for %s"
+msgstr "Buchung für %s bearbeiten"
+
+#: classes/Coupons/CouponsAdmin.php:414
+msgid "Edit Coupon"
+msgstr "Gutschein bearbeiten"
+
+#: classes/Coupons/CouponsAdmin.php:189
+msgid "Edit Coupons"
+msgstr "Gutscheine bearbeiten"
+
+#: classes/Events/Event.php:1833 em-posts.php:137
+#| msgid "Edit events"
+msgid "Edit Event"
+msgstr "Veranstaltungen bearbeiten"
+
+#: em-posts.php:77
+msgid "Edit Event Category"
+msgstr "Veranstaltungskategorie bearbeiten"
+
+#: em-posts.php:42
+msgid "Edit Event Tag"
+msgstr "Veranstaltungsschlagwort bearbeiten"
+
+#: classes/Forms/FormPost.php:61 classes/Forms/FormPost.php:101
+msgid "Edit Form"
+msgstr "Formular bearbeiten"
+
+#: classes/Gateways/gateways-admin.php:44
+msgid "Edit Gateways"
+msgstr "Gateway bearbeiten"
+
+#: em-posts.php:234
+#| msgid "Edit locations"
+msgid "Edit Location"
+msgstr "Standort bearbeiten"
+
+#: build/admin.js:1
+msgid "Edit Note"
+msgstr "Notiz bearbeiten"
+
+#: em-posts.php:183
+msgid "Edit Recurring Event"
+msgstr "Wiederkehrende Veranstaltung bearbeiten"
+
+#: classes/Events/EventPostsAdmin.php:245
+msgid "Edit Recurring Events"
+msgstr "Wiederkehrende Veranstaltungen bearbeiten"
+
+#: classes/Speaker/Speakers.php:41
+msgid "Edit Speaker"
+msgstr "Referent bearbeiten"
+
+#: build/admin.js:1
+msgid "Edit Ticket"
+msgstr "Ticket bearbeiten"
+
+#: admin/em-bookings.php:234
+msgid "Edit User"
+msgstr "Benutzer bearbeiten"
+
+#: admin/bookings/em-cancelled.php:112 admin/bookings/em-confirmed.php:119
+#: admin/bookings/em-pending.php:135 admin/bookings/em-person.php:126
+#: admin/bookings/em-rejected.php:112 classes/Bookings/BookingsTable.php:645
+#: classes/Bookings/BookingsTable.php:654
+#: classes/Bookings/BookingsTable.php:661
+#: classes/Bookings/BookingsTable.php:670 classes/Coupons/CouponsAdmin.php:383
+#: classes/Gateways/gateway.offline.php:138
+msgid "Edit/View"
+msgstr "Bearbeiten/Anzeigen"
+
+#: classes/Coupons/Coupons.php:355 classes/Forms/BookingsForm.php:48
+#: classes/Forms/FormPost.php:50 classes/Gateways/Gateways.php:425
+#: classes/People/Person.php:96 classes/People/Person.php:109
+#: em-install.php:491 em-install.php:680
+msgid "Email"
+msgstr "E-Mail"
+
+#: admin/settings/emails.php:46
+msgid "Email event owner?"
+msgstr "E-Mails an den Veranstaltungseigentümer"
+
+#: admin/settings/emails.php:45
+msgid "Email events admin?"
+msgstr "E-Mails an Administrator der Veranstaltung?"
+
+#: classes/Bookings/Booking.php:1011 em-actions.php:343 em-actions.php:366
+msgid "Email Sent."
+msgstr "Nachricht versendet."
+
+#: admin/settings/emails.php:14
+msgid "Email Settings"
+msgstr "E-Mail Einstellungen"
+
+#: admin/em-options.php:88
+msgid "Emails"
+msgstr "E-Mails"
+
+#: build/index.js:1
+msgid "Empty option"
+msgstr "Leeroption"
+
+#: classes/Emails/EmailsAdmin.php:40 classes/Emails/EmailsAdmin.php:83
+msgctxt "Enable a feature in settings page"
+msgid "Enable %s?"
+msgstr "%s aktivieren?"
+
+#: admin/settings/bookings.php:54
+msgid "Enable custom ticket ordering?"
+msgstr "Individuelle Ticket-Sortierung aktivieren?"
+
+#: templates/forms/event/bookings.php:8
+msgid "Enable registration for this event"
+msgstr "Buchung/Anmeldung für diese Veranstaltung aktivieren"
+
+#: classes/Emails/CustomEmailsAdmin.php:127
+msgid "Enabled"
+msgstr "Aktiviert"
+
+#: admin/em-bookings.php:162 build/index.js:1
+msgid "End"
+msgstr "Ende"
+
+#: classes/Coupons/CouponsAdmin.php:469
+msgid "End Date"
+msgstr "Enddatum"
+
+#: build/index.js:1
+msgid "Ends at"
+msgstr "Endet um"
+
+#: classes/Intl/Date.php:62
+msgid "Ends at:"
+msgstr "Endet um:"
+
+#: build/index.js:1
+msgid "Enough free spaces left"
+msgstr "Genug freie Plätze verfügbar"
+
+#: templates/forms/event/bookings-ticket-form.php:24
+msgid "Enter a maximum number of spaces (required)."
+msgstr "Gebe eine maximale Anzahl an Plätzen an (erforderlich)."
+
+#: classes/Coupons/CouponsAdmin.php:503
+msgid "Enter a number here only, decimals accepted."
+msgstr "Zahl eingeben, nur Dezimalzahlen erlaubt"
+
+#: templates/forms/event/bookings-ticket-form.php:14
+msgid "Enter a ticket name."
+msgstr "Gebe einen Ticketnamen an."
+
+#: build/index.js:1
+msgid "Enter audience"
+msgstr "Zielgruppe angeben"
+
+#: classes/Gateways/gateway.mollie.php:467
+msgid "EPS"
+msgstr "EPS"
+
+#: build/admin.js:1
+msgid "Error"
+msgstr "Fehler"
+
+#: classes/Bookings/Booking.php:1015 classes/Bookings/Booking.php:1016
+#: em-actions.php:348 em-actions.php:375
+msgid "ERROR : Email Not Sent."
+msgstr "FEHLER: Nachricht nicht versendet."
+
+#: build/index.js:1
+msgid "Error message"
+msgstr "Fehlermeldung"
+
+#: admin/bookings/em-events.php:93 admin/bookings/em-pending.php:101
+#: admin/bookings/em-person.php:86 admin/em-bookings.php:88
+#: admin/em-bookings.php:89 admin/em-data-privacy.php:275
+#: admin/em-data-privacy.php:358 admin/em-data-privacy.php:360
+#: classes/Bookings/BookingsTable.php:91 classes/Coupons/Coupons.php:351
+#: classes/Coupons/CouponsAdmin.php:342 classes/Coupons/CouponsAdmin.php:353
+#: classes/Events/Event.php:1054 classes/Events/Event.php:1069
+#: classes/Events/Event.php:1145 classes/Events/EventPostsAdmin.php:181
+#: classes/Events/EventPostsAdmin.php:183
+#: classes/Events/EventPostsAdmin.php:307
+#: classes/Events/EventPostsAdmin.php:384
+#: classes/Events/EventPostsAdmin.php:386
+#: classes/Events/EventPostsAdmin.php:444 classes/Gateways/Gateways.php:513
+#: classes/Gateways/gateways.transactions.php:128 em-actions.php:121
+#: em-posts.php:133
+msgid "Event"
+msgstr "Veranstaltung"
+
+#: classes/Events/Event.php:1049 classes/Events/Event.php:1065
+#: classes/Events/EventPostAdmin.php:139
+msgid "event"
+msgstr "Veranstaltung"
+
+#: admin/settings/emails.php:49
+msgid "Event Admin/Owner Emails"
+msgstr "E-Mail des Veranstaltungsadminstrators/Eigentümers"
+
+#: admin/em-bookings.php:49
+msgid "Event Bookings Dashboard"
+msgstr "Buchungsübersicht"
+
+#: em-posts.php:67 em-posts.php:70
+msgid "Event Categories"
+msgstr "Kategorien"
+
+#: em-posts.php:68 em-posts.php:71
+msgid "Event Category"
+msgstr "Veranstaltungskategorie"
+
+#: classes/Events/Event.php:2109
+msgid "Event could not be attached."
+msgstr "%s konnte nicht hinzugefügt werden."
+
+#: classes/Events/Event.php:2092
+msgid "Event could not be detached."
+msgstr "%s konnte nicht herausgelöst werden."
+
+#: classes/Bookings/BookingsTable.php:92
+msgid "Event Date(s)"
+msgstr "Veranstaltungsdatum/daten"
+
+#: classes/Events/Event.php:2088
+msgid "Event detached."
+msgstr "Veranstaltung herausgelöst."
+
+#: classes/Emails/EmailsAdmin.php:29 classes/Emails/EmailsAdmin.php:40
+msgid "Event Email Reminders"
+msgstr "Erinnerungs-Mails"
+
+#: classes/Emails/EmailsAdmin.php:86
+#| msgid "Event Details"
+msgid "Event Emails"
+msgstr "Veranstaltungsmails"
+
+#: admin/em-options.php:81
+#| msgid "Event Manager titles"
+msgid "Event Manager Options"
+msgstr "Veranstaltungsoptionen"
+
+#: admin/em-bookings.php:97 admin/em-data-privacy.php:357
+msgid "Event Name"
+msgstr "Veranstaltungsname"
+
+#: classes/Events/Event.php:826
+msgid "Event name"
+msgstr "Veranstaltungsname"
+
+#: templates/forms/event/bookings.php:147
+msgid "Event Options"
+msgstr "Veranstaltungsoptionen"
+
+#: classes/Emails/CustomEmailsAdmin.php:174
+#: classes/Emails/CustomEmailsAdmin.php:390
+msgid "Event Owner Emails"
+msgstr "Veranstaltungseigentümer bearbeiten"
+
+#: classes/Events/Event.php:2106
+msgid "Event re-attached to recurrence."
+msgstr "Veranstaltung der Veranstaltungsreihe wieder hinzugefügt."
+
+#. Description of the plugin
+#| msgid ""
+#| "Event registration and booking management for WordPress. Recurring events,"
+#| " locations, webinars, google maps, rss, ical, booking registration and "
+#| "more!"
+msgid ""
+"Event registration and booking management for WordPress. Recurring events, "
+"locations, webinars, ical, booking registration and more!"
+msgstr ""
+"Veranstaltungssystem und Buchungsverwaltung für WordPress. Wiederkehrende "
+"Veranstaltungen, Veranstaltungsorte, Webinars, Google Maps, RSS, iCal, "
+"Buchungssystem und mehr!"
+
+#: admin/em-help.php:23
+msgid "Event Related Placeholders"
+msgstr "Platzhalter für Veranstaltungen"
+
+#: templates/forms/event/when-with-recurring.php:23
+#: templates/forms/event/when.php:24
+msgid "Event starts at"
+msgstr "Veranstaltung findet statt von"
+
+#: em-posts.php:36
+msgid "Event Tag"
+msgstr "Veranstaltungsschlagwort"
+
+#: em-posts.php:35
+msgid "Event Tags"
+msgstr "Schlagworte"
+
+#: classes/Bookings/BookingsTable.php:93
+msgid "Event Time(s)"
+msgstr "Veranstaltungszeit(en)"
+
+#. Plugin Name of the plugin
+#: admin/em-data-privacy.php:48 admin/em-data-privacy.php:199
+#: admin/em-data-privacy.php:348 em-actions.php:121 em-install.php:546
+#: em-posts.php:129 em-posts.php:132 em-posts.php:134
+msgid "Events"
+msgstr "Veranstaltungen"
+
+#: admin/settings/general.php:18 events.php:179 events.php:180 events.php:181
+#: events.php:182 events.php:183 events.php:184
+msgid "events"
+msgstr "Veranstaltungen"
+
+#: classes/Events/EventPostsAdmin.php:130
+msgctxt "events"
+msgid "Future <span class=\"count\">(%s)</span>"
+msgid_plural "Future <span class=\"count\">(%s)</span>"
+msgstr[0] "Zukünftige <span class=\"count\">(%s)</span>"
+msgstr[1] "Zukünftige <span class=\"count\">(%s)</span>"
+
+#: admin/settings/general.php:14
+msgid "Events can be managed as a collection of recurring events"
+msgstr ""
+"Veranstaltungen können als Sammlung von wiederkehrenden Veranstaltungen "
+"verwaltet werden"
+
+#: classes/Events/Event.php:851 classes/Events/Event.php:853
+msgid "Events cannot start after they end."
+msgstr "Veranstaltung kann nicht enden, bevor sie begonnen hat."
+
+#: em-functions.php:77
+msgid "Events current and next month"
+msgstr "Veranstaltungen in diesem und nächsten Monat"
+
+#: em-install.php:80
+msgid "Events has been updated to version "
+msgstr "Events Manager wurde aktualisiert"
+
+#: admin/em-data-privacy.php:30 admin/em-data-privacy.php:38
+#: admin/em-data-privacy.php:44 admin/em-data-privacy.php:48
+#: admin/em-data-privacy.php:54 admin/em-data-privacy.php:184
+#: admin/em-data-privacy.php:189 admin/em-data-privacy.php:195
+#: admin/em-data-privacy.php:199 admin/em-data-privacy.php:205
+#: classes/People/People.php:41
+msgid "Events Manager"
+msgstr "Events Manager"
+
+#: classes/Emails/EmailsAdmin.php:34
+msgid ""
+"Events Manager can send people that booked a place at your events a reminder "
+"email before it starts."
+msgstr ""
+"Events Manager kann den Veranstaltungsgästen vor Start der Veranstaltung "
+"eine Erinnerungs per Email senden."
+
+#: classes/Gateways/gateway.mollie.php:338
+#: classes/Gateways/gateway.mollie.php:371
+msgid "Events Manager Placeholders"
+msgstr "Events Manager Platzhalter"
+
+#: admin/em-admin.php:40
+msgid "Events Manager Settings"
+msgstr "Events Manager Einstellungen"
+
+#: em-functions.php:76
+msgid "Events next month"
+msgstr "Veranstaltungen im nächsten Monat"
+
+#: templates/forms/event/when-with-recurring.php:22
+msgid "Events start from"
+msgstr "Veranstaltungen beginnen ab"
+
+#: em-functions.php:74
+msgid "Events this month"
+msgstr "Veranstaltungen in diesem Monat"
+
+#: em-functions.php:75
+msgid "Events this month (today onwards)"
+msgstr "Veranstaltungen in diesem Monat (ab heute)"
+
+#: em-functions.php:73
+msgid "Events this week (today to %s)"
+msgstr "Veranstaltungen in dieser Woche (heute bis %s)"
+
+#: em-functions.php:72
+msgid "Events this whole week (%s to %s)"
+msgstr "Veranstaltungen in dieser Woche (%s bis %s)"
+
+#: admin/em-bookings.php:62
+msgid "Events With Bookings Enabled"
+msgstr "Veranstaltungen mit Buchungsmöglichkeit"
+
+#: em-functions.php:81
+msgid "Events within 12 months"
+msgstr "Veranstaltungen innerhalb von 12 Monaten"
+
+#: em-functions.php:78
+msgid "Events within 2 months"
+msgstr "Veranstaltungen innerhalb von 2 Monaten"
+
+#: em-functions.php:79
+msgid "Events within 3 months"
+msgstr "Veranstaltungen innerhalb von 3 Monaten"
+
+#: em-functions.php:80
+msgid "Events within 6 months"
+msgstr "Veranstaltungen innerhalb von 6 Monaten"
+
+#: build/index.js:1
+msgid "Every"
+msgstr "Jeden"
+
+#: templates/forms/event/when-with-recurring.php:39
+msgid "every"
+msgstr "jede(r/n)"
+
+#: classes/Events/Event.php:2654
+msgid "every %s days"
+msgstr "jeden %s. Tag"
+
+#: classes/Events/Event.php:2678
+msgid "every %s months"
+msgstr "jedes %s Monat"
+
+#: classes/Events/Event.php:2665
+msgid "every %s weeks"
+msgstr "alle %s Wochen"
+
+#: classes/Events/Event.php:2683
+msgid "every %s years"
+msgstr "alle %s Jahre"
+
+#: classes/Emails/EmailsAdmin.php:49
+msgid ""
+"Every day Events Manager automatically checks upcoming events in order to "
+"generate emails. You can choose at what time of day to run this check, if "
+"your site has a lot of traffic, it may help having this run at times of "
+"lower server loads."
+msgstr ""
+"Events Manager überprüft täglich anstehende Veranstaltungen, um Emails zu "
+"generieren. Du kannst einstellen, zu welcher Tageszeit diese Überprüfungen "
+"laufen. Wenn Deine Site viele Zugriffe hat, kannst Du dies zu Zeiten "
+"niedrigerer Last laufen lassen."
+
+#: classes/Events/Event.php:2663
+msgid "every week"
+msgstr "jede Woche"
+
+#: classes/Events/Event.php:2681
+msgid "every year"
+msgstr "jährlich"
+
+#: classes/Events/Event.php:2652
+msgid "everyday"
+msgstr "täglich"
+
+#: templates/forms/event/bookings-ticket-form.php:86
+msgid "Everyone"
+msgstr "Jeden"
+
+#: build/index.js:1
+msgid "Exclude current event"
+msgstr "Aktuelles Event ausschließen"
+
+#: Assets.php:197
+msgid "Expand All"
+msgstr "Alle aufklappen"
+
+#: classes/Gateways/gateway.mollie.php:447
+msgid "expired"
+msgstr "abgelaufen"
+
+#: Assets.php:160 classes/Bookings/BookingsTable.php:294
+msgid "Export Bookings"
+msgstr "Buchungen exportieren"
+
+#: admin/em-bookings.php:91
+msgid "Export CSV"
+msgstr "Exportiere CSV"
+
+#: templates/forms/event/booking-stats.php:30
+msgid "export csv"
+msgstr "CSV exportieren"
+
+#: classes/Bookings/BookingsTable.php:381
+msgid "Export these bookings."
+msgstr "Diese Buchungen exportieren."
+
+#: classes/Gateways/gateway.mollie.php:448
+msgid "failed"
+msgstr "fehlgeschlagen"
+
+#: classes/Gateways/Gateways.php:46 em-install.php:664
+#| msgid "Tax"
+msgid "Fax"
+msgstr "Fax"
+
+#: classes/Speaker/Speakers.php:74 build/index.js:1
+msgid "Female"
+msgstr "Weiblich"
+
+#: build/index.js:1
+msgid "few"
+msgstr "wenig"
+
+#: build/index.js:1
+msgid "Fifth"
+msgstr "Fünfte"
+
+#: templates/forms/event/when-with-recurring.php:59
+msgid "fifth"
+msgstr "fünfte"
+
+#: build/index.js:1
+msgid "Filter"
+msgstr "Filter"
+
+#: classes/Coupons/Coupons.php:360 classes/Coupons/CouponsAdmin.php:347
+#: classes/Coupons/CouponsAdmin.php:358
+msgid "Final Price"
+msgstr "Gesamtpreis"
+
+#: build/index.js:1
+msgid "First"
+msgstr "Erste"
+
+#: templates/forms/event/when-with-recurring.php:59
+msgid "first"
+msgstr "erste"
+
+#: classes/Bookings/BookingsTable.php:89 classes/Forms/BookingsForm.php:46
+#: classes/Forms/FormPost.php:51
+msgid "First Name"
+msgstr "Vorname"
+
+#: build/index.js:1
+msgid "First time"
+msgstr "Erster Termin"
+
+#: classes/Coupons/CouponsAdmin.php:483
+msgid "Fixed Amount"
+msgstr "Fester Betrag"
+
+#: classes/Export/ExportAdmin.php:36
+msgid "Font path"
+msgstr "Ordner für Schriftarten"
+
+#: templates/forms/event/when-with-recurring.php:71
+msgid ""
+"For a recurring event, a one day event will be created on each recurring "
+"date within this date range."
+msgstr ""
+"Für eine wiederkehrende Veranstaltung wird eine ganztägige Veranstaltung für "
+"jeden wiederkehrenden Termin in diesem Zeitraum erstellt werden."
+
+#: admin/settings/emails.php:45
+msgid ""
+"For multiple emails, separate by commas (e.g. email1@test.com,email2@test."
+"com,etc.)"
+msgstr ""
+"Für mehrere E-Mails, durch Kommata trennen (z.B. email1@example.com,"
+"email2@example.com,...)"
+
+#: classes/Emails/CustomEmailsAdmin.php:98
+msgid ""
+"For multiple emails, seperate by commas (e.g. email1@test.com,email2@test."
+"com, etc.)"
+msgstr ""
+"Mehrere E-Mail-Adressen mit Komma trennen (z.B. email1@test.com,email2@test."
+"com, etc.)"
+
+#: classes/Forms/FormPost.php:56 classes/Forms/FormPost.php:96
+msgid "Form"
+msgstr "Formular"
+
+#: classes/Forms/FormPostAdmin.php:27 classes/Forms/FormPostAdmin.php:69
+msgid "Form Name"
+msgstr "Formularname"
+
+#: admin/em-admin.php:43 classes/Forms/FormPost.php:46
+#: classes/Forms/FormPost.php:57 classes/Forms/FormPost.php:87
+#: classes/Forms/FormPost.php:97
+msgid "Forms"
+msgstr "Formulare"
+
+#: build/index.js:1
+msgid "Fourth"
+msgstr "Vierte"
+
+#: templates/forms/event/when-with-recurring.php:59
+msgid "fourth"
+msgstr "vierte"
+
+#: classes/Intl/Countries.php:18
+msgid "France"
+msgstr "Frankreich"
+
+#: admin/bookings/em-events.php:128 build/blocks/details-price/render.php:22
+#: classes/Events/EventPostsAdmin.php:268 templates/forms/event/bookings.php:89
+#: build/index.js:1
+msgid "Free"
+msgstr "Frei"
+
+#: classes/Gateways/gateway.mollie.php:365
+msgid "Free Booking Message"
+msgstr "Nachricht bei Gratis-Veranstaltungen"
+
+#: build/index.js:1
+msgid "Free Spaces"
+msgstr "Freie Plätze"
+
+#: build/blocks/details-spaces/render.php:17
+msgid "Free spaces"
+msgstr "Freie Plätze"
+
+#: classes/Intl/Date.php:120 build/index.js:1
+msgid "Fri"
+msgstr "Fri"
+
+#: build/index.js:1
+msgid "Friday"
+msgstr "Freitag"
+
+#: build/index.js:1
+msgid "From"
+msgstr "Von"
+
+#: build/index.js:1
+msgid "from"
+msgstr "von"
+
+#: templates/forms/event/when-with-recurring.php:13
+#: templates/forms/event/when.php:12
+msgid "From "
+msgstr "Von "
+
+#: classes/Events/Event.php:2650
+msgid "From %1$s to %2$s"
+msgstr "von %1$s bis %2$s"
+
+#: build/admin.js:1
+msgid "Full Price"
+msgstr "Gesamtpreis"
+
+#: build/booking.js:1
+msgid "Full price"
+msgstr "Gesamtpreis"
+
+#: classes/Gateways/gateway.offline.php:394
+msgid "Fully Paid"
+msgstr "Vollständig bezahlt"
+
+#: admin/em-data-privacy.php:184
+msgid "Further Information"
+msgstr "Weitere Informationen"
+
+#: build/index.js:1
+msgid "Future"
+msgstr "Zukunft"
+
+#: admin/bookings/em-events.php:34
+msgid "Future Events"
+msgstr "Zukünftige Veranstaltungen"
+
+#: admin/bookings/em-events.php:14 em-functions.php:68
+msgid "Future events"
+msgstr "Zukünftige Veranstaltungen"
+
+#: classes/Gateways/Gateways.php:516
+#: classes/Gateways/gateways.transactions.php:133
+msgid "Gateway"
+msgstr "Gateway"
+
+#: classes/Gateways/gateways-admin.php:37
+msgid "Gateway activated."
+msgstr "Gateway aktiviert."
+
+#: classes/Gateways/gateways-admin.php:41
+msgid "Gateway activation toggled."
+msgstr "Gateway-Aktivierung umgeschaltet."
+
+#: classes/Gateways/gateways-admin.php:39
+msgid "Gateway deactivated."
+msgstr "Gateway deaktiviert."
+
+#: classes/Gateways/gateway.php:614
+msgid "Gateway Description"
+msgstr "Gateway-Beschreibung"
+
+#: classes/Emails/EmailsAdmin.php:91
+msgid "Gateway Emails"
+msgstr "Gateway-E-Mails"
+
+#: classes/Gateways/gateways-admin.php:64
+msgid "Gateway Name"
+msgstr "Gateway Name"
+
+#: classes/Gateways/gateways-admin.php:38
+msgid "Gateway not activated."
+msgstr "Gateway nicht aktiviert."
+
+#: classes/Gateways/gateways-admin.php:40
+msgid "Gateway not deactivated."
+msgstr "Gateway nicht deaktiviert."
+
+#: classes/Gateways/gateway.php:588
+msgid "Gateway not updated."
+msgstr "Gateway nicht aktualisiert."
+
+#: classes/Emails/CustomEmailsAdmin.php:470
+#| msgid "General settings"
+msgid "Gateway Settings"
+msgstr "Gateway-Einstellungen"
+
+#: classes/Gateways/gateway.php:610
+msgid "Gateway Title"
+msgstr "Gateway-Titel"
+
+#: classes/Gateways/gateway.php:587
+msgid "Gateway updated."
+msgstr "Gateway aktualisiert"
+
+#: classes/Gateways/Gateways.php:340
+msgid "Gateway Used"
+msgstr "Benutztes Gateway"
+
+#: classes/Speaker/Speakers.php:74 build/index.js:1
+msgid "Gender"
+msgstr "Geschlecht"
+
+#: admin/em-options.php:83 admin/settings/bookings.php:7
+msgid "General"
+msgstr "Allgemein"
+
+#: classes/Gateways/Gateways.php:424
+msgid ""
+"Generated accordingly from user first/last name or full name field. If a "
+"name field isn't provided in your booking form, the username will be used "
+"instead."
+msgstr ""
+"Entsprechend generiert aus dem Vor-/Nachnamen oder vollständigem Namensfeld. "
+"Wenn kein Name im Buchungsformular angegeben wird, wird stattdessen der "
+"Benutzername verwendet."
+
+#: classes/Intl/Countries.php:16
+msgid "Germany"
+msgstr "Deutschland"
+
+#: admin/em-admin.php:41 admin/em-help.php:9
+msgid "Getting Help for Events Manager"
+msgstr "Hilfe für Events Manager"
+
+#: classes/Gateways/gateway.mollie.php:468
+#: classes/Gateways/gateway.mollie.php:485
+msgid "Gift Card"
+msgstr "Geschenk-Karte"
+
+#: classes/Gateways/gateway.offline.php:230
+#: classes/Gateways/gateway.offline.php:235
+msgid "Go back to &quot;%s&quot; bookings"
+msgstr "Gehe zurück zu den &quot;%s&quot; Buchungen"
+
+#: classes/Gateways/gateway.mollie.php:469
+msgid "Google Pay"
+msgstr "Google Pay"
+
+#: classes/Bookings/Booking.php:851 classes/Bookings/Booking.php:859
+#: classes/Bookings/BookingsTable.php:543
+msgid "Guest User"
+msgstr "Gast Benutzer"
+
+#: templates/forms/event/bookings-ticket-form.php:88
+msgid "Guest Users"
+msgstr "Gastbenutzer"
+
+#: build/index.js:1
+msgid "Height"
+msgstr "Höhe"
+
+#: admin/em-admin.php:41 build/index.js:1
+msgid "Help"
+msgstr "Hilfe"
+
+#: build/index.js:1
+msgid "Help text for the date field"
+msgstr "Hilfetext für das Datumsfeld"
+
+#: build/index.js:1
+msgid "Help text for the input field"
+msgstr "Hilfetext für das Eingabefeld"
+
+#: em-install.php:517
+msgid "Hide Advanced Search"
+msgstr "Erweiterte Suche verbergen"
+
+#: build/index.js:1
+msgid "Highest Date"
+msgstr "Spätestes Datum"
+
+#: classes/Export/ExportAdmin.php:36
+msgid "Hint: Theme path is "
+msgstr "Hinweis: Themen-Pfad ist "
+
+#: build/booking.js:1
+msgid "However our admin has been informed and will take care of the problem."
+msgstr ""
+"Wir wurden über den Vorfall informiert und werden uns bemühen, das Problem "
+"zu beheben"
+
+#: classes/Bookings/Bookings.php:139 classes/Gateways/gateway.offline.php:91
+msgid ""
+"However, there were some problems whilst sending confirmation emails to you "
+"and/or the event contact person. You may want to contact them directly and "
+"letting them know of this error."
+msgstr ""
+"Allerdings gab es einige Probleme bei der Übermittlung der Bestätigungs-E-"
+"Mails an dich und/oder den Ansprechpartner der Veranstaltung. Bitte "
+"kontaktiere den Veranstalter direkt und teile ihm die Details zum Fehler mit."
+
+#. Plugin URI of the plugin
+#. Author URI of the plugin
+msgid "https://github.com/gollenia/events-manager"
+msgstr "https://github.com/gollenia/events-manager"
+
+#: em-install.php:623
+msgid ""
+"I consent to my submitted data being collected and stored as outlined by the "
+"site %s."
+msgstr ""
+"Ich erkläre mich damit einverstanden, dass die eingegebenen Daten gemäß der "
+"Seite %s verarbeitet werden."
+
+#: classes/Gateways/gateway.offline.php:418 build/booking.js:1
+msgid "IBAN"
+msgstr "IBAN"
+
+#: classes/Coupons/Coupons.php:350 classes/Taxonomies/TaxonomyAdmin.php:54
+msgid "ID"
+msgstr "ID"
+
+#: classes/Gateways/gateway.mollie.php:470
+#: classes/Gateways/gateway.mollie.php:487
+msgid "iDEAL"
+msgstr "iDEAL"
+
+#: classes/Gateways/gateway.php:617
+msgid ""
+"If a user chooses to pay with this gateway, or it is selected by default, "
+"this message will be shown just below the selection."
+msgstr ""
+"Wenn ein Benutzer dieses Zahlungsgateway wählt, oder es standardmäßig "
+"gewählt ist, wird diese Nachricht unter der Auswahl angezeigt."
+
+#: build/index.js:1
+msgid "If applicable, exclude the current event from the list"
+msgstr "Aktuelle Veranstaltung aus Liste ausschließen"
+
+#: templates/forms/event/bookings-ticket-form.php:79
+msgid ""
+"If checked every booking must select one or the minimum number of this "
+"ticket."
+msgstr ""
+"Wenn ausgewählt, muss für jede Buchung mindestens ein oder die minimale "
+"Anzahl Tickets ausgewählt werden."
+
+#: admin/settings/emails.php:28
+msgid ""
+"If HTML emails are enabled, br tags will automatically be added for new "
+"lines."
+msgstr ""
+"Wenn HTML E-Mails aktiviert sind, werden automatisch br Tags für "
+"Zeilenumbrüche hinzugefügt."
+
+#: admin/settings/emails.php:27
+msgid ""
+"If set to yes, your emails will be sent in HTML format, otherwise plaintext."
+msgstr ""
+"Wenn es auf ja gesetzt ist, werden deine E-Mails im HTML Format gesendet, "
+"anderenfalls im Klartext."
+
+#: templates/forms/event/bookings.php:163
+msgid ""
+"If set, the total number of spaces for a single booking to this event cannot "
+"exceed this amount."
+msgstr ""
+"Wenn gesetzt, kann die maximale Anzahl von Plätzen für eine einzelne Buchung "
+"diesen Wert nicht überschreiten."
+
+#: classes/Coupons/CouponsAdmin.php:455
+msgid "If set, this coupon will only be valid that many times."
+msgstr "Wenn gesetzt, ist dieser Gutschein nur sooft gültig."
+
+#: classes/Speaker/Speakers.php:73
+msgid ""
+"If the speaker has a special Role (e.g. Organizator, Leder, etc), type in "
+"here, else leave blank"
+msgstr ""
+"Hier eintragen, wenn der Referent eoine spezielle Funktion hat (Leiter, "
+"Organisator, etc). Ansonsten leer lassen."
+
+#: classes/Emails/EmailsAdmin.php:42
+msgid ""
+"If using SMTP in your email settings. You can automatically attach an ical "
+"file which some email clients (e.g. gmail) will render as an invitation they "
+"can add to their calendar."
+msgstr ""
+"Wenn Du SMTP in Deinen Email Einstellungen verwendest, kannst Du automatisch "
+"eine iCal Datei zur Veranstaltungsbestätigung anhängen lassen, die manche "
+"Email Programme als Kalendereinladung interpretieren."
+
+#: classes/Gateways/gateway.php:644
+msgid ""
+"If you are only using testing credentials, you can display and save them "
+"safely."
+msgstr ""
+"Wenn du Testdaten verwendest, kannst du sie sicher anzeigen und speichern."
+
+#: classes/Gateways/gateway.offline.php:395
+msgid ""
+"If you check this as fully paid, and leave the amount paid blank, it will be "
+"assumed the full payment has been made."
+msgstr ""
+"Wenn Du dies als komplett bezahlt markierst und den Betrag leer läßt, wird "
+"angenommen, dass eine vollständige Bezahlung durchgeführt wurde."
+
+#: admin/settings/bookings.php:14
+msgid ""
+"If you get a lot of pending bookings and you decide to allow more bookings "
+"than spaces allow, setting this to yes will allow you to override the event "
+"space limit when manually approving."
+msgstr ""
+"Stelle diese Option auf Ja, wenn du viele Buchungen erhälst und du dich "
+"entschließt, bei manueller Genehmigung mehr Buchungen zuzulassen als Plätze "
+"vorhanden sind."
+
+#: admin/settings/general.php:36
+msgid ""
+"If you select a default country, that will be pre-selected when creating a "
+"new location."
+msgstr ""
+"Wenn du ein Land als Standard auswählst, wird dieses beim Erstellen eines "
+"neuen Veranstaltungsortes vorgeschlagen."
+
+#: classes/Events/EventPostAdmin.php:45
+msgid ""
+"If you update this event data and save, it could get overwritten if you edit "
+"the recurring event template. To make it an independent, <a href=\"%s\">"
+"detach it</a>."
+msgstr ""
+"Wenn du diese Veranstaltung aktualisierst und speicherst könnte sie von der "
+"Vorlage Veranstaltungsreihe überschrieben werden. Um sie davon unabhängig zu "
+"machen, <a href=\"%s\">kopple sie ab</a>."
+
+#: admin/settings/emails.php:45
+msgid ""
+"If you would like every event booking confirmation email sent to an "
+"administrator write their email here (leave blank to not send an email)."
+msgstr ""
+"Wenn du möchtest, dass jede Buchungsbestätigung per E-Mail an einen "
+"Administrator geschickt werden soll, gib hier seine E-Mail-Adresse ein (leer "
+"lassen, um keine E-Mails zu verschicken)."
+
+#: classes/Gateways/Gateways.php:420
+msgid ""
+"In many cases, customer address information is required by gateways for "
+"verification. This section connects your custom fields to commonly used "
+"customer information fields."
+msgstr ""
+"In vielen Fällen ist die Kundenadresse vom Gateway zur Überprüfung "
+"erforderlich.  Dieser Bereich verbindet individuelle Felder mit gewöhnlich "
+"genutzten Benutzerinformationsfeldern."
+
+#: classes/Gateways/gateway.offline.php:418
+msgid ""
+"In order to generate a QR Code for payment, you have to provide a valid IBAN"
+msgstr ""
+"Um einen QR-Code für die Bezahlung zu generieren, muss eine gültige IBAN "
+"angegeben werden"
+
+#: templates/forms/event/attributes.php:51
+msgid ""
+"In order to use attributes, you must define some in your templates, "
+"otherwise they'll never show. Go to Events > Settings > General to add "
+"attribute placeholders."
+msgstr ""
+"Um Attribute zu benutzen, musst du einige in deinen Vorlagen definieren, "
+"sonst werden sie nie angezeigt. Gehe zu Veranstaltungen > Einstellungen > "
+"Allgemein um Attributplatzhalter zu definieren."
+
+#: classes/Gateways/gateway.offline.php:421
+msgid ""
+"In some countries you need to specify a beneficiary. This Data is added to "
+"the QR Code."
+msgstr ""
+"In manchen Ländern muss ein Begünstigter angegeben werden. Dieser wird dem "
+"QR-Code hinzugefügt."
+
+#: admin/em-help.php:21
+msgid ""
+"In the <a href='%s'>settings page</a>, you'll find various textboxes where "
+"you can edit how event information looks, such as for event and location "
+"lists. Using the placeholders below, you can choose what information should "
+"be displayed."
+msgstr ""
+"Auf der <a href='%s'>Einstellungsseite</a> findest du verschiedene "
+"Textfelder, in denen du eintragen kannst, wie die Veranstaltung, der "
+"Veranstaltungsort, die Liste der Veranstaltungen, oder die Liste der "
+"Veranstaltungsorte angezeigt werden sollen. Mit den folgenden Platzhaltern "
+"kannst du wählen, welche Informationen angezeigt werden sollen."
+
+#: classes/Gateways/gateways-admin.php:130
+msgid "Inactive"
+msgstr "Dektiviert"
+
+#: classes/Bookings/BookingsTable.php:70
+msgid "Incomplete Bookings"
+msgstr "Unvollständige Buchungen"
+
+#: templates/forms/event/bookings.php:156
+msgid ""
+"Individual tickets with remaining spaces will not be available if total "
+"booking spaces reach this limit. Leave blank for no limit."
+msgstr ""
+"Individuelle Tickets mit verbleibenden Plätzen werden nicht verfügbar sein, "
+"wenn die Gesamtzahl die Begrenzung erreicht hat. Leer lassen für keine "
+"Begrenzung."
+
+#: build/admin.js:1
+msgid "Info"
+msgstr "Info"
+
+#: admin/settings/emails.php:26
+msgid "Insert the address of the notification sender."
+msgstr ""
+"Gib hier eine existierende E-Mail Adresse als Absender für die "
+"Benachrichtigungen an."
+
+#: admin/settings/emails.php:25
+msgid "Insert the display name of the notification sender."
+msgstr "Gib hier den Namen für den Absender bei Benachrichtigungen an."
+
+#: build/index.js:1
+msgid "Interval"
+msgstr "Intervall"
+
+#: classes/Coupons/Coupons.php:238
+msgid "Invalid coupon code provided"
+msgstr "Ungültiger Gutscheincode angegeben"
+
+#: classes/Export/ExportAdmin.php:39
+msgid "Italic Font"
+msgstr "Kursivschrift"
+
+#: classes/Gateways/gateway.mollie.php:471
+#: classes/Gateways/gateway.mollie.php:488
+msgid "Klarna"
+msgstr "Klarna"
+
+#: build/index.js:1
+msgid "Label"
+msgstr "Beschriftung"
+
+#: build/index.js:1
+msgid "Label for the field"
+msgstr "Beschriftung für das Feld"
+
+#: multilingual/em-ml-bookings.php:198
+msgid "Language Booked"
+msgstr "Sprache bei Buchung"
+
+#: build/index.js:1
+msgid "Last"
+msgstr "Letzte"
+
+#: templates/forms/event/when-with-recurring.php:59
+msgid "last"
+msgstr "letzte"
+
+#: classes/Bookings/BookingsTable.php:90 classes/Forms/BookingsForm.php:47
+#: classes/Forms/FormPost.php:52
+msgid "Last Name"
+msgstr "Nachname"
+
+#: build/index.js:1
+msgid "Last time"
+msgstr "Letzter Termin"
+
+#: templates/forms/event/bookings.php:163
+msgid "Leave blank for no limit."
+msgstr "Leer lassen für unbegrenzt."
+
+#: templates/forms/event/bookings-ticket-form.php:30
+#: templates/forms/event/bookings-ticket-form.php:35
+msgid "Leave either blank for no upper/lower limit."
+msgstr "Leer lassen für keine obere/untere Grenze."
+
+#: build/index.js:1
+msgid "Length of preview text"
+msgstr "Länge des Vorschautextes"
+
+#: build/index.js:1
+msgid "Let user select style"
+msgstr "Benutzer kann Stil auswählen"
+
+#: build/index.js:1
+msgid "Limit"
+msgstr "Limit"
+
+#: templates/forms/event/event-locations/url.php:9
+msgid "Link Text"
+msgstr "Link-Text"
+
+#: build/index.js:1
+msgid "Link to"
+msgstr "Link zu"
+
+#: build/index.js:1
+msgid "List"
+msgstr "Liste"
+
+#: build/admin.js:1
+msgid "Loading Data..."
+msgstr "Lade Daten..."
+
+#: Assets.php:169 build/index.js:1
+msgid "Loading..."
+msgstr "Wird geladen..."
+
+#: admin/em-bookings.php:110 admin/em-data-privacy.php:371
+#: admin/em-data-privacy.php:383 admin/em-data-privacy.php:385
+#: admin/em-data-privacy.php:450 admin/em-data-privacy.php:452
+#: build/blocks/details-location/render.php:13
+#: classes/Events/EventPostsAdmin.php:189
+#: classes/Events/EventPostsAdmin.php:392 classes/Locations/Location.php:383
+#: classes/Locations/LocationPostsAdmin.php:49
+#: classes/Locations/LocationPostsAdmin.php:51 em-posts.php:229
+#: build/index.js:1
+msgid "Location"
+msgstr "Veranstaltungsort"
+
+#: classes/Locations/Location.php:306
+msgid "Location name"
+msgstr "Standort-Name"
+
+#: admin/em-help.php:26
+msgid "Location Related Placeholders"
+msgstr "Platzhalter für Veranstaltungsorte"
+
+#: templates/forms/event/location.php:37
+msgid "Location Type"
+msgstr "Typ des Veranstaltungsortes"
+
+#: templates/forms/event/location.php:66
+msgid "Location:"
+msgstr "Veranstaltungsort:"
+
+#: admin/em-data-privacy.php:54 admin/em-data-privacy.php:205
+#: admin/em-data-privacy.php:335 admin/em-data-privacy.php:434
+#: admin/settings/general.php:16 admin/settings/general.php:22
+#: classes/Locations/LocationPostsAdmin.php:40 em-install.php:548
+#: em-posts.php:225 em-posts.php:228 em-posts.php:230
+msgid "Locations"
+msgstr "Veranstaltungsorte"
+
+#: events.php:193 events.php:194 events.php:195 events.php:196 events.php:197
+#: events.php:198 events.php:199
+msgid "locations"
+msgstr "Veranstaltungsorte"
+
+#: build/blocks/booking/render.php:25
+msgid "Log In"
+msgstr "Anmelden"
+
+#: templates/forms/event/bookings-ticket-form.php:87
+msgid "Logged In Users"
+msgstr "angemeldete Benutzer"
+
+#: build/index.js:1
+msgid "Lowest Date"
+msgstr "Frühestes Datum"
+
+#: classes/Speaker/Speakers.php:74 build/index.js:1
+msgid "Male"
+msgstr "Männlich"
+
+#: admin/em-bookings.php:86
+msgid "Manage %s Bookings"
+msgstr "Buchungen für %s verwalten"
+
+#: templates/forms/event/booking-stats.php:27
+msgid "manage bookings"
+msgstr "Buchungen verwalten"
+
+#: admin/em-bookings.php:231
+msgid "Manage Person's Booking"
+msgstr "Buchungen dieser Person verwalten"
+
+#: classes/Gateways/gateway.offline.php:313
+#: classes/Gateways/gateway.offline.php:316
+#| msgid "Manage bookings"
+msgid "Manual booking."
+msgstr "Manuelle Buchung"
+
+#. Author of the plugin
+msgid "Marcus Sykes, Thomas Gollenia"
+msgstr "Marcus Sykes, Thomas Gollenia"
+
+#: classes/Gateways/gateway.mollie.php:482
+msgid "Mastercard, VISA, Amex"
+msgstr "Master Card, Visa, American Express, ..."
+
+#: admin/em-bookings.php:160
+msgid "Max"
+msgstr "Max"
+
+#: templates/forms/event/bookings.php:160
+msgid "Maximum Spaces Per Booking"
+msgstr "Maximale Anzahl Plätze je Buchung"
+
+#: build/index.js:1
+msgid "May not apply on mobile phones"
+msgstr "Auf Mobiltelefonen nicht möglich"
+
+#: classes/Emails/CustomEmailsAdmin.php:141
+msgid "Message"
+msgstr "Nachricht"
+
+#: admin/em-bookings.php:159
+msgid "Min"
+msgstr "Min"
+
+#: templates/forms/event/bookings.php:49
+msgid "Min/Max"
+msgstr "Min/Max"
+
+#: classes/Events/Event.php:885
+msgid "Missing fields: "
+msgstr "Fehlende Felder:"
+
+#: Assets.php:181 templates/forms/event/bookings.php:28
+msgid ""
+"Modifications to event tickets will cause all bookings to individual "
+"recurrences of this event to be deleted."
+msgstr ""
+"Durch Änderungen an Veranstaltungstickets werden alle Buchungen einzelner "
+"Termine dieser Serie gelöscht."
+
+#: Assets.php:176
+msgid ""
+"Modifications to event times will cause all recurrences of this event to be "
+"deleted and recreated, previous bookings will be deleted."
+msgstr ""
+"Durch Änderung der Verantaltungszeiten werden alle Termine dieser Serie "
+"gelöscht und neu angelegt. Vorhandene Buchungen werden gelöscht."
+
+#: Assets.php:178 classes/Events/EventPostAdmin.php:39
+#: classes/Events/EventPostsAdmin.php:351
+msgid ""
+"Modifications to recurring events will be applied to all recurrences and "
+"will overwrite any changes made to those individual event recurrences."
+msgstr ""
+"Änderungen an Veranstaltungsserien werden auf alle Serientermine angewendet "
+"und überschreiben Änderungen individueller Serientermine."
+
+#: templates/forms/event/bookings.php:140
+msgid "Modify Recurring Event Tickets "
+msgstr "Tickets für Veranstaltungsserie ändern"
+
+#: classes/Bookings/BookingsTable.php:267
+msgid "Modify what information is displayed in this booking table."
+msgstr ""
+"Bearbeite, welche Informationen in der Buchungstabelle angezeigt werden."
+
+#: classes/Gateways/gateway.mollie.php:363
+msgid "Mollie API Key"
+msgstr "Mollie API-Schlüssel"
+
+#: classes/Gateways/gateway.mollie.php:83
+msgid "Mollie API Key is not found."
+msgstr "Mollie API-Schlüssel nicht gefunden"
+
+#: classes/Intl/Date.php:116 build/index.js:1
+msgid "Mon"
+msgstr "Mon"
+
+#: build/index.js:1
+msgid "Monday"
+msgstr "Montag"
+
+#: build/index.js:1
+msgid "month"
+msgstr "Monat"
+
+#: templates/forms/event/when-with-recurring.php:45
+msgid "month on the"
+msgstr "Monat am"
+
+#: templates/forms/event/when-with-recurring.php:35 build/index.js:1
+msgid "Monthly"
+msgstr "Monatlich"
+
+#: build/index.js:1
+msgid "months"
+msgstr "Monate"
+
+#: templates/forms/event/when-with-recurring.php:46
+msgid "months on the"
+msgstr "Monate am"
+
+#: classes/Coupons/CouponsAdmin.php:202
+msgid "My %s"
+msgstr "Meine %s"
+
+#: em-install.php:611
+msgid "My Bookings"
+msgstr "Meine Buchungen"
+
+#: classes/Events/Event.php:1892
+msgid "N/A"
+msgstr "n. a."
+
+#: admin/em-bookings.php:155 admin/em-data-privacy.php:380
+#: admin/em-data-privacy.php:449 classes/Bookings/BookingsTable.php:88
+#: classes/Coupons/Coupon.php:60 classes/Coupons/Coupons.php:306
+#: classes/Coupons/CouponsAdmin.php:57 classes/Coupons/CouponsAdmin.php:220
+#: classes/Coupons/CouponsAdmin.php:230 classes/Coupons/CouponsAdmin.php:442
+#: classes/Forms/AttendeeForms.php:35 classes/Forms/FormPost.php:91
+#: classes/People/Person.php:92 classes/People/Person.php:94
+#: classes/People/Person.php:108 em-install.php:490 em-install.php:679
+#: templates/forms/event/bookings-ticket-form.php:14
+#: templates/templates/bookings-event-printable.php:24 build/admin.js:1
+#: build/index.js:1
+msgid "Name"
+msgstr "Name"
+
+#: classes/Gateways/Gateways.php:424
+msgid "Name (first/last)"
+msgstr "Name"
+
+#: build/index.js:1
+msgid "Name and image"
+msgstr "Name und Bild"
+
+#: admin/em-docs.php:195
+msgid "Name of the Bank"
+msgstr "Name der Bank"
+
+#: build/index.js:1
+msgid "Name only"
+msgstr "Nur Name"
+
+#: em-install.php:521
+msgid "Near..."
+msgstr "Nahe ..."
+
+#: build/frontend.js:1
+msgid "Nearly Booked up"
+msgstr "Fast ausgebucht"
+
+#: classes/Bookings/BookingsTable.php:69
+msgid "Needs Attention"
+msgstr "Benötigt Aufmerksamkeit"
+
+#: classes/Intl/Countries.php:19
+msgid "Netherlands"
+msgstr "Holland"
+
+#: em-posts.php:80
+msgid "New Event Category Name"
+msgstr "Neue Veranstaltungskategorie Name"
+
+#: em-posts.php:45
+msgid "New Event Tag Name"
+msgstr "Veranstaltungsschlagwort Name"
+
+#: classes/Forms/FormPost.php:62 classes/Forms/FormPost.php:102
+msgid "New Form"
+msgstr "Neues Formular"
+
+#: em-posts.php:235
+msgid "New Location"
+msgstr "Neuer Veranstaltungsort"
+
+#: em-posts.php:184
+msgid "New Recurring Event"
+msgstr "Neue wiederkehrende Veranstaltung"
+
+#: classes/Speaker/Speakers.php:42
+msgid "New Speaker"
+msgstr "Neuer Referent"
+
+#: build/booking.js:1
+msgid "Next"
+msgstr "Weiter"
+
+#: build/index.js:1
+msgid "Next month"
+msgstr "Nächstes Monat"
+
+#: classes/Forms/Forms.php:102 classes/Options.php:169
+#: templates/emails/bookingfields.php:17
+msgid "No"
+msgstr "Nein"
+
+#: em-install.php:546 em-install.php:548
+msgid "No %s"
+msgstr "Keine  %s"
+
+#: classes/Bookings/BookingsTable.php:471
+msgid "No bookings."
+msgstr "Keine Buchungen."
+
+#: admin/bookings/em-cancelled.php:125
+msgid "No cancelled bookings."
+msgstr "Keine stornierten Buchungen."
+
+#: classes/Events/EventPostAdmin.php:275
+msgid "No categories available, <a href=\"%s\">create one here first</a>"
+msgstr ""
+"Noch keine Kategorien vorhanden, <a href=\"%s\">Erstelle hier eine "
+"Kategorie</a>"
+
+#: admin/bookings/em-confirmed.php:131 admin/bookings/em-person.php:139
+msgid "No confirmed bookings."
+msgstr "Keine bestätigten Buchungen."
+
+#: classes/Coupons/CouponsAdmin.php:270
+msgid "No coupons have been inserted yet!"
+msgstr "Es wurden noch keine Gutscheine eingefügt"
+
+#: admin/settings/general.php:36
+msgid "no default country"
+msgstr "kein Standard-Land"
+
+#: admin/settings/general.php:28
+msgid "no default location"
+msgstr "kein Standard-Veranstaltungsort"
+
+#: classes/Coupons/Coupons.php:282
+msgid "No event given"
+msgstr "Keine Veranstaltung angegeben"
+
+#: admin/bookings/em-events.php:86
+msgid "no events"
+msgstr "keine Veranstaltungen"
+
+#: em-posts.php:141
+msgid "No Events Found"
+msgstr "Keine Veranstaltungen gefunden"
+
+#: build/index.js:1
+msgid "No events found"
+msgstr "Keine Veranstaltungen gefunden"
+
+#: em-posts.php:142
+msgid "No Events Found in Trash"
+msgstr "Keine Veranstaltungen im Papierkorb gefunden"
+
+#: em-install.php:552
+msgid "No events in this location"
+msgstr "Keine Veranstaltungen an diesem Ort"
+
+#: classes/Forms/FormPost.php:66 classes/Forms/FormPost.php:106
+msgid "No Forms Found"
+msgstr "Keine Formulare gefunden"
+
+#: classes/Forms/FormPost.php:67 classes/Forms/FormPost.php:107
+msgid "No Forms Found in Trash"
+msgstr "Keine Formulare im Papierkorb"
+
+#: admin/em-bookings.php:112 templates/forms/event/location.php:10
+#: templates/forms/event/location.php:72
+msgid "No Location"
+msgstr "Kein Veranstaltungsort"
+
+#: build/index.js:1
+msgid "No location selected"
+msgstr "Kein Ort ausgewählt"
+
+#: em-posts.php:239
+msgid "No Locations Found"
+msgstr "Keine Veranstaltungsorte gefunden"
+
+#: em-posts.php:240
+msgid "No Locations Found in Trash"
+msgstr "Keine Veranstaltungsorte im Papierkorb gefunden"
+
+#: classes/Gateways/gateways-admin.php:144
+msgid "No Payment gateways were found for this install."
+msgstr "Keine Zahlungsgateways für diese Installation gefunden."
+
+#: admin/bookings/em-pending.php:147
+msgid "No pending bookings."
+msgstr "Keine ausstehenden Buchungen."
+
+#: em-posts.php:188
+msgid "No Recurring Events Found"
+msgstr "Keine wiederkehrenden Veranstaltungen gefunden"
+
+#: em-posts.php:189
+msgid "No Recurring Events Found in Trash"
+msgstr "Keine wiederkehrenden Veranstaltungen im Papierkorb gefunden"
+
+#: admin/bookings/em-rejected.php:125
+msgid "No rejected bookings."
+msgstr "Keine abgelehnten Buchungen."
+
+#: templates/forms/event/booking-stats.php:20
+msgid "No responses yet!"
+msgstr "Noch keine Antworten!"
+
+#: build/blocks/details-spaces/render.php:27
+msgid "No spaces left"
+msgstr "Keine Plätze mehr frei"
+
+#: classes/Speaker/Speakers.php:46
+msgid "No Speaker Found"
+msgstr "Kein Referent gefunden"
+
+#: classes/Speaker/Speakers.php:47
+msgid "No Speaker Found in Trash"
+msgstr "Kein Referent im Papierkorb"
+
+#: em-actions.php:32
+msgid "No ticket id provided"
+msgstr "Keine Ticket-ID angegeben"
+
+#: classes/Gateways/gateways.transactions.php:320
+msgid "No Transactions"
+msgstr "Keine Transaktionen"
+
+#: classes/Events/EventPostsAdmin.php:227
+#: classes/Events/EventPostsAdmin.php:424
+#: classes/Gateways/gateway.mollie.php:367 classes/Gateways/Gateways.php:333
+#: classes/Gateways/gateways.transactions.php:305 build/index.js:1
+msgid "None"
+msgstr "keine(r)"
+
+#: classes/Forms/Forms.php:239 classes/Gateways/Gateways.php:431
+msgid "none selected"
+msgstr "keine ausgewählt"
+
+#: classes/Gateways/gateways.transactions.php:275
+#: classes/Gateways/gateways.transactions.php:284
+#: classes/Gateways/gateways.transactions.php:296
+msgid "None yet"
+msgstr "Noch nicht"
+
+#: classes/Bookings/Booking.php:997
+msgid "Not approved, spaces full."
+msgstr "Nicht bestätigt, alle Plätze sind ausgebucht."
+
+#: admin/settings/bookings.php:42
+msgid "Not enough spaces"
+msgstr "Keine ausreichenden Plätze vorhanden"
+
+#: classes/Bookings/Booking.php:855
+msgid "Not Supplied"
+msgstr "Nicht angegeben"
+
+#: build/admin.js:1
+msgid "Note"
+msgstr "Notiz"
+
+#: classes/Emails/CustomEmailsAdmin.php:314
+msgid ""
+"Note that some gateways do not automatically send pending or confirmed "
+"emails, in these cases they may only apply to when event admins manually "
+"change the status of a booking resulting in an automated email getting sent."
+msgstr ""
+"Beachte, dass manche Gateways nicht automatisch Emails für offene Vorgänge "
+"oder Bestätigungen verschicken. In diesen Fällen werden automatisierte "
+"Emails nur versadnt, wenn ein Administrator manuell den Status einer Buchung "
+"ändert."
+
+#: classes/Gateways/Gateways.php:519
+#: classes/Gateways/gateways.transactions.php:135
+#| msgid "dates"
+msgid "Notes"
+msgstr "Notizen"
+
+#: admin/settings/emails.php:26
+msgid "Notification sender address"
+msgstr "Absender E-Mail Adresse"
+
+#: admin/settings/emails.php:25
+msgid "Notification sender name"
+msgstr "Name des Absenders von Benachrichtigungen"
+
+#: em-install.php:488
+msgid ""
+"Now there are #_BOOKEDSPACES spaces reserved, #_AVAILABLESPACES are still "
+"available."
+msgstr ""
+"Jetzt sind #_BOOKEDSPACES Plätze reserviert. #_AVAILABLESPACES Plätze sind "
+"noch verfügbar."
+
+#: build/index.js:1
+msgid "Number of columns the input field will occupy"
+msgstr "Anzahl der Spüalten, die dieses Eingabefeld einnimmt"
+
+#: classes/Gateways/gateway.offline.php:422
+msgid "Number of days until payment has to be made"
+msgstr "Anzahl von Tagen, innerhalb derer die Zahlung erfolgen muss"
+
+#: build/index.js:1
+msgid "Number of text rows"
+msgstr "Anzahl der Textzeilen"
+
+#: build/index.js:1
+msgid "Number of words"
+msgstr "Anzahl der Wörter"
+
+#: classes/Intl/Date.php:59
+msgid "o'clock"
+msgstr "Uhr"
+
+#: classes/Gateways/gateway.mollie.php:363
+msgid ""
+"Obtain your Live or Test API Key from your <a href=%s target=\"_blank\">"
+"Mollie Dashboard</a>."
+msgstr ""
+"Erhalten Sie Ihren Live- oder Test-API-Schlüssel von Ihrem <a href=%s "
+"target=\"_blank\">Mollie Dashboard</a>."
+
+#: templates/forms/event/when-with-recurring.php:66
+msgid "of each month"
+msgstr "eines jedes Monats"
+
+#: admin/bookings/em-events.php:128 classes/Events/EventPostsAdmin.php:268
+msgid "Off"
+msgstr "von"
+
+#: build/blocks/details-spaces/render.php:21 build/index.js:1
+msgid "Only %s space left"
+msgid_plural "Only %s spaces left"
+msgstr[0] "Nur noch %s Platz frei"
+msgstr[1] "Nur noch %s Plätze frei"
+
+#: build/blocks/details-spaces/render.php:29
+msgid "Only few spaces left"
+msgstr "Nur noch wenige Plätze frei"
+
+#: build/index.js:1
+msgid "Only for internal usage - place field text below"
+msgstr "Nur für internen Gebrauch"
+
+#: build/index.js:1
+msgid "Only for testing"
+msgstr "Nur zu Testzwecken"
+
+#: classes/Coupons/CouponsAdmin.php:426
+msgid "Only on specific events that I own"
+msgstr "Nur bei bestimmten Veranstaltungen, die ich verwalte."
+
+#: classes/Gateways/gateway.mollie.php:443
+msgid "open"
+msgstr "offen"
+
+#: build/index.js:1
+msgid "Options"
+msgstr "Optionen"
+
+#: build/index.js:1
+msgid "Options for the radio control. Each line represents one option"
+msgstr "Optionen für das Radio-Element. Eine Option pro Zeile"
+
+#: build/index.js:1
+msgid "Options for the select control. Each line represents one option"
+msgstr "Optionen für das Auswahlfeld. Eine Option pro Zeile"
+
+#: admin/settings/general.php:50
+msgid "Order by end date, end time, then event name"
+msgstr "Nach Enddatum, Endzeit, dann Veranstaltungsname  sortieren"
+
+#: admin/settings/general.php:49
+msgid "Order by name, end date, then end time"
+msgstr "Nach Name, Enddatum, dann Endzeit  sortieren"
+
+#: admin/settings/general.php:48
+msgid "Order by name, start date, then start time"
+msgstr "Nach Name, Startdatum, dann Startzeit  sortieren"
+
+#: admin/settings/general.php:47
+msgid "Order by start date, start time, then event name"
+msgstr "Nach Startdatum, Startzeit, dann Veranstaltungsname sortieren"
+
+#: admin/settings/bookings.php:61
+msgid "Order Tickets By"
+msgstr "Tickets sortieren nach"
+
+#: classes/Coupons/Coupons.php:358 classes/Coupons/CouponsAdmin.php:345
+#: classes/Coupons/CouponsAdmin.php:356
+msgid "Original Total Price"
+msgstr "Originaler Gesamtpreis"
+
+#: classes/Events/EventPostsAdmin.php:191
+#: classes/Events/EventPostsAdmin.php:394
+msgid "Owner"
+msgstr "Eigentümer"
+
+#: classes/Gateways/gateway.mollie.php:445
+msgid "paid"
+msgstr "bezahlt"
+
+#: em-posts.php:143
+msgid "Parent Event"
+msgstr "Übergeordnete Veranstaltung"
+
+#: em-posts.php:75
+msgid "Parent Event Categories"
+msgstr "Übergeordnete Veranstaltungskategorien"
+
+#: em-posts.php:76
+msgid "Parent Event Category:"
+msgstr "Übergeordnete Veranstaltungskategorie:"
+
+#: em-posts.php:41
+msgid "Parent Event Tag:"
+msgstr "Übergeordnete Veranstaltungsschlagwörter:"
+
+#: em-posts.php:40
+msgid "Parent Event Tags"
+msgstr "Übergeordnete Veranstaltungsschlagwörter"
+
+#: classes/Forms/FormPost.php:68 classes/Forms/FormPost.php:108
+msgid "Parent Form"
+msgstr "Übergeordnete Form"
+
+#: em-posts.php:241
+msgid "Parent Location"
+msgstr "Übergeordnete Veranstaltungsorte"
+
+#: em-posts.php:190
+msgid "Parent Recurring Event"
+msgstr "Übergeordnete wiederkehrende Veranstaltung"
+
+#: classes/Speaker/Speakers.php:48
+msgid "Parent Speaker"
+msgstr "Übergeordneter Referent"
+
+#: build/index.js:1
+msgid "Past"
+msgstr "Vergangene"
+
+#: admin/em-bookings.php:258
+msgid "Past And Present Bookings"
+msgstr "Vergangene und aktuelle Buchungen"
+
+#: admin/bookings/em-events.php:28
+msgid "Past Events"
+msgstr "Vergangene Veranstaltungen"
+
+#: admin/bookings/em-events.php:12 em-functions.php:69
+msgid "Past events"
+msgstr "Vergangene Veranstaltungen"
+
+#: build/index.js:1
+msgid "Pattern"
+msgstr "Muster"
+
+#: em-install.php:652 em-install.php:654
+msgid "Pay Offline"
+msgstr "Oflline bezahlen"
+
+#: classes/Gateways/Gateways.php:227
+msgid "Pay with"
+msgstr "Bezahlen mit"
+
+#: classes/Gateways/gateway.mollie.php:480
+msgid "Pay with your Apple ID"
+msgstr "Bezahle mit deiner AppleID"
+
+#: classes/Gateways/gateway.mollie.php:486
+msgid "Pay with your Google Account"
+msgstr "Bezahle mmit deinem Google-Account"
+
+#: build/admin.js:1 build/booking.js:1
+msgid "Payment"
+msgstr "Bezahlung"
+
+#: classes/Gateways/gateway.offline.php:422
+msgid "Payment Deadline"
+msgstr "Zahlungsziel"
+
+#: classes/Gateways/gateway.mollie.php:335
+#: classes/Gateways/gateway.mollie.php:371
+msgid "Payment Description"
+msgstr "Zahlungsbeschreibung"
+
+#: classes/Emails/EmailsAdmin.php:93 classes/Emails/EmailsAdmin.php:94
+#: classes/Gateways/gateways-admin.php:14
+msgid "Payment Gateways"
+msgstr "Zahlungsgateways"
+
+#: classes/Gateways/gateway.offline.php:47
+msgid "Payment has been registered."
+msgstr "Bezahlung wurde registriert"
+
+#: build/admin.js:1 build/booking.js:1
+msgid "Payment Method"
+msgstr "Zahlmethode"
+
+#: admin/em-docs.php:194
+msgid "Payment reference (auto generated)"
+msgstr "Verwendungszweck"
+
+#: classes/Gateways/gateway.mollie.php:321
+#: classes/Gateways/gateway.mollie.php:369
+msgid "Payment Status Text"
+msgstr "Zahlungsstatus Text"
+
+#: classes/Gateways/gateway.mollie.php:472
+#: classes/Gateways/gateway.mollie.php:489
+msgid "PayPal"
+msgstr "PayPal"
+
+#: admin/bookings/em-events.php:133 classes/Bookings/Booking.php:131
+#: classes/Bookings/BookingsTable.php:65 classes/Events/Event.php:361
+#: classes/Events/EventPostsAdmin.php:282
+#: classes/Gateways/gateway.mollie.php:187
+#: classes/Gateways/gateway.mollie.php:192 em-install.php:495
+msgid "Pending"
+msgstr "Ausstehend"
+
+#: classes/Gateways/gateway.mollie.php:444
+msgid "pending"
+msgstr "ausstehend"
+
+#: admin/settings/emails.php:60 admin/settings/emails.php:95
+#: classes/Emails/CustomEmailsAdmin.php:177
+#: classes/Emails/CustomEmailsAdmin.php:187
+#: classes/Emails/CustomEmailsAdmin.php:393
+#: classes/Emails/CustomEmailsAdmin.php:403
+msgid "Pending booking email"
+msgstr "E-Mail für neu zu bearbeitende Buchung"
+
+#: templates/forms/event/booking-stats.php:14
+msgid "Pending Spaces"
+msgstr "Offene Buchungen"
+
+#: classes/Coupons/CouponsAdmin.php:482
+msgid "Percentage"
+msgstr "Prozent"
+
+#: admin/settings/general.php:19
+msgid "Permalink"
+msgstr "Permalink"
+
+#: admin/em-bookings.php:247
+msgid "Personal Details"
+msgstr "Persönliche Angaben"
+
+#: classes/Bookings/Booking.php:916
+msgid "Personal details have successfully been modified."
+msgstr "Persönliche Informationen wurden erfolgreich geändert."
+
+#: build/index.js:1
+msgid "Personal Information"
+msgstr "Persönliche Informationen"
+
+#: build/index.js:1
+msgid "Persons"
+msgstr "Personen"
+
+#: admin/em-data-privacy.php:230 classes/Gateways/Gateways.php:45
+#: classes/People/People.php:41 classes/People/Person.php:97
+#: classes/People/Person.php:110 em-install.php:663 em-install.php:686
+#: build/index.js:1
+msgid "Phone"
+msgstr "Telefon"
+
+#: classes/Bookings/BookingsTable.php:95
+msgid "Phone Number"
+msgstr "Telefonnummer"
+
+#: admin/bookings/em-cancelled.php:86 admin/bookings/em-confirmed.php:87
+#: admin/bookings/em-pending.php:104 admin/bookings/em-rejected.php:86
+#: templates/templates/bookings-event-printable.php:26
+msgid "Phone number"
+msgstr "Telefonnummer"
+
+#: templates/forms/event/location.php:17
+msgid "Physical Location"
+msgstr "Physischer Ort"
+
+#: admin/em-help.php:20
+msgid "Placeholders for customizing event pages"
+msgstr "Platzhalter für die Anpassung von Veranstaltungsseiten"
+
+#: build/booking.js:1
+msgid "Please accept the privacy policy"
+msgstr "Bitte akzeptiere die Datenschutzbestimmungen"
+
+#: em-data-privacy.php:159
+msgid ""
+"Please check the consent box so we can collect and store your submitted "
+"information."
+msgstr ""
+"Bitte aktiviere die Checkbox zum Einverständnis, damit wir deine "
+"übermittelten Daten speichern können."
+
+#: classes/Gateways/gateway.offline.php:177
+msgid ""
+"Please enter a valid payment amount (e.g. 10.00). Use negative numbers to "
+"credit a booking."
+msgstr ""
+"Bitte gib einen gültigen Betrag ein (z.B. 10,00). Benutze negative Zahlen "
+"für eine Gutschrift."
+
+#: classes/Gateways/gateway.offline.php:58
+msgid ""
+"Please enter a valid payment amount. Numbers only, use negative number to "
+"credit a booking."
+msgstr ""
+"Bitte gib einen gültigen Zahlungsbetrag ein. Nur Ziffern. Benutze negative "
+"Zahlen für eine Gutschrift."
+
+#: classes/Tickets/Ticket.php:322
+msgid "Please enter a valid ticket price e.g. 10.50 (no currency signs)"
+msgstr ""
+"Bitte gib einen korrekten Ticketpreis an z.B. 10.50 (Kein Währungszeichen)"
+
+#: classes/Locations/EventLocationUrl.php:30
+msgid "Please enter a valid URL for this event location."
+msgstr "Bitte gib eine gültige URL für den Veranstaltungsort an."
+
+#: build/booking.js:1
+msgid "Please fill in all required fields"
+msgstr "Bitte alle benötigten Felder ausfüllen"
+
+#: classes/Forms/AttendeeForms.php:62 classes/Forms/BookingsForm.php:74
+#: classes/Forms/UserFields.php:28
+msgid "Please fill in the field: %s"
+msgstr "Bitte Feld ausfüllen: %s"
+
+#: classes/Locations/EventLocationUrl.php:34
+msgid "Please provide some link text for this event location URL."
+msgstr "Bitte gib einen Linktext für die URL des Veranstaltungsortes an."
+
+#: build/booking.js:1
+msgid "Please select a payment method"
+msgstr "Bitte eine Zahlungsweise wählen"
+
+#: classes/Gateways/gateway.mollie.php:77
+msgid "Please select a payment method."
+msgstr "Bitte wähle eine Zahlungsmethode"
+
+#: classes/Events/Event.php:876
+msgid "Please select a valid location."
+msgstr "Bitte wähle einen gültigen Veranstaltungsort."
+
+#: build/booking.js:1
+msgid "Please select at least one ticket"
+msgstr "Bitte mindestens ein Ticket auswählen"
+
+#: classes/Events/Event.php:892
+msgid "Please specify what days of the week this event should occur on."
+msgstr "Wochentage für diese Veranstaltung angeben."
+
+#: classes/Emails/Mailer.php:64
+msgid "Please supply a valid email format."
+msgstr "Bitte gib ein eine gültige E-Mail-Adresse ein."
+
+#: build/index.js:1
+msgid "Please type in a unique itentifier for the field"
+msgstr "Bitte eine eindeutige ID für das Feld angeben"
+
+#: classes/Forms/Forms.php:291
+msgid ""
+"Please use the time picker provided to select the appropriate time format."
+msgstr ""
+"Bitte verwende den Zeit-Selektor, um das geeignete Zeitformat auszuwählen."
+
+#: Assets.php:158
+msgid "Please wait while the booking is being submitted."
+msgstr "Bitte warte, während die Buchung abgeschickt wird."
+
+#: build/blocks/details-spaces/render.php:31
+msgid "Plenty of spaces left"
+msgstr "Genug Plätze frei"
+
+#: em-posts.php:73
+msgid "Popular Event Categories"
+msgstr "Beliebte Veranstaltungskategorien"
+
+#: em-posts.php:38
+msgid "Popular Event Tags"
+msgstr "Beliebte Veranstaltungsschlagwörter"
+
+#: build/index.js:1
+msgid "Position"
+msgstr "Positionierung"
+
+#: classes/Locations/LocationPostsAdmin.php:59
+#| msgid "Postcode:"
+msgid "Postcode"
+msgstr "Postleitzahl"
+
+#: classes/Gateways/gateway.mollie.php:473
+#: classes/Gateways/gateway.mollie.php:490
+msgid "PostFinance"
+msgstr "PostFinance"
+
+#: admin/em-bookings.php:157 build/blocks/details-price/render.php:21
+#: build/blocks/details-price/render.php:31 classes/Coupons/Coupons.php:353
+#: classes/Tickets/Tickets.php:257 templates/emails/bookingsummary.php:15
+#: templates/emails/bookingtickets.php:9
+#: templates/forms/event/bookings-ticket-form.php:21
+#: templates/forms/event/bookings.php:48 build/admin.js:1 build/index.js:1
+msgid "Price"
+msgstr "Preis"
+
+#: admin/settings/bookings.php:22
+msgid "Pricing"
+msgstr "Preise"
+
+#: templates/forms/event/booking-stats.php:28
+msgid "printable view"
+msgstr "Druckansicht"
+
+#: admin/settings/bookings.php:43
+msgid "Privacy Message"
+msgstr "Datenschutz-Nachricht"
+
+#: build/booking.js:1
+msgid "Purpose"
+msgstr "Verwendungszweck"
+
+#: templates/emails/bookingsummary.php:13 templates/emails/bookingtickets.php:7
+msgid "Quantity"
+msgstr "Menge"
+
+#: admin/em-bookings.php:53
+msgid "Recent Bookings"
+msgstr "Neueste Buchungen"
+
+#: build/index.js:1
+msgid "Recurrence"
+msgstr "Wiederholung"
+
+#: classes/Events/EventPostsAdmin.php:430
+msgid "Recurrences"
+msgstr "Wiederkehrende Veranstaltungen"
+
+#: templates/forms/event/when-with-recurring.php:12
+msgid "Recurrences span from "
+msgstr "Wiederholung findet statt von"
+
+#: build/index.js:1
+msgid "Recurring"
+msgstr "Wiederholend"
+
+#: em-posts.php:178
+msgid "Recurring Event"
+msgstr "Wiederkehrende Veranstaltung"
+
+#: admin/em-data-privacy.php:44 admin/em-data-privacy.php:195
+#: admin/em-data-privacy.php:348 admin/settings/general.php:14 em-posts.php:174
+#: em-posts.php:177 em-posts.php:179
+msgid "Recurring Events"
+msgstr "Wiederkehrende Veranstaltungen"
+
+#: events.php:187 events.php:188 events.php:189 events.php:190 events.php:191
+msgid "recurring events"
+msgstr "Wiederkehrende Veranstaltung"
+
+#: em-posts.php:175
+msgid "Recurring Events Template"
+msgstr "Wiederkehrende Veranstaltungen Vorlage"
+
+#: classes/Gateways/gateway.mollie.php:366
+msgid "Redirect Message"
+msgstr "Weiterleitungsnachricht"
+
+#: classes/Gateways/gateway.mollie.php:366
+msgid "Redirecting to complete your online payment..."
+msgstr "Weiterleitung zum Abschluss Ihrer Online-Zahlung..."
+
+#: build/index.js:1
+msgid "Reference Date"
+msgstr "Datumsreferenz"
+
+#: classes/Gateways/gateway.mollie.php:449
+msgid "refunded"
+msgstr "zurückerstattet"
+
+#: classes/Gateways/gateway.mollie.php:285
+msgid "Refunded on %s"
+msgstr "Zurückerstattet auf %s"
+
+#: em-install.php:539 build/index.js:1
+msgid "Region"
+msgstr "Region"
+
+#: build/admin.js:1 build/booking.js:1 build/index.js:1
+msgid "Registration"
+msgstr "Registrierung"
+
+#: classes/Forms/AttendeeForms.php:286
+msgid "Registration Fields"
+msgstr "Registrierungsfelder"
+
+#: classes/Forms/UserFields.php:198
+msgid ""
+"Registration fields are only shown to guest visitors. If you add new fields "
+"here and save, they will then be available as custom registrations in your "
+"bookings editor, and this information will be accessible and editable on "
+"each user <a href=\"%s\">profile page</a>."
+msgstr ""
+"Registration fields are only shown to guest visitors. If you add new fields "
+"here and save, they will then be available as custom registrations in your "
+"bookings editor, and this information will be accessible and editable on "
+"each user <a href=\"%s\">profile page</a>."
+
+#: build/index.js:1
+msgid "Registration Form"
+msgstr "Registrierungsform"
+
+#: build/index.js:1
+msgid "Regular expression to prevent wrong or illegal input"
+msgstr "Regulärer Ausdruck um Fehleingaben zu verhindern"
+
+#: classes/Export/ExportAdmin.php:37
+msgid "Regular Font"
+msgstr "Normalschrift"
+
+#: admin/bookings/em-confirmed.php:116 admin/bookings/em-pending.php:133
+#: admin/bookings/em-person.php:124 classes/Bookings/BookingsTable.php:643
+#: classes/Bookings/BookingsTable.php:652
+#: classes/Gateways/gateway.offline.php:136
+msgid "Reject"
+msgstr "Ablehnen"
+
+#: classes/Bookings/Booking.php:133 classes/Bookings/BookingsTable.php:68
+#: classes/Gateways/gateway.mollie.php:189 em-install.php:497
+msgid "Rejected"
+msgstr "Abgelehnt"
+
+#: admin/settings/emails.php:76 admin/settings/emails.php:111
+#: classes/Emails/CustomEmailsAdmin.php:179
+#: classes/Emails/CustomEmailsAdmin.php:189
+#: classes/Emails/CustomEmailsAdmin.php:395
+#: classes/Emails/CustomEmailsAdmin.php:405
+msgid "Rejected booking email"
+msgstr "E-Mail bei abgelehnter Buchung"
+
+#: em-install.php:646
+msgid "Reminder"
+msgstr "Erinnerung"
+
+#: classes/Emails/EmailsAdmin.php:53
+msgid "Reminder subject"
+msgstr "Betreff der Erinnerung"
+
+#: build/index.js:1
+msgid "Required"
+msgstr "Erforderlich"
+
+#: classes/Coupons/CouponsAdmin.php:411
+msgid "required"
+msgstr "benötigt"
+
+#: templates/forms/event/bookings-ticket-form.php:79
+msgid "Required?"
+msgstr "Benötigt?"
+
+#: admin/settings/bookings.php:12
+msgid "Reserved unconfirmed spaces?"
+msgstr "Unbestätigte Plätze buchen?"
+
+#: templates/forms/event/location.php:107
+msgid "Reset"
+msgstr "Zurücksetzen"
+
+#: templates/forms/event/location.php:106
+msgid "Reset this form to create a location or search again."
+msgstr "Setze das Formular zurück, um einen Ort anzulegen oder suche erneut."
+
+#: admin/bookings/em-cancelled.php:111 admin/bookings/em-person.php:121
+msgid "Restore"
+msgstr "Wiederherstellen"
+
+#: templates/forms/event/bookings-ticket-form.php:92
+msgid "Restrict to"
+msgstr "Einschränken auf"
+
+#: classes/Gateways/gateway.mollie.php:367
+msgid "Return Page"
+msgstr "Seite beim Zurückkehren"
+
+#: classes/Speaker/Speakers.php:73
+msgid "Role"
+msgstr "Funktion"
+
+#: classes/Gateways/gateway.offline.php:420
+msgid "Same goes with Bank name."
+msgstr "Selbiges gilt für den Namen der Bank"
+
+#: classes/Intl/Date.php:121 build/index.js:1
+msgid "Sat"
+msgstr "Sat"
+
+#: build/index.js:1
+msgid "Saturday"
+msgstr "Samstag"
+
+#: admin/em-options.php:140 classes/Options.php:276
+msgid "Save Changes"
+msgstr "Änderungen speichern"
+
+#: classes/Gateways/Gateways.php:444
+msgid "Save Form"
+msgstr "Formular speichern"
+
+#: Assets.php:161
+msgid "Save Settings"
+msgstr "Einstellungen speichern"
+
+#: Assets.php:159
+msgid "Save Ticket"
+msgstr "Ticket speichern"
+
+#: build/booking.js:1
+#| msgid "Scan the QR-Code with yout phone to start payment"
+msgid "Scan the QR-Code with your phone to start payment"
+msgstr "QR-Code mit dem Smartphone einscannen, um die Bezahlung zu starten"
+
+#: build/booking.js:1
+msgid "Scan to pay"
+msgstr "Scan to Pay"
+
+#: build/index.js:1
+msgid "Scope"
+msgstr "Bereich"
+
+#: admin/bookings/em-cancelled.php:38 admin/bookings/em-cancelled.php:40
+#: admin/bookings/em-confirmed.php:39 admin/bookings/em-confirmed.php:41
+#: admin/bookings/em-pending.php:53 admin/bookings/em-pending.php:55
+#: admin/bookings/em-person.php:40 admin/bookings/em-person.php:42
+#: admin/bookings/em-rejected.php:38 admin/bookings/em-rejected.php:40
+#: Assets.php:167 em-install.php:513 em-install.php:519 build/frontend.js:1
+msgid "Search"
+msgstr "Suche"
+
+#: em-posts.php:72
+msgid "Search Event Categories"
+msgstr "Veranstaltungskategorien durchsuchen"
+
+#: em-posts.php:37
+msgid "Search Event Tags"
+msgstr "Suche Veranstaltungenschlagwörter"
+
+#: em-posts.php:140
+msgid "Search Events"
+msgstr "Veranstaltungen suchen"
+
+#: classes/Forms/FormPost.php:65 classes/Forms/FormPost.php:105
+msgid "Search Forms"
+msgstr "Suchformulare"
+
+#: em-posts.php:238
+msgid "Search Locations"
+msgstr "Veranstaltungsorte suchen"
+
+#: em-posts.php:187
+msgid "Search Recurring Events"
+msgstr "Wiederkehrende Veranstaltungen suchen"
+
+#: classes/Speaker/Speakers.php:45
+msgid "Search Speaker"
+msgstr "Referent suchen"
+
+#: Assets.php:168
+msgid "Searching..."
+msgstr "Suche..."
+
+#: build/index.js:1
+msgid "Second"
+msgstr "Zweiter"
+
+#: templates/forms/event/when-with-recurring.php:59
+msgid "second"
+msgstr "zweite"
+
+#: multilingual/em-ml-admin.php:52 multilingual/em-ml-admin.php:69
+msgid "See original translation."
+msgstr "Siehe Originalübersetzung."
+
+#: build/index.js:1
+msgid "Select a location"
+msgstr "Ort auswählen"
+
+#: build/index.js:1
+msgid "Select a speaker"
+msgstr "Sprecher auswählen"
+
+#: classes/Gateways/gateway.offline.php:366
+msgid "Select a user, or enter a new one below."
+msgstr "Wähle einen Benutzer aus, oder füge einen Neuen hinzu."
+
+#: build/frontend.js:1
+msgid "Select category"
+msgstr "Kategorie auswählen"
+
+#: build/index.js:1
+msgid "Select Country"
+msgstr "Land auswählen"
+
+#: templates/forms/event/location.php:76
+msgid "Select Location"
+msgstr "Ort auswählen"
+
+#: templates/forms/event/people.php:27
+#| msgid "Delete Speaker"
+msgid "Select Speaker"
+msgstr "Referent auswählen"
+
+#: build/frontend.js:1
+msgid "Select tags"
+msgstr "Schlagworte auswählen"
+
+#: classes/Bookings/BookingsTable.php:296
+msgid ""
+"Select the options below and export all the bookings you have currently "
+"filtered (all pages) into a CSV spreadsheet format."
+msgstr ""
+"Wähle aus den u.a. Optionen und exportiere alle Buchungen, die du gerade "
+"gefiltert hast (alle Seiten) in ein CSV Tabellen Format."
+
+#: classes/Gateways/gateway.mollie.php:342
+#: classes/Gateways/gateway.mollie.php:372
+msgid "Send email on failed / cancelled payment?"
+msgstr "E-Mail bei abgebrochener oder fehlgeschlagener Zahlung senden?"
+
+#: admin/settings/emails.php:27
+msgid "Send HTML Emails?"
+msgstr "Sende HTML E-Mails?"
+
+#: em-install.php:578
+msgid "Send your booking"
+msgstr "Buchung abschicken"
+
+#: em-posts.php:81
+msgid "Separate event categories with commas"
+msgstr "Trenne Veranstaltungskategorien mit Kommata"
+
+#: em-posts.php:46
+msgid "Separate event tags with commas"
+msgstr "Trenne Veranstaltungsschlagwörter mit Komma"
+
+#: build/index.js:1
+msgid "Set a text here to show when no events are visible"
+msgstr "Text der eingeblendet wird, wenn keine Veranstaltungen verfügbar sind"
+
+#: admin/em-admin.php:40 admin/em-admin.php:128
+msgid "Settings"
+msgstr "Einstellungen"
+
+#: build/index.js:1
+msgid ""
+"Show a warning that the event is nearly booked up when only this number of "
+"spaces are left"
+msgstr ""
+"Warnung anzeigen, wenn die Veranstaltung ausgebucht ist oder nur noch wenige "
+"Plätze frei sind"
+
+#: em-install.php:516
+msgid "Show Advanced Search"
+msgstr "Erweiterte Suche anzeigen"
+
+#: classes/Gateways/gateway.php:645
+msgid "Show API Keys"
+msgstr "API-Schlüssel zeigen"
+
+#: build/index.js:1
+msgid "Show Audience"
+msgstr "Zielgruppe anzeigen"
+
+#: build/index.js:1
+msgid "Show audience"
+msgstr "Zielgruppe anzeigen"
+
+#: build/index.js:1
+msgid "Show category"
+msgstr "Kategorie anzeigen"
+
+#: build/index.js:1
+msgid "Show category filter"
+msgstr "Kategorienfilter anzeigen"
+
+#: build/index.js:1
+msgid "Show if event is booked up or nearly booked up"
+msgstr "Anzeigen wenn die Veranstaltung fast oder ganz ausgebucht ist"
+
+#: build/index.js:1
+msgid "Show image"
+msgstr "Bild anzeigen"
+
+#: build/index.js:1
+msgid "Show Link"
+msgstr "Link zeigen"
+
+#: build/index.js:1
+msgid "Show Portrait if possible"
+msgstr "Portrait zeigen, wenn möglich"
+
+#: build/index.js:1
+msgid "Show search bar"
+msgstr "Suchleiste"
+
+#: build/index.js:1
+msgid "Show Speaker"
+msgstr "Sprecher anzeigen"
+
+#: build/index.js:1
+msgid "Show tag filter"
+msgstr "Schlagwortfilter anzeigen"
+
+#: admin/em-docs.php:196
+msgid "Show the date until the payment has to be done"
+msgstr "Zeigt das Datum, bis zu dem die Überweisung getätigt sein muss"
+
+#: classes/Gateways/gateway.mollie.php:338
+#: classes/Gateways/gateway.mollie.php:371
+msgid ""
+"Shown in the payment description in your Mollie backend. All %s are allowed."
+msgstr ""
+"Wie in der Zahlungsbeschreibung in Ihrem Mollie-Backend angezeigt. Alle %s "
+"sind erlaubt."
+
+#: classes/Gateways/gateway.mollie.php:366
+msgid ""
+"Shown when the booking is successfully created and the customer is "
+"redirected to Mollie."
+msgstr ""
+"Wird angezeigt, wenn die Buchung erfolgreich erstellt wurde und der Kunde zu "
+"Mollie weitergeleitet wird."
+
+#: classes/Gateways/gateway.mollie.php:365
+msgid ""
+"Shown when the total booking price = 0.00. Your customer will <u>not</u> be "
+"redirected to Mollie."
+msgstr ""
+"Wird angezeigt, wenn der Buchungspreis null ist. Der Kunde wird dann <b>"
+"nicht</b> zu mollie weitergeleitet."
+
+#: admin/em-docs.php:192
+msgid "Shows the IBAN number for Offline Payments."
+msgstr "Zeigt die IBAN Nummer für Überweisungen"
+
+#: build/index.js:1
+msgid "Side"
+msgstr "Seite"
+
+#: classes/Events/Event.php:889
+msgid ""
+"Since the event is repeated, you must specify an event end date greater than "
+"the start date."
+msgstr ""
+"Da die Veranstaltung sich wiederholt, musst du einen Veranstaltungsenddatum "
+"eingeben welches später liegt als das Startdatum."
+
+#: build/index.js:1
+msgid "Slug"
+msgstr "Slug"
+
+#: classes/Gateways/gateway.mollie.php:474
+msgid "SOFORT Banking"
+msgstr "SOFORT-Überweisung"
+
+#: classes/Events/Event.php:1049
+msgid ""
+"Something went wrong saving your %s to the index table. Please inform a site "
+"administrator about this."
+msgstr ""
+"Etwas ging schief beim Sichern von %s in die Index Tabelle. Bitte informiere "
+"den Administrator darüber."
+
+#: classes/Coupons/CouponAdmin.php:77
+msgid "Something went wrong saving your %s."
+msgstr "Etwas ging schief beim Speichern von %s."
+
+#: classes/Events/Event.php:1065
+msgid ""
+"Something went wrong updating your %s to the index table. Please inform a "
+"site administrator about this."
+msgstr ""
+"Etwas ging schief beim Aktualisieren von %s in der Index Tabelle. Bitte "
+"informiere den Administrator darüber."
+
+#: classes/Coupons/CouponAdmin.php:86
+msgid "Something went wrong updating your %s."
+msgstr "Etwas ging schief beim Aktualisieren von %s."
+
+#: classes/Events/Event.php:1096 classes/Events/EventPostAdmin.php:340
+msgid "Something went wrong with the recurrence update..."
+msgstr "Bei der Aktualisierung der Wiederholungen ist ein Fehler passiert ..."
+
+#: build/index.js:1
+msgid "Sorting"
+msgstr "Sortierung"
+
+#: admin/bookings/em-cancelled.php:87 admin/bookings/em-confirmed.php:88
+#: admin/bookings/em-pending.php:105 admin/bookings/em-person.php:87
+#: admin/bookings/em-rejected.php:87 admin/em-bookings.php:158
+#: classes/Bookings/BookingsTable.php:96 classes/Coupons/Coupons.php:356
+#: classes/Coupons/CouponsAdmin.php:344 classes/Coupons/CouponsAdmin.php:355
+#: classes/Tickets/Tickets.php:257
+#: templates/forms/event/bookings-ticket-form.php:24
+#: templates/templates/bookings-event-printable.php:27
+msgid "Spaces"
+msgstr "Plätze"
+
+#: admin/em-bookings.php:100
+msgid "Spaces confirmed"
+msgstr "Plätze bestätigt"
+
+#: templates/forms/event/bookings-ticket-form.php:32
+#: templates/forms/event/bookings-ticket-form.php:37
+msgid "spaces per booking"
+msgstr "Plätze je Buchung"
+
+#: templates/forms/event/bookings-ticket-form.php:30
+msgctxt "spaces per booking"
+msgid "At least"
+msgstr "Mindestens"
+
+#: templates/forms/event/bookings-ticket-form.php:35
+msgctxt "spaces per booking"
+msgid "At most"
+msgstr "Maximal"
+
+#: build/blocks/details-speaker/render.php:66 classes/Speaker/Speakers.php:36
+#: templates/forms/event/people.php:24 build/index.js:1
+msgid "Speaker"
+msgstr "Referent"
+
+#: classes/Speaker/Speakers.php:32 classes/Speaker/Speakers.php:35
+#: classes/Speaker/Speakers.php:37
+msgid "Speakers"
+msgstr "Referenten"
+
+#: classes/Speaker/Speakers.php:33
+msgid "Speakers for an event."
+msgstr "Referenten für eine Veranstaltung"
+
+#: classes/Forms/AttendeeForms.php:337
+msgid "Split bookings by attendee"
+msgstr "Buchungen nach Teilnehmern aufteilen"
+
+#: classes/Bookings/BookingsTable.php:300
+msgid "Split bookings by ticket type"
+msgstr "Teile Buchungen anhand des Ticket Typ"
+
+#: classes/Tickets/Tickets.php:189
+msgid "Standard"
+msgstr "Standard"
+
+#: classes/Tickets/Ticket.php:82
+msgid "Standard Ticket"
+msgstr "Standard-Ticket"
+
+#: admin/em-bookings.php:161 build/index.js:1
+msgid "Start"
+msgstr "Beginn"
+
+#: classes/Coupons/CouponsAdmin.php:460
+msgid "Start Date"
+msgstr "Startdatum"
+
+#: templates/forms/event/bookings.php:50
+msgid "Start/End"
+msgstr "Start/Ende"
+
+#: build/index.js:1
+msgid "Starts at"
+msgstr "Beginnt um"
+
+#: build/index.js:1
+msgid "State"
+msgstr "Bundesstaat"
+
+#: classes/Gateways/Gateways.php:42 em-install.php:542 em-install.php:660
+#: em-install.php:683
+msgid "State/County"
+msgstr "Bundesland"
+
+#: admin/bookings/em-person.php:88 admin/em-data-privacy.php:273
+#: classes/Bookings/BookingsTable.php:97 classes/Gateways/Gateways.php:515
+#: classes/Gateways/gateways.transactions.php:134
+msgid "Status"
+msgstr "Status"
+
+#: build/index.js:1
+msgid "Style"
+msgstr "Stil"
+
+#: admin/em-data-privacy.php:286 templates/emails/bookingsummary.php:25
+msgid "Sub Total"
+msgstr "Zwischensumme"
+
+#: classes/Emails/CustomEmailsAdmin.php:137
+msgid "Subject"
+msgstr "Betreff"
+
+#: build/admin.js:1
+msgid "Success"
+msgstr "Erfolg"
+
+#: classes/Gateways/gateway.offline.php:417
+msgid "Success Message"
+msgstr "Erfolgsmeldung"
+
+#: admin/settings/bookings.php:40
+msgid "Successful booking"
+msgstr "Erfolgreiche Buchung"
+
+#: admin/settings/bookings.php:41
+msgid "Successful pending booking"
+msgstr "Erfolgreiche unbestätigte Buchung"
+
+#: classes/Coupons/CouponAdmin.php:108
+msgid "Successfully deleted %s"
+msgstr "%s Erfolgreich gelöscht"
+
+#: classes/Coupons/CouponAdmin.php:81 classes/Coupons/CouponAdmin.php:88
+#: classes/Events/Event.php:1054 classes/Events/Event.php:1069
+#: classes/Locations/Location.php:383
+msgid "Successfully saved %s"
+msgstr "%s erfolgreich gespeichert."
+
+#: classes/Intl/Date.php:122 build/index.js:1
+msgid "Sun"
+msgstr "Son"
+
+#: build/index.js:1
+msgid "Sunday"
+msgstr "Sonntag"
+
+#: admin/em-data-privacy.php:266 templates/emails/bookingsummary.php:61
+msgid "Surcharges (After Taxes)"
+msgstr "Zuschläge (nach Steuern)"
+
+#: admin/em-data-privacy.php:264 templates/emails/bookingsummary.php:38
+msgid "Surcharges Before Taxes"
+msgstr "Zuschläge vor Steuern"
+
+#: classes/Gateways/gateway.mollie.php:475
+#: classes/Gateways/gateway.mollie.php:492
+msgid "Swish"
+msgstr "Swish"
+
+#: classes/Gateways/gateway.mollie.php:493
+msgid "Swiss payment service"
+msgstr "Beliebter Zahlungsdienstleister in der Schweiz"
+
+#: classes/Intl/Countries.php:17
+msgid "Switzerland"
+msgstr "Schweiz"
+
+#: build/index.js:1
+msgid "Table"
+msgstr "Tabelle"
+
+#: build/index.js:1
+msgid "Tags"
+msgstr "Schlagworte"
+
+#: admin/settings/bookings.php:28
+msgid "Tax Rate"
+msgstr "Steuersatz"
+
+#: admin/em-data-privacy.php:298 templates/emails/bookingsummary.php:47
+msgid "Taxes"
+msgstr "Steuern"
+
+#: build/index.js:1
+msgid "Telephone"
+msgstr "Telefon"
+
+#: admin/settings/emails.php:19
+msgid "Test Email Settings"
+msgstr "E-Mail Einstellungen testen"
+
+#: build/admin.js:1
+msgid "Text"
+msgstr "Text"
+
+#: build/index.js:1
+msgid "Text to display when no country is selected"
+msgstr ""
+"Text, der den Benutzer darüber informiert, dass dies ein Pflichtfeld ist"
+
+#: build/index.js:1
+msgid "Text to display when the user types in invalid or insufficient data"
+msgstr ""
+"Text, der den Benutzer darüber informiert, dass er ungültige Daten "
+"eingegeben hat"
+
+#: build/index.js:1
+msgid "Text to inform the user that a choice has to be made"
+msgstr ""
+"Text, der den Benutzer darüber informiert, dass dies ein Pflichtfeld ist"
+
+#: build/index.js:1
+msgid "Text to inform the user that this checkbox must be checked"
+msgstr ""
+"Text, der den Benutzer darüber informiert, dass dies ein Pflichtfeld ist"
+
+#: classes/Gateways/gateway.mollie.php:365
+msgid ""
+"Thank you for your booking.<br>You will receive a confirmation email soon."
+msgstr ""
+"Vielen Dank für Ihre Buchung.<br>Sie erhalten in Kürze eine Bestätigungs-E-"
+"Mail."
+
+#: classes/Locations/Location.php:130
+msgid "The country"
+msgstr "Das Land"
+
+#: classes/Events/Event.php:2649
+msgid "the fifth %s of the month"
+msgstr "der fünfte %s des Monats"
+
+#: classes/Events/Event.php:2649
+msgid "the first %s of the month"
+msgstr "der erste %s des Monats"
+
+#: em-install.php:494 em-install.php:495 em-install.php:496 em-install.php:497
+msgid "The following booking is %s :"
+msgstr "Die nachfolgende Buchung ist %s:"
+
+#: classes/Events/Event.php:2649
+msgid "the fourth %s of the month"
+msgstr "der vierte %s des Monats"
+
+#: multilingual/em-ml-bookings.php:182
+msgid "The language used to make this booking was %s"
+msgstr "Die Sprache, in der diese Buchung vorgenommen wurde, war %s"
+
+#: classes/Events/Event.php:2649
+msgid "the last %s of the month"
+msgstr "der letzte %s des Monats"
+
+#: classes/Locations/Location.php:130
+msgid "The location address"
+msgstr "Die Adresse des Veranstaltungsorts"
+
+#: classes/Locations/Location.php:130
+msgid "The location town"
+msgstr "Die Stadt des Veranstaltungsorts"
+
+#: classes/Gateways/gateway.offline.php:417
+msgid ""
+"The message that is shown to a user when a booking with offline payments is "
+"successful."
+msgstr ""
+"Diese Nachricht wird dem Benutzer angezeigt, wenn eine Buchung mit Offline-"
+"Bezahlung erfolgreich war."
+
+#: classes/Events/Event.php:2649
+msgid "the second %s of the month"
+msgstr "der zweite %s des Monats"
+
+#: classes/Gateways/gateway.mollie.php:213
+#: classes/Gateways/gateway.mollie.php:323
+#: classes/Gateways/gateway.mollie.php:324
+#: classes/Gateways/gateway.mollie.php:369
+msgid "The status of your payment is"
+msgstr "Der Status Ihrer Zahlung ist"
+
+#: classes/Gateways/gateway.mollie.php:317
+#: classes/Gateways/gateway.mollie.php:368
+msgid "The status of your payment is:"
+msgstr "Der Status Ihrer Zahlung ist:"
+
+#: classes/Events/Event.php:2649
+msgid "the third %s of the month"
+msgstr "der dritte %s des Monats"
+
+#: classes/Bookings/Booking.php:441
+msgid "The ticket %s is no longer available."
+msgstr "Das Ticket %s ist nicht länger verfügbar."
+
+#: classes/Gateways/gateway.php:609
+msgid ""
+"The user will see this as the text option when choosing a payment method."
+msgstr ""
+"Der Benutzer sieht dies als Textoption, wenn er eine Zahlungsmethode "
+"auswählt."
+
+#: classes/Events/Event.php:2238 classes/Events/Event.php:2316
+msgid "There was a problem adding custom fields to your recurring events."
+msgstr ""
+"Beim Hinzufügen der benutzerdefinierten Felder zu deinen wiederkehrenden "
+"Ereignissen ist ein Problem aufgetreten."
+
+#: em-install.php:584
+msgid ""
+"There was a problem creating a user account, please contact a website "
+"administrator."
+msgstr ""
+"Es gab ein Problem beim Erstellen eines Benutzerkontos. Kontaktiere bitte "
+"einen der Administratoren."
+
+#: classes/Bookings/Booking.php:267 classes/Bookings/Booking.php:268
+#: classes/Bookings/Booking.php:276 classes/Bookings/Booking.php:289
+#: classes/Tickets/TicketsBookings.php:82
+#: classes/Tickets/TicketsBookings.php:83
+msgid "There was a problem saving the booking."
+msgstr "Es gab ein Problem beim Speichern der Buchung."
+
+#: classes/Events/Event.php:1096 classes/Events/EventPostAdmin.php:340
+msgid "There was a problem saving the recurring events."
+msgstr "Es gab ein Problem beim Speichern der wiederkehrenden Veranstaltungen."
+
+#: classes/Tickets/TicketBooking.php:98 classes/Tickets/TicketBooking.php:99
+#: classes/Tickets/TicketBooking.php:104 classes/Tickets/TicketBooking.php:105
+msgid "There was a problem saving the ticket booking."
+msgstr "Es gab ein Problem beim Speichern der Ticket-Buchung."
+
+#: classes/Tickets/Ticket.php:222 classes/Tickets/Ticket.php:223
+#: classes/Tickets/Ticket.php:228 classes/Tickets/Ticket.php:229
+msgid "There was a problem saving the ticket."
+msgstr "Es gab ein Problem beim Speichern des Tickets."
+
+#: em-install.php:1142
+msgid ""
+"There was an error whilst migrating your times to our new timezone-aware "
+"formats. Below is a list of errors:"
+msgstr ""
+"Bei der Migration deiner Zeiten auf die neue Zeitzonen-bewussten Formate ist "
+"ein Fehler aufgetreten. Liste der Fehler:"
+
+#: classes/Emails/CustomEmailsAdmin.php:391
+msgid ""
+"These emails get sent to the event owners when a person has made a booking "
+"using this specific gateway."
+msgstr ""
+"Diese Emails werden an den Veranstalter versandt, wenn eine Person dieses "
+"spezielle Gateway verwendet hat."
+
+#: classes/Emails/CustomEmailsAdmin.php:175
+msgid ""
+"These emails get sent to the event owners when a person has made a booking."
+msgstr ""
+"Diese Emails werden an den Veranstalter gesendet, wenn jemand eine Buchung "
+"tätigt."
+
+#: classes/Emails/CustomEmailsAdmin.php:401
+msgid ""
+"These emails will be sent to the person who booked a place at your event and "
+"selected this specific gateway."
+msgstr ""
+"Diese Email wird an eine Person versandt, die einen Platz in Deiner "
+"Veranstaltung gebucht und dieses spezielle Gateway ausgewählt hat."
+
+#: classes/Emails/CustomEmailsAdmin.php:185
+msgid ""
+"These emails will be sent to the person who booked a place at your event."
+msgstr ""
+"Diese Emails werden an Teilnehmer versandt, die einen Platz gebucht haben."
+
+#: build/index.js:1
+msgid "Third"
+msgstr "Dritter"
+
+#: templates/forms/event/when-with-recurring.php:59
+msgid "third"
+msgstr "dritte"
+
+#: Assets.php:184
+msgid "This cannot be undone."
+msgstr "Das kann nicht rückgängig gemacht werden."
+
+#: classes/Coupons/CouponAdmin.php:45
+msgid "This coupon code has already been used, coupon codes must be unique."
+msgstr ""
+"Dieser Gutscheincode ist bereits in Verwendung. Jeder Code darf nur einmal "
+"verwendet werden."
+
+#: classes/Forms/Forms.php:318
+msgid ""
+"This email already exists in our system, please log in to register to "
+"proceed with your booking."
+msgstr ""
+"Diese E-Mail existiert bereits in unserem System. Bitte melde dich an, um "
+"mit deiner Buchung fortzufahren."
+
+#: templates/forms/event/when-with-recurring.php:32
+msgid "This event repeats"
+msgstr "Die Veranstaltung wiederholt sich"
+
+#: templates/forms/event/when.php:37
+msgid ""
+"This event spans every day between the beginning and end date, with "
+"start/end times applying to each day."
+msgstr ""
+"Diese Veranstaltung umfasst jeden Tag zwischen Beginn- und Enddatum, mit der "
+"Start- und Endzeit an jedem dieser Tage."
+
+#: templates/forms/event/when-with-recurring.php:10
+msgid "This is a recurring event."
+msgstr "Dies ist eine wiederkehrende Veranstaltung."
+
+#: multilingual/em-ml-admin.php:51
+msgid ""
+"This is a translated event, therefore your time, location and booking "
+"information is handled by your original event translation."
+msgstr ""
+"Dies ist eine übersetzte Veranstaltung. Zeit, Ort und Buchungsinformationen "
+"werden durch die Originalübersetzung verwaltet."
+
+#: multilingual/em-ml-admin.php:68
+msgid ""
+"This is a translated location, so address information is handled by your "
+"original location translation. You can provide translations for certain "
+"fields which will override the original translation."
+msgstr ""
+"Dies ist ein übersetzter Standort, sodass die Adressinformationen von deiner "
+"ursprünglichen Standortübersetzung übernommen werden. Du kannst "
+"Übersetzungen für bestimmte Felder bereitstellen, welche die ursprüngliche "
+"Übersetzung überschreiben."
+
+#: admin/settings/emails.php:53 admin/settings/emails.php:88
+msgid ""
+"This is sent when a person's booking is confirmed. This will be sent "
+"automatically if approvals are required and the booking is approved. If "
+"approvals are disabled, this is sent out when a user first submits their "
+"booking."
+msgstr ""
+"Diese E-Mail wird an den Benutzer geschickt, wenn die Buchung bestätigt wird."
+" Wenn eine Genehmigung erforderlich ist, erfolgt dies nach der Genehmigung "
+"durch den Administrator. Wenn die Genehmigung deaktiviert ist, wird die E-"
+"Mail an den Benutzer geschickt, sobald dieser die Buchung zum ersten Mal "
+"aufgibt."
+
+#: admin/settings/emails.php:61
+msgid ""
+"This is sent when a person's booking is pending. If approvals are enabled, "
+"this is sent out when a user first submits their booking."
+msgstr ""
+"Dies wird versandt, wenn die Buchung einer Person auf \"Wartend\" steht. "
+"Wenn Genehmigungen aktiviert sind, wird dies versandt, nachdem ein Anwender "
+"erstmalig eine Buchung tätigt."
+
+#: classes/Coupons/CouponsAdmin.php:438
+msgid "This is the code you give to users for them to use when booking."
+msgstr "Gutscheincode für die Buchung."
+
+#: templates/forms/event/bookings.php:185
+msgid ""
+"This is the definite date after which bookings will be closed for this event,"
+" regardless of individual ticket settings above. Default value will be the "
+"event start date."
+msgstr ""
+"Dies ist das definitive Datum, nach dem keine Buchungen für die "
+"Veranstaltungen mehr vorgenommen werden können, unabhängig von individuellen "
+"Ticket Einstellungen oben. Standardwert ist das Veranstaltungs-Startdatum."
+
+#: classes/Gateways/gateway.php:613
+msgid "This message will be shown to the user when they select this gateway."
+msgstr ""
+"Diese Nachricht wird den Benutzern angezeigt, wenn sie dieses Gateway "
+"auswählen."
+
+#: build/index.js:1
+msgid "This month"
+msgstr "Dieses Monat"
+
+#: admin/settings/general.php:35
+msgid ""
+"This option allows you to select the default location when adding an event."
+msgstr ""
+"Diese Option ermöglicht es dir, einen Standard-Veranstaltungsort für neue "
+"Veranstaltungen auszuwählen."
+
+#: admin/settings/bookings.php:11
+msgid ""
+"This setting is not applicable when using payment gateways, see individual "
+"gateways for approval settings."
+msgstr ""
+"Diese Einstellung ist nicht anwendbar, wenn Zahlungs-Gateway verwendet "
+"werden. Genehmigungs-Einstellungen in den einzelnen Gateways beachten."
+
+#: admin/settings/emails.php:112
+msgid ""
+"This will be sent automatically when a booking is rejected. Not relevant if "
+"bookings don't require approval."
+msgstr ""
+"Diese E-Mail wird automatisch an den Benutzer geschickt, wenn die Buchung "
+"abgelehnt wird. Ist nicht relevant, wenn Buchungen keine Genehmigung "
+"erfordern."
+
+#: admin/settings/emails.php:77
+msgid "This will be sent to event admins when a booking is rejected."
+msgstr ""
+"Dies wird an Veranstaltungsadministratoren versandt, wenn eine Buchung "
+"abgelehnt wird."
+
+#: admin/settings/emails.php:96
+msgid ""
+"This will be sent to the person when they first submit their booking. Not "
+"relevant if bookings don't require approval."
+msgstr ""
+"Diese E-Mail wird an die buchende Person geschickt, wenn eine neue Buchung "
+"eingegangen ist. Ist nicht relevant, wenn keine Genehmigung für Buchung "
+"erforderlich sind."
+
+#: admin/settings/emails.php:104
+msgid "This will be sent when a user cancels their booking."
+msgstr ""
+"Diese E-Mail wird verschickt, wenn der Benutzer seine Buchung storniert."
+
+#: classes/Gateways/gateway.mollie.php:324
+#: classes/Gateways/gateway.mollie.php:369
+msgid "This will change the output of the setting above."
+msgstr "Dies wird die Ausgabe der oben genannten Einstellung ändern."
+
+#: classes/Gateways/gateway.offline.php:419
+msgid "Though not needed, some banks are only happy if you provide a BIC"
+msgstr ""
+"Obwohl sie nicht benötigt wird, bestehen manche Banken auf Angabe einer BIC"
+
+#: classes/Intl/Date.php:119 build/index.js:1
+msgid "Thu"
+msgstr "Don"
+
+#: build/index.js:1
+msgid "Thursday"
+msgstr "Donnerstag"
+
+#: admin/settings/bookings.php:49 classes/Forms/AttendeeForms.php:392
+msgid "Ticket"
+msgstr "Ticket"
+
+#: classes/Tickets/Ticket.php:325
+msgid ""
+"Ticket %s has a higher minimum spaces requirement than the maximum spaces "
+"allowed."
+msgstr ""
+"Ticket %s hat einen höheren Mindest-Platzbedarf als die maximal zulässige "
+"Anzahl an Plätzen erlaubt."
+
+#: classes/Tickets/TicketBooking.php:91
+msgid "Ticket booking created"
+msgstr "Ticket-Buchung erstellt"
+
+#: classes/Tickets/Ticket.php:219
+msgid "Ticket created"
+msgstr "Ticket erstellt"
+
+#: classes/Bookings/BookingsTable.php:105
+msgid "Ticket Description"
+msgstr "Ticketbeschreibung"
+
+#: admin/em-bookings.php:146
+msgid "Ticket for %s"
+msgstr "Ticket für %s"
+
+#: classes/Bookings/BookingsTable.php:108
+msgid "Ticket ID"
+msgstr "Ticket-ID"
+
+#: classes/Bookings/BookingsTable.php:104 templates/forms/event/bookings.php:47
+msgid "Ticket Name"
+msgstr "Ticket-Name"
+
+#: admin/settings/bookings.php:58 classes/Tickets/Tickets.php:40
+msgid "Ticket Name (Ascending)"
+msgstr "Ticket-Name (aufsteigend)"
+
+#: admin/settings/bookings.php:59 classes/Tickets/Tickets.php:41
+msgid "Ticket Name (Descending)"
+msgstr "Ticket-Name (absteigend)"
+
+#: classes/Bookings/BookingsTable.php:106
+msgid "Ticket Price"
+msgstr "Ticketpreis"
+
+#: admin/settings/bookings.php:57 classes/Tickets/Tickets.php:39
+msgid "Ticket Price (Ascending)"
+msgstr "Ticketpreis (aufsteigend)"
+
+#: admin/settings/bookings.php:56 classes/Tickets/Tickets.php:38
+msgid "Ticket Price (Descending)"
+msgstr "Ticketpreis (absteigend)"
+
+#: classes/Bookings/BookingsTable.php:107
+msgid "Ticket Total"
+msgstr "Tickets Gesamt"
+
+#: classes/Tickets/Tickets.php:257
+msgid "Ticket Type"
+msgstr "Ticket-Typ"
+
+#: admin/em-data-privacy.php:285 admin/em-data-privacy.php:404
+#: templates/forms/event/bookings.php:22 build/booking.js:1
+msgid "Tickets"
+msgstr "Tickets"
+
+#: build/blocks/details-time/render.php:14 build/index.js:1
+msgid "Time"
+msgstr "Zeit"
+
+#: templates/forms/event/bookings-ticket-form.php:55
+#: templates/forms/event/bookings-ticket-form.php:73
+msgctxt "time"
+msgid "at"
+msgstr "um"
+
+#: build/index.js:1
+msgid "Time and Date"
+msgstr "Zeit und Datum"
+
+#: admin/em-data-privacy.php:367
+msgid "Timezone"
+msgstr "Zeitzone"
+
+#: build/index.js:1
+msgid "To"
+msgstr "Bis"
+
+#: classes/Intl/Date.php:59 classes/Intl/Date.php:72
+#: templates/forms/event/when-with-recurring.php:16
+#: templates/forms/event/when-with-recurring.php:17
+#: templates/forms/event/when-with-recurring.php:25
+#: templates/forms/event/when.php:17 templates/forms/event/when.php:28
+#: build/index.js:1
+msgid "to"
+msgstr "bis"
+
+#: classes/Events/EventPostAdmin.php:46
+msgid ""
+"To manage the whole set, <a href=\"%s\">edit the recurring event template</a>"
+"."
+msgstr ""
+"Um die ganze Veranstaltungsreihe zu bearbeiten, <a href=\"%s\">bearbeite die "
+"Vorlage Veranstaltungsreihe</a>."
+
+#: build/index.js:1
+msgid "Today"
+msgstr "Heute"
+
+#: em-functions.php:70
+msgid "Today's events"
+msgstr "Heutige Veranstaltungen"
+
+#: build/index.js:1
+msgid "Toggle"
+msgstr "Toggle"
+
+#: classes/Gateways/gateways-admin.php:53
+msgid "Toggle activation"
+msgstr "Toggle-Aktivierung"
+
+#: build/index.js:1
+msgid "Tomorrow"
+msgstr "Morgen"
+
+#: em-functions.php:71
+msgid "Tomorrow's events"
+msgstr "Veranstaltungen von morgen"
+
+#: classes/Forms/Forms.php:273
+msgid "Too maxi"
+msgstr "Zu groß"
+
+#: classes/Forms/Forms.php:263
+msgid "Too mini"
+msgstr "Zu klein"
+
+#: build/index.js:1
+msgid "Top"
+msgstr "Oben"
+
+#: classes/Bookings/BookingsTable.php:99
+msgid "Total"
+msgstr "Gesamt"
+
+#: classes/Coupons/CouponsAdmin.php:452
+msgid "Total Coupons"
+msgstr "Gesamtzahl Gutscheine"
+
+#: classes/Gateways/gateways.transactions.php:408
+msgid "Total Paid"
+msgstr "Gesamtsumme (bezahlt)"
+
+#: admin/em-data-privacy.php:300 templates/emails/bookingsummary.php:69
+msgid "Total Price"
+msgstr "Gesamtpreis"
+
+#: templates/forms/event/bookings.php:153
+msgid "Total Spaces"
+msgstr "Gesamtplätze"
+
+#: classes/Locations/LocationPostsAdmin.php:58
+msgid "Town"
+msgstr "Stadt"
+
+#: classes/Gateways/gateways.transactions.php:434
+msgid "Transaction could not be deleted"
+msgstr "Transaktion konnte nicht gelöscht werden"
+
+#: classes/Gateways/gateways.transactions.php:430
+msgid "Transaction deleted"
+msgstr "Transaktion gelöscht"
+
+#: classes/Gateways/Gateways.php:518
+#: classes/Gateways/gateways.transactions.php:407
+msgid "Transaction ID"
+msgstr "Transaktions-ID"
+
+#: classes/Gateways/gateways.transactions.php:132
+msgid "Transaction id"
+msgstr "Transaktions-ID"
+
+#: classes/Gateways/gateways-admin.php:66
+#: classes/Gateways/gateways.transactions.php:86
+msgid "Transactions"
+msgstr "Transaktionen"
+
+#: classes/Gateways/gateway.mollie.php:491
+msgid "Transfer Money from Your Account within Seconds"
+msgstr "Überweisen Sie Geld von Ihrem Konto innerhalb von Sekunden"
+
+#: multilingual/em-ml-admin.php:31 multilingual/em-ml-admin.php:32
+msgid "Translated Event Information"
+msgstr "Übersetzte Veranstaltungsinformation"
+
+#: em-functions.php:93
+msgid "Trying to perform an illegal action."
+msgstr "Versuch, eine illegale Aktion auszuführen."
+
+#: classes/Intl/Date.php:117 build/index.js:1
+msgid "Tue"
+msgstr "Di"
+
+#: build/index.js:1
+msgid "Tuesday"
+msgstr "Dienstag"
+
+#: classes/Gateways/gateway.mollie.php:476
+msgid "Twint"
+msgstr "Twint"
+
+#: classes/Forms/FormPostAdmin.php:14 build/admin.js:1
+msgid "Type"
+msgstr "Typ"
+
+#: admin/bookings/em-confirmed.php:114 admin/bookings/em-person.php:118
+#: classes/Bookings/BookingsTable.php:651
+msgid "Unapprove"
+msgstr "Genehmigung zurückziehen"
+
+#: admin/em-bookings.php:78 admin/em-bookings.php:138 admin/em-bookings.php:185
+#: admin/em-bookings.php:223 admin/em-bookings.php:276
+#: classes/Coupons/CouponsAdmin.php:285 classes/Coupons/CouponsAdmin.php:405
+msgid "Unauthorized Access"
+msgstr "Unberechtigter Zugriff"
+
+#: classes/Events/Event.php:2088
+msgid "Undo"
+msgstr "Rückgängig machen"
+
+#: build/index.js:1
+msgid "Unique identifier"
+msgstr "Eindeutige ID"
+
+#: classes/Coupons/CouponsAdmin.php:323
+msgid "Unlimited"
+msgstr "Unbegrenzt"
+
+#: build/index.js:1
+msgid "Upcoming Events"
+msgstr "Kommende Veranstaltungen"
+
+#: em-posts.php:78
+msgid "Update Event Category"
+msgstr "Veranstaltungskategorie aktualisieren"
+
+#: em-posts.php:43
+msgid "Update Event Tag"
+msgstr "Veranstaltungsschlagwort aktualisieren"
+
+#: classes/Locations/EventLocationUrl.php:54
+#: templates/forms/event/event-locations/url.php:5 build/index.js:1
+msgid "URL"
+msgstr "URL"
+
+#: classes/Locations/EventLocationUrl.php:51
+msgid "URLs"
+msgstr "URLs"
+
+#: classes/Gateways/gateways.transactions.php:129
+msgid "User"
+msgstr "Benutzer"
+
+#: classes/Forms/UserFields.php:195
+msgid "User Fields"
+msgstr "Benutzerfelder"
+
+#: classes/Bookings/BookingsTable.php:87
+msgid "Username"
+msgstr "Benutzername"
+
+#: classes/Emails/EmailsAdmin.php:88 classes/Emails/EmailsAdmin.php:89
+msgid ""
+"Users with the %s user capability will be able to do this when "
+"adding/editing events."
+msgstr ""
+"Dies können Anwender mit %s Berechtigung durchführen, wenn sie "
+"Veranstaltungen hinzufügen/ändern."
+
+#: classes/Coupons/Coupons.php:310 classes/Coupons/CouponsAdmin.php:60
+#: classes/Coupons/CouponsAdmin.php:225 classes/Coupons/CouponsAdmin.php:235
+#: classes/Coupons/CouponsAdmin.php:318
+msgid "Uses"
+msgstr "Verwendung"
+
+#: classes/Gateways/Gateways.php:425
+msgid "Uses the WordPress account email associated with the user."
+msgstr "Email Adresse des WordPress Benutzerkontos verwenden."
+
+#: classes/Forms/FormPost.php:63 classes/Forms/FormPost.php:103
+#: classes/Speaker/Speakers.php:43 em-posts.php:138 em-posts.php:185
+#: em-posts.php:236
+msgid "View"
+msgstr "Anzeigen"
+
+#: admin/em-bookings.php:88 classes/Events/EventPostsAdmin.php:430
+msgid "View %s"
+msgstr "Zeige %s"
+
+#: classes/Events/EventPostsAdmin.php:159
+msgid "View all categories"
+msgstr "Alle Kategorien anzeigen"
+
+#: templates/forms/event/bookings.php:84
+msgid "View Bookings"
+msgstr "Zeige Buchungen"
+
+#: em-posts.php:139
+msgid "View Event"
+msgstr "Veranstaltung ansehen"
+
+#: admin/em-bookings.php:149
+msgid "View Event Bookings"
+msgstr "Buchungen der Veranstaltung anzeigen"
+
+#: classes/Forms/FormPost.php:64 classes/Forms/FormPost.php:104
+msgid "View Form"
+msgstr "Formular ansehen"
+
+#: em-posts.php:237
+msgid "View Location"
+msgstr "Veranstaltungsort Anzeigen"
+
+#: classes/Speaker/Speakers.php:44
+msgid "View Speaker"
+msgstr "Referent ansehen"
+
+#: classes/Gateways/gateway.php:531
+msgid "View this transaction on %s"
+msgstr "Diese Transaktion auf %s ansehen"
+
+#: classes/Gateways/gateways-admin.php:135
+msgid "View transactions"
+msgstr "Transaktionen ansehen"
+
+#: admin/em-bookings.php:148
+msgid "View/Edit Event"
+msgstr "Veranstaltung ansehen/bearbeiten"
+
+#: classes/Gateways/gateway.mollie.php:483
+msgid "Vpay or Maestro"
+msgstr "V Pay oder Maestro"
+
+#: classes/Gateways/gateway.mollie.php:191
+msgid "Waiting for Mollie"
+msgstr "Warte auf Mollie"
+
+#: build/admin.js:1
+msgid "Warning"
+msgstr "Warnung"
+
+#: build/index.js:1
+msgid "Warning threshold"
+msgstr "Warnungsgrenze"
+
+#: classes/Events/EventPostAdmin.php:44
+msgid "WARNING: This is a recurrence in a set of recurring events."
+msgstr ""
+"ACHTUNG: Dies ist eine Wiederholung aus einer Reihe sich wiederholender "
+"Veranstaltungen."
+
+#: classes/Events/EventPostAdmin.php:38
+msgid "WARNING: This is a recurring event."
+msgstr "ACHTUNG: Das ist eine wiederkehrende Veranstaltung."
+
+#: admin/em-data-privacy.php:26
+msgid ""
+"We collect and store information you submit to us about events (and "
+"corresponding locations) you would like to publish on our site."
+msgstr ""
+"Wir sammeln und speichern die Informationen, die du über Veranstaltungen "
+"(und zugehörige Orte) eingibst, wenn du diese auf unserer Website "
+"veröffentlichen willst."
+
+#: admin/em-data-privacy.php:25
+msgid ""
+"We collect and store information you submit to us when making a booking, for "
+"the purpose of reserving your requested spaces at our event and maintaining "
+"a record of attendance."
+msgstr ""
+"Wir speichern die Informationen, die du während des Bestellprozesses "
+"eingibst, um deine Plätze bei unserer Veranstaltung zu reservieren."
+
+#: admin/em-data-privacy.php:27
+msgid ""
+"We may use cookies to temporarily store information about a booking in "
+"progress as well as any error/confirmation messages whilst submitting or "
+"managing your events and locations."
+msgstr ""
+"Wir benutzen Cookies, um Informationen während des Bestellprozesses und "
+"Fehler- und Erfolgsmeldungen beim Absenden und Verwalten von Veranstaltungen "
+"und Orten temporär zu speichern."
+
+#: classes/Emails/EmailsAdmin.php:35
+msgid ""
+"We use <a href=\"%s\">WP Cron</a> for scheduling checks for future events, "
+"which relies on site visits to trigger these tasks to run. If you have low "
+"levels of site traffic, this may not happen frequently enough, so you may "
+"want to consider forcing WP-Cron to run every few minutes. For more "
+"information, <a href=\"%s\">read this tutorial</a> on setting up WP Cron."
+msgstr ""
+"Wir verwenden <a href=\"%s\">WP Cron</a> zur Planung von Überprüfungen "
+"zukünftiger Ereignisse, die auf Seitenbesuche angewiesen sind, um diese "
+"Aufgaben auszuführen. Bei geringem Seitenverkehr kann dies nicht häufig "
+"genug geschehen, sodass Sie in Erwägung ziehen sollten, WP-Cron alle paar "
+"Minuten auszuführen. Weitere Informationen finden Sie in <a href=\"%s\">"
+"diesem Tutorial</a> zur Einrichtung von WP Cron."
+
+#: admin/em-data-privacy.php:22
+msgid ""
+"We use Google services to generate maps and provide autocompletion when "
+"searching for events by location, which may collect data via your browser in "
+"accordance to Google's <a href=\"%s\">privacy policy</a>."
+msgstr ""
+"Wir nutzen Google-Services, um Karten bereitzustellen und um bei der Suche "
+"nach Veranstaltungen Autovervollständigung anzubieten. Diese sammeln Daten "
+"in Übereinstimmung mit Googles <a href=\"%s\">Datenschutzerklärung</a>."
+
+#: build/index.js:1
+msgid "Website"
+msgstr "Webseite"
+
+#: classes/Intl/Date.php:118 build/index.js:1
+msgid "Wed"
+msgstr "Mi"
+
+#: build/index.js:1
+msgid "Wednesday"
+msgstr "Mittwoch"
+
+#: templates/forms/event/when-with-recurring.php:43
+msgid "week on"
+msgstr "Woche am "
+
+#: build/index.js:1
+msgid "Weekday"
+msgstr "Wochentag"
+
+#: templates/forms/event/when-with-recurring.php:35 build/index.js:1
+msgid "Weekly"
+msgstr "Wöchentlich"
+
+#: templates/forms/event/when-with-recurring.php:44
+msgid "weeks on"
+msgstr "Wochen am"
+
+#: build/index.js:1
+msgid "What should your visitor say \"yes\" to?"
+msgstr "Zu was soll der Benutzer \"Ja\" sagen?"
+
+#: admin/em-data-privacy.php:363 admin/em-data-privacy.php:365
+msgid "When"
+msgstr "Wann"
+
+#: admin/settings/bookings.php:42
+msgid "When a booking cannot be made due to lack of spaces."
+msgstr "Wenn eine Buchung auf Grund Platzmangels nicht getätigt werden kann."
+
+#: admin/settings/bookings.php:40
+msgid "When a booking is registered and confirmed."
+msgstr "When eine Buchung durchgeführt und bestätigt ist."
+
+#: admin/settings/bookings.php:41
+msgid "When a booking is registered but pending."
+msgstr "Wenn eine Buchung durchgeführt, aber unerledigt ist."
+
+#: admin/settings/bookings.php:29
+msgid ""
+"When displaying ticket prices and booking totals, include the tax "
+"automatically?"
+msgstr ""
+"Steuern automatisch anzeigen, wenn Ticketpreise und Buchungssummen angezeigt "
+"werden?"
+
+#: admin/settings/bookings.php:54
+msgid ""
+"When enabled, users can custom-order their tickets using drag and drop. If "
+"enabled, saved ordering supercedes the default ticket ordering below."
+msgstr ""
+"Wenn diese Option aktiviert ist, können Benutzer Ihre Tickets per Drag-and-"
+"drop sortieren. Dabei überschreibt die gespeicherte Reihenfolge die "
+"untenstehende Standard-Sortierung."
+
+#: admin/settings/general.php:81
+msgid ""
+"When Events Manager displays lists of events the default behavior is "
+"ordering by start date in ascending order. To change this, modify the values "
+"above."
+msgstr ""
+"Normalerweise sortiert Event-Manager die Liste der Veranstaltungen nach dem "
+"Startdatum in aufsteigender Reihenfolge. Um die Sortierung zu ändern, passe "
+"die Werte oben an."
+
+#: build/index.js:1
+msgid "Width"
+msgstr "Breite"
+
+#: em-install.php:523
+msgid "Within"
+msgstr "Innerhalb"
+
+#: admin/settings/general.php:18
+msgid "WordPress Search"
+msgstr "WordPress Suche"
+
+#: classes/Emails/EmailsAdmin.php:46
+msgid "WP Cron Time"
+msgstr "WP Cron Zeit"
+
+#: templates/forms/event/when-with-recurring.php:47 build/index.js:1
+msgid "year"
+msgstr "Jahr"
+
+#: templates/forms/event/when-with-recurring.php:35 build/index.js:1
+msgid "Yearly"
+msgstr "Jährlich"
+
+#: templates/forms/event/when-with-recurring.php:48 build/index.js:1
+msgid "years"
+msgstr "Jahre"
+
+#: classes/Forms/Forms.php:102 classes/Options.php:169
+#: templates/emails/bookingfields.php:17
+msgid "Yes"
+msgstr "Ja"
+
+#: templates/forms/event/location.php:50
+msgid ""
+"You are switching location type, if you update this event your event "
+"previous location data will be deleted."
+msgstr ""
+"Wenn du den Typ des Veranstaltungsortes dieser Veranstaltung aktualisierst, "
+"werden die vorherigen Daten zum Veranstaltungsort gelöscht."
+
+#: classes/Bookings/Booking.php:386
+msgid "You are trying to book a non-existent ticket for this event."
+msgstr ""
+"Du versuchst, ein nicht vorhandenes Ticket für diese Veranstaltung zu buchen."
+
+#: classes/Events/EventPostsAdmin.php:69
+msgid "You are viewing individual recurrences of recurring event %s."
+msgstr "Du siehst einzelne Termine der Veranstaltungsserie %s."
+
+#: classes/Coupons/CouponsAdmin.php:316
+msgid "You are viewing the details of coupon %s - <a href=\"%s\">edit</a>"
+msgstr ""
+"Sie sehen die Details des Gutscheins %s - <a href=\"%s\">bearbeiten</a>\n"
+"\n"
+"\n"
+"\n"
+"\n"
+"\n"
+"\n"
+
+#: classes/Gateways/gateway.mollie.php:364
+msgid ""
+"You can activate/deactivate each payment method individually in your <a "
+"href=%s target=\"_blank\">Mollie Dashboard</a>."
+msgstr ""
+"Sie können jede Zahlungsmethode einzeln in Ihrem <a href=%s "
+"target=\"_blank\">Mollie Dashboard</a> aktivieren/deaktivieren."
+
+#: classes/Emails/CustomEmailsAdmin.php:470
+msgid ""
+"You can also create default emails for specific gateways in your individual "
+"%s settings page."
+msgstr ""
+"Du kannst auch Standard-Emails für bestimmte Gateways in Deiner eigenen %s "
+"Einstellungen Seite festlegen."
+
+#: classes/Emails/EmailsAdmin.php:14
+msgid ""
+"You can choose to add ical attachments to your booking emails, which display "
+"event information in email clients such as gmail and outlook allowing for "
+"easy adding to calendars."
+msgstr ""
+"Sie können wählen, iCal-Anhänge Ihren Buchungs-E-Mails beizufügen, die "
+"Veranstaltungsinformationen in E-Mail-Clients wie Gmail und Outlook anzeigen,"
+" damit sie leicht zum Kalender hinzugefügt werden können."
+
+#: classes/Emails/EmailsAdmin.php:41
+msgid ""
+"You can choose to send people attending your event x days before the event "
+"starts. Minimum is one day."
+msgstr ""
+"Du kannst eine automatische Erinnerung x Tage vor der Veranstaltung an die "
+"Teilnhemer senden. Minimum ist ein Tag."
+
+#: classes/Emails/EmailsAdmin.php:80
+msgid ""
+"You can customize the email templates sent when users make a booking for one "
+"of your events."
+msgstr ""
+"Du kannst die Email-Vorlagen verändern, die ein Benutzer bei Buchung für "
+"eine Veranstaltung erhält."
+
+#: admin/settings/emails.php:44
+msgid "You can disable this email by leaving the subject blank."
+msgstr "Du kannst diese E-Mail deaktivieren, indem du den Betreff leer lässt."
+
+#: classes/Events/EventPostsAdmin.php:355
+msgid ""
+"You can edit individual recurrences and disassociate them with a recurring "
+"event to prevent getting overwritten."
+msgstr ""
+"Um einzelne Termine bearbeiten zu können, ohne die Serie zu verändern, "
+"kannst du sie von der Serie trennen."
+
+#: classes/Events/EventPostAdmin.php:41 classes/Events/EventPostsAdmin.php:70
+#: templates/forms/event/bookings.php:31
+msgid ""
+"You can edit individual recurrences and disassociate them with this "
+"recurring event."
+msgstr ""
+"Du kannst einzelne Termine bearbeiten und sie von dieser Veranstaltungsserie "
+"lösen."
+
+#: templates/forms/event/bookings.php:43
+msgid ""
+"You can have single or multiple tickets, where certain tickets become "
+"available under certain conditions, e.g. early bookings, group discounts, "
+"maximum bookings per ticket, etc."
+msgstr ""
+"Du kannst ein oder mehrere Tickets haben, die unter bestimmten Bedingungen "
+"verfügbar sind, z. B. Frühbucher-, Gruppen-Rabatte, maximale Buchungen pro "
+"Ticket, oder Preiskategorien etc."
+
+#: admin/settings/bookings.php:43
+msgid "You can type any HTML Content here."
+msgstr "Hier kann jeder HTML-Inhalt eingefügt werden."
+
+#: classes/Tickets/Ticket.php:589
+msgid "You cannot delete a ticket that has a booking on it."
+msgstr ""
+"Du kannst ein Ticket nicht löschen, solange noch Buchungen dafür existieren."
+
+#: classes/Tickets/Tickets.php:134 classes/Tickets/Tickets.php:146
+msgid ""
+"You cannot delete tickets if there are any bookings associated with them. "
+"Please delete these bookings first."
+msgstr ""
+"Du kannst keine Tickets löschen, wenn Buchungen dafür existieren. Bitte "
+"lösche zuerst die Buchungen."
+
+#: classes/Bookings/Booking.php:291
+msgid "You cannot manage this %s."
+msgstr "Du darfst %s nicht verwalten."
+
+#: events.php:184 events.php:198
+msgid "You cannot read private %s"
+msgstr "Du kannst private %s nicht sehen"
+
+#: events.php:199
+msgid "You cannot view others %s"
+msgstr "Du kannst %s von anderen nicht sehen"
+
+#: events.php:181 events.php:189 events.php:195 events.php:202
+msgid "You do not have permission to delete %s"
+msgstr "Du hast keine Berechtigung, %s zu löschen"
+
+#: events.php:180 events.php:188 events.php:194
+msgid "You do not have permission to delete others %s"
+msgstr "Du hast keine Berechtigung um %s von anderen zu löschen"
+
+#: events.php:183 events.php:191 events.php:197 events.php:203
+msgid "You do not have permission to edit %s"
+msgstr "Du hast keine Berechtigung, um %s zu bearbeiten"
+
+#: events.php:182 events.php:190 events.php:196
+msgid "You do not have permission to edit others %s"
+msgstr "Du hast keine Berechtigung um %s von anderen zu bearbeiten"
+
+#: events.php:177
+msgid "You do not have permission to manage %s"
+msgstr "Du hast keine Berechtigung, %s zu verwalten"
+
+#: events.php:176
+msgid "You do not have permission to manage others %s"
+msgstr "Du hast keine Berechtigung um %s von anderen zu verwalten"
+
+#: events.php:179 events.php:187 events.php:193
+msgid "You do not have permission to publish %s"
+msgstr "Du hast keine Berechtigung, %s zu veröffentlichen"
+
+#: events.php:205
+msgid "You do not have permission to upload images"
+msgstr "Du hast keine Berechtigung, Bilder hochzuladen"
+
+#: classes/Tickets/TicketsBookings.php:186
+msgid "You do not have the rights to manage this %s."
+msgstr "Du hast nicht die Rechte, %s zu verwalten."
+
+#: admin/em-bookings.php:78 admin/em-bookings.php:185 admin/em-bookings.php:223
+#: admin/em-bookings.php:276
+msgid "You do not have the rights to manage this event."
+msgstr "Du hast nicht die Rechte, diese Veranstaltung zu verwalten."
+
+#: admin/em-bookings.php:138
+msgid "You do not have the rights to manage this ticket."
+msgstr "Du hast nicht die Rechte, dieses Ticket zu verwalten."
+
+#: templates/forms/event/attributes.php:43
+msgid ""
+"You don't have any custom attributes defined in any of your Events Manager "
+"template settings. Please add them the <a href='%s'>settings page</a>"
+msgstr ""
+"Du hast noch keine benutzerdefinierten Attribute in deinem Events Manager "
+"Template-Einstellungen definiert. Bitte füge diese auf der <a href='%s'>"
+"Einstellungen Seite</a> ein."
+
+#: classes/Events/Event.php:2242
+msgid "You have not defined a date range long enough to create a recurrence."
+msgstr ""
+"Du hast einen Datumsbereich definiert, der nicht lang genug ist, um eine "
+"Wiederholung zu erstellen."
+
+#: build/booking.js:1
+msgid "You may try it later again."
+msgstr "Bitte versuche es später nocheinmal"
+
+#: em-data-privacy.php:105
+msgid ""
+"You must allow us to collect and store your data in order for us to process "
+"your booking."
+msgstr ""
+"Du musst uns erlauben, die Daten zu speichern, um die Buchung abzuschließen."
+
+#: classes/Bookings/Booking.php:417
+msgid "You must request at least one space to book an event."
+msgstr ""
+"Du musst bei der Buchung mindestens einen Platz anfordern, um die "
+"Veranstaltung zu buchen."
+
+#: build/booking.js:1
+msgid "You will be redirected to the payment gateway"
+msgstr "Du wirst zu unserem Zahlungsanbieter weitergeleitet."
+
+#: classes/Events/EventPostAdmin.php:139
+msgid ""
+"Your %s details are incorrect and cannot be published, please correct these "
+"errors first:"
+msgstr ""
+"Deine %s Details sind inkorrekt und können nicht veröffentlicht werden. "
+"Bitte korrigiere erst diese Fehler: "
+
+#: classes/Bookings/Booking.php:263
+msgid "Your booking has been recorded"
+msgstr "Deine Buchung wurde erfasst"
+
+#: classes/Coupons/CouponsAdmin.php:394
+msgid "Your coupon hasn't been used yet!"
+msgstr "Dein Gutschein wurde bisher nicht verwendet!"
+
+#: classes/Gateways/gateway.mollie.php:367
+msgid ""
+"Your customer will be redirected back to this page after the payment. Leave "
+"blank to use the Single Event Page."
+msgstr ""
+"Ihr Kunde wird nach der Zahlung auf diese Seite zurückgeleitet. Lassen Sie "
+"das Feld leer, um die Einzelseitenansicht zu verwenden."
+
+#: classes/Events/EventPostAdmin.php:137
+msgid ""
+"Your event details are incorrect and recurrences cannot be created, please "
+"correct these errors first:"
+msgstr ""
+"Deine Veranstaltungsdetails sind inkorrekt und die wiederkehrende "
+"Veranstaltung konnte nicht angelegt werden. Bitte korrigiere erst diese "
+"Fehler:"
+
+#: classes/Gateways/gateway.php:640
+msgid ""
+"Your site is not using SSL! Whilst not a requirement, if you're going to "
+"submit API information for a live %s account, we recommend you do so over a "
+"secure connection. If this is not possible, consider an alternative option "
+"of submitting your API information as covered in our %s."
+msgstr ""
+"Ihre Seite verwendet kein SSL! Auch wenn es keine Voraussetzung ist, "
+"empfehlen wir Ihnen, bei der Übermittlung von API-Informationen für ein Live-"
+"%s-Konto eine sichere Verbindung zu nutzen. Falls dies nicht möglich ist, "
+"sollten Sie eine alternative Option zur Übermittlung Ihrer API-Informationen "
+"in Betracht ziehen, wie in unserem %s beschrieben."
+
+#: build/index.js:1
+msgid "ZIP Code"
+msgstr "Postleitzahl"
+
+#: classes/Gateways/Gateways.php:43 em-install.php:661 em-install.php:684
+msgid "Zip/Post Code"
+msgstr "Postleitzahl"

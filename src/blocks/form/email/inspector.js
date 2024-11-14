@@ -12,30 +12,33 @@ const Inspector = ( props ) => {
 
 	return (
 		<InspectorControls>
-			<PanelBody title={ __( 'Data', 'events' ) } initialOpen={ true }>
+			<PanelBody title={ __( 'Data', 'events-manager' ) } initialOpen={ true }>
 				<ToggleControl
-					label={ __( 'Required', 'events' ) }
+					label={ __( 'Required', 'events-manager' ) }
 					checked={ required }
 					disabled={ lockFieldId }
 					onChange={ ( value ) => setAttributes( { required: value } ) }
 				/>
 				<TextControl
-					label={ __( 'Help', 'events' ) }
-					help={ __( 'Help text for the input field', 'events' ) }
+					label={ __( 'Help', 'events-manager' ) }
+					help={ __( 'Help text for the input field', 'events-manager' ) }
 					value={ help }
 					onChange={ ( value ) => setAttributes( { help: value } ) }
 				/>
 				<TextControl
-					label={ __( 'Error message', 'events' ) }
-					help={ __( 'Text to display when the user types in invalid or insufficient data', 'events' ) }
+					label={ __( 'Error message', 'events-manager' ) }
+					help={ __(
+						'Text to display when the user types in invalid or insufficient data',
+						'events-manager'
+					) }
 					value={ error }
 					onChange={ ( value ) => setAttributes( { error: value } ) }
 				/>
 			</PanelBody>
-			<PanelBody title={ __( 'Appearance', 'events' ) } initialOpen={ true }>
+			<PanelBody title={ __( 'Appearance', 'events-manager' ) } initialOpen={ true }>
 				<RangeControl
-					label={ __( 'Width', 'events' ) }
-					help={ __( 'Number of columns the input field will occupy', 'events' ) }
+					label={ __( 'Width', 'events-manager' ) }
+					help={ __( 'Number of columns the input field will occupy', 'events-manager' ) }
 					value={ width }
 					max={ 6 }
 					min={ 1 }

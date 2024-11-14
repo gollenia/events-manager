@@ -10,12 +10,12 @@ global $EM_Event;
 <html>
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-	<title><?php echo sprintf(__('Bookings for %s','events-manager'), $EM_Event->name); ?></title>
+	<title><?php echo sprintf(__('Bookings for %s','events-manager'), $EM_Event->event_name); ?></title>
 	
 </head>
 <body id="printable">
 	<div id="container">
-	<h1><?php echo sprintf(__('Bookings for %s','events-manager'), $EM_Event->name); ?></h1> 
+	<h1><?php echo sprintf(__('Bookings for %s','events-manager'), $EM_Event->event_name); ?></h1> 
 	<p><?php echo $EM_Event->output("#d #M #Y"); ?></p>
 	<p><?php echo $EM_Event->output("#_LOCATION, #_ADDRESS, #_TOWN"); ?></p>   
 	<h2><?php _e('Bookings data', 'events-manager');?></h2>

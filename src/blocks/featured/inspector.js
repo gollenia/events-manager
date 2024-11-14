@@ -1,11 +1,16 @@
 import { InspectorControls } from '@wordpress/block-editor';
-import { CheckboxControl, FormTokenField, PanelBody, PanelRow, RangeControl, SelectControl, ToggleControl } from '@wordpress/components';
+import {
+	CheckboxControl,
+	FormTokenField,
+	PanelBody,
+	PanelRow,
+	RangeControl,
+	SelectControl,
+	ToggleControl,
+} from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 
-
-
-const Inspector = (props) => {
-	
+const Inspector = ( props ) => {
 	const {
 		attributes: {
 			limit,
@@ -22,133 +27,125 @@ const Inspector = (props) => {
 			selectedCategory,
 			selectedLocation,
 			fromDate,
-			toDate, 
+			toDate,
 			order,
 			showAudience,
-			showSpeaker
+			showSpeaker,
 		},
 		tagList,
 		categoryList,
 		tagsFieldValue,
 		locationList,
 		tagNames,
-		setAttributes
+		setAttributes,
 	} = props;
 
 	const locationViewOptions = [
-		{ value: "", label: __("", 'events') },
-		{ value: "city", label: __("City", 'events') },
-		{ value: "name", label: __("Name", 'events') },
-	]
+		{ value: '', label: __( '', 'events-manager' ) },
+		{ value: 'city', label: __( 'City', 'events-manager' ) },
+		{ value: 'name', label: __( 'Name', 'events-manager' ) },
+	];
 
 	const orderListViewOptions = [
-		{ value: "ASC", label: __("Ascending", 'events')},
-		{ value: "DESC", label: __("Descending", 'events')}
-	]
+		{ value: 'ASC', label: __( 'Ascending', 'events-manager' ) },
+		{ value: 'DESC', label: __( 'Descending', 'events-manager' ) },
+	];
 
-  	return (
+	return (
 		<InspectorControls>
-		<PanelBody
-			title={__('Data', 'events')}
-			initialOpen={true}
-		>
-			<SelectControl
-				label={__('Category', 'events')}
-				value={ selectedCategory }
-				options={ categoryList }
-				onChange={ (value) => { setAttributes( { selectedCategory: value } ); } }
-			/>
-			<FormTokenField
-				label={__('Tags', 'events')}
-				value={ tagsFieldValue }
-				suggestions={ tagNames }
-				onChange={ (selectedTags) => {
-					let selectedTagsArray = [];
-					selectedTags.map(
-						( tagName ) => {
+			<PanelBody title={ __( 'Data', 'events-manager' ) } initialOpen={ true }>
+				<SelectControl
+					label={ __( 'Category', 'events-manager' ) }
+					value={ selectedCategory }
+					options={ categoryList }
+					onChange={ ( value ) => {
+						setAttributes( { selectedCategory: value } );
+					} }
+				/>
+				<FormTokenField
+					label={ __( 'Tags', 'events-manager' ) }
+					value={ tagsFieldValue }
+					suggestions={ tagNames }
+					onChange={ ( selectedTags ) => {
+						let selectedTagsArray = [];
+						selectedTags.map( ( tagName ) => {
 							const matchingTag = tagList.find( ( tag ) => {
 								return tag.name === tagName;
-
 							} );
 							if ( matchingTag !== undefined ) {
 								selectedTagsArray.push( matchingTag.id );
 							}
-						}
-					)
+						} );
 
-					setAttributes( { selectedTags: selectedTagsArray } );
-
-				} }
-				__experimentalExpandOnFocus={true}
-			/>
-			
-			<SelectControl
-				label={__('Location', 'events')}
-				value={ selectedLocation }
-				options={ locationList }
-				onChange={ ( value ) => {
-					setAttributes( { selectedLocation: value } );
-				} }
-			/>
-
-			
-		</PanelBody>
-
-		<PanelBody
-			title={__('Appearance', 'events')}
-			initialOpen={true}
-		>
-			<PanelRow>
-				<ToggleControl
-					label={ __("Drop shadow", 'events')}
-					checked={ dropShadow }
-					onChange={ (value) => setAttributes({ dropShadow: value }) }
+						setAttributes( { selectedTags: selectedTagsArray } );
+					} }
+					__experimentalExpandOnFocus={ true }
 				/>
-			</PanelRow>
-			
-			<PanelRow>	
+
 				<SelectControl
-						label={__('Location', 'events')}
+					label={ __( 'Location', 'events-manager' ) }
+					value={ selectedLocation }
+					options={ locationList }
+					onChange={ ( value ) => {
+						setAttributes( { selectedLocation: value } );
+					} }
+				/>
+			</PanelBody>
+
+			<PanelBody title={ __( 'Appearance', 'events-manager' ) } initialOpen={ true }>
+				<PanelRow>
+					<ToggleControl
+						label={ __( 'Drop shadow', 'events-manager' ) }
+						checked={ dropShadow }
+						onChange={ ( value ) => setAttributes( { dropShadow: value } ) }
+					/>
+				</PanelRow>
+
+				<PanelRow>
+					<SelectControl
+						label={ __( 'Location', 'events-manager' ) }
 						value={ showLocation }
 						options={ locationViewOptions }
 						onChange={ ( value ) => {
 							setAttributes( { showLocation: value } );
 						} }
+					/>
+				</PanelRow>
+				<RangeControl
+					label={ __( 'Length of preview text', 'events-manager' ) }
+					max={ 200 }
+					min={ 0 }
+					help={ __( 'Number of words', 'events-manager' ) }
+					onChange={ ( value ) => {
+						setAttributes( { excerptLength: value } );
+					} }
+					value={ excerptLength }
 				/>
-			</PanelRow>
-			<RangeControl
-				label={__("Length of preview text", 'events')}
-				max={ 200 }
-				min={ 0 }
-				help={__("Number of words", 'events')}
-				onChange={(value) => {setAttributes( { excerptLength: value })}}
-				value={ excerptLength }
-			/>
-			<PanelRow>
-				<CheckboxControl
-					label={ __("Show Audience", 'events')}
-					checked={ showAudience }
-					onChange={ (value) => setAttributes({ showAudience: value }) }
-				/>
-			</PanelRow>
-			<PanelRow>
-				<CheckboxControl
-					label={ __("Show Speaker", 'events')}
-					checked={ showSpeaker }
-					onChange={ (value) => setAttributes({ showSpeaker: value }) }
-				/>
-			</PanelRow>
-			
-			<PanelRow>
-				<CheckboxControl
-					label={ __("Show category", 'events')}
-					checked={ showCategory }
-					onChange={ (value) => setAttributes({ showCategory: value }) }
-				/>
-			</PanelRow>
-		</PanelBody>
+				<PanelRow>
+					<CheckboxControl
+						label={ __( 'Show Audience', 'events-manager' ) }
+						checked={ showAudience }
+						onChange={ ( value ) => setAttributes( { showAudience: value } ) }
+					/>
+				</PanelRow>
+				<PanelRow>
+					<CheckboxControl
+						label={ __( 'Show Speaker', 'events-manager' ) }
+						checked={ showSpeaker }
+						onChange={ ( value ) => setAttributes( { showSpeaker: value } ) }
+					/>
+				</PanelRow>
+
+				<PanelRow>
+					<CheckboxControl
+						label={ __( 'Show category', 'events-manager' ) }
+						checked={ showCategory }
+						onChange={ ( value ) => setAttributes( { showCategory: value } ) }
+					/>
+				</PanelRow>
+			</PanelBody>
 		</InspectorControls>
-  	);
+	);
 };
 
 export default Inspector;

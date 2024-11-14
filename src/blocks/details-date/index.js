@@ -15,11 +15,13 @@ const { name, title, description } = metadata;
 
 const settings = {
 	...metadata,
-	title: __( title, 'events' ),
-	description: __( description, 'events' ),
+	title: __( title, 'events-manager' ),
+	description: __( description, 'events-manager' ),
 	icon,
 	edit: Edit,
-	save: () => { return null }
+	save: () => {
+		return null;
+	},
 };
 
 export { name, settings };

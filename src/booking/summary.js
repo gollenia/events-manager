@@ -4,7 +4,14 @@ import Gateway from './gateway';
 import { formatCurrency } from './modules/priceUtils';
 
 function Summary( { state, dispatch } ) {
-	const { data, response, request, wizzard } = state;
+	const { data, response, request, wizard } = state;
+
+	const [ TICKETS, REGISTRATION, PAYMENT, SUCCESS ] = [
+		wizard.step == 0,
+		wizard.step == 1,
+		wizard.step == 2,
+		wizard.step == 3,
+	];
 
 	const ticketCount = request.tickets.length;
 
@@ -36,6 +43,10 @@ function Summary( { state, dispatch } ) {
 			: sum - parseInt( response.coupon.discount );
 	};
 
+	const TICKETS_MISSING =
+		( TICKETS && request.tickets.length == 0 ) ||
+		( REGISTRATION && data.attendee_fields.length == 0 && request.tickets.length == 0 );
+
 	const fullPrice = useMemo( () => calculateFullPrice(), [ response.coupon, ticketCount ] );
 
 	return (
@@ -47,7 +58,7 @@ function Summary( { state, dispatch } ) {
 							<div className="list__title">{ data.available_tickets[ id ].name }</div>
 							<div className="list__subtitle">{ data.available_tickets[ id ].description }</div>
 							<div className="list__subtitle">
-								{ __( 'Base price:', 'events' ) }{ ' ' }
+								{ __( 'Base price:', 'events-manager' ) }{ ' ' }
 								{ formatCurrency(
 									data.available_tickets[ id ].price,
 									data.l10n.locale,
@@ -75,10 +86,12 @@ function Summary( { state, dispatch } ) {
 									></button>
 								</div>
 							) }
-							{ data.attendee_fields.length > 0 && wizzard.step == 0 && (
+							{ data.attendee_fields.length > 0 && wizard.step == 0 && (
 								<>
 									<button
-										className="button button--primary button--icon"
+										className={ `button button--primary button--icon ${
+											TICKETS_MISSING ? 'button--breathing' : ''
+										}` }
 										onClick={ () => dispatch( { type: 'ADD_TICKET', payload: id } ) }
 									>
 										<i className="material-icons material-symbols-outlined">add_circle</i>
@@ -92,7 +105,7 @@ function Summary( { state, dispatch } ) {
 					<div className="list__item">
 						<div className="list__content">
 							<div className="list__title">
-								{ response.coupon.description || __( 'Coupon', 'events' ) }
+								{ response.coupon.description || __( 'Coupon', 'events-manager' ) }
 							</div>
 						</div>
 						<div className="list__actions">
@@ -114,7 +127,7 @@ function Summary( { state, dispatch } ) {
 				<div className="list__item">
 					<div className="list__content">
 						<div className="list__title">
-							<b>{ __( 'Full price', 'events' ) }</b>
+							<b>{ __( 'Full price', 'events-manager' ) }</b>
 						</div>
 					</div>
 					<div className="list__actions">
@@ -128,7 +141,7 @@ function Summary( { state, dispatch } ) {
 								<button className="button button--primary button--icon"></button>
 							</div>
 						) }
-						{ wizzard.step == 0 && (
+						{ wizard.step == 0 && (
 							<button className="button button--primary button--icon invisible">
 								<i className="material-icons material-symbols-outlined">add_circle</i>
 							</button>
@@ -136,7 +149,7 @@ function Summary( { state, dispatch } ) {
 					</div>
 				</div>
 			</div>
-			{ wizzard.step == 2 && (
+			{ wizard.step == 2 && (
 				<div>
 					<Gateway state={ state } />
 				</div>

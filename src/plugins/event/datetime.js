@@ -7,7 +7,7 @@
  */
 import { CheckboxControl, PanelRow, TextControl } from '@wordpress/components';
 import { select } from '@wordpress/data';
-import { PluginDocumentSettingPanel } from '@wordpress/edit-post';
+import { PluginDocumentSettingPanel } from '@wordpress/editor';
 import './datetime.scss';
 
 import { useEntityProp } from '@wordpress/core-data';
@@ -60,13 +60,13 @@ const datetimeSelector = () => {
 	return (
 		<PluginDocumentSettingPanel
 			name="events-datetime-settings"
-			title={ __( 'Time and Date', 'events' ) }
+			title={ __( 'Time and Date', 'events-manager' ) }
 			className="events-datetime-settings"
 		>
 			<div className="em-date-row">
-				<h3>{ __( 'Date', 'events' ) }</h3>
+				<h3>{ __( 'Date', 'events-manager' ) }</h3>
 				<PanelRow>
-					<label for="em-from-date">{ __( 'From', 'events' ) }</label>
+					<label for="em-from-date">{ __( 'From', 'events-manager' ) }</label>
 					<div>
 						<TextControl
 							value={ meta._event_start_date }
@@ -74,6 +74,7 @@ const datetimeSelector = () => {
 								setMeta( { _event_start_date: value } );
 								const startDate = new Date( value );
 								const endDate = new Date( meta._event_end_date );
+								console.log( startDate, endDate );
 								if ( startDate > endDate ) {
 									setMeta( { _event_end_date: value } );
 								}
@@ -85,7 +86,7 @@ const datetimeSelector = () => {
 					</div>
 				</PanelRow>
 				<PanelRow>
-					<label for="em-to-date">{ __( 'To', 'events' ) }</label>
+					<label for="em-to-date">{ __( 'To', 'events-manager' ) }</label>
 					<div>
 						<TextControl
 							value={ meta._event_end_date }
@@ -100,7 +101,7 @@ const datetimeSelector = () => {
 					</div>
 				</PanelRow>
 			</div>
-			<h3>{ __( 'Time', 'events' ) }</h3>
+			<h3>{ __( 'Time', 'events-manager' ) }</h3>
 			<PanelRow className="em-time-row">
 				<TextControl
 					value={ meta._event_start_time ? meta._event_start_time : '00:00' }
@@ -110,7 +111,7 @@ const datetimeSelector = () => {
 							setMeta( { _event_end_time: getNextHour( 1, value ) } );
 						}
 					} }
-					label={ __( 'Starts at', 'events' ) }
+					label={ __( 'Starts at', 'events-manager' ) }
 					disabled={ meta._event_all_day }
 					type="time"
 				/>
@@ -124,7 +125,7 @@ const datetimeSelector = () => {
 						}
 					} }
 					disabled={ meta._event_all_day }
-					label={ __( 'Ends at', 'events' ) }
+					label={ __( 'Ends at', 'events-manager' ) }
 					type="time"
 				/>
 			</PanelRow>
@@ -133,7 +134,7 @@ const datetimeSelector = () => {
 				onChange={ ( value ) => {
 					setMeta( { _event_all_day: value ? 1 : 0 } );
 				} }
-				label={ __( 'All day', 'events' ) }
+				label={ __( 'All day', 'events-manager' ) }
 			/>
 		</PluginDocumentSettingPanel>
 	);

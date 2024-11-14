@@ -1,7 +1,16 @@
 const initialState = {
-	data: {},
+	data: false,
 	state: 'loading',
-	modal: false,
+	modal: {
+		selectedTicketIndex: 999,
+		visible: false,
+	},
+	currentTicket: 999,
+	coupon: {
+		discount: 0,
+		discountType: '%',
+	},
+	sendState: 'idle',
 };
 
 export default initialState;

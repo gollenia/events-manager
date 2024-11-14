@@ -51,7 +51,7 @@ jQuery( document ).ready( function ( $ ) {
 		document.location = newloc;
 	} );
 } );
-console.log( 'events/admin.js' );
+
 const bookingEditRoot = document.getElementById( 'booking-edit' );
 
 import { BookingAdmin } from './admin/booking/booking-admin';

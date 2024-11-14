@@ -42,19 +42,35 @@ const edit = ( props ) => {
 
 	const blockProps = useBlockProps( { className: 'event-details-item' } );
 
+	const hasPhoto =
+		blockProps.className.includes( 'is-style-photo' ) &&
+		location?._embedded?.[ 'wp:featuredmedia' ]?.length &&
+		location?._embedded?.[ 'wp:featuredmedia' ][ 0 ].media_details.sizes?.thumbnail?.source_url;
+
+	console.log( 'location', hasPhoto );
+
 	return (
 		<div { ...blockProps }>
 			<Inspector { ...props } />
 
 			<div className="event-details__item">
 				<div className="event-details__icon">
-					<i className="material-icons material-symbols-outlined">place</i>
+					{ hasPhoto ? (
+						<img
+							className="icon-round"
+							src={
+								location._embedded[ 'wp:featuredmedia' ][ 0 ].media_details.sizes.thumbnail.source_url
+							}
+						/>
+					) : (
+						<i className="material-icons material-symbols-outlined">place</i>
+					) }
 				</div>
 				<div>
 					<RichText
 						tagName="h5"
 						className="event-details_title description-editable"
-						placeholder={ __( 'Location', 'events' ) }
+						placeholder={ __( 'Location', 'events-manager' ) }
 						value={ description }
 						onChange={ ( value ) => {
 							setAttributes( { description: value } );
@@ -80,7 +96,7 @@ const edit = ( props ) => {
 						</div>
 					) : (
 						<div className="event-details_audience description-editable">
-							{ showTitle && <div>{ __( 'No location selected', 'events' ) }</div> }
+							{ showTitle && <div>{ __( 'No location selected', 'events-manager' ) }</div> }
 						</div>
 					) }
 				</div>

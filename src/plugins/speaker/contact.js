@@ -7,7 +7,7 @@
  */
 import { TextControl } from '@wordpress/components';
 import { select } from '@wordpress/data';
-import { PluginDocumentSettingPanel } from '@wordpress/edit-post';
+import { PluginDocumentSettingPanel } from '@wordpress/editor';
 
 import { useEntityProp } from '@wordpress/core-data';
 import { __ } from '@wordpress/i18n';
@@ -22,12 +22,12 @@ const contactData = () => {
 	return (
 		<PluginDocumentSettingPanel
 			name="events-location-settings"
-			title={ __( 'Contact', 'events' ) }
+			title={ __( 'Contact', 'events-manager' ) }
 			className="events-location-settings"
 		>
 			<TextControl
 				type="email"
-				label={ __( 'E-Mail', 'events' ) }
+				label={ __( 'E-Mail', 'events-manager' ) }
 				value={ meta._email }
 				onChange={ ( value ) => {
 					setMeta( { _email: value } );
@@ -36,7 +36,7 @@ const contactData = () => {
 
 			<TextControl
 				type="tel"
-				label={ __( 'Telephone', 'events' ) }
+				label={ __( 'Telephone', 'events-manager' ) }
 				value={ meta._phone }
 				onChange={ ( value ) => {
 					setMeta( { _phone: value } );

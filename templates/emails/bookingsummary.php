@@ -5,14 +5,14 @@
 * For more information, see http://wp-events-plugin.com/documentation/using-template-files/
 */
 /* @var $EM_Booking EM_Booking */ ?>
-<?php foreach($EM_Booking->get_tickets_bookings() as $EM_Ticket_Booking): /* @var $EM_Ticket_Booking EM_Ticket_Booking */ ?>
+<?php foreach($EM_Booking->get_tickets_bookings() as $ticket_booking):  ?>
 
-<?php echo $EM_Ticket_Booking->get_ticket()->ticket_name; ?>
+<?php echo $ticket_booking->get_ticket()->ticket_name; ?>
 
 --------------------------------------
-<?php _e('Quantity','events-manager'); ?>: <?php echo $EM_Ticket_Booking->get_spaces(); ?>
+<?php _e('Quantity','events-manager'); ?>: <?php echo $ticket_booking->get_spaces(); ?>
 
-<?php _e('Price','events-manager'); ?>: <?php echo $EM_Ticket_Booking->get_price(true); ?>
+<?php _e('Price','events-manager'); ?>: <?php echo $ticket_booking->format_price($ticket_booking->get_price()); ?>
 
 <?php endforeach; ?>
 
@@ -22,7 +22,7 @@
 $price_summary = $EM_Booking->get_price_summary_array();
 //we should now have an array of information including base price, taxes and post/pre tax discounts
 ?>
-<?php _e('Sub Total','events-manager'); ?> : <?php echo $EM_Booking->get_price_base(true); ?>
+
 
 <?php if( count($price_summary['discounts_pre_tax']) > 0 ): ?>
 

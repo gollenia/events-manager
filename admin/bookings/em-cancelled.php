@@ -5,17 +5,17 @@
  * @param int $event_id
  */
 function em_bookings_cancelled_table(){
-	global $EM_Event, $EM_Ticket, $wpdb, $current_user;
-	
+	global $EM_Event;
+
+	$ticket_id = key_exists('ticket_id', $_REQUEST) ? $_REQUEST['ticket_id'] : 0;
+	$ticket = new \Contexis\Events\Tickets\Ticket($ticket_id);
 	$action_scope = ( !empty($_REQUEST['em_obj']) && $_REQUEST['em_obj'] == 'em_bookings_cancelled_table' );
-	$action = ( $action_scope && !empty($_GET ['action']) ) ? $_GET ['action']:'';
-	$order = ( $action_scope && !empty($_GET ['order']) ) ? $_GET ['order']:'ASC';
 	$limit = ( $action_scope && !empty($_GET['limit']) ) ? $_GET['limit'] : 20;//Default limit
 	$page = ( $action_scope && !empty($_GET['pno']) ) ? $_GET['pno']:1;
 	$offset = ( $action_scope && $page > 1 ) ? ($page-1)*$limit : 0;
 	
-	if( is_object($EM_Ticket) ){
-		$EM_Bookings = $EM_Ticket->get_bookings()->get_cancelled_bookings();
+	if( is_object($ticket) ){
+		$EM_Bookings = $ticket->get_bookings()->get_cancelled_bookings();
 	}else{
 		if( is_object($EM_Event) ){
 			$EM_Bookings = $EM_Event->get_bookings()->get_cancelled_bookings();
@@ -42,27 +42,7 @@ function em_bookings_cancelled_table(){
 				-->
 				<?php if ( $bookings_count >= $limit ) : ?>
 				<div class='tablenav'>
-					<!--
-					<div class="alignleft actions">
-						<select name="action">
-							<option value="-1" selected="selected">
-								<?php _e('Bulk Actions', 'events-manager'); ?>
-							</option>
-							<option value="approve">
-								<?php _e('Approve', 'events-manager'); ?>
-							</option>
-							<option value="decline">
-								<?php _e('Decline', 'events-manager'); ?>
-							</option>
-						</select> 
-						<input type="submit" id="post-query-submit" value="Filter" class="button-secondary" />
-					</div>
-					-->
-					<!--
-					<div class="view-switch">
-						<a href="/wp-admin/edit.php?mode=list"><img class="current" id="view-switch-list" src="http://wordpress.lan/wp-includes/images/blank.gif" width="20" height="20" title="List View" alt="List View" name="view-switch-list" /></a> <a href="/wp-admin/edit.php?mode=excerpt"><img id="view-switch-excerpt" src="http://wordpress.lan/wp-includes/images/blank.gif" width="20" height="20" title="Excerpt View" alt="Excerpt View" name="view-switch-excerpt" /></a>
-					</div>
-					-->
+					
 					<?php 
 					if ( $bookings_count >= $limit ) {
 						$bookings_nav = Contexis\Events\Admin\Pagination::paginate( $bookings_count, $limit, $page, array('em_ajax'=>0, 'em_obj'=>'em_bookings_confirmed_table'));
@@ -104,9 +84,9 @@ function em_bookings_cancelled_table(){
 									<td><?php echo $EM_Booking->get_spaces() ?></td>
 									<td>
 										<?php
-										$approve_url = em_add_get_params($_SERVER['REQUEST_URI'], array('action'=>'bookings_approve', 'booking_id'=>$EM_Booking->booking_id));
-										$delete_url = em_add_get_params($_SERVER['REQUEST_URI'], array('action'=>'bookings_delete', 'booking_id'=>$EM_Booking->booking_id));
-										$edit_url = em_add_get_params($_SERVER['REQUEST_URI'], array('booking_id'=>$EM_Booking->booking_id, 'em_ajax'=>null, 'em_obj'=>null));
+										$approve_url = add_query_arg(['action'=>'bookings_approve', 'booking_id'=>$EM_Booking->booking_id], $_SERVER['REQUEST_URI']);
+										$delete_url = add_query_arg(['action'=>'bookings_delete', 'booking_id'=>$EM_Booking->booking_id], $_SERVER['REQUEST_URI']);
+										$edit_url = add_query_arg(['booking_id'=>$EM_Booking->booking_id, 'em_ajax'=>null, 'em_obj'=>null], $_SERVER['REQUEST_URI']);
 										?>
 										<a class="em-bookings-approve" href="<?php echo $approve_url ?>"><?php _e('Restore','events-manager'); ?></a> |
 										<a class="em-bookings-edit" href="<?php echo $edit_url; ?>"><?php _e('Edit/View','events-manager'); ?></a> |

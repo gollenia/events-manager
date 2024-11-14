@@ -38,8 +38,7 @@ function em_uninstall() {
 
 function em_install() {
 	global $wp_rewrite;
-	switch_to_locale(EM_ML::$wplang); //switch to blog language (if applicable)
-   	$wp_rewrite->flush_rules();
+	$wp_rewrite->flush_rules();
 	$old_version = get_option('dbem_version');	
    	
 	if( Events::VERSION > $old_version || $old_version == '' ){
@@ -56,8 +55,7 @@ function em_install() {
 			em_create_reminders_table();
 			em_create_bookings_relationships_table();
 			
-			add_action('em_ml_init', 'EM_ML::toggle_languages_index');
-		 	
+			
 			if( empty($old_version) ){
 				update_option('dbem_hello_to_user',1);
 			}
@@ -176,8 +174,10 @@ function em_create_events_table() {
 		event_timezone tinytext NULL DEFAULT NULL,
 		post_content longtext NULL DEFAULT NULL,
 		event_rsvp tinyint(1) unsigned NOT NULL DEFAULT 0,
-		event_rsvp_date date NULL DEFAULT NULL,
-		event_rsvp_time time NULL DEFAULT NULL,
+		event_rsvp_end datetime NULL DEFAULT NULL,
+		event_rsvp_start datetime NULL DEFAULT NULL,
+		event_speaker_id bigint(20) unsigned NULL DEFAULT NULL,
+		event_audience text NULL DEFAULT NULL,
 		event_rsvp_spaces int(5) NULL DEFAULT NULL,
 		event_spaces int(5) NULL DEFAULT 0,
 		event_private tinyint(1) unsigned NOT NULL DEFAULT 0,
@@ -311,8 +311,7 @@ function em_create_bookings_table() {
 		booking_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 		booking_status bool NOT NULL DEFAULT 1,
  		booking_price decimal(14,4) unsigned NOT NULL DEFAULT 0,
- 		booking_tax_rate decimal(7,4) NULL DEFAULT NULL,
- 		booking_taxes decimal(14,4) NULL DEFAULT NULL,
+ 		booking_donation bool NOT NULL DEFAULT 0,
 		booking_meta LONGTEXT NULL,
 		PRIMARY KEY  (booking_id)
 		) DEFAULT CHARSET=utf8 ;";
@@ -345,7 +344,6 @@ function em_create_tickets_table() {
 		ticket_members_roles LONGTEXT NULL,
 		ticket_guests INT( 1 ) NULL ,
 		ticket_required INT( 1 ) NULL ,
-		ticket_parent BIGINT( 20 ) UNSIGNED NULL,
 		ticket_order INT( 2 ) UNSIGNED NULL,
 		ticket_meta LONGTEXT NULL,
 		PRIMARY KEY  (ticket_id)
@@ -418,10 +416,8 @@ function em_create_coupons_table() {
 		  coupon_start datetime DEFAULT NULL,
 		  coupon_end datetime DEFAULT NULL,
 		  coupon_type varchar(20) DEFAULT NULL,
-		  coupon_tax varchar(4) DEFAULT NULL,
 		  coupon_discount decimal(14,2) NOT NULL,
 		  coupon_eventwide bool NOT NULL DEFAULT 0,
-		  coupon_sitewide bool NOT NULL DEFAULT 0,
 		  coupon_private bool NOT NULL DEFAULT 0,
 		  PRIMARY KEY  (coupon_id)
 		) DEFAULT CHARSET=utf8 ;";
@@ -499,7 +495,7 @@ function em_add_options() {
 	$blogname = wp_specialchars_decode(get_option('blogname'), ENT_QUOTES);
 	$booking_registration_email_subject = sprintf(__('[%s] Your username and password', 'events-manager'), $blogname);
 	$booking_registration_email_body = "";
-	$respondent_email_body_localizable = __("Dear #_BOOKINGNAME, <br />This is a reminder about your #_BOOKINGSPACES space/spaces reserved for #_EVENTNAME.<br />When : #_EVENTDATES @ #_EVENTTIMES<br />Where : #_LOCATIONNAME - #_LOCATIONFULLLINE<br />We look forward to seeing you there!<br />Yours faithfully,<br />#_CONTACTNAME",'em-pro').$email_footer;
+	$respondent_email_body_localizable = __("Dear #_BOOKINGNAME, <br />This is a reminder about your #_BOOKINGSPACES space/spaces reserved for #_EVENTNAME.<br />When : #_EVENTDATES @ #_EVENTTIMES<br />Where : #_LOCATIONNAME - #_LOCATIONFULLLINE<br />We look forward to seeing you there!<br />Yours faithfully,<br />#_CONTACTNAME",'events-manager').$email_footer;
 	//all the options
 	$dbem_options = array(
 		
@@ -571,9 +567,6 @@ function em_add_options() {
 		
 		'dbem_bookings_currency' => 'USD',
 		
-		
-		'dbem_bookings_tax' => 0, //extra tax
-		'dbem_bookings_tax_auto_add' => 0, //adjust prices to show tax?
 			//Form Options
 		'dbem_bookings_submit_button' => __('Send your booking', 'events-manager'),	
 		'dbem_bookings_form_max' => 20,
@@ -643,26 +636,26 @@ function em_add_options() {
 		//email reminders
 		'dbem_cron_emails' => 0,
 		'dbem_cron_emails_limit' => get_option('emp_cron_emails_limit', 100),
-		'dbem_emp_emails_reminder_subject' => __('Reminder','em-pro').' - #_EVENTNAME',
+		'dbem_emp_emails_reminder_subject' => __('Reminder','events-manager').' - #_EVENTNAME',
 		'dbem_emp_emails_reminder_body' => str_replace("<br />", "\n\r", $respondent_email_body_localizable),
 		'dbem_emp_emails_reminder_time' => '12:00 AM',
 		'dbem_emp_emails_reminder_days' => 1,
 		'dbem_emp_emails_reminder_ical' => 1,
 		//offline
-		'em_offline_option_name' => __('Pay Offline', 'em-pro'),
+		'em_offline_option_name' => __('Pay Offline', 'events-manager'),
 		'em_offline_booking_feedback' => __('Booking successful.', 'events-manager'),
-		'em_offline_button' => __('Pay Offline', 'em-pro'),
+		'em_offline_button' => __('Pay Offline', 'events-manager'),
 		'emp_gateway_customer_fields' => ['address' => 'dbem_address','address_2' => 'dbem_address_2','city' => 'dbem_city','state' => 'dbem_state','zip' => 'dbem_zip','country' => 'dbem_country','phone' => 'dbem_phone','fax' => 'dbem_fax','company' => 'dbem_company'],
 		'em_user_fields' => [
 			'dbem_address' => array ( 'label' => __('Address','events-manager'), 'type' => 'text', 'fieldid'=>'dbem_address', 'required'=>1 ),
 			'dbem_address_2' => array ( 'label' => __('Address Line 2','events-manager'), 'type' => 'text', 'fieldid'=>'dbem_address_2' ),
 			'dbem_city' => array ( 'label' => __('City/Town','events-manager'), 'type' => 'text', 'fieldid'=>'dbem_city', 'required'=>1 ),
 			'dbem_state' => array ( 'label' => __('State/County','events-manager'), 'type' => 'text', 'fieldid'=>'dbem_state', 'required'=>1 ),
-			'dbem_zip' => array ( 'label' => __('Zip/Post Code','em-pro'), 'type' => 'text', 'fieldid'=>'dbem_zip', 'required'=>1 ),
+			'dbem_zip' => array ( 'label' => __('Zip/Post Code','events-manager'), 'type' => 'text', 'fieldid'=>'dbem_zip', 'required'=>1 ),
 			'dbem_country' => array ( 'label' => __('Country','events-manager'), 'type' => 'country', 'fieldid'=>'dbem_country', 'required'=>1 ),
 			'dbem_phone' => array ( 'label' => __('Phone','events-manager'), 'type' => 'text', 'fieldid'=>'dbem_phone' ),
-			'dbem_fax' => array ( 'label' => __('Fax','em-pro'), 'type' => 'text', 'fieldid'=>'dbem_fax' ),
-			'dbem_company' => array ( 'label' => __('Company','em-pro'), 'type' => 'text', 'fieldid'=>'dbem_company' ),
+			'dbem_fax' => array ( 'label' => __('Fax','events-manager'), 'type' => 'text', 'fieldid'=>'dbem_fax' ),
+			'dbem_company' => array ( 'label' => __('Company','events-manager'), 'type' => 'text', 'fieldid'=>'dbem_company' ),
 		]
 		
 	);
@@ -675,16 +668,16 @@ function em_add_options() {
 		add_option($key, $value);
 	}
 
-	$booking_form_data = array( 'name'=> __('Default','em-pro'), 'form'=> array (
+	$booking_form_data = array( 'name'=> __('Default','events-manager'), 'form'=> array (
 		'name' => array ( 'label' => __('Name','events-manager'), 'type' => 'name', 'fieldid'=>'user_name', 'required'=>1 ),
 		'user_email' => array ( 'label' => __('Email','events-manager'), 'type' => 'user_email', 'fieldid'=>'user_email', 'required'=>1 ),
 		  'dbem_address' => array ( 'label' => __('Address','events-manager'), 'type' => 'dbem_address', 'fieldid'=>'dbem_address', 'required'=>1 ),
 		  'dbem_city' => array ( 'label' => __('City/Town','events-manager'), 'type' => 'dbem_city', 'fieldid'=>'dbem_city', 'required'=>1 ),
 		  'dbem_state' => array ( 'label' => __('State/County','events-manager'), 'type' => 'dbem_state', 'fieldid'=>'dbem_state', 'required'=>1 ),
-		  'dbem_zip' => array ( 'label' => __('Zip/Post Code','em-pro'), 'type' => 'dbem_zip', 'fieldid'=>'dbem_zip', 'required'=>1 ),
+		  'dbem_zip' => array ( 'label' => __('Zip/Post Code','events-manager'), 'type' => 'dbem_zip', 'fieldid'=>'dbem_zip', 'required'=>1 ),
 		  'dbem_country' => array ( 'label' => __('Country','events-manager'), 'type' => 'dbem_country', 'fieldid'=>'dbem_country', 'required'=>1 ),
 		  'dbem_phone' => array ( 'label' => __('Phone','events-manager'), 'type' => 'dbem_phone', 'fieldid'=>'dbem_phone' ),
-			'booking_comment' => array ( 'label' => __('Comment','events-manager'), 'type' => 'textarea', 'fieldid'=>'booking_comment' ),
+		  'booking_comment' => array ( 'label' => __('Comment','events-manager'), 'type' => 'textarea', 'fieldid'=>'booking_comment' ),
 	  ));
   
 	  //Booking form stuff only run on install
@@ -892,6 +885,28 @@ function em_upgrade_current_installation(){
 		delete_option('dbem_rsvp_mail_SMTPAuth');
 		
 	}
+
+	//update version
+	if( get_option('dbem_version') != '' && get_option('dbem_version') < 6.7 ) {
+		global $wpdb;
+		$wpdb->query('ALTER TABLE '.EM_EVENTS_TABLE.' ADD COLUMN event_rsvp_end datetime NULL DEFAULT NULL');
+		$wpdb->query('ALTER TABLE '.EM_EVENTS_TABLE.' ADD COLUMN event_rsvp_start datetime NULL DEFAULT NULL');
+		$wpdb->query('ALTER TABLE '.EM_EVENTS_TABLE.' ADD COLUMN event_speaker_id bigint(20) unsigned NULL DEFAULT NULL');
+		$wpdb->query('ALTER TABLE '.EM_EVENTS_TABLE.' ADD COLUMN event_audience text NULL DEFAULT NULL');
+		$wpdb->query('ALTER TABLE '.EM_EVENTS_TABLE.' DROP COLUMN event_rsvp_date');
+		$wpdb->query('ALTER TABLE '.EM_EVENTS_TABLE.' DROP COLUMN event_rsvp_time');
+	}
+
+	if( get_option('dbem_version') != '' && get_option('dbem_version') < 6.8 ) {
+		global $wpdb;
+		$wpdb->query('ALTER TABLE '.EM_BOOKINGS_TABLE.' ADD COLUMN booking_donation decimal(10,2) NULL DEFAULT NULL');
+		$wpdb->query('ALTER TABLE '.EM_BOOKINGS_TABLE.' DROP COLUMN booking_tax');
+		$wpdb->query('ALTER TABLE '.EM_BOOKINGS_TABLE.' DROP COLUMN booking_tax_rate');
+		$wpdb->query('ALTER TABLE '.EM_COUPONS_TABLE.' DROP COLUMN coupon_tax');
+		$wpdb->query('ALTER TABLE '.EM_TICKETS_TABLE.' DROP COLUMN ticket_parent');
+		
+		delete_option('dbem_bookings_tax');
+		delete_option('dbem_bookings_tax_auto_add');
 }
 
 function em_set_mass_caps( $roles, $caps ){
@@ -958,50 +973,6 @@ function em_set_capabilities(){
 		}
 		em_set_mass_caps( array('administrator','editor','contributor','author','subscriber'), $default_caps);
 	}
-}
-
-function em_migrate_events($events){
-	global $wpdb;
-	//disable actions
-	remove_action('save_post',array('EM_Event_Recurring_Post_Admin','save_post'));
-	remove_action('save_post',array('EM_Event_Post_Admin','save_post'),10,1);
-	$post_fields = array('event_slug','event_owner','event_name','event_attributes','post_id','post_content');
-	$event_metas = array(); //restart metas
-	foreach($events as $event){
-		//new post info
-		$post_array = array();
-		$post_array['post_type'] = $event['recurrence'] == 1 ? 'event-recurring' : EM_Event::POST_TYPE;
-		$post_array['post_title'] = $event['event_name'];
-		$post_array['post_content'] = $event['post_content'];
-		$post_array['post_status'] = (!isset($event['event_status']) || $event['event_status'])  ? 'publish':'pending';
-		$post_array['post_author'] = $event['event_owner'];
-		$post_array['post_slug'] = $event['event_slug'];
-		$event['start_ts'] = strtotime($event['event_start_date']);
-		$event['end_ts'] = strtotime($event['event_end_date']);
-		//Save post, register post id in index
-		$post_id = wp_insert_post($post_array);
-		if( is_wp_error($post_id) || $post_id == 0 ){ $post_id = 999999999999999999; }//hopefully nobody blogs that much... if you do, and you're reading this, maybe you should be hiring me for the upgrade ;) }
-		if( $post_id != 999999999999999999 ){
-			$wpdb->query('UPDATE '.EM_EVENTS_TABLE." SET post_id='$post_id' WHERE event_id='{$event['event_id']}'");
-			//meta
-	 		foreach($event as $meta_key => $meta_val){
-	 			if( !in_array($meta_key, $post_fields) && $meta_key != 'event_attributes' ){
-		 			$event_metas[] = $wpdb->prepare("(%d, '%s', '%s')", array($post_id, '_'.$meta_key, $meta_val));
-	 			}elseif($meta_key == 'event_attributes'){
-	 				$event_attributes = unserialize($meta_val); //from em table it's serialized
-					if( is_array($event_attributes) ){
-		 				foreach($event_attributes as $att_key => $att_val){
-			 				$event_metas[] = $wpdb->prepare("(%d, '%s', '%s')", array($post_id, $att_key, $att_val));
-		 				}
-					}
-	 			}
-	 		}
-		}
-	}
- 	//insert the metas in one go, faster than one by one
- 	if( count($event_metas) > 0 ){
-	 	$result = $wpdb->query("INSERT INTO ".$wpdb->postmeta." (post_id,meta_key,meta_value) VALUES ".implode(',',$event_metas));
- 	}
 }
 
 function em_migrate_locations($locations){

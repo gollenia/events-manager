@@ -1,16 +1,65 @@
-.modal {
-	background-color: rgba( 0, 0, 0, 0.5 );
-	position: fixed;
-	top: 0;
-	left: 0;
-	right: 0;
-	bottom: 0;
-	display: grid;
-	place-content: center;
+#booking-admin {
+	padding-right: 20px;
+}
+.payment-status {
+	display: inline-block;
+	padding: 3px 8px;
+	white-space: nowrap;
+	border-radius: 5px;
+	background-color: #f0f0f1;
+	font-weight: 600;
+
+	&.pending {
+		color: #1e1600;
+		background-color: #ffb700;
+	}
+
+	&.paid {
+		color: #fff;
+		background-color: #00a000;
+	}
+
+	&.unpaid {
+		color: #fff;
+		background-color: #ab0000;
+	}
 }
 
-.modal-content {
-	background-color: #f0f0f1;
-	padding: 20px;
-	border-radius: 5px;
+.booking-details {
+	display: flex;
+	justify-content: space-between;
+}
+
+.booking-info {
+	display: flex;
+	gap: 1rem;
+}
+
+.row-actions a {
+	cursor: pointer;
+}
+
+.modal-actions {
+	display: flex;
+	margin-top: 1rem;
+	justify-content: space-between;
+}
+
+.booking-actions {
+	display: flex;
+	margin-top: 1rem;
+	justify-content: flex-end;
+	gap: 1rem;
+}
+
+.flex-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-top: 1rem;
+}
+
+.note-container {
+	margin-top: 1rem;
+	margin-bottom: 1rem;
 }

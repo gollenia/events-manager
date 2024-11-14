@@ -85,38 +85,6 @@ function em_admin_menu(){
 }
 add_action('admin_menu','em_admin_menu');
 
-/**
- * Generate warnings and notices in the admin area
- */
-function em_admin_warnings() {
-	global $EM_Notices;
-	//If we're editing the events page show hello to new user
-	
-	$dismiss_link_joiner = ( count($_GET) > 0 ) ? '&amp;':'?';
-	
-	if( current_user_can('activate_plugins') ){
-		//New User Intro
-		if (isset ( $_GET ['disable_hello_to_user'] ) && $_GET ['disable_hello_to_user'] == 'true'){
-			// Disable Hello to new user if requested
-			update_option('dbem_hello_to_user',0);
-		}elseif ( get_option ( 'dbem_hello_to_user' ) ) {
-			//FIXME update welcome msg with good links
-			$advice = sprintf( __("<p>Events Manager is ready to go! It is highly recommended you read the <a href='%s'>Getting Started</a> guide on our site, as well as checking out the <a href='%s'>Settings Page</a>. <a href='%s' title='Don't show this advice again'>Dismiss</a></p>", 'events-manager'), 'http://wp-events-plugin.com/documentation/getting-started-guide/?utm_source=em&utm_medium=plugin&utm_content=installationlink&utm_campaign=plugin_links', EM_ADMIN_URL .'&amp;page=events-manager-options', esc_url($_SERVER['REQUEST_URI'].$dismiss_link_joiner.'disable_hello_to_user=true'));
-			?>
-			<div id="message" class="updated">
-				<?php echo $advice; ?>
-			</div>
-			<?php
-		}
-
-		
-		
-	}
-	//Warn about EM page edit
-	
-	echo $EM_Notices;		
-}
-add_action ( 'admin_notices', 'em_admin_warnings', 100 );
 
 /**
  * Settings link in the plugins page menu

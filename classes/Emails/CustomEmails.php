@@ -271,7 +271,7 @@ class EM_Custom_Emails{
 			foreach( $admin_emails as $admin_email_type => $admin_email_type_emails ){
 				$admin_emails_export[] = $admin_email_type . ': '. implode(', ', $admin_email_type_emails);
 			}
-			$export_item['data'][] = array( 'name' => __('Admin Emails', 'em-pro'), 'value' => implode('<br>', $admin_emails_export) );
+			$export_item['data'][] = array( 'name' => __('Admin Emails', 'events-manager'), 'value' => implode('<br>', $admin_emails_export) );
 			unset($admin_emails_export, $admin_emails);
 		}
 		if( !empty($event_emails) ){
@@ -288,7 +288,7 @@ class EM_Custom_Emails{
 				}
 				$event_emails_export[] = $event_emails_string;
 			}
-			$export_item['data'][] = array( 'name' => __('Admin Emails', 'em-pro'), 'value' => implode('<br><br>--------------<br><br>', $event_emails_export) );
+			$export_item['data'][] = array( 'name' => __('Admin Emails', 'events-manager'), 'value' => implode('<br><br>--------------<br><br>', $event_emails_export) );
 		}
 		return $export_item;
 	}

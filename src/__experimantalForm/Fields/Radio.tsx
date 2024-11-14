@@ -9,11 +9,11 @@ export type RadioProps = {
 	options?: Array< string >;
 	disabled: boolean;
 	onChange: ( value: string ) => void;
-	admin: boolean;
+	value: string;
 };
 
 const Radio = ( props: RadioProps ) => {
-	const { onChange, options, name, disabled, placeholder, width, required, admin } = props;
+	const { onChange, options, name, disabled, placeholder, width, required, admin, value } = props;
 
 	const classes = [
 		'ctx-form-field',
@@ -30,39 +30,6 @@ const Radio = ( props: RadioProps ) => {
 	};
 
 	const firstOptionInitiallyChecked = required && ! selection;
-
-	if ( admin )
-		return (
-			<tr>
-				<td>
-					<label>{ props.label }</label>
-				</td>
-				<td>
-					<fieldset name={ props.name }>
-						<legend>{ props.label }</legend>
-						{ options &&
-							options.map( ( option, index ) => {
-								return (
-									<label key={ index } htmlFor={ name + index }>
-										<input
-											checked={ selection === option }
-											onChange={ ( value ) => {
-												onChangeHandler( value );
-											} }
-											disabled={ disabled }
-											type="radio"
-											value={ option }
-											name={ name }
-											id={ name + index }
-										/>
-										{ option }
-									</label>
-								);
-							} ) }
-					</fieldset>
-				</td>
-			</tr>
-		);
 
 	return (
 		<div

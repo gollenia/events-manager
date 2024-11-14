@@ -43,6 +43,17 @@
 		}
 	},
 	"parents": [ "events-manager/details" ],
+	"styles": [
+		{
+			"name": "icon",
+			"label": "Icon",
+			"isDefault": true
+		},
+		{
+			"name": "photo",
+			"label": "Photo"
+		}
+	],
 	"usesContext": [ "postId" ],
 	"render": "file:./render.php"
 }

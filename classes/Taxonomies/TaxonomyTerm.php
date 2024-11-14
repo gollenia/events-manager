@@ -95,7 +95,7 @@ class EM_Taxonomy_Term extends EM_Object {
 		if( !empty($wp_rewrite) && $wp_rewrite->using_permalinks() ){
 			$return = trailingslashit($this->get_url()).'ical/';
 		}else{
-			$return = em_add_get_params($this->get_url(), array('ical'=>1));
+			$return = add_query_arg(['ical'=>1], $this->get_url());
 		}
 		return apply_filters('em_'. $this->option_name .'_get_ical_url', $return);
 	}
@@ -105,7 +105,7 @@ class EM_Taxonomy_Term extends EM_Object {
 		if( !empty($wp_rewrite) && $wp_rewrite->using_permalinks() ){
 			$return = trailingslashit($this->get_url()).'feed/';
 		}else{
-			$return = em_add_get_params($this->get_url(), array('feed'=>1));
+			$return = add_query_arg(['feed'=>1], $this->get_url());
 		}
 		return apply_filters('em_'. $this->option_name .'_get_rss_url', $return);
 	}

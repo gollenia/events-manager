@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import BookingEditor from './BookingEditor';
-console.log( 'BookingAdmin' );
+
 function BookingAdmin() {
 	document.addEventListener( 'DOMContentLoaded', () => {
 		const rootElement = document.getElementById( 'booking-admin' );

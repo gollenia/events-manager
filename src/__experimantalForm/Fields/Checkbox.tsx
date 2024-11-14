@@ -14,11 +14,10 @@ type Props = {
 	toggle: boolean;
 	formTouched: boolean;
 	onChange: ( value: any ) => void;
-	admin: boolean;
 };
 
 const Checkbox = ( props: Props ) => {
-	const { label, width, onChange, type, value, help, toggle, customErrorMessage, admin, name } = props;
+	const { label, width, onChange, type, value, help, toggle, customErrorMessage, name } = props;
 
 	const inputRef = useRef< HTMLInputElement >( null );
 	const [ touched, setTouched ] = useState( false );
@@ -45,40 +44,11 @@ const Checkbox = ( props: Props ) => {
 		! inputRef?.current?.validity.valid && isTouched ? 'error' : '',
 	].join( ' ' );
 
-	if ( admin )
-		return (
-			<tr>
-				<td>
-					<label>{ label }</label>
-				</td>
-				<td>
-					<fieldset>
-						<label htmlFor={ name }>
-							<div className="toggle__control">
-								<input
-									name={ name }
-									disabled={ props.disabled }
-									required={ props.required }
-									ref={ inputRef }
-									onClick={ () => setTouched( true ) }
-									checked={ value }
-									type="checkbox"
-									onChange={ onChangeHandler }
-									onInvalid={ setInvalidity }
-								/>
-								{ toggle && <span className="toggle__switch"></span> }
-							</div>
-							<span>{ help ?? label }</span>
-						</label>
-						{ isTouched && ! inputRef?.current?.validity.valid && inputRef.current?.validationMessage && (
-							<span className="error-message">
-								{ customErrorMessage || inputRef.current?.validationMessage }
-							</span>
-						) }
-					</fieldset>
-				</td>
-			</tr>
-		);
+	const Label = () => {
+		const labelText = help ?? label;
+
+		return <span dangerouslySetInnerHTML={ { __html: labelText } }></span>;
+	};
 
 	return (
 		<div
@@ -101,7 +71,7 @@ const Checkbox = ( props: Props ) => {
 					/>
 					{ toggle && <span className="toggle__switch"></span> }
 				</div>
-				<span>{ help ?? label }</span>
+				<Label />
 			</label>
 			{ isTouched && ! inputRef?.current?.validity.valid && inputRef.current?.validationMessage && (
 				<span className="error-message">{ customErrorMessage || inputRef.current?.validationMessage }</span>

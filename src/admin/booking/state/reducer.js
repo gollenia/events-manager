@@ -3,10 +3,13 @@ const initializer = ( initialState ) => initialState;
 const createTicket = ( availableFields, availableTickets ) => {
 	const fields = {};
 	for ( let field of availableFields ) {
-		fields[ field.fieldid ] = '';
+		fields[ field.fieldid ] = field.defaultValue || '';
+		if ( field.type === 'select' || field.type === 'radio' ) {
+			fields[ field.fieldid ] = field.options[ 0 ];
+		}
 	}
 	return {
-		ticket: parseInt( Object.keys( availableTickets )[ 0 ] ),
+		id: parseInt( Object.keys( availableTickets )[ 0 ] ),
 		fields,
 	};
 };
@@ -14,9 +17,20 @@ const createTicket = ( availableFields, availableTickets ) => {
 const reducer = ( state = {}, action ) => {
 	const { type, payload } = action;
 	const { data } = state;
+
+	const getCouponData = ( couponId ) => {
+		const coupon = state.data.available_coupons.find( ( coupon ) => coupon.value === couponId );
+
+		return {
+			discount: coupon ? coupon.discount : 0,
+			discountType: coupon ? coupon.type : '%',
+		};
+	};
+
 	switch ( type ) {
 		case 'SET_DATA':
 			state.data = payload;
+			state.coupon = getCouponData( state.data.booking.coupon );
 			return { ...state };
 
 		case 'SET_STATE':
@@ -24,9 +38,10 @@ const reducer = ( state = {}, action ) => {
 			return { ...state };
 
 		case 'ADD_TICKET':
-			const ticket = createTicket( data.attendeeFields, data.availableTickets );
+			const ticket = createTicket( data.attendee_fields, data.available_tickets );
 			state.data.attendees.push( ticket );
-			state.modal.ticket = state.data.attendees.length;
+			state.currentTicket = state.data.attendees.length - 1;
+			state.sendState = 'unsaved';
 			return { ...state };
 
 		case 'SET_FIELD':
@@ -36,7 +51,7 @@ const reducer = ( state = {}, action ) => {
 			if ( payload.form === 'registration' ) {
 				state.data.registration[ payload.field ] = payload.value;
 			}
-			state.wizzard.checkValidity = true;
+			state.sendState = 'unsaved';
 			return { ...state };
 
 		case 'REMOVE_TICKET':
@@ -45,38 +60,39 @@ const reducer = ( state = {}, action ) => {
 					? payload.index
 					: state.request.tickets.findIndex( ( ticket ) => ticket.id === payload.id );
 			state.data.attendees.splice( index, 1 );
+			state.sendState = 'unsaved';
 			return { ...state };
 
-		case 'SET_MODAL':
-			state.modal.ticket = payload;
+		case 'SET_CURRENT_TICKET':
+			state.currentTicket = payload;
+			return { ...state };
+
+		case 'SET_TICKET':
+			state.data.attendees[ payload.index ] = payload.ticket;
+			state.sendState = 'unsaved';
 			return { ...state };
 
 		case 'SET_COUPON':
-			state.request.coupon = payload;
-			return { ...state };
-
-		case 'SET_COUPON_LOADING':
-			state.modal.couponButton = payload;
-			return { ...state };
-
-		case 'COUPON_RESPONSE':
-			state.response.coupon = payload;
-			return { ...state };
-
-		case 'BOOKING_RESPONSE':
-			state.response.booking = payload;
+			state.data.booking.coupon = payload;
+			state.coupon = getCouponData( payload );
+			state.sendState = 'unsaved';
 			return { ...state };
 
 		case 'SET_GATEWAY':
-			state.request.gateway = payload;
-			state.wizzard.checkValidity = true;
+			state.data.booking.gateway = payload;
+			state.sendState = 'unsaved';
 			return { ...state };
 
-		case 'VALIDITY':
-			for ( let key in payload ) {
-				state.wizzard.steps[ key ].valid = payload[ key ];
-			}
-			state.wizzard.checkValidity = false;
+		case 'SET_PRICE':
+			state.fullPrice = payload;
+			return { ...state };
+
+		case 'SET_SEND_STATE':
+			state.sendState = payload;
+			return { ...state };
+
+		case 'SET_NOTE':
+			state.data.booking.note = payload;
 			return { ...state };
 
 		case 'RESET':

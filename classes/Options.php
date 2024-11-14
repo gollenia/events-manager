@@ -241,6 +241,37 @@ class Options {
 		<?php
 	}
 
+	public static function page_select($title, $name, $description='', $none = '') {
+		$option_value = get_option($name);
+		?>
+		   <tr valign="top" id='<?php echo esc_attr($name);?>_row'>
+		   <th scope="row"><label for="<?php echo esc_attr($name) ?>"><?php echo esc_html($title); ?><label></th>
+			   <td>
+				<select name="<?php echo esc_attr($name); ?>" >
+					<?php 
+					$pages = get_pages();
+					if( $none ){
+						?>
+						 <option value='0' <?php echo (0 == $option_value) ? "selected='selected' " : ''; ?>>
+							 <?php echo esc_html($none); ?>
+						 </option>
+						<?php
+					}
+					foreach($pages as $page) {
+						?>
+						 <option value='<?php echo esc_attr($page->ID) ?>' <?php echo ($page->ID == $option_value) ? "selected='selected' " : ''; ?>>
+							 <?php echo esc_html($page->post_title); ?>
+						 </option>
+						<?php 
+					}
+					?>
+				</select> <br/>
+				<p class="description"><?php echo $description; ?></p>
+			</td>
+		   </tr>
+		<?php
+	}
+
 	public static function save_button() {
 		return '<tr><th>&nbsp;</th><td><p class="submit" style="margin:0px; padding:0px; text-align:right;"><input type="submit" class="button-primary" name="Submit" value="'. __( 'Save Changes', 'events-manager') .' ('. __('All','events-manager') .')" /></p></td></tr>';
 	}

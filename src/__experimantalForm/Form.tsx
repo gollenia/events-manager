@@ -21,7 +21,6 @@ type FormProps = {
 	extraData?: any;
 	onStateChange?: ( state: any ) => void;
 	onChange?: ( form: any ) => void;
-	admin?: boolean;
 };
 
 type FormState = 'LOADING' | 'LOADED' | 'SUBMITTING' | 'SUCCESS' | 'ERROR';
@@ -68,7 +67,7 @@ const Form = ( props: FormProps ) => {
 
 	const handleSubmit = ( event: any ) => {
 		const formData = { ...form, ...extraData };
-		console.log( 'submitting', formData );
+
 		event.preventDefault();
 		if ( onSubmit ) {
 			onSubmit( event, formData );
@@ -185,7 +184,6 @@ const Form = ( props: FormProps ) => {
 						<InputField
 							{ ...field }
 							status={ status }
-							admin={ props.admin }
 							disabled={ status == 'SUBMITTING' }
 							formTouched={ touched }
 							key={ index }
@@ -214,7 +212,6 @@ Form.defaultProps = {
 	onSubmit: null,
 	validate: true,
 	submitUrl: '',
-	admin: false,
 };
 
 export default Form;

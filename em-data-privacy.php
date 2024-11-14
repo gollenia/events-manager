@@ -36,9 +36,8 @@ function em_data_privacy_consent_hooks(){
 	//BOOKINGS
 	if( get_option('dbem_data_privacy_consent_bookings') == 1 || ( get_option('dbem_data_privacy_consent_bookings') == 2 && !is_user_logged_in() ) ){
 	    add_action('em_booking_form_footer', 'em_data_privacy_consent_checkbox', 9, 0); //supply 0 args since arg is $EM_Event and callback will think it's an event submission form
-		add_filter('em_booking_get_post', 'em_data_privacy_consent_booking_get_post', 10, 2);
 		add_filter('em_booking_validate', 'em_data_privacy_consent_booking_validate', 10, 2);
-		add_filter('em_booking_save', 'em_data_privacy_consent_booking_save', 10, 2);
+		
 	}
 	//EVENTS
 	if( get_option('dbem_data_privacy_consent_events') == 1 || ( get_option('dbem_data_privacy_consent_events') == 2 && !is_user_logged_in() ) ){
@@ -77,19 +76,6 @@ if( !is_admin() || ( defined('DOING_AJAX') && DOING_AJAX && !empty($_REQUEST['ac
 }
 
 /**
- * Gets consent information for the submitted booking and and add it to the booking object for saving later.
- * @param bool $result
- * @param EM_Booking $EM_Booking
- * @return bool
- */
-function em_data_privacy_consent_booking_get_post( $result, $EM_Booking ){
-    if( !empty($_REQUEST['data_privacy_consent']) ){
-        $EM_Booking->booking_meta['consent'] = true;
-    }
-    return $result;
-}
-
-/**
  * Validates a bookng to ensure consent is/was given.
  * @param bool $result
  * @param EM_Booking $EM_Booking
@@ -102,7 +88,7 @@ function em_data_privacy_consent_booking_validate( $result, $EM_Booking ){
 		if( !empty($consent_given_already) && get_option('dbem_data_privacy_consent_remember') == 1 ) return $result; //ignore if consent given as per settings
 	}
     if( empty($EM_Booking->booking_meta['consent']) ){
-	    $EM_Booking->add_error( sprintf(__('You must allow us to collect and store your data in order for us to process your booking.', 'events-manager')) );
+	    $EM_Booking->add_error( sprintf(__('You must allow us to collect and store your data in order for us to process your booking.', 'events')) );
 	    $result = false;
     }
     return $result;
@@ -156,7 +142,7 @@ function em_data_privacy_cpt_validate( $result, $EM_Object ){
 	}
 	$attributes = get_class($EM_Object) == 'EM_Event' ? 'event_attributes':'location_attributes';
 	if( empty($EM_Object->{$attributes}['_consent_given']) ){
-		$EM_Object->add_error( sprintf(__('Please check the consent box so we can collect and store your submitted information.', 'events-manager')) );
+		$EM_Object->add_error( sprintf(__('Please check the consent box so we can collect and store your submitted information.', 'events')) );
 		$result = false;
     }
 	return $result;

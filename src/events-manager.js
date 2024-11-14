@@ -304,7 +304,7 @@ jQuery( document ).ready( function ( $ ) {
 		};
 		check_ticket_sortability();
 	}
-	//Manageing Bookings
+	//Managing Bookings
 	if ( $( '#em-bookings-table' ).length > 0 ) {
 		//Pagination link clicks
 		document.addEventListener( 'click', function ( event ) {
@@ -480,37 +480,7 @@ jQuery( document ).ready( function ( $ ) {
 		);
 	}
 
-	//Manual Booking
-	$( document ).on( 'click', 'a.em-booking-button', function ( e ) {
-		e.preventDefault();
-		let button = $( this );
-		if ( button.text() != EM.bb_booked && $( this ).text() != EM.bb_booking ) {
-			button.text( EM.bb_booking );
-			let button_data = button.attr( 'id' ).split( '_' );
-			$.ajax( {
-				url: EM.ajaxurl,
-				dataType: 'jsonp',
-				data: {
-					event_id: button_data[ 1 ],
-					_wpnonce: button_data[ 2 ],
-					action: 'booking_add_one',
-				},
-				success: function ( response, statusText, xhr, $form ) {
-					if ( response.result ) {
-						button.text( EM.bb_booked );
-					} else {
-						button.text( EM.bb_error );
-					}
-					if ( response.message != '' ) alert( response.message );
-					$( document ).triggerHandler( 'em_booking_button_response', [ response, button ] );
-				},
-				error: function () {
-					button.text( EM.bb_error );
-				},
-			} );
-		}
-		return false;
-	} );
+	
 	$( document ).on( 'click', 'a.em-cancel-button', function ( e ) {
 		e.preventDefault();
 		let button = $( this );
@@ -619,7 +589,8 @@ jQuery( document ).ready( function ( $ ) {
 		.trigger( 'change' );
 
 	//Finally, add autocomplete here
-	//Autocomplete
+	//Autocomplete #TODO: DELETE
+	/*
 	if ( jQuery( 'div.em-location-data input#location-name' ).length > 0 ) {
 		jQuery( 'div.em-location-data input#location-name' )
 			.autocomplete( {
@@ -692,6 +663,7 @@ jQuery( document ).ready( function ( $ ) {
 			jQuery( '#em-location-search-tip' ).hide();
 		}
 	}
+	*/
 	/* Local JS Timezone related placeholders */
 	/* Moment JS Timzeone PH */
 	if ( window.moment ) {

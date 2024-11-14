@@ -58,7 +58,7 @@ const edit = ( props ) => {
 					<RichText
 						tagName="h5"
 						className="event-details_title description-editable"
-						placeholder={ __( 'Time', 'events' ) }
+						placeholder={ __( 'Time', 'events-manager' ) }
 						value={ description }
 						onChange={ ( value ) => {
 							setAttributes( { description: value } );

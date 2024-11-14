@@ -17,62 +17,65 @@ const Inspector = ( props ) => {
 
 	const ageInfo = () => {
 		if ( minAge === 0 && maxAge !== 0 ) {
-			return `${ __( 'at best', 'events' ) } ${ maxAge.result } }`;
+			return `${ __( 'at best', 'events-manager' ) } ${ maxAge.result } }`;
 		}
 		if ( minAge !== 0 && maxAge === 0 ) {
-			return `${ __( 'at least', 'events' ) } ${ minAge.result } }`;
+			return `${ __( 'at least', 'events-manager' ) } ${ minAge.result } }`;
 		}
 		if ( minAge === maxAge ) {
 			return `${ minAge.result }`;
 		}
 		return (
 			<>
-				{ __( 'from', 'events' ) } { maxAge.result }
+				{ __( 'from', 'events-manager' ) } { maxAge.result }
 				<br />
-				{ __( 'to', 'events' ) } { minAge.result }
+				{ __( 'to', 'events-manager' ) } { minAge.result }
 			</>
 		);
 	};
 
 	return (
 		<InspectorControls>
-			<PanelBody title={ __( 'Data', 'events' ) } initialOpen={ true }>
+			<PanelBody title={ __( 'Data', 'events-manager' ) } initialOpen={ true }>
 				<ToggleControl
-					label={ __( 'Required', 'events' ) }
+					label={ __( 'Required', 'events-manager' ) }
 					checked={ required }
 					onChange={ ( value ) => setAttributes( { required: value } ) }
 				/>
 
 				<TextControl
-					label={ __( 'Help', 'events' ) }
-					help={ __( 'Help text for the date field', 'events' ) }
+					label={ __( 'Help', 'events-manager' ) }
+					help={ __( 'Help text for the date field', 'events-manager' ) }
 					value={ help }
 					onChange={ ( value ) => setAttributes( { help: value } ) }
 				/>
 				<TextControl
-					label={ __( 'Error message', 'events' ) }
-					help={ __( 'Text to display when the user types in invalid or insufficient data', 'events' ) }
+					label={ __( 'Error message', 'events-manager' ) }
+					help={ __(
+						'Text to display when the user types in invalid or insufficient data',
+						'events-manager'
+					) }
 					value={ error }
 					onChange={ ( value ) => setAttributes( { error: value } ) }
 				/>
 				<TextControl
-					label={ __( 'Lowest Date', 'events' ) }
-					help={ __( 'e.g. maximal age for an attendee', 'events' ) }
+					label={ __( 'Lowest Date', 'events-manager' ) }
+					help={ __( 'e.g. maximal age for an attendee', 'events-manager' ) }
 					value={ min }
 					onChange={ ( value ) => setAttributes( { min: value } ) }
 					type="date"
 				/>
 				<TextControl
-					label={ __( 'Highest Date', 'events' ) }
-					help={ __( 'e.g. minimal age for an attendee', 'events' ) }
+					label={ __( 'Highest Date', 'events-manager' ) }
+					help={ __( 'e.g. minimal age for an attendee', 'events-manager' ) }
 					value={ max }
 					onChange={ ( value ) => setAttributes( { max: value } ) }
 					type="date"
 				/>
 				<p className="age-info">
 					<TextControl
-						label={ __( 'Reference Date', 'events' ) }
-						help={ __( 'Only for testing', 'events' ) }
+						label={ __( 'Reference Date', 'events-manager' ) }
+						help={ __( 'Only for testing', 'events-manager' ) }
 						value={ referenceDate }
 						onChange={ ( value ) => {
 							setReferenceDate( value );
@@ -82,10 +85,10 @@ const Inspector = ( props ) => {
 					{ ageInfo() }
 				</p>
 			</PanelBody>
-			<PanelBody title={ __( 'Appearance', 'events' ) } initialOpen={ true }>
+			<PanelBody title={ __( 'Appearance', 'events-manager' ) } initialOpen={ true }>
 				<RangeControl
-					label={ __( 'Width', 'events' ) }
-					help={ __( 'Number of columns the input field will occupy', 'events' ) }
+					label={ __( 'Width', 'events-manager' ) }
+					help={ __( 'Number of columns the input field will occupy', 'events-manager' ) }
 					value={ width }
 					max={ 4 }
 					min={ 1 }

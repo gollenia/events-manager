@@ -1,4 +1,7 @@
 <?php
+
+use Contexis\Events\Tickets\Tickets;
+use Contexis\Events\Tickets\Ticket;
 /**
  * Deals with the booking info for an event
  * @author marcus
@@ -12,7 +15,7 @@ class EM_Bookings extends EM_Object implements Iterator {
 	 */
 	protected $bookings;
 	/**
-	 * @var EM_Tickets
+	 * @var Tickets
 	 */
 	var $tickets;
 	/**
@@ -51,20 +54,17 @@ class EM_Bookings extends EM_Object implements Iterator {
 	function __construct( $data = false ){
 		if( is_object($data) && get_class($data) == "EM_Event" ){ //Creates a blank bookings object if needed
 			$this->event_id = $data->event_id;
-		}elseif( is_array($data) ){
-			foreach( $data as $EM_Booking ){
-				if( get_class($EM_Booking) == 'EM_Booking'){
-					$this->bookings[] = $EM_Booking;
-				}
-			}
+			return;
+		}
+		
+		if( !is_array($data) ) return;
+		foreach( $data as $EM_Booking ){
+			if( get_class($EM_Booking) == 'EM_Booking') $this->bookings[] = $EM_Booking;
 		}
 	}
 	
 	public function __get( $var ){
-		if( $var == 'bookings' ){
-			return $this->load();
-		}
-		return parent::__get( $var );
+		return $var == 'bookings' ? $this->load() : $this->$var;
 	}
 	
 	public function __set( $var, $val ){
@@ -75,7 +75,7 @@ class EM_Bookings extends EM_Object implements Iterator {
 				$this->bookings = null;
 			}
 		}
-		parent::__set( $var, $val );
+		$this->$var = $val;
 	}
 	
 	/**
@@ -91,7 +91,7 @@ class EM_Bookings extends EM_Object implements Iterator {
 		if( $prop == 'bookings' ){
 			return $this->bookings !== null;
 		}
-		return parent::__isset( $prop );
+		return isset($this->$prop);
 	}
 	
 	public function load( $refresh = false ){
@@ -153,24 +153,7 @@ class EM_Bookings extends EM_Object implements Iterator {
 		return apply_filters('em_bookings_add', false, $EM_Booking);
 	}
 
-	/**
-	 * Get POST data and create a booking for each ticket requested. If successful, a booking object is returned, false if not.
-	 * @return false|object
-	 */
-	function add_from_post(){
-		$EM_Booking = new EM_booking();
-		$result = $EM_Booking->get_post();
-		if($result){
-			$result = $this->add($EM_Booking);
-			if($result){
-				$result = $EM_Booking;
-			}
-			$this->feedback_message = sprintf(__('%s created.','events-manager'),__('Booking','events-manager'));
-		}else{
-			$this->errors = array_merge($this->errors, $EM_Booking->errors);
-		}
-		return apply_filters('em_bookings_add_from_post',$result,$EM_Booking,$this);
-	}
+
 	
 	/**
 	 * Smart event locator, saves a database read if possible. Note that if an event doesn't exist, a blank object will be created to prevent duplicates.
@@ -193,13 +176,13 @@ class EM_Bookings extends EM_Object implements Iterator {
 	}
 	
 	/**
-	 * Retrieve and save the bookings belonging to instance. If called again will return cached version, set $force_reload to true to create a new EM_Tickets object.
+	 * Retrieve and save the bookings belonging to instance. If called again will return cached version, set $force_reload to true to create a new Tickets object.
 	 * @param boolean $force_reload
-	 * @return EM_Tickets
+	 * @return Tickets
 	 */
 	function get_tickets( $force_reload = false ){
 		if( !is_object($this->tickets) || $force_reload ){
-			$this->tickets = new EM_Tickets($this->event_id);
+			$this->tickets = new \Contexis\Events\Tickets\Tickets($this->event_id);
 		}else{
 			$this->tickets->event_id = $this->event_id;
 		}
@@ -207,24 +190,24 @@ class EM_Bookings extends EM_Object implements Iterator {
 	}
 	
 	/**
-	 * Returns EM_Tickets object with available tickets
+	 * Returns Tickets object with available tickets
 	 * @param boolean $include_member_tickets - if set to true, member-ony tickets will be considered available even if logged out
-	 * @return EM_Tickets
+	 * @return Tickets
 	 */
 	function get_available_tickets( $include_member_tickets = false ){
 		$tickets = array();
 		
-		foreach ($this->get_tickets() as $EM_Ticket){
-			/* @var $EM_Ticket EM_Ticket */
-			if( $EM_Ticket->is_available($include_member_tickets) ){
+		foreach ($this->get_tickets() as $ticket){
+			/* @var $ticket Ticket */
+			if( $ticket->is_available($include_member_tickets) ){
 				//within time range
-				if( $EM_Ticket->get_available_spaces() > 0 ){
-					$tickets[] = $EM_Ticket;
+				if( $ticket->get_available_spaces() > 0 ){
+					$tickets[] = $ticket;
 				}
 			}
 		}
-		$EM_Tickets = new EM_Tickets($tickets);
-		return apply_filters('em_bookings_get_available_tickets', $EM_Tickets, $this);
+		//$tickets = new \Contexis\Events\Tickets\Tickets($tickets);
+		return apply_filters('em_bookings_get_available_tickets', $this->get_tickets(), $this);
 	}
 	
 	/**
@@ -240,10 +223,10 @@ class EM_Bookings extends EM_Object implements Iterator {
 	 * @return bool 
 	 */
 	function ticket_exists($ticket_id){
-		$EM_Tickets = $this->get_tickets();
-		foreach( $EM_Tickets->tickets as $EM_Ticket){
-			if($EM_Ticket->ticket_id == $ticket_id){
-				return apply_filters('em_bookings_ticket_exists',true, $EM_Ticket, $this);
+		$tickets = $this->get_tickets();
+		foreach( $tickets->tickets as $ticket){
+			if($ticket->ticket_id == $ticket_id){
+				return apply_filters('em_bookings_ticket_exists',true, $ticket, $this);
 			}
 		}
 		return apply_filters('em_bookings_ticket_exists',false, false,$this);
@@ -256,7 +239,7 @@ class EM_Bookings extends EM_Object implements Iterator {
 	function has_open_time(){
 	    $return = false;
 	    $EM_Event = $this->get_event();
-	    if( $EM_Event->rsvp_end()->getTimestamp() > time()){
+	    if( $EM_Event->rsvp_end()->getTimestamp() > time() && $EM_Event->rsvp_start()->getTimestamp() < time() ){
 	    	$return = true;
 	    }
 	    return $return;
@@ -375,11 +358,18 @@ class EM_Bookings extends EM_Object implements Iterator {
 	 * @return int
 	 */
 	function get_spaces( $force_refresh=false ){
+		
 		if($force_refresh || $this->spaces == 0){
 			$this->spaces = $this->get_tickets()->get_spaces();
+			
 		}
+		
 		//check overall events cap
-		if(!empty($this->get_event()->event_spaces) && $this->get_event()->event_spaces < $this->spaces) $this->spaces = $this->get_event()->event_spaces;
+		if(!empty($this->get_event()->event_spaces) && $this->get_event()->event_spaces < $this->spaces) {
+			$this->spaces = $this->get_event()->event_spaces;
+
+		}
+
 		return apply_filters('em_booking_get_spaces',$this->spaces,$this);
 	}
 	
@@ -513,27 +503,6 @@ class EM_Bookings extends EM_Object implements Iterator {
 	}
 	
 	/**
-	 * Checks to see if user has a booking for this event
-	 * @param int $user_id
-	 */
-	function has_booking( $user_id = false ){
-		if( $user_id === false ){
-			$user_id = get_current_user_id();
-		}
-		if( is_numeric($user_id) && $user_id > 0 ){
-			global $wpdb;
-			// get the first booking ID available and return that
-			$sql = $wpdb->prepare('SELECT booking_id FROM '.EM_BOOKINGS_TABLE.' WHERE event_id = %d AND person_id = %d AND booking_status NOT IN (2,3)', $this->event_id, $user_id);
-			$booking_id = $wpdb->get_var($sql);
-			if( (int) $booking_id > 0 ){
-				$EM_Booking = EM_Booking::find($booking_id);
-				return apply_filters('em_bookings_has_booking', $EM_Booking, $this);
-			}
-		}
-		return apply_filters('em_bookings_has_booking', false, $this);
-	}
-	
-	/**
 	 * Get bookings that match the array of arguments passed.
 	 * @return array 
 	 * @static
@@ -620,26 +589,8 @@ class EM_Bookings extends EM_Object implements Iterator {
 	}
 	
 
-	//List of patients in the patient database, that a user can choose and go on to edit any previous treatment data, or add a new admission.
-	//Deprecated
-	//@todo remove in 6.0
-	function export_csv() {
-		global $EM_Event;
-		if($EM_Event->event_id != $this->event_id ){
-			$event = $this->get_event();
-			$event_name = $event->name;
-		}else{
-			$event_name = $EM_Event->name;
-		}
-		// The name of the file on the user's pc
-		$file_name = sanitize_title($event_name). "-bookings.csv";
-		
-		header("Content-Type: application/octet-stream");
-		header("Content-Disposition: Attachment; filename=$file_name");
-		em_locate_template('templates/csv-event-bookings.php', true);
-		exit();
-	}
 	
+	// TODO:DELETE
 	static function enqueue_js(){
         if( !defined('EM_BOOKING_JS_LOADED') ){ //request loading of JS file in footer of page load
         	add_action('wp_footer','EM_Bookings::em_booking_js_footer', 20);
@@ -648,6 +599,7 @@ class EM_Bookings extends EM_Object implements Iterator {
         }
 	}
 	
+	// TODO:DELETE
 	static function em_booking_js_footer(){
 		?>		
 		<script type="text/javascript">
@@ -694,8 +646,8 @@ class EM_Bookings extends EM_Object implements Iterator {
 		    $conditions['event'] = EM_BOOKINGS_TABLE.'.event_id != 0';
 		}
 		if( is_numeric($args['ticket_id']) ){
-		    $EM_Ticket = new EM_Ticket($args['ticket_id']);
-		    if( $EM_Ticket->can_manage() ){
+		    $ticket = new Ticket($args['ticket_id']);
+		    if( $ticket->can_manage() ){
 				$conditions['ticket'] = EM_BOOKINGS_TABLE.'.booking_id IN (SELECT booking_id FROM '.EM_TICKETS_BOOKINGS_TABLE." WHERE ticket_id='{$args['ticket_id']}')";
 		    }
 		}

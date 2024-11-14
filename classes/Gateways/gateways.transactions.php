@@ -62,7 +62,8 @@ class EM_Gateways_Transactions{
 	function ajax(){
 		if( wp_verify_nonce($_REQUEST['_wpnonce'],'em_transactions_table') ){
 			//Get the context
-			global $EM_Event, $EM_Booking, $EM_Ticket, $EM_Person;
+			global $EM_Event, $EM_Booking, $EM_Person;
+			$ticket = new \Contexis\Events\Tickets\Ticket();
 			em_load_event();
 			$context = false;
 			if( !empty($_REQUEST['booking_id']) && is_object($EM_Booking) && $EM_Booking->can_manage('manage_bookings','manage_others_bookings') ){
@@ -71,8 +72,8 @@ class EM_Gateways_Transactions{
 				$context = $EM_Event;
 			}elseif( !empty($_REQUEST['person_id']) && is_object($EM_Person) && current_user_can('manage_bookings') ){
 				$context = $EM_Person;
-			}elseif( !empty($_REQUEST['ticket_id']) && is_object($EM_Ticket) && $EM_Ticket->can_manage('manage_bookings','manage_others_bookings') ){
-				$context = $EM_Ticket;
+			}elseif( !empty($_REQUEST['ticket_id']) && is_object($ticket) && $ticket->can_manage('manage_bookings','manage_others_bookings') ){
+				$context = $ticket;
 			}			
 			echo $this->mytransactions($context);
 			exit;
@@ -83,7 +84,7 @@ class EM_Gateways_Transactions{
 		global $page, $action, $wp_query;
 		?>
 		<div class="wrap">
-		<h2><?php _e('Transactions','em-pro'); ?></h2>
+		<h2><?php _e('Transactions','events-manager'); ?></h2>
 		<?php $this->mytransactions($context); ?>
 		<script type="text/javascript">
 			jQuery(document).ready( function($){
@@ -125,14 +126,14 @@ class EM_Gateways_Transactions{
 
 		$columns = array();
 
-		$columns['event'] = __('Event','em-pro');
-		$columns['user'] = __('User','em-pro');
-		$columns['date'] = __('Date','em-pro');
-		$columns['amount'] = __('Amount','em-pro');
-		$columns['transid'] = __('Transaction id','em-pro');
-		$columns['gateway'] = __('Gateway','em-pro');
-		$columns['status'] = __('Status','em-pro');
-		$columns['note'] = __('Notes','em-pro');
+		$columns['event'] = __('Event','events-manager');
+		$columns['user'] = __('User','events-manager');
+		$columns['date'] = __('Date','events-manager');
+		$columns['amount'] = __('Amount','events-manager');
+		$columns['transid'] = __('Transaction id','events-manager');
+		$columns['gateway'] = __('Gateway','events-manager');
+		$columns['status'] = __('Status','events-manager');
+		$columns['note'] = __('Notes','events-manager');
 		$columns['actions'] = '';
 
 		$trans_navigation = paginate_links( array(
@@ -150,7 +151,7 @@ class EM_Gateways_Transactions{
 			<input type="hidden" name="person_id" value='<?php echo $context->ID ?>' />
 			<?php elseif( is_object($context) && (get_class($context)=="EM_Booking" || get_class($context)=="EM_Multiple_Booking") ): ?>
 			<input type="hidden" name="booking_id" value='<?php echo $context->booking_id ?>' />
-			<?php elseif( is_object($context) && get_class($context)=="EM_Ticket" ): ?>
+			<?php elseif( is_object($context) && get_class($context)=="Ticket" ): ?>
 			<input type="hidden" name="ticket_id" value='<?php echo $context->ticket_id ?>' />
 			<?php endif; ?>
 			<input type="hidden" name="pno" value='<?php echo $this->page ?>' />
@@ -242,7 +243,7 @@ class EM_Gateways_Transactions{
 						<?php
 							$EM_Booking = EM_Booking::find($transaction->booking_id);
 							if( get_class($EM_Booking) == 'EM_Multiple_Booking' ){
-								$link = em_add_get_params($EM_Booking->get_admin_url(), array('booking_id'=>$EM_Booking->booking_id, 'em_ajax'=>null, 'em_obj'=>null));
+								$link = add_query_arg(['booking_id'=>$EM_Booking->booking_id, 'em_ajax'=>null, 'em_obj'=>null], $EM_Booking->get_admin_url());
 								echo '<a href="'.$link.'">'.$EM_Booking->get_event()->event_name.'</a>';
 							}else{
 								echo '<a href="'.$EM_Booking->get_event()->get_bookings_url().'">'.$EM_Booking->get_event()->event_name.'</a>';
@@ -272,7 +273,7 @@ class EM_Gateways_Transactions{
 								//use the below filter to override specific gateways, the above for modifying the field for all gateways
 								echo apply_filters('em_gateways_transactions_table_gateway_id_'.$transaction->transaction_gateway, $transaction_gateway_id, $transaction, $EM_Booking);
 							} else {
-								echo __('None yet','em-pro');
+								echo __('None yet','events-manager');
 							}
 						?>
 					</td>
@@ -281,7 +282,7 @@ class EM_Gateways_Transactions{
 							if(!empty($transaction->transaction_gateway)) {
 								echo $transaction->transaction_gateway;
 							} else {
-								echo __('None yet','em-pro');
+								echo __('None yet','events-manager');
 							}
 						?>
 					</td>
@@ -290,10 +291,10 @@ class EM_Gateways_Transactions{
 							if(!empty($transaction->transaction_status)) {
 								echo "<span class='em-label " . str_replace(" ", "-", strtolower($transaction->transaction_status)) . "'>"; 
 								echo '<i class="material-symbols-outlined">check_circle</i>';
-								_e($transaction->transaction_status, 'em-pro');
+								_e($transaction->transaction_status, 'events-manager');
 								echo "</span>";
 							} else {
-								echo __('None yet','em-pro');
+								echo __('None yet','events-manager');
 							}
 						?>
 					</td>
@@ -302,13 +303,13 @@ class EM_Gateways_Transactions{
 							if(!empty($transaction->transaction_note)) {
 								echo esc_html($transaction->transaction_note);
 							} else {
-								echo __('None','em-pro');
+								echo __('None','events-manager');
 							}
 						?>
 					</td>
 					<td class="column-trans-note-id">
 						<?php if( $EM_Booking->can_manage() ): ?>
-						<span class="trash"><a class="em-transaction-delete" href="<?php echo em_add_get_params($_SERVER['REQUEST_URI'], array('action'=>'transaction_delete', 'txn_id'=>$transaction->transaction_id, '_wpnonce'=>wp_create_nonce('transaction_delete_'.$transaction->transaction_id.'_'.get_current_user_id()))); ?>"><?php esc_html_e('Delete','events-manager'); ?></a></span>
+						<span class="trash"><a class="em-transaction-delete" href="<?php echo add_query_arg(['action'=>'transaction_delete', 'txn_id'=>$transaction->transaction_id, '_wpnonce'=>wp_create_nonce('transaction_delete_'.$transaction->transaction_id.'_'.get_current_user_id())], $_SERVER['REQUEST_URI']); ?>"><?php esc_html_e('Delete','events-manager'); ?></a></span>
 						<?php endif; ?>
 					</td>
 			    </tr>
@@ -317,7 +318,7 @@ class EM_Gateways_Transactions{
 		} else {
 			?>
 			<tr valign="middle" class="alternate" >
-				<td colspan="<?php echo $columns; ?>" scope="row"><?php _e('No Transactions','em-pro'); ?></td>
+				<td colspan="<?php echo $columns; ?>" scope="row"><?php _e('No Transactions','events-manager'); ?></td>
 		    </tr>
 			<?php
 		}
@@ -348,8 +349,8 @@ class EM_Gateways_Transactions{
 			$conditions[] = "person_id = ".$context->ID;			
 		}elseif( is_object($context) && get_class($context)=="EM_Ticket" && $context->can_manage('manage_bookings','manage_others_bookings') ){
 			$booking_ids = array();
-			$EM_Ticket = $context;
-			foreach( EM_Bookings::get( array('ticket_id' => $EM_Ticket->ticket_id, 'array' => 'booking_id') ) as $booking ){
+			$ticket = $context;
+			foreach( EM_Bookings::get( array('ticket_id' => $ticket->ticket_id, 'array' => 'booking_id') ) as $booking ){
 				$booking_ids[] = $booking['booking_id'];
 			}
 			if( count($booking_ids) > 0 ){
@@ -404,8 +405,8 @@ class EM_Gateways_Transactions{
 	}
 	
 	function em_bookings_table_cols_template($template, $EM_Bookings_Table){
-		$template['gateway_txn_id'] = __('Transaction ID','em-pro');
-		$template['payment_total'] = __('Total Paid','em-pro');
+		$template['gateway_txn_id'] = __('Transaction ID','events-manager');
+		$template['payment_total'] = __('Total Paid','events-manager');
 		return $template;
 	}
 }
@@ -427,11 +428,11 @@ function emp_transactions_init(){
 			if( (!empty($EM_Booking->booking_id) && $EM_Booking->can_manage()) || is_super_admin() ){
 				//all good, delete it
 				$wpdb->query('DELETE FROM '.EM_TRANSACTIONS_TABLE." WHERE transaction_id='".$_REQUEST['txn_id']."'");
-				_e('Transaction deleted','em-pro');
+				_e('Transaction deleted','events-manager');
 				exit();
 			}
 		}
-		_e('Transaction could not be deleted', 'em-pro');
+		_e('Transaction could not be deleted', 'events-manager');
 		exit();
 	}
 }

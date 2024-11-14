@@ -11,7 +11,7 @@ class EM_Gateways_Admin{
 	
 	
 	public static function admin_menu($plugin_pages){
-		$plugin_pages[] = add_submenu_page('edit.php?post_type='.EM_POST_TYPE_EVENT, __('Payment Gateways','em-pro'),__('Payment Gateways','em-pro'),'list_users','events-manager-gateways', 'EM_Gateways_Admin::handle_gateways_panel');
+		$plugin_pages[] = add_submenu_page('edit.php?post_type='.EM_POST_TYPE_EVENT, __('Payment Gateways','events-manager'),__('Payment Gateways','events-manager'),'list_users','events-manager-gateways', 'EM_Gateways_Admin::handle_gateways_panel');
 		return $plugin_pages;
 	}
 
@@ -33,15 +33,15 @@ class EM_Gateways_Admin{
 				return; // so we don't show the list below
 				break;
 		}
-		$messages = array();
-		$messages[1] = __('Gateway activated.', 'em-pro');
-		$messages[2] = __('Gateway not activated.', 'em-pro');
-		$messages[3] = __('Gateway deactivated.', 'em-pro');
-		$messages[4] = __('Gateway not deactivated.', 'em-pro');
-		$messages[5] = __('Gateway activation toggled.', 'em-pro');
+		$messages = [];
+		$messages[1] = __('Gateway activated.', 'events-manager');
+		$messages[2] = __('Gateway not activated.', 'events-manager');
+		$messages[3] = __('Gateway deactivated.', 'events-manager');
+		$messages[4] = __('Gateway not deactivated.', 'events-manager');
+		$messages[5] = __('Gateway activation toggled.', 'events-manager');
 		?>
 		<div class='wrap'>
-			<h1><?php _e('Edit Gateways','em-pro'); ?></h1>
+			<h1><?php _e('Edit Gateways','events-manager'); ?></h1>
 			<?php
 			if ( isset($_GET['msg']) && !empty($messages[$_GET['msg']]) ) echo '<div id="message" class="updated fade"><p>' . $messages[$_GET['msg']] . '</p></div>';
 			?>
@@ -52,7 +52,7 @@ class EM_Gateways_Admin{
 							<option selected="selected" value=""><?php _e('Bulk actions'); ?></option>
 							<option value="toggle"><?php _e('Toggle activation', 'events-manager'); ?></option>
 						</select>
-						<input type="submit" class="button-secondary action" value="<?php _e('Apply','em-pro'); ?>">		
+						<input type="submit" class="button-secondary action" value="<?php _e('Apply','events-manager'); ?>">		
 					</div>		
 					<div class="alignright actions"></div>		
 					<br class="clear">
@@ -61,9 +61,9 @@ class EM_Gateways_Admin{
 				<?php
 					wp_original_referer_field(true, 'previous'); wp_nonce_field('emp-gateways');	
 					$columns = array(	
-						"name" => __('Gateway Name','em-pro'),
-						"active" =>	__('Active','em-pro'),
-						"transactions" => __('Transactions','em-pro')
+						"name" => __('Gateway Name','events-manager'),
+						"active" =>	__('Active','events-manager'),
+						"transactions" => __('Transactions','events-manager')
 					);
 					$columns = apply_filters('em_gateways_columns', $columns);	
 					$gateways = EM_Gateways::gateways_list();
@@ -125,14 +125,14 @@ class EM_Gateways_Admin{
 									<td class="column-active">
 										<?php
 											if(array_key_exists($key, $active)) {
-												echo "<strong>" . __('Active', 'em-pro') . "</strong>";
+												echo "<strong>" . __('Active', 'events-manager') . "</strong>";
 											} else {
-												echo __('Inactive', 'em-pro');
+												echo __('Inactive', 'events-manager');
 											}
 										?>
 									</td>
 									<td class="column-transactions">
-										<a href='<?php echo EM_ADMIN_URL; ?>&amp;page=<?php echo $page; ?>&amp;action=transactions&amp;gateway=<?php echo $key; ?>'><?php _e('View transactions','em-pro'); ?></a>
+										<a href='<?php echo EM_ADMIN_URL; ?>&amp;page=<?php echo $page; ?>&amp;action=transactions&amp;gateway=<?php echo $key; ?>'><?php _e('View transactions','events-manager'); ?></a>
 									</td>
 							    </tr>
 								<?php
@@ -141,7 +141,7 @@ class EM_Gateways_Admin{
 							$columncount = count($columns) + 1;
 							?>
 							<tr valign="middle" class="alternate" >
-								<td colspan="<?php echo $columncount; ?>" scope="row"><?php _e('No Payment gateways were found for this install.','em-pro'); ?></td>
+								<td colspan="<?php echo $columncount; ?>" scope="row"><?php _e('No Payment gateways were found for this install.','events-manager'); ?></td>
 						    </tr>
 							<?php
 						}
@@ -163,9 +163,9 @@ class EM_Gateways_Admin{
 					$key = addslashes ( $_REQUEST ['gateway'] );
 					if (isset ( $EM_Gateways [$key] )) {
 						if ($EM_Gateways [$key]->deactivate ()) {
-							wp_safe_redirect ( add_query_arg ( 'msg', 3, em_wp_get_referer () ) );
+							wp_safe_redirect ( add_query_arg ( 'msg', 3, wp_validate_redirect(wp_get_raw_referer(), false ) ) );
 						} else {
-							wp_safe_redirect ( add_query_arg ( 'msg', 4, em_wp_get_referer () ) );
+							wp_safe_redirect ( add_query_arg ( 'msg', 4, wp_validate_redirect(wp_get_raw_referer(), false ) ) );
 						}
 					}
 					break;		
@@ -173,9 +173,9 @@ class EM_Gateways_Admin{
 					$key = addslashes ( $_REQUEST ['gateway'] );
 					if (isset ( $EM_Gateways[$key] )) {
 						if ($EM_Gateways[$key]->activate ()) {
-							wp_safe_redirect ( add_query_arg ( 'msg', 1, em_wp_get_referer () ) );
+							wp_safe_redirect ( add_query_arg ( 'msg', 1, wp_validate_redirect(wp_get_raw_referer(), false ) ) );
 						} else {
-							wp_safe_redirect ( add_query_arg ( 'msg', 2, em_wp_get_referer () ) );
+							wp_safe_redirect ( add_query_arg ( 'msg', 2, wp_validate_redirect(wp_get_raw_referer(), false ) ) );
 						}
 					}
 					break;		
@@ -186,15 +186,15 @@ class EM_Gateways_Admin{
 							$EM_Gateways [$key]->toggleactivation ();				
 						}
 					}
-					wp_safe_redirect ( add_query_arg ( 'msg', 5, em_wp_get_referer () ) );
+					wp_safe_redirect ( add_query_arg ( 'msg', 5, wp_validate_redirect(wp_get_raw_referer(), false ) ) );
 					break;		
 				case 'updated' :
 					$gateway = addslashes ( $_REQUEST ['gateway'] );		
 					check_admin_referer ( 'updated-'.$EM_Gateways[$gateway]->gateway );
 					if ($EM_Gateways[$gateway]->update ()) {
-						wp_safe_redirect ( add_query_arg ( 'msg', 'updated', em_wp_get_referer () ) );
+						wp_safe_redirect ( add_query_arg ( 'msg', 'updated', wp_validate_redirect(wp_get_raw_referer(), false ) ) );
 					} else {
-						wp_safe_redirect ( add_query_arg ( 'msg', 'error', em_wp_get_referer () ) );
+						wp_safe_redirect ( add_query_arg ( 'msg', 'error', wp_validate_redirect(wp_get_raw_referer(), false ) ) );
 					}			
 					break;
 			}

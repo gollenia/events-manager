@@ -1,13 +1,15 @@
 <?php
+
+namespace Contexis\Events\Tickets;
 /**
  * Deals with the ticket info for an event
  * @author marcus
  *
  */
-class EM_Tickets extends EM_Object implements Iterator, Countable {
+class Tickets extends \EM_Object implements \Iterator, \Countable {
 	
 	/**
-	 * Array of EM_Ticket objects for a specific event
+	 * Array of Ticket objects for a specific event
 	 * @var array
 	 */
 	var $tickets = array();
@@ -25,7 +27,7 @@ class EM_Tickets extends EM_Object implements Iterator, Countable {
 	
 	
 	/**
-	 * Creates an EM_Tickets instance
+	 * Creates an Tickets instance
 	 * @param mixed $event
 	 */
 	function __construct( $object = false ){
@@ -52,21 +54,21 @@ class EM_Tickets extends EM_Object implements Iterator, Countable {
 		    }
 			$tickets = $wpdb->get_results($sql, ARRAY_A);
 			foreach ($tickets as $ticket){
-				$EM_Ticket = new EM_Ticket($ticket);
-				$EM_Ticket->event_id = $this->event_id;
-				$this->tickets[$EM_Ticket->ticket_id] = $EM_Ticket;
+				$ticket = new Ticket($ticket);
+				$ticket->event_id = $this->event_id;
+				$this->tickets[$ticket->ticket_id] = $ticket;
                 
 			}
-		}elseif( is_array($object) ){ //expecting an array of EM_Ticket objects or ticket db array
-			if( is_object(current($object)) && get_class(current($object)) == 'EM_Ticket' ){
-			    foreach($object as $EM_Ticket){
-					$this->tickets[$EM_Ticket->ticket_id] = $EM_Ticket;
+		}elseif( is_array($object) ){ //expecting an array of Ticket objects or ticket db array
+			if( is_object(current($object)) && get_class(current($object)) == 'Ticket' ){
+			    foreach($object as $ticket){
+					$this->tickets[$ticket->ticket_id] = $ticket;
 			    }
 			}else{
 				foreach($object as $ticket){
-					$EM_Ticket = new EM_Ticket($ticket);
-					$EM_Ticket->event_id = $this->event_id;
-					$this->tickets[$EM_Ticket->ticket_id] = $EM_Ticket;				
+					$ticket = new Ticket($ticket);
+					$ticket->event_id = $this->event_id;
+					$this->tickets[$ticket->ticket_id] = $ticket;				
 				}
 			}
 		}
@@ -81,7 +83,7 @@ class EM_Tickets extends EM_Object implements Iterator, Countable {
 		if( is_object($EM_Event) && $EM_Event->event_id == $this->event_id ){
 			return $EM_Event;
 		}else{
-			return new EM_Event($this->event_id);
+			return new \EM_Event($this->event_id);
 		}
 	}
 
@@ -90,22 +92,22 @@ class EM_Tickets extends EM_Object implements Iterator, Countable {
 	 * @return bool 
 	 */
 	function has_ticket($ticket_id){
-		foreach( $this->tickets as $EM_Ticket){
-			if($EM_Ticket->ticket_id == $ticket_id){
-				return apply_filters('em_tickets_has_ticket',true, $EM_Ticket, $this);
+		foreach( $this->tickets as $ticket){
+			if($ticket->ticket_id == $ticket_id){
+				return apply_filters('em_tickets_has_ticket',true, $ticket, $this);
 			}
 		}
 		return apply_filters('em_tickets_has_ticket',false, false,$this);
 	}
 	
 	/**
-	 * Get the first EM_Ticket object in this instance. Returns false if no tickets available.
-	 * @return EM_Ticket
+	 * Get the first Ticket object in this instance. Returns false if no tickets available.
+	 * @return Ticket
 	 */
 	function get_first(){
 		if( count($this->tickets) > 0 ){
-			foreach($this->tickets as $EM_Ticket){
-				return $EM_Ticket;
+			foreach($this->tickets as $ticket){
+				return $ticket;
 			}
 		}else{
 			return false;
@@ -123,8 +125,8 @@ class EM_Tickets extends EM_Object implements Iterator, Countable {
 		$ticket_ids = array();
 		if( !empty($this->tickets) ){
 			//get ticket ids if tickets are already preloaded into the object
-			foreach( $this->tickets as $EM_Ticket ){
-				$ticket_ids[] = $EM_Ticket->ticket_id;
+			foreach( $this->tickets as $ticket ){
+				$ticket_ids[] = $ticket->ticket_id;
 			}
 			//check that tickets don't have bookings
 			if(count($ticket_ids) > 0){
@@ -160,35 +162,36 @@ class EM_Tickets extends EM_Object implements Iterator, Countable {
 		do_action('em_tickets_get_post_pre', $this);
 		$current_tickets = $this->tickets; //save previous tickets so things like ticket_meta doesn't get overwritten
 		$this->tickets = array(); //clean current tickets out
+		
 		if( !empty($_POST['em_tickets']) && is_array($_POST['em_tickets']) ){
 			//get all ticket data and create objects
-			global $allowedposttags;
+			
 			$order = 1;
 			foreach($_POST['em_tickets'] as $row => $ticket_data){
 			    if( $row > 0 ){
 			    	if( !empty($ticket_data['ticket_id']) && !empty($current_tickets[$ticket_data['ticket_id']]) ){
-			    		$EM_Ticket = $current_tickets[$ticket_data['ticket_id']];
+			    		$ticket = $current_tickets[$ticket_data['ticket_id']];
 			    	}else{
-			    		$EM_Ticket = new EM_Ticket();
+			    		$ticket = new Ticket();
 			    	}
 					$ticket_data['event_id'] = $this->event_id;
-					$EM_Ticket->get_post($ticket_data);
-					$EM_Ticket->ticket_order = $order;
-					if( $EM_Ticket->ticket_id ){
-						$this->tickets[$EM_Ticket->ticket_id] = $EM_Ticket;
+					$ticket->get_post($ticket_data);
+					$ticket->ticket_order = $order;
+					if( $ticket->ticket_id ){
+						$this->tickets[$ticket->ticket_id] = $ticket;
 					}else{
-						$this->tickets[] = $EM_Ticket;
+						$this->tickets[] = $ticket;
 					}
 				    $order++;
 			    }
 			}
 		}else{
 			//we create a blank standard ticket
-			$EM_Ticket = new EM_Ticket(array(
+			$ticket = new Ticket(array(
 				'event_id' => $this->event_id,
 				'ticket_name' => __('Standard','events-manager')
 			));
-			$this->tickets[] = $EM_Ticket;
+			$this->tickets[] = $ticket;
 		}
 		return apply_filters('em_tickets_get_post', count($this->errors) == 0, $this);
 	}
@@ -198,9 +201,9 @@ class EM_Tickets extends EM_Object implements Iterator, Countable {
 	 */
 	function validate(){
 		$this->errors = array();
-		foreach($this->tickets as $EM_Ticket){
-			if( !$EM_Ticket->validate() ){
-				$this->add_error($EM_Ticket->get_errors());
+		foreach($this->tickets as $ticket){
+			if( !$ticket->validate() ){
+				$this->add_error($ticket->get_errors());
 			} 
 		}
 		return apply_filters('em_tickets_validate', count($this->errors) == 0, $this);
@@ -211,12 +214,12 @@ class EM_Tickets extends EM_Object implements Iterator, Countable {
 	 */
 	function save(){
 		$result = true;
-		foreach( $this->tickets as $EM_Ticket ){
-			/* @var $EM_Ticket EM_Ticket */
-			$EM_Ticket->event_id = $this->event_id; //pass on saved event_data
-			if( !$EM_Ticket->save() ){
+		foreach( $this->tickets as $ticket ){
+			/* @var $ticket Ticket */
+			$ticket->event_id = $this->event_id; //pass on saved event_data
+			if( !$ticket->save() ){
 				$result = false;
-				$this->add_error($EM_Ticket->get_errors());
+				$this->add_error($ticket->get_errors());
 			}
 		}
 		return apply_filters('em_tickets_save', $result, $this);
@@ -226,10 +229,12 @@ class EM_Tickets extends EM_Object implements Iterator, Countable {
 	 * Goes through each ticket and populates it with the bookings made
 	 */
 	function get_ticket_bookings(){
-		foreach( $this->tickets as $EM_Ticket ){
-			$EM_Ticket->get_bookings();
+		foreach( $this->tickets as $ticket ){
+			$ticket->get_bookings();
 		}
 	}
+
+	
 	
 	/**
 	 * Get the total number of spaces this event has. This will show the lower value of event global spaces limit or total ticket spaces. Setting $force_refresh to true will recheck spaces, even if previously done so.
@@ -239,9 +244,9 @@ class EM_Tickets extends EM_Object implements Iterator, Countable {
 	function get_spaces( $force_refresh=false ){
 		$spaces = 0;
 		if($force_refresh || $this->spaces == 0){
-			foreach( $this->tickets as $EM_Ticket ){
-				/* @var $EM_Ticket EM_Ticket */
-				$spaces += $EM_Ticket->get_spaces();
+			foreach( $this->tickets as $ticket ){
+				/* @var $ticket Ticket */
+				$spaces += $ticket->get_spaces();
 			}
 			$this->spaces = $spaces;
 		}
@@ -264,9 +269,9 @@ class EM_Tickets extends EM_Object implements Iterator, Countable {
         reset($this->tickets);
     }
 	/**
-	 * @return EM_Ticket
+	 * @return Ticket
 	 */
-    public function current() : EM_Ticket {
+    public function current() : Ticket {
         $var = current($this->tickets);
         return $var;
     }  
@@ -277,7 +282,7 @@ class EM_Tickets extends EM_Object implements Iterator, Countable {
         return $var;
     }
 	/**
-	 * @return EM_Ticket
+	 * @return Ticket
 	 */
     public function next() : void {
         next($this->tickets);
