@@ -29,23 +29,23 @@ class EM_Speakers {
             'query_var' => false,
             'has_archive' => false,
             'supports' => ['title', 'thumbnail', 'editor', 'excerpt', 'custom-fields'],
-            'label' => __('Speakers','events-manager'),
-            'description' => __('Speakers for an event.','events-manager'),
+            'label' => __('Speakers','events'),
+            'description' => __('Speakers for an event.','events'),
             'labels' => [
-                'name' => __('Speakers','events-manager'),
-                'singular_name' => __('Speaker','events-manager'),
-                'menu_name' => __('Speakers','events-manager'),
-                'add_new' => __('Add Speaker','events-manager'),
-                'add_new_item' => __('Add New Speaker','events-manager'),
-                'edit' => __('Edit','events-manager'),
-                'edit_item' => __('Edit Speaker','events-manager'),
-                'new_item' => __('New Speaker','events-manager'),
-                'view' => __('View','events-manager'),
-                'view_item' => __('View Speaker','events-manager'),
-                'search_items' => __('Search Speaker','events-manager'),
-                'not_found' => __('No Speaker Found','events-manager'),
-                'not_found_in_trash' => __('No Speaker Found in Trash','events-manager'),
-                'parent' => __('Parent Speaker','events-manager'),
+                'name' => __('Speakers','events'),
+                'singular_name' => __('Speaker','events'),
+                'menu_name' => __('Speakers','events'),
+                'add_new' => __('Add Speaker','events'),
+                'add_new_item' => __('Add New Speaker','events'),
+                'edit' => __('Edit','events'),
+                'edit_item' => __('Edit Speaker','events'),
+                'new_item' => __('New Speaker','events'),
+                'view' => __('View','events'),
+                'view_item' => __('View Speaker','events'),
+                'search_items' => __('Search Speaker','events'),
+                'not_found' => __('No Speaker Found','events'),
+                'not_found_in_trash' => __('No Speaker Found in Trash','events'),
+                'parent' => __('Parent Speaker','events'),
             ],
         ]);
 
@@ -69,9 +69,9 @@ class EM_Speakers {
 		$role = get_post_meta( $post->ID, 'role', true );
         wp_nonce_field( basename( __FILE__ ), 'person_details' );
         echo '<table class="form-table"><tbody>';
-        echo '<tr><th>' . __( 'E-Mail', 'events-manager' ) . '</th><td><input name="email" type="email" value="' . $email . '"></td></tr>';
-		echo '<tr><th>' . __( 'Role', 'events-manager' ) . '</th><td><input name="role" type="text" value="' . $role . '"></td><p>' . __("If the speaker has a special Role (e.g. Organizator, Leder, etc), type in here, else leave blank", 'events-manager') . '</p></tr>';
-		echo '<tr><th>' . __( 'Gender', 'events-manager' ) . '</th><td><select name="gender"><option value="male" ' . ($gender == 'male' ? 'selected' : '') . '>' . __('Male', 'events-manager') . '</option><option value="female" ' . ($gender == 'female' ? 'selected' : '') . '>' . __('Female', 'events-manager') . '</option></select></td></tr>';
+        echo '<tr><th>' . __( 'E-Mail', 'events' ) . '</th><td><input name="email" type="email" value="' . $email . '"></td></tr>';
+		echo '<tr><th>' . __( 'Role', 'events' ) . '</th><td><input name="role" type="text" value="' . $role . '"></td><p>' . __("If the speaker has a special Role (e.g. Organizator, Leder, etc), type in here, else leave blank", 'events') . '</p></tr>';
+		echo '<tr><th>' . __( 'Gender', 'events' ) . '</th><td><select name="gender"><option value="male" ' . ($gender == 'male' ? 'selected' : '') . '>' . __('Male', 'events') . '</option><option value="female" ' . ($gender == 'female' ? 'selected' : '') . '>' . __('Female', 'events') . '</option></select></td></tr>';
         echo '</tbody></table>';
 
     }

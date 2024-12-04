@@ -37,44 +37,44 @@ const Inspector = ( props ) => {
 						speaker._embedded[ 'wp:featuredmedia' ][ 0 ].media_details.sizes?.thumbnail?.source_url,
 				};
 		  } )
-		: [ { name: __( 'Loading...', 'events-manager' ), key: 'loading' } ];
+		: [ { name: __( 'Loading...', 'events' ), key: 'loading' } ];
 
 	return (
 		<InspectorControls>
-			<PanelBody title={ __( 'Appearance', 'events-manager' ) } initialOpen={ true }>
+			<PanelBody title={ __( 'Appearance', 'events' ) } initialOpen={ true }>
 				<CheckboxControl
-					label={ __( 'Show Portrait if possible', 'events-manager' ) }
+					label={ __( 'Show Portrait if possible', 'events' ) }
 					checked={ showPortrait }
 					onChange={ ( value ) => setAttributes( { showPortrait: value } ) }
 				/>
 				<CheckboxControl
-					label={ __( 'Show Link', 'events-manager' ) }
+					label={ __( 'Show Link', 'events' ) }
 					checked={ showLink }
 					onChange={ ( value ) => setAttributes( { showLink: value } ) }
 				/>
 				<SelectControl
-					label={ __( 'Link to', 'events-manager' ) }
+					label={ __( 'Link to', 'events' ) }
 					value={ linkTo }
 					onChange={ ( value ) => setAttributes( { linkTo: value } ) }
 					options={ [
-						{ label: __( 'E-Mail', 'events-manager' ), value: 'mail' },
-						{ label: __( 'Phone', 'events-manager' ), value: 'call' },
-						{ label: __( 'Website', 'events-manager' ), value: 'public' },
-						{ label: __( 'Custom URL', 'events-manager' ), value: 'custom' },
+						{ label: __( 'E-Mail', 'events' ), value: 'mail' },
+						{ label: __( 'Phone', 'events' ), value: 'call' },
+						{ label: __( 'Website', 'events' ), value: 'public' },
+						{ label: __( 'Custom URL', 'events' ), value: 'custom' },
 					] }
 					disabled={ ! showLink }
 				/>
 
 				<TextControl
-					label={ __( 'Custom URL', 'events-manager' ) }
+					label={ __( 'Custom URL', 'events' ) }
 					value={ url }
 					onChange={ ( value ) => setAttributes( { url: value } ) }
 					disabled={ linkTo !== 'custom' || ! showLink }
 				/>
 			</PanelBody>
-			<PanelBody title={ __( 'Data', 'events-manager' ) } initialOpen={ true }>
+			<PanelBody title={ __( 'Data', 'events' ) } initialOpen={ true }>
 				<ComboboxControl
-					label={ __( 'Select a speaker', 'events-manager' ) }
+					label={ __( 'Select a speaker', 'events' ) }
 					value={ customSpeakerId }
 					onChange={ ( value ) => {
 						setAttributes( { customSpeakerId: value } );
@@ -82,7 +82,7 @@ const Inspector = ( props ) => {
 					options={ speakerSelection }
 					__experimentalRenderItem={ ( { item } ) => {
 						return (
-							<div className="events-manager-speaker-item">
+							<div className="events-speaker-item">
 								{ item.media ? (
 									<img className="icon-round" width="24px" height="24px" src={ item.media } />
 								) : (

@@ -29,7 +29,7 @@ const reducer = ( state = {}, action ) => {
 		case 'SET_MODAL':
 			state.modal.visible = payload;
 			state.modal.title = payload
-				? `${ __( 'Registration', 'events-manager' ) } ${ data.event?.title }`
+				? `${ __( 'Registration', 'events' ) } ${ data.event?.title }`
 				: state.originalDocumentTitle;
 			return { ...state };
 
@@ -48,6 +48,9 @@ const reducer = ( state = {}, action ) => {
 			}
 			if ( payload.form === 'registration' ) {
 				state.request.registration[ payload.field ] = payload.value;
+			}
+			if ( payload.form === 'donation' ) {
+				state.request.donation = payload.value;
 			}
 			state.wizard.checkValidity = true;
 			return { ...state };

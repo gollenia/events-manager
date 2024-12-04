@@ -15,10 +15,12 @@ const { name, title } = metadata;
 
 const settings = {
 	...metadata,
-	title: __( title, 'ctx-blocks' ),
+	title: __( title, 'events' ),
 	icon,
 	edit: Edit,
-	save: () => { return null }
+	save: () => {
+		return null;
+	},
 };
 
 export { name, settings };

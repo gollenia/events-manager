@@ -77,7 +77,7 @@ const Booking = ( { post, open } ) => {
 					<div className="event-modal-header">
 						<div className="event-modal-caption">
 							<div className="">
-								<b className="margin--0">{ __( 'Booking', 'events-manager' ) }</b>
+								<b className="margin--0">{ __( 'Booking', 'events' ) }</b>
 								<h3 className="margin--0">{ data?.event?.title }</h3>
 							</div>
 							<WizardGuide state={ state } />
@@ -107,8 +107,8 @@ const Booking = ( { post, open } ) => {
 											valid={ wizard.steps.tickets.valid }
 											invalidMessage={
 												request.tickets.length == 0
-													? __( 'Please select at least one ticket', 'events-manager' )
-													: __( 'Please fill out all required fields', 'events-manager' )
+													? __( 'Please select at least one ticket', 'events' )
+													: __( 'Please fill out all required fields', 'events' )
 											}
 										>
 											<TicketList { ...{ state, dispatch } } />
@@ -116,7 +116,7 @@ const Booking = ( { post, open } ) => {
 									) }
 									<WizardStep
 										valid={ wizard.steps.registration.valid }
-										invalidMessage={ __( 'Please fill out all required fields', 'events-manager' ) }
+										invalidMessage={ __( 'Please fill out all required fields', 'events' ) }
 									>
 										<UserRegistration { ...{ state, dispatch } } />
 									</WizardStep>

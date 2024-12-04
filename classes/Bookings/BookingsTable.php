@@ -1,5 +1,6 @@
 <?php
 //Builds a table of bookings, still work in progress...
+// May be replaced by JS App in future
 class EM_Bookings_Table {
 	/**
 	 * associative array of columns that'll be shown in order from left to right
@@ -8,7 +9,7 @@ class EM_Bookings_Table {
 	 * * value - label for use in column headers 
 	 * @var array
 	 */
-	public $cols = ['user_name','event_name','booking_spaces','booking_status','booking_price','actions'];
+	public $cols = ['user_name','event_name','booking_spaces','booking_status','booking_price','donation','booking_date'];
 	/**
 	 * Asoociative array of available column keys and corresponding headers, which will be used to display this table of bookings
 	 * @var array
@@ -55,19 +56,16 @@ class EM_Bookings_Table {
 	public $ticket;
 	public $event;
 	
-
-
-	
 	
 	function __construct($show_tickets = false){
 		$this->statuses = array(
-			'all' => array('label'=>__('All','events-manager'), 'search'=>false),
-			'pending' => array('label'=>__('Pending','events-manager'), 'search'=>0),
-			'confirmed' => array('label'=>__('Confirmed','events-manager'), 'search'=>1), 
-			'cancelled' => array('label'=>__('Cancelled','events-manager'), 'search'=>3),
-			'rejected' => array('label'=>__('Rejected','events-manager'), 'search'=>2),
-			'needs-attention' => array('label'=>__('Needs Attention','events-manager'), 'search'=>array(0)),
-			'incomplete' => array('label'=>__('Incomplete Bookings','events-manager'), 'search'=>array(0))
+			'all' => array('label'=>__('All','events'), 'search'=>false),
+			'pending' => array('label'=>__('Pending','events'), 'search'=>0),
+			'confirmed' => array('label'=>__('Confirmed','events'), 'search'=>1), 
+			'cancelled' => array('label'=>__('Cancelled','events'), 'search'=>3),
+			'rejected' => array('label'=>__('Rejected','events'), 'search'=>2),
+			'needs-attention' => array('label'=>__('Needs Attention','events'), 'search'=>array(0)),
+			'incomplete' => array('label'=>__('Incomplete Bookings','events'), 'search'=>array(0))
 		);
 		if( !get_option('dbem_bookings_approval') ){
 			unset($this->statuses['pending']);
@@ -84,36 +82,36 @@ class EM_Bookings_Table {
 		$this->status = ( !empty($_REQUEST['status']) && array_key_exists($_REQUEST['status'], $this->statuses) ) ? sanitize_text_field($_REQUEST['status']):'needs-attention';
 		//build template of possible columns
 		$this->cols_template = apply_filters('em_bookings_table_cols_template', array(
-			'user_login' => __('Username', 'events-manager'),
-			'user_name'=>__('Name','events-manager'),
-			'first_name'=>__('First Name','events-manager'),
-			'last_name'=>__('Last Name','events-manager'),
-			'event_name'=>__('Event','events-manager'),
-			'event_date'=>__('Event Date(s)','events-manager'),
-			'event_time'=>__('Event Time(s)','events-manager'),
-			'user_email'=>__('E-mail','events-manager'),
-			'dbem_phone'=>__('Phone Number','events-manager'),
-			'booking_spaces'=>__('Spaces','events-manager'),
-			'booking_status'=>__('Status','events-manager'),
-			'booking_date'=>__('Booking Date','events-manager'),
-			'booking_price'=>__('Total','events-manager'),
-			'booking_id'=>__('Booking ID','events-manager'),
-			'booking_comment'=>__('Booking Comment','events-manager')
+			'user_login' => __('Username', 'events'),
+			'user_name'=>__('Name','events'),
+			'first_name'=>__('First Name','events'),
+			'last_name'=>__('Last Name','events'),
+			'event_name'=>__('Event','events'),
+			'event_date'=>__('Event Date(s)','events'),
+			'event_time'=>__('Event Time(s)','events'),
+			'user_email'=>__('E-mail','events'),
+			'dbem_phone'=>__('Phone Number','events'),
+			'booking_spaces'=>__('Spaces','events'),
+			'booking_status'=>__('Status','events'),
+			'booking_date'=>__('Booking Date','events'),
+			'booking_price'=>__('Total','events'),
+			'booking_id'=>__('Booking ID','events'),
+			'booking_comment'=>__('Booking Comment','events')
 		), $this);
 		$this->cols_tickets_template = apply_filters('em_bookings_table_cols_tickets_template', array(
-			'ticket_name'=>__('Ticket Name','events-manager'),
-			'ticket_description'=>__('Ticket Description','events-manager'),
-			'ticket_price'=>__('Ticket Price','events-manager'),
-			'ticket_total'=>__('Ticket Total','events-manager'),
-			'ticket_id'=>__('Ticket ID','events-manager')
+			'ticket_name'=>__('Ticket Name','events'),
+			'ticket_description'=>__('Ticket Description','events'),
+			'ticket_price'=>__('Ticket Price','events'),
+			'ticket_total'=>__('Ticket Total','events'),
+			'ticket_id'=>__('Ticket ID','events')
 		), $this);
 		//add tickets to template if we're showing rows by booking-ticket
 		if( $show_tickets ){
 			$this->show_tickets = true;
-			$this->cols = array('user_name','event_name','ticket_name','ticket_price','booking_spaces','booking_status','actions');
+			$this->cols = array('user_name','event_name','ticket_name','ticket_price','booking_spaces','booking_status');
 			$this->cols_template = array_merge( $this->cols_template, $this->cols_tickets_template);
 		}
-		$this->cols_template['actions'] = __('Actions','events-manager');
+		
 		//calculate columns if post requests		
 		if( !empty($_REQUEST['cols']) ){
 		    if( is_array($_REQUEST['cols']) ){
@@ -196,7 +194,7 @@ class EM_Bookings_Table {
 	/**
 	 * @return $EM_Event|false
 	 */
-	function get_event(){
+	function get_event() : EM_Event|false {
 		global $EM_Event;
 		if( !empty($this->event) && is_object($this->event) ){
 			return $this->event;
@@ -247,13 +245,13 @@ class EM_Bookings_Table {
 		$EM_Event = $this->get_event();
 		$EM_Person = $this->get_person();
 		?>
-		<div id="em-bookings-table-settings" class="em-bookings-table-overlay" style="display:none;" title="<?php esc_attr_e('Bookings Table Settings','events-manager'); ?>">
+		<div id="em-bookings-table-settings" class="em-bookings-table-overlay" style="display:none;" title="<?php esc_attr_e('Bookings Table Settings','events'); ?>">
 			<form id="em-bookings-table-settings-form" class="em-bookings-table-form" action="" method="post">
-				<p><?php _e('Modify what information is displayed in this booking table.','events-manager') ?></p>
+				<p><?php _e('Modify what information is displayed in this booking table.','events') ?></p>
 				<div id="em-bookings-table-settings-form-cols">
 					<p>
-						<strong><?php _e('Columns to show','events-manager')?></strong><br />
-						<?php _e('Drag items to or from the left column to add or remove them.','events-manager'); ?>
+						<strong><?php _e('Columns to show','events')?></strong><br />
+						<?php _e('Drag items to or from the left column to add or remove them.','events'); ?>
 					</p>
 					<ul id="em-bookings-cols-active" class="em-bookings-cols-sortable">
 						<?php foreach( $this->cols as $col_key ): ?>
@@ -276,17 +274,17 @@ class EM_Bookings_Table {
 				</div>
 			</form>
 		</div>
-		<div id="em-bookings-table-export" class="em-bookings-table-overlay" style="display:none;" title="<?php esc_attr_e('Export Bookings','events-manager'); ?>">
+		<div id="em-bookings-table-export" class="em-bookings-table-overlay" style="display:none;" title="<?php esc_attr_e('Export Bookings','events'); ?>">
 			<form id="em-bookings-table-export-form" class="em-bookings-table-form" action="" method="post">
-				<p><?php esc_html_e('Select the options below and export all the bookings you have currently filtered (all pages) into a CSV spreadsheet format.','events-manager') ?></p>
+				<p><?php esc_html_e('Select the options below and export all the bookings you have currently filtered (all pages) into a CSV spreadsheet format.','events') ?></p>
 				
 				<p>
 				<input type="checkbox" name="show_tickets" value="1" />
-				<label><?php esc_html_e('Split bookings by ticket type','events-manager')?> </label>
+				<label><?php esc_html_e('Split bookings by ticket type','events')?> </label>
 				
 				<?php do_action('em_bookings_table_export_options'); ?>
 				<div id="em-bookings-table-settings-form-cols">
-					<p><strong><?php esc_html_e('Columns to export','events-manager')?></strong></p>
+					<p><strong><?php esc_html_e('Columns to export','events')?></strong></p>
 					<ul id="em-bookings-export-cols-active" class="em-bookings-cols-sortable">
 						<?php foreach( $this->cols as $col_key ): ?>
 							<li class="ui-state-highlight">
@@ -343,7 +341,7 @@ class EM_Bookings_Table {
 		$this->get_bookings(true); //get bookings and refresh
 		?>
 		<div class='em-bookings-table em_obj' id="em-bookings-table">
-			<form class='bookings-filter' method='get' action='<?php echo esc_url(bloginfo('wpurl')); ?>/wp-admin/edit.php'>
+			<form class='bookings-filter' method='get' action='<?php echo esc_url(site_url()); ?>/wp-admin/edit.php'>
 				<?php if( $EM_Event !== false ): ?>
 				<input type="hidden" name="event_id" value='<?php echo esc_attr($EM_Event->event_id); ?>' />
 				<?php endif; ?>
@@ -353,12 +351,12 @@ class EM_Bookings_Table {
 				<input type="hidden" name="order" value='<?php echo esc_attr($this->order); ?>' />
 				<input type="hidden" name="orderby" value='<?php echo esc_attr($this->orderby); ?>' />
 				<input type="hidden" name="post_type" value="event" />
-				<input type="hidden" name="page" value="events-manager-bookings" />
+				<input type="hidden" name="page" value="events-bookings" />
 				<input type="hidden" name="cols" value="<?php echo esc_attr(implode(',', $this->cols)); ?>" />
 				
 				<div class='tablenav'>
 					<div class="alignleft actions">
-						<a href="#" class="em-bookings-table-export button-secondary" id="em-bookings-table-export-trigger" rel="#em-bookings-table-export" title="<?php _e('Export these bookings.','events-manager'); ?>"><i class="material-symbols-outlined">export_notes</i></a>
+						<a href="#" class="em-bookings-table-export button-secondary" id="em-bookings-table-export-trigger" rel="#em-bookings-table-export" title="<?php _e('Export these bookings.','events'); ?>"><i class="material-symbols-outlined">export_notes</i></a>
 						<a href="#" class="em-bookings-table-settings button-secondary" id="em-bookings-table-settings-trigger" rel="#em-bookings-table-settings"><i class="material-symbols-outlined">table</i></a>
 						<?php if( $EM_Event === false ): ?>
 						<select name="scope">
@@ -373,7 +371,7 @@ class EM_Bookings_Table {
 						</select>
 						<?php endif; ?>
 						<select name="limit">
-							<option value="<?php echo esc_attr($this->limit) ?>"><?php echo esc_html(sprintf(__('%s Rows','events-manager'),$this->limit)); ?></option>
+							<option value="<?php echo esc_attr($this->limit) ?>"><?php echo esc_html(sprintf(__('%s Rows','events'),$this->limit)); ?></option>
 							<option value="5">5</option>
 							<option value="10">10</option>
 							<option value="25">25</option>
@@ -392,7 +390,7 @@ class EM_Bookings_Table {
 						</select>
 						
 						<input name="pno" type="hidden" value="1" />
-						<button id="" class="button-secondary" type="" value="" ><?php esc_attr_e( 'Filter' )?>
+						<button id="post-query-submit" class="button-secondary" type="submit" value="" ><?php esc_attr_e( 'Filter' )?>
 						
 					</div>
 					<?php 
@@ -404,7 +402,7 @@ class EM_Bookings_Table {
 				</div>
 				<div class="clear"></div>
 				<div class='table-wrap'>
-				<table id='dbem-bookings-table' class='widefat post '>
+				<table id='dbem-bookings-table' class='widefat post bookingstable'>
 					<thead>
 						<tr>
 							<?php /*						
@@ -438,7 +436,7 @@ class EM_Bookings_Table {
 								} else {
 									$row = $this->get_row($EM_Booking);
 									foreach( $row as $row_cell ){
-									?><td><?php echo $row_cell; ?></td><?php
+									?><td class="<?php echo $row_cell['class']; ?>"><?php echo $row_cell['content']; ?></td><?php
 									}
 								}
 								?>
@@ -449,7 +447,7 @@ class EM_Bookings_Table {
 					</tbody>
 					<?php else: ?>
 						<tbody>
-							<tr><td scope="row" colspan="<?php echo count($this->cols); ?>"><?php esc_html_e('No bookings.', 'events-manager'); ?></td></tr>
+							<tr><td scope="row" colspan="<?php echo count($this->cols); ?>"><?php esc_html_e('No bookings.', 'events'); ?></td></tr>
 						</tbody>
 					<?php endif; ?>
 				</table>
@@ -504,8 +502,8 @@ class EM_Bookings_Table {
 		/* @var $ticket Ticket */
 		/* @var $ticket_booking ticket_booking */
 		/* @var $EM_Booking EM_Booking */
-		
-		if( get_class($object) == 'TicketBooking' ){
+		get_class($object);
+		if( get_class($object) == 'Contexis\Events\Tickets\TicketBooking' ){
 			$ticket_booking = $object;
 			$EM_Booking = $ticket_booking->get_booking();
 		}else{
@@ -514,18 +512,26 @@ class EM_Bookings_Table {
 		$cols = array();
 		foreach($this->cols as $col){
 			if( $col == 'actions' && $format == 'csv' ) continue; 
-			$cols[] = $this->get_cell($EM_Booking, $col, $format);
+			$cols[] = ['content' => $this->get_cell($EM_Booking, $col, $format), 'class' => 'em-bookings-col-'.$col];
 		}
 		return $cols;
 	}
 
 	function get_cell($EM_Booking, $column, $format = 'html'){
+		
+		$price_array = $EM_Booking->get_price_summary_array();
 		switch ($column) {
 			case 'user_email':
 				return $EM_Booking->get_person()->user_email;
 				break;
 			case 'user_name':
-				return $EM_Booking->get_person()->get_name();
+				if( $format == 'csv' ) return $EM_Booking->get_person()->get_name();
+				$url = $EM_Booking->get_event()->get_bookings_url();
+				$url = add_query_arg(['booking_id'=>$EM_Booking->booking_id, 'em_ajax'=>null, 'em_obj'=>null], $url);
+				
+				$ret = "<strong><a class='row-title' href='$url'>" . $EM_Booking->get_person()->get_name() . '</a></strong>';
+				$ret .= "<div class='row-actions'>" . implode(' | ', $this->get_booking_actions($EM_Booking)) . "</div>";
+				return $ret;
 				break;
 			case 'first_name':
 				return $EM_Booking->get_person()->first_name;
@@ -543,12 +549,15 @@ class EM_Bookings_Table {
 				return $EM_Booking->get_event()->output('#_EVENTTIMES');
 				break;
 			case 'booking_price':
-				return \Contexis\Events\Intl\Price::format( $EM_Booking->get_price());
+				return \Contexis\Events\Intl\Price::format( $price_array['total'] );
+				break;
+			case 'donation':
+				return \Contexis\Events\Intl\Price::format( $price_array['donation'] );
 				break;
 			case 'booking_status':
 				if( $format == 'csv' ) return $EM_Booking->get_status();
 				$status = array_search($EM_Booking->booking_status, array_column($this->statuses, 'search'));
-				return '<span class="em-booking-status-'.$status.'">'.ucwords($EM_Booking->get_status()).'</span>';
+				return '<span class="em-label em-label-'.$status.'"><i class="material-symbols-outlined">'.$this->get_status_icon($status).'</i>'.ucwords($EM_Booking->get_status()).'</span>';
 				break;
 			case 'booking_date':
 				return \Contexis\Events\Intl\Date::get_date($EM_Booking->date()->getTimestamp()) . " " . \Contexis\Events\Intl\Date::get_time($EM_Booking->date()->getTimestamp());
@@ -557,7 +566,7 @@ class EM_Bookings_Table {
 				return $EM_Booking->booking_id;
 				break;
 			case 'actions':
-				return implode(' | ', $this->get_booking_actions($EM_Booking));
+				return '';
 				break;
 			case 'booking_spaces':
 				return $EM_Booking->get_spaces();
@@ -577,6 +586,7 @@ class EM_Bookings_Table {
 			case 'ticket_total':
 				return $EM_Booking->get_tickets_bookings()->tickets_bookings[0]->get_price(false);
 				break;
+			
 			case 'ticket_id':
 				return $EM_Booking->get_tickets_bookings()->tickets_bookings[0]->get_ticket()->ticket_id;
 				break;
@@ -603,11 +613,27 @@ class EM_Bookings_Table {
 				break;
 		}
 	}
+
+	function get_status_icon ($status) {
+		$icons = [
+			'pending',
+			'check_circle',
+			'check_circle',
+			'block',
+			'pan_tool',
+			'overview',
+			'overview',
+			'credit_card_clock',
+			'overview',
+		];
+		return $icons[$status];
+	}
 	
 	function get_row_csv($EM_Booking){
 	    $row = $this->get_row($EM_Booking, 'csv');
 	    foreach($row as $k=>$v){
-	    	$row[$k] = html_entity_decode($v);
+			var_dump($v['content']);
+	    	$row[$k] = html_entity_decode($v['content']);
 	    } //remove things like &amp; which may have been saved to the DB directly
 	    return $row;
 	}
@@ -622,48 +648,37 @@ class EM_Bookings_Table {
 	 */
 	function get_booking_actions($EM_Booking){
 		$booking_actions = array();
-		$url = $EM_Booking->get_event()->get_bookings_url();	
-		
+
 		switch($EM_Booking->booking_status){
-			case 0: //pending
-				if( get_option('dbem_bookings_approval') ){
-					$booking_actions = array(
-						'approve' => '<a class="em-bookings-approve" href="'.add_query_arg(['action'=>'bookings_approve', 'booking_id'=>$EM_Booking->booking_id], $url).'">'.__('Approve','events-manager').'</a>',
-						'reject' => '<a class="em-bookings-reject" href="'.add_query_arg(['action'=>'bookings_reject', 'booking_id'=>$EM_Booking->booking_id], $url).'">'.__('Reject','events-manager').'</a>',
-						'delete' => '<span class="trash"><a class="em-bookings-delete" href="'.add_query_arg(['action'=>'bookings_delete', 'booking_id'=>$EM_Booking->booking_id], $url).'">'.__('Delete','events-manager').'</a></span>',
-						'edit' => '<a class="em-bookings-edit" href="'.add_query_arg(['booking_id'=>$EM_Booking->booking_id, 'em_ajax'=>null, 'em_obj'=>null], $url).'">'.__('Edit/View','events-manager').'</a>',
-					);
-					break;
-				}//if approvals are off, treat as a 1
-			case 1: //approved
-				$booking_actions = array(
-					'unapprove' => '<a class="em-bookings-unapprove" href="'.add_query_arg(['action'=>'bookings_unapprove', 'booking_id'=>$EM_Booking->booking_id], $url).'">'.__('Unapprove','events-manager').'</a>',
-					'cancel' => '<a class="em-bookings-cancel" href="'.add_query_arg(['action'=>'bookings_cancel', 'booking_id'=>$EM_Booking->booking_id], $url).'">'.__('Cancel','events-manager').'</a>',
-					'delete' => '<span class="trash"><a class="em-bookings-delete" href="'.add_query_arg(['action'=>'bookings_delete', 'booking_id'=>$EM_Booking->booking_id], $url).'">'.__('Delete','events-manager').'</a></span>',
-					'edit' => '<a class="em-bookings-edit" href="'.add_query_arg(['booking_id'=>$EM_Booking->booking_id, 'em_ajax'=>null, 'em_obj'=>null], $url).'">'.__('Edit/View','events-manager').'</a>',
-				);
-				break;
-			case 2: //rejected
-				$booking_actions = array(
-					'approve' => '<a class="em-bookings-approve" href="'.add_query_arg(['action'=>'bookings_approve', 'booking_id'=>$EM_Booking->booking_id], $url).'">'.__('Approve','events-manager').'</a>',
-					'delete' => '<span class="trash"><a class="em-bookings-delete" href="'.add_query_arg(['action'=>'bookings_delete', 'booking_id'=>$EM_Booking->booking_id], $url).'">'.__('Delete','events-manager').'</a></span>',
-					'edit' => '<a class="em-bookings-edit" href="'.add_query_arg(['booking_id'=>$EM_Booking->booking_id, 'em_ajax'=>null, 'em_obj'=>null], $url).'">'.__('Edit/View','events-manager').'</a>',
-				);
-				break;
-			case 3: //cancelled
-			case 4: //awaiting online payment - similar to pending but always needs approval in EM Free
-			case 5: //awaiting payment - similar to pending but always needs approval in EM Free
-				$booking_actions = array(
-					'approve' => '<a class="em-bookings-approve" href="'.add_query_arg(['action'=>'bookings_approve', 'booking_id'=>$EM_Booking->booking_id], $url).'">'.__('Approve','events-manager').'</a>',
-					'delete' => '<span class="trash"><a class="em-bookings-delete" href="'.add_query_arg(['action'=>'bookings_delete', 'booking_id'=>$EM_Booking->booking_id], $url).'">'.__('Delete','events-manager').'</a></span>',
-					'edit' => '<a class="em-bookings-edit" href="'.add_query_arg(['booking_id'=>$EM_Booking->booking_id, 'em_ajax'=>null, 'em_obj'=>null], $url).'">'.__('Edit/View','events-manager').'</a>',
-				);
+			case EM_Booking::PENDING: 
+				if( !get_option('dbem_bookings_approval') ) break;
+				$actions = ['approve', 'reject'];
 				break;
 				
+			case EM_Booking::APPROVED:
+				$actions = ['unapprove', 'cancel'];
+				break;
+			default:
+				$actions = ['approve'];
+				break;	
 		}
-		if( !get_option('dbem_bookings_approval') ) unset($booking_actions['unapprove']);
-		$booking_actions = apply_filters('em_bookings_table_booking_actions_'.$EM_Booking->booking_status ,$booking_actions, $EM_Booking);
+
+		$actions = apply_filters('em_bookings_table_booking_actions_'.$EM_Booking->booking_status, $actions, $EM_Booking);
+		$actions[] = 'delete';
+		$booking_actions = $this->generate_action_links($actions, $EM_Booking);
+		
 		return apply_filters('em_bookings_table_cols_col_action', $booking_actions, $EM_Booking);
+	}
+
+	private function generate_action_links(array $actions, $EM_Booking) : array {
+		$links = [];
+
+		foreach($actions as $action) {
+			$class = $action== 'delete' ? 'trash' : '';
+			$links[] =  "<span class='$class'><a class='em-bookings-action' data-action='$action' data-booking-id='$EM_Booking->booking_id'>" . __(ucfirst($action), 'events') . "</a></span>";
+		}
+		
+		return $links;
 	}
 }
 ?>

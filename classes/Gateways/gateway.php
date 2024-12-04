@@ -107,7 +107,7 @@ class EM_Gateway {
 	}
 	
 	public function register_handle_payment_api(){
-		register_rest_route( 'events-manager/v1', '/gateways/'.$this->gateway.'/notify', array(
+		register_rest_route( 'events/v1', '/gateways/'.$this->gateway.'/notify', array(
 			array(
 				'methods'  => 'GET,POST',
 				'callback' => array( $this, 'handle_payment_return_api' ),
@@ -483,7 +483,7 @@ class EM_Gateway {
 	 * @return string
 	 */
 	function get_payment_return_api_url(){
-		return get_rest_url( get_current_blog_id(), 'events-manager/v1/gateways/'.$this->gateway.'/notify' );
+		return get_rest_url( get_current_blog_id(), 'events/v1/gateways/'.$this->gateway.'/notify' );
 	}
 
 	/**
@@ -534,7 +534,7 @@ class EM_Gateway {
 	 */
 	function em_gateways_transactions_table_gateway_id($transaction_id, $transaction ){
 		$gateway_url = ( get_option('em_'. $this->gateway . "_status" ) == 'live') ? $this->transaction_detail[0] : $this->transaction_detail[1];
-		$title = sprintf( esc_attr__('View this transaction on %s', 'events-manager'), $this->transaction_detail[0]);
+		$title = sprintf( esc_attr__('View this transaction on %s', 'events'), $this->transaction_detail[0]);
 		$transaction_id = '<a href="'. esc_url(sprintf($gateway_url,$transaction->transaction_gateway_id)) .'" target="_blank" title="'.$title.'">'. $transaction->transaction_gateway_id .'</a>';
 		return $transaction_id;
 	}
@@ -589,17 +589,17 @@ class EM_Gateway {
 	 */
 	function settings() {
 		global $page, $action, $EM_Notices;
-		$gateway_link = admin_url('edit.php?post_type='.EM_POST_TYPE_EVENT.'&page=events-manager-options#bookings');
-		$messages['updated'] = esc_html__('Gateway updated.', 'events-manager');
-		$messages['error'] = esc_html__('Gateway not updated.', 'events-manager');
+		$gateway_link = admin_url('edit.php?post_type='.EM_POST_TYPE_EVENT.'&page=events-options#bookings');
+		$messages['updated'] = esc_html__('Gateway updated.', 'events');
+		$messages['error'] = esc_html__('Gateway not updated.', 'events');
 		?>
 	    
 		<div class='wrap nosubsub'>
-			<h1><?php echo sprintf(__('Edit %s settings','events-manager'), esc_html($this->title) ); ?></h1>
+			<h1><?php echo sprintf(__('Edit %s settings','events'), esc_html($this->title) ); ?></h1>
 			<?php
 			if ( isset($_GET['msg']) && !empty($messages[$_GET['msg']]) ){ 
 				echo '<div id="message" class="'.$_GET['msg'].' fade"><p>' . $messages[$_GET['msg']] . 
-				' <a href="'.add_query_arg(['action'=>null,'gateway'=>null, 'msg' => null], $_SERVER['REQUEST_URI']).'">'.esc_html__('Back to gateways','events-manager').'</a>'.
+				' <a href="'.add_query_arg(['action'=>null,'gateway'=>null, 'msg' => null], $_SERVER['REQUEST_URI']).'">'.esc_html__('Back to gateways','events').'</a>'.
 				'</p></div>';
 			}
 			?>
@@ -607,21 +607,21 @@ class EM_Gateway {
 				<input type='hidden' name='action' id='action' value='updated' />
 				<input type='hidden' name='gateway' id='gateway' value='<?php echo $this->gateway; ?>' />
 				<?php wp_nonce_field('updated-' . $this->gateway); ?>
-				<h3><?php echo sprintf(esc_html( '%s Options', 'events-manager'),esc_html('Booking Form','events-manager')); ?></h3>
+				<h3><?php echo sprintf(esc_html( '%s Options', 'events'),esc_html('Booking Form','events')); ?></h3>
 				<table class="form-table">
 				<tbody>
                     <?php
                         //Gateway Title
-                        $desc = __('The user will see this as the text option when choosing a payment method.','events-manager'); 
-                        Options::input(__('Gateway Title', 'events-manager'), 'em_'.$this->gateway.'_option_name', $desc);
+                        $desc = __('The user will see this as the text option when choosing a payment method.','events'); 
+                        Options::input(__('Gateway Title', 'events'), 'em_'.$this->gateway.'_option_name', $desc);
 
 						//Gateway Description
-						$desc = __('This message will be shown to the user when they select this gateway.','events-manager');
-						Options::textarea(__('Gateway Description', 'events-manager'), 'em_'.$this->gateway.'_option_description', $desc);
+						$desc = __('This message will be shown to the user when they select this gateway.','events');
+						Options::textarea(__('Gateway Description', 'events'), 'em_'.$this->gateway.'_option_description', $desc);
 
                         //Gateway booking form info
-                        $desc = __('If a user chooses to pay with this gateway, or it is selected by default, this message will be shown just below the selection.', 'events-manager'); 
-                        Options::textarea(__('Booking Form Information', 'events-manager'), 'em_'.$this->gateway.'_form', $desc); 
+                        $desc = __('If a user chooses to pay with this gateway, or it is selected by default, this message will be shown just below the selection.', 'events'); 
+                        Options::textarea(__('Booking Form Information', 'events'), 'em_'.$this->gateway.'_form', $desc); 
                     ?>
 				</tbody>
 				</table>

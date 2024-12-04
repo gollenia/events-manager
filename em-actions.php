@@ -2,47 +2,11 @@
 /**
  * Performs actions on init. This works for both ajax and normal requests, the return results depends if an em_ajax flag is passed via POST or GET.
  * 
- * TODO: This whole file must be split up and the wp_ajax_ functions should be replaced with the REST API
+ * @todo This whole file must be split up and the wp_ajax_ functions should be replaced with the REST API where possible
  */
 function em_init_actions() {
 	global $wpdb,$EM_Notices,$EM_Event; 
 	if( defined('DOING_AJAX') && DOING_AJAX ) $_REQUEST['em_ajax'] = true;
-	
-	//NOTE - No EM objects are globalized at this point, as we're hitting early init mode.
-	//TODO Clean this up.... use a uniformed way of calling EM Ajax actions
-	if( !empty($_REQUEST['em_ajax']) || !empty($_REQUEST['em_ajax_action']) ){
-		if(isset($_REQUEST['em_ajax_action']) && $_REQUEST['em_ajax_action'] == 'get_location') {
-			if(isset($_REQUEST['id'])){
-				$EM_Location = new EM_Location( absint($_REQUEST['id']), 'location_id' );
-				$location_array = $EM_Location->to_array();
-		     	echo json_encode($location_array);
-			}
-			die();
-		}   
-		if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'GlobalMapData') {
-			$EM_Locations = EM_Locations::get( $_REQUEST );
-			$json_locations = array();
-			foreach($EM_Locations as $location_key => $EM_Location) {
-				$json_locations[$location_key] = $EM_Location->to_array();
-			}
-			echo json_encode($json_locations);
-		 	die();
-	 	}
-		if(isset($_REQUEST['query']) && $_REQUEST['query'] == 'GlobalEventsMapData') {
-			$_REQUEST['has_location'] = true; //we're looking for locations in this context, so locations necessary
-			$_REQUEST['groupby'] = 'location_id'; //grouping will generally produce much faster processing
-			$EM_Events = EM_Events::get( $_REQUEST );
-			$json_locations = array();
-			$locations = array();
-			foreach($EM_Events as $EM_Event) {
-				$EM_Location = $EM_Event->get_location();
-				$location_array = $EM_Event->get_location()->to_array();
-				$json_locations[] = $location_array;
-			}
-			echo json_encode($json_locations);
-		 	die();   
-	 	}
-	}
 	
 	//Event Actions
 	if( !empty($_REQUEST['action']) && substr($_REQUEST['action'],0,5) == 'event' ){
@@ -127,72 +91,11 @@ function em_init_actions() {
 		}elseif( !empty($_REQUEST['event_id']) ){
 			$EM_Event = new EM_Event( absint($_REQUEST['event_id']) );
 		}
-		$allowed_actions = array('bookings_approve'=>'approve','bookings_reject'=>'reject','bookings_unapprove'=>'unapprove', 'bookings_delete'=>'delete');
+		$allowed_actions = array('bookings_approve'=>'approve','bookings_reject'=>'reject','bookings_unapprove'=>'unapprove', 'bookings_delete'=>'delete', 'bookings_cancel'=>'cancel');
 		$result = false;
 		$feedback = '';
 		
-		//TODO user action shouldn't check permission, booking object should.
-	  	if( array_key_exists($_REQUEST['action'], $allowed_actions) && $EM_Event->can_manage('manage_bookings','manage_others_bookings') ){
-	  		//Event Admin only actions
-			$action = $allowed_actions[$_REQUEST['action']];
-			//Just do it here, since we may be deleting bookings of different events.
-			if( !empty($_REQUEST['bookings']) && is_array($_REQUEST['bookings']) && array_is_list($_REQUEST['bookings'])){
-				$results = array();
-				foreach($_REQUEST['bookings'] as $booking_id){
-					$EM_Booking = EM_Booking::find($booking_id);
-					$result = $EM_Booking->$action();
-					$results[] = $result;
-					if( !in_array(false, $results) && !$result ){
-						$feedback = $EM_Booking->feedback_message;
-					}
-				}
-				$result = !in_array(false,$results);
-			}elseif( is_object($EM_Booking) ){
-				$result = $EM_Booking->$action();
-				$feedback = $EM_Booking->feedback_message;
-			}
-			//FIXME not adhereing to object's feedback or error message, like other bits in this file.
-			//TODO multiple deletion won't work in ajax
-			if( !empty($_REQUEST['em_ajax']) ){
-				if( $result ){
-					echo $feedback;
-				}else{
-					echo '<span style="color:red">'.$feedback.'</span>';
-				}	
-				die();
-			}else{
-			    if( $result ){
-			        $EM_Notices->add_confirm($feedback);
-			    }else{
-			        $EM_Notices->add_error($feedback);
-			    }
-			}
-		}elseif( $_REQUEST['action'] == 'booking_set_status' ){
-			
-			if( $EM_Booking->can_manage('manage_bookings','manage_others_bookings') && $_REQUEST['booking_status'] != $EM_Booking->booking_status ){
-				if ( $EM_Booking->set_status($_REQUEST['booking_status'], false, true) ){
-					if( !empty($_REQUEST['send_email']) ){
-						if( $EM_Booking->email() ){
-						    if( $EM_Booking->mails_sent > 0 ) {
-						        $EM_Booking->feedback_message .= " ".__('Email Sent.','events');
-						    }else{
-						        $EM_Booking->feedback_message .= " "._x('No emails to send for this booking.', 'bookings', 'events');
-						    }
-						}else{
-							$EM_Booking->feedback_message .= ' <span style="color:red">'.__('ERROR : Email Not Sent.','events').'</span>';
-						}
-					}
-					$EM_Notices->add_confirm( $EM_Booking->feedback_message, true );
-					$redirect = !empty($_REQUEST['redirect_to']) ? $_REQUEST['redirect_to'] : wp_validate_redirect(wp_get_raw_referer(), false );
-					wp_safe_redirect( $redirect );
-					exit();
-				}else{
-					$result = false;
-					$EM_Notices->add_error( $EM_Booking->get_errors() );
-					$feedback = $EM_Booking->feedback_message;	
-				}	
-			}
-		}elseif( $_REQUEST['action'] == 'booking_resend_email' ){
+		if( $_REQUEST['action'] == 'booking_resend_email' ){
 			
 			if( $EM_Booking->can_manage('manage_bookings','manage_others_bookings') ){
 				if( $EM_Booking->email(false, true) ){
@@ -212,100 +115,12 @@ function em_init_actions() {
 			}
 		}
 
-		header( 'Content-Type: application/javascript; charset=UTF-8', true );
+		//header( 'Content-Type: application/javascript; charset=UTF-8', true );
 		$return = array('result'=>$result, 'message'=>$feedback, 'error'=>$EM_Booking->get_errors());
-		echo json_encode(apply_filters('em_action_'.$_REQUEST['action'], $return, $EM_Booking));
-		wp_die();
-		
+		var_dump($return);
+		//wp_die();
 	}
-	
-	//AJAX call for searches
-	if( !empty($_REQUEST['action']) && substr($_REQUEST['action'],0,6) == 'search' ){
-		//default search arts
-		if( $_REQUEST['action'] == 'search_states' ){
-			$results = array();
-			$conds = array();
-			if( !empty($_REQUEST['country']) ){
-				$conds[] = $wpdb->prepare("(location_country = '%s' OR location_country IS NULL )", $_REQUEST['country']);
-			}
-			if( !empty($_REQUEST['region']) ){
-				$conds[] = $wpdb->prepare("( location_region = '%s' )", $_REQUEST['region']);
-			}
-			$cond = (count($conds) > 0) ? "AND ".implode(' AND ', $conds):'';
-			$results = $wpdb->get_col("SELECT DISTINCT location_state FROM " . EM_LOCATIONS_TABLE ." WHERE location_state IS NOT NULL AND location_state != '' $cond ORDER BY location_state");
-			if( $_REQUEST['return_html'] ) {
-				//quick shortcut for quick html form manipulation
-				ob_start();
-				?>
-				<option value=''><?php echo get_option('dbem_search_form_states_label') ?></option>
-				<?php
-				foreach( $results as $result ){
-					echo "<option>{$result}</option>";
-				}
-				$return = ob_get_clean();
-				echo apply_filters('em_ajax_search_states', $return);
-				exit();
-			}else{
-				echo json_encode($results);
-				exit();
-			}
-		}
-		if( $_REQUEST['action'] == 'search_towns' ){
-			$results = array();
-			$conds = array();
-			if( !empty($_REQUEST['country']) ){
-				$conds[] = $wpdb->prepare("(location_country = '%s' OR location_country IS NULL )", $_REQUEST['country']);
-			}
-			if( !empty($_REQUEST['region']) ){
-				$conds[] = $wpdb->prepare("( location_region = '%s' )", $_REQUEST['region']);
-			}
-			if( !empty($_REQUEST['state']) ){
-				$conds[] = $wpdb->prepare("(location_state = '%s' )", $_REQUEST['state']);
-			}
-			$cond = (count($conds) > 0) ? "AND ".implode(' AND ', $conds):'';
-			$results = $wpdb->get_col("SELECT DISTINCT location_town FROM " . EM_LOCATIONS_TABLE ." WHERE location_town IS NOT NULL AND location_town != '' $cond  ORDER BY location_town");
-			if( $_REQUEST['return_html'] ) {
-				//quick shortcut for quick html form manipulation
-				ob_start();
-				?>
-				<option value=''><?php echo get_option('dbem_search_form_towns_label'); ?></option>
-				<?php			
-				foreach( $results as $result ){
-					echo "<option>$result</option>";
-				}
-				$return = ob_get_clean();
-				echo apply_filters('em_ajax_search_towns', $return);
-				exit();
-			}else{
-				echo json_encode($results);
-				exit();
-			}
-		}
-		if( $_REQUEST['action'] == 'search_regions' ){
-			$results = array();
-			if( !empty($_REQUEST['country']) ){
-				$conds[] = $wpdb->prepare("(location_country = '%s' )", $_REQUEST['country']);
-			}
-			$cond = (count($conds) > 0) ? "AND ".implode(' AND ', $conds):'';
-			$results = $wpdb->get_results("SELECT DISTINCT location_region AS value FROM " . EM_LOCATIONS_TABLE ." WHERE location_region IS NOT NULL AND location_region != '' $cond  ORDER BY location_region");
-			if( $_REQUEST['return_html'] ) {
-				//quick shortcut for quick html form manipulation
-				ob_start();
-				?>
-				<option value=''><?php echo get_option('dbem_search_form_regions_label'); ?></option>
-				<?php	
-				foreach( $results as $result ){
-					echo "<option>{$result->value}</option>";
-				}
-				$return = ob_get_clean();
-				echo apply_filters('em_ajax_search_regions', $return);
-				exit();
-			}else{
-				echo json_encode($results);
-				exit();
-			}
-		}
-	}
+
 		
 	//EM Ajax requests require this flag.
 	if( is_user_logged_in() ){

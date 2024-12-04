@@ -1,1 +1,45 @@
-{"translation-revision-date":"2024-09-10 07:46+0000","generator":"Loco https:\/\/localise.biz\/","source":"build\/booking.js","domain":"events-manager","locale_data":{"events-manager":{"":{"domain":"events-manager","lang":"de_DE","plural-forms":"nplurals=2; plural=n != 1;"},"Amount":["Betrag"],"An error occured in our booking system.":["Ein Fehler trat in unserem buchungssystem auf."],"Back":["Zur\u00fcck"],"Bank":["Bank"],"Base price:":["Grundpreis:"],"Beneficial":["Beg\u00fcnstigter"],"BIC":["BIC"],"Book now":["Jetzt buchen"],"Check coupon":["Gutschein pr\u00fcfen"],"Close":["Schlie\u00dfen"],"Coupon":["Gutschein"],"Coupon code":["Gutscheincode"],"Done":["Fertig"],"Full price":["Gesamtpreis"],"However our admin has been informed and will take care of the problem.":["Wir wurden \u00fcber den Vorfall informiert und werden uns bem\u00fchen, das Problem zu beheben"],"IBAN":["IBAN"],"Next":["Weiter"],"Payment":["Bezahlung"],"Payment Method":["Zahlmethode"],"Please accept the privacy policy":["Bitte akzeptiere die Datenschutzbestimmungen"],"Please fill in all required fields":["Bitte alle ben\u00f6tigten Felder ausf\u00fcllen"],"Please select a payment method":["Bitte eine Zahlungsweise w\u00e4hlen"],"Please select at least one ticket":["Bitte mindestens ein Ticket ausw\u00e4hlen"],"Purpose":["Verwendungszweck"],"Registration":["Registrierung"],"Scan the QR-Code with your phone to start payment":["QR-Code mit dem Smartphone einscannen, um die Bezahlung zu starten"],"Scan to pay":["Scan to Pay"],"Tickets":["Tickets"],"You may try it later again.":["Bitte versuche es sp\u00e4ter nocheinmal"],"You will be redirected to the payment gateway":["Du wirst zu unserem Zahlungsanbieter weitergeleitet."]}}}
+{
+	"translation-revision-date": "2024-09-10 07:46+0000",
+	"generator": "Loco https://localise.biz/",
+	"source": "build/booking.js",
+	"domain": "events",
+	"locale_data": {
+		"events": {
+			"": { "domain": "events", "lang": "de_DE", "plural-forms": "nplurals=2; plural=n != 1;" },
+			"Amount": [ "Betrag" ],
+			"An error occured in our booking system.": [ "Ein Fehler trat in unserem buchungssystem auf." ],
+			"Back": [ "Zur\u00fcck" ],
+			"Bank": [ "Bank" ],
+			"Base price:": [ "Grundpreis:" ],
+			"Beneficial": [ "Beg\u00fcnstigter" ],
+			"BIC": [ "BIC" ],
+			"Book now": [ "Jetzt buchen" ],
+			"Check coupon": [ "Gutschein pr\u00fcfen" ],
+			"Close": [ "Schlie\u00dfen" ],
+			"Coupon": [ "Gutschein" ],
+			"Coupon code": [ "Gutscheincode" ],
+			"Done": [ "Fertig" ],
+			"Full price": [ "Gesamtpreis" ],
+			"However our admin has been informed and will take care of the problem.": [
+				"Wir wurden \u00fcber den Vorfall informiert und werden uns bem\u00fchen, das Problem zu beheben"
+			],
+			"IBAN": [ "IBAN" ],
+			"Next": [ "Weiter" ],
+			"Payment": [ "Bezahlung" ],
+			"Payment Method": [ "Zahlmethode" ],
+			"Please accept the privacy policy": [ "Bitte akzeptiere die Datenschutzbestimmungen" ],
+			"Please fill in all required fields": [ "Bitte alle ben\u00f6tigten Felder ausf\u00fcllen" ],
+			"Please select a payment method": [ "Bitte eine Zahlungsweise w\u00e4hlen" ],
+			"Please select at least one ticket": [ "Bitte mindestens ein Ticket ausw\u00e4hlen" ],
+			"Purpose": [ "Verwendungszweck" ],
+			"Registration": [ "Registrierung" ],
+			"Scan the QR-Code with your phone to start payment": [
+				"QR-Code mit dem Smartphone einscannen, um die Bezahlung zu starten"
+			],
+			"Scan to pay": [ "Scan to Pay" ],
+			"Tickets": [ "Tickets" ],
+			"You may try it later again.": [ "Bitte versuche es sp\u00e4ter nocheinmal" ],
+			"You will be redirected to the payment gateway": [ "Du wirst zu unserem Zahlungsanbieter weitergeleitet." ]
+		}
+	}
+}

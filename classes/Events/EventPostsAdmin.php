@@ -66,8 +66,8 @@ class EM_Event_Posts_Admin{
             $EM_Event = EM_Event::find( absint($_REQUEST['recurrence_id']) );
             ?>
             <div class="notice notice-info">
-                <p><?php echo sprintf(esc_html__('You are viewing individual recurrences of recurring event %s.', 'events-manager'), '<a href="'.$EM_Event->get_edit_url().'">'.$EM_Event->event_name.'</a>'); ?></p>
-                <p><?php esc_html_e('You can edit individual recurrences and disassociate them with this recurring event.', 'events-manager'); ?></p>
+                <p><?php echo sprintf(esc_html__('You are viewing individual recurrences of recurring event %s.', 'events'), '<a href="'.$EM_Event->get_edit_url().'">'.$EM_Event->event_name.'</a>'); ?></p>
+                <p><?php esc_html_e('You can edit individual recurrences and disassociate them with this recurring event.', 'events'); ?></p>
             </div>
             <?php
         }
@@ -127,7 +127,7 @@ class EM_Event_Posts_Admin{
 			$views['all'] = str_replace('edit.php?', 'edit.php?scope=all&', $views['all'] );
 			//merge new custom status into views
 			$old_views = $views;
-			$views = array('em_future' => "<a href='edit.php?post_type=$post_type'$class>" . sprintf( _nx( 'Future <span class="count">(%s)</span>', 'Future <span class="count">(%s)</span>', $num_posts->em_future, 'events', 'events-manager'), number_format_i18n( $num_posts->em_future ) ) . '</a>');
+			$views = array('em_future' => "<a href='edit.php?post_type=$post_type'$class>" . sprintf( _nx( 'Future <span class="count">(%s)</span>', 'Future <span class="count">(%s)</span>', $num_posts->em_future, 'events', 'events'), number_format_i18n( $num_posts->em_future ) ) . '</a>');
 			$views = array_merge($views, $old_views);
 		}
 		
@@ -156,7 +156,7 @@ class EM_Event_Posts_Admin{
 			wp_dropdown_categories(array( 'hide_empty' => 1, 'name' => EM_TAXONOMY_CATEGORY,
 							'hierarchical' => true, 'orderby'=>'name', 'id' => EM_TAXONOMY_CATEGORY,
 							'taxonomy' => EM_TAXONOMY_CATEGORY, 'selected' => $selected,
-							'show_option_all' => __('View all categories', 'events-manager')));
+							'show_option_all' => __('View all categories', 'events')));
 		
             if( !empty($_REQUEST['author']) ){
             	?>
@@ -178,21 +178,21 @@ class EM_Event_Posts_Admin{
 		if( array_key_exists('cb', $columns) ){
 			$cb = $columns['cb'];
 	    	unset($columns['cb']);
-	    	$id_array = array('cb'=>$cb, 'event-id' => sprintf(__('%s ID','events-manager'),__('Event','events-manager')));
+	    	$id_array = array('cb'=>$cb, 'event-id' => sprintf(__('%s ID','events'),__('Event','events')));
 		}else{
-	    	$id_array = array('event-id' => sprintf(__('%s ID','events-manager'),__('Event','events-manager')));
+	    	$id_array = array('event-id' => sprintf(__('%s ID','events'),__('Event','events')));
 		}
 	    unset($columns['comments']);
 	    unset($columns['date']);
 	    unset($columns['author']);
 	    $columns = array_merge($id_array, $columns, array(
-	    	'location' => __('Location','events-manager'),
-	    	'date-time' => __('Date and Time','events-manager'),
-	    	'author' => __('Owner','events-manager'),
+	    	'location' => __('Location','events'),
+	    	'date-time' => __('Date and Time','events'),
+	    	'author' => __('Owner','events'),
 	    	'extra' => '',
-			'spaces' => __('Available','events-manager'),
-			'booked' => __('Booked','events-manager'),
-			'actions' => __('Actions', 'events-manager')
+			'spaces' => __('Available','events'),
+			'booked' => __('Booked','events'),
+			'actions' => __('Actions', 'events')
 	    ));
 	    if( !get_option('dbem_locations_enabled') ){
 	    	unset($columns['location']);
@@ -221,10 +221,8 @@ class EM_Event_Posts_Admin{
 					echo "<strong><a href='". $EM_Location->get_permalink()."'>" . $EM_Location->location_name . "</a></strong>";
 					echo "<span class='row-actions'> - ". implode(' | ', $actions) . "</span>";
 					echo "<br/>" . $EM_Location->location_address . " - " . $EM_Location->location_town;
-				}elseif( $EM_Event->has_event_location() ) {
-					echo $EM_Event->get_event_location()->get_admin_column();
 				}else{
-					echo __('None','events-manager');
+					echo __('None','events');
 				}
 				break;
 			case 'date-time':
@@ -234,7 +232,7 @@ class EM_Event_Posts_Admin{
 				if(!$EM_Event->event_all_day){
 					echo \Contexis\Events\Intl\Date::get_time($EM_Event->start()->getTimestamp(), $EM_Event->end()->getTimestamp());
 				}else{
-					echo __('All Day','events-manager');
+					echo __('All Day','events');
 				}
 				if( $EM_Event->get_timezone()->getName() != EM_DateTimeZone::create()->getName() ) echo '<span class="dashicons dashicons-info" style="font-size:16px; color:#ccc; padding-top:2px;" title="'.esc_attr(str_replace('_', ' ', $EM_Event->event_timezone)).'"></span>';
 				break;
@@ -242,11 +240,11 @@ class EM_Event_Posts_Admin{
 				if ( $EM_Event->is_recurrence() && current_user_can('edit_recurring_events','edit_others_recurring_events') ) {
 					$actions = array();
 					if( $EM_Event->get_event_recurrence()->can_manage('edit_recurring_events', 'edit_others_recurring_events') ){
-						$actions[] = '<a href="'. admin_url() .'post.php?action=edit&amp;post='. $EM_Event->get_event_recurrence()->post_id .'">'. esc_html__( 'Edit Recurring Events', 'events-manager'). '</a>';
-						$actions[] = '<a class="em-detach-link" href="'. esc_url($EM_Event->get_detach_url()) .'">'. esc_html__('Detach', 'events-manager') .'</a>';
+						$actions[] = '<a href="'. admin_url() .'post.php?action=edit&amp;post='. $EM_Event->get_event_recurrence()->post_id .'">'. esc_html__( 'Edit Recurring Events', 'events'). '</a>';
+						$actions[] = '<a class="em-detach-link" href="'. esc_url($EM_Event->get_detach_url()) .'">'. esc_html__('Detach', 'events') .'</a>';
 					}
 					if( $EM_Event->get_event_recurrence()->can_manage('delete_recurring_events', 'delete_others_recurring_events') ){
-						$actions[] = '<span class="trash"><a class="em-delete-recurrence-link" href="'. get_delete_post_link($EM_Event->get_event_recurrence()->post_id) .'">'. esc_html__('Delete','events-manager') .'</a></span>';
+						$actions[] = '<span class="trash"><a class="em-delete-recurrence-link" href="'. get_delete_post_link($EM_Event->get_event_recurrence()->post_id) .'">'. esc_html__('Delete','events') .'</a></span>';
 					}
 					?>
 					<strong>
@@ -265,7 +263,7 @@ class EM_Event_Posts_Admin{
 				if( get_option('dbem_rsvp_enabled') == 1 && !empty($EM_Event->event_rsvp) && $EM_Event->can_manage('manage_bookings','manage_others_bookings')){
 					?>
 					
-					<b><?php echo $EM_Event->get_bookings()->get_available_spaces(); echo " "; echo __("Free", "events-manager") ?> </b><br> <?php echo __("Off", "events-manager"); echo " "; echo $EM_Event->get_spaces(); ?>
+					<b><?php echo $EM_Event->get_bookings()->get_available_spaces(); echo " "; echo __("Free", "events") ?> </b><br> <?php echo __("Off", "events"); echo " "; echo $EM_Event->get_spaces(); ?>
 					
 				
 					<?php
@@ -279,7 +277,7 @@ class EM_Event_Posts_Admin{
 					?>
 					
 					<b style="white-space: nowrap;"><?php echo $EM_Event->get_bookings()->get_booked_spaces(); echo " ";  ?> /
-					<?php echo $EM_Event->get_bookings()->get_pending_spaces(); echo " "; echo __("Pending", "events-manager") ?></b>
+					<?php echo $EM_Event->get_bookings()->get_pending_spaces(); echo " "; echo __("Pending", "events") ?></b>
 					<div class="em-booking-graph">
 									<?php if($booked_percent < 100) { ?>
 										<div class="em-booking-graph-booked <?php if($pending_percent) echo "cut" ?>" style="width:<?php echo $booked_percent ?>%;"></div>
@@ -294,7 +292,7 @@ class EM_Event_Posts_Admin{
 				}
 				break;
 			case 'actions':
-				echo '<a href="' . $EM_Event->get_bookings_url() . '">'. __("Bookings",'events-manager') . '</a>'; 
+				echo '<a href="' . $EM_Event->get_bookings_url() . '">'. __("Bookings",'events') . '</a>'; 
 		}
 	}
 	
@@ -304,7 +302,7 @@ class EM_Event_Posts_Admin{
 			$EM_Event = EM_Event::find($post, 'post_id');
 			unset($actions['inline hide-if-no-js']);
 			unset($actions['edit']);
-			$actions['duplicate'] = '<a href="'.$EM_Event->duplicate_url().'" title="'.sprintf(__('Duplicate %s','events-manager'), __('Event','events-manager')).'">'.__('Duplicate','events-manager').'</a>';
+			$actions['duplicate'] = '<a href="'.$EM_Event->duplicate_url().'" title="'.sprintf(__('Duplicate %s','events'), __('Event','events')).'">'.__('Duplicate','events').'</a>';
 		}
 		return $actions;
 	}
@@ -348,11 +346,11 @@ class EM_Event_Recurring_Posts_Admin{
 	public static function admin_notices(){
 		?>
 		<div class="notice notice-info">
-			<p><?php esc_html_e( 'Modifications to recurring events will be applied to all recurrences and will overwrite any changes made to those individual event recurrences.', 'events-manager'); ?></p>
-			<p><?php esc_html_e( 'Bookings to individual event recurrences will be preserved if event times and ticket settings are not modified.', 'events-manager'); ?></p>
+			<p><?php esc_html_e( 'Modifications to recurring events will be applied to all recurrences and will overwrite any changes made to those individual event recurrences.', 'events'); ?></p>
+			<p><?php esc_html_e( 'Bookings to individual event recurrences will be preserved if event times and ticket settings are not modified.', 'events'); ?></p>
 			<p>
 				<a href="<?php echo esc_url( em_get_events_admin_url() ); ?>">
-					<strong><?php esc_html_e('You can edit individual recurrences and disassociate them with a recurring event to prevent getting overwritten.', 'events-manager'); ?></strong>
+					<strong><?php esc_html_e('You can edit individual recurrences and disassociate them with a recurring event to prevent getting overwritten.', 'events'); ?></strong>
 				</a>
 	    	</p>
 		</div>
@@ -381,17 +379,17 @@ class EM_Event_Recurring_Posts_Admin{
 		if( array_key_exists('cb', $columns) ){
 			$cb = $columns['cb'];
 	    	unset($columns['cb']);
-	    	$id_array = array('cb'=>$cb, 'event-id' => sprintf(__('%s ID','events-manager'),__('Event','events-manager')));
+	    	$id_array = array('cb'=>$cb, 'event-id' => sprintf(__('%s ID','events'),__('Event','events')));
 		}else{
-	    	$id_array = array('event-id' => sprintf(__('%s ID','events-manager'),__('Event','events-manager')));
+	    	$id_array = array('event-id' => sprintf(__('%s ID','events'),__('Event','events')));
 		}
 	    unset($columns['comments']);
 	    unset($columns['date']);
 	    unset($columns['author']);
 	    $columns = array_merge($id_array, $columns, array(
-	    	'location' => __('Location','events-manager'),
-	    	'date-time' => __('Date and Time','events-manager'),
-	    	'author' => __('Owner','events-manager'),
+	    	'location' => __('Location','events'),
+	    	'date-time' => __('Date and Time','events'),
+	    	'author' => __('Owner','events'),
 	    ));
 		if( !get_option('dbem_locations_enabled') ){
 			unset($columns['location']);
@@ -421,13 +419,13 @@ class EM_Event_Recurring_Posts_Admin{
 						echo "<span class='row-actions'> - ". implode(' | ', $actions) . "</span>";
 						echo "<br/>" . $EM_Location->location_address . " - " . $EM_Location->location_town;
 					}else{
-						echo __('None','events-manager');
+						echo __('None','events');
 					}
 					break;
 				case 'date-time':
 					echo $EM_Event->get_recurrence_description();
 					$edit_url = add_query_arg(array('scope'=>'all', 'recurrence_id'=>$EM_Event->event_id), em_get_events_admin_url());
-					$link_text = sprintf(__('View %s', 'events-manager'), __('Recurrences', 'events-manager'));
+					$link_text = sprintf(__('View %s', 'events'), __('Recurrences', 'events'));
 					echo "<br /><span class='row-actions'>
 							<a href='". esc_url($edit_url) ."'>". esc_html($link_text) ."</a>
 						</span>";
@@ -441,7 +439,7 @@ class EM_Event_Recurring_Posts_Admin{
 			global $post, $EM_Event;
 			$EM_Event = EM_Event::find($post, 'post_id');
 			unset($actions['inline hide-if-no-js']);
-			$actions['duplicate'] = '<a href="'.$EM_Event->duplicate_url().'" title="'.sprintf(__('Duplicate %s','events-manager'), __('Event','events-manager')).'">'.__('Duplicate','events-manager').'</a>';
+			$actions['duplicate'] = '<a href="'.$EM_Event->duplicate_url().'" title="'.sprintf(__('Duplicate %s','events'), __('Event','events')).'">'.__('Duplicate','events').'</a>';
 		}
 		return $actions;
 	}

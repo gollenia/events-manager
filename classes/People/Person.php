@@ -77,7 +77,7 @@ class EM_Person extends WP_User {
 	}
 	
 	function get_bookings_url(){
-		return is_admin() ? EM_ADMIN_URL. "&page=events-manager-bookings&person_id=".$this->ID : '';
+		return is_admin() ? EM_ADMIN_URL. "&page=events-bookings&person_id=".$this->ID : '';
 	}
 	
 	function display_summary(){
@@ -89,12 +89,12 @@ class EM_Person extends WP_User {
 				<td style="padding-left:10px; vertical-align: top;">
 					<table>
 						<?php if( $this->ID === 0 ): ?>
-						<tr><th><?php _e('Name','events-manager'); ?> : </th><th><?php echo $this->get_name(); ?></th></tr>
+						<tr><th><?php _e('Name','events'); ?> : </th><th><?php echo $this->get_name(); ?></th></tr>
 						<?php else: ?>
-						<tr><th><?php _e('Name','events-manager'); ?> : </th><th><a href="<?php echo $this->get_bookings_url(); ?>"><?php echo $this->get_name(); ?></a></th></tr>
+						<tr><th><?php _e('Name','events'); ?> : </th><th><a href="<?php echo $this->get_bookings_url(); ?>"><?php echo $this->get_name(); ?></a></th></tr>
 						<?php endif; ?>
-						<tr><th><?php _e('Email','events-manager'); ?> : </th><td><?php echo $this->user_email; ?></td></tr>
-						<tr><th><?php _e('Phone','events-manager'); ?> : </th><td><?php echo esc_html($this->phone); ?></td></tr>
+						<tr><th><?php _e('Email','events'); ?> : </th><td><?php echo $this->user_email; ?></td></tr>
+						<tr><th><?php _e('Phone','events'); ?> : </th><td><?php echo esc_html($this->phone); ?></td></tr>
 					</table>
 				</td>
 			</tr>
@@ -105,8 +105,8 @@ class EM_Person extends WP_User {
 
 	function get_summary(){
 	    $summary = array(
-		    'user_name' => array('name' => __('Name','events-manager'), 'value' => $this->get_name()),
-		    'user_email' => array('name' => __('Email','events-manager'), 'value' => $this->user_email),
+		    'user_name' => array('name' => __('Name','events'), 'value' => $this->get_name()),
+		    'user_email' => array('name' => __('Email','events'), 'value' => $this->user_email),
         );
 	    $summary = array_merge( $summary, $this->custom_user_fields );
 		

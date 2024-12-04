@@ -79,7 +79,7 @@ class EventPost {
 			if(!in_array('event', $meta['post_type'])){
 				continue;
 			}
-			register_meta( 'event', $meta['name'], [
+			register_post_meta( 'event', $meta['name'], [
 				'type' => $meta['type'],
 				'single'       => true,
 				
@@ -88,8 +88,7 @@ class EventPost {
 					return current_user_can( 'edit_posts' );
 				},
 				'show_in_rest' => [
-					'schema' => [
-						
+					'schema' => [	
 						'style' => $meta['type']
 					]
 				]
@@ -100,7 +99,7 @@ class EventPost {
 			if(!in_array('event-recurring', $meta['post_type'])){
 				continue;
 			}
-			register_meta( 'event-recurring', $meta['name'], [
+			register_post_meta( 'event-recurring', $meta['name'], [
 				'type' => $meta['type'],
 				'single'       => true,
 				'sanitize_callback' => '',

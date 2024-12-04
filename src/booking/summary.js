@@ -15,7 +15,7 @@ function Summary( { state, dispatch } ) {
 
 	const ticketCount = request.tickets.length;
 
-	const ticketPrice = ( key, k = 0 ) => {
+	const ticketPrice = ( key ) => {
 		return (
 			data.available_tickets[ key ].price *
 			request.tickets.reduce( ( n, ticket ) => {
@@ -34,78 +34,95 @@ function Summary( { state, dispatch } ) {
 	const calculateFullPrice = () => {
 		let sum = 0;
 		for ( let ticket in data.available_tickets ) {
-			sum += ticketPrice( ticket, 6 );
+			sum += ticketPrice( ticket );
 		}
 
-		if ( ! response.coupon.success ) return sum;
-		return response.coupon.percent
+		if ( ! response.coupon.success ) return sum + request.donation;
+		sum = response.coupon.percent
 			? sum - ( sum / 100 ) * parseInt( response.coupon.discount )
 			: sum - parseInt( response.coupon.discount );
+		return sum + request.donation;
 	};
 
 	const TICKETS_MISSING =
 		( TICKETS && request.tickets.length == 0 ) ||
 		( REGISTRATION && data.attendee_fields.length == 0 && request.tickets.length == 0 );
 
-	const fullPrice = useMemo( () => calculateFullPrice(), [ response.coupon, ticketCount ] );
+	const fullPrice = useMemo( () => calculateFullPrice(), [ response.coupon, ticketCount, request.donation ] );
 
 	return (
 		<>
 			<div className="list ticket-summary">
-				{ Object.keys( data.available_tickets ).map( ( id, key ) => (
-					<div className="list__item" key={ key }>
-						<div className="list__content">
-							<div className="list__title">{ data.available_tickets[ id ].name }</div>
-							<div className="list__subtitle">{ data.available_tickets[ id ].description }</div>
-							<div className="list__subtitle">
-								{ __( 'Base price:', 'events-manager' ) }{ ' ' }
-								{ formatCurrency(
-									data.available_tickets[ id ].price,
-									data.l10n.locale,
-									data.l10n.currency
+				{ Object.keys( data.available_tickets ).map( ( id, key ) => {
+					const maxSpaces = Math.min(
+						data.available_spaces - request.tickets.length,
+						data.available_tickets[ id ].max - countTicketsById( id )
+					);
+
+					return (
+						<div className="list__item" key={ key }>
+							<div className="list__content">
+								<div className="list__title">{ data.available_tickets[ id ].name }</div>
+								<div className="list__subtitle">{ data.available_tickets[ id ].description }</div>
+								<div className="list__subtitle">
+									{ __( 'Base price:', 'events' ) }{ ' ' }
+									{ formatCurrency(
+										data.available_tickets[ id ].price,
+										data.l10n.locale,
+										data.l10n.currency
+									) }
+								</div>
+								{ maxSpaces < 5 && (
+									<div className="list__subtitle has-red-text">
+										{ __( 'Available:', 'events' ) } { maxSpaces }
+									</div>
+								) }
+							</div>
+
+							<div className="list__actions">
+								<span className="button button--pseudo nowrap">
+									{ formatCurrency( ticketPrice( id ), data.l10n.locale, data.l10n.currency ) }
+								</span>
+								{ data.attendee_fields.length == 0 && (
+									<div className="number-picker">
+										<button
+											className="button button--primary button--icon"
+											onClick={ () => dispatch( { type: 'REMOVE_TICKET', payload: { id } } ) }
+											disabled={ data.available_tickets[ id ].min == countTicketsById( id ) }
+										></button>
+										<input value={ countTicketsById( data.available_tickets[ id ].id ) } />
+										<button
+											className="button button--primary button--icon"
+											onClick={ () => dispatch( { type: 'ADD_TICKET', payload: id } ) }
+											disabled={ data.available_tickets[ id ].max == countTicketsById( id ) }
+										></button>
+									</div>
+								) }
+								{ data.attendee_fields.length > 0 && wizard.step == 0 && (
+									<>
+										<button
+											className={ `button button--primary button--icon ${
+												TICKETS_MISSING ? 'button--breathing' : ''
+											}` }
+											onClick={ () => dispatch( { type: 'ADD_TICKET', payload: id } ) }
+											disabled={
+												data.available_tickets[ id ].max == countTicketsById( id ) ||
+												request.tickets.length == data.available_spaces
+											}
+										>
+											<i className="material-icons material-symbols-outlined">add_circle</i>
+										</button>
+									</>
 								) }
 							</div>
 						</div>
-
-						<div className="list__actions">
-							<span className="button button--pseudo nowrap">
-								{ formatCurrency( ticketPrice( id ), data.l10n.locale, data.l10n.currency ) }
-							</span>
-							{ data.attendee_fields.length == 0 && (
-								<div className="number-picker">
-									<button
-										className="button button--primary button--icon"
-										onClick={ () => dispatch( { type: 'REMOVE_TICKET', payload: { id } } ) }
-										disabled={ data.available_tickets[ id ].min == countTicketsById( id ) }
-									></button>
-									<input value={ countTicketsById( data.available_tickets[ id ].id ) } />
-									<button
-										className="button button--primary button--icon"
-										onClick={ () => dispatch( { type: 'ADD_TICKET', payload: id } ) }
-										disabled={ data.available_tickets[ id ].max == countTicketsById( id ) }
-									></button>
-								</div>
-							) }
-							{ data.attendee_fields.length > 0 && wizard.step == 0 && (
-								<>
-									<button
-										className={ `button button--primary button--icon ${
-											TICKETS_MISSING ? 'button--breathing' : ''
-										}` }
-										onClick={ () => dispatch( { type: 'ADD_TICKET', payload: id } ) }
-									>
-										<i className="material-icons material-symbols-outlined">add_circle</i>
-									</button>
-								</>
-							) }
-						</div>
-					</div>
-				) ) }
+					);
+				} ) }
 				{ response.coupon.success && (
 					<div className="list__item">
 						<div className="list__content">
 							<div className="list__title">
-								{ response.coupon.description || __( 'Coupon', 'events-manager' ) }
+								{ response.coupon.description || __( 'Coupon', 'events' ) }
 							</div>
 						</div>
 						<div className="list__actions">
@@ -127,7 +144,7 @@ function Summary( { state, dispatch } ) {
 				<div className="list__item">
 					<div className="list__content">
 						<div className="list__title">
-							<b>{ __( 'Full price', 'events-manager' ) }</b>
+							<b>{ __( 'Full price', 'events' ) }</b>
 						</div>
 					</div>
 					<div className="list__actions">

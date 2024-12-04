@@ -8,42 +8,42 @@ const Inspector = ( props ) => {
 
 	return (
 		<InspectorControls>
-			<PanelBody title={ __( 'Data', 'events-manager' ) } initialOpen={ true }>
+			<PanelBody title={ __( 'Data', 'events' ) } initialOpen={ true }>
 				<CheckboxControl
-					label={ __( 'Show Title', 'events-manager' ) }
+					label={ __( 'Show Title', 'events' ) }
 					checked={ showTitle }
 					onChange={ ( value ) => setAttributes( { showTitle: value } ) }
 				/>
 				<CheckboxControl
-					label={ __( 'Show Address', 'events-manager' ) }
+					label={ __( 'Show Address', 'events' ) }
 					checked={ showAddress }
 					onChange={ ( value ) => setAttributes( { showAddress: value } ) }
 				/>
 				<CheckboxControl
-					label={ __( 'Show Zip', 'events-manager' ) }
+					label={ __( 'Show Zip', 'events' ) }
 					checked={ showZip }
 					onChange={ ( value ) => setAttributes( { showZip: value } ) }
 				/>
 				<CheckboxControl
-					label={ __( 'Show City', 'events-manager' ) }
+					label={ __( 'Show City', 'events' ) }
 					checked={ showCity }
 					onChange={ ( value ) => setAttributes( { showCity: value } ) }
 				/>
 
 				<CheckboxControl
-					label={ __( 'Show Country', 'events-manager' ) }
+					label={ __( 'Show Country', 'events' ) }
 					checked={ showCountry }
 					onChange={ ( value ) => setAttributes( { showCountry: value } ) }
 				/>
 			</PanelBody>
-			<PanelBody title={ __( 'Behaviour', 'events-manager' ) } initialOpen={ true }>
+			<PanelBody title={ __( 'Behaviour', 'events' ) } initialOpen={ true }>
 				<CheckboxControl
-					label={ __( 'Show Link', 'events-manager' ) }
+					label={ __( 'Show Link', 'events' ) }
 					checked={ showLink }
 					onChange={ ( value ) => setAttributes( { showLink: value } ) }
 				/>
 				<URLInput
-					label={ __( 'Custom Link', 'events-manager' ) }
+					label={ __( 'Custom Link', 'events' ) }
 					value={ url }
 					onChange={ ( value ) => setAttributes( { url: value } ) }
 				/>

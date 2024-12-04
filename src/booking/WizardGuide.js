@@ -26,6 +26,9 @@ const WizardGuide = ( { state } ) => {
 				.join( ' ' );
 
 			const badgeContent = () => {
+				if ( wizard.step == 3 && state?.response?.booking?.booking_id ) {
+					return <i className="material-icons material-symbols-outlined">done</i>;
+				}
 				if ( wizard.steps[ step ].step >= wizard.step ) {
 					return <span>{ badgeNumber }</span>;
 				}

@@ -27,6 +27,8 @@ const edit = ( props ) => {
 	const postType = select( 'core/editor' ).getCurrentPostType();
 	const [ meta, setMeta ] = useEntityProp( 'postType', postType, 'meta' );
 
+	console.log( meta );
+
 	const blockProps = useBlockProps( {
 		className: [ 'ctx-event-booking' ].filter( Boolean ).join( ' ' ),
 	} );
@@ -57,7 +59,7 @@ const edit = ( props ) => {
 					tagName="span"
 					value={ buttonTitle }
 					onChange={ ( value ) => setAttributes( { buttonTitle: value } ) }
-					placeholder={ __( 'Registration', 'events-manager' ) }
+					placeholder={ __( 'Registration', 'events' ) }
 					allowedFormats={ [ 'core/bold', 'core/italic' ] }
 				/>
 			</span>

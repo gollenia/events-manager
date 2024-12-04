@@ -67,28 +67,6 @@ p.warning {
 	float: left;
 }
 
-.em-label {
-	padding: 1px 4px;
-	display: inline-flex;
-	border-radius: 99px;
-	align-items: center;
-
-	i {
-		margin-right: 3px;
-		font-size: 17px;
-	}
-}
-
-.em-label.completed {
-	background: #4caf50;
-	color: #fff;
-}
-
-.em-label.pending {
-	background: #ffc107;
-	color: #000;
-}
-
 .em-booking-graph {
 	margin-top: 6px;
 	border-radius: 999px;
@@ -835,4 +813,64 @@ table.em-caps-table td {
 	color: #000;
 	margin-left: 5px;
 	font-weight: 700;
+}
+
+.em-label {
+	font-weight: 500;
+	display: inline-flex;
+	align-items: center;
+	padding: 3px 5px 4px;
+	font-size: 11px;
+	text-transform: uppercase;
+	border-radius: 4px;
+
+	i {
+		margin-right: 3px;
+		font-size: 17px;
+	}
+
+	&-0 {
+		background: #ffc107;
+		color: #000;
+	}
+
+	&-1 {
+		background: #ffc107;
+		color: #000;
+	}
+
+	&-2 {
+		background: #4caf50;
+		color: #fff;
+	}
+
+	&-3 {
+		background: #f55e53;
+		color: #fff;
+	}
+
+	&-4 {
+		background: #f55e53;
+		color: #fff;
+	}
+
+	&-8 {
+		background: #ffc107;
+		color: #000;
+	}
+
+	&-7 {
+		background: #ffc107;
+		color: #000;
+	}
+
+	&.completed {
+		background: #4caf50;
+		color: #fff;
+	}
+
+	&.pending {
+		background: #ffc107;
+		color: #000;
+	}
 }

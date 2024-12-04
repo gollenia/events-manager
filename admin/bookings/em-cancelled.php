@@ -35,9 +35,9 @@ function em_bookings_cancelled_table(){
 					</li>
 				</ul>
 				<p class="search-box">
-					<label class="screen-reader-text" for="post-search-input"><?php _e('Search', 'events-manager'); ?>:</label>
+					<label class="screen-reader-text" for="post-search-input"><?php _e('Search', 'events'); ?>:</label>
 					<input type="text" id="post-search-input" name="em_search" value="<?php echo (!empty($_GET['em_search'])) ? esc_attr($_GET['em_search']):''; ?>" />
-					<input type="submit" value="<?php _e('Search', 'events-manager'); ?>" class="button" />
+					<input type="submit" value="<?php _e('Search', 'events'); ?>" class="button" />
 				</p>
 				-->
 				<?php if ( $bookings_count >= $limit ) : ?>
@@ -55,16 +55,16 @@ function em_bookings_cancelled_table(){
 				<div class="clear"></div>
 				<?php if( $bookings_count > 0 ): ?>
 				<div class='table-wrap'>
-				<table id='dbem-bookings-table' class='widefat post '>
+				<table id='dbem-bookings-table' class='widefat post cancelled'>
 					<thead>
 						<tr>
 							<th class='manage-column column-cb check-column' scope='col'>
 								<input class='select-all' type="checkbox" value='1' />
 							</th>
-							<th class='manage-column' scope='col'><?php _e('Booker', 'events-manager'); ?></th>
-							<th class='manage-column' scope='col'><?php _e('E-mail', 'events-manager'); ?></th>
-							<th class='manage-column' scope='col'><?php _e('Phone number', 'events-manager'); ?></th>
-							<th class='manage-column' scope='col'><?php _e('Spaces', 'events-manager'); ?></th>
+							<th class='manage-column' scope='col'><?php _e('Booker', 'events'); ?></th>
+							<th class='manage-column' scope='col'><?php _e('E-mail', 'events'); ?></th>
+							<th class='manage-column' scope='col'><?php _e('Phone number', 'events'); ?></th>
+							<th class='manage-column' scope='col'><?php _e('Spaces', 'events'); ?></th>
 							<th class='manage-column' scope='col'>&nbsp;</th>
 						</tr>
 					</thead>
@@ -78,7 +78,7 @@ function em_bookings_cancelled_table(){
 								?>
 								<tr>
 									<th scope="row" class="check-column" style="padding:7px 0px 7px;"><input type='checkbox' value='<?php echo $EM_Booking->booking_id ?>' name='bookings[]'/></th>
-									<td><a href="<?php echo EM_ADMIN_URL; ?>&amp;page=events-manager-bookings&amp;person_id=<?php echo $EM_Booking->person->ID; ?>"><?php echo $EM_Booking->person->get_name() ?></a></td>
+									<td><a href="<?php echo EM_ADMIN_URL; ?>&amp;page=events-bookings&amp;person_id=<?php echo $EM_Booking->person->ID; ?>"><?php echo $EM_Booking->person->get_name() ?></a></td>
 									<td><?php echo $EM_Booking->person->user_email ?></td>
 									<td><?php echo $EM_Booking->person->phone ?></td>
 									<td><?php echo $EM_Booking->get_spaces() ?></td>
@@ -86,11 +86,10 @@ function em_bookings_cancelled_table(){
 										<?php
 										$approve_url = add_query_arg(['action'=>'bookings_approve', 'booking_id'=>$EM_Booking->booking_id], $_SERVER['REQUEST_URI']);
 										$delete_url = add_query_arg(['action'=>'bookings_delete', 'booking_id'=>$EM_Booking->booking_id], $_SERVER['REQUEST_URI']);
-										$edit_url = add_query_arg(['booking_id'=>$EM_Booking->booking_id, 'em_ajax'=>null, 'em_obj'=>null], $_SERVER['REQUEST_URI']);
+										
 										?>
-										<a class="em-bookings-approve" href="<?php echo $approve_url ?>"><?php _e('Restore','events-manager'); ?></a> |
-										<a class="em-bookings-edit" href="<?php echo $edit_url; ?>"><?php _e('Edit/View','events-manager'); ?></a> |
-										<a class="em-bookings-delete" href="<?php echo $delete_url ?>"><?php _e('Delete','events-manager'); ?></a>
+										<a class="em-bookings-approve" href="<?php echo $approve_url ?>"><?php _e('Restore','events'); ?></a> |
+										<a class="em-bookings-delete" href="<?php echo $delete_url ?>"><?php _e('Delete','events'); ?></a>
 									</td>
 								</tr>
 								<?php
@@ -102,7 +101,7 @@ function em_bookings_cancelled_table(){
 				</table>
 				</div>
 				<?php else: ?>
-					<?php _e('No cancelled bookings.', 'events-manager'); ?>
+					<?php _e('No cancelled bookings.', 'events'); ?>
 				<?php endif; ?>
 			</form>
 			<?php if( !empty($bookings_nav) && $EM_Bookings >= $limit ) : ?>

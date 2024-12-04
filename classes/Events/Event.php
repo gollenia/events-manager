@@ -1,7 +1,6 @@
 <?php
 
 
-use EM_Event_Locations\Event_Location, EM_Event_Locations\Event_Locations;
 use \Contexis\Events\EventPost;
 
 /**
@@ -41,6 +40,9 @@ class EM_Event extends \EM_Object{
 	var $event_owner;
 	var $event_name;
 	var $event_image;
+	var $coupon_ids;
+	var $coupons;
+	var $coupons_count;
 	/**
 	 * The event start time in local time, represented by a mysql TIME format or 00:00:00 default.
 	 * Protected so when set in PHP it will reset the EM_Event->start property (EM_DateTime object) so it will have the correct UTC time according to timezone.
@@ -105,7 +107,7 @@ class EM_Event extends \EM_Object{
 	 *
 	 * @var string
 	 */
-	public $event_location_type;
+	
 	var $recurrence_id;
 	var $event_status;
 	var $blog_id = 0;
@@ -155,7 +157,6 @@ class EM_Event extends \EM_Object{
 		'event_rsvp_spaces' => array( 'name'=>'rsvp_spaces', 'type'=>'%d', 'null'=>true ),
 		'event_spaces' => array( 'name'=>'spaces', 'type'=>'%d', 'null'=>true),
 		'location_id' => array( 'name'=>'location_id', 'type'=>'%d', 'null'=>true ),
-		'event_location_type' => array( 'type'=>'%s', 'null'=>true ),
 		'recurrence_id' => array( 'name'=>'recurrence_id', 'type'=>'%d', 'null'=>true ),
 		'event_status' => array( 'name'=>'status', 'type'=>'%d', 'null'=>true ),
 		'event_private' => array( 'name'=>'status', 'type'=>'%d', 'null'=>true ),
@@ -200,15 +201,6 @@ class EM_Event extends \EM_Object{
 	 * @var EM_Location
 	 */
 	var $location;
-	/**
-	 * @var Event_Location
-	 */
-	var $event_location;
-	/**
-	 * If we're switching event location types, previous event location is kept here and deleted upon save()
-	 * @var Event_Location
-	 */
-	var $event_location_deleted = null;
 	/**
 	 * @var EM_Bookings
 	 */
@@ -328,7 +320,7 @@ class EM_Event extends \EM_Object{
 			if($search_by == 'event_id' && !$is_post ){
 				//search by event_id, get post_id and blog_id (if in ms mode) and load the post
 				$results = $wpdb->get_row($wpdb->prepare("SELECT post_id, blog_id FROM ".EM_EVENTS_TABLE." WHERE event_id=%d",$id), ARRAY_A);
-				if(!$results) return new WP_Error('event_id', __('Event ID not found. Maybe you provided a POST ID?','events-manager'));
+				if(!$results) return new WP_Error('event_id', __('Event ID not found. Maybe you provided a POST ID?','events'));
 				if( !empty($results['post_id']) ) { $this->post_id = $results['post_id']; $this->event_id = $id; }
 				if( !array_key_exists('blog_id', $results) || $results['blog_id']=='' ){
 				    $results['blog_id'] = '';
@@ -364,8 +356,8 @@ class EM_Event extends \EM_Object{
 		$this->recurrence = $this->is_recurring() ? 1:0;
 		//Do it here so things appear in the po file.
 		$this->status_array = array(
-			0 => __('Pending','events-manager'),
-			1 => __('Approved','events-manager')
+			0 => __('Pending','events'),
+			1 => __('Approved','events')
 		);
 		// fire hook to add any extra info to an event
 		do_action('em_event', $this, $id, $search_by);
@@ -437,10 +429,6 @@ class EM_Event extends \EM_Object{
 	public function __clone(){
 		$this->bookings = null;
 		$this->location = null;
-		if( is_object($this->event_location) ){
-			$this->event_location = clone $this->event_location;
-			$this->event_location->event = $this;
-		}
 	}
 
 		/**
@@ -578,7 +566,7 @@ class EM_Event extends \EM_Object{
 				$this->event_rsvp_donation = get_post_meta($this->post_id, '_event_rsvp_donation', true) == 1 ? true : false;
 				$this->speaker_id = array_key_exists('_speaker_id', $event_meta) ? intval($event_meta['_speaker_id'][0]) : 0;
 				
-				if( $this->has_event_location() ) $this->get_event_location()->load_postdata($event_meta);
+				
 				//quick compatability fix in case _event_id isn't loaded or somehow got erased in post meta
 				if( empty($this->event_id) && !$this->is_recurring() ){
 					global $wpdb;
@@ -803,7 +791,7 @@ class EM_Event extends \EM_Object{
 		$validate_post = true;
 		if( empty($this->event_name) ){
 			$validate_post = false; 
-			$this->add_error( sprintf(__("%s is required.", 'events-manager'), __('Event name','events-manager')) );
+			$this->add_error( sprintf(__("%s is required.", 'events'), __('Event name','events')) );
 		}
 		//anonymous submissions and guest basic info
 		
@@ -832,14 +820,14 @@ class EM_Event extends \EM_Object{
 		}
 		if( preg_match('/\d{4}-\d{2}-\d{2}/', $this->event_start_date) && preg_match('/\d{4}-\d{2}-\d{2}/', $this->event_end_date) ){
 			if( $this->start()->getTimestamp() > $this->end()->getTimestamp() ){
-				$this->add_error(__('Events cannot start after they end.','events-manager'));
+				$this->add_error(__('Events cannot start after they end.','events'));
 			}elseif( $this->is_recurring() && $this->recurrence_days == 0 && $this->start()->getTimestamp() > $this->end()->getTimestamp() ){
-				$this->add_error(__('Events cannot start after they end.','events-manager').' '.__('For recurring events that end the following day, ensure you make your event last 1 or more days.'));
+				$this->add_error(__('Events cannot start after they end.','events').' '.__('For recurring events that end the following day, ensure you make your event last 1 or more days.'));
 			}
 		}else{
 			if( !empty($missing_fields['event_start_date']) ) { unset($missing_fields['event_start_date']); }
 			if( !empty($missing_fields['event_end_date']) ) { unset($missing_fields['event_end_date']); }
-			$this->add_error(__('Dates must have correct formatting. Please use the date picker provided.','events-manager'));
+			$this->add_error(__('Dates must have correct formatting. Please use the date picker provided.','events'));
 		}
 		if( $this->event_rsvp ){
 		    
@@ -853,23 +841,20 @@ class EM_Event extends \EM_Object{
 					$this->add_error($this->get_location()->get_errors());
 				}elseif( !empty($this->location_id) && !$this->get_location()->location_id ){
 					// non-existent location selected
-					$this->add_error( __('Please select a valid location.', 'events-manager') );
+					$this->add_error( __('Please select a valid location.', 'events') );
 				}
-			}elseif( $this->has_event_location() ){
-				// event location, validation applies errors directly to $this
-				$this->get_event_location()->validate();
 			}
 		}
 		if ( count($missing_fields) > 0){
 			// TODO Create friendly equivelant names for missing fields notice in validation
-			$this->add_error( __( 'Missing fields: ', 'events-manager') . implode ( ", ", $missing_fields ) . ". " );
+			$this->add_error( __( 'Missing fields: ', 'events') . implode ( ", ", $missing_fields ) . ". " );
 		}
 		if ( $this->is_recurring() ){
 		    if( $this->event_end_date == "" || $this->event_end_date == $this->event_start_date){
-		        $this->add_error( __( 'Since the event is repeated, you must specify an event end date greater than the start date.', 'events-manager'));
+		        $this->add_error( __( 'Since the event is repeated, you must specify an event end date greater than the start date.', 'events'));
 		    }
 		    if( $this->recurrence_freq == 'weekly' && !preg_match('/^[0-9](,[0-9])*$/',$this->recurrence_byday) ){
-		        $this->add_error( __( 'Please specify what days of the week this event should occur on.', 'events-manager'));
+		        $this->add_error( __( 'Please specify what days of the week this event should occur on.', 'events'));
 		    }
 		}
 		
@@ -1020,7 +1005,7 @@ class EM_Event extends \EM_Object{
 					//success, so link the event with the post via an event id meta value for easy retrieval
 					$this->event_id = $wpdb->insert_id;
 					update_post_meta($this->post_id, '_event_id', $this->event_id);
-					$this->feedback_message = sprintf(__('Successfully saved %s','events-manager'),__('Event','events-manager'));
+					$this->feedback_message = sprintf(__('Successfully saved %s','events'),__('Event','events'));
 					$this->just_added_event = true; //make an easy hook
 					$this->get_bookings()->bookings = array(); //set bookings array to 0 to avoid an extra DB query
 					do_action('em_event_save_new', $this);
@@ -1035,7 +1020,7 @@ class EM_Event extends \EM_Object{
 				}else{
 					//Also set the status here if status != previous status
 					if( $this->previous_status != $this->get_status() ) $this->set_status($this->get_status());
-					$this->feedback_message = sprintf(__('Successfully saved %s','events-manager'),__('Event','events-manager'));
+					$this->feedback_message = sprintf(__('Successfully saved %s','events'),__('Event','events'));
 				}
 				
 			}
@@ -1061,7 +1046,7 @@ class EM_Event extends \EM_Object{
 				if( empty($EM_EVENT_SAVE_POST) ){
 					if( $this->just_added_event ) $this->recurring_reschedule = true;
 				 	if( !$this->save_events() ){
-						$this->add_error(__ ( 'Something went wrong with the recurrence update...', 'events-manager'). __ ( 'There was a problem saving the recurring events.', 'events-manager'));
+						$this->add_error(__ ( 'Something went wrong with the recurrence update...', 'events'). __ ( 'There was a problem saving the recurring events.', 'events'));
 				 	}
 				}
 			}
@@ -1110,7 +1095,7 @@ class EM_Event extends \EM_Object{
 		$EM_Event->force_status = 'draft';
 		if( !$EM_Event->save() ) return;
 		
-		$EM_Event->feedback_message = sprintf(__("%s successfully duplicated.", 'events-manager'), __('Event','events-manager'));
+		$EM_Event->feedback_message = sprintf(__("%s successfully duplicated.", 'events'), __('Event','events'));
 		//save tags here - eventually will be moved into part of $this->save();
 		
 		$EM_Tags = new EM_Tags($this);
@@ -1199,9 +1184,7 @@ class EM_Event extends \EM_Object{
 			if( $result !== false ){
 				$this->get_bookings()->delete();
 				$this->get_tickets()->delete();
-				if( $this->has_event_location() ) {
-					$this->get_event_location()->delete();
-				}
+				
 				//Delete the recurrences then this recurrence event
 				if( $this->is_recurring() ){
 					$result = $this->delete_events(); //was true at this point, so false if fails
@@ -1301,7 +1284,7 @@ class EM_Event extends \EM_Object{
 	 * @return DateTime
 	 */
 	public function rsvp_end( $utc_timezone = false ) : DateTime{
-		if( !empty($this->rsvp_end) && $this->rsvp_end->valid ) return $this->rsvp_end;
+		if( !empty($this->rsvp_end) ) return $this->rsvp_end;
 
 		if( empty($this->event_rsvp_end) ){
 			$this->rsvp_end = $this->start()->copy();
@@ -1317,21 +1300,21 @@ class EM_Event extends \EM_Object{
 	}
 
 	public function rsvp_start( $utc_timezone = false ) {
-		if(!empty($this->rsvp_start) && $this->rsvp_start->valid) return $this->rsvp_start;
+		if(!empty($this->rsvp_start) ) return $this->rsvp_start;
 		
 		if( empty($this->event_rsvp_start ) ){ 
 			//no date defined means event start date/time is used
-			$this->rsvp_start = $this->start()->copy();
+			$this->event_rsvp_start = $this->start()->copy();
 			return $this->rsvp_start;
 		}
 		
 		try {
-			$this->rsvp_start = new DateTime($this->event_rsvp_start);
+			$this->event_rsvp_start = new DateTime($this->event_rsvp_start);
 		} catch (Exception $e) {
-			$this->rsvp_start = $this->start()->copy();
+			$this->event_rsvp_start = $this->start()->copy();
 		}
 
-		return $this->rsvp_start;
+		return $this->event_rsvp_start;
 	}
 
 	
@@ -1433,19 +1416,7 @@ class EM_Event extends \EM_Object{
 		return !empty($this->location_id);
 	}
 	
-	/**
-	 * Gets the event's event location (note, different from a regular event location, which uses get_location())
-	 * Returns implementation of Event_Location or false if no event location assigned.
-	 * @return EM_Event_Locations\URL|Event_Location|false
-	 */
-	public function get_event_location(){
-		if( is_object($this->event_location) ) return $this->event_location;
-		$Event_Location = false;
-		if( $this->has_event_location() ){
-			$this->event_location = $Event_Location = Event_Locations::get( $this->event_location_type, $this );
-		}
-		return apply_filters('em_event_get_event_location', $Event_Location, $this);
-	}
+
 
 
 	public function can_book(){
@@ -1484,18 +1455,6 @@ class EM_Event extends \EM_Object{
 		return $end->getTimestamp() < $now->getTimestamp();
 	}
 
-
-	/**
-	 * Returns whether the event has an event location associated with it (different from a physical location). If supplied, can check against a specific type.
-	 * @param string $event_location_type
-	 * @return bool
-	 */
-	public function has_event_location( $event_location_type = null ){
-		if( $event_location_type !== null ){
-			return !empty($this->event_location_type) && $this->event_location_type === $event_location_type && Event_Locations::is_enabled($event_location_type);
-		}
-		return !empty($this->event_location_type) && Event_Locations::is_enabled($this->event_location_type);
-	}
 	
 	/**
 	 * Returns the location object this event belongs to.
@@ -1577,7 +1536,7 @@ class EM_Event extends \EM_Object{
 	}
 	
 	function get_bookings_url(){
-		return is_admin() ? EM_ADMIN_URL. "&page=events-manager-bookings&event_id=".$this->event_id : '';
+		return is_admin() ? EM_ADMIN_URL. "&page=events-bookings&event_id=".$this->event_id : '';
 	}
 	
 	function get_permalink(){
@@ -1697,9 +1656,8 @@ class EM_Event extends \EM_Object{
 				$show_condition = match($condition) {
 					'has_bookings' => $this->event_rsvp && get_option('dbem_rsvp_enabled'),
 					'no_bookings' => (!$this->event_rsvp && get_option('dbem_rsvp_enabled')),
-					'no_location' => !$this->has_event_location() && !$this->has_location(),
-					'has_location' => ( $this->has_location() && $this->get_location()->location_status ) || $this->has_event_location(),
-					'has_event_location' => $this->has_event_location(),
+					'no_location' => !$this->has_location(),
+					'has_location' => ( $this->has_location() && $this->get_location()->location_status ),
 					'has_image' => $this->get_image_url() != '',
 					'has_time' => ( $this->event_start_time != $this->event_end_time && !$this->event_all_day ),
 					'all_day' => ($condition == 'all_day'),
@@ -1824,7 +1782,7 @@ class EM_Event extends \EM_Object{
 					if( $this->can_manage('edit_events','edit_others_events') ){
 						$link = esc_url($this->get_edit_url());
 						if( $result == '#_EDITEVENTLINK'){
-							$replace = '<a href="'.$link.'">'.esc_html(sprintf(__('Edit Event','events-manager'))).'</a>';
+							$replace = '<a href="'.$link.'">'.esc_html(sprintf(__('Edit Event','events'))).'</a>';
 						}else{
 							$replace = $link;
 						}
@@ -1883,7 +1841,7 @@ class EM_Event extends \EM_Object{
 					$replace = $this->get_contact()->ID;
 					break;
 				case '#_CONTACTPHONE':
-		      		$replace = ( $this->get_contact()->phone != '') ? $this->get_contact()->phone : __('N/A', 'events-manager');
+		      		$replace = ( $this->get_contact()->phone != '') ? $this->get_contact()->phone : __('N/A', 'events');
 					break;
 				case '#_CONTACTMETA':
 					if( !empty($placeholders[3][$key]) ){
@@ -1923,15 +1881,7 @@ class EM_Event extends \EM_Object{
 					}
 					break;
 				//Event location (not physical location)
-				case '#_EVENTLOCATION':
-					if( $this->has_event_location() ) {
-						if (!empty($placeholders[3][$key])) {
-							$replace = $this->get_event_location()->output( $placeholders[3][$key], $target );
-						} else {
-							$replace = $this->get_event_location()->output( null, $target );
-						}
-					}
-					break;
+				
 				default:
 					$replace = $full_result;
 					break;
@@ -2079,11 +2029,11 @@ class EM_Event extends \EM_Object{
 			$url = $this->get_attach_url($this->recurrence_id);
 			$wpdb->update(EM_EVENTS_TABLE, array('recurrence_id'=>null), array('event_id' => $this->event_id));
 			delete_post_meta($this->post_id, '_recurrence_id');
-			$this->feedback_message = __('Event detached.','events-manager') . ' <a href="'.$url.'">'.__('Undo','events-manager').'</a>';
+			$this->feedback_message = __('Event detached.','events') . ' <a href="'.$url.'">'.__('Undo','events').'</a>';
 			$this->recurrence_id = 0;
 			return apply_filters('em_event_detach', true, $this);
 		}
-		$this->add_error(__('Event could not be detached.','events-manager'));
+		$this->add_error(__('Event could not be detached.','events'));
 		return apply_filters('em_event_detach', false, $this);
 	}
 	
@@ -2097,10 +2047,10 @@ class EM_Event extends \EM_Object{
 			//add recurrence id to post meta and index table
 			$wpdb->update(EM_EVENTS_TABLE, array('recurrence_id'=>$recurrence_id), array('event_id' => $this->event_id));
 			update_post_meta($this->post_id, '_recurrence_id', $recurrence_id);
-			$this->feedback_message = __('Event re-attached to recurrence.','events-manager');
+			$this->feedback_message = __('Event re-attached to recurrence.','events');
 			return apply_filters('em_event_attach', true, $recurrence_id, $this);
 		}
-		$this->add_error(__('Event could not be attached.','events-manager'));
+		$this->add_error(__('Event could not be attached.','events'));
 		return apply_filters('em_event_attach', false, $recurrence_id, $this);
 	}
 
@@ -2230,11 +2180,11 @@ class EM_Event extends \EM_Object{
 				 	if( count($meta_inserts) > 0 ){
 					 	$result = $wpdb->query("INSERT INTO ".$wpdb->postmeta." (post_id,meta_key,meta_value) VALUES ".implode(',',$meta_inserts));
 					 	if($result === false){
-					 		$this->add_error(esc_html__('There was a problem adding custom fields to your recurring events.','events-manager'));
+					 		$this->add_error(esc_html__('There was a problem adding custom fields to your recurring events.','events'));
 					 	}
 				 	}
 				}else{
-			 		$this->add_error(esc_html__('You have not defined a date range long enough to create a recurrence.','events-manager'));
+			 		$this->add_error(esc_html__('You have not defined a date range long enough to create a recurrence.','events'));
 			 		$result = false;
 			 	}
 			}else{
@@ -2308,7 +2258,7 @@ class EM_Event extends \EM_Object{
 			 	if( count($meta_inserts) > 0 ){
 				 	$result = $wpdb->query("INSERT INTO ".$wpdb->postmeta." (post_id,meta_key,meta_value) VALUES ".implode(',',$meta_inserts));
 				 	if($result === false){
-				 		$this->add_error(esc_html__('There was a problem adding custom fields to your recurring events.','events-manager'));
+				 		$this->add_error(esc_html__('There was a problem adding custom fields to your recurring events.','events'));
 				 	}
 			 	}
 			}
@@ -2640,12 +2590,12 @@ class EM_Event extends \EM_Object{
 		$EM_Event_Recurring = $this->get_event_recurrence(); 
 		$recurrence = $this->to_array();
 		$weekdays_name = array( translate('Sunday'),translate('Monday'),translate('Tuesday'),translate('Wednesday'),translate('Thursday'),translate('Friday'),translate('Saturday'));
-		$monthweek_name = array('1' => __('the first %s of the month', 'events-manager'),'2' => __('the second %s of the month', 'events-manager'), '3' => __('the third %s of the month', 'events-manager'), '4' => __('the fourth %s of the month', 'events-manager'), '5' => __('the fifth %s of the month', 'events-manager'), '-1' => __('the last %s of the month', 'events-manager'));
-		$output = sprintf (__('From %1$s to %2$s', 'events-manager'),  $EM_Event_Recurring->event_start_date, $EM_Event_Recurring->event_end_date).", ";
+		$monthweek_name = array('1' => __('the first %s of the month', 'events'),'2' => __('the second %s of the month', 'events'), '3' => __('the third %s of the month', 'events'), '4' => __('the fourth %s of the month', 'events'), '5' => __('the fifth %s of the month', 'events'), '-1' => __('the last %s of the month', 'events'));
+		$output = sprintf (__('From %1$s to %2$s', 'events'),  $EM_Event_Recurring->event_start_date, $EM_Event_Recurring->event_end_date).", ";
 		if ($EM_Event_Recurring->recurrence_freq == 'daily')  {
-			$freq_desc =__('everyday', 'events-manager');
+			$freq_desc =__('everyday', 'events');
 			if ($EM_Event_Recurring->recurrence_interval > 1 ) {
-				$freq_desc = sprintf (__("every %s days", 'events-manager'), $EM_Event_Recurring->recurrence_interval);
+				$freq_desc = sprintf (__("every %s days", 'events'), $EM_Event_Recurring->recurrence_interval);
 			}
 		}elseif ($EM_Event_Recurring->recurrence_freq == 'weekly')  {
 			$weekday_array = explode(",", $EM_Event_Recurring->recurrence_byday);
@@ -2654,9 +2604,9 @@ class EM_Event extends \EM_Object{
 				array_push($natural_days, $weekdays_name[$day]);
 			}
 			$output .= implode(", ", $natural_days);
-			$freq_desc = " " . __("every week", 'events-manager');
+			$freq_desc = " " . __("every week", 'events');
 			if ($EM_Event_Recurring->recurrence_interval > 1 ) {
-				$freq_desc = " ".sprintf (__("every %s weeks", 'events-manager'), $EM_Event_Recurring->recurrence_interval);
+				$freq_desc = " ".sprintf (__("every %s weeks", 'events'), $EM_Event_Recurring->recurrence_interval);
 			}
 			
 		}elseif ($EM_Event_Recurring->recurrence_freq == 'monthly')  {
@@ -2669,12 +2619,12 @@ class EM_Event extends \EM_Object{
 			}
 			$freq_desc = sprintf (($monthweek_name[$EM_Event_Recurring->recurrence_byweekno]), implode(" and ", $natural_days));
 			if ($EM_Event_Recurring->recurrence_interval > 1 ) {
-				$freq_desc .= ", ".sprintf (__("every %s months",'events-manager'), $EM_Event_Recurring->recurrence_interval);
+				$freq_desc .= ", ".sprintf (__("every %s months",'events'), $EM_Event_Recurring->recurrence_interval);
 			}
 		}elseif ($EM_Event_Recurring->recurrence_freq == 'yearly')  {
-			$freq_desc = __("every year", 'events-manager');
+			$freq_desc = __("every year", 'events');
 			if ($EM_Event_Recurring->recurrence_interval > 1 ) {
-				$freq_desc .= sprintf (__("every %s years",'events-manager'), $EM_Event_Recurring->recurrence_interval);
+				$freq_desc .= sprintf (__("every %s years",'events'), $EM_Event_Recurring->recurrence_interval);
 			}
 		}else{
 			$freq_desc = "[ERROR: corrupted database record]";

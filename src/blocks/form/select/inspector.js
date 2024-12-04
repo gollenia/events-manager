@@ -17,43 +17,43 @@ const Inspector = ( props ) => {
 
 	return (
 		<InspectorControls>
-			<PanelBody title={ __( 'Data', 'events-manager' ) } initialOpen={ true }>
+			<PanelBody title={ __( 'Data', 'events' ) } initialOpen={ true }>
 				<ToggleControl
-					label={ __( 'Required', 'events-manager' ) }
+					label={ __( 'Required', 'events' ) }
 					checked={ required }
 					onChange={ ( value ) => setAttributes( { required: value, hasEmptyOption: value } ) }
 				/>
 				<CheckboxControl
-					label={ __( 'Empty option', 'events-manager' ) }
-					help={ __( 'An empty option ist shown and selected as default', 'events-manager' ) }
+					label={ __( 'Empty option', 'events' ) }
+					help={ __( 'An empty option ist shown and selected as default', 'events' ) }
 					checked={ hasEmptyOption }
 					disabled={ required }
 					onChange={ ( value ) => setAttributes( { hasEmptyOption: value } ) }
 				/>
 				<TextControl
-					label={ __( 'Help', 'events-manager' ) }
-					help={ __( 'Alternate text for the empty option', 'events-manager' ) }
+					label={ __( 'Help', 'events' ) }
+					help={ __( 'Alternate text for the empty option', 'events' ) }
 					value={ help }
 					disabled={ ! hasEmptyOption }
 					onChange={ ( value ) => setAttributes( { help: value } ) }
 				/>
 				<TextControl
-					label={ __( 'Error message', 'events-manager' ) }
-					help={ __( 'Text to inform the user that a choice has to be made', 'events-manager' ) }
+					label={ __( 'Error message', 'events' ) }
+					help={ __( 'Text to inform the user that a choice has to be made', 'events' ) }
 					value={ error }
 					onChange={ ( value ) => setAttributes( { error: value } ) }
 				/>
 				<TextareaControl
-					label={ __( 'Options', 'events-manager' ) }
+					label={ __( 'Options', 'events' ) }
 					value={ options.join( '\n' ) }
 					onChange={ ( value ) => setAttributes( { options: value.split( '\n' ) } ) }
-					help={ __( 'Options for the select control. Each line represents one option', 'events-manager' ) }
+					help={ __( 'Options for the select control. Each line represents one option', 'events' ) }
 				/>
 			</PanelBody>
-			<PanelBody title={ __( 'Appearance', 'events-manager' ) } initialOpen={ true }>
+			<PanelBody title={ __( 'Appearance', 'events' ) } initialOpen={ true }>
 				<RangeControl
-					label={ __( 'Width', 'events-manager' ) }
-					help={ __( 'Number of columns the input field will occupy', 'events-manager' ) }
+					label={ __( 'Width', 'events' ) }
+					help={ __( 'Number of columns the input field will occupy', 'events' ) }
 					value={ width }
 					max={ 6 }
 					min={ 1 }

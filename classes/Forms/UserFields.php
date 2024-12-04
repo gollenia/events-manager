@@ -22,7 +22,7 @@ class EM_User_Fields {
 	public static function get_form(){
 		if( empty(self::$form) ){
 			self::$form = new EM_Form('em_user_fields');
-			self::$form->form_required_error = __('Please fill in the field: %s','events-manager');
+			self::$form->form_required_error = __('Please fill in the field: %s','events');
 			self::$form->is_user_form = true;
 		}
 		

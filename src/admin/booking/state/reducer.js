@@ -9,7 +9,7 @@ const createTicket = ( availableFields, availableTickets ) => {
 		}
 	}
 	return {
-		id: parseInt( Object.keys( availableTickets )[ 0 ] ),
+		ticket_id: parseInt( Object.keys( availableTickets )[ 0 ] ),
 		fields,
 	};
 };
@@ -45,11 +45,16 @@ const reducer = ( state = {}, action ) => {
 			return { ...state };
 
 		case 'SET_FIELD':
+			console.log( 'payload', payload );
 			if ( payload.form === 'ticket' ) {
+				console.log( 'payload', payload );
 				state.data.attendees[ payload.index ].fields[ payload.field ] = payload.value;
 			}
 			if ( payload.form === 'registration' ) {
 				state.data.registration[ payload.field ] = payload.value;
+			}
+			if ( payload.form === 'donation' ) {
+				state.data.booking.donation = payload.value;
 			}
 			state.sendState = 'unsaved';
 			return { ...state };
@@ -58,7 +63,7 @@ const reducer = ( state = {}, action ) => {
 			const index =
 				payload.index !== undefined
 					? payload.index
-					: state.request.tickets.findIndex( ( ticket ) => ticket.id === payload.id );
+					: state.request.tickets.findIndex( ( ticket ) => ticket.ticket_id === payload.ticket_id );
 			state.data.attendees.splice( index, 1 );
 			state.sendState = 'unsaved';
 			return { ...state };
@@ -68,6 +73,7 @@ const reducer = ( state = {}, action ) => {
 			return { ...state };
 
 		case 'SET_TICKET':
+			console.log( 'payload', payload );
 			state.data.attendees[ payload.index ] = payload.ticket;
 			state.sendState = 'unsaved';
 			return { ...state };

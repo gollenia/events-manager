@@ -35,12 +35,12 @@ function em_admin_menu(){
   	// Add a submenu to the custom top-level menu:
    	$plugin_pages = array();
    	if( get_option('dbem_rsvp_enabled') ){
-		$plugin_pages['bookings'] = add_submenu_page('edit.php?post_type='.EM_POST_TYPE_EVENT, __('Bookings', 'events-manager'), __('Bookings', 'events-manager').$bookings_num, 'manage_bookings', 'events-manager-bookings', "em_bookings_page");
+		$plugin_pages['bookings'] = add_submenu_page('edit.php?post_type='.EM_POST_TYPE_EVENT, __('Bookings', 'events'), __('Bookings', 'events').$bookings_num, 'manage_bookings', 'events-bookings', "em_bookings_page");
    	}
-	$plugin_pages['options'] = add_submenu_page('edit.php?post_type='.EM_POST_TYPE_EVENT, __('Events Manager Settings','events-manager'),__('Settings','events-manager'), 'manage_options', "events-manager-options", 'em_admin_options_page');
-	$plugin_pages['help'] = add_submenu_page('edit.php?post_type='.EM_POST_TYPE_EVENT, __('Getting Help for Events Manager','events-manager'),__('Help','events-manager'), 'manage_options', "events-manager-help", 'em_admin_help_page');
+	$plugin_pages['options'] = add_submenu_page('edit.php?post_type='.EM_POST_TYPE_EVENT, __('Events Manager Settings','events'),__('Settings','events'), 'manage_options', "events-options", 'em_admin_options_page');
+	$plugin_pages['help'] = add_submenu_page('edit.php?post_type='.EM_POST_TYPE_EVENT, __('Getting Help for Events Manager','events'),__('Help','events'), 'manage_options', "events-help", 'em_admin_help_page');
 
-	$plugin_pages['bookingforms'] = add_submenu_page('edit.php?post_type='.EM_POST_TYPE_EVENT, __('Edit booking and attendee forms','events-manager'),__('Forms','events-manager'), 'manage_options', "events-manager-forms", ["\\Contexis\\Events\\Forms\\Admin", "option_page"]);
+	$plugin_pages['bookingforms'] = add_submenu_page('edit.php?post_type='.EM_POST_TYPE_EVENT, __('Edit booking and attendee forms','events'),__('Forms','events'), 'manage_options', "events-forms", ["\\Contexis\\Events\\Forms\\Admin", "option_page"]);
 	//If multisite global with locations set to be saved in main blogs we can force locations to be created on the main blog only
 	
 	$plugin_pages = apply_filters('em_create_events_submenu',$plugin_pages);
@@ -93,7 +93,7 @@ add_action('admin_menu','em_admin_menu');
  * @return array
  */
 function em_plugin_action_links($actions, $file, $plugin_data) {
-	array_unshift($actions, sprintf( '<a href="'.EM_ADMIN_URL.'&amp;page=events-manager-options">%s</a>', __('Settings', 'events-manager') ));
+	array_unshift($actions, sprintf( '<a href="'.EM_ADMIN_URL.'&amp;page=events-options">%s</a>', __('Settings', 'events') ));
 	return $actions;
 }
 
@@ -102,8 +102,8 @@ add_filter( 'plugin_action_links_events/events.php', 'em_plugin_action_links', 1
 function em_user_action_links( $actions, $user ){
 	if (!is_admin() && !current_user_can( 'manage_others_bookings')) return $actions;
 	
-	$bookings_link = EM_ADMIN_URL. "&page=events-manager-bookings&person_id=".$user->ID;
-	$actions['bookings'] = "<a href='$bookings_link'>" . __( 'Bookings','events-manager') . "</a>";
+	$bookings_link = EM_ADMIN_URL. "&page=events-bookings&person_id=".$user->ID;
+	$actions['bookings'] = "<a href='$bookings_link'>" . __( 'Bookings','events') . "</a>";
 	
 	return $actions;
 }

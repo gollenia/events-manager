@@ -1,7 +1,7 @@
 <?php
 /*
  * This file is called by templates/forms/event-editor.php to display attribute fields on your event form on your website.
-* You can override this file by copying it to /wp-content/themes/yourtheme/plugins/events-manager/forms/event/ and editing it there.
+* You can override this file by copying it to /wp-content/themes/yourtheme/plugins/events/forms/event/ and editing it there.
 */
 global $EM_Event;
 /* @var $EM_Event EM_Event */

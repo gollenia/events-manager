@@ -45,8 +45,8 @@ const Success = ( props ) => {
 				<div>
 					<div className="iban-scan">
 						<div className="card__content">
-							<h2>{ __( 'Scan to pay', 'events-manager' ) }</h2>
-							<h4>{ __( 'Scan the QR-Code with your phone to start payment', 'events-manager' ) }</h4>
+							<h2>{ __( 'Scan to pay', 'events' ) }</h2>
+							<h4>{ __( 'Scan the QR-Code with your phone to start payment', 'events' ) }</h4>
 							<SVG
 								className="w-full"
 								src={ `/wp-admin/admin-ajax.php?action=em_qr_code&booking_id=${ booking.booking_id }` }
@@ -58,27 +58,27 @@ const Success = ( props ) => {
 					<p dangerouslySetInnerHTML={ { __html: gateway.message } }></p>
 					<table className="table--dotted">
 						<tr>
-							<th className="text-left">{ __( 'Bank', 'events-manager' ) }</th>
+							<th className="text-left">{ __( 'Bank', 'events' ) }</th>
 							<td>{ gateway.bank }</td>
 						</tr>
 						<tr>
-							<th className="text-left">{ __( 'IBAN', 'events-manager' ) }</th>
+							<th className="text-left">{ __( 'IBAN', 'events' ) }</th>
 							<td>{ formatIBAN( gateway.iban ) }</td>
 						</tr>
 						<tr>
-							<th className="text-left">{ __( 'BIC', 'events-manager' ) }</th>
+							<th className="text-left">{ __( 'BIC', 'events' ) }</th>
 							<td>{ gateway.bic }</td>
 						</tr>
 						<tr>
-							<th className="text-left">{ __( 'Beneficial', 'events-manager' ) }</th>
+							<th className="text-left">{ __( 'Beneficial', 'events' ) }</th>
 							<td>{ gateway.beneficiary }</td>
 						</tr>
 						<tr>
-							<th className="text-left">{ __( 'Purpose', 'events-manager' ) }</th>
+							<th className="text-left">{ __( 'Purpose', 'events' ) }</th>
 							<td>{ gateway.purpose }</td>
 						</tr>
 						<tr>
-							<th className="text-left">{ __( 'Amount', 'events-manager' ) }</th>
+							<th className="text-left">{ __( 'Amount', 'events' ) }</th>
 							<td>{ formatCurrency( gateway.amount, data.l10n.locale, data.l10n.currency ) }</td>
 						</tr>
 					</table>

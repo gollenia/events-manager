@@ -109,7 +109,7 @@ const bookingOptions = () => {
 				<Modal title="This is my modal" onRequestClose={ closeModal }>
 					<Flex>
 						<SelectControl
-							label={ __( 'Registration Form', 'events-manager' ) }
+							label={ __( 'Registration Form', 'events' ) }
 							value={ meta._booking_form }
 							onChange={ ( value ) => {
 								setMeta( { _booking_form: value } );
@@ -120,7 +120,7 @@ const bookingOptions = () => {
 						/>
 
 						<SelectControl
-							label={ __( 'Attendee Form', 'events-manager' ) }
+							label={ __( 'Attendee Form', 'events' ) }
 							value={ meta._attendee_form }
 							onChange={ ( value ) => {
 								setMeta( { _attendee_form: value } );
@@ -131,7 +131,7 @@ const bookingOptions = () => {
 						/>
 					</Flex>
 					<CheckboxControl
-						label={ __( 'Allow Donation', 'events-manager' ) }
+						label={ __( 'Allow Donation', 'events' ) }
 						checked={ meta._event_rsvp_donation }
 						onChange={ ( value ) => {
 							setMeta( { _event_rsvp_donation: value } );
@@ -160,7 +160,7 @@ const bookingOptions = () => {
 								...tickets,
 								{
 									ticket_id: 0,
-									ticket_name: __( 'New Ticket', 'events-manager' ),
+									ticket_name: __( 'New Ticket', 'events' ),
 									ticket_description: '',
 									ticket_price: 0,
 									ticket_spaces: meta._event_spaces,
@@ -172,18 +172,18 @@ const bookingOptions = () => {
 							] );
 						} }
 					>
-						{ __( 'Add Ticket', 'events-manager' ) }
+						{ __( 'Add Ticket', 'events' ) }
 					</Button>
 				</Modal>
 			) }
 			<PluginDocumentSettingPanel
 				name="events-booking-options"
-				title={ __( 'Bookings', 'events-manager' ) }
+				title={ __( 'Bookings', 'events' ) }
 				className="events-form-settings"
 			>
 				v
 				<Button variant="primary" onClick={ () => setIsOpen( true ) } disabled={ ! meta._event_rsvp }>
-					{ __( 'Manage Tickets', 'events-manager' ) }
+					{ __( 'Manage Tickets', 'events' ) }
 				</Button>
 			</PluginDocumentSettingPanel>
 		</>

@@ -18,17 +18,7 @@ import lock from './lockIcon.js';
  */
 const edit = ( props ) => {
 	const {
-		attributes: {
-			width,
-			required,
-			placeholder,
-			label,
-			fieldid,
-			range,
-			min,
-			max,
-			step,
-		},
+		attributes: { width, required, placeholder, label, fieldid, range, min, max, step },
 		setAttributes,
 	} = props;
 
@@ -48,9 +38,7 @@ const edit = ( props ) => {
 		className: [
 			'ctx:form-field',
 			'ctx:form-field--' + width,
-			validFieldId() == false || label === ''
-				? 'ctx:form-field--error'
-				: '',
+			validFieldId() == false || label === '' ? 'ctx:form-field--error' : '',
 		]
 			.filter( Boolean )
 			.join( ' ' ),
@@ -68,17 +56,13 @@ const edit = ( props ) => {
 								tagName="span"
 								className="ctx:form-details__label"
 								value={ label }
-								placeholder={ __( 'Label', 'gutenberg-form' ) }
-								onChange={ ( value ) =>
-									setAttributes( { label: value } )
-								}
+								placeholder={ __( 'Label', 'events' ) }
+								onChange={ ( value ) => setAttributes( { label: value } ) }
 							/>
 
 							<span>{ required ? '*' : '' }</span>
 						</span>
-						<span className="ctx:form-field__label">
-							{ __( 'Label for the field', 'gutenberg-form' ) }
-						</span>
+						<span className="ctx:form-field__label">{ __( 'Label for the field', 'events' ) }</span>
 					</div>
 				</div>
 
@@ -88,7 +72,7 @@ const edit = ( props ) => {
 							tagName="p"
 							className="ctx:form-details__label"
 							value={ fieldid }
-							placeholder={ __( 'Slug', 'gutenberg-form' ) }
+							placeholder={ __( 'Slug', 'events' ) }
 							onChange={ ( value ) => setFieldId( value ) }
 						/>
 					) }
@@ -99,16 +83,11 @@ const edit = ( props ) => {
 					) }
 					{ validFieldId() == false && (
 						<span className="ctx:form-field__error-message">
-							{ __(
-								'Please type in a unique itentifier for the field',
-								'gutenberg-form'
-							) }
+							{ __( 'Please type in a unique itentifier for the field', 'events' ) }
 						</span>
 					) }
 					{ validFieldId() && (
-						<span className="ctx:form-field__label">
-							{ __( 'Unique identifier', 'gutenberg-form' ) }
-						</span>
+						<span className="ctx:form-field__label">{ __( 'Unique identifier', 'events' ) }</span>
 					) }
 				</div>
 			</div>
@@ -116,9 +95,7 @@ const edit = ( props ) => {
 			{ range ? (
 				<RangeControl
 					value={ placeholder }
-					onChange={ ( value ) =>
-						setAttributes( { placeholder: value } )
-					}
+					onChange={ ( value ) => setAttributes( { placeholder: value } ) }
 					min={ min }
 					max={ max }
 					step={ step }
@@ -128,9 +105,7 @@ const edit = ( props ) => {
 					autocomplete="off"
 					value={ placeholder }
 					type="number"
-					onChange={ ( event ) =>
-						setAttributes( { placeholder: event.target.value } )
-					}
+					onChange={ ( event ) => setAttributes( { placeholder: event.target.value } ) }
 				/>
 			) }
 		</div>

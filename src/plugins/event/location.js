@@ -48,11 +48,11 @@ const locationSelector = () => {
 	return (
 		<PluginDocumentSettingPanel
 			name="events-location-settings"
-			title={ __( 'Location', 'events-manager' ) }
+			title={ __( 'Location', 'events' ) }
 			className="events-location-settings"
 		>
 			<ComboboxControl
-				label={ __( 'Select a location', 'events-manager' ) }
+				label={ __( 'Select a location', 'events' ) }
 				value={ meta._location_id }
 				onChange={ ( value ) => {
 					setMeta( { _location_id: value || 0 } );
@@ -62,7 +62,7 @@ const locationSelector = () => {
 				__experimentalRenderItem={ ( { item } ) => {
 					if ( item.value == 0 ) return <></>;
 					return (
-						<div className="events-manager-speaker-item">
+						<div className="events-speaker-item">
 							{ item.media ? (
 								<img className="icon-round" width="24px" height="24px" src={ item.media } />
 							) : (

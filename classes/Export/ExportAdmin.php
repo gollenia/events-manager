@@ -33,10 +33,10 @@ class ExportAdmin {
 					<input id="upload_image_button" type="button" class="button-primary" value="<?php _e("Select Image", "events"); ?>" /></div></td></tr>
 					
 					<?php
-					Options::input( __( 'Font path', 'events-manager' ), 'em_export_font_path',__('Hint: Theme path is ', 'events-manager') . get_stylesheet_directory());
-					Options::input( __( 'Regular Font', 'events-manager' ), 'em_export_font_regular');
-					Options::input( __( 'Bold Font', 'events-manager' ), 'em_export_font_bold');
-					Options::input( __( 'Italic Font', 'events-manager' ), 'em_export_font_italic');
+					Options::input( __( 'Font path', 'events' ), 'em_export_font_path',__('Hint: Theme path is ', 'events') . get_stylesheet_directory());
+					Options::input( __( 'Regular Font', 'events' ), 'em_export_font_regular');
+					Options::input( __( 'Bold Font', 'events' ), 'em_export_font_bold');
+					Options::input( __( 'Italic Font', 'events' ), 'em_export_font_italic');
 					?>
 				</tbody></table>
 			</div>

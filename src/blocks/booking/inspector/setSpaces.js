@@ -5,9 +5,9 @@ import React from 'react';
 const SetSpaces = ( props ) => {
 	const { meta, setMeta } = props;
 	return (
-		<PanelBody title={ __( 'Spaces Settings', 'events-manager' ) } initialOpen={ true }>
+		<PanelBody title={ __( 'Spaces Settings', 'events' ) } initialOpen={ true }>
 			<TextControl
-				label={ __( 'Bookable Spaces', 'events-manager' ) }
+				label={ __( 'Spaces overall', 'events' ) }
 				value={ meta._event_spaces }
 				type="number"
 				onChange={ ( value ) => {
@@ -17,7 +17,7 @@ const SetSpaces = ( props ) => {
 			/>
 
 			<TextControl
-				label={ __( 'Maximum bookable spaces per booking', 'events-manager' ) }
+				label={ __( 'Maximum spaces per booking', 'events' ) }
 				value={ meta._event_spaces_max }
 				type="number"
 				onChange={ ( value ) => {

@@ -19,7 +19,7 @@ $photo = get_the_post_thumbnail_url( $location->post_id, "post-thumbnail" );
 		<?php endif; ?>
 	</div>
 	<div class="event-details-text">
-		<h4><?php echo $attributes['description'] ?: __("Location", "events-manager") ?></h4>
+		<h4><?php echo $attributes['description'] ?: __("Location", "events") ?></h4>
 		
 		<address class="event-details-data">
 			<?php if($attributes['showTitle']) echo $location->location_name . '<br />' ?>

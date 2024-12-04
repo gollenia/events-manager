@@ -1,1 +1,13 @@
-{"translation-revision-date":"2024-06-20 11:38+0000","generator":"Loco https:\/\/localise.biz\/","source":"build\/frontend.js","domain":"events-manager","locale_data":{"events-manager":{"":{"domain":"events-manager","lang":"fr_FR","plural-forms":"nplurals=2; plural=n != 1;"},"All":["Tout"],"Search":["Rechercher"]}}}
+{
+	"translation-revision-date": "2024-06-20 11:38+0000",
+	"generator": "Loco https://localise.biz/",
+	"source": "build/frontend.js",
+	"domain": "events",
+	"locale_data": {
+		"events": {
+			"": { "domain": "events", "lang": "fr_FR", "plural-forms": "nplurals=2; plural=n != 1;" },
+			"All": [ "Tout" ],
+			"Search": [ "Rechercher" ]
+		}
+	}
+}

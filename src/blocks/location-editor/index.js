@@ -15,7 +15,7 @@ const { name, title } = metadata;
 
 const settings = {
 	...metadata,
-	title: __(title, 'ctx-blocks'),
+	title: __( title, 'events' ),
 	icon: icons.posts,
 	edit: Edit,
 	save: () => {

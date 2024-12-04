@@ -3,11 +3,11 @@
 namespace Contexis\Events\Tickets;
 class TicketBooking extends \EM_Object{
 	//DB Fields
-	var $ticket_booking_id;
-	var $booking_id;
-	var $ticket_id;
-	var $ticket_booking_price;
-	var $ticket_booking_spaces;
+	public $ticket_booking_id;
+	public $booking_id;
+	public $ticket_id;
+	public $ticket_booking_price;
+	public $ticket_booking_spaces;
 	public array $fields = array(
 		'ticket_booking_id' => array('name'=>'id','type'=>'%d'),
 		'ticket_id' => array('name'=>'ticket_id','type'=>'%d'),
@@ -82,7 +82,7 @@ class TicketBooking extends \EM_Object{
 				if($this->get_spaces() > 0){
 					$where = array( 'ticket_booking_id' => $this->ticket_booking_id );  
 					$result = $wpdb->update($table, $data, $where, $this->get_types($data));
-					$this->feedback_message = __('Changes saved','events-manager');
+					$this->feedback_message = __('Changes saved','events');
 				}else{
 					$this->result = $this->delete(); 
 				}
@@ -91,21 +91,21 @@ class TicketBooking extends \EM_Object{
 					//TODO better error handling
 					$result = $wpdb->insert($table, $data, $this->get_types($data));
 				    $this->ticket_booking_id = $wpdb->insert_id;  
-					$this->feedback_message = __('Ticket booking created','events-manager'); 
+					$this->feedback_message = __('Ticket booking created','events'); 
 				}else{
 					//no point saving a booking with no spaces
 					$result = false;
 				}
 			}
 			if( $result === false ){
-				$this->feedback_message = __('There was a problem saving the ticket booking.', 'events-manager');
-				$this->errors[] = __('There was a problem saving the ticket booking.', 'events-manager');
+				$this->feedback_message = __('There was a problem saving the ticket booking.', 'events');
+				$this->errors[] = __('There was a problem saving the ticket booking.', 'events');
 			}
 			//$this->compat_keys();
 			return apply_filters('em_ticket_booking_save', ( count($this->errors) == 0 ), $this);
 		}else{
-			$this->feedback_message = __('There was a problem saving the ticket booking.', 'events-manager');
-			$this->errors[] = __('There was a problem saving the ticket booking.', 'events-manager');
+			$this->feedback_message = __('There was a problem saving the ticket booking.', 'events');
+			$this->errors[] = __('There was a problem saving the ticket booking.', 'events');
 			return apply_filters('em_ticket_booking_save', false, $this);
 		}
 		return true;
@@ -117,17 +117,10 @@ class TicketBooking extends \EM_Object{
 	 * @return boolean
 	 */
 	function validate(){
-		$missing_fields = Array ();
-		foreach ( $this->required_fields as $field ) {
-			$true_field = $this->fields[$field]['name'];
-			if ( $this->$true_field == "") {
-				$missing_fields[] = $field;
-			}
+		if( $this->ticket_booking_spaces == 0 ){
+			$this->errors[] = __('You must book at least one space.','events');
 		}
-		if ( count($missing_fields) > 0){
-			// TODO Create friendly equivelant names for missing fields notice in validation 
-			$this->errors[] = __ ( 'Missing fields: ' ) . implode ( ", ", $missing_fields ) . ". ";
-		}
+
 		return apply_filters('em_ticket_booking_validate', count($this->errors) == 0, $this );
 	}
 	
@@ -212,7 +205,7 @@ class TicketBooking extends \EM_Object{
 		return apply_filters('em_ticket_booking_delete', ($result !== false ), $this);
 	}
 	
-
+	
 	
 	
 	/**

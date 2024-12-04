@@ -128,7 +128,7 @@ class EM_Location extends EM_Object {
 	 */
 	function __construct($id = false,  $search_by = 'location_id' ) {
 		//Initialize
-		$this->required_fields = array("location_address" => __('The location address', 'events-manager'), "location_town" => __('The location town', 'events-manager'), "location_country" => __('The country', 'events-manager'));
+		$this->required_fields = array("location_address" => 'The location address', "location_town" => 'The location town', "location_country" => 'The country');
 		//Get the post_id/location_id
 		$is_post = !empty($id->ID) && $id->post_type == EM_POST_TYPE_LOCATION;
 		if( $is_post ){
@@ -303,7 +303,7 @@ class EM_Location extends EM_Object {
 		$validate_post = true;
 		if( empty($this->location_name) ){
 			$validate_post = false;
-			$this->add_error( __('Location name','events-manager').__(" is required.", 'events-manager') );
+			$this->add_error( __('Location name','events').__(" is required.", 'events') );
 		}
 
 		return apply_filters('em_location_validate', $validate_post, $this );		
@@ -378,7 +378,7 @@ class EM_Location extends EM_Object {
 		if($success) {
 			$this->location_id = $wpdb->insert_id;
 			update_post_meta($this->post_id, '_location_id', $this->location_id);
-			$this->feedback_message = sprintf(__('Successfully saved %s','events-manager'),__('Location','events-manager'));
+			$this->feedback_message = sprintf(__('Successfully saved %s','events'),__('Location','events'));
 		}
 	}
 	

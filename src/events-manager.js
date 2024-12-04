@@ -1,319 +1,16 @@
 import './events_manager.scss';
 
 jQuery( document ).ready( function ( $ ) {
-	let load_ui_css = false; //load jquery ui css?
-	/* Time Entry */
-	$( '#start-time' ).each( function ( i, el ) {
-		$( el )
-			.addClass( 'em-time-input em-time-start' )
-			.next( '#end-time' )
-			.addClass( 'em-time-input em-time-end' )
-			.parent()
-			.addClass( 'em-time-range' );
-	} );
-
-	/*
-	 * ADMIN AREA AND PUBLIC FORMS (Still polishing this section up, note that form ids and classes may change accordingly)
-	 */
-	//Events List
-	//Approve/Reject Links
-	$( '.events-table' ).on( 'click', '.em-event-delete', function () {
-		if ( ! confirm( 'Are you sure you want to delete?' ) ) {
-			return false;
-		}
-		window.location.href = this.href;
-	} );
-	//Forms
-	$( '#event-form #event-image-delete, #location-form #location-image-delete' ).on( 'click', function () {
-		let el = $( this );
-		if ( el.is( ':checked' ) ) {
-			el.closest( '.event-form-image, .location-form-image' )
-				.find( '#event-image-img, #location-image-img' )
-				.hide();
-		} else {
-			el.closest( '.event-form-image, .location-form-image' )
-				.find( '#event-image-img, #location-image-img' )
-				.show();
-		}
-	} );
-	//Event Editor
-	//Recurrence Warnings
-
-	//Tickets & Bookings
-	if ( $( '#em-tickets-form' ).length > 0 ) {
-		//Enable/Disable Bookings
-		$( '#event-rsvp' ).on( 'click', function ( event ) {
-			if ( ! this.checked ) {
-				let confirmation = confirm( EM.disable_bookings_warning );
-				if ( confirmation == false ) {
-					event.preventDefault();
-				} else {
-					$( '#event-rsvp-options' ).hide();
-				}
-			} else {
-				$( '#event-rsvp-options' ).fadeIn();
-			}
-		} );
-		if ( $( 'input#event-rsvp' ).is( ':checked' ) ) {
-			$( 'div#rsvp-data' ).fadeIn();
-		} else {
-			$( 'div#rsvp-data' ).hide();
-		}
-		//Ticket(s) UI
-		let reset_ticket_forms = function () {
-			$( '#em-tickets-form table tbody tr.em-tickets-row' ).show();
-			$( '#em-tickets-form table tbody tr.em-tickets-row-form' ).hide();
-		};
-		//recurrences and cut-off logic for ticket availability
-		if ( $( '#em-recurrence-checkbox' ).length > 0 ) {
-			$( '#em-recurrence-checkbox' )
-				.on( 'change', function () {
-					if ( $( '#em-recurrence-checkbox' ).is( ':checked' ) ) {
-						$(
-							'#em-tickets-form .ticket-dates-from-recurring, #em-tickets-form .ticket-dates-to-recurring, #event-rsvp-options .em-booking-date-recurring'
-						).show();
-						$(
-							'#em-tickets-form .ticket-dates-from-normal, #em-tickets-form .ticket-dates-to-normal, #event-rsvp-options .em-booking-date-normal, #em-tickets-form .hidden'
-						).hide();
-					} else {
-						$(
-							'#em-tickets-form .ticket-dates-from-normal, #em-tickets-form .ticket-dates-to-normal, #event-rsvp-options .em-booking-date-normal'
-						).show();
-						$(
-							'#em-tickets-form .ticket-dates-from-recurring, #em-tickets-form .ticket-dates-to-recurring, #event-rsvp-options .em-booking-date-recurring, #em-tickets-form .hidden'
-						).hide();
-					}
-				} )
-				.trigger( 'change' );
-		} else if ( $( '#em-form-recurrence' ).length > 0 ) {
-			$(
-				'#em-tickets-form .ticket-dates-from-recurring, #em-tickets-form .ticket-dates-to-recurring, #event-rsvp-options .em-booking-date-recurring'
-			).show();
-			$(
-				'#em-tickets-form .ticket-dates-from-normal, #em-tickets-form .ticket-dates-to-normal, #event-rsvp-options .em-booking-date-normal, #em-tickets-form .hidden'
-			).hide();
-		} else {
-			$(
-				'#em-tickets-form .ticket-dates-from-recurring, #em-tickets-form .ticket-dates-to-recurring, #event-rsvp-options .em-booking-date-recurring, #em-tickets-form .hidden'
-			).hide();
-		}
-		//Add a new ticket
-		$( '#em-tickets-add' ).on( 'click', function ( e ) {
-			e.preventDefault();
-			reset_ticket_forms();
-			//create copy of template slot, insert so ready for population
-			let tickets = $( '#em-tickets-form table tbody' );
-			let rowNo = tickets.length + 1;
-			let slot = tickets
-				.first( '.em-ticket-template' )
-				.clone( true )
-				.attr( 'id', 'em-ticket-' + rowNo )
-				.removeClass( 'em-ticket-template' )
-				.addClass( 'em-ticket' )
-				.appendTo( $( '#em-tickets-form table' ) );
-			//change the index of the form element names
-			slot.find( '*[name]' ).each( function ( index, el ) {
-				el = $( el );
-				el.attr( 'name', el.attr( 'name' ).replace( 'em_tickets[0]', 'em_tickets[' + rowNo + ']' ) );
-			} );
-			//show ticket and switch to editor
-			slot.show().find( '.ticket-actions-edit' ).trigger( 'click' );
-			//refresh datepicker and values
-			slot.find( '.em-date-input-loc' ).datepicker( 'destroy' ).removeAttr( 'id' ); //clear all datepickers
-			slot.find( '.em-time-input' )
-				.off()
-				.each( function ( index, el ) {
-					if ( typeof this.em_timepickerObj == 'object' ) {
-						this.em_timepicker( 'remove' );
-					}
-				} ); //clear all em_timepickers - consequently, also other click/blur/change events, recreate the further down
-			em_setup_datepicker( slot );
-			em_setup_timepicker( slot );
-			$( 'html, body' ).animate( { scrollTop: slot.offset().top - 30 } ); //sends user to form
-			check_ticket_sortability();
-		} );
-		//Edit a Ticket
-		$( document ).on( 'click', '.ticket-actions-edit', function ( e ) {
-			e.preventDefault();
-			reset_ticket_forms();
-			let tbody = $( this ).closest( 'tbody' );
-			tbody.find( 'tr.em-tickets-row' ).hide();
-			tbody.find( 'tr.em-tickets-row-form' ).fadeIn();
-			return false;
-		} );
-		$( document ).on( 'click', '.ticket-actions-edited', function ( e ) {
-			e.preventDefault();
-			let tbody = $( this ).closest( 'tbody' );
-			let rowNo = tbody.attr( 'id' ).replace( 'em-ticket-', '' );
-			tbody.find( '.em-tickets-row' ).fadeIn();
-			tbody.find( '.em-tickets-row-form' ).hide();
-			tbody.find( '*[name]' ).each( function ( index, el ) {
-				el = $( el );
-				if ( el.attr( 'name' ) == 'ticket_start_pub' ) {
-					tbody.find( 'span.ticket_start' ).text( el.val() );
-				} else if ( el.attr( 'name' ) == 'ticket_end_pub' ) {
-					tbody.find( 'span.ticket_end' ).text( el.val() );
-				} else if ( el.attr( 'name' ) == 'em_tickets[' + rowNo + '][ticket_type]' ) {
-					if ( el.find( ':selected' ).val() == 'members' ) {
-						tbody.find( 'span.ticket_name' ).prepend( '* ' );
-					}
-				} else if ( el.attr( 'name' ) == 'em_tickets[' + rowNo + '][ticket_start_recurring_days]' ) {
-					let text =
-						tbody.find( 'select.ticket-dates-from-recurring-when' ).val() == 'before'
-							? '-' + el.val()
-							: el.val();
-					if ( el.val() != '' ) {
-						tbody.find( 'span.ticket_start_recurring_days' ).text( text );
-						tbody
-							.find( 'span.ticket_start_recurring_days_text, span.ticket_start_time' )
-							.removeClass( 'hidden' )
-							.show();
-					} else {
-						tbody.find( 'span.ticket_start_recurring_days' ).text( ' - ' );
-						tbody
-							.find( 'span.ticket_start_recurring_days_text, span.ticket_start_time' )
-							.removeClass( 'hidden' )
-							.hide();
-					}
-				} else if ( el.attr( 'name' ) == 'em_tickets[' + rowNo + '][ticket_end_recurring_days]' ) {
-					let text =
-						tbody.find( 'select.ticket-dates-to-recurring-when' ).val() == 'before'
-							? '-' + el.val()
-							: el.val();
-					if ( el.val() != '' ) {
-						tbody.find( 'span.ticket_end_recurring_days' ).text( text );
-						tbody
-							.find( 'span.ticket_end_recurring_days_text, span.ticket_end_time' )
-							.removeClass( 'hidden' )
-							.show();
-					} else {
-						tbody.find( 'span.ticket_end_recurring_days' ).text( ' - ' );
-						tbody
-							.find( 'span.ticket_end_recurring_days_text, span.ticket_end_time' )
-							.removeClass( 'hidden' )
-							.hide();
-					}
-				} else {
-					let classname = el
-						.attr( 'name' )
-						.replace( 'em_tickets[' + rowNo + '][', '' )
-						.replace( ']', '' )
-						.replace( '[]', '' );
-					tbody.find( '.em-tickets-row .' + classname ).text( el.val() );
-				}
-			} );
-			//allow for others to hook into this
-			$( document ).triggerHandler( 'em_maps_tickets_edit', [ tbody, rowNo, true ] );
-			$( 'html, body' ).animate( { scrollTop: tbody.parent().offset().top - 30 } ); //sends user back to top of form
-			return false;
-		} );
-		$( document ).on( 'change', '.em-ticket-form select.ticket_type', function ( e ) {
-			//check if ticket is for all users or members, if members, show roles to limit the ticket to
-			let el = $( this );
-			if ( el.find( 'option:selected' ).val() == 'members' ) {
-				el.closest( '.em-ticket-form' ).find( '.ticket-roles' ).fadeIn();
-			} else {
-				el.closest( '.em-ticket-form' ).find( '.ticket-roles' ).hide();
-			}
-		} );
-		$( document ).on( 'click', '.em-ticket-form .ticket-options-advanced', function ( e ) {
-			//show or hide advanced tickets, hidden by default
-			e.preventDefault();
-			let el = $( this );
-			if ( el.hasClass( 'show' ) ) {
-				el.closest( '.em-ticket-form' ).find( '.em-ticket-form-advanced' ).fadeIn();
-				el.find( '.show,.show-advanced' ).hide();
-				el.find( '.hide,.hide-advanced' ).show();
-			} else {
-				el.closest( '.em-ticket-form' ).find( '.em-ticket-form-advanced' ).hide();
-				el.find( '.show,.show-advanced' ).show();
-				el.find( '.hide,.hide-advanced' ).hide();
-			}
-			el.toggleClass( 'show' );
-		} );
-		$( '.em-ticket-form' ).each( function () {
-			//check whether to show advanced options or not by default for each ticket
-			let show_advanced = false;
-			let el = $( this );
-			el.find( '.em-ticket-form-advanced input[type="text"]' ).each( function () {
-				if ( this.value != '' ) show_advanced = true;
-			} );
-			if ( el.find( '.em-ticket-form-advanced input[type="checkbox"]:checked' ).length > 0 ) {
-				show_advanced = true;
-			}
-			el.find( '.em-ticket-form-advanced option:selected' ).each( function () {
-				if ( this.value != '' ) show_advanced = true;
-			} );
-			if ( show_advanced ) el.find( '.ticket-options-advanced' ).trigger( 'click' );
-		} );
-		//Delete a ticket
-		$( document ).on( 'click', '.ticket-actions-delete', function ( e ) {
-			e.preventDefault();
-			let el = $( this );
-			let tbody = el.closest( 'tbody' );
-			if ( tbody.find( 'input.ticket_id' ).val() > 0 ) {
-				//only will happen if no bookings made
-				el.text( 'Deleting...' );
-				$.getJSON(
-					$( this ).attr( 'href' ),
-					{ em_ajax_action: 'delete_ticket', id: tbody.find( 'input.ticket_id' ).val() },
-					function ( data ) {
-						if ( data.result ) {
-							tbody.remove();
-						} else {
-							el.text( 'Delete' );
-							alert( data.error );
-						}
-					}
-				);
-			} else {
-				//not saved to db yet, so just remove
-				tbody.remove();
-			}
-			check_ticket_sortability();
-			return false;
-		} );
-		//Sort Tickets
-		$( '#em-tickets-form.em-tickets-sortable table' ).sortable( {
-			items: '> tbody',
-			placeholder: 'em-ticket-sortable-placeholder',
-			handle: '.ticket-status',
-			helper: function ( event, el ) {
-				let helper = $( el ).clone().addClass( 'em-ticket-sortable-helper' );
-				let tds = helper.find( '.em-tickets-row td' ).length;
-				helper.children().remove();
-				helper.append(
-					'<tr class="em-tickets-row"><td colspan="' +
-						tds +
-						'" style="text-align:left; padding-left:15px;"><span class="dashicons dashicons-tickets-alt"></span></td></tr>'
-				);
-				return helper;
-			},
-		} );
-		let check_ticket_sortability = function () {
-			let em_tickets = $( '#em-tickets-form table tbody.em-ticket' );
-
-			if ( em_tickets.length == 1 ) {
-				em_tickets.find( '.ticket-status' ).addClass( 'single' );
-				$( '#em-tickets-form.em-tickets-sortable table' ).sortable( 'option', 'disabled', true );
-				return;
-			}
-
-			em_tickets.find( '.ticket-status' ).removeClass( 'single' );
-			$( '#em-tickets-form.em-tickets-sortable table' ).sortable( 'option', 'disabled', false );
-		};
-		check_ticket_sortability();
-	}
 	//Managing Bookings
-	if ( $( '#em-bookings-table' ).length > 0 ) {
+	if ( $( '#dbem-bookings-table' ).length > 0 ) {
 		//Pagination link clicks
 		document.addEventListener( 'click', function ( event ) {
-			if ( ! event.target.matches( '#em-bookings-table .tablenav-pages a' ) ) return;
+			if ( ! event.target.matches( '#dbem-bookings-table .tablenav-pages a' ) ) return;
 			event.preventDefault();
 
 			event.stopImmediatePropagation();
 			let el = $( event.target );
-			let form = el.parents( '#em-bookings-table form.bookings-filter' );
+			let form = el.parents( '#dbem-bookings-table form.bookings-filter' );
 			//get page no from url, change page, submit form
 			let match = el.attr( 'href' ).match( /#[0-9]+/ );
 			if ( match != null && match.length > 0 ) {
@@ -323,14 +20,14 @@ jQuery( document ).ready( function ( $ ) {
 				form.find( 'input[name=pno]' ).val( 1 );
 			}
 
-			el.parents( '#em-bookings-table' ).find( '.table-wrap' ).first().append( '<div id="em-loading" />' );
+			el.parents( '#dbem-bookings-table' ).find( '.table-wrap' ).first().append( '<div id="em-loading" />' );
 			//ajax call
 			$.post( EM.ajaxurl, form.serializeArray(), function ( data ) {
-				let root = el.parents( '#em-bookings-table' ).first();
+				let root = el.parents( '#dbem-bookings-table' ).first();
 				root.replaceWith( data );
 				//recreate overlays
-				$( '#em-bookings-table-export input[name=scope]' ).val( root.find( 'select[name=scope]' ).val() );
-				$( '#em-bookings-table-export input[name=status]' ).val( root.find( 'select[name=status]' ).val() );
+				$( '#dbem-bookings-table-export input[name=scope]' ).val( root.find( 'select[name=scope]' ).val() );
+				$( '#dbem-bookings-table-export input[name=status]' ).val( root.find( 'select[name=status]' ).val() );
 				jQuery( document ).triggerHandler( 'em_bookings_filtered', [ data, root, el ] );
 			} );
 			return false;
@@ -480,7 +177,6 @@ jQuery( document ).ready( function ( $ ) {
 		);
 	}
 
-	
 	$( document ).on( 'click', 'a.em-cancel-button', function ( e ) {
 		e.preventDefault();
 		let button = $( this );

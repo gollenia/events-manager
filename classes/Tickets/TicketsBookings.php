@@ -81,8 +81,8 @@ class TicketsBookings extends \EM_Object implements \Iterator, \Countable {
 		}
 		//return result
 		if( count($this->errors) > 0 ){
-			$this->feedback_message = __('There was a problem saving the booking.', 'events-manager');
-			$this->errors[] = __('There was a problem saving the booking.', 'events-manager');
+			$this->feedback_message = __('There was a problem saving the booking.', 'events');
+			$this->errors[] = __('There was a problem saving the booking.', 'events');
 			return apply_filters('em_tickets_bookings_save', false, $this);
 		}
 		return apply_filters('em_tickets_bookings_save', true, $this);
@@ -185,7 +185,7 @@ class TicketsBookings extends \EM_Object implements \Iterator, \Countable {
 				if( $ticket_booking->can_manage() ){
 					$tickets_bookings_ids[] = $ticket_booking->booking_id;
 				}else{
-					$this->errors[] = sprintf(__('You do not have the rights to manage this %s.','events-manager'),__('Booking','events-manager'));					
+					$this->errors[] = sprintf(__('You do not have the rights to manage this %s.','events'),__('Booking','events'));					
 				}
 			}
 			if(count($ticket_ids) > 0){
@@ -250,7 +250,7 @@ class TicketsBookings extends \EM_Object implements \Iterator, \Countable {
 	}	
 	
 	/* Overrides EM_Object method to apply a filter to result
-	 * @see wp-content/plugins/events-manager/classes/EM_Object#build_sql_conditions()
+	 * @see wp-content/plugins/events/classes/EM_Object#build_sql_conditions()
 	 */
 	public static function build_sql_conditions( $args = array() ){
 		$conditions = apply_filters( 'em_tickets_build_sql_conditions', parent::build_sql_conditions($args), $args );
@@ -261,7 +261,7 @@ class TicketsBookings extends \EM_Object implements \Iterator, \Countable {
 	}
 	
 	/* Overrides EM_Object method to apply a filter to result
-	 * @see wp-content/plugins/events-manager/classes/EM_Object#build_sql_orderby()
+	 * @see wp-content/plugins/events/classes/EM_Object#build_sql_orderby()
 	 */
 	public static function build_sql_orderby( $args, $accepted_fields, $default_order = 'ASC' ){
 		return apply_filters( 'em_tickets_bookings_build_sql_orderby', parent::build_sql_orderby($args, $accepted_fields, get_option('dbem_events_default_order')), $args, $accepted_fields, $default_order );

@@ -42,9 +42,9 @@ const SelectBookingForms = ( props ) => {
 	}, [] );
 
 	return (
-		<PanelBody title={ __( 'Booking Forms', 'events-manager' ) } initialOpen={ true }>
+		<PanelBody title={ __( 'Booking Forms', 'events' ) } initialOpen={ true }>
 			<SelectControl
-				label={ __( 'Registration Form', 'events-manager' ) }
+				label={ __( 'Registration Form', 'events' ) }
 				value={ meta._booking_form }
 				onChange={ ( value ) => {
 					setMeta( { _booking_form: value } );
@@ -55,7 +55,7 @@ const SelectBookingForms = ( props ) => {
 			/>
 
 			<SelectControl
-				label={ __( 'Attendee Form', 'events-manager' ) }
+				label={ __( 'Attendee Form', 'events' ) }
 				value={ meta._attendee_form }
 				onChange={ ( value ) => {
 					setMeta( { _attendee_form: value } );

@@ -15,15 +15,15 @@ const TicketRow = ( props ) => {
 
 				<div className="row-actions">
 					<a className="edit" onClick={ () => onSelect( index ) }>
-						{ __( 'Edit', 'events-manager' ) }
+						{ __( 'Edit', 'events' ) }
 					</a>
 					&nbsp;|&nbsp;
 					<a className="view" onClick={ () => onDuplicate( index ) }>
-						{ __( 'Duplicate', 'events-manager' ) }
+						{ __( 'Duplicate', 'events' ) }
 					</a>
 					&nbsp;|&nbsp;
 					<a className="submitdelete" onClick={ () => onDelete( ticket.ticket_id ) }>
-						{ __( 'Delete', 'events-manager' ) }
+						{ __( 'Delete', 'events' ) }
 					</a>
 				</div>
 			</td>

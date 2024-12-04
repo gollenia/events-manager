@@ -37,10 +37,10 @@ class Tickets extends \EM_Object implements \Iterator, \Countable {
 			$orderby_option = get_option('dbem_bookings_tickets_orderby');
 			$order_by = get_option('dbem_bookings_tickets_ordering') ? array('ticket_order ASC') : array();
 			$ticket_orderby_options = apply_filters('em_tickets_orderby_options', array(
-				'ticket_price DESC, ticket_name ASC'=>__('Ticket Price (Descending)','events-manager'),
-				'ticket_price ASC, ticket_name ASC'=>__('Ticket Price (Ascending)','events-manager'),
-				'ticket_name ASC, ticket_price DESC'=>__('Ticket Name (Ascending)','events-manager'),
-				'ticket_name DESC, ticket_price DESC'=>__('Ticket Name (Descending)','events-manager')
+				'ticket_price DESC, ticket_name ASC'=>__('Ticket Price (Descending)','events'),
+				'ticket_price ASC, ticket_name ASC'=>__('Ticket Price (Ascending)','events'),
+				'ticket_name ASC, ticket_price DESC'=>__('Ticket Name (Ascending)','events'),
+				'ticket_name DESC, ticket_price DESC'=>__('Ticket Name (Descending)','events')
 			));
 			if( array_key_exists($orderby_option, $ticket_orderby_options) ){
 				$order_by[] = $orderby_option;
@@ -133,7 +133,7 @@ class Tickets extends \EM_Object implements \Iterator, \Countable {
 				$bookings = $wpdb->get_var("SELECT COUNT(*) FROM ". EM_TICKETS_BOOKINGS_TABLE." WHERE ticket_id IN (".implode(',',$ticket_ids).")");
 				if( $bookings > 0 ){
 					$result = false;
-					$this->add_error(__('You cannot delete tickets if there are any bookings associated with them. Please delete these bookings first.','events-manager'));
+					$this->add_error(__('You cannot delete tickets if there are any bookings associated with them. Please delete these bookings first.','events'));
 				}else{
 					$result = $wpdb->query("DELETE FROM ".EM_TICKETS_TABLE." WHERE ticket_id IN (".implode(',',$ticket_ids).")");
 				}
@@ -145,7 +145,7 @@ class Tickets extends \EM_Object implements \Iterator, \Countable {
 			$ticket_ids = $wpdb->get_col("SELECT ticket_id FROM ". EM_TICKETS_TABLE." WHERE event_id='$event_id'");
 			if( $bookings > 0 ){
 				$result = false;
-				$this->add_error(__('You cannot delete tickets if there are any bookings associated with them. Please delete these bookings first.','events-manager'));
+				$this->add_error(__('You cannot delete tickets if there are any bookings associated with them. Please delete these bookings first.','events'));
 			}else{
 				$result = $wpdb->query("DELETE FROM ".EM_TICKETS_TABLE." WHERE event_id='$event_id'");
 			}
@@ -189,7 +189,7 @@ class Tickets extends \EM_Object implements \Iterator, \Countable {
 			//we create a blank standard ticket
 			$ticket = new Ticket(array(
 				'event_id' => $this->event_id,
-				'ticket_name' => __('Standard','events-manager')
+				'ticket_name' => __('Standard','events')
 			));
 			$this->tickets[] = $ticket;
 		}
@@ -259,7 +259,7 @@ class Tickets extends \EM_Object implements \Iterator, \Countable {
 	 */
 	function get_ticket_columns($EM_Event = false){
 		if( !$EM_Event ) $EM_Event = $this->get_event();
-		$columns = array( 'type' => __('Ticket Type','events-manager'), 'price' => __('Price','events-manager'), 'spaces' => __('Spaces','events-manager'));
+		$columns = array( 'type' => __('Ticket Type','events'), 'price' => __('Price','events'), 'spaces' => __('Spaces','events'));
 		if( $EM_Event->is_free() ) unset($columns['price']); //add event price
 		return apply_filters('em_booking_form_tickets_cols', $columns, $EM_Event );
 	}

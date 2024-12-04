@@ -21,9 +21,9 @@ const Inspector = ( props ) => {
 
 	return (
 		<InspectorControls>
-			<PanelBody title={ __( 'Data', 'gutenberg-form' ) } initialOpen={ true }>
+			<PanelBody title={ __( 'Data', 'events' ) } initialOpen={ true }>
 				<ToggleControl
-					label={ __( 'Required', 'gutenberg-form' ) }
+					label={ __( 'Required', 'events' ) }
 					checked={ required }
 					disabled={ lockFieldId }
 					onChange={ ( value ) => setAttributes( { required: value } ) }
@@ -31,7 +31,7 @@ const Inspector = ( props ) => {
 
 				<div className="ctx:form__panel-row">
 					<NumberControl
-						label={ __( 'Minimum value', 'gutenberg-form' ) }
+						label={ __( 'Minimum value', 'events' ) }
 						value={ min }
 						onChange={ ( value ) => {
 							if ( placeholder < value ) {
@@ -41,7 +41,7 @@ const Inspector = ( props ) => {
 						} }
 					/>
 					<NumberControl
-						label={ __( 'Maximum value', 'gutenberg-form' ) }
+						label={ __( 'Maximum value', 'events' ) }
 						value={ max }
 						onChange={ ( value ) => {
 							if ( placeholder > value ) {
@@ -52,40 +52,40 @@ const Inspector = ( props ) => {
 					/>
 				</div>
 				<NumberControl
-					label={ __( 'Step', 'gutenberg-form' ) }
+					label={ __( 'Step', 'events' ) }
 					value={ step }
 					max={ max }
 					onChange={ ( value ) => setAttributes( { step: value } ) }
 				/>
 			</PanelBody>
-			<PanelBody title={ __( 'Appearance', 'gutenberg-form' ) } initialOpen={ true }>
+			<PanelBody title={ __( 'Appearance', 'events' ) } initialOpen={ true }>
 				<div className="styleSelector">
 					<Button onClick={ () => setAttributes( { range: false } ) } className={ range ? '' : 'active' }>
 						<Icon size="40" className="icon" icon={ icons.number } />
-						<span>{ __( 'Input', 'gutenberg-form' ) }</span>
+						<span>{ __( 'Input', 'events' ) }</span>
 					</Button>
 					<Button onClick={ () => setAttributes( { range: true } ) } className={ range ? 'active' : '' }>
 						<Icon size="40" className="icon" icon={ icons.range } />
 
-						<span>{ __( 'Range', 'gutenberg-form' ) }</span>
+						<span>{ __( 'Range', 'events' ) }</span>
 					</Button>
 				</div>
 
 				<CheckboxControl
-					label={ __( 'Show labels', 'gutenberg-form' ) }
+					label={ __( 'Show labels', 'events' ) }
 					checked={ hasLabels }
 					onChange={ ( value ) => setAttributes( { hasLabels: value } ) }
 				/>
 
 				<CheckboxControl
-					label={ __( 'Show ticks', 'gutenberg-form' ) }
+					label={ __( 'Show ticks', 'events' ) }
 					checked={ hasTicks }
 					onChange={ ( value ) => setAttributes( { hasTicks: value } ) }
 				/>
 
 				<RangeControl
-					label={ __( 'Width', 'gutenberg-form' ) }
-					help={ __( 'Number of columns the input field will occupy', 'gutenberg-form' ) }
+					label={ __( 'Width', 'events' ) }
+					help={ __( 'Number of columns the input field will occupy', 'events' ) }
 					value={ width }
 					max={ 6 }
 					min={ 1 }

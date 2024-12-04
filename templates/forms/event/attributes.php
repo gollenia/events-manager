@@ -40,7 +40,7 @@ $has_deprecated = false;
 				}
 				if($count == 1){
 					?>
-					<tr><td colspan="2"><?php echo sprintf(__("You don't have any custom attributes defined in any of your Events Manager template settings. Please add them the <a href='%s'>settings page</a>",'events-manager'),EM_ADMIN_URL ."&amp;page=events-manager-options"); ?></td></tr>
+					<tr><td colspan="2"><?php echo sprintf(__("You don't have any custom attributes defined in any of your Events Manager template settings. Please add them the <a href='%s'>settings page</a>",'events'),EM_ADMIN_URL ."&amp;page=events-options"); ?></td></tr>
 					<?php
 				}
 				?>
@@ -48,7 +48,7 @@ $has_deprecated = false;
 		</table>
 	<?php else : ?>
 		<p>
-		<?php _e('In order to use attributes, you must define some in your templates, otherwise they\'ll never show. Go to Events > Settings > General to add attribute placeholders.', 'events-manager'); ?>
+		<?php _e('In order to use attributes, you must define some in your templates, otherwise they\'ll never show. Go to Events > Settings > General to add attribute placeholders.', 'events'); ?>
 		</p> 
 		<script>
 			jQuery(document).ready(function($){ $('#event_attributes').addClass('closed'); });

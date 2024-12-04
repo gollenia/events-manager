@@ -24,13 +24,10 @@ const sendOrder = ( state, dispatch ) => {
 	}, 10000 );
 
 	let fetchRequest = {
-		registration: request.registration,
+		...request,
 		_wpnonce: data._nonce,
-		gateway: request.gateway,
-		action: 'booking_add',
 		event_id: data.event.event_id,
 		attendees: {},
-		coupon: request.coupon,
 	};
 
 	for ( const id of Object.keys( data.available_tickets ) ) {
@@ -40,8 +37,6 @@ const sendOrder = ( state, dispatch ) => {
 	request.tickets.map( ( ticket ) => {
 		fetchRequest.attendees[ ticket.id ].push( ticket.fields );
 	} );
-
-	console.log( 'fetchRequest', fetchRequest );
 
 	fetch( `/wp-json/events/v2/booking/${ data.event.event_id }`, {
 		method: 'POST',
@@ -57,8 +52,8 @@ const sendOrder = ( state, dispatch ) => {
 		.then( ( response ) => {
 			console.log( 'response', response );
 			dispatch( { type: 'BOOKING_RESPONSE', payload: { state: STATES.SUCCESS, response } } );
-			if ( response.gateway_url ) {
-				window.location.replace( response.gateway_url );
+			if ( response.gateway.url ) {
+				window.location.replace( response.gateway.url );
 			}
 		} )
 		.catch( ( error ) => {

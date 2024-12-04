@@ -18,15 +18,15 @@ class EM_Data_Privacy {
 
 		$content = array();
 		$content[] = sprintf(
-			__('We use Google services to generate maps and provide autocompletion when searching for events by location, which may collect data via your browser in accordance to Google\'s <a href="%s">privacy policy</a>.', 'events-manager' ),
+			__('We use Google services to generate maps and provide autocompletion when searching for events by location, which may collect data via your browser in accordance to Google\'s <a href="%s">privacy policy</a>.', 'events' ),
 			'https://policies.google.com/privacy'
 		);
-		$content[] = __('We collect and store information you submit to us when making a booking, for the purpose of reserving your requested spaces at our event and maintaining a record of attendance.', 'events-manager' );
-		$content[] = __('We collect and store information you submit to us about events (and corresponding locations) you would like to publish on our site.', 'events-manager' );
-		$content[] = __('We may use cookies to temporarily store information about a booking in progress as well as any error/confirmation messages whilst submitting or managing your events and locations.', 'events-manager' );
+		$content[] = __('We collect and store information you submit to us when making a booking, for the purpose of reserving your requested spaces at our event and maintaining a record of attendance.', 'events' );
+		$content[] = __('We collect and store information you submit to us about events (and corresponding locations) you would like to publish on our site.', 'events' );
+		$content[] = __('We may use cookies to temporarily store information about a booking in progress as well as any error/confirmation messages whilst submitting or managing your events and locations.', 'events' );
 
 		wp_add_privacy_policy_content(
-			__('Events Manager', 'events-manager'),
+			__('Events Manager', 'events'),
 			wp_kses_post( '<p>'. implode('</p><p>', $content) .'</p>' )
 		);
 	}

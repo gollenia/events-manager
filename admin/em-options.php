@@ -8,7 +8,7 @@ function em_options_save(){
 	 * since options are only updated here, its one place fit all
 	 */
 
-	if( current_user_can('manage_options') && !empty($_POST['em-submitted']) && check_admin_referer('events-manager-options','_wpnonce') ){
+	if( current_user_can('manage_options') && !empty($_POST['em-submitted']) && check_admin_referer('events-options','_wpnonce') ){
 		//Build the array of options here
 		
 		foreach ($_POST as $postKey => $postValue){
@@ -28,24 +28,10 @@ function em_options_save(){
 			
 		}
 		//set capabilities
-		if( !empty($_POST['em_capabilities']) && is_array($_POST['em_capabilities']) ){
-			global $em_capabilities_array, $wp_roles;
-			if( !is_network_admin() ){
-			    //normal blog role application
-				foreach( $wp_roles->role_objects as $role_name => $role ){
-					foreach( array_keys($em_capabilities_array) as $capability){
-						if( !empty($_POST['em_capabilities'][$role_name][$capability]) ){
-							$role->add_cap($capability);
-						}else{
-							$role->remove_cap($capability);
-						}
-					}
-				}
-			}
-		}
+		
 		update_option('dbem_flush_needed',1);
 		do_action('em_options_save');
-		$EM_Notices->add_confirm('<strong>'.__('Changes saved.', 'events-manager').'</strong>', true);
+		$EM_Notices->add_confirm('<strong>'.__('Changes saved.', 'events').'</strong>', true);
 		$referrer = wp_validate_redirect(wp_get_raw_referer(), false );
 		//add tab hash path to url if supplied
 		if( !empty($_REQUEST['tab_path']) ){
@@ -78,14 +64,14 @@ function em_admin_options_page() {
 	
 	<style type="text/css">.postbox h3 { cursor:pointer; }</style>
 	<div class="em-tabs wrap <?php if(empty($tabs_enabled)) echo 'tabs-active' ?>">
-		<h1 id="em-options-title"><?php _e ( 'Event Manager Options', 'events-manager'); ?></h1>
+		<h1 id="em-options-title"><?php _e ( 'Event Manager Options', 'events'); ?></h1>
 		<h2 class="nav-tab-wrapper">
-			<a href="<?php echo $general_tab_link; ?>#general" id="em-menu-general" class="nav-tab nav-tab-active"><?php _e('General','events-manager'); ?></a>
+			<a href="<?php echo $general_tab_link; ?>#general" id="em-menu-general" class="nav-tab nav-tab-active"><?php _e('General','events'); ?></a>
 			
 			<?php if( get_option('dbem_rsvp_enabled') ): ?>
-			<a href="<?php echo $bookings_tab_link; ?>#bookings" id="em-menu-bookings" class="nav-tab"><?php _e('Bookings','events-manager'); ?></a>
+			<a href="<?php echo $bookings_tab_link; ?>#bookings" id="em-menu-bookings" class="nav-tab"><?php _e('Bookings','events'); ?></a>
 			<?php endif; ?>
-			<a href="<?php echo $emails_tab_link; ?>#emails" id="em-menu-emails" class="nav-tab"><?php _e('Emails','events-manager'); ?></a>
+			<a href="<?php echo $emails_tab_link; ?>#emails" id="em-menu-emails" class="nav-tab"><?php _e('Emails','events'); ?></a>
 			<?php
 			$custom_tabs = apply_filters('em_options_page_tabs', array());
 			foreach( $custom_tabs as $tab_key => $tab_name ){
@@ -137,9 +123,9 @@ function em_admin_options_page() {
 			
 			
 			<p class="submit">
-				<input type="submit" class="button-primary" name="Submit" value="<?php esc_attr_e( 'Save Changes', 'events-manager'); ?>" />
+				<input type="submit" class="button-primary" name="Submit" value="<?php esc_attr_e( 'Save Changes', 'events'); ?>" />
 				<input type="hidden" name="em-submitted" value="1" />
-				<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce('events-manager-options'); ?>" />
+				<input type="hidden" name="_wpnonce" value="<?php echo wp_create_nonce('events-options'); ?>" />
 			</p>  
 			
 			</div> <!-- .metabox-sortables -->

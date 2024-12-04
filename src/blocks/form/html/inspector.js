@@ -10,10 +10,10 @@ const Inspector = ( props ) => {
 
 	return (
 		<InspectorControls>
-			<PanelBody title={ __( 'Appearance', 'events-manager' ) } initialOpen={ true }>
+			<PanelBody title={ __( 'Appearance', 'events' ) } initialOpen={ true }>
 				<RangeControl
-					label={ __( 'Width', 'events-manager' ) }
-					help={ __( 'Number of columns the input field will occupy', 'events-manager' ) }
+					label={ __( 'Width', 'events' ) }
+					help={ __( 'Number of columns the input field will occupy', 'events' ) }
 					value={ width }
 					max={ 4 }
 					min={ 1 }

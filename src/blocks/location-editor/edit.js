@@ -50,7 +50,7 @@ const edit = ( props ) => {
 		} );
 		items.unshift( {
 			value: '',
-			label: __( 'Select Country', 'events-manager' ),
+			label: __( 'Select Country', 'events' ),
 		} );
 		setCountries( items );
 	};
@@ -101,7 +101,7 @@ const edit = ( props ) => {
 		<div>
 			<div className="location-edit__admin">
 				<TextControl
-					label={ __( 'Address', 'events-manager' ) }
+					label={ __( 'Address', 'events' ) }
 					value={ meta._location_address }
 					onBlur={ ( value ) => {
 						getGeoPosition();
@@ -116,7 +116,7 @@ const edit = ( props ) => {
 				<Flex>
 					<FlexItem isBlock>
 						<TextControl
-							label={ __( 'ZIP Code', 'events-manager' ) }
+							label={ __( 'ZIP Code', 'events' ) }
 							value={ meta._location_postcode }
 							onBlur={ ( value ) => {
 								getGeoPosition();
@@ -131,7 +131,7 @@ const edit = ( props ) => {
 					</FlexItem>
 					<FlexItem isBlock>
 						<TextControl
-							label={ __( 'City', 'events-manager' ) }
+							label={ __( 'City', 'events' ) }
 							value={ meta._location_town }
 							onBlur={ ( value ) => {
 								getGeoPosition();
@@ -147,7 +147,7 @@ const edit = ( props ) => {
 				</Flex>
 
 				<SelectControl
-					label={ __( 'Country', 'events-manager' ) }
+					label={ __( 'Country', 'events' ) }
 					value={ meta._location_country }
 					options={ countries }
 					onBlur={ ( value ) => {
@@ -162,7 +162,7 @@ const edit = ( props ) => {
 				/>
 
 				<TextControl
-					label={ __( 'State', 'events-manager' ) }
+					label={ __( 'State', 'events' ) }
 					value={ meta._location_state }
 					onChange={ ( value ) => {
 						setMeta( {
@@ -173,7 +173,7 @@ const edit = ( props ) => {
 				/>
 
 				<TextControl
-					label={ __( 'URL', 'events-manager' ) }
+					label={ __( 'URL', 'events' ) }
 					value={ meta._location_url }
 					onChange={ ( value ) => {
 						setMeta( {

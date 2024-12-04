@@ -41,21 +41,21 @@ const Inspector = ( props ) => {
 	} = props;
 
 	const locationViewOptions = [
-		{ value: '', label: __( '', 'events-manager' ) },
-		{ value: 'city', label: __( 'City', 'events-manager' ) },
-		{ value: 'name', label: __( 'Name', 'events-manager' ) },
+		{ value: '', label: __( '', 'events' ) },
+		{ value: 'city', label: __( 'City', 'events' ) },
+		{ value: 'name', label: __( 'Name', 'events' ) },
 	];
 
 	const orderListViewOptions = [
-		{ value: 'ASC', label: __( 'Ascending', 'events-manager' ) },
-		{ value: 'DESC', label: __( 'Descending', 'events-manager' ) },
+		{ value: 'ASC', label: __( 'Ascending', 'events' ) },
+		{ value: 'DESC', label: __( 'Descending', 'events' ) },
 	];
 
 	return (
 		<InspectorControls>
-			<PanelBody title={ __( 'Data', 'events-manager' ) } initialOpen={ true }>
+			<PanelBody title={ __( 'Data', 'events' ) } initialOpen={ true }>
 				<SelectControl
-					label={ __( 'Category', 'events-manager' ) }
+					label={ __( 'Category', 'events' ) }
 					value={ selectedCategory }
 					options={ categoryList }
 					onChange={ ( value ) => {
@@ -63,7 +63,7 @@ const Inspector = ( props ) => {
 					} }
 				/>
 				<FormTokenField
-					label={ __( 'Tags', 'events-manager' ) }
+					label={ __( 'Tags', 'events' ) }
 					value={ tagsFieldValue }
 					suggestions={ tagNames }
 					onChange={ ( selectedTags ) => {
@@ -83,7 +83,7 @@ const Inspector = ( props ) => {
 				/>
 
 				<SelectControl
-					label={ __( 'Location', 'events-manager' ) }
+					label={ __( 'Location', 'events' ) }
 					value={ selectedLocation }
 					options={ locationList }
 					onChange={ ( value ) => {
@@ -92,10 +92,10 @@ const Inspector = ( props ) => {
 				/>
 			</PanelBody>
 
-			<PanelBody title={ __( 'Appearance', 'events-manager' ) } initialOpen={ true }>
+			<PanelBody title={ __( 'Appearance', 'events' ) } initialOpen={ true }>
 				<PanelRow>
 					<ToggleControl
-						label={ __( 'Drop shadow', 'events-manager' ) }
+						label={ __( 'Drop shadow', 'events' ) }
 						checked={ dropShadow }
 						onChange={ ( value ) => setAttributes( { dropShadow: value } ) }
 					/>
@@ -103,7 +103,7 @@ const Inspector = ( props ) => {
 
 				<PanelRow>
 					<SelectControl
-						label={ __( 'Location', 'events-manager' ) }
+						label={ __( 'Location', 'events' ) }
 						value={ showLocation }
 						options={ locationViewOptions }
 						onChange={ ( value ) => {
@@ -112,10 +112,10 @@ const Inspector = ( props ) => {
 					/>
 				</PanelRow>
 				<RangeControl
-					label={ __( 'Length of preview text', 'events-manager' ) }
+					label={ __( 'Length of preview text', 'events' ) }
 					max={ 200 }
 					min={ 0 }
-					help={ __( 'Number of words', 'events-manager' ) }
+					help={ __( 'Number of words', 'events' ) }
 					onChange={ ( value ) => {
 						setAttributes( { excerptLength: value } );
 					} }
@@ -123,14 +123,14 @@ const Inspector = ( props ) => {
 				/>
 				<PanelRow>
 					<CheckboxControl
-						label={ __( 'Show Audience', 'events-manager' ) }
+						label={ __( 'Show Audience', 'events' ) }
 						checked={ showAudience }
 						onChange={ ( value ) => setAttributes( { showAudience: value } ) }
 					/>
 				</PanelRow>
 				<PanelRow>
 					<CheckboxControl
-						label={ __( 'Show Speaker', 'events-manager' ) }
+						label={ __( 'Show Speaker', 'events' ) }
 						checked={ showSpeaker }
 						onChange={ ( value ) => setAttributes( { showSpeaker: value } ) }
 					/>
@@ -138,7 +138,7 @@ const Inspector = ( props ) => {
 
 				<PanelRow>
 					<CheckboxControl
-						label={ __( 'Show category', 'events-manager' ) }
+						label={ __( 'Show category', 'events' ) }
 						checked={ showCategory }
 						onChange={ ( value ) => setAttributes( { showCategory: value } ) }
 					/>

@@ -51,7 +51,7 @@ class EM_Taxonomy_Admin {
 
 	public static function columns_add($columns) {
 		//prepend ID after checkbox
-	    $columns['term-id'] = __('ID','events-manager');
+	    $columns['term-id'] = __('ID','events');
 	    return $columns;
 	}
 	
@@ -73,10 +73,10 @@ class EM_Taxonomy_Admin {
 		$taxonomy_color = $EM_Taxonomy->get_color();
 		?>
 	    <tr class="form-field term-color-wrap">
-	        <th scope="row" valign="top"><label for="term-color"><?php esc_html_e('Color','events-manager'); ?></label></th>
+	        <th scope="row" valign="top"><label for="term-color"><?php esc_html_e('Color','events'); ?></label></th>
 	        <td>
 	            <input type="color" name="term_color" id="term-color" class="term-color" value="<?php echo esc_attr($taxonomy_color); ?>" /><br />
-	            <p class="description"><?php echo sprintf(__('Choose a color for your %s. You can access this using the %s placeholder.','events-manager'), __(self::$name_singular, 'events-manager'), '<code>'. self::$placeholder_color. '</code>'); ?></p>
+	            <p class="description"><?php echo sprintf(__('Choose a color for your %s. You can access this using the %s placeholder.','events'), __(self::$name_singular, 'events'), '<code>'. self::$placeholder_color. '</code>'); ?></p>
 	            <div id="picker" style="position:absolute; display:none; background:#DEDEDE"></div>
 	        </td>
 	    </tr>
@@ -87,9 +87,9 @@ class EM_Taxonomy_Admin {
 	public static function form_add(){
 		?>
 	    <div class="term-color-wrap">
-	        <label for="term-color"><?php esc_html_e('Color','events-manager'); ?></label>
+	        <label for="term-color"><?php esc_html_e('Color','events'); ?></label>
             <input type="color" name="term_color" id="term-color" class="term-color" value="#FFFFFF" /><br />
-            <p class="description"><?php echo sprintf(__('Choose a color for your %s. You can access this using the %s placeholder.','events-manager'), __(self::$name_singular,'events-manager'),'<code>'. self::$placeholder_color. '</code>'); ?></p>
+            <p class="description"><?php echo sprintf(__('Choose a color for your %s. You can access this using the %s placeholder.','events'), __(self::$name_singular,'events'),'<code>'. self::$placeholder_color. '</code>'); ?></p>
 	    </div>
 	    <?php
 	}

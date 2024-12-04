@@ -25,9 +25,9 @@ const Inspector = ( props ) => {
 				<SetExtras { ...props } meta={ meta } setMeta={ setMeta } />
 			</InspectorControls>
 			<InspectorControls group="styles">
-				<PanelBody title={ __( 'Button Settings', 'events-manager' ) } initialOpen={ true }>
+				<PanelBody title={ __( 'Button Settings', 'events' ) } initialOpen={ true }>
 					<TextControl
-						label={ __( 'Button Icon', 'events-manager' ) }
+						label={ __( 'Button Icon', 'events' ) }
 						value={ buttonIcon }
 						onChange={ ( value ) => {
 							setAttributes( { buttonIcon: value } );

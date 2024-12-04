@@ -45,15 +45,13 @@ function EventCards( props ) {
 					if ( item.bookings?.spaces > 0 ) {
 						return (
 							<span className="event-card-pill event-card-pill-warning">
-								{ __( 'Nearly Booked up', 'events-manager' ) }
+								{ __( 'Nearly Booked up', 'events' ) }
 							</span>
 						);
 					}
 
 					return (
-						<span className="event-card-pill event-card-pill-error">
-							{ __( 'Booked up', 'events-manager' ) }
-						</span>
+						<span className="event-card-pill event-card-pill-error">{ __( 'Booked up', 'events' ) }</span>
 					);
 				};
 

@@ -136,7 +136,7 @@ class EM_Bookings extends EM_Object implements Iterator {
 			}
 			if(!$emailSent){
 				$EM_Booking->email_not_sent = true;
-				$this->feedback_message .= ' '.__('However, there were some problems whilst sending confirmation emails to you and/or the event contact person. You may want to contact them directly and letting them know of this error.', 'events-manager');
+				$this->feedback_message .= ' '.__('However, there were some problems whilst sending confirmation emails to you and/or the event contact person. You may want to contact them directly and letting them know of this error.', 'events');
 				if( current_user_can('activate_plugins') ){
 					if( count($EM_Booking->get_errors()) > 0 ){
 						$this->feedback_message .= '<br/><strong>Errors:</strong> (only admins see this message)<br/><ul><li>'. implode('</li><li>', $EM_Booking->get_errors()).'</li></ul>';
@@ -148,7 +148,7 @@ class EM_Bookings extends EM_Object implements Iterator {
 			return apply_filters('em_bookings_add', true, $EM_Booking);
 		}else{
 			//Failure
-			$this->errors[] = "<strong>".__('Booking could not be created','events-manager')."</strong><br />". implode('<br />', $EM_Booking->errors);
+			$this->errors[] = "<strong>".__('Booking could not be created','events')."</strong><br />". implode('<br />', $EM_Booking->errors);
 		}
 		return apply_filters('em_bookings_add', false, $EM_Booking);
 	}
@@ -239,7 +239,7 @@ class EM_Bookings extends EM_Object implements Iterator {
 	function has_open_time(){
 	    $return = false;
 	    $EM_Event = $this->get_event();
-	    if( $EM_Event->rsvp_end()->getTimestamp() > time() && $EM_Event->rsvp_start()->getTimestamp() < time() ){
+	    if( $EM_Event->rsvp_end()->getTimestamp() > time() && $EM_Event->event_rsvp_start()->getTimestamp() < time() ){
 	    	$return = true;
 	    }
 	    return $return;
@@ -329,17 +329,17 @@ class EM_Bookings extends EM_Object implements Iterator {
 			foreach( $booking_ids as $booking_id ){
 				$EM_Booking = EM_Booking::find($booking_id);
 				if( !$EM_Booking->can_manage() ){
-					$this->feedback_message = __('Bookings %s. Mails Sent.', 'events-manager');
+					$this->feedback_message = __('Bookings %s. Mails Sent.', 'events');
 					return false;
 				}
 				$results[] = $EM_Booking->set_status($status, $send_email, $ignore_spaces);
 			}
 			if( !in_array('false',$results) ){
-				$this->feedback_message = __('Bookings %s. Mails Sent.', 'events-manager');
+				$this->feedback_message = __('Bookings %s. Mails Sent.', 'events');
 				return true;
 			}else{
 				//TODO Better error handling needed if some bookings fail approval/failure
-				$this->feedback_message = __('An error occurred.', 'events-manager');
+				$this->feedback_message = __('An error occurred.', 'events');
 				return false;
 			}
 		}elseif( is_numeric($booking_ids) || is_object($booking_ids) ){
@@ -628,7 +628,7 @@ class EM_Bookings extends EM_Object implements Iterator {
 	}
 	
 	/* Overrides EM_Object method to apply a filter to result
-	 * @see wp-content/plugins/events-manager/classes/EM_Object#build_sql_conditions()
+	 * @see wp-content/plugins/events/classes/EM_Object#build_sql_conditions()
 	 */
 	public static function build_sql_conditions( $args = array() ){
 		$conditions = apply_filters( 'em_bookings_build_sql_conditions', parent::build_sql_conditions($args), $args );
@@ -655,7 +655,7 @@ class EM_Bookings extends EM_Object implements Iterator {
 	}
 	
 	/* Overrides EM_Object method to apply a filter to result
-	 * @see wp-content/plugins/events-manager/classes/EM_Object#build_sql_orderby()
+	 * @see wp-content/plugins/events/classes/EM_Object#build_sql_orderby()
 	 */
 	public static function build_sql_orderby( $args, $accepted_fields, $default_order = 'ASC' ){
 		return apply_filters( 'em_bookings_build_sql_orderby', parent::build_sql_orderby($args, $accepted_fields, get_option('dbem_bookings_default_order','booking_date')), $args, $accepted_fields, $default_order );
@@ -714,39 +714,37 @@ class EM_Bookings extends EM_Object implements Iterator {
 	//Iterator Implementation - if we iterate this object, we automatically invoke the load() function first
 	//and load up all bookings to go through from the database.
 	#[\ReturnTypeWillChange]
-    public function rewind() {
+    public function rewind() : void {
     	$this->load();
         reset($this->bookings);
-		
     }  
 
 	#[\ReturnTypeWillChange]
-    public function current(){
+    public function current() : mixed {
     	$this->load();
         $var = current($this->bookings);
         return $var;
     }  
 
 	#[\ReturnTypeWillChange]
-    public function key(){
+    public function key() : mixed{
     	$this->load();
         $var = key($this->bookings);
         return $var;
     }  
 
 	#[\ReturnTypeWillChange]
-    public function next(){
+    public function next() : mixed {
     	$this->load();
         $var = next($this->bookings);
         return $var;
     }  
 
 	#[\ReturnTypeWillChange]
-    public function valid(){
+    public function valid() : bool {
     	$this->load();
         $key = key($this->bookings);
-        $var = ($key !== NULL && $key !== FALSE);
-        return $var;
+        return ($key !== NULL && $key !== FALSE);
     }
 }
 ?>

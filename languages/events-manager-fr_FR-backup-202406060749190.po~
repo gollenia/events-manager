@@ -507,15 +507,15 @@ msgstr "Surcharges (après taxes)"
 msgid "Surcharges Before Taxes"
 msgstr "Surcharges avant taxes"
 
-#: events-manager.php:401 templates/forms/event/bookings.php:36
+#: events.php:401 templates/forms/event/bookings.php:36
 msgid "Modifications to event tickets will cause all bookings to individual recurrences of this event to be deleted."
 msgstr "Les modifications des billets d'événements entraineront la suppression de toutes les réservations d'événements individuels de cet événement."
 
-#: events-manager.php:396
+#: events.php:396
 msgid "Modifications to event times will cause all recurrences of this event to be deleted and recreated, previous bookings will be deleted."
 msgstr "Les modifications des horaires d'événements entraineront la suppression de toutes les récurrences de cet événement et la récréation de toutes les réservations précédentes."
 
-#: events-manager.php:395 events-manager.php:397 events-manager.php:400
+#: events.php:395 events.php:397 events.php:400
 msgid "Are you sure you want to continue?"
 msgstr "Êtes-vous sûr de vouloir continuer ?"
 
@@ -534,12 +534,12 @@ msgid "You can edit individual recurrences and disassociate them with this recur
 msgstr "Vous pouvez modifier les récurrences individuelles et dissocier les récurrences avec cet événement récurrent."
 
 #: classes/em-event-post-admin.php:40 classes/em-event-posts-admin.php:324
-#: events-manager.php:399
+#: events.php:399
 msgid "Bookings to individual event recurrences will be preserved if event times and ticket settings are not modified."
 msgstr "Les réservations d'événements individuels seront conservées si les horaires et les paramètres de billets ne sont pas modifiés."
 
 #: classes/em-event-post-admin.php:39 classes/em-event-posts-admin.php:323
-#: events-manager.php:398
+#: events.php:398
 msgid "Modifications to recurring events will be applied to all recurrences and will overwrite any changes made to those individual event recurrences."
 msgstr "Les modifications des événements récurrents seront appliquées à toutes les récurrences et écraseront toutes les modifications faites aux récurrences individuelles."
 
@@ -1306,97 +1306,97 @@ msgstr "C'est un événement traduit, donc votre horaire, lieu et informations d
 msgid "Translated Event Information"
 msgstr "Informations sur l'événement traduit"
 
-#: events-manager.php:464
+#: events.php:464
 msgid "You do not have permission to upload images"
 msgstr "Vous n'avez pas la permission d'envoyer des images"
 
-#: events-manager.php:458
+#: events.php:458
 msgid "You cannot view others %s"
 msgstr "Vous ne pouvez pas voir les autres %s"
 
-#: events-manager.php:443 events-manager.php:457
+#: events.php:443 events.php:457
 msgid "You cannot read private %s"
 msgstr "Vous ne pouvez pas lire les %s privés"
 
-#: events-manager.php:442 events-manager.php:450 events-manager.php:456
-#: events-manager.php:462
+#: events.php:442 events.php:450 events.php:456
+#: events.php:462
 msgid "You do not have permission to edit %s"
 msgstr "Vous n'avez pas la permission de modifier %s"
 
-#: events-manager.php:441 events-manager.php:449 events-manager.php:455
+#: events.php:441 events.php:449 events.php:455
 msgid "You do not have permission to edit others %s"
 msgstr "Vous n'avez pas la permission de modifier les autres %s"
 
-#: events-manager.php:440 events-manager.php:448 events-manager.php:454
-#: events-manager.php:461
+#: events.php:440 events.php:448 events.php:454
+#: events.php:461
 msgid "You do not have permission to delete %s"
 msgstr "Vous n'avez pas la permission de supprimer %s"
 
-#: events-manager.php:439 events-manager.php:447 events-manager.php:453
+#: events.php:439 events.php:447 events.php:453
 msgid "You do not have permission to delete others %s"
 msgstr "Vous n'avez pas la permission de supprimer les autres %s"
 
-#: events-manager.php:438 events-manager.php:446 events-manager.php:452
+#: events.php:438 events.php:446 events.php:452
 msgid "You do not have permission to publish %s"
 msgstr "Vous n'avez pas la permission de publier %s"
 
-#: events-manager.php:436
+#: events.php:436
 msgid "You do not have permission to manage %s"
 msgstr "Vous n'avez pas la permission de gérer %s"
 
-#: events-manager.php:435
+#: events.php:435
 msgid "You do not have permission to manage others %s"
 msgstr "Vous n'avez pas la permission de gérer les autres %s"
 
-#: events-manager.php:418
+#: events.php:418
 msgid "Expand All"
 msgstr "Tout développer"
 
-#: events-manager.php:417
+#: events.php:417
 msgid "Collapse All"
 msgstr "Tout réduire"
 
-#: events-manager.php:408
+#: events.php:408
 msgid "Are you sure you want to disable bookings? If you do this and save, you will lose all previous bookings. If you wish to prevent further bookings, reduce the number of spaces available to the amount of bookings you currently have"
 msgstr "Êtes-vous sûr de vouloir désactiver les réservations ? Si vous faites cela et enregistrez, vous allez perdre toutes les réservations précédentes. Si vous souhaitez empêcher d'autres réservations, réduisez le nombre de places disponibles à la quantité de réservations que vous avez actuellement"
 
-#: events-manager.php:405
+#: events.php:405
 msgid "Are you sure you want to delete all recurrences of this event?"
 msgstr "Êtes-vous sûr de vouloir supprimer toutes les occurrences de cet événement ?"
 
-#: events-manager.php:404
+#: events.php:404
 msgid "All events will be moved to trash."
 msgstr "Tous les événements seront déplacés dans la corbeille."
 
-#: events-manager.php:404
+#: events.php:404
 msgid "This cannot be undone."
 msgstr "Ceci ne peut pas être annulé."
 
-#: events-manager.php:403
+#: events.php:403
 msgid "Are you sure you want to detach this event? By doing so, this event will be independent of the recurring set of events."
 msgstr "Êtes-vous sûr de vouloir détacher cet événement ? En le faisant, cet événement sera indépendant du jeu de répétitions d'événements."
 
-#: events-manager.php:389
+#: events.php:389
 msgid "Loading..."
 msgstr "Chargement..."
 
-#: events-manager.php:388
+#: events.php:388
 msgid "Searching..."
 msgstr "Recherche..."
 
-#: events-manager.php:373
+#: events.php:373
 msgid "Are you sure you want to delete?"
 msgstr "Êtes-vous sûr de vouloir supprimer ?"
 
-#: events-manager.php:372
+#: events.php:372
 msgid "Save Settings"
 msgstr "Enregistrer les paramètres"
 
-#: events-manager.php:369
+#: events.php:369
 msgid "Save Ticket"
 msgstr "Enregistrer le billet"
 
-#: events-manager.php:368
+#: events.php:368
 msgid "Please wait while the booking is being submitted."
 msgstr "Veuillez patienter pendant que la réservation est en cours d'enregistrement."
 
@@ -2504,7 +2504,7 @@ msgstr "Séparer les réservations par type de billet"
 msgid "Select the options below and export all the bookings you have currently filtered (all pages) into a CSV spreadsheet format."
 msgstr "Sélectionnez les options ci-dessous et exportez toutes les réservations que vous avez actuellement filtrées (toutes les pages) dans un format de feuille de calcul CSV."
 
-#: classes/em-bookings-table.php:284 events-manager.php:371
+#: classes/em-bookings-table.php:284 events.php:371
 msgid "Export Bookings"
 msgstr "Exporter les réservations"
 
@@ -2863,8 +2863,8 @@ msgstr "Date de réservation"
 msgid "Start Date"
 msgstr "Date de début"
 
-#: admin/settings/tabs/pages.php:650 events-manager.php:435
-#: events-manager.php:436
+#: admin/settings/tabs/pages.php:650 events.php:435
+#: events.php:436
 msgid "bookings"
 msgstr "réservations"
 
@@ -3622,7 +3622,7 @@ msgstr "Le format d'un titre de page d'une catégorie."
 #: admin/settings/tabs/pages.php:373 admin/settings/tabs/pages.php:374
 #: admin/settings/tabs/pages.php:383 admin/settings/tabs/pages.php:389
 #: admin/settings/tabs/pages.php:393 admin/settings/tabs/pages.php:459
-#: events-manager.php:461 events-manager.php:462
+#: events.php:461 events.php:462
 msgid "categories"
 msgstr "catégories"
 
@@ -5122,9 +5122,9 @@ msgid "User can use other user locations for their events."
 msgstr "L'utilisateur peut utiliser les emplacements d'autres utilisateurs pour ses événements."
 
 #: admin/em-options.php:695 admin/em-options.php:696 admin/em-options.php:697
-#: admin/em-options.php:698 admin/em-options.php:699 events-manager.php:446
-#: events-manager.php:447 events-manager.php:448 events-manager.php:449
-#: events-manager.php:450
+#: admin/em-options.php:698 admin/em-options.php:699 events.php:446
+#: events.php:447 events.php:448 events.php:449
+#: events.php:450
 msgid "recurring events"
 msgstr "événements récurrents"
 
@@ -5444,9 +5444,9 @@ msgstr "Si vous préférez que tous vos lieux appartiennent à votre blog princi
 #: admin/settings/tabs/pages.php:310 admin/settings/tabs/pages.php:311
 #: admin/settings/tabs/pages.php:312 admin/settings/tabs/pages.php:355
 #: admin/settings/tabs/pages.php:706 classes/em-location.php:552
-#: events-manager.php:452 events-manager.php:453 events-manager.php:454
-#: events-manager.php:455 events-manager.php:456 events-manager.php:457
-#: events-manager.php:458
+#: events.php:452 events.php:453 events.php:454
+#: events.php:455 events.php:456 events.php:457
+#: events.php:458
 msgid "locations"
 msgstr "lieux"
 
@@ -5493,8 +5493,8 @@ msgstr "Lier le %s de sous-site directement au sous-site ?"
 #: admin/settings/tabs/pages.php:75 admin/settings/tabs/pages.php:76
 #: admin/settings/tabs/pages.php:130 admin/settings/tabs/pages.php:131
 #: admin/settings/tabs/pages.php:133 admin/settings/tabs/pages.php:698
-#: events-manager.php:438 events-manager.php:439 events-manager.php:440
-#: events-manager.php:441 events-manager.php:442 events-manager.php:443
+#: events.php:438 events.php:439 events.php:440
+#: events.php:441 events.php:442 events.php:443
 msgid "events"
 msgstr "événements"
 
@@ -5950,7 +5950,7 @@ msgstr "Mettre à jour les blogs"
 #: admin/em-data-privacy.php:184 admin/em-data-privacy.php:189
 #: admin/em-data-privacy.php:195 admin/em-data-privacy.php:199
 #: admin/em-data-privacy.php:205 classes/em-people.php:41 em-install.php:1057
-#: em-install.php:1079 events-manager.php:752
+#: em-install.php:1079 events.php:752
 msgid "Events Manager"
 msgstr "Events Manager"
 
@@ -6197,7 +6197,7 @@ msgstr "Actions groupées"
 #: admin/bookings/em-person.php:40 admin/bookings/em-person.php:42
 #: admin/bookings/em-rejected.php:38 admin/bookings/em-rejected.php:40
 #: admin/settings/tabs/formats.php:56 em-install.php:408 em-install.php:414
-#: events-manager.php:387 templates/templates/events-search.php:28
+#: events.php:387 templates/templates/events-search.php:28
 msgid "Search"
 msgstr "Rechercher"
 

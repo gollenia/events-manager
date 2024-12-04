@@ -12,11 +12,11 @@ class Countries {
 		global $em_countries_array;
 		if( !is_array($em_countries_array) ){
 			$em_countries_array = array (
-				'AT' => __('Austria', 'events-manager'), 
-				'DE' => __('Germany', 'events-manager'), 
-				'CH' => __('Switzerland', 'events-manager'), 
-				'FR' => __('France', 'events-manager'), 
-				'NL' => __('Netherlands', 'events-manager') 
+				'AT' => __('Austria', 'events'), 
+				'DE' => __('Germany', 'events'), 
+				'CH' => __('Switzerland', 'events'), 
+				'FR' => __('France', 'events'), 
+				'NL' => __('Netherlands', 'events') 
 			);
 		}
 		if($sort){ asort($em_countries_array); }

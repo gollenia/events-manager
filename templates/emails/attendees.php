@@ -1,5 +1,5 @@
 <?php
-$tickets = $EM_Booking->meta['attendees'];
+$tickets = $EM_Booking->booking_meta['attendees'];
 $ticket_array = [];
 $form_fields = EM_Attendees_Form::get_form($EM_Booking->event_id)->form_fields;
 

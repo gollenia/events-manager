@@ -11,7 +11,7 @@ if(!$event->event_rsvp) return;
 			<i class="event-details-icon material-icons material-symbols-outlined">event_busy</i>
 		</div>
 		<div class="event-details-text">
-			<h4><?php echo $attributes['description'] ?: __("Booking end", "events-manager") ?></h4>
+			<h4><?php echo $attributes['description'] ?: __("Booking end", "events") ?></h4>
 			<time class="event-details-data">
 				<?php echo $date ?>
 

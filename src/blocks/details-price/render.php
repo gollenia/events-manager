@@ -18,8 +18,8 @@ $is_free = $event->is_free();
 			<i class="material-icons material-symbols-outlined">savings</i>
 		</div>
 		<div class="event-details-text">
-			<h4><?php echo $attributes['description'] ? $attributes['description'] : __("Price", "events-manager") ?></h4>
-			<div class="event-details-data"><?php echo __("Free", "events-manager") ?></div> 
+			<h4><?php echo $attributes['description'] ? $attributes['description'] : __("Price", "events") ?></h4>
+			<div class="event-details-data"><?php echo __("Free", "events") ?></div> 
 		</div>
 	</div>
 <?php else : ?>
@@ -28,7 +28,7 @@ $is_free = $event->is_free();
 			<i class="event-details-icon material-icons material-symbols-outlined">payments</i>
 		</div>
 		<div class="event-details-text">
-			<h4><?php echo $attributes['description'] ? $attributes['description'] : __("Price", "events-manager") ?></h4>
+			<h4><?php echo $attributes['description'] ? $attributes['description'] : __("Price", "events") ?></h4>
 			<div class="event-details-data"><?php echo $attributes['overwritePrice'] ? $attributes['overwritePrice'] : $price->format ?></div> 
 		</div>
 	</div>

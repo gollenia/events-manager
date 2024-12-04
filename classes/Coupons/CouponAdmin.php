@@ -40,7 +40,7 @@ class EM_Coupon_Admin extends EM_Coupon {
 				foreach( $duplicates as $coupon_id ){
 					if( $coupon_id != $this->coupon_id ){
 						$validate = false;
-						$this->add_error( __('This coupon code has already been used, coupon codes must be unique.', 'events-manager') );
+						$this->add_error( __('This coupon code has already been used, coupon codes must be unique.', 'events') );
 					}
 				}
 			}
@@ -49,7 +49,7 @@ class EM_Coupon_Admin extends EM_Coupon {
 		foreach( $this->required_fields as $field => $msg){
 			if( empty($this->$field) ){
 				$validate = false;
-				$this->add_error( sprintf(__("%s is required.", 'events-manager'),$msg) );
+				$this->add_error( sprintf(__("%s is required.", 'events'),$msg) );
 			}
 		}
 		return apply_filters('em_coupon_validate', $validate, $this );		
@@ -72,18 +72,18 @@ class EM_Coupon_Admin extends EM_Coupon {
 		if( empty($this->coupon_id) ){
 			unset($coupon_array['coupon_id']);
 			if ( !$wpdb->insert(EM_COUPONS_TABLE, $coupon_array) ){
-				$this->add_error( sprintf(__('Something went wrong saving your %s.','events-manager'),__('Coupon','events-manager')));
+				$this->add_error( sprintf(__('Something went wrong saving your %s.','events'),__('Coupon','events')));
 			}else{
 				//success, so link the coupon with the post via an coupon id meta value for easy retrieval
 				$this->coupon_id = $wpdb->insert_id;
-				$this->feedback_message = sprintf(__('Successfully saved %s','events-manager'),__('Coupon','events-manager'));
+				$this->feedback_message = sprintf(__('Successfully saved %s','events'),__('Coupon','events'));
 				do_action('em_coupon_save_new', $this);
 			}
 		}else{
 			if ( $wpdb->update(EM_COUPONS_TABLE, $coupon_array, array('coupon_id'=>$this->coupon_id) ) === false ){
-				$this->add_error( sprintf(__('Something went wrong updating your %s.','events-manager'),__('Coupon','events-manager')));			
+				$this->add_error( sprintf(__('Something went wrong updating your %s.','events'),__('Coupon','events')));			
 			}else{
-				$this->feedback_message = sprintf(__('Successfully saved %s','events-manager'),__('Coupon','events-manager'));
+				$this->feedback_message = sprintf(__('Successfully saved %s','events'),__('Coupon','events'));
 			}		
 		}
 		$this->id = $this->coupon_id;
@@ -103,7 +103,7 @@ class EM_Coupon_Admin extends EM_Coupon {
 			do_action('em_coupon_delete_pre', $this);
 			$result = $wpdb->query("DELETE FROM ".EM_COUPONS_TABLE." WHERE coupon_id=".$this->coupon_id);
 			$total = $wpdb->query("DELETE FROM ".EM_META_TABLE." WHERE meta_key='coupon-count' AND object_id={$this->coupon_id} LIMIT 1");
-			$this->feedback_message = sprintf(__('Successfully deleted %s','events-manager'),__('Coupon','events-manager'));
+			$this->feedback_message = sprintf(__('Successfully deleted %s','events'),__('Coupon','events'));
 		}
 		return apply_filters('em_coupon_delete', $result !== false, $this);
 	}	

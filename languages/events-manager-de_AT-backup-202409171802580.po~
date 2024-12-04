@@ -3,7 +3,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Plugins - Events Manager - Stable (latest release)\n"
-"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/events-manager\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/events\n"
 "Last-Translator: \n"
 "Language-Team: Deutsch (Österreich)\n"
 "MIME-Version: 1.0\n"
@@ -12,7 +12,7 @@ msgstr ""
 "POT-Creation-Date: 2024-06-06T05:55:35+00:00\n"
 "PO-Revision-Date: 2024-09-17 18:02+0000\n"
 "X-Generator: Loco https://localise.biz/\n"
-"X-Domain: events-manager\n"
+"X-Domain: events\n"
 "Language: de_AT\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Loco-Version: 2.6.6; wp-6.6.2"
@@ -2904,8 +2904,8 @@ msgstr ""
 
 #. Plugin URI of the plugin
 #. Author URI of the plugin
-msgid "https://github.com/gollenia/events-manager"
-msgstr "https://github.com/gollenia/events-manager"
+msgid "https://github.com/gollenia/events"
+msgstr "https://github.com/gollenia/events"
 
 #: em-install.php:623
 msgid ""

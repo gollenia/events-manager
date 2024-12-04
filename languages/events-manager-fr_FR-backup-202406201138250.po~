@@ -2563,8 +2563,8 @@ msgstr "HTML autorisé."
 
 #. Plugin URI of the plugin
 #. Author URI of the plugin
-msgid "https://github.com/gollenia/events-manager"
-msgstr "https://github.com/gollenia/events-manager"
+msgid "https://github.com/gollenia/events"
+msgstr "https://github.com/gollenia/events"
 
 #: em-install.php:623
 msgid ""

@@ -101,12 +101,12 @@ const EditUpcoming = ( props ) => {
 			</BlockControls>
 			<div { ...blockProps }>
 				<div className="components-placeholder is-large">
-					<div className="components-placeholder__label">{ __( 'Upcoming Events', 'events-manager' ) }</div>
+					<div className="components-placeholder__label">{ __( 'Upcoming Events', 'events' ) }</div>
 
 					<div className="components-placeholder__instructions">
 						<RichText
 							tagName="p"
-							placeholder={ __( 'Set a text here to show when no events are visible', 'events-manager' ) }
+							placeholder={ __( 'Set a text here to show when no events are visible', 'events' ) }
 							value={ altText }
 							onChange={ ( value ) => {
 								setAttributes( { altText: value } );

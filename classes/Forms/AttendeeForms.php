@@ -32,7 +32,7 @@ class EM_Attendees_Form {
 	public static function get_form_template(){
 	    if( empty(self::$form_template )){
     		self::$form_template = apply_filters('em_attendees_form_get_form_template', array (
-				'attendee_name' => array ( 'label' => __('Name','events-manager'), 'type' => 'text', 'fieldid'=>'attendee_name', 'required'=>1 )
+				'attendee_name' => array ( 'label' => __('Name','events'), 'type' => 'text', 'fieldid'=>'attendee_name', 'required'=>1 )
     		));	        
 	    }
 	    return self::$form_template;
@@ -54,12 +54,12 @@ class EM_Attendees_Form {
 
 			if(empty($form_data)) {
 				$form_data = array('form' => self::get_form_template());
-				self::$form_name = __('Default','events-manager');
+				self::$form_name = __('Default','events');
 			}
 
 			self::$form_name = get_the_title(self::$form_id);
 			self::$form = new EM_Attendee_Form($form_data, 'em_attendee_form', false);
-			self::$form->form_required_error = __('Please fill in the field: %s','events-manager');
+			self::$form->form_required_error = __('Please fill in the field: %s','events');
 		}
 		return self::$form;
 	}
@@ -118,7 +118,7 @@ class EM_Attendees_Form {
 			}else{
 				$attendee_data[$ticket_booking->ticket_id] = array();
 				for($i=1; $i <= $ticket_booking->ticket_booking_spaces; $i++){
-					$key = sprintf(__('Attendee %s','events-manager'), $i);
+					$key = sprintf(__('Attendee %s','events'), $i);
 					$attendee_data[$ticket_booking->ticket_id][$key] = array();
 				}
 			}
@@ -142,7 +142,7 @@ class EM_Attendees_Form {
 	    		$EM_Form->field_values = $field_values;
 	    		//output the field values
 				
-	    		$key = sprintf(__('Attendee %s','events-manager'), $i);
+	    		$key = sprintf(__('Attendee %s','events'), $i);
 	    		$attendees[$key] = array();
 	    		foreach( $EM_Form->form_fields as $fieldid => $field){
 					if( $field['type'] == 'html' ) continue;
@@ -157,7 +157,7 @@ class EM_Attendees_Form {
 	    }elseif( $padding ){
 	    	//no attendees so pad with empty values
 	    	for( $space_no = 1; $space_no <= $ticket_booking->ticket_booking_spaces; $space_no++ ){
-	    		$key = sprintf(__('Attendee %s','events-manager'), $space_no);
+	    		$key = sprintf(__('Attendee %s','events'), $space_no);
 	    		$attendees[$key] = array();
 	    		foreach( $EM_Form->form_fields as $fieldid => $field){
 	    			if( $field['type'] != 'html' ){
@@ -232,7 +232,7 @@ class EM_Attendees_Form {
 						}
 						//validate and save errors within this ticket user
 						if( !$EM_Form->validate($EM_Form->field_values['name']) ){
-							$title = $ticket_booking->get_ticket()->ticket_name . " - " . sprintf(__('Attendee %s','events-manager'), $i+1);
+							$title = $ticket_booking->get_ticket()->ticket_name . " - " . sprintf(__('Attendee %s','events'), $i+1);
 							$error = array( $title => $EM_Form->get_errors());
 						    $EM_Booking->add_error($EM_Form->get_errors());
 						    $result = false;
@@ -283,7 +283,7 @@ class EM_Attendees_Form {
 			$headers = $EM_Bookings_Table->get_headers(true);
 			$registration_length = count($headers);
 			$titles = array_fill(0, count($headers), '<b><middle><style height="50" bgcolor="#f2f2f2" color="#000000"></style></middle></b>');
-			$titles[0] = '<b><middle><style height="25" bgcolor="#f2f2f2" color="#000000">' . __('Registration Fields','events-manager') . '</style></middle></b>';
+			$titles[0] = '<b><middle><style height="25" bgcolor="#f2f2f2" color="#000000">' . __('Registration Fields','events') . '</style></middle></b>';
 			foreach($headers as $key => $header){
 				$headers[$key] = '<b><middle><style height="50" bgcolor="#f2f2f2" color="#000000">' . $header . '</style></middle></b>';
 			}
@@ -292,7 +292,7 @@ class EM_Attendees_Form {
 				foreach($form_fields as $field ){
 					if( $field['type'] != 'html' ){
 						$headers[] = EM_Bookings_Table::sanitize_spreadsheet_cell('<b><middle><style height="25" bgcolor="#e2efda" color="#375623">' . $field['label'] . '</style></middle></b>');
-						$titles[] = $i == 0 ? '<b><middle><style height="25" bgcolor="#e2efda" color="#375623">' . __('Attendee','events-manager') . '</style></middle></b>' : '<b><middle><style height="25" bgcolor="#e2efda" color="#375623"></style></middle></b>';
+						$titles[] = $i == 0 ? '<b><middle><style height="25" bgcolor="#e2efda" color="#375623">' . __('Attendee','events') . '</style></middle></b>' : '<b><middle><style height="25" bgcolor="#e2efda" color="#375623"></style></middle></b>';
 						$i++;
 					}
 				}
@@ -325,14 +325,14 @@ class EM_Attendees_Form {
 			$xlsx = Shuchkin\SimpleXLSXGen::fromArray( $excel_sheet );
 			$xlsx->mergeCells('A1:'. $alphabet[$registration_length-1].'1');
 			$xlsx->mergeCells($alphabet[$registration_length].'1:'. $alphabet[count($headers)-1].'1');
-			$xlsx->downloadAs($title . '-' . lcfirst(__('Bookings', 'events-manager')) . '.xlsx');
+			$xlsx->downloadAs($title . '-' . lcfirst(__('Bookings', 'events')) . '.xlsx');
 			exit();
 		}
 	}
 	
 	public static function em_bookings_table_export_options(){
 		?>
-		<p><input type="checkbox" name="show_attendees" value="1" /><label><?php _e('Split bookings by attendee','events-manager')?> </label>
+		<p><input type="checkbox" name="show_attendees" value="1" /><label><?php _e('Split bookings by attendee','events')?> </label>
 		
 		<script type="text/javascript">
 			jQuery(document).ready(function($){
@@ -387,7 +387,7 @@ class EM_Attendees_Form {
 		foreach( $tickets_bookings->tickets_bookings as $ticket_booking ){
 			//Display ticket info
 			if( !empty($attendee_datas[$ticket_booking->ticket_id]) ){
-				$attendee_string[$ticket_booking->ticket_id] = __('Ticket','events-manager').' - '. $ticket_booking->get_ticket()->ticket_name ."<br>-----------------------------";
+				$attendee_string[$ticket_booking->ticket_id] = __('Ticket','events').' - '. $ticket_booking->get_ticket()->ticket_name ."<br>-----------------------------";
 				//display a row for each space booked on this ticket
 				foreach( $attendee_datas[$ticket_booking->ticket_id] as $attendee_title => $attendee_data ){
 					$attendee_string[$ticket_booking->ticket_id] .= '<br>'. $attendee_title ."<br>------------";
@@ -397,7 +397,7 @@ class EM_Attendees_Form {
 				}
 			}
 		}
-		if( !empty($attendee_string) ) $export_item['data']['attendees'] = array('name'=> __('Attendees', 'events-manager'), 'value' => implode('<br><br>', $attendee_string));
+		if( !empty($attendee_string) ) $export_item['data']['attendees'] = array('name'=> __('Attendees', 'events'), 'value' => implode('<br><br>', $attendee_string));
 		return $export_item;
 	}
 }

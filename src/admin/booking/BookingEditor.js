@@ -40,7 +40,7 @@ const BookingEditor = ( { bookingId } ) => {
 	}, [ state.sendState ] );
 
 	if ( state.state === 'loading' || ! data ) {
-		return <p>{ __( 'Loading Data...', 'events-manager' ) }</p>;
+		return <p>{ __( 'Loading Data...', 'events' ) }</p>;
 	}
 	console.log( 'state', state );
 	return (

@@ -12,7 +12,7 @@ if(!$audience) return;
 		<i class="material-icons material-symbols-outlined"><?php echo $attributes['icon'] ?: 'male' ?></i>
 	</div>
 	<div class="event-details-text">
-	<h4><?php echo $attributes['description'] ?: __("Audience", "events-manager") ?></h4>
+	<h4><?php echo $attributes['description'] ?: __("Audience", "events") ?></h4>
 		<div class="event-details-data"><?php echo get_post_meta($id, '_event_audience', true) ?></div>
 	</div>
 </div> 

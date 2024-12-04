@@ -16,8 +16,8 @@ const { name, title, description } = metadata;
 
 const settings = {
 	...metadata,
-	title: __( title, 'events-manager' ),
-	description: __( description, 'events-manager' ),
+	title: __( title, 'events' ),
+	description: __( description, 'events' ),
 	icon,
 	edit: withColors( { buttonColor: 'buttonColor' } )( Edit ),
 	save: () => {

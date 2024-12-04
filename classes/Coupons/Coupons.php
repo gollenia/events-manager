@@ -65,27 +65,24 @@ class EM_Coupons extends EM_Object {
 	/* Event Helpers */
 
 	/**
-	 * Depricated, renamed to event_get_coupon
-	 */
-	public static function get_coupon($code, $EM_Event){ self::event_get_coupon($code, $EM_Event); }
-	/**
 	 * @param int $code
 	 * @param EM_Event $EM_Event
 	 * @return EM_Coupon|boolean
 	 */
 	public static function event_get_coupon($code, $EM_Event){
-	    global $wpdb;
 		//get coupons that are event and sitewide
-		if( !empty($EM_Event->event_id) ){
-		    $coupons = EM_Coupons::get(array('code'=>$code,'event'=>$EM_Event->event_id));
-		    if( count($coupons) > 0 ){
-	            foreach($coupons as $EM_Coupon){ /* @var $EM_Coupon EM_Coupon */
-		            if( !empty($EM_Coupon->coupon_code) && strtolower($EM_Coupon->coupon_code) == strtolower($code) ){
-		            	return $EM_Coupon;
-		            }
-	            }
-		    }
+		if(!isset($EM_Event->event_id)) return false;
+		
+		$coupons = EM_Coupons::get(array('code'=>$code,'event'=>$EM_Event->event_id));
+
+		if( count($coupons) == 0) return false;
+		
+		foreach($coupons as $EM_Coupon){ /* @var $EM_Coupon EM_Coupon */
+			if( !empty($EM_Coupon->coupon_code) && strtolower($EM_Coupon->coupon_code) == strtolower($code) ){
+				return $EM_Coupon;
+			}
 		}
+		
 		return false;
 	}
 	
@@ -174,21 +171,21 @@ class EM_Coupons extends EM_Object {
 		global $EM_Notices;
 		if(!empty($_REQUEST['coupon_code'])){
 			if( !self::cart_coupon_apply($_REQUEST['coupon_code']) ){
-				$EM_Notices->add_error(__('Coupon Invalid','events-manager'));
+				$EM_Notices->add_error(__('Coupon Invalid','events'));
 			}
 		}else{
-			$EM_Notices->add_error(__('Coupon Not Found', 'events-manager'));
+			$EM_Notices->add_error(__('Coupon Not Found', 'events'));
 		}
 	}
 	
 	public static function cart_coupon_apply_ajax(){
-	    $response = array('result'=>false, 'message'=> __('Coupon Not Found', 'events-manager'));
+	    $response = array('result'=>false, 'message'=> __('Coupon Not Found', 'events'));
 		if(!empty($_REQUEST['coupon_code'])){
 			if( self::cart_coupon_apply($_REQUEST['coupon_code']) ){
 				$response['result'] = true;
 				$response['message'] = '';
 			}else{
-				$response['message'] = __('Coupon Invalid','events-manager');
+				$response['message'] = __('Coupon Invalid','events');
 			}
 		}
         header('Content-Type: text/javascript; charset=utf-8'); //to prevent MIME type errors in MultiSite environments
@@ -203,17 +200,18 @@ class EM_Coupons extends EM_Object {
 	
 	
 	public static function em_booking_validate($result, $EM_Booking){
-		if( !empty($EM_Booking->booking_meta['coupon']) ){
-			$EM_Coupon = self::event_get_coupon($EM_Booking->booking_meta['coupon']['coupon_code'], $EM_Booking->get_event());
-			if( $EM_Coupon === false && !empty($EM_Booking->booking_id) ){ //if a previously saved booking, account for the fact it may not work
-				$EM_Coupon = new EM_Coupon($EM_Booking->booking_meta['coupon']);
-			}
-			if( $EM_Coupon === false || !$EM_Coupon->is_valid() ){
-				$EM_Booking->add_error(__('Invalid coupon code provided','events-manager'));
-				unset($EM_Booking->booking_meta['coupon']);
-				return false;
-			}
+		if(!isset($EM_Booking->booking_meta['coupon_code'])) return $result;
+		
+		$EM_Coupon = self::event_get_coupon($EM_Booking->booking_meta['coupon_code'], $EM_Booking->get_event());
+		unset($EM_Booking->booking_meta['coupon_code']);
+
+		if( $EM_Coupon === false || !$EM_Coupon->is_valid() ){
+			$EM_Booking->add_error(__('Invalid coupon code provided','events'));
+			return false;
 		}
+
+		$EM_Booking->booking_meta['coupon'] = $EM_Coupon->coupon_id;
+		
 		return apply_filters('em_coupons_em_booking_validate', $result, $EM_Booking);
 	}
 
@@ -245,7 +243,7 @@ class EM_Coupons extends EM_Object {
 		
 		$result = [
 			'success'=>false, 
-			'message'=> __('Coupon Not Found', 'events-manager'),
+			'message'=> __('Coupon Not Found', 'events'),
 			'discount' => 0,
 			'percent' => false,
 			'code' => ''
@@ -253,12 +251,12 @@ class EM_Coupons extends EM_Object {
 
 		$event_id = $request->get_param( 'event_id' );
 
-		if(!$event_id) return array_merge($result, ["message" => __('No event given','events-manager')]);
+		if(!$event_id) return array_merge($result, ["message" => __('No event given','events')]);
 	
 		$EM_Event = new EM_Event($event_id);
 		$EM_Coupon = self::event_get_coupon($request->get_param('code'), $EM_Event);
 
-		if (empty($EM_Event->event_id) || !is_object($EM_Coupon)) return array_merge($result, ["message" => __('Coupon Invalid','events-manager')]);
+		if (empty($EM_Event->event_id) || !is_object($EM_Coupon)) return array_merge($result, ["message" => __('Coupon Invalid','events')]);
 
 		if(!$EM_Coupon->is_valid()) return $result;
 	
@@ -277,12 +275,12 @@ class EM_Coupons extends EM_Object {
 
 		$array = [
 			[
-				'<b>' . __("Name", "events-manager") .'</b>',
-				'<b>' . __("Code", "events-manager") .'</b>',
-				'<b>' . __("Description", "events-manager") .'</b>',
-				'<b>' . __("Discount", "events-manager") .'</b>',
-				'<b>' . __("Uses", "events-manager") .'</b>',
-				'<b>' . __("Count", "events-manager") .'</b>'
+				'<b>' . __("Name", "events") .'</b>',
+				'<b>' . __("Code", "events") .'</b>',
+				'<b>' . __("Description", "events") .'</b>',
+				'<b>' . __("Discount", "events") .'</b>',
+				'<b>' . __("Uses", "events") .'</b>',
+				'<b>' . __("Count", "events") .'</b>'
 			]
 		];
 
@@ -321,17 +319,17 @@ class EM_Coupons extends EM_Object {
 		$bookings_count = 0;
 		$EM_Bookings = array(
 			[
-				"<b>" . __("ID", "events-manager") . "</b>",
-				"<b>" . __("Event", "events-manager") . "</b>",
-				"<b>" . __("Booking Date", "events-manager") . "</b>",
-				"<b>" . __("Price", "events-manager") . "</b>",
-				"<b>" . __("Booker", "events-manager") . "</b>",
-				"<b>" . __("Email", "events-manager") . "</b>",
-				"<b>" . __('Spaces', 'events-manager') . "</b>",
-				"<b>" . __("Coupon Name", "events-manager") . "</b>",
-				"<b>" . __('Original Total Price','events-manager', "events-manager") . "</b>",
-				"<b>" . __("Discount", "events-manager") . "</b>",
-				"<b>" . __("Final Price", "events-manager") . "</b>"
+				"<b>" . __("ID", "events") . "</b>",
+				"<b>" . __("Event", "events") . "</b>",
+				"<b>" . __("Booking Date", "events") . "</b>",
+				"<b>" . __("Price", "events") . "</b>",
+				"<b>" . __("Booker", "events") . "</b>",
+				"<b>" . __("Email", "events") . "</b>",
+				"<b>" . __('Spaces', 'events') . "</b>",
+				"<b>" . __("Coupon Name", "events") . "</b>",
+				"<b>" . __('Original Total Price','events', "events") . "</b>",
+				"<b>" . __("Discount", "events") . "</b>",
+				"<b>" . __("Final Price", "events") . "</b>"
 				
 			]
 		);
@@ -528,7 +526,10 @@ class EM_Coupons extends EM_Object {
 	 */
 	public static function refresh_counts( $EM_Booking ){
 		$result = true;
-		foreach( self::booking_get_coupons($EM_Booking) as $EM_Coupon ){ /* @var EM_Coupon $EM_Coupon */
+		$coupons = self::booking_get_coupons($EM_Booking);
+		file_put_contents('/var/www/vhosts/kids-team.internal/log/coupons.txt', print_r($coupons, true));
+		foreach( $coupons as $EM_Coupon ){ /* @var EM_Coupon $EM_Coupon */
+
 			$result = $EM_Coupon->recount() !== false && $result;
 		}
 		return apply_filters('em_coupons_refresh_counts', $result, $EM_Booking);
@@ -542,7 +543,7 @@ class EM_Coupons extends EM_Object {
 		if( !$EM_Event->is_free(true) && EM_Coupons::event_has_coupons($EM_Event) > 0){
 			?>
 			<p class="em-bookings-form-coupon input-text my-8">
-				<label><?php _e('Coupon Code','events-manager'); ?></label>
+				<label><?php _e('Coupon Code','events'); ?></label>
 				<input type="text" name="coupon_code" class="input em-coupon-code" />
 			</p>
 			<?php
@@ -554,7 +555,7 @@ class EM_Coupons extends EM_Object {
 	
 	
 	public static function coupon_check_ajax(){
-		$result = array('result'=>false, 'message'=> __('Coupon Not Found', 'events-manager'));
+		$result = array('result'=>false, 'message'=> __('Coupon Not Found', 'events'));
 		if(!empty($_REQUEST['event_id'])){
 			$EM_Event = new EM_Event($_REQUEST['event_id']);
 			$EM_Coupon = self::event_get_coupon($_REQUEST['coupon_code'], $EM_Event);
@@ -563,7 +564,7 @@ class EM_Coupons extends EM_Object {
 					$result['result'] = true;
 					$result['message'] = $EM_Coupon->get_discount_text();
 				}else{
-					$result['message'] = __('Coupon Invalid','events-manager');
+					$result['message'] = __('Coupon Invalid','events');
 				}
 			}
 		}
@@ -659,7 +660,7 @@ class EM_Coupons extends EM_Object {
 	 */
 	
 	public static function em_bookings_table_cols_template($template){
-		$template['coupon'] = __('Coupon Code','events-manager');
+		$template['coupon'] = __('Coupon Code','events');
 		return $template;
 	}
 	
@@ -679,7 +680,7 @@ class EM_Coupons extends EM_Object {
 	}
 
 	/* Overrides EM_Object method to apply a filter to result
-	 * @see wp-content/plugins/events-manager/classes/EM_Object#build_sql_conditions()
+	 * @see wp-content/plugins/events/classes/EM_Object#build_sql_conditions()
 	 */
 	public static function build_sql_conditions( $args = array() ){
 		$conditions = array();

@@ -34,6 +34,10 @@ If you start developping, you need npm.
 
 ### Versions
 
+#### 6.8
+
+-   Lots of old code removed
+
 #### 6.7
 
 -   Bookings are now processed through a REST API

@@ -22,6 +22,6 @@
 			"default": false
 		}
 	},
-	"parents": ["events-manager/details"],
+	"parents": [ "events-manager/details" ],
 	"render": "file:./render.php"
 }

@@ -1,5 +1,5 @@
 {
-	"name": "gutenberg-form/number",
+	"name": "events-manager/number",
 	"apiVersion": 2,
 	"title": "Number Field",
 	"description": "Lets the user give a number or a range of numbers",
@@ -54,5 +54,5 @@
 			"default": false
 		}
 	},
-	"parent": [ "gutenberg-form/form-fields" ]
+	"parent": [ "events-manager/form-fields" ]
 }

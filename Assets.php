@@ -129,7 +129,7 @@ class Assets {
 	
 	
 	public function admin_enqueue( ){
-		wp_enqueue_script('events', plugins_url('/build/events.js',__FILE__), array('jquery', 'jquery-ui-core','jquery-ui-widget','jquery-ui-position','jquery-ui-sortable','jquery-ui-datepicker','jquery-ui-autocomplete','jquery-ui-dialog','wp-color-picker'), \Events::VERSION);		
+		wp_enqueue_script('events-manager', plugins_url('/build/events-manager.js',__FILE__), array('jquery', 'jquery-ui-core','jquery-ui-widget','jquery-ui-position','jquery-ui-sortable','jquery-ui-datepicker','jquery-ui-autocomplete','jquery-ui-dialog','wp-color-picker'), \Events::VERSION);		
 		wp_enqueue_script('events-admin-script', plugins_url('/build/admin.js',__FILE__), array('jquery', 'wp-api', 'wp-i18n', 'wp-components', 'wp-element' ), \Events::VERSION);		
 		wp_enqueue_style('events-admin', plugins_url('/build/admin.css',__FILE__), array('wp-components'), \Events::VERSION);
 		wp_enqueue_style('events-admin-booking', plugins_url('/build/style-admin.css',__FILE__), array(), \Events::VERSION);
@@ -199,7 +199,7 @@ class Assets {
 			}
 		}		
 		
-		wp_localize_script('events','EM', apply_filters('em_wp_localize_script', $em_localized_js));
+		wp_localize_script('events-manager','EM', apply_filters('em_wp_localize_script', $em_localized_js));
 	}
 }
 Assets::init();

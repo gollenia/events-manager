@@ -7,7 +7,7 @@ const WizardStep = ( props ) => {
 		left: 100 * index + '%',
 		transform: `translateX(-${ 100 * currentStep }%)`,
 	};
-
+	console.log( props );
 	const classes = [
 		'wizard__step',
 		isActive ? 'wizard__step--active' : '',
@@ -16,8 +16,6 @@ const WizardStep = ( props ) => {
 	]
 		.filter( Boolean )
 		.join( ' ' );
-
-	console.log( props );
 
 	return (
 		<div style={ style } className={ classes }>

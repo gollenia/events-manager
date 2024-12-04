@@ -35,15 +35,15 @@ class EM_Event_Post_Admin{
 		global $post, $EM_Event, $pagenow;
 		if( $pagenow == 'post.php' && ($post->post_type == EM_POST_TYPE_EVENT || $post->post_type == 'event-recurring') ){
 			if ( $EM_Event->is_recurring() ) {
-				$warning = "<p><strong>".__( 'WARNING: This is a recurring event.', 'events-manager')."</strong></p>";
-				$warning .= "<p>". __( 'Modifications to recurring events will be applied to all recurrences and will overwrite any changes made to those individual event recurrences.', 'events-manager') . '</p>';
-				$warning .= "<p>". __( 'Bookings to individual event recurrences will be preserved if event times and ticket settings are not modified.', 'events-manager') . '</p>';
-				$warning .= '<p><a href="'. esc_url( add_query_arg(array('scope'=>'all', 'recurrence_id'=>$EM_Event->event_id), em_get_events_admin_url()) ).'">'. esc_html__('You can edit individual recurrences and disassociate them with this recurring event.','events-manager') . '</a></p>';
+				$warning = "<p><strong>".__( 'WARNING: This is a recurring event.', 'events')."</strong></p>";
+				$warning .= "<p>". __( 'Modifications to recurring events will be applied to all recurrences and will overwrite any changes made to those individual event recurrences.', 'events') . '</p>';
+				$warning .= "<p>". __( 'Bookings to individual event recurrences will be preserved if event times and ticket settings are not modified.', 'events') . '</p>';
+				$warning .= '<p><a href="'. esc_url( add_query_arg(array('scope'=>'all', 'recurrence_id'=>$EM_Event->event_id), em_get_events_admin_url()) ).'">'. esc_html__('You can edit individual recurrences and disassociate them with this recurring event.','events') . '</a></p>';
 				?><div class="notice notice-warning is-dismissible"><?php echo $warning; ?></div><?php
 			} elseif ( $EM_Event->is_recurrence() ) {
-				$warning = "<p><strong>".__('WARNING: This is a recurrence in a set of recurring events.', 'events-manager')."</strong></p>";
-				$warning .= "<p>". sprintf(__('If you update this event data and save, it could get overwritten if you edit the recurring event template. To make it an independent, <a href="%s">detach it</a>.', 'events-manager'), $EM_Event->get_detach_url())."</p>";
-				$warning .= "<p>".sprintf(__('To manage the whole set, <a href="%s">edit the recurring event template</a>.', 'events-manager'),admin_url('post.php?action=edit&amp;post='.$EM_Event->get_event_recurrence()->post_id))."</p>";
+				$warning = "<p><strong>".__('WARNING: This is a recurrence in a set of recurring events.', 'events')."</strong></p>";
+				$warning .= "<p>". sprintf(__('If you update this event data and save, it could get overwritten if you edit the recurring event template. To make it an independent, <a href="%s">detach it</a>.', 'events'), $EM_Event->get_detach_url())."</p>";
+				$warning .= "<p>".sprintf(__('To manage the whole set, <a href="%s">edit the recurring event template</a>.', 'events'),admin_url('post.php?action=edit&amp;post='.$EM_Event->get_event_recurrence()->post_id))."</p>";
 				?><div class="notice notice-warning is-dismissible"><?php echo $warning; ?></div><?php
 			}
 			
@@ -134,9 +134,9 @@ class EM_Event_Post_Admin{
 				//failed somewhere, set to draft, don't publish
 				$EM_Event->set_status(null, true);
 				if( $EM_Event->is_recurring() ){
-					$EM_Notices->add_error( '<strong>'.__('Your event details are incorrect and recurrences cannot be created, please correct these errors first:','events-manager').'</strong>', true); //Always seems to redirect, so we make it static
+					$EM_Notices->add_error( '<strong>'.__('Your event details are incorrect and recurrences cannot be created, please correct these errors first:','events').'</strong>', true); //Always seems to redirect, so we make it static
 				}else{
-					$EM_Notices->add_error( '<strong>'.sprintf(__('Your %s details are incorrect and cannot be published, please correct these errors first:','events-manager'),__('event','events-manager')).'</strong>', true); //Always seems to redirect, so we make it static
+					$EM_Notices->add_error( '<strong>'.sprintf(__('Your %s details are incorrect and cannot be published, please correct these errors first:','events'),__('event','events')).'</strong>', true); //Always seems to redirect, so we make it static
 				}
 				$EM_Notices->add_error($EM_Event->get_errors(), true); //Always seems to redirect, so we make it static
 				apply_filters('em_event_save', false, $EM_Event);
@@ -229,7 +229,7 @@ class EM_Event_Post_Admin{
 		}
 		
 		if( get_option('dbem_rsvp_enabled', true) && $EM_Event->can_manage('manage_bookings','manage_others_bookings') ){
-			add_meta_box('em-event-bookings', __('Bookings/Registration','events-manager'), array('EM_Event_Post_Admin','meta_box_bookings'),EM_POST_TYPE_EVENT, 'normal','high');
+			add_meta_box('em-event-bookings', __('Bookings/Registration','events'), array('EM_Event_Post_Admin','meta_box_bookings'),EM_POST_TYPE_EVENT, 'normal','high');
 		}
 
 		
@@ -273,7 +273,7 @@ class EM_Event_Post_Admin{
 			 <?php echo walk_category_dropdown_tree($categories, 0, $args_em); ?>
 			</p>
 		<?php else: ?>
-			<p><?php sprintf(__('No categories available, <a href="%s">create one here first</a>','events-manager'), get_bloginfo('wpurl').'/wp-admin/admin.php?page=events-manager-categories'); ?></p>
+			<p><?php sprintf(__('No categories available, <a href="%s">create one here first</a>','events'), get_bloginfo('wpurl').'/wp-admin/admin.php?page=events-categories'); ?></p>
 		<?php endif; ?>
 		<!-- END Categories -->
 		<?php
@@ -338,7 +338,7 @@ class EM_Event_Recurring_Post_Admin{
 			//get the list post IDs for recurrences this recurrence
 		 	if( !$EM_Event->save_events() && ( $EM_Event->is_published() || 'future' == $EM_Event->post_status ) ){
 				$EM_Event->set_status(null, true);
-				$EM_Notices->add_error(__ ( 'Something went wrong with the recurrence update...', 'events-manager'). __ ( 'There was a problem saving the recurring events.', 'events-manager'));
+				$EM_Notices->add_error(__ ( 'Something went wrong with the recurrence update...', 'events'). __ ( 'There was a problem saving the recurring events.', 'events'));
 		 	}
 		}
 		$EM_EVENT_SAVE_POST = false; //last filter of save_post in EM for events
@@ -420,7 +420,7 @@ class EM_Event_Recurring_Post_Admin{
 		
 	
 		if( get_option('dbem_rsvp_enabled') && $EM_Event->can_manage('manage_bookings','manage_others_bookings') ){
-			add_meta_box('em-event-bookings', __('Bookings/Registration','events-manager'), array('EM_Event_Post_Admin','meta_box_bookings'),'event-recurring', 'normal','high');
+			add_meta_box('em-event-bookings', __('Bookings/Registration','events'), array('EM_Event_Post_Admin','meta_box_bookings'),'event-recurring', 'normal','high');
 		}
 		
 		

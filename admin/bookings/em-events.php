@@ -9,9 +9,9 @@ function em_bookings_events_table() {
 	global $wpdb;
 
 	$scope_names = array (
-		'past' => __ ( 'Past events', 'events-manager'),
-		'all' => __ ( 'All events', 'events-manager'),
-		'future' => __ ( 'Future events', 'events-manager')
+		'past' => __ ( 'Past events', 'events'),
+		'all' => __ ( 'All events', 'events'),
+		'future' => __ ( 'Future events', 'events')
 	);
 	
 	$action_scope = ( !empty($_REQUEST['em_obj']) && $_REQUEST['em_obj'] == 'em_bookings_events_table' );
@@ -25,13 +25,13 @@ function em_bookings_events_table() {
 	// No action, only showing the events list
 	switch ($scope) {
 		case "past" :
-			$title = __ ( 'Past Events', 'events-manager');
+			$title = __ ( 'Past Events', 'events');
 			break;
 		case "all" :
-			$title = __ ( 'All Events', 'events-manager');
+			$title = __ ( 'All Events', 'events');
 			break;
 		default :
-			$title = __ ( 'Future Events', 'events-manager');
+			$title = __ ( 'Future Events', 'events');
 			$scope = "future";
 	}
 	$owner = !current_user_can('manage_others_bookings') ? get_current_user_id() : false;
@@ -41,17 +41,18 @@ function em_bookings_events_table() {
 	$use_events_end = get_option ( 'dbem_use_event_end' );
 	?>
 	<div class="wrap em_bookings_events_table em_obj">
+		
 		<form id="posts-filter" action="" method="get">
 			<input type="hidden" name="em_obj" value="em_bookings_events_table" />
 			<?php if(!empty($_GET['page'])): ?>
-			<input type='hidden' name='page' value='events-manager-bookings' />
+			<input type='hidden' name='page' value='events-bookings' />
 			<?php endif; ?>		
 			<div class="tablenav">			
 				<div class="alignleft actions">
 					<!--
 					<select name="action">
 						<option value="-1" selected="selected"><?php esc_html_e( 'Bulk Actions' ); ?></option>
-						<option value="deleteEvents"><?php esc_html_e( 'Delete selected','events-manager'); ?></option>
+						<option value="deleteEvents"><?php esc_html_e( 'Delete selected','events'); ?></option>
 					</select> 
 					<input type="submit" value="<?php esc_html_e( 'Apply' ); ?>" name="doaction2" id="doaction2" class="button-secondary action" />
 					 --> 
@@ -65,7 +66,7 @@ function em_bookings_events_table() {
 						}
 						?>
 					</select>
-					<button id="post-query-submit" class="button-secondary" type="" value="" ><?php esc_attr_e( 'Filter hihi' )?>
+					<button id="post-query-submit" class="button-secondary" type="" value="" ><?php esc_attr_e( 'Filter' )?>
 				</div>
 				<!--
 				<div class="view-switch">
@@ -83,17 +84,17 @@ function em_bookings_events_table() {
 			<?php
 			if (empty ( $events )) {
 				// TODO localize
-				_e ( 'no events','events-manager');
+				_e ( 'no events','events');
 			} else {
 			?>
 			<div class='table-wrap'>	
 			<table class="widefat">
 				<thead>
 					<tr>
-						<th><?php esc_html_e( 'Event', 'events-manager'); ?></th>
-						<th><?php esc_html_e( 'Available', 'events-manager'); ?></th>
-						<th><?php esc_html_e( 'Booked', 'events-manager'); ?></th>
-						<th><?php esc_html_e( 'Date and time', 'events-manager'); ?></th>
+						<th><?php esc_html_e( 'Event', 'events'); ?></th>
+						<th><?php esc_html_e( 'Available', 'events'); ?></th>
+						<th><?php esc_html_e( 'Booked', 'events'); ?></th>
+						<th><?php esc_html_e( 'Date and time', 'events'); ?></th>
 						
 					</tr>
 				</thead>
@@ -128,12 +129,12 @@ function em_bookings_events_table() {
 							</td>
 							<td>
 								
-							<b><?php echo $EM_Event->get_bookings()->get_available_spaces(); echo " "; echo __("Free", "events-manager") ?> </b><br> <?php echo __("Off", "events-manager"); echo " "; echo $EM_Event->get_spaces(); ?>
+							<b><?php echo $EM_Event->get_bookings()->get_available_spaces(); echo " "; echo __("Free", "events") ?> </b><br> <?php echo __("Off", "events"); echo " "; echo $EM_Event->get_spaces(); ?>
 					
 							</td>
 							<td >
 								<b><?php echo $EM_Event->get_bookings()->get_booked_spaces(); echo " ";  ?> /
-								<?php echo $EM_Event->get_bookings()->get_pending_spaces(); echo " "; echo __("Pending", "events-manager") ?></b>
+								<?php echo $EM_Event->get_bookings()->get_pending_spaces(); echo " "; echo __("Pending", "events") ?></b>
 								<div class="em-booking-graph">
 									<?php if($booked_percent < 100) { ?>
 										<div class="em-booking-graph-booked <?php if($pending_percent) echo "cut" ?>" style="width:<?php echo $booked_percent ?>%;"></div>

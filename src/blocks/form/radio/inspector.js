@@ -10,30 +10,30 @@ const Inspector = ( props ) => {
 
 	return (
 		<InspectorControls>
-			<PanelBody title={ __( 'Data', 'events-manager' ) } initialOpen={ true }>
+			<PanelBody title={ __( 'Data', 'events' ) } initialOpen={ true }>
 				<ToggleControl
-					label={ __( 'Required', 'events-manager' ) }
+					label={ __( 'Required', 'events' ) }
 					checked={ required }
 					onChange={ ( value ) => setAttributes( { required: value } ) }
 				/>
 
 				<TextControl
-					label={ __( 'Error message', 'events-manager' ) }
-					help={ __( 'Text to inform the user that a choice has to be made', 'events-manager' ) }
+					label={ __( 'Error message', 'events' ) }
+					help={ __( 'Text to inform the user that a choice has to be made', 'events' ) }
 					value={ error }
 					onChange={ ( value ) => setAttributes( { error: value } ) }
 				/>
 				<TextareaControl
-					label={ __( 'Options', 'events-manager' ) }
+					label={ __( 'Options', 'events' ) }
 					value={ options.join( '\n' ) }
 					onChange={ ( value ) => setAttributes( { options: value.split( '\n' ) } ) }
-					help={ __( 'Options for the radio control. Each line represents one option', 'events-manager' ) }
+					help={ __( 'Options for the radio control. Each line represents one option', 'events' ) }
 				/>
 			</PanelBody>
-			<PanelBody title={ __( 'Appearance', 'events-manager' ) } initialOpen={ true }>
+			<PanelBody title={ __( 'Appearance', 'events' ) } initialOpen={ true }>
 				<RangeControl
-					label={ __( 'Width', 'events-manager' ) }
-					help={ __( 'Number of columns the input field will occupy', 'events-manager' ) }
+					label={ __( 'Width', 'events' ) }
+					help={ __( 'Number of columns the input field will occupy', 'events' ) }
 					value={ width }
 					max={ 4 }
 					min={ 1 }

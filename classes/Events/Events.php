@@ -1,5 +1,4 @@
 <?php
-use EM_Event_Locations\Event_Locations;
 //TODO EM_Events is currently static, better we make this non-static so we can loop sets of events, and standardize with other objects.
 /**
  * Use this class to query and manipulate sets of events. If dealing with more than one event, you probably want to use this class in some way.
@@ -297,7 +296,7 @@ class EM_Events extends EM_Object {
 	}
 
 	/* Overrides EM_Object method to apply a filter to result
-	 * @see wp-content/plugins/events-manager/classes/EM_Object#build_sql_conditions()
+	 * @see wp-content/plugins/events/classes/EM_Object#build_sql_conditions()
 	 */
 	public static function build_sql_conditions( $args = array() ){
 		global $wpdb;
@@ -354,15 +353,6 @@ class EM_Events extends EM_Object {
 			$conditions['post_id'] = "(".EM_EVENTS_TABLE.".post_id NOT IN (".implode(',',$excludes)."))";
 		}
 
-		// event locations
-		
-		if( isset($args['has_event_location']) && $args['has_event_location'] !== false ){
-			if( $args['has_event_location'] ){
-				$conditions['has_event_location'] = "event_location_type IS NOT NULL";
-			}else{
-				$conditions['has_event_location'] = "event_location_type IS NULL";
-			}
-		}
 		return apply_filters( 'em_events_build_sql_conditions', $conditions, $args );
 	}
 	
@@ -449,8 +439,6 @@ class EM_Events extends EM_Object {
 			'has_location' => false, //search events with a location
 			'no_location' => false, //search events without a location
 			'location_status' => false, //search events with locations of a specific publish status
-			'event_location_type' => false,
-			'has_event_location' => false,
 		);
 		//sort out whether defaults were supplied or just the array of search values
 		if( empty($array) ){

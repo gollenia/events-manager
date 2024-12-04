@@ -15,7 +15,7 @@ const Gateway = ( props ) => {
 
 	return (
 		<div>
-			<h2>{ __( 'Payment', 'events-manager' ) }</h2>
+			<h2>{ __( 'Payment', 'events' ) }</h2>
 			<h4>{ title }</h4>
 			<p dangerouslySetInnerHTML={ createMarkup() }></p>
 			<div className="list">

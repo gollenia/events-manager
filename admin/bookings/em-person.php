@@ -37,9 +37,9 @@ function em_bookings_person_table(){
 					</li>
 				</ul>
 				<p class="search-box">
-					<label class="screen-reader-text" for="post-search-input"><?php _e('Search', 'events-manager'); ?>:</label>
+					<label class="screen-reader-text" for="post-search-input"><?php _e('Search', 'events'); ?>:</label>
 					<input type="text" id="post-search-input" name="em_search" value="<?php echo (!empty($_GET['em_search'])) ? esc_attr($_GET['em_search']):''; ?>" />
-					<input type="submit" value="<?php _e('Search', 'events-manager'); ?>" class="button" />
+					<input type="submit" value="<?php _e('Search', 'events'); ?>" class="button" />
 				</p>
 				-->
 				<?php if ( $bookings_count >= $limit ) : ?>
@@ -57,15 +57,15 @@ function em_bookings_person_table(){
 				<div class="clear"></div>
 				<?php if( $bookings_count > 0 ): ?>
 				<div class='table-wrap'>
-				<table id='dbem-bookings-table' class='widefat post '>
+				<table id='dbem-bookings-table' class='widefat post person'>
 					<thead>
 						<tr>
 							<th class='manage-column column-cb check-column' scope='col'>
 								<input class='select-all' type="checkbox" value='1' />
 							</th>
-							<th class='manage-column' scope='col'><?php _e('Event', 'events-manager'); ?></th>
-							<th class='manage-column' scope='col'><?php _e('Spaces', 'events-manager'); ?></th>
-							<th class='manage-column' scope='col'><?php _e('Status', 'events-manager'); ?></th>
+							<th class='manage-column' scope='col'><?php _e('Event', 'events'); ?></th>
+							<th class='manage-column' scope='col'><?php _e('Spaces', 'events'); ?></th>
+							<th class='manage-column' scope='col'><?php _e('Status', 'events'); ?></th>
 							<th class='manage-column' scope='col'>&nbsp;</th>
 						</tr>
 					</thead>
@@ -80,7 +80,7 @@ function em_bookings_person_table(){
 								?>
 								<tr>
 									<th scope="row" class="check-column" style="padding:7px 0px 7px;"><input type='checkbox' value='<?php echo $EM_Booking->booking_id ?>' name='bookings[]'/></th>
-									<td><a class="row-title" href="<?php echo EM_ADMIN_URL; ?>&amp;page=events-manager-bookings&amp;event_id=<?php echo $EM_Event->event_id ?>"><?php echo ($EM_Event->event_name); ?></a></td>
+									<td><a class="row-title" href="<?php echo EM_ADMIN_URL; ?>&amp;page=events-bookings&amp;event_id=<?php echo $EM_Event->event_id ?>"><?php echo ($EM_Event->event_name); ?></a></td>
 									<td><?php echo $EM_Booking->get_spaces() ?></td>
 									<td><?php echo $EM_Booking->status_array[$EM_Booking->booking_status]; ?>
 									</td>
@@ -92,19 +92,19 @@ function em_bookings_person_table(){
 										$delete_url = add_query_arg(['action'=>'bookings_delete', 'booking_id'=>$EM_Booking->booking_id], $_SERVER['REQUEST_URI']);
 										?>
 										<?php if( get_option('dbem_bookings_approval') && ($EM_Booking->booking_status == EM_Booking::PENDING ) ): ?>
-										<a class="em-bookings-approve" href="<?php echo $approve_url ?>"><?php _e('Approve','events-manager'); ?></a> |
+										<a class="em-bookings-approve" href="<?php echo $approve_url ?>"><?php _e('Approve','events'); ?></a> |
 										<?php endif; ?>
 										<?php if( get_option('dbem_bookings_approval') && $EM_Booking->booking_status == EM_Booking::APPROVED ): ?>
-										<a class="em-bookings-unapprove" href="<?php echo $unapprove_url ?>"><?php _e('Unapprove','events-manager'); ?></a> |
+										<a class="em-bookings-unapprove" href="<?php echo $unapprove_url ?>"><?php _e('Unapprove','events'); ?></a> |
 										<?php endif; ?>
 										<?php if( $EM_Booking->booking_status == EM_Booking::REJECTED ): ?>
-										<a class="em-bookings-approve" href="<?php echo $approve_url ?>"><?php _e('Restore','events-manager'); ?></a> |
+										<a class="em-bookings-approve" href="<?php echo $approve_url ?>"><?php _e('Restore','events'); ?></a> |
 										<?php endif; ?>
 										<?php if( $EM_Booking->booking_status == EM_Booking::PENDING || $EM_Booking->booking_status == EM_Booking::APPROVED ): ?>
-										<a class="em-bookings-reject" href="<?php echo $reject_url ?>"><?php _e('Reject','events-manager'); ?></a> |
+										<a class="em-bookings-reject" href="<?php echo $reject_url ?>"><?php _e('Reject','events'); ?></a> |
 										<?php endif; ?>
-										<a class="em-bookings-edit" href="<?php echo EM_ADMIN_URL; ?>&amp;page=events-manager-bookings&amp;booking_id=<?php echo $EM_Booking->booking_id; ?>"><?php _e('Edit/View','events-manager'); ?></a> |
-										<span class="trash"><a class="em-bookings-delete" href="<?php echo $delete_url ?>"><?php _e('Delete','events-manager'); ?></a></span>
+										<a class="em-bookings-edit" href="<?php echo EM_ADMIN_URL; ?>&amp;page=events-bookings&amp;booking_id=<?php echo $EM_Booking->booking_id; ?>"><?php _e('Edit/View','events'); ?></a> |
+										<span class="trash"><a class="em-bookings-delete" href="<?php echo $delete_url ?>"><?php _e('Delete','events'); ?></a></span>
 									</td>
 								</tr>
 								<?php
@@ -116,7 +116,7 @@ function em_bookings_person_table(){
 				</table>
 				</div>
 				<?php else: ?>
-					<?php _e('No confirmed bookings.', 'events-manager'); ?>
+					<?php _e('No confirmed bookings.', 'events'); ?>
 				<?php endif; ?>
 			</form>
 			<?php if( !empty($bookings_nav) && $bookings >= $limit ) : ?>

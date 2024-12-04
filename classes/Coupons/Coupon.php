@@ -7,6 +7,8 @@ class EM_Coupon extends EM_Object {
 	//DB Fields
 	var $coupon_id = '';
 	var $coupon_owner = '';
+	var $owner = '';
+	var $id = '';
 	var $blog_id = '';
 	var $coupon_code = '';
 	var $coupon_name = '';
@@ -53,7 +55,7 @@ class EM_Coupon extends EM_Object {
 	function __construct($id = false, $search_by = 'id') {
 		global $wpdb;
 		//Initialize
-		$this->required_fields = array("coupon_name" => __('Name', 'events-manager'), "coupon_discount" => __('Discount', 'events-manager'), "coupon_code" => __('Code', 'events-manager'));
+		$this->required_fields = array("coupon_name" => __('Name', 'events'), "coupon_discount" => __('Discount', 'events'), "coupon_code" => __('Code', 'events'));
 		//Get the array/coupon_id
 		if( is_numeric($id) && $search_by == 'id' ){
 			//search by coupon_id, get post_id and blog_id (if in ms mode) and load the post
@@ -66,6 +68,7 @@ class EM_Coupon extends EM_Object {
 		}
 		if( !empty($coupon) && is_array($coupon) && !empty($coupon['coupon_code']) ){
 			foreach( $coupon as $key => $value ){ //merge the post data into coupon object
+				if($key == 'coupon_tax' || $key == 'coupon_sitewide') continue;
 				$this->$key = $value;
 			}
 		}
@@ -134,7 +137,7 @@ class EM_Coupon extends EM_Object {
 			$count = $this->recount();
 			$this->count = $count ? $count : 0;
 		}elseif( !$this->count ){
-			$count = $wpdb->get_var("SELECT meta_value FROM ".EM_META_TABLE." WHERE meta_key='coupon-count' AND object_id={$this->coupon_id} LIMIT 1");
+			$count = $wpdb->get_var("SELECT meta_value FROM ".EM_META_TABLE." WHERE meta_key='coupon-count' AND object_id='{$this->coupon_id}' LIMIT 1");
 			$this->count = $count ? $count:0;
 		}
 		return $this->count;
@@ -142,14 +145,13 @@ class EM_Coupon extends EM_Object {
 	
 	function recount( $count = false ){
 		global $wpdb;
-		//if no number supplied, do a recount
 		if( !$count ){
 			$coupon_search = str_replace('a:1:{', '', serialize(array('coupon_code'=>$this->coupon_code)));
 			$coupon_search = substr($coupon_search, 0, strlen($coupon_search)-1 );
 			$count = $wpdb->get_var('SELECT COUNT(*) FROM '.EM_BOOKINGS_TABLE." WHERE booking_meta LIKE '%{$coupon_search}%' AND booking_status NOT IN (2,3)");
 		}
 		//check if record exists and update/insert accordingly
-		$meta_id = $wpdb->get_var("SELECT meta_id FROM ".EM_META_TABLE." WHERE meta_key='coupon-count' AND object_id={$this->coupon_id} LIMIT 1");
+		$meta_id = $wpdb->get_var("SELECT meta_id FROM ".EM_META_TABLE." WHERE meta_key='coupon-count' AND object_id='{$this->coupon_id}' LIMIT 1");
 		if( $meta_id ){
 			$result =  $wpdb->update(EM_META_TABLE, array('meta_value' => $count), array('meta_key' => 'coupon-count', 'object_id' => $this->coupon_id));			
 		}else{
@@ -166,11 +168,11 @@ class EM_Coupon extends EM_Object {
 		switch($this->coupon_type){
 			case '%':
 				//discount by percent
-				$text = sprintf(__('%s Off','events-manager'), number_format($this->coupon_discount, 2).'%');
+				$text = sprintf(__('%s Off','events'), number_format($this->coupon_discount, 2).'%');
 				break;
 			case '#' :
 				//discount by price
-				$text = sprintf(__('%s Off','events-manager'), \Contexis\Events\Intl\Price::format($this->coupon_discount));
+				$text = sprintf(__('%s Off','events'), \Contexis\Events\Intl\Price::format($this->coupon_discount));
 				break;
 		}
 		return apply_filters('em_coupon_get_discount_text', $text, $this);

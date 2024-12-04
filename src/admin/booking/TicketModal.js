@@ -7,10 +7,9 @@ const TicketModal = ( { store, onCancel, onSave } ) => {
 	const [ state, dispatch ] = store;
 	const ticket = state.currentTicket != 999 ? state.data.attendees[ state.currentTicket ] : null;
 	const { attendee_fields, available_tickets } = state.data;
-	const { currentTicketIndex } = state;
 
 	const [ shadowTicket, setShadowTicket ] = React.useState( ticket );
-
+	console.log( 'uuihd', state.currentTicket );
 	useEffect( () => {
 		setShadowTicket( ticket );
 	}, [ ticket ] );
@@ -28,7 +27,7 @@ const TicketModal = ( { store, onCancel, onSave } ) => {
 			{ ticket && (
 				<Modal onRequestClose={ onCancel }>
 					<div className="events-ticket-modal-content">
-						<h2>{ __( 'Edit Ticket', 'events-manager' ) }</h2>
+						<h2>{ __( 'Edit Ticket', 'events' ) }</h2>
 						<div>
 							<SelectControl
 								label="Ticket Type"
@@ -72,7 +71,7 @@ const TicketModal = ( { store, onCancel, onSave } ) => {
 							</Button>
 							<Button
 								onClick={ () => {
-									onSave( shadowTicket, currentTicketIndex );
+									onSave( shadowTicket, state.currentTicket );
 								} }
 								variant="primary"
 							>

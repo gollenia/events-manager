@@ -22,22 +22,22 @@ const personalData = () => {
 	return (
 		<PluginDocumentSettingPanel
 			name="events-location-settings"
-			title={ __( 'Personal Information', 'events-manager' ) }
+			title={ __( 'Personal Information', 'events' ) }
 			className="events-location-settings"
 		>
 			<SelectControl
-				label={ __( 'Gender', 'events-manager' ) }
+				label={ __( 'Gender', 'events' ) }
 				value={ meta._gender }
 				onChange={ ( value ) => {
 					setMeta( { _gender: value } );
 				} }
 				options={ [
 					{
-						label: __( 'Male', 'events-manager' ),
+						label: __( 'Male', 'events' ),
 						value: 'male',
 					},
 					{
-						label: __( 'Female', 'events-manager' ),
+						label: __( 'Female', 'events' ),
 						value: 'female',
 					},
 				] }
@@ -45,7 +45,7 @@ const personalData = () => {
 
 			<TextControl
 				type="date"
-				label={ __( 'Birthday', 'events-manager' ) }
+				label={ __( 'Birthday', 'events' ) }
 				value={ meta._birthday }
 				onChange={ ( value ) => {
 					setMeta( { _birthday: value } );

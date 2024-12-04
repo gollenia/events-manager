@@ -22,12 +22,12 @@ const contactData = () => {
 	return (
 		<PluginDocumentSettingPanel
 			name="events-location-settings"
-			title={ __( 'Contact', 'events-manager' ) }
+			title={ __( 'Contact', 'events' ) }
 			className="events-location-settings"
 		>
 			<TextControl
 				type="email"
-				label={ __( 'E-Mail', 'events-manager' ) }
+				label={ __( 'E-Mail', 'events' ) }
 				value={ meta._email }
 				onChange={ ( value ) => {
 					setMeta( { _email: value } );
@@ -36,7 +36,7 @@ const contactData = () => {
 
 			<TextControl
 				type="tel"
-				label={ __( 'Telephone', 'events-manager' ) }
+				label={ __( 'Telephone', 'events' ) }
 				value={ meta._phone }
 				onChange={ ( value ) => {
 					setMeta( { _phone: value } );

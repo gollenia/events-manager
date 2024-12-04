@@ -16,8 +16,8 @@ class Post {
 
 	function rewrite_rules( $wp_rewrite ) {
 		$feed_rules = array(
-		  '/wp-admin/edit.php?post_type=bookingform' => '/wp-admin/edit.php?post_type=event&page=events-manager-forms',
-		  '/wp-admin/edit.php?post_type=attendeeform' => '/wp-admin/edit.php?post_type=event&page=events-manager-forms',
+		  '/wp-admin/edit.php?post_type=bookingform' => '/wp-admin/edit.php?post_type=event&page=events-forms',
+		  '/wp-admin/edit.php?post_type=attendeeform' => '/wp-admin/edit.php?post_type=event&page=events-forms',
 		);
 	 
 		$wp_rewrite->rules = $feed_rules + $wp_rewrite->rules;
@@ -43,29 +43,29 @@ class Post {
 				'query_var' => true,
 				'has_archive' => false,
 				'supports' => ['title','excerpt','editor'],
-				'label' => __('Forms','events-manager'),
-				'description' => __('Display forms on your blog.','events-manager'),
+				'label' => __('Forms','events'),
+				'description' => __('Display forms on your blog.','events'),
 				'template' => [
-					['events-manager/form-container', [], [
-						['events-manager/form-email', ["lock" => ["remove" => true, "move" => false], "required" => true, "label" => __('Email', 'events-manager'), "fieldid" => 'user_email']],
-						['events-manager/form-text', ["lock" => ["remove" => true, "move" => false], "required" => true, "width" => 3, "label" => __('First Name', 'events-manager'), "fieldid" => 'first_name']],
-						['events-manager/form-text', ["lock" => ["remove" => true, "move" => false], "required" => true, "width" => 3, "label" => __('Last Name', 'events-manager'), "fieldid" => 'last_name']]]]
+					['events/form-container', [], [
+						['events/form-email', ["lock" => ["remove" => true, "move" => false], "required" => true, "label" => __('Email', 'events'), "fieldid" => 'user_email']],
+						['events/form-text', ["lock" => ["remove" => true, "move" => false], "required" => true, "width" => 3, "label" => __('First Name', 'events'), "fieldid" => 'first_name']],
+						['events/form-text', ["lock" => ["remove" => true, "move" => false], "required" => true, "width" => 3, "label" => __('Last Name', 'events'), "fieldid" => 'last_name']]]]
 				],
 				'labels' => [
-					'name' => __('Booking Form','events-manager'),
-					'singular_name' => __('Form','events-manager'),
-					'menu_name' => __('Forms','events-manager'),
-					'add_new' => __('Add Booking Form','events-manager'),
-					'add_new_item' => __('Add New Form','events-manager'),
-					'edit' => __('Edit','events-manager'),
-					'edit_item' => __('Edit Form','events-manager'),
-					'new_item' => __('New Form','events-manager'),
-					'view' => __('View','events-manager'),
-					'view_item' => __('View Form','events-manager'),
-					'search_items' => __('Search Forms','events-manager'),
-					'not_found' => __('No Forms Found','events-manager'),
-					'not_found_in_trash' => __('No Forms Found in Trash','events-manager'),
-					'parent' => __('Parent Form','events-manager'),
+					'name' => __('Booking Form','events'),
+					'singular_name' => __('Form','events'),
+					'menu_name' => __('Forms','events'),
+					'add_new' => __('Add Booking Form','events'),
+					'add_new_item' => __('Add New Form','events'),
+					'edit' => __('Edit','events'),
+					'edit_item' => __('Edit Form','events'),
+					'new_item' => __('New Form','events'),
+					'view' => __('View','events'),
+					'view_item' => __('View Form','events'),
+					'search_items' => __('Search Forms','events'),
+					'not_found' => __('No Forms Found','events'),
+					'not_found_in_trash' => __('No Forms Found in Trash','events'),
+					'parent' => __('Parent Form','events'),
 				],
 			];
 	
@@ -84,28 +84,28 @@ class Post {
 				'query_var' => true,
 				'has_archive' => false,
 				'supports' => ['title','excerpt','editor'],
-				'label' => __('Forms','events-manager'),
-				'description' => __('Display forms on your blog.','events-manager'),
+				'label' => __('Forms','events'),
+				'description' => __('Display forms on your blog.','events'),
 				'template' => [
-					['events-manager/form-container', [], [
-						['events-manager/form-text', ["required" => true, "width" => 3, "label" => __('Name', 'events-manager'), "fieldid" => 'name']]
+					['events/form-container', [], [
+						['events/form-text', ["required" => true, "width" => 3, "label" => __('Name', 'events'), "fieldid" => 'name']]
 					]]
 				],
 				'labels' => [
-					'name' => __('Attendee Form','events-manager'),
-					'singular_name' => __('Form','events-manager'),
-					'menu_name' => __('Forms','events-manager'),
-					'add_new' => __('Add Form','events-manager'),
-					'add_new_item' => __('Add New Form','events-manager'),
-					'edit' => __('Edit','events-manager'),
-					'edit_item' => __('Edit Form','events-manager'),
-					'new_item' => __('New Form','events-manager'),
-					'view' => __('View','events-manager'),
-					'view_item' => __('View Form','events-manager'),
-					'search_items' => __('Search Forms','events-manager'),
-					'not_found' => __('No Forms Found','events-manager'),
-					'not_found_in_trash' => __('No Forms Found in Trash','events-manager'),
-					'parent' => __('Parent Form','events-manager'),
+					'name' => __('Attendee Form','events'),
+					'singular_name' => __('Form','events'),
+					'menu_name' => __('Forms','events'),
+					'add_new' => __('Add Form','events'),
+					'add_new_item' => __('Add New Form','events'),
+					'edit' => __('Edit','events'),
+					'edit_item' => __('Edit Form','events'),
+					'new_item' => __('New Form','events'),
+					'view' => __('View','events'),
+					'view_item' => __('View Form','events'),
+					'search_items' => __('Search Forms','events'),
+					'not_found' => __('No Forms Found','events'),
+					'not_found_in_trash' => __('No Forms Found in Trash','events'),
+					'parent' => __('Parent Form','events'),
 				],
 			];
 	

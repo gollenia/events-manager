@@ -14,19 +14,19 @@ export default function Edit( { ...props } ) {
 
 	document
 		.getElementsByClassName( 'edit-post-fullscreen-mode-close' )[ 0 ]
-		?.setAttribute( 'href', 'edit.php?post_type=event&page=events-manager-forms' );
+		?.setAttribute( 'href', 'edit.php?post_type=event&page=events-forms' );
 
 	const allowedBlocks = [
-		'events-manager/form-text',
-		'events-manager/form-email',
-		'events-manager/form-textarea',
-		'events-manager/form-select',
-		'events-manager/form-country',
-		'events-manager/form-phone',
-		'events-manager/form-radio',
-		'events-manager/form-checkbox',
-		'events-manager/form-date',
-		'events-manager/form-html',
+		'events/form-text',
+		'events/form-email',
+		'events/form-textarea',
+		'events/form-select',
+		'events/form-country',
+		'events/form-phone',
+		'events/form-radio',
+		'events/form-checkbox',
+		'events/form-date',
+		'events/form-html',
 	];
 
 	const innerBlocksProps = useInnerBlocksProps( blockProps, { allowedBlocks, renderAppender: false } );
@@ -37,7 +37,7 @@ export default function Edit( { ...props } ) {
 				rootClientId={ rootClientId }
 				renderToggle={ ( { onToggle, disabled } ) => (
 					<a className="components-button is-primary" onClick={ onToggle }>
-						{ __( 'Add Field', 'events-manager' ) }
+						{ __( 'Add Field', 'events' ) }
 					</a>
 				) }
 				isAppender

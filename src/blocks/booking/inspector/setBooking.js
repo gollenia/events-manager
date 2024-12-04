@@ -8,9 +8,9 @@ const SetBooking = ( props ) => {
 	const [ showTickets, setShowTickets ] = React.useState( false );
 
 	return (
-		<PanelBody title={ __( 'Booking Settings', 'events-manager' ) } initialOpen={ true }>
+		<PanelBody title={ __( 'Booking Settings', 'events' ) } initialOpen={ true }>
 			<CheckboxControl
-				label={ __( 'Enable Bookings', 'events-manager' ) }
+				label={ __( 'Enable Bookings', 'events' ) }
 				checked={ meta._event_rsvp }
 				onChange={ ( value ) => {
 					setMeta( { _event_rsvp: value } );
@@ -18,7 +18,7 @@ const SetBooking = ( props ) => {
 			/>
 
 			<TextControl
-				label={ __( 'Booking Start Date', 'events-manager' ) }
+				label={ __( 'Booking Start Date', 'events' ) }
 				value={ meta._event_rsvp_start }
 				type="datetime-local"
 				onChange={ ( value ) => {
@@ -28,7 +28,7 @@ const SetBooking = ( props ) => {
 			/>
 
 			<TextControl
-				label={ __( 'Booking End Date', 'events-manager' ) }
+				label={ __( 'Booking End Date', 'events' ) }
 				value={ meta._event_rsvp_end }
 				type="datetime-local"
 				onChange={ ( value ) => {
@@ -42,7 +42,7 @@ const SetBooking = ( props ) => {
 				variant="secondary"
 				disabled={ ! meta._event_rsvp }
 			>
-				{ __( 'Edit Tickets', 'events-manager' ) }
+				{ __( 'Edit Tickets', 'events' ) }
 			</Button>
 			<TicketModal
 				{ ...props }

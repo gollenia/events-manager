@@ -60,13 +60,13 @@ const datetimeSelector = () => {
 	return (
 		<PluginDocumentSettingPanel
 			name="events-datetime-settings"
-			title={ __( 'Time and Date', 'events-manager' ) }
+			title={ __( 'Time and Date', 'events' ) }
 			className="events-datetime-settings"
 		>
 			<div className="em-date-row">
-				<h3>{ __( 'Date', 'events-manager' ) }</h3>
+				<h3>{ __( 'Date', 'events' ) }</h3>
 				<PanelRow>
-					<label for="em-from-date">{ __( 'From', 'events-manager' ) }</label>
+					<label for="em-from-date">{ __( 'From', 'events' ) }</label>
 					<div>
 						<TextControl
 							value={ meta._event_start_date }
@@ -86,7 +86,7 @@ const datetimeSelector = () => {
 					</div>
 				</PanelRow>
 				<PanelRow>
-					<label for="em-to-date">{ __( 'To', 'events-manager' ) }</label>
+					<label for="em-to-date">{ __( 'To', 'events' ) }</label>
 					<div>
 						<TextControl
 							value={ meta._event_end_date }
@@ -101,7 +101,7 @@ const datetimeSelector = () => {
 					</div>
 				</PanelRow>
 			</div>
-			<h3>{ __( 'Time', 'events-manager' ) }</h3>
+			<h3>{ __( 'Time', 'events' ) }</h3>
 			<PanelRow className="em-time-row">
 				<TextControl
 					value={ meta._event_start_time ? meta._event_start_time : '00:00' }
@@ -111,7 +111,7 @@ const datetimeSelector = () => {
 							setMeta( { _event_end_time: getNextHour( 1, value ) } );
 						}
 					} }
-					label={ __( 'Starts at', 'events-manager' ) }
+					label={ __( 'Starts at', 'events' ) }
 					disabled={ meta._event_all_day }
 					type="time"
 				/>
@@ -125,7 +125,7 @@ const datetimeSelector = () => {
 						}
 					} }
 					disabled={ meta._event_all_day }
-					label={ __( 'Ends at', 'events-manager' ) }
+					label={ __( 'Ends at', 'events' ) }
 					type="time"
 				/>
 			</PanelRow>
@@ -134,7 +134,7 @@ const datetimeSelector = () => {
 				onChange={ ( value ) => {
 					setMeta( { _event_all_day: value ? 1 : 0 } );
 				} }
-				label={ __( 'All day', 'events-manager' ) }
+				label={ __( 'All day', 'events' ) }
 			/>
 		</PluginDocumentSettingPanel>
 	);

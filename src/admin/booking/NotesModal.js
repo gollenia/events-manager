@@ -19,27 +19,27 @@ const NotesModal = ( { store, showModal, setShowModal } ) => {
 		<>
 			{ showModal && (
 				<Modal
-					title={ __( 'Note', 'events-manager' ) }
+					title={ __( 'Note', 'events' ) }
 					onRequestClose={ () => {
 						setShowModal( false );
 					} }
 				>
 					<div className="booking-notes">
 						<SelectControl
-							label={ __( 'Type', 'events-manager' ) }
+							label={ __( 'Type', 'events' ) }
 							value={ shadowNote?.type }
 							onChange={ ( value ) => setShadowNote( { ...shadowNote, type: value } ) }
 							defaultValue="warning"
 							options={ [
-								{ value: 'error', label: __( 'Error', 'events-manager' ) },
-								{ value: 'warning', label: __( 'Warning', 'events-manager' ) },
-								{ value: 'info', label: __( 'Info', 'events-manager' ) },
-								{ value: 'success', label: __( 'Success', 'events-manager' ) },
+								{ value: 'error', label: __( 'Error', 'events' ) },
+								{ value: 'warning', label: __( 'Warning', 'events' ) },
+								{ value: 'info', label: __( 'Info', 'events' ) },
+								{ value: 'success', label: __( 'Success', 'events' ) },
 							] }
 						/>
 
 						<TextareaControl
-							label={ __( 'Text', 'events-manager' ) }
+							label={ __( 'Text', 'events' ) }
 							value={ shadowNote?.text }
 							onChange={ ( value ) => setShadowNote( { ...shadowNote, text: value } ) }
 						/>

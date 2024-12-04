@@ -22,7 +22,7 @@ if($attributes['buttonIcon']) {
 	echo "<i class=\"material-icons material-symbols-outlined\">{$attributes['buttonIcon']}</i>";
 } 
 if(!$attributes['iconOnly']) {
-	echo $attributes['buttonTitle'] ?: __("Log In", "events-manager");
+	echo $attributes['buttonTitle'] ?: __("Register", "events");
 }
 ?>
 </button>

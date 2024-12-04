@@ -6,7 +6,7 @@ import {
 import { PanelBody, PanelRow, TextControl } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 
-const Inspector = (props) => {
+const Inspector = ( props ) => {
 	const {
 		attributes,
 		setAttributes,
@@ -19,87 +19,74 @@ const Inspector = (props) => {
 
 	const colorGradientSettings = useMultipleOriginColorsAndGradients();
 
-	const {
-		image,
-		roundImage,
-		url,
-		urlIcon,
-		icon,
-		customIconBackgroundColor,
-		customIconColor,
-	} = attributes;
+	const { image, roundImage, url, urlIcon, icon, customIconBackgroundColor, customIconColor } = attributes;
 
 	return (
 		<>
 			<InspectorControls>
-				<PanelBody
-					title={__('Behaviour', 'ctx-blocks')}
-					initialOpen={true}
-				>
+				<PanelBody title={ __( 'Behaviour', 'events' ) } initialOpen={ true }>
 					<TextControl
-						label={__('Link', 'ctx-blocks')}
-						value={url}
-						onChange={(value) => setAttributes({ url: value })}
+						label={ __( 'Link', 'events' ) }
+						value={ url }
+						onChange={ ( value ) => setAttributes( { url: value } ) }
 					/>
 					<TextControl
-						label={__('Icon for Link', 'ctx-blocks')}
-						value={urlIcon}
-						onChange={(value) => setAttributes({ urlIcon: value })}
+						label={ __( 'Icon for Link', 'events' ) }
+						value={ urlIcon }
+						onChange={ ( value ) => setAttributes( { urlIcon: value } ) }
 					/>
 				</PanelBody>
 
-				<PanelBody title={__('Image', 'ctx-blocks')} initialOpen={true}>
+				<PanelBody title={ __( 'Image', 'events' ) } initialOpen={ true }>
 					<PanelRow>
 						<TextControl
-							label={__('Icon', 'ctx-blocks')}
-							value={icon}
-							onChange={(value) => setAttributes({ icon: value })}
+							label={ __( 'Icon', 'events' ) }
+							value={ icon }
+							onChange={ ( value ) => setAttributes( { icon: value } ) }
 						/>
 					</PanelRow>
 				</PanelBody>
 			</InspectorControls>
 			<InspectorControls group="color">
 				<ColorGradientSettingsDropdown
-					settings={[
+					settings={ [
 						{
-							label: __('Icon Background', 'ctx-blocks'),
-							colorValue:
-								iconBackgroundColor.color ||
-								customIconBackgroundColor,
-							onColorChange: (value) => {
-								setIconBackgroundColor(value);
+							label: __( 'Icon Background', 'events' ),
+							colorValue: iconBackgroundColor.color || customIconBackgroundColor,
+							onColorChange: ( value ) => {
+								setIconBackgroundColor( value );
 
-								setAttributes({
+								setAttributes( {
 									customIconBackgroundColor: value,
-								});
+								} );
 							},
 						},
-					]}
-					panelId={clientId}
-					hasColorsOrGradients={false}
-					disableCustomColors={false}
+					] }
+					panelId={ clientId }
+					hasColorsOrGradients={ false }
+					disableCustomColors={ false }
 					__experimentalIsRenderedInSidebar
-					{...colorGradientSettings}
+					{ ...colorGradientSettings }
 				/>
 				<ColorGradientSettingsDropdown
-					settings={[
+					settings={ [
 						{
-							label: __('Icon Color', 'ctx-blocks'),
+							label: __( 'Icon Color', 'events' ),
 							colorValue: iconColor.color || customIconColor,
-							onColorChange: (value) => {
-								setIconColor(value);
+							onColorChange: ( value ) => {
+								setIconColor( value );
 
-								setAttributes({
+								setAttributes( {
 									customIconColor: value,
-								});
+								} );
 							},
 						},
-					]}
-					panelId={clientId}
-					hasColorsOrGradients={false}
-					disableCustomColors={false}
+					] }
+					panelId={ clientId }
+					hasColorsOrGradients={ false }
+					disableCustomColors={ false }
 					__experimentalIsRenderedInSidebar
-					{...colorGradientSettings}
+					{ ...colorGradientSettings }
 				/>
 			</InspectorControls>
 		</>

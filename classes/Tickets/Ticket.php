@@ -13,7 +13,7 @@ namespace Contexis\Events\Tickets;
  */
 class Ticket extends \EM_Object{
 	//DB Fields
-	public int $ticket_id;
+	public $ticket_id;
 	public int $event_id = 0;
 	protected string $ticket_name;
 	protected string $ticket_description;
@@ -30,6 +30,7 @@ class Ticket extends \EM_Object{
 	public int $ticket_primary = 0;
 	public $ticket_meta = array();
 	public int $ticket_order;
+	public bool $is_available;
     public int $count = 0;
 	public array $fields = array(
 		'ticket_id' => array('name'=>'id','type'=>'%d'),
@@ -79,7 +80,7 @@ class Ticket extends \EM_Object{
 			$ticket_data = $_REQUEST['ticket_id'];
 		}
 
-		$this->ticket_name = __('Standard Ticket','events-manager');
+		$this->ticket_name = __('Standard Ticket','events');
 		$ticket = array();
 		if( $ticket_data !== false ){
 			//Load ticket data
@@ -92,7 +93,7 @@ class Ticket extends \EM_Object{
 			  	$ticket = $wpdb->get_row($sql, ARRAY_A);
 			}
 			//Save into the object
-			$this->from_array($ticket);
+			if(is_array($ticket)) $this->from_array($ticket);
 			//serialized arrays
 			$this->ticket_meta = (!empty($ticket['ticket_meta'])) ? maybe_unserialize($ticket['ticket_meta']):array();
 			$this->ticket_primary = array_key_exists('primary', $this->ticket_meta) ? $this->ticket_meta['primary'] : 0;
@@ -209,22 +210,22 @@ class Ticket extends \EM_Object{
 				}
 				$sql = "UPDATE $table SET ".implode(', ', $set_array)." WHERE ticket_id={$this->ticket_id}";
 				$result = $wpdb->query($sql);
-				$this->feedback_message = __('Changes saved','events-manager');
+				$this->feedback_message = __('Changes saved','events');
 			}else{
 				if( isset($data['ticket_id']) && empty($data['ticket_id']) ) unset($data['ticket_id']);
 				$result = $wpdb->insert($table, $data, $this->get_types($data));
 			    $this->ticket_id = $wpdb->insert_id;
-				$this->feedback_message = __('Ticket created','events-manager'); 
+				$this->feedback_message = __('Ticket created','events'); 
 			}
 			if( $result === false ){
-				$this->feedback_message = __('There was a problem saving the ticket.', 'events-manager');
-				$this->errors[] = __('There was a problem saving the ticket.', 'events-manager');
+				$this->feedback_message = __('There was a problem saving the ticket.', 'events');
+				$this->errors[] = __('There was a problem saving the ticket.', 'events');
 			}
 			//$this->compat_keys();
 			return apply_filters('em_ticket_save', ( count($this->errors) == 0 ), $this);
 		}else{
-			$this->feedback_message = __('There was a problem saving the ticket.', 'events-manager');
-			$this->errors[] = __('There was a problem saving the ticket.', 'events-manager');
+			$this->feedback_message = __('There was a problem saving the ticket.', 'events');
+			$this->errors[] = __('There was a problem saving the ticket.', 'events');
 			return apply_filters('em_ticket_save', false, $this);
 		}
 		return true;
@@ -319,10 +320,10 @@ class Ticket extends \EM_Object{
 			}
 		}
 		if( !empty($this->ticket_price) && !is_numeric($this->ticket_price) ){
-			$this->add_error(esc_html__('Please enter a valid ticket price e.g. 10.50 (no currency signs)','events-manager'));
+			$this->add_error(esc_html__('Please enter a valid ticket price e.g. 10.50 (no currency signs)','events'));
 		}
 		if( !empty($this->ticket_min) && !empty($this->ticket_max) && $this->ticket_max < $this->ticket_min ) {
-			$error = esc_html__('Ticket %s has a higher minimum spaces requirement than the maximum spaces allowed.','events-manager');
+			$error = esc_html__('Ticket %s has a higher minimum spaces requirement than the maximum spaces allowed.','events');
 			$this->add_error( sprintf($error, '<em>'. esc_html($this->ticket_name) .'</em>'));
 		}
 		if ( count($missing_fields) > 0){
@@ -489,7 +490,7 @@ class Ticket extends \EM_Object{
 				$sql = $wpdb->prepare("DELETE FROM ". EM_TICKETS_TABLE . " WHERE ticket_id=%d", $this->ticket_id);
 				$result = $wpdb->query( $sql );
 			}else{
-				$this->feedback_message = __('You cannot delete a ticket that has a booking on it.','events-manager');
+				$this->feedback_message = __('You cannot delete a ticket that has a booking on it.','events');
 				$this->add_error($this->feedback_message);
 				return false;
 			}

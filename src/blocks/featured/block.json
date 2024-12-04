@@ -2,7 +2,7 @@
 	"name": "events-manager/featured",
 	"apiVersion": 2,
 	"title": "Featured",
-	"category": "widgets", 
+	"category": "widgets",
 	"attributes": {
 		"dropShadow": {
 			"type": "boolean",
@@ -52,6 +52,5 @@
 			"type": "boolean",
 			"default": false
 		}
-
 	}
 }

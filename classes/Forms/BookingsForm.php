@@ -43,10 +43,10 @@ class EM_Booking_Form {
 	public static function get_form_template(){
 	    if( empty(self::$form_template )){
     		self::$form_template = apply_filters('em_booking_form_get_form_template', array (
-    			'first_name' => array ( 'label' => __('First Name','events-manager'), 'type' => 'name', 'fieldid'=>'user_name', 'required'=>1 ),
-				'last_name' => array ( 'label' => __('Last Name','events-manager'), 'type' => 'name', 'fieldid'=>'last_name', 'required'=>1 ),
-    			'user_email' => array ( 'label' => __('Email','events-manager'), 'type' => 'email', 'fieldid'=>'user_email', 'required'=>1 ),
-    		  	'booking_comment' => array ( 'label' => __('Comment','events-manager'), 'type' => 'textarea', 'fieldid'=>'booking_comment' ),
+    			'first_name' => array ( 'label' => __('First Name','events'), 'type' => 'name', 'fieldid'=>'user_name', 'required'=>1 ),
+				'last_name' => array ( 'label' => __('Last Name','events'), 'type' => 'name', 'fieldid'=>'last_name', 'required'=>1 ),
+    			'user_email' => array ( 'label' => __('Email','events'), 'type' => 'email', 'fieldid'=>'user_email', 'required'=>1 ),
+    		  	'booking_comment' => array ( 'label' => __('Comment','events'), 'type' => 'textarea', 'fieldid'=>'booking_comment' ),
     		));        
 	    }
 	    return self::$form_template;
@@ -67,11 +67,11 @@ class EM_Booking_Form {
 
 			if(empty($form_data)) {
 				$form_data = array('form' => self::get_form_template());
-				self::$form_name = __('Default','events-manager');
+				self::$form_name = __('Default','events');
 			}
 			self::$form_name = get_the_title(self::$form_id);
 			self::$form = new EM_Form($form_data, 'em_bookings_form');
-			self::$form->form_required_error = __('Please fill in the field: %s','events-manager');
+			self::$form->form_required_error = __('Please fill in the field: %s','events');
 		}
         
 		return self::$form;
@@ -160,6 +160,7 @@ class EM_Booking_Form {
 		    	$values = array_merge($values, $EM_Booking->booking_meta['registration']);
 		    }
 		    $EM_Form->field_values = $values;
+			file_put_contents("/var/www/vhosts/kids-team.internal/log/registration.txt", print_r($EM_Booking->booking_meta, true));
 		}
 		if( !empty($EM_Booking->mb_validate_bookings) ) $EM_Form->ignore_captcha = true; //MB Mode doing a final validation, so no need to re-check captcha
 		if( !$EM_Form->validate() ){

@@ -14,7 +14,7 @@ Class EM_Gateway_Mollie extends EM_Gateway {
 	var $gateway 		= 'mollie';
 	var $title 			= 'Mollie';
 	var $status 		= 4;
-	var $status_txt 	= 'Awaiting Mollie Payment';
+	var $status_txt 	= 'Awaiting Online Payment';
 	var $button_enabled = true;
 	var $payment_return = true;
 	var $supports_multiple_bookings = true;
@@ -80,13 +80,13 @@ Class EM_Gateway_Mollie extends EM_Gateway {
 	 */
 	function booking_validate($result, $EM_Booking) {
 		if (isset( $_POST['paymentType'] ) && empty( $_POST['paymentType'] )) {
-			$EM_Booking->add_error( __('Please select a payment method.', 'events-manager') );
+			$EM_Booking->add_error( __('Please select a payment method.', 'events') );
 			$result = false;
 		}
 
 		$api_key = get_option('em_mollie_api_key');
 		if( !isset($api_key) || empty($api_key) ) {
-			$EM_Booking->add_error( __('Mollie API Key is not found.', 'events-manager') );
+			$EM_Booking->add_error( __('Mollie API Key is not found.', 'events') );
 			$result = false;
 		}
 
@@ -109,7 +109,7 @@ Class EM_Gateway_Mollie extends EM_Gateway {
 
 		$mollie 	= self::start_mollie();
 
-		$description = $booking->output(get_option('em_mollie_description') ?? sprintf( esc_html__('%s tickets for %s', 'events-manager'), '#_BOOKINGSPACES', '#_EVENTNAME'));
+		$description = $booking->output(get_option('em_mollie_description') ?? sprintf( esc_html__('%s tickets for %s', 'events'), '#_BOOKINGSPACES', '#_EVENTNAME'));
 
 		$args = [
 			'amount'  		=> [
@@ -175,12 +175,12 @@ Class EM_Gateway_Mollie extends EM_Gateway {
 			$status 		= (int) $EM_Booking->status;
 
 			$payment_status = array(
-				0 => __("Pending", 'events-manager'),
-				1 => __("Approved", 'events-manager'),
-				2 => __("Rejected", 'events-manager'),
-				3 => __("Cancelled", 'events-manager'),
-				4 => __("Waiting for Mollie", 'events-manager'),
-				5 => __("Pending", 'events-manager'),
+				0 => __("Pending", 'events'),
+				1 => __("Approved", 'events'),
+				2 => __("Rejected", 'events'),
+				3 => __("Cancelled", 'events'),
+				4 => __("Waiting for Mollie", 'events'),
+				5 => __("Pending", 'events'),
 			);
 
 			switch( $status ) {
@@ -191,7 +191,7 @@ Class EM_Gateway_Mollie extends EM_Gateway {
 				case 3:		// Cancelled
 				case 2: 	// Reject = fallback.
 					$class 		= 'error';
-					$feedback 	= __('Booking could not be created','events-manager');
+					$feedback 	= __('Booking could not be created','events');
 				break;
 				case 0: 	// Pending/Open
 				case 4: 	// Awaiting Online Payment.
@@ -201,12 +201,12 @@ Class EM_Gateway_Mollie extends EM_Gateway {
 					// Add styling for this status only - use EM css for the others.
 				break;
 			}
-			$status_string 	= get_option('em_mollie_status_text') ?? __('The status of your payment is', 'events-manager');
+			$status_string 	= get_option('em_mollie_status_text') ?? __('The status of your payment is', 'events');
 			$status_text 	= sprintf('<h3 class="alert__title">%s: %s</h3>', $status_string, strtoupper($payment_status[$status]) );
 			$status_text 	= get_option('em_mollie_show_status') != 'no' ? $status_text : null;
 			$feedback_text 	= get_option('em_mollie_show_feedback') != 'no' ? $feedback	: null;
 			$button 		= sprintf('<div class="button-group button-group--right"><a class="button button--primary" href=%s>%s</a></div>',
-				esc_url(get_permalink(get_option('dbem_events_page'))), esc_attr__('Continue', 'events-manager')	);
+				esc_url(get_permalink(get_option('dbem_events_page'))), esc_attr__('Continue', 'events')	);
 
 			$result 	= sprintf('<section class="section py-12 %s" style="max-width: 33%%;">', $class);
 			$result 	.= '<div class="card card--shadow bg-white card__image-top">';
@@ -265,7 +265,7 @@ Class EM_Gateway_Mollie extends EM_Gateway {
 		}
 
 		elseif ($payment->hasChargebacks()) {
-			$note = __('Charged back', 'events-manager');
+			$note = __('Charged back', 'events');
 			$this->record_transaction( $EM_Booking, $payment->amount->value, strtoupper($payment->amount->currency), $timestamp, $mollie_id, 'Charded back', $note);
 			$EM_Booking->set_status(3);
 		}
@@ -273,7 +273,7 @@ Class EM_Gateway_Mollie extends EM_Gateway {
 			// Fetch detailed info for refund from Mollie.
 			foreach( $payment->refunds() as $refund ) {
 				$date 		= $this->get_localized_time($refund->createdAt);
-				$note 		= sprintf( __('Refunded on %s', 'events-manager'), $date );
+				$note 		= sprintf( __('Refunded on %s', 'events'), $date );
 				$this->record_transaction( $EM_Booking, $payment->amountRefunded->value, strtoupper($payment->amount->currency), $timestamp, $mollie_id, 'Refunded', $note);
 			}
 		}
@@ -293,7 +293,7 @@ Class EM_Gateway_Mollie extends EM_Gateway {
 		;
 		
 		$dashboard_url 	= 'https://www.mollie.com/dashboard/developers/api-keys';
-		$force_reload 	= admin_url('edit.php?post_type=event&page=events-manager-gateways&action=edit&gateway=mollie&em_mollie_action=refresh_methods');
+		$force_reload 	= admin_url('edit.php?post_type=event&page=events-gateways&action=edit&gateway=mollie&em_mollie_action=refresh_methods');
 
 		$fields_array = array(
 		
@@ -302,38 +302,38 @@ Class EM_Gateway_Mollie extends EM_Gateway {
 			
 			array(
 				'id' 		=> 'show_status',
-				'label' 	=> __('Display Payment Status', 'events-manager'),
+				'label' 	=> __('Display Payment Status', 'events'),
 				'type' 		=> 'toggle',
 				'default' 	=> 'yes',
-				'help' 		=> __('Display the payment status on the Return Page?', 'events-manager') .'<br><code>'. __('The status of your payment is:', 'events-manager') .' [status]</code>',
+				'help' 		=> __('Display the payment status on the Return Page?', 'events') .'<br><code>'. __('The status of your payment is:', 'events') .' [status]</code>',
 			),
 			array(
 				'id' 		=> 'status_text',
-				'label' 	=> __('Payment Status Text', 'events-manager'),
+				'label' 	=> __('Payment Status Text', 'events'),
 				'type' 		=> 'text',
-				'default'	=>  __('The status of your payment is', 'events-manager'),
-				'help'		=> __('This will change the output of the setting above.', 'events-manager') .'<br>'. __('Default') .': <code>'. __('The status of your payment is', 'events-manager') .'</code>',
+				'default'	=>  __('The status of your payment is', 'events'),
+				'help'		=> __('This will change the output of the setting above.', 'events') .'<br>'. __('Default') .': <code>'. __('The status of your payment is', 'events') .'</code>',
 			),
 			array(
 				'id' 		=> 'show_feedback',
-				'label' 	=> __('Display Feedback Messages', 'events-manager'),
+				'label' 	=> __('Display Feedback Messages', 'events'),
 				'type' 		=> 'toggle',
 				'default' 	=> 'yes',
-				'help' 		=> sprintf( __('Display the booking feedback messages as set in your <a href=%s target="_blank">Events Manager Settings</a>?', 'events-manager'), admin_url('edit.php?post_type=event&page=events-manager-options#bookings') ),
+				'help' 		=> sprintf( __('Display the booking feedback messages as set in your <a href=%s target="_blank">Events Manager Settings</a>?', 'events'), admin_url('edit.php?post_type=event&page=events-options#bookings') ),
 			),
 			array(
 				'id' 		=> 'description',
-				'label' 	=> __('Payment Description', 'events-manager'),
+				'label' 	=> __('Payment Description', 'events'),
 				'type'		=> 'text',
-				'default' 	=> sprintf( esc_html__('%s tickets for %s', 'events-manager'), '#_BOOKINGSPACES', '#_EVENTNAME'),
-				'help' 		=> sprintf( esc_html__('Shown in the payment description in your Mollie backend. All %s are allowed.', 'events-manager'), '<a href='. admin_url('edit.php?post_type=event&page=events-manager-help') .' target="_blank">' . __("Events Manager Placeholders", 'events-manager') . '</a>' ),
+				'default' 	=> sprintf( esc_html__('%s tickets for %s', 'events'), '#_BOOKINGSPACES', '#_EVENTNAME'),
+				'help' 		=> sprintf( esc_html__('Shown in the payment description in your Mollie backend. All %s are allowed.', 'events'), '<a href='. admin_url('edit.php?post_type=event&page=events-help') .' target="_blank">' . __("Events Manager Placeholders", 'events') . '</a>' ),
 			),
 			array(
 				'id'		=> 'send_cancel_mail',
-				'label'  	=> __('Send email on failed / cancelled payment?', 'events-manager'),
+				'label'  	=> __('Send email on failed / cancelled payment?', 'events'),
 				'type' 		=> 'toggle',
 				'default' 	=> 'yes',
-				'help'		=> __('By default Events Manager will send the Booking Cancelled Email if a payment had failed or is incomplete. This can lead to confusion if the user rebooks right after with a successful payment. This option lets you disable sending the automatic Booking Cancelled Email. (Setting this option to "no" will not affect the email if you change the booking status manually.)', 'events-manager'),
+				'help'		=> __('By default Events Manager will send the Booking Cancelled Email if a payment had failed or is incomplete. This can lead to confusion if the user rebooks right after with a successful payment. This option lets you disable sending the automatic Booking Cancelled Email. (Setting this option to "no" will not affect the email if you change the booking status manually.)', 'events'),
 			),
 		);
 		return $fields_array;
@@ -351,16 +351,16 @@ Class EM_Gateway_Mollie extends EM_Gateway {
 		wp_enqueue_style('em-mollie');
 		$dashboard_url 	= 'https://www.mollie.com/dashboard/developers/api-keys';
 		echo '<table class="form-table stonehenge-table">';
-			Options::input( __('Mollie API Key', 'events-manager'), 'em_mollie_api_key', sprintf( __('Obtain your Live or Test API Key from your <a href=%s target="_blank">Mollie Dashboard</a>.', 'events-manager'), $dashboard_url ), []);
-			Options::checkbox( __('Display Payment Methods', 'events-manager'), 'em_mollie_show_methods', __('Display small images of the activated payment methods on your booking form?', 'events-manager') .'<br>'. sprintf( __( 'You can activate/deactivate each payment method individually in your <a href=%s target="_blank">Mollie Dashboard</a>.', 'events-manager'), $dashboard_url ) );
-			Options::input( __('Free Booking Message', 'events-manager'), 'em_mollie_message_free', __('Shown when the total booking price = 0.00. Your customer will <u>not</u> be redirected to Mollie.', 'events-manager'), ['default' => __('Thank you for your booking.<br>You will receive a confirmation email soon.', 'events-manager')] );
-			Options::input( __('Redirect Message', 'events-manager'), 'em_mollie_message_redirect', __('Shown when the booking is successfully created and the customer is redirected to Mollie.', 'events-manager'), ['default' => __('Redirecting to complete your online payment...', 'events-manager')] );
-			Options::page_select( __('Return Page', 'events-manager'), 'em_mollie_return_page', __('Your customer will be redirected back to this page after the payment. Leave blank to use the Single Event Page.', 'events-manager'), __('None', 'events-manager') );
-			Options::checkbox( __('Display Payment Status', 'events-manager'), 'em_mollie_show_status', __('Display the payment status on the Return Page?', 'events-manager') .'<br><code>'. __('The status of your payment is:', 'events-manager') .' [status]</code>' );
-			Options::input( __('Payment Status Text', 'events-manager'), 'em_mollie_status_text', __('This will change the output of the setting above.', 'events-manager') .'<br>'. __('Default') .': <code>'. __('The status of your payment is', 'events-manager') .'</code>', ['default' => __('The status of your payment is', 'events-manager')] );
-			Options::checkbox( __('Display Feedback Messages', 'events-manager'), 'em_mollie_show_feedback', sprintf( __('Display the booking feedback messages as set in your <a href=%s target="_blank">Events Manager Settings</a>?', 'events-manager'), admin_url('edit.php?post_type=event&page=events-manager-options#bookings') ) );
-			Options::input( __('Payment Description', 'events-manager'), 'em_mollie_description', sprintf( esc_html__('%s tickets for %s', 'events-manager'), '#_BOOKINGSPACES', '#_EVENTNAME'), ['help' => sprintf( esc_html__('Shown in the payment description in your Mollie backend. All %s are allowed.', 'events-manager'), '<a href='. admin_url('edit.php?post_type=event&page=events-manager-help') .' target="_blank">' . __("Events Manager Placeholders", 'events-manager') . '</a>')] );
-			Options::checkbox( __('Send email on failed / cancelled payment?', 'events-manager'), 'em_mollie_send_cancel_mail', __('By default Events Manager will send the Booking Cancelled Email if a payment had failed or is incomplete. This can lead to confusion if the user rebooks right after with a successful payment. This option lets you disable sending the automatic Booking Cancelled Email. (Setting this option to "no" will not affect the email if you change the booking status manually.)' ));
+			Options::input( __('Mollie API Key', 'events'), 'em_mollie_api_key', sprintf( __('Obtain your Live or Test API Key from your <a href=%s target="_blank">Mollie Dashboard</a>.', 'events'), $dashboard_url ), []);
+			Options::checkbox( __('Display Payment Methods', 'events'), 'em_mollie_show_methods', __('Display small images of the activated payment methods on your booking form?', 'events') .'<br>'. sprintf( __( 'You can activate/deactivate each payment method individually in your <a href=%s target="_blank">Mollie Dashboard</a>.', 'events'), $dashboard_url ) );
+			Options::input( __('Free Booking Message', 'events'), 'em_mollie_message_free', __('Shown when the total booking price = 0.00. Your customer will <u>not</u> be redirected to Mollie.', 'events'), ['default' => __('Thank you for your booking.<br>You will receive a confirmation email soon.', 'events')] );
+			Options::input( __('Redirect Message', 'events'), 'em_mollie_message_redirect', __('Shown when the booking is successfully created and the customer is redirected to Mollie.', 'events'), ['default' => __('Redirecting to complete your online payment...', 'events')] );
+			Options::page_select( __('Return Page', 'events'), 'em_mollie_return_page', __('Your customer will be redirected back to this page after the payment. Leave blank to use the Single Event Page.', 'events'), __('None', 'events') );
+			Options::checkbox( __('Display Payment Status', 'events'), 'em_mollie_show_status', __('Display the payment status on the Return Page?', 'events') .'<br><code>'. __('The status of your payment is:', 'events') .' [status]</code>' );
+			Options::input( __('Payment Status Text', 'events'), 'em_mollie_status_text', __('This will change the output of the setting above.', 'events') .'<br>'. __('Default') .': <code>'. __('The status of your payment is', 'events') .'</code>', ['default' => __('The status of your payment is', 'events')] );
+			Options::checkbox( __('Display Feedback Messages', 'events'), 'em_mollie_show_feedback', sprintf( __('Display the booking feedback messages as set in your <a href=%s target="_blank">Events Manager Settings</a>?', 'events'), admin_url('edit.php?post_type=event&page=events-options#bookings') ) );
+			Options::input( __('Payment Description', 'events'), 'em_mollie_description', sprintf( esc_html__('%s tickets for %s', 'events'), '#_BOOKINGSPACES', '#_EVENTNAME'), ['help' => sprintf( esc_html__('Shown in the payment description in your Mollie backend. All %s are allowed.', 'events'), '<a href='. admin_url('edit.php?post_type=event&page=events-help') .' target="_blank">' . __("Events Manager Placeholders", 'events') . '</a>')] );
+			Options::checkbox( __('Send email on failed / cancelled payment?', 'events'), 'em_mollie_send_cancel_mail', __('By default Events Manager will send the Booking Cancelled Email if a payment had failed or is incomplete. This can lead to confusion if the user rebooks right after with a successful payment. This option lets you disable sending the automatic Booking Cancelled Email. (Setting this option to "no" will not affect the email if you change the booking status manually.)' ));
 		echo '</table>';
 	}
 
@@ -431,14 +431,14 @@ Class EM_Gateway_Mollie extends EM_Gateway {
 
 		$translate 	= array(
 			// Status
-			'open'			=> __('open', 'events-manager'),
-			'pending' 		=> __('pending', 'events-manager'),
-			'paid' 			=> __('paid', 'events-manager'),
-			'canceled' 		=> __('canceled', 'events-manager'),
-			'expired' 		=> __('expired', 'events-manager'),
-			'failed' 		=> __('failed', 'events-manager'),
-			'refunded' 		=> __('refunded', 'events-manager'),
-			'chargeback' 	=> __('chargeback', 'events-manager'),
+			'open'			=> __('open', 'events'),
+			'pending' 		=> __('pending', 'events'),
+			'paid' 			=> __('paid', 'events'),
+			'canceled' 		=> __('canceled', 'events'),
+			'expired' 		=> __('expired', 'events'),
+			'failed' 		=> __('failed', 'events'),
+			'refunded' 		=> __('refunded', 'events'),
+			'chargeback' 	=> __('chargeback', 'events'),
 
 		);
 
@@ -451,37 +451,37 @@ Class EM_Gateway_Mollie extends EM_Gateway {
 
 	public static function mollie_method( string $method ) : array {
 		$names = [
-			'applepay' 	    => __('Apple Pay', 'events-manager'),
-			'bancontact' 	=> __('Bancontact', 'events-manager'),
-			'creditcard' 	=> __('Credit Card', 'events-manager'),
-			'directdebit' 	=> __('Direct Debit', 'events-manager'),
-			'eps' 			=> __('EPS', 'events-manager'),
-			'giftcard' 		=> __('Gift Card', 'events-manager'),
-			'googlepay' 	=> __('Google Pay', 'events-manager'),
-			'ideal' 		=> __('iDEAL', 'events-manager'),
-			'klarna' 		=> __('Klarna', 'events-manager'),
-			'paypal' 		=> __('PayPal', 'events-manager'),
-			'postfinance' 	=> __('PostFinance', 'events-manager'),
-			'sofort' 		=> __('SOFORT Banking', 'events-manager'),
-			'swish' 		=> __('Swish', 'events-manager'),
-			'twintr' 		=> __('Twint', 'events-manager'),
+			'applepay' 	    => __('Apple Pay', 'events'),
+			'bancontact' 	=> __('Bancontact', 'events'),
+			'creditcard' 	=> __('Credit Card', 'events'),
+			'directdebit' 	=> __('Direct Debit', 'events'),
+			'eps' 			=> __('EPS', 'events'),
+			'giftcard' 		=> __('Gift Card', 'events'),
+			'googlepay' 	=> __('Google Pay', 'events'),
+			'ideal' 		=> __('iDEAL', 'events'),
+			'klarna' 		=> __('Klarna', 'events'),
+			'paypal' 		=> __('PayPal', 'events'),
+			'postfinance' 	=> __('PostFinance', 'events'),
+			'sofort' 		=> __('SOFORT Banking', 'events'),
+			'swish' 		=> __('Swish', 'events'),
+			'twintr' 		=> __('Twint', 'events'),
 		];
 
 		$descriptions = [
-			'applepay'  	=> __('Pay with your Apple ID', 'events-manager'),
-			'bancontact' 	=> __('Digital Payment Service', 'events-manager'),
-			'creditcard' 	=> __('Mastercard, VISA, Amex', 'events-manager'),
-			'directdebit' 	=> __('Vpay or Maestro', 'events-manager'),
-			'eps' 			=> __('Austrian Payment Service', 'events-manager'),
-			'giftcard' 		=> __('Gift Card', 'events-manager'),
-			'googlepay' 	=> __('Pay with your Google Account', 'events-manager'),
-			'ideal' 		=> __('iDEAL', 'events-manager'),
-			'klarna' 		=> __('Klarna', 'events-manager'),
-			'paypal' 		=> __('PayPal', 'events-manager'),
-			'postfinance' 	=> __('PostFinance', 'events-manager'),
-			'sofort' 		=> __('Transfer Money from Your Account within Seconds', 'events-manager'),
-			'swish' 		=> __('Swish', 'events-manager'),
-			'twintr' 		=> __('Swiss payment service', 'events-manager'),
+			'applepay'  	=> __('Pay with your Apple ID', 'events'),
+			'bancontact' 	=> __('Digital Payment Service', 'events'),
+			'creditcard' 	=> __('Mastercard, VISA, Amex', 'events'),
+			'directdebit' 	=> __('Vpay or Maestro', 'events'),
+			'eps' 			=> __('Austrian Payment Service', 'events'),
+			'giftcard' 		=> __('Gift Card', 'events'),
+			'googlepay' 	=> __('Pay with your Google Account', 'events'),
+			'ideal' 		=> __('iDEAL', 'events'),
+			'klarna' 		=> __('Klarna', 'events'),
+			'paypal' 		=> __('PayPal', 'events'),
+			'postfinance' 	=> __('PostFinance', 'events'),
+			'sofort' 		=> __('Transfer Money from Your Account within Seconds', 'events'),
+			'swish' 		=> __('Swish', 'events'),
+			'twintr' 		=> __('Swiss payment service', 'events'),
 		];
 
 		return [
@@ -551,11 +551,13 @@ Class EM_Gateway_Mollie extends EM_Gateway {
 		register_rest_route( 'em-mollie/v2', '/methods', array(
 			'methods' 	=> 'GET',
 			'callback' 	=> array($this, 'get_methods'),
+			'permission_callback' => '__return_true',
 		));
 
 		register_rest_route( 'em-mollie/v2', '/refresh', array(
 			'methods' 	=> 'GET',
 			'callback' 	=> array($this, 'refresh_methods'),
+			'permission_callback' => '__return_true',
 		));
 	}
 

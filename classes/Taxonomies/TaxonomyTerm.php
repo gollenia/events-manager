@@ -15,6 +15,7 @@ class EM_Taxonomy_Term extends EM_Object {
 	var $slug;
 	var $term_group;
 	var $term_taxonomy_id;
+	var $filter;
 	var $taxonomy; //initially used to supply string representing constant containing name of the specific taxonomy type
 	var $description = '';
 	var $parent = 0;

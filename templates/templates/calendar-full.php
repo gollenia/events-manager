@@ -1,6 +1,6 @@
 <?php 
 /*
- * This file contains the HTML generated for full calendars. You can copy this file to yourthemefolder/plugins/events-manager/templates and modify it in an upgrade-safe manner.
+ * This file contains the HTML generated for full calendars. You can copy this file to yourthemefolder/plugins/events/templates and modify it in an upgrade-safe manner.
  *
  * Note that leaving the class names for the previous/next links will keep the AJAX navigation working.
  *

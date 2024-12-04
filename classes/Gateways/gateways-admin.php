@@ -3,7 +3,7 @@ class EM_Gateways_Admin{
 	
 	public static function init(){
 		add_action('em_create_events_submenu', 'EM_Gateways_Admin::admin_menu',10,1);
-		if( !empty($_REQUEST['page']) && $_REQUEST['page'] == 'events-manager-gateways' ){
+		if( !empty($_REQUEST['page']) && $_REQUEST['page'] == 'events-gateways' ){
 			add_action('admin_init', 'EM_Gateways_Admin::handle_gateways_panel_updates', 10, 1);
 		}
 		
@@ -11,7 +11,7 @@ class EM_Gateways_Admin{
 	
 	
 	public static function admin_menu($plugin_pages){
-		$plugin_pages[] = add_submenu_page('edit.php?post_type='.EM_POST_TYPE_EVENT, __('Payment Gateways','events-manager'),__('Payment Gateways','events-manager'),'list_users','events-manager-gateways', 'EM_Gateways_Admin::handle_gateways_panel');
+		$plugin_pages[] = add_submenu_page('edit.php?post_type='.EM_POST_TYPE_EVENT, __('Payment Gateways','events'),__('Payment Gateways','events'),'list_users','events-gateways', 'EM_Gateways_Admin::handle_gateways_panel');
 		return $plugin_pages;
 	}
 
@@ -34,14 +34,14 @@ class EM_Gateways_Admin{
 				break;
 		}
 		$messages = [];
-		$messages[1] = __('Gateway activated.', 'events-manager');
-		$messages[2] = __('Gateway not activated.', 'events-manager');
-		$messages[3] = __('Gateway deactivated.', 'events-manager');
-		$messages[4] = __('Gateway not deactivated.', 'events-manager');
-		$messages[5] = __('Gateway activation toggled.', 'events-manager');
+		$messages[1] = __('Gateway activated.', 'events');
+		$messages[2] = __('Gateway not activated.', 'events');
+		$messages[3] = __('Gateway deactivated.', 'events');
+		$messages[4] = __('Gateway not deactivated.', 'events');
+		$messages[5] = __('Gateway activation toggled.', 'events');
 		?>
 		<div class='wrap'>
-			<h1><?php _e('Edit Gateways','events-manager'); ?></h1>
+			<h1><?php _e('Edit Gateways','events'); ?></h1>
 			<?php
 			if ( isset($_GET['msg']) && !empty($messages[$_GET['msg']]) ) echo '<div id="message" class="updated fade"><p>' . $messages[$_GET['msg']] . '</p></div>';
 			?>
@@ -50,9 +50,9 @@ class EM_Gateways_Admin{
 					<div class="alignleft actions">
 						<select name="action">
 							<option selected="selected" value=""><?php _e('Bulk actions'); ?></option>
-							<option value="toggle"><?php _e('Toggle activation', 'events-manager'); ?></option>
+							<option value="toggle"><?php _e('Toggle activation', 'events'); ?></option>
 						</select>
-						<input type="submit" class="button-secondary action" value="<?php _e('Apply','events-manager'); ?>">		
+						<input type="submit" class="button-secondary action" value="<?php _e('Apply','events'); ?>">		
 					</div>		
 					<div class="alignright actions"></div>		
 					<br class="clear">
@@ -61,9 +61,9 @@ class EM_Gateways_Admin{
 				<?php
 					wp_original_referer_field(true, 'previous'); wp_nonce_field('emp-gateways');	
 					$columns = array(	
-						"name" => __('Gateway Name','events-manager'),
-						"active" =>	__('Active','events-manager'),
-						"transactions" => __('Transactions','events-manager')
+						"name" => __('Gateway Name','events'),
+						"active" =>	__('Active','events'),
+						"transactions" => __('Transactions','events')
 					);
 					$columns = apply_filters('em_gateways_columns', $columns);	
 					$gateways = EM_Gateways::gateways_list();
@@ -125,14 +125,14 @@ class EM_Gateways_Admin{
 									<td class="column-active">
 										<?php
 											if(array_key_exists($key, $active)) {
-												echo "<strong>" . __('Active', 'events-manager') . "</strong>";
+												echo "<strong>" . __('Active', 'events') . "</strong>";
 											} else {
-												echo __('Inactive', 'events-manager');
+												echo __('Inactive', 'events');
 											}
 										?>
 									</td>
 									<td class="column-transactions">
-										<a href='<?php echo EM_ADMIN_URL; ?>&amp;page=<?php echo $page; ?>&amp;action=transactions&amp;gateway=<?php echo $key; ?>'><?php _e('View transactions','events-manager'); ?></a>
+										<a href='<?php echo EM_ADMIN_URL; ?>&amp;page=<?php echo $page; ?>&amp;action=transactions&amp;gateway=<?php echo $key; ?>'><?php _e('View transactions','events'); ?></a>
 									</td>
 							    </tr>
 								<?php
@@ -141,7 +141,7 @@ class EM_Gateways_Admin{
 							$columncount = count($columns) + 1;
 							?>
 							<tr valign="middle" class="alternate" >
-								<td colspan="<?php echo $columncount; ?>" scope="row"><?php _e('No Payment gateways were found for this install.','events-manager'); ?></td>
+								<td colspan="<?php echo $columncount; ?>" scope="row"><?php _e('No Payment gateways were found for this install.','events'); ?></td>
 						    </tr>
 							<?php
 						}

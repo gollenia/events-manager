@@ -3,7 +3,9 @@ import { __ } from '@wordpress/i18n';
 import PropTypes from 'prop-types';
 import Coupon from './coupon';
 
-import InputField from '../__experimantalForm/InputField';
+import { useState } from 'react';
+
+import { InputField } from '@contexis/wp-react-form';
 import Summary from './summary';
 
 const Payment = ( props ) => {
@@ -12,6 +14,8 @@ const Payment = ( props ) => {
 		state,
 		dispatch,
 	} = props;
+
+	const [ allowDonation, setAllowDonation ] = useState( false );
 
 	const gatewayOptions = () => {
 		const result = {};
@@ -32,7 +36,7 @@ const Payment = ( props ) => {
 					{ data?.event?.has_coupons && <Coupon state={ state } dispatch={ dispatch } /> }
 					{ Object.keys( data.available_gateways ).length > 1 && (
 						<InputField
-							label={ __( 'Payment Method', 'events-manager' ) }
+							label={ __( 'Payment Method', 'events' ) }
 							options={ gatewayOptions() }
 							name={ 'gateway' }
 							onChange={ ( event ) => {
@@ -44,33 +48,40 @@ const Payment = ( props ) => {
 						/>
 					) }
 					{ data.allow_donation && (
-						<div classNAme="donation">
-							<h4>{ __( 'Donation', 'events-manager' ) }</h4>
+						<div className="donation" style={ { gridColumn: 'span 6' } }>
+							<h4>{ __( 'Donation', 'events' ) }</h4>
 							<p dangerouslySetInnerHTML={ { __html: data.l10n.donation } }></p>
 							<InputField
-								onChange={ ( event ) => {
-									dispatch( {
-										type: 'SET_FIELD',
-										payload: { form: 'registration', field: 'donation_ok', value: event },
-									} );
+								onChange={ ( value ) => {
+									if ( ! value ) {
+										dispatch( {
+											type: 'SET_FIELD',
+											payload: { form: 'donation', value: { amount: 0.0 } },
+										} );
+									}
+									setAllowDonation( value );
 								} }
 								type={ 'checkbox' }
-								value={ request.registration.data_privacy_consent }
-								name={ 'data_privacy_consent' }
-								help={ __( 'Yes, I want to donate', 'events-manager' ) }
+								value={ allowDonation }
+								name={ 'allow_donation' }
+								help={ __( 'Yes, I want to donate', 'events' ) }
 								locale={ data.l10n.locale }
+								className="donation-checkbox"
 							/>
 							<InputField
-								label={ __( 'Amount', 'events-manager' ) }
+								label={ __( 'Amount', 'events' ) }
 								onChange={ ( event ) => {
 									dispatch( {
 										type: 'SET_FIELD',
-										payload: { form: 'registration', field: 'donation', value: event },
+										payload: { form: 'donation', value: parseFloat( event ) },
 									} );
 								} }
-								type={ 'text' }
-								pattern={ '^[0-9]+(.[0-9]{1,2})?$' }
-								value={ request.donation }
+								type={ 'currency' }
+								min={ 0.0 }
+								max={ 1000.0 }
+								step="any"
+								disabled={ ! allowDonation }
+								value={ request.donation.amount }
 								name={ 'donation' }
 								locale={ data.l10n.locale }
 							/>

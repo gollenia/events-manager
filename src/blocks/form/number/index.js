@@ -15,8 +15,8 @@ const { name, title, description } = metadata;
 
 const settings = {
 	...metadata,
-	title: __( title, 'gutenberg-form' ),
-	description: __( description, 'gutenberg-form' ),
+	title: __( title, 'events' ),
+	description: __( description, 'events' ),
 	icon: icons.icon,
 	edit: Edit,
 	save: () => {

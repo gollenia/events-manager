@@ -7,7 +7,7 @@ const Inspector = ( props ) => {
 
 	return (
 		<InspectorControls>
-			<PanelBody title={ __( 'Appearance', 'ctx-blocks' ) } initialOpen={ true }>
+			<PanelBody title={ __( 'Appearance', 'events' ) } initialOpen={ true }>
 				<PanelRow></PanelRow>
 			</PanelBody>
 		</InspectorControls>

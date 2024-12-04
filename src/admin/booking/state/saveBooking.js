@@ -7,13 +7,12 @@ const saveBooking = ( bookingId, state, dispatch ) => {
 		registration: data.registration,
 		booking_id: bookingId,
 		gateway: data.booking.gateway,
+		donation: data.booking.donation,
 		event_id: data.event.event_id,
 		note: data.booking.note,
 		attendees: {},
 		coupon: data.booking.coupon,
 	};
-
-	console.log( window.EM );
 
 	for ( const id of Object.keys( data.available_tickets ) ) {
 		fetchRequest[ 'attendees' ][ id ] = [];

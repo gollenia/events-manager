@@ -61,7 +61,7 @@ class EM_Mailer {
 			return $send;
 		}
 
-		$this->errors[] = __('Please supply a valid email format.', 'events-manager');
+		$this->errors[] = __('Please supply a valid email format.', 'events');
 		self::delete_email_attachments($attachments);
 		return false;
 		

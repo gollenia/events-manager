@@ -7,8 +7,12 @@ use EM_Gateway;
 use WP_REST_Response;
 use WP_REST_Server;
 use Contexis\Events\Tickets\Tickets;
+use WP;
+use WP_REST_Request;
 
 class BookingsRest {
+
+	private array $allowed_actions = ['approve', 'reject', 'unapprove', 'cancel', 'delete'];
 
 	public static function init() {
 		$instance = new self();
@@ -35,107 +39,99 @@ class BookingsRest {
                 return true;
             }, 'login_user_id' => get_current_user_id()],
 		], true);
-
-		register_rest_route( 'events/v2', '/tickets', [
-			['methods' => WP_REST_Server::READABLE, 'callback' => [$this, 'get_tickets'], 'permission_callback' => function ( \WP_REST_Request $request ) {
-				return true;
-			},],
-		], true);
 	}
 
-	/**
-	 * Create a new booking
-	 *
-	 * @param \WP_REST_Request $request
-	 * @return void
-	 */
-	public function create_booking($request) {
+	public function create_booking(\WP_REST_Request $request) : WP_REST_Response 
+	{
 		$booking = \EM_Booking::find();
 		$booking->get_request($request);
 
-		$result = [
-			'success' => false
-		];
-
-		if(!$booking->validate()) {
-			http_response_code(400);
-			$result['validation'] = "bibbl";
-			$result['errors'] = $booking->errors;
-			return $result;
+		if(!$booking->validate() || !$booking->save()) {
+			return new WP_REST_Response(['errors' => $booking->errors], 400);
 		}
 
-		$success = $booking->save();
-
-		if(!$success) {
-			http_response_code(400);
-			return $result;
-		}
-		http_response_code($success = 200);
 		do_action('em_booking_add', $booking);
-		$result['errors'] = $booking->errors;
-		$result['response_code'] = $success;
-		$result['booking_id'] = $success ? $booking->booking_id : null;
-		$result['message'] = $booking->feedback_message;
 
-		return apply_filters('em_booking_response', $result, $booking);
-		
+		$result = apply_filters('em_booking_response', [], $booking);
+
+		return new WP_REST_Response(array_merge($result, [
+			'errors' => $booking->errors,
+			'booking_id' => $booking->booking_id ?? null,
+			'message' => $booking->feedback_message
+		]), 200);
 	}
 
-	/**
-	 * Update an existing booking
-	 *
-	 * @param \WP_REST_Request $request
-	 * @return void
-	 */
-	public function update_booking(\WP_REST_Request $request) {
+	public function update_booking(\WP_REST_Request $request) : WP_REST_Response 
+	{
+
 		$id = $request->get_param('id');
+
+		if(!$id) {
+			return new WP_REST_Response([
+				'error' => __('No booking ID given', 'events')
+			], 400);
+		}
+
 		$booking = new \EM_Booking($id);
 
 		if(!$booking->can_manage('edit')) {
-			http_response_code(403);
-			return [
+			$response = [
 				'success' => false,
-				'error' => 'You do not have permission to edit this booking'
+				'error' => __('You do not have permission to edit this booking', 'events')
 			];
+			return new WP_REST_Response($response, 403);
 		}
 
-		
+		if(isset($request['action'])) {
+			[$code, $result] = $this->set_action($request['action'], $booking);
+			return new WP_REST_Response($result, $code);
+		}
+
 		$booking->get_request($request);
-		//wp_verify_nonce( $request['_nonce'], 'events-manager' );
+		//wp_verify_nonce( $request['_nonce'], 'events' );
 		if(!$booking->validate()) {
-			http_response_code(400);
-			return [
+			return new WP_REST_Response([
 				'success' => false,
 				'errors' => $booking->errors,
 				'booking_meta' => $booking->booking_meta,
 				'request' => $request
-			];
+			], 400);
 		}
+
 		$success = $booking->save();
-		return new WP_REST_Response($success);
+		return new WP_REST_Response(['success' => $success], $success ? 200 : 400);
 	}
 
-	public function can_get_bookings() {
+	private function can_get_bookings() : bool
+	{
 		if(!is_user_logged_in()) return false;
 		return current_user_can('manage_others_bookings');
 	}
 
-	/**
-	 * Get data of an existing booking by its ID
-	 * used by src/admin/booking/index.js
-	 *
-	 * @param \WP_REST_Request $request
-	 * @return void
-	 */
-	public function read_booking($request) {
+	private function set_action(string $action, \EM_Booking $booking) : array
+	{
+		
+		if(!in_array($action, $this->allowed_actions)) {
+			return [400, ['error' => __('Invalid action', 'events')]];
+		}
 
+		$result = $booking->$action();
+
+		if($booking->errors && count($booking->errors) > 0) {
+			return [400, ['error' => join(', ', $booking->errors)]];	
+		}
+		
+		return [200, ['success' => $result, 'status' => $booking->booking_status, 'status_text' => $booking->get_status()]];
+	}
+
+	public function read_booking(\WP_REST_Request $request) : \WP_REST_Response 
+	{
 		$booking = $request->has_param('id') ? \EM_Booking::find($request->get_param('id')) : false;
 		$event_id = $booking ? $booking->event_id : intval($request->get_param('event_id'));
 		
 		$event = \EM_Event::find($event_id, $booking ? 'event_id' : 'post_id');
 		if(!$event || ($request->get_param('id') && !$booking)) {
-			http_response_code(404);
-			return;
+			return new WP_REST_Response(['error' => __('Booking not found', 'events')], 404);
 		}
 
 		$coupons = $booking ? \EM_Coupons::get_options($event) : null;
@@ -158,6 +154,7 @@ class BookingsRest {
 				"locale" => str_replace('_', '-', get_locale()),
 			],
 			'available_coupons' => $coupons,
+			'available_spaces' => $event->get_bookings()->get_available_spaces(),
 			'registration' => $registration,
 			'attendees' => $booking ? $booking->get_attendees() : [],
 			'booking' => $booking ? [
@@ -166,66 +163,25 @@ class BookingsRest {
 				'status' => $booking->status,
 				'status_array' => $booking->status_array,
 				'price' => $booking->get_price(),
+				'donation' => $booking->booking_donation,
 				'paid' => $booking->get_price_summary_array(),
 				'gateway' => $booking->booking_meta['gateway'],
-				'coupon' => $booking->booking_meta['coupon'],
-				'note' => $booking->booking_meta['note'],
+				'coupon' => isset($booking->booking_meta['coupon']) ? $booking->booking_meta['coupon'] : null,
+				'note' => isset($booking->booking_meta['note']) ? $booking->booking_meta['note'] : null,
 			] : null
 		];
 
-		http_response_code(200);
-
-		return $data;
+		return new WP_REST_Response($data, 200);
 	}
 
-	/**
-	 * Delete a booking by its ID
-	 *
-	 * @param \WP_REST_Request $request
-	 * @return void
-	 */
-	public function delete_booking($request) {
+	public function delete_booking(\WP_REST_Request $request) : \WP_REST_Response 
+	{
 		$id = $request->get_param('id');
 		$booking = new \EM_Booking($id);
 		$success = $booking->delete();
-		http_response_code($success ? 200 : 400);
-		return [
-			'success' => $success
-		];
-	}
 
-	function register_rest_routes() {
-		register_rest_route('events/v2', '/tickets/(?P<event_id>\d+)', [
-			[
-				'methods' => WP_REST_Server::READABLE,
-				'callback' => [$this, 'get_tickets_rest'],
-				'permission_callback' => [$this, 'get_tickets_permissions_check'],
-			],
-			[
-				'methods' => WP_REST_Server::CREATABLE,
-				'callback' => [$this, 'create_ticket_rest'],
-				'permission_callback' => [$this, 'create_ticket_permissions_check'],
-			],
-			'schema' => [$this, 'get_public_item_schema'],
-		]);
-	}
+		return new WP_REST_Response(['success' => $success, 'errors' => $booking->errors], $success ? 200 : 400);
 
-	function get_tickets_permissions_check($request) {
-		return current_user_can('manage_options');
-	}
-
-	function get_tickets($request) {
-		
-		$event = \EM_Event::find($request->get_param('post_id'), 'post_id');
-		
-		$ticket_data = new Tickets($event);
-		
-		$tickets = [];
-
-		foreach( $ticket_data->tickets as $ticket ) {
-			$tickets[] = $ticket->get_rest_data();
-		}
-		return $tickets;
 	}
 }
 

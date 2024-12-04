@@ -2,7 +2,7 @@
 	"name": "events-manager/upcoming",
 	"title": "Upcoming Events",
 	"description": "Shows a list or cards of upcoming events",
-	"text-domain": "events-manager",
+	"text-domain": "events",
 	"apiVersion": 2,
 	"category": "widgets",
 	"attributes": {

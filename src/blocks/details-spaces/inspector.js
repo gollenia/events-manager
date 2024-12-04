@@ -10,16 +10,16 @@ const Inspector = ( props ) => {
 
 	return (
 		<InspectorControls>
-			<PanelBody title={ __( 'Behaviour', 'ctx-blocks' ) } initialOpen={ true }>
+			<PanelBody title={ __( 'Behaviour', 'events' ) } initialOpen={ true }>
 				<CheckboxControl
-					label={ __( 'Show Number', 'ctx-blocks' ) }
+					label={ __( 'Show Number', 'events' ) }
 					checked={ showNumber }
 					onChange={ ( value ) => setAttributes( { showNumber: value } ) }
 				/>
 
 				<RangeControl
-					label={ __( 'Warning Threshold', 'ctx-blocks' ) }
-					help={ __( 'Number of spaces when the warning message is shown', 'ctx-blocks' ) }
+					label={ __( 'Warning Threshold', 'events' ) }
+					help={ __( 'Number of spaces when the warning message is shown', 'events' ) }
 					value={ warningThreshold }
 					onChange={ ( value ) => setAttributes( { warningThreshold: value } ) }
 					min={ 1 }
@@ -27,30 +27,30 @@ const Inspector = ( props ) => {
 				/>
 
 				<TextControl
-					label={ _n( 'Message when only few spaces are left', 'ctx-blocks' ) }
-					help={ __( 'Use %s as placeholder for the number of spaces left', 'ctx-blocks' ) }
+					label={ _n( 'Message when only few spaces are left', 'events' ) }
+					help={ __( 'Use %s as placeholder for the number of spaces left', 'events' ) }
 					value={ warningText }
 					onChange={ ( value ) => setAttributes( { warningText: value } ) }
 					placeholder={ sprintf(
-						_n( 'Only %s space left', 'Only %s spaces left', warningThreshold, 'ctx-blocks' ),
+						_n( 'Only %s space left', 'Only %s spaces left', warningThreshold, 'events' ),
 						warningThreshold
 					) }
 				/>
 
 				<TextControl
-					label={ __( 'Message when enough spaces are free', 'ctx-blocks' ) }
+					label={ __( 'Message when enough spaces are free', 'events' ) }
 					value={ okText }
 					onChange={ ( value ) => setAttributes( { okText: value } ) }
 					disabled={ showNumber }
-					placeholder={ __( 'Enough free spaces left', 'ctx-blocks' ) }
+					placeholder={ __( 'Enough free spaces left', 'events' ) }
 				/>
 
 				<TextControl
-					label={ __( 'Message when event is booked up', 'ctx-blocks' ) }
+					label={ __( 'Message when event is booked up', 'events' ) }
 					value={ bookedUpText }
 					onChange={ ( value ) => setAttributes( { bookedUpText: value } ) }
 					disabled={ showNumber }
-					placeholder={ __( 'Booked up', 'ctx-blocks' ) }
+					placeholder={ __( 'Booked up', 'events' ) }
 				/>
 			</PanelBody>
 		</InspectorControls>

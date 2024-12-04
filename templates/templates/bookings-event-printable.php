@@ -1,7 +1,7 @@
 <?php 
 /*
  * This page displays a printable view of bookings for a single event.
- * You can override the default display settings pages by copying this file to yourthemefolder/plugins/events-manager/templates/ and modifying it however you need.
+ * You can override the default display settings pages by copying this file to yourthemefolder/plugins/events/templates/ and modifying it however you need.
  * Here you can assume that $EM_Event is globally available with the right EM_Event object.
  */
 global $EM_Event;
@@ -10,22 +10,22 @@ global $EM_Event;
 <html>
 <head>
 	<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
-	<title><?php echo sprintf(__('Bookings for %s','events-manager'), $EM_Event->event_name); ?></title>
+	<title><?php echo sprintf(__('Bookings for %s','events'), $EM_Event->event_name); ?></title>
 	
 </head>
 <body id="printable">
 	<div id="container">
-	<h1><?php echo sprintf(__('Bookings for %s','events-manager'), $EM_Event->event_name); ?></h1> 
+	<h1><?php echo sprintf(__('Bookings for %s','events'), $EM_Event->event_name); ?></h1> 
 	<p><?php echo $EM_Event->output("#d #M #Y"); ?></p>
 	<p><?php echo $EM_Event->output("#_LOCATION, #_ADDRESS, #_TOWN"); ?></p>   
-	<h2><?php _e('Bookings data', 'events-manager');?></h2>
+	<h2><?php _e('Bookings data', 'events');?></h2>
 	<table id="bookings-table">
 		<tr>
-			<th scope='col'><?php _e('Name', 'events-manager')?></th>
-			<th scope='col'><?php _e('E-mail', 'events-manager')?></th>
-			<th scope='col'><?php _e('Phone number', 'events-manager')?></th> 
-			<th scope='col'><?php _e('Spaces', 'events-manager')?></th>
-			<th scope='col'><?php _e('Comment', 'events-manager')?></th>
+			<th scope='col'><?php _e('Name', 'events')?></th>
+			<th scope='col'><?php _e('E-mail', 'events')?></th>
+			<th scope='col'><?php _e('Phone number', 'events')?></th> 
+			<th scope='col'><?php _e('Spaces', 'events')?></th>
+			<th scope='col'><?php _e('Comment', 'events')?></th>
 		</tr> 
 		<?php foreach($EM_Event->get_bookings()->bookings as $EM_Booking) {       
 			if( $EM_Booking->booking_status == EM_Booking::APPROVED){
@@ -41,12 +41,12 @@ global $EM_Event;
 	   	<?php }} ?>
 	  	<tr id='booked-spaces'>
 			<td colspan='3'>&nbsp;</td>
-			<td class='total-label'><?php _e('Booked', 'events-manager')?>:</td>
+			<td class='total-label'><?php _e('Booked', 'events')?>:</td>
 			<td class='spaces-number'><?php echo $EM_Event->get_bookings()->get_booked_spaces(); ?></td>
 		</tr>
 		<tr id='available-spaces'>
 			<td colspan='3'>&nbsp;</td> 
-			<td class='total-label'><?php _e('Available', 'events-manager')?>:</td>  
+			<td class='total-label'><?php _e('Available', 'events')?>:</td>  
 			<td class='spaces-number'><?php echo $EM_Event->get_bookings()->get_available_spaces(); ?></td>
 		</tr>
 	</table>  

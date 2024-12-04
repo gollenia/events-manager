@@ -1,5 +1,5 @@
-//import { InputField } from '@contexis/wp-react-form';
-import InputField from '../__experimantalForm/InputField';
+import { InputField } from '@contexis/wp-react-form';
+//import InputField from '../__experimantalForm/InputField';
 
 /*
  *	Renders a single ticket with it's form fields
@@ -26,11 +26,14 @@ const Ticket = ( props ) => {
 			</div>
 			<div className="booking-ticket-form">
 				{ attendee_fields.map( ( field, key ) => {
+					console.log( index, key, state.wizard.step );
 					return (
 						<InputField
 							{ ...field }
 							name={ field.fieldid }
 							key={ key }
+							id={ ( ( index == key ) == state.wizard.step ) == 0 ? 'first-ticket-field' : '' }
+							tabIndex={ `${ index + 1 }${ key }` }
 							type={ field.type }
 							value={ ticket.fields[ field.fieldid ] }
 							onChange={ ( value ) => {

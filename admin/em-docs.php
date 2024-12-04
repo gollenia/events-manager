@@ -2,31 +2,31 @@
 
 function em_docs_init($force_init = false){
 	global $pagenow;
-	if( ($pagenow == 'edit.php' && !empty($_GET['page']) && $_GET['page']=='events-manager-help' && class_exists('EM_Event')) || $force_init){
+	if( ($pagenow == 'edit.php' && !empty($_GET['page']) && $_GET['page']=='events-help' && class_exists('EM_Event')) || $force_init){
 		add_action('wp_head', 'emd_head');
 		//Generate the docs
 		global $EM_Documentation;
 		$EM_Documentation = array(
 			'arguments' => array(
 				'events' => array(
-					'blog' => array( 'desc' => sprintf('Limit search to %s created in a specific blog id (MultiSite only)','events-manager')),
+					'blog' => array( 'desc' => sprintf('Limit search to %s created in a specific blog id (MultiSite only)','events')),
 					'bookings' => array( 'desc'=> 'Include only events with bookings enabled. Use \'user\' to show events a logged in user has booked.'.'1 = yes, 0 = no'),
 					'category' => array( 'desc'=> str_replace('%s','categories', 'Supply a single id, slug or comma-separated ids or slugs (e.g. "1,%s-slug,3") to limit the search to events in any of these %s. You can also use negative numbers and slugs to exclude specific %s (e.g. -1,-exclude-%s,-3). If you mix inclusions and exclusions, all events with included %s AND without excluded %s will be shown. You can also use &amp; to separate ids and slugs, in which case events must contain (or not contain) both %s to be shown.'), 'default'=>0),
-					'event' => array( 'desc'=> sprintf('Supply a single id or comma-separated ids (e.g. "1,2,3") to limit the search to %s with the %s.','events-manager', 'event_id(s)'), 'default'=>0),
+					'event' => array( 'desc'=> sprintf('Supply a single id or comma-separated ids (e.g. "1,2,3") to limit the search to %s with the %s.','events', 'event_id(s)'), 'default'=>0),
 					'group' => array( 'desc' => 'Limit search to events belonging to a specific group id (BuddyPress only). Using \'my\' will show events belonging to groups the logged in user is a member of.'),
 					'near' => array('desc'=>'Accepts a comma-separated coordinates (e.g. 1,1) value, which searches for events or locations located near this coordinate.'),
 					'near_unit' => array('desc'=>'The distance unit used when a near attribute is provided.', 'default'=>'mi', 'args'=>'mi or km'),
 					'near_distance' => array('desc'=>'The radius distance when searching with the near attribute. near_unit will determine whether this is in miles or kilometers.'),
 				    'owner' => array('desc'=> 'Limits returned results to a specific owner, identified by their user id (e.g. list events or locations owned by user)', 'default'=>0),
-					'post_id' => array( 'desc' => sprintf('Supply a single id or comma-separated ids (e.g. "1,2,3") to limit the search to %s with the %s.','events-manager', 'post_id(s)')),
-					'private' => array( 'desc' => sprintf('Display private %s within your list?','events-manager'), 'args' => '1 = yes, 0 = no', 'default' => 'If user can view private events, 1, otherwise 0.'),
-					'private_only' => array( 'desc' =>sprintf('Display only private %s ?','events-manager'), 'args' => '1 = yes, 0 = no', 'default' => '0'),
+					'post_id' => array( 'desc' => sprintf('Supply a single id or comma-separated ids (e.g. "1,2,3") to limit the search to %s with the %s.','events', 'post_id(s)')),
+					'private' => array( 'desc' => sprintf('Display private %s within your list?','events'), 'args' => '1 = yes, 0 = no', 'default' => 'If user can view private events, 1, otherwise 0.'),
+					'private_only' => array( 'desc' =>sprintf('Display only private %s ?','events'), 'args' => '1 = yes, 0 = no', 'default' => '0'),
 					'recurrences' => array( 'desc'=> 'Show only recurrences if set to 1 or non-recurrences if set to 0, shows all events if not used.'),
 					'recurrence' => array( 'desc'=> 'If set to the event id of the recurring event, this will show only events this event recurrences.', 'default'=>0),
 					'recurring' => array( 'desc'=> 'If set to 1, will only show recurring event templates. Only useful if you know what you\'re doing, use recurrence or recurrences if you want to filter event recurrences.', 'default'=>0),
 					'scope' => array( 'desc'=> 'Choose the time frame of events to show. Additionally you can supply dates (in format of YYYY-MM-DD), either single for events on a specific date or two dates separated by a comma (e.g. 2010-12-25,2010-12-31) for events ocurring between these dates.', 'default'=>'future', 'args'=>array("future", "past", "today", "tomorrow", "month", "next-month", "1-months", "2-months", "3-months", "6-months", "12-months","all")),
 					'search' => array( 'desc'=> 'Do a search for this string within event name, details and location address.' ),
-					'status' => array( 'desc' => sprintf('Limit search to %s with a spefic status (1 is active, 0 is pending approval)','events-manager'), 'default'=>1),
+					'status' => array( 'desc' => sprintf('Limit search to %s with a spefic status (1 is active, 0 is pending approval)','events'), 'default'=>1),
 					'tag' => array( 'desc'=> str_replace('%s', 'tags', 'Supply a single id, slug or comma-separated ids or slugs (e.g. "1,%s-slug,3") to limit the search to events in any of these %s. You can also use negative numbers and slugs to exclude specific %s (e.g. -1,-exclude-%s,-3). If you mix inclusions and exclusions, all events with included %s AND without excluded %s will be shown. You can also use &amp; to separate ids and slugs, in which case events must contain (or not contain) both %s to be shown.'), 'default'=>0),
 					'year' => array( 'desc'=> 'If set to a year (e.g. 2010) only events that start or end during this year/month will be returned. Does not work as intended if used with scope.', 'default'=>''),
 					'has_location' => array( 'desc'=> 'When set to true, only events WITH an assigned location will be shown, has priority over no_location.', 'default'=>''),
@@ -186,11 +186,11 @@ function em_docs_init($force_init = false){
 						'desc' => 'Information pertaining to speicifc gateways.',
 						'placeholders' => array(
 							'#_BOOKINGTXNID' => array( 'desc' => '<em>Online Payments Only</em> - Prints the transaction ID of this booking if available.' ),
-							'#_IBAN' => array( 'desc' => __('Shows the IBAN number for Offline Payments.', 'events-manager') ),
-							'#_BENEFICIARY' => array( 'desc' => __('Displays the beneficiary name.', 'events-manager') ),
-							'#_REFERENCE' => array( 'desc' => __('Payment reference (auto generated)', 'events-manager') ),
-							'#_BANK' => array( 'desc' => __('Name of the Bank', 'events-manager') ),
-							'#_PAYMENTDEADLINE' => array( 'desc' => __('Show the date until the payment has to be done', 'events-manager') ),
+							'#_IBAN' => array( 'desc' => __('Shows the IBAN number for Offline Payments.', 'events') ),
+							'#_BENEFICIARY' => array( 'desc' => __('Displays the beneficiary name.', 'events') ),
+							'#_REFERENCE' => array( 'desc' => __('Payment reference (auto generated)', 'events') ),
+							'#_BANK' => array( 'desc' => __('Name of the Bank', 'events') ),
+							'#_PAYMENTDEADLINE' => array( 'desc' => __('Show the date until the payment has to be done', 'events') ),
 						)
 					),
 					'Coupon Information' => array(

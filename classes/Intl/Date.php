@@ -56,10 +56,10 @@ class Date {
 		}
 		
 		if($instance->is_same_day()) {
-			return $instance->fmt->format($start) . " " . __('to', 'events-manager') . " " . $instance->fmt->format($end) . " " . __("o'clock", 'events-manager');
+			return $instance->fmt->format($start) . " " . __('to', 'events') . " " . $instance->fmt->format($end) . " " . __("o'clock", 'events');
 		}
 
-		return __('Begins at:', 'events-manager') . ' ' . $instance->fmt->format($start) . '<br>' . __('Ends at:', 'events-manager') . ' ' . $instance->fmt->format($end);
+		return __('Begins at:', 'events') . ' ' . $instance->fmt->format($start) . '<br>' . __('Ends at:', 'events') . ' ' . $instance->fmt->format($end);
 	}
 
 	/**
@@ -69,7 +69,7 @@ class Date {
 	 */
 	public function date_range() {
 
-		$result = [__('to', 'events-manager'), $this->fmt->format($this->end)];
+		$result = [__('to', 'events'), $this->fmt->format($this->end)];
 
 		$remove_letters = array_merge(
 			$this->is_same_year() ? ['y', 'Y'] : [],
@@ -113,13 +113,13 @@ class Date {
 
 	public static function weekdays() {
 		return [
-			__('Mon', 'events-manager'),
-			__('Tue', 'events-manager'),
-			__('Wed', 'events-manager'),
-			__('Thu', 'events-manager'),
-			__('Fri', 'events-manager'),
-			__('Sat', 'events-manager'),
-			__('Sun', 'events-manager')
+			__('Mon', 'events'),
+			__('Tue', 'events'),
+			__('Wed', 'events'),
+			__('Thu', 'events'),
+			__('Fri', 'events'),
+			__('Sat', 'events'),
+			__('Sun', 'events')
 		];
 	}
 }

@@ -11,7 +11,7 @@ $reschedule_warnings = !empty($EM_Event->event_id) && $EM_Event->is_recurring() 
 	?>
 
 	
-	<h3 class="title"><?php esc_html_e('Event Options','events-manager'); ?></h3>
+	<h3 class="title"><?php esc_html_e('Event Options','events'); ?></h3>
 
 	<hr>
 	<?php

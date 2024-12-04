@@ -10,6 +10,8 @@ class Price {
 	public bool $free;
 	public string $format;
 	public string $currency;
+	public float $donation;
+	public float $discount;
 	private NumberFormatter $fmt;
 	
 	/**

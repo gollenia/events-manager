@@ -1,16 +1,15 @@
 <?php
 /*
 Plugin Name: Events
-Version: 6.7
-Plugin URI: https://github.com/gollenia/events-manager
+Version: 6.8.2
+Plugin URI: https://github.com/gollenia/events
 Description: Event registration and booking management for WordPress. Recurring events, locations, webinars, ical, booking registration and more!
 Author: Marcus Sykes, Thomas Gollenia
-Author URI: https://github.com/gollenia/events-manager
-Text Domain: events-manager
+Author URI: https://github.com/gollenia/events
+Text Domain: events
 */
 
 /*
-Copyright (c) 2021, Marcus Sykes
 
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -30,108 +29,107 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 // Setting constants
 
 class Events {
-	const VERSION = '6.7';
+	const VERSION = '6.82';
 	const DIR = __DIR__;
 }
+
+function em_load_textdomain() {
+	load_plugin_textdomain('events', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' ); 
+}
+
+add_action( 'plugin_loaded', 'em_load_textdomain', 10 );
+
+
+
 
 require_once( plugin_dir_path( __FILE__ ) . '/vendor/autoload.php');
 
 // INCLUDES
 //Base classes
-require_once('polyfill.php');
-require_once('Assets.php');
-require_once('classes/Options.php');
-require_once('classes/Object.php');
-require_once('classes/Datetime.php');
-require_once('classes/DatetimeZone.php');
-require_once('classes/Taxonomies/TaxonomyTerm.php');
-require_once('classes/Taxonomies/TaxonomyTerms.php');
-//require_once('classes/Taxonomies/TaxonomyFrontend.php');
-//set up events as posts
-require_once('classes/Forms/FormPost.php');
-require_once("em-posts.php");
-//Template Tags & Template Logic
-require_once("em-actions.php");
-require_once("em-ical.php");
+require_once __DIR__ . '/polyfill.php';
+require_once __DIR__ . '/Assets.php';
+require_once __DIR__ . '/classes/Options.php';
+require_once __DIR__ . '/classes/Object.php';
+require_once __DIR__ . '/classes/DateTime.php';
+require_once __DIR__ . '/classes/DateTimeZone.php';
+require_once __DIR__ . '/classes/Taxonomies/TaxonomyTerm.php';
+require_once __DIR__ . '/classes/Taxonomies/TaxonomyTerms.php';
 
+require_once __DIR__ . '/classes/Forms/FormPost.php';
+require_once __DIR__ . '/em-posts.php';
+require_once __DIR__ . '/em-actions.php';
+require_once __DIR__ . '/em-ical.php';
 
-//Classes
-require_once('classes/Bookings/Booking.php');
-require_once('classes/Bookings/Bookings.php');
-require_once("classes/Bookings/BookingsTable.php") ;
-require_once('classes/Bookings/BookingsRest.php');
+require_once __DIR__ . '/classes/Bookings/Booking.php';
 
+require_once __DIR__ . '/classes/Bookings/Bookings.php';
+require_once __DIR__ . '/classes/Bookings/BookingsTable.php';
+require_once __DIR__ . '/classes/Bookings/BookingsRest.php';
+require_once __DIR__ . '/classes/Bookings/BookingExport.php';
+require_once __DIR__ . '/classes/Categories/Category.php';
+require_once __DIR__ . '/classes/Categories/Categories.php';
 
-require_once('classes/Categories/Category.php');
-require_once('classes/Categories/Categories.php');
+require_once __DIR__ . '/classes/Events/Event.php';
+require_once __DIR__ . '/classes/Events/EventPost.php';
+require_once __DIR__ . '/classes/Events/Events.php';
+require_once __DIR__ . '/classes/Locations/Location.php';
 
-require_once('classes/Events/Event.php');
-require_once('classes/Locations/EventLocations.php');
-require_once('classes/Events/EventPost.php');
-require_once('classes/Events/Events.php');
-require_once('classes/Locations/Location.php');
-require_once('classes/Locations/LocationPost.php');
-require_once('classes/Locations/Locations.php');
-require_once("classes/Emails/Mailer.php") ;
-require_once('classes/Notices.php');
-require_once('classes/People/People.php');
-require_once('classes/People/Person.php');
-require_once('classes/Permalinks.php');
-require_once('classes/Speaker/Speakers.php');
+require_once __DIR__ . '/classes/Locations/LocationPost.php';
+require_once __DIR__ . '/classes/Locations/Locations.php';
+require_once __DIR__ . '/classes/Emails/Mailer.php';
+require_once __DIR__ . '/classes/Notices.php';
+require_once __DIR__ . '/classes/People/People.php';
+require_once __DIR__ . '/classes/People/Person.php';
+require_once __DIR__ . '/classes/Permalinks.php';
+require_once __DIR__ . '/classes/Speaker/Speakers.php';
 
-
-require_once('classes/Tags/Tag.php');
-require_once('classes/Tags/Tags.php');
-require_once('classes/Tickets/TicketBooking.php');
-require_once('classes/Tickets/Ticket.php');
-require_once('classes/Tickets/TicketsBookings.php');
-require_once('classes/Tickets/Tickets.php');
-require_once('classes/Tickets/TicketsController.php');
+require_once __DIR__ . '/classes/Tags/Tag.php';
+require_once __DIR__ . '/classes/Tags/Tags.php';
+require_once __DIR__ . '/classes/Tickets/TicketBooking.php';
+require_once __DIR__ . '/classes/Tickets/Ticket.php';
+require_once __DIR__ . '/classes/Tickets/TicketsBookings.php';
+require_once __DIR__ . '/classes/Tickets/Tickets.php';
+require_once __DIR__ . '/classes/Tickets/TicketsController.php';
 //Admin Files
 if( is_admin() ){
-	
-	require_once('classes/Forms/FormPostAdmin.php');
-	require_once('admin/em-admin.php');
-	require_once('admin/em-bookings.php');
-	require_once('admin/em-docs.php');
-	require_once('admin/em-help.php');
-	require_once('admin/em-options.php');
-	require_once('admin/em-data-privacy.php');
+	require_once __DIR__ . '/classes/Forms/FormPostAdmin.php';
+	require_once __DIR__ . '/admin/em-admin.php';
+	require_once __DIR__ . '/admin/em-bookings.php';
+	require_once __DIR__ . '/admin/em-docs.php';
+	require_once __DIR__ . '/admin/em-help.php';
+	require_once __DIR__ . '/admin/em-options.php';
+	require_once __DIR__ . '/admin/em-data-privacy.php';
 
-	//post/taxonomy controllers
-	require_once('classes/Events/EventPostAdmin.php');
-	require_once('classes/Events/EventPostsAdmin.php');
+	require_once __DIR__ . '/classes/Events/EventPostAdmin.php';
+	require_once __DIR__ . '/classes/Events/EventPostsAdmin.php';
+	require_once __DIR__ . '/classes/Locations/LocationPostAdmin.php';
+	require_once __DIR__ . '/classes/Locations/LocationPostsAdmin.php';
+	require_once __DIR__ . '/classes/Taxonomies/TaxonomyAdmin.php';
+	require_once __DIR__ . '/classes/Categories/CategoriesAdmin.php';
+	require_once __DIR__ . '/classes/Tags/TagsAdmin.php';
+	require_once __DIR__ . '/admin/bookings/em-events.php';
+	/*
+	require_once __DIR__ . '/admin/bookings/em-cancelled.php';
+	require_once __DIR__ . '/admin/bookings/em-confirmed.php';
 	
-	
-	require_once('classes/Locations/LocationPostAdmin.php');
-	require_once('classes/Locations/LocationPostsAdmin.php');
-	require_once('classes/Taxonomies/TaxonomyAdmin.php');
-	require_once('classes/Categories/CategoriesAdmin.php');
-	require_once('classes/Tags/TagsAdmin.php');
-	//bookings folder
-	require_once('admin/bookings/em-cancelled.php');
-	require_once('admin/bookings/em-confirmed.php');
-	require_once('admin/bookings/em-events.php');
-	require_once('admin/bookings/em-rejected.php');
-	require_once('admin/bookings/em-pending.php');
-	require_once('admin/bookings/em-person.php');
+	require_once __DIR__ . '/admin/bookings/em-rejected.php';
+	require_once __DIR__ . '/admin/bookings/em-pending.php';
+	require_once __DIR__ . '/admin/bookings/em-person.php';
+	*/
 }
 
-require_once('classes/Speaker/Speaker.php');
-require_once('classes/Export/Export.php');
+require_once __DIR__ . '/classes/Speaker/Speaker.php';
 
-require_once('classes/Forms/Forms.php');
+require_once __DIR__ . '/classes/Export/Export.php';
 
-//booking-specific features
-require_once('classes/Gateways/Gateways.php'); 
-require_once('classes/Forms/BookingsForm.php');
+require_once __DIR__ . '/classes/Forms/Forms.php';
+require_once __DIR__ . '/classes/Gateways/Gateways.php';
+require_once __DIR__ . '/classes/Forms/BookingsForm.php';
 
-require_once('classes/Coupons/Coupons.php');
-require_once('classes/Emails/Emails.php');
-require_once('classes/Forms/UserFields.php');
+require_once __DIR__ . '/classes/Coupons/Coupons.php';
+require_once __DIR__ . '/classes/Emails/Emails.php';
+require_once __DIR__ . '/classes/Forms/UserFields.php';
 
-//This should come into a "Migration" class
-//Table names
 global $wpdb;
 $prefix = $wpdb->prefix;
 define('EM_EVENTS_TABLE',$prefix.'em_events'); //TABLE NAME
@@ -146,53 +144,7 @@ define('EM_EMAIL_QUEUE_TABLE', $wpdb->prefix.'em_email_queue'); //TABLE NAME
 define('EM_COUPONS_TABLE', $wpdb->prefix.'em_coupons'); //TABLE NAME
 define('EM_BOOKINGS_RELATIONSHIPS_TABLE', $wpdb->prefix.'em_bookings_relationships'); //TABLE NAME
 
-/**
- * @author marcus
- * Contains functions for loading styles on both admin and public sides.
- */
 
-/**
- * Perform plugins_loaded actions
- */
-function em_plugins_loaded(){
-	//Capabilities
-	global $em_capabilities_array;
-	$em_capabilities_array = apply_filters('em_capabilities_array', array(
-		/* Booking Capabilities */
-		'manage_others_bookings' => sprintf(__('You do not have permission to manage others %s','events-manager'),__('bookings','events-manager')),
-		'manage_bookings' => sprintf(__('You do not have permission to manage %s','events-manager'),__('bookings','events-manager')),
-		/* Event Capabilities */
-		'publish_events' => sprintf(__('You do not have permission to publish %s','events-manager'),__('events','events-manager')),
-		'delete_others_events' => sprintf(__('You do not have permission to delete others %s','events-manager'),__('events','events-manager')),
-		'delete_events' => sprintf(__('You do not have permission to delete %s','events-manager'),__('events','events-manager')),
-		'edit_others_events' => sprintf(__('You do not have permission to edit others %s','events-manager'),__('events','events-manager')),
-		'edit_events' => sprintf(__('You do not have permission to edit %s','events-manager'),__('events','events-manager')),
-		'read_private_events' => sprintf(__('You cannot read private %s','events-manager'),__('events','events-manager')),
-		/*'read_events' => sprintf(__('You cannot view %s','events-manager'),__('events','events-manager')),*/
-		/* Recurring Event Capabilties */
-		'publish_recurring_events' => sprintf(__('You do not have permission to publish %s','events-manager'),__('recurring events','events-manager')),
-		'delete_others_recurring_events' => sprintf(__('You do not have permission to delete others %s','events-manager'),__('recurring events','events-manager')),
-		'delete_recurring_events' => sprintf(__('You do not have permission to delete %s','events-manager'),__('recurring events','events-manager')),
-		'edit_others_recurring_events' => sprintf(__('You do not have permission to edit others %s','events-manager'),__('recurring events','events-manager')),
-		'edit_recurring_events' => sprintf(__('You do not have permission to edit %s','events-manager'),__('recurring events','events-manager')),
-		/* Location Capabilities */
-		'publish_locations' => sprintf(__('You do not have permission to publish %s','events-manager'),__('locations','events-manager')),
-		'delete_others_locations' => sprintf(__('You do not have permission to delete others %s','events-manager'),__('locations','events-manager')),
-		'delete_locations' => sprintf(__('You do not have permission to delete %s','events-manager'),__('locations','events-manager')),
-		'edit_others_locations' => sprintf(__('You do not have permission to edit others %s','events-manager'),__('locations','events-manager')),
-		'edit_locations' => sprintf(__('You do not have permission to edit %s','events-manager'),__('locations','events-manager')),
-		'read_private_locations' => sprintf(__('You cannot read private %s','events-manager'),__('locations','events-manager')),
-		'read_others_locations' => sprintf(__('You cannot view others %s','events-manager'),__('locations','events-manager')),
-		/*'read_locations' => sprintf(__('You cannot view %s','events-manager'),__('locations','events-manager')),*/
-		/* Category Capabilities */
-		'delete_event_categories' => sprintf(__('You do not have permission to delete %s','events-manager'),__('categories','events-manager')),
-		'edit_event_categories' => sprintf(__('You do not have permission to edit %s','events-manager'),__('categories','events-manager')),
-		/* Upload Capabilities */
-		'upload_event_images' => __('You do not have permission to upload images','events-manager')
-	));
-
-}
-add_filter('plugins_loaded','em_plugins_loaded');
 
 /**
  * Perform init actions
@@ -223,7 +175,7 @@ function em_init(){
 		}
 	}
 	//add custom functions.php file
-	locate_template('plugins/events-manager/functions.php', true);
+	locate_template('plugins/events/functions.php', true);
 	//fire a loaded hook, most plugins should consider going through here to load anything EM related
 	do_action('events_manager_loaded');
 }
@@ -289,7 +241,7 @@ if(is_admin()){ add_action('init', 'em_load_event', 2); }
  */
 function em_locate_template( $template_name, $load=false, $the_args = array() ) {
 	//First we check if there are overriding tempates in the child or parent theme
-	$located = locate_template(array('plugins/events-manager/'.$template_name));
+	$located = locate_template(array('plugins/events/'.$template_name));
 	if( !$located ){
 		$located = apply_filters('em_locate_template_default', $located, $template_name, $load, $the_args);
 		if ( !$located && file_exists(Events::DIR.'/templates/'.$template_name) ) {
@@ -329,8 +281,6 @@ register_deactivation_hook( __FILE__,function() {
 	global $wp_rewrite;
    	$wp_rewrite->flush_rules();
 });
-
-
 
 
 
@@ -378,9 +328,4 @@ function em_register_blocks()
 }
 
 add_action('init', 'em_register_blocks');
-
-function em_load_textdomain() {
-	load_plugin_textdomain('events-manager', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' ); 
-}
-add_action( 'plugins_loaded', 'em_load_textdomain' );
 

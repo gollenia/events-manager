@@ -5,10 +5,10 @@ import React from 'react';
 const SetExtras = ( props ) => {
 	const { meta, setMeta } = props;
 	return (
-		<PanelBody title={ __( 'Extras', 'events-manager' ) } initialOpen={ true }>
+		<PanelBody title={ __( 'Extras', 'events' ) } initialOpen={ true }>
 			<CheckboxControl
-				label={ __( 'Allow Donation', 'events-manager' ) }
-				help={ __( 'Allow attendees to donate for other attendees when booking.', 'events-manager' ) }
+				label={ __( 'Allow Donation', 'events' ) }
+				help={ __( 'Allow attendees to donate for other attendees when booking.', 'events' ) }
 				checked={ meta._event_rsvp_donation }
 				onChange={ ( value ) => {
 					setMeta( { _event_rsvp_donation: value } );

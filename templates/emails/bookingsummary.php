@@ -10,9 +10,9 @@
 <?php echo $ticket_booking->get_ticket()->ticket_name; ?>
 
 --------------------------------------
-<?php _e('Quantity','events-manager'); ?>: <?php echo $ticket_booking->get_spaces(); ?>
+<?php _e('Quantity','events'); ?>: <?php echo $ticket_booking->get_spaces(); ?>
 
-<?php _e('Price','events-manager'); ?>: <?php echo $ticket_booking->format_price($ticket_booking->get_price()); ?>
+<?php _e('Price','events'); ?>: <?php echo $ticket_booking->format_price($ticket_booking->get_price()); ?>
 
 <?php endforeach; ?>
 
@@ -24,46 +24,5 @@ $price_summary = $EM_Booking->get_price_summary_array();
 ?>
 
 
-<?php if( count($price_summary['discounts_pre_tax']) > 0 ): ?>
 
-<?php _e('Discounts Before Taxes','events-manager'); ?>
-
-<?php foreach( $price_summary['discounts_pre_tax'] as $discount_summary ): ?>
-(<?php echo $discount_summary['name']; ?>) : -<?php echo $discount_summary['amount']; ?>
-
-<?php endforeach; ?>
-<?php endif; ?>
-<?php if( count($price_summary['surcharges_pre_tax']) > 0 ): ?>
-
-<?php _e('Surcharges Before Taxes','events-manager'); ?>
-
-<?php foreach( $price_summary['surcharges_pre_tax'] as $surcharge_summary ): ?>
-(<?php echo $surcharge_summary['name']; ?>) : <?php echo $surcharge_summary['amount']; ?>
-
-<?php endforeach; ?>
-<?php endif; ?>
-
-<?php if( !empty($price_summary['taxes']['amount'])  ): ?>
-<?php _e('Taxes','events-manager'); ?> ( <?php echo $price_summary['taxes']['rate']; ?> ) : <?php echo $price_summary['taxes']['amount']; ?>
-<?php endif; ?>
-
-<?php if( count($price_summary['discounts_post_tax']) > 0 ): ?>
-
-<?php _e('Discounts (After Taxes)','events-manager'); ?>
-
-<?php foreach( $price_summary['discounts_post_tax'] as $discount_summary ): ?>
-<?php echo $discount_summary['name']; ?> : -<?php echo $discount_summary['amount']; ?>
- 
-<?php endforeach; ?>
-<?php endif; ?>
-<?php if( count($price_summary['surcharges_post_tax']) > 0 ): ?>
-
-<?php _e('Surcharges (After Taxes)','events-manager'); ?>
-
-<?php foreach( $price_summary['surcharges_post_tax'] as $surcharge_summary ): ?>
-<?php echo $surcharge_summary['name']; ?> : <?php echo $surcharge_summary['amount']; ?>
- 
-<?php endforeach; ?>
-<?php endif; ?>
-
-<?php _e('Total Price','events-manager'); ?> : <?php echo $price_summary['total']; ?>
+<?php _e('Total Price','events'); ?> : <?php echo $price_summary['total']; ?>

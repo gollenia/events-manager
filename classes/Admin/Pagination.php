@@ -27,7 +27,7 @@ class Pagination {
 			'current' => $page,
 			'add_args' => $vars
 		));
-		$return .= sprintf( '<span class="displaying-num">' . __( 'Displaying %1$s&#8211;%2$s of %3$s', 'events-manager') . ' </span>%4$s',
+		$return .= sprintf( '<span class="displaying-num">' . __( 'Displaying %1$s&#8211;%2$s of %3$s', 'events') . ' </span>%4$s',
 			number_format_i18n( ( $page - 1 ) * $limit + 1 ),
 			number_format_i18n( min( $page * $limit, $total ) ),
 			number_format_i18n( $total ),

@@ -7,45 +7,45 @@ $admin_recurring = is_admin() && $EM_Event->is_recurring();
 ?>
 <!-- START recurrence postbox -->
 <div id="em-form-with-recurrence" class="event-form-with-recurrence event-form-when">
-	<p><?php _e('This is a recurring event.', 'events-manager'); ?> <input type="checkbox" id="em-recurrence-checkbox" name="recurring" value="1" <?php if($EM_Event->is_recurring()) echo 'checked' ?> /></p>
+	<p><?php _e('This is a recurring event.', 'events'); ?> <input type="checkbox" id="em-recurrence-checkbox" name="recurring" value="1" <?php if($EM_Event->is_recurring()) echo 'checked' ?> /></p>
 	<p class="em-date-range">
-		<span class="em-recurring-text"><?php _e ( 'Recurrences span from ', 'events-manager'); ?></span>
-		<span class="em-event-text"><?php _e ( 'From ', 'events-manager'); ?></span>				
+		<span class="em-recurring-text"><?php _e ( 'Recurrences span from ', 'events'); ?></span>
+		<span class="em-event-text"><?php _e ( 'From ', 'events'); ?></span>				
 		<input class="em-date-start em-date-input-loc" type="text" />
 		<input class="em-date-input" type="hidden" name="event_start_date" value="<?php echo $EM_Event->start()->getDate(); ?>" />
-		<span class="em-recurring-text"><?php _e('to','events-manager'); ?></span>
-		<span class="em-event-text"><?php _e('to','events-manager'); ?></span>
+		<span class="em-recurring-text"><?php _e('to','events'); ?></span>
+		<span class="em-event-text"><?php _e('to','events'); ?></span>
 		<input class="em-date-end em-date-input-loc" type="text" />
 		<input class="em-date-input" type="hidden" name="event_end_date" value="<?php echo $EM_Event->end()->getDate(); ?>" />
 	</p>
 	<p>
-		<span class="em-recurring-text"><?php _e('Events start from','events-manager'); ?></span>
-		<span class="em-event-text"><?php _e('Event starts at','events-manager'); ?></span>
+		<span class="em-recurring-text"><?php _e('Events start from','events'); ?></span>
+		<span class="em-event-text"><?php _e('Event starts at','events'); ?></span>
 		<input class="em-time-input em-time-start" type="time" size="8" maxlength="8" name="event_start_time" value="<?php echo $EM_Event->start()->i18n("H:i"); ?>" />
-		<?php _e('to','events-manager'); ?>
+		<?php _e('to','events'); ?>
 		<input class="em-time-input em-time-end" type="time" size="8" maxlength="8" name="event_end_time" value="<?php echo $EM_Event->end()->i18n("H:i"); ?>" />
-		<?php _e('All day','events-manager'); ?> <input type="checkbox" class="em-time-allday" name="event_all_day" id="em-time-all-day" value="1" <?php if(!empty($EM_Event->event_all_day)) echo 'checked="checked"'; ?> />
+		<?php _e('All day','events'); ?> <input type="checkbox" class="em-time-allday" name="event_all_day" id="em-time-all-day" value="1" <?php if(!empty($EM_Event->event_all_day)) echo 'checked="checked"'; ?> />
 	</p>
 
 	<div class="em-recurring-text">
 		<p>
-			<?php _e ( 'This event repeats', 'events-manager'); ?> 
+			<?php _e ( 'This event repeats', 'events'); ?> 
 			<select id="recurrence-frequency" name="recurrence_freq">
 				<?php
-					$freq_options = array ("daily" => __ ( 'Daily', 'events-manager'), "weekly" => __ ( 'Weekly', 'events-manager'), "monthly" => __ ( 'Monthly', 'events-manager'), 'yearly' => __('Yearly','events-manager') );
+					$freq_options = array ("daily" => __ ( 'Daily', 'events'), "weekly" => __ ( 'Weekly', 'events'), "monthly" => __ ( 'Monthly', 'events'), 'yearly' => __('Yearly','events') );
 					Contexis\Events\Options::option_items ( $freq_options, $EM_Event->recurrence_freq ); 
 				?>
 			</select>
-			<?php _e ( 'every', 'events-manager')?>
+			<?php _e ( 'every', 'events')?>
 			<input id="recurrence-interval" name='recurrence_interval' size='2' value='<?php echo $EM_Event->recurrence_interval ; ?>' />
-			<span class='interval-desc' id="interval-daily-singular"><?php _e ( 'day', 'events-manager')?></span>
-			<span class='interval-desc' id="interval-daily-plural"><?php _e ( 'days', 'events-manager') ?></span>
-			<span class='interval-desc' id="interval-weekly-singular"><?php _e ( 'week on', 'events-manager'); ?></span>
-			<span class='interval-desc' id="interval-weekly-plural"><?php _e ( 'weeks on', 'events-manager'); ?></span>
-			<span class='interval-desc' id="interval-monthly-singular"><?php _e ( 'month on the', 'events-manager')?></span>
-			<span class='interval-desc' id="interval-monthly-plural"><?php _e ( 'months on the', 'events-manager')?></span>
-			<span class='interval-desc' id="interval-yearly-singular"><?php _e ( 'year', 'events-manager')?></span> 
-			<span class='interval-desc' id="interval-yearly-plural"><?php _e ( 'years', 'events-manager') ?></span>
+			<span class='interval-desc' id="interval-daily-singular"><?php _e ( 'day', 'events')?></span>
+			<span class='interval-desc' id="interval-daily-plural"><?php _e ( 'days', 'events') ?></span>
+			<span class='interval-desc' id="interval-weekly-singular"><?php _e ( 'week on', 'events'); ?></span>
+			<span class='interval-desc' id="interval-weekly-plural"><?php _e ( 'weeks on', 'events'); ?></span>
+			<span class='interval-desc' id="interval-monthly-singular"><?php _e ( 'month on the', 'events')?></span>
+			<span class='interval-desc' id="interval-monthly-plural"><?php _e ( 'months on the', 'events')?></span>
+			<span class='interval-desc' id="interval-yearly-singular"><?php _e ( 'year', 'events')?></span> 
+			<span class='interval-desc' id="interval-yearly-plural"><?php _e ( 'years', 'events') ?></span>
 		</p>
 		<p class="alternate-selector" id="weekly-selector">
 			<?php
@@ -56,19 +56,19 @@ $admin_recurring = is_admin() && $EM_Event->is_recurring();
 		<p class="alternate-selector" id="monthly-selector" style="display:inline;">
 			<select id="monthly-modifier" name="recurrence_byweekno">
 				<?php
-					$weekno_options = array ("1" => __ ( 'first', 'events-manager'), '2' => __ ( 'second', 'events-manager'), '3' => __ ( 'third', 'events-manager'), '4' => __ ( 'fourth', 'events-manager'), '5' => __ ( 'fifth', 'events-manager'), '-1' => __ ( 'last', 'events-manager') ); 
+					$weekno_options = array ("1" => __ ( 'first', 'events'), '2' => __ ( 'second', 'events'), '3' => __ ( 'third', 'events'), '4' => __ ( 'fourth', 'events'), '5' => __ ( 'fifth', 'events'), '-1' => __ ( 'last', 'events') ); 
 					Contexis\Events\Options::option_items ( $weekno_options, $EM_Event->recurrence_byweekno  ); 
 				?>
 			</select>
 			<select id="recurrence-weekday" name="recurrence_byday">
 				<?php Contexis\Events\Options::option_items ( $days_names, $EM_Event->recurrence_byday  ); ?>
 			</select>
-			<?php _e('of each month','events-manager'); ?>
+			<?php _e('of each month','events'); ?>
 		</p>
 		<p class="em-duration-range">
-			<?php echo sprintf(__('Each event spans %s day(s)','events-manager'), '<input id="end-days" type="text" size="8" maxlength="8" name="recurrence_days" value="'. $EM_Event->recurrence_days .'" />'); ?>
+			<?php echo sprintf(__('Each event spans %s day(s)','events'), '<input id="end-days" type="text" size="8" maxlength="8" name="recurrence_days" value="'. $EM_Event->recurrence_days .'" />'); ?>
 		</p>
-		<p class="em-range-description"><em><?php _e( 'For a recurring event, a one day event will be created on each recurring date within this date range.', 'events-manager'); ?></em></p>
+		<p class="em-range-description"><em><?php _e( 'For a recurring event, a one day event will be created on each recurring date within this date range.', 'events'); ?></em></p>
 	</div>
 	<script type="text/javascript">
 	//<![CDATA[

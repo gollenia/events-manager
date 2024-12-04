@@ -1,1 +1,42 @@
-{"translation-revision-date":"2024-11-14 14:05+0000","generator":"Loco https:\/\/localise.biz\/","source":"build\/booking.js","domain":"events-manager","locale_data":{"events-manager":{"":{"domain":"","lang":"de_AT","plural-forms":"nplurals=2; plural=n != 1;"},"Amount":["Betrag"],"Back":["Zur\u00fcck"],"Bank":["Bank"],"Base price:":["Grundpreis:"],"Beneficial":["Beg\u00fcnstigter"],"BIC":["BIC"],"Book now":["Jetzt buchen"],"Booking":["Buchung"],"Check coupon":["Gutschein pr\u00fcfen"],"Close":["Schlie\u00dfen"],"Coupon":["Gutschein"],"Coupon code":["Gutscheincode"],"Done":["Fertig"],"Full price":["Gesamtpreis"],"IBAN":["IBAN"],"Next":["Weiter"],"Payment":["Bezahlung"],"Payment Method":["Zahlmethode"],"Please accept the privacy policy":["Bitte akzeptiere die Datenschutzbestimmungen"],"Please fill in all required fields":["Bitte alle ben\u00f6tigten Felder ausf\u00fcllen"],"Please fill out all required fields":["Bitte alle ben\u00f6tigten Felder ausf\u00fcllen"],"Please select a payment method":["Bitte eine Zahlungsweise w\u00e4hlen"],"Please select at least one ticket":["Bitte mindestens ein Ticket ausw\u00e4hlen"],"Purpose":["Verwendungszweck"],"Registration":["Registrierung"],"Scan the QR-Code with your phone to start payment":["QR-Code mit dem Smartphone einscannen, um die Bezahlung zu starten"],"Scan to pay":["Scan to Pay"],"Tickets":["Tickets"],"You will be redirected to the payment gateway":["Du wirst zu unserem Zahlungsanbieter weitergeleitet."]}}}
+{
+	"translation-revision-date": "2024-11-14 14:05+0000",
+	"generator": "Loco https://localise.biz/",
+	"source": "build/booking.js",
+	"domain": "events",
+	"locale_data": {
+		"events": {
+			"": { "domain": "", "lang": "de_AT", "plural-forms": "nplurals=2; plural=n != 1;" },
+			"Amount": [ "Betrag" ],
+			"Back": [ "Zur\u00fcck" ],
+			"Bank": [ "Bank" ],
+			"Base price:": [ "Grundpreis:" ],
+			"Beneficial": [ "Beg\u00fcnstigter" ],
+			"BIC": [ "BIC" ],
+			"Book now": [ "Jetzt buchen" ],
+			"Booking": [ "Buchung" ],
+			"Check coupon": [ "Gutschein pr\u00fcfen" ],
+			"Close": [ "Schlie\u00dfen" ],
+			"Coupon": [ "Gutschein" ],
+			"Coupon code": [ "Gutscheincode" ],
+			"Done": [ "Fertig" ],
+			"Full price": [ "Gesamtpreis" ],
+			"IBAN": [ "IBAN" ],
+			"Next": [ "Weiter" ],
+			"Payment": [ "Bezahlung" ],
+			"Payment Method": [ "Zahlmethode" ],
+			"Please accept the privacy policy": [ "Bitte akzeptiere die Datenschutzbestimmungen" ],
+			"Please fill in all required fields": [ "Bitte alle ben\u00f6tigten Felder ausf\u00fcllen" ],
+			"Please fill out all required fields": [ "Bitte alle ben\u00f6tigten Felder ausf\u00fcllen" ],
+			"Please select a payment method": [ "Bitte eine Zahlungsweise w\u00e4hlen" ],
+			"Please select at least one ticket": [ "Bitte mindestens ein Ticket ausw\u00e4hlen" ],
+			"Purpose": [ "Verwendungszweck" ],
+			"Registration": [ "Registrierung" ],
+			"Scan the QR-Code with your phone to start payment": [
+				"QR-Code mit dem Smartphone einscannen, um die Bezahlung zu starten"
+			],
+			"Scan to pay": [ "Scan to Pay" ],
+			"Tickets": [ "Tickets" ],
+			"You will be redirected to the payment gateway": [ "Du wirst zu unserem Zahlungsanbieter weitergeleitet." ]
+		}
+	}
+}

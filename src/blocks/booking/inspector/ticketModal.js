@@ -63,9 +63,9 @@ const TicketModal = ( props ) => {
 	const modalTitle =
 		Object.keys( currentTicket ).length > 0
 			? currentTicket.ticket_id == 0
-				? __( 'New Ticket', 'events-manager' )
-				: __( 'Edit Ticket', 'events-manager' )
-			: __( 'Tickets', 'events-manager' );
+				? __( 'New Ticket', 'events' )
+				: __( 'Edit Ticket', 'events' )
+			: __( 'Tickets', 'events' );
 
 	return (
 		<>
@@ -86,12 +86,12 @@ const TicketModal = ( props ) => {
 								<thead>
 									<tr>
 										<th>#</th>
-										<th>{ __( 'Name', 'events-manager' ) }</th>
-										<th>{ __( 'Description', 'events-manager' ) }</th>
-										<th>{ __( 'Price', 'events-manager' ) }</th>
-										<th>{ __( 'Spaces', 'events-manager' ) }</th>
-										<th>{ __( 'Min', 'events-manager' ) }</th>
-										<th>{ __( 'Max', 'events-manager' ) }</th>
+										<th>{ __( 'Name', 'events' ) }</th>
+										<th>{ __( 'Description', 'events' ) }</th>
+										<th>{ __( 'Price', 'events' ) }</th>
+										<th>{ __( 'Spaces', 'events' ) }</th>
+										<th>{ __( 'Min', 'events' ) }</th>
+										<th>{ __( 'Max', 'events' ) }</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -114,7 +114,7 @@ const TicketModal = ( props ) => {
 										onClick={ () => {
 											setCurrentTicket( {
 												ticket_id: 0,
-												ticket_name: __( 'New Ticket', 'events-manager' ),
+												ticket_name: __( 'New Ticket', 'events' ),
 												ticket_description: '',
 												ticket_price: 0,
 												ticket_spaces: meta._event_spaces,
@@ -127,7 +127,7 @@ const TicketModal = ( props ) => {
 											} );
 										} }
 									>
-										{ __( 'Add Ticket', 'events-manager' ) }
+										{ __( 'Add Ticket', 'events' ) }
 									</Button>
 								</FlexItem>
 							</Flex>

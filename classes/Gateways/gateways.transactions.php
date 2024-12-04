@@ -84,7 +84,7 @@ class EM_Gateways_Transactions{
 		global $page, $action, $wp_query;
 		?>
 		<div class="wrap">
-		<h2><?php _e('Transactions','events-manager'); ?></h2>
+		<h2><?php _e('Transactions','events'); ?></h2>
 		<?php $this->mytransactions($context); ?>
 		<script type="text/javascript">
 			jQuery(document).ready( function($){
@@ -126,14 +126,14 @@ class EM_Gateways_Transactions{
 
 		$columns = array();
 
-		$columns['event'] = __('Event','events-manager');
-		$columns['user'] = __('User','events-manager');
-		$columns['date'] = __('Date','events-manager');
-		$columns['amount'] = __('Amount','events-manager');
-		$columns['transid'] = __('Transaction id','events-manager');
-		$columns['gateway'] = __('Gateway','events-manager');
-		$columns['status'] = __('Status','events-manager');
-		$columns['note'] = __('Notes','events-manager');
+		$columns['event'] = __('Event','events');
+		$columns['user'] = __('User','events');
+		$columns['date'] = __('Date','events');
+		$columns['amount'] = __('Amount','events');
+		$columns['transid'] = __('Transaction id','events');
+		$columns['gateway'] = __('Gateway','events');
+		$columns['status'] = __('Status','events');
+		$columns['note'] = __('Notes','events');
 		$columns['actions'] = '';
 
 		$trans_navigation = paginate_links( array(
@@ -163,7 +163,7 @@ class EM_Gateways_Transactions{
 			<div class="tablenav">
 				<div class="alignleft actions">
 					<select name="limit">
-						<option value="<?php echo $this->limit ?>"><?php echo sprintf(esc_html('%s Rows','events-manager'),$this->limit); ?></option>
+						<option value="<?php echo $this->limit ?>"><?php echo sprintf(esc_html('%s Rows','events'),$this->limit); ?></option>
 						<option value="5">5</option>
 						<option value="10">10</option>
 						<option value="25">25</option>
@@ -181,9 +181,9 @@ class EM_Gateways_Transactions{
 					</select>
 					<button id="post-query-submit" class="button-secondary" type="" value="" ><?php esc_attr_e( 'Filter' )?>
 					<?php if( is_object($context) && get_class($context)=="EM_Event" ): ?>
-					<?php esc_html_e('Displaying Event','events-manager'); ?> : <?php echo $context->event_name; ?>
+					<?php esc_html_e('Displaying Event','events'); ?> : <?php echo $context->event_name; ?>
 					<?php elseif( is_object($context) && get_class($context)=="EM_Person" ): ?>
-					<?php esc_html_e('Displaying User','events-manager'); echo ' : '.$context->get_name(); ?>
+					<?php esc_html_e('Displaying User','events'); echo ' : '.$context->get_name(); ?>
 					<?php endif; ?>
 				</div>
 				<?php 
@@ -273,7 +273,7 @@ class EM_Gateways_Transactions{
 								//use the below filter to override specific gateways, the above for modifying the field for all gateways
 								echo apply_filters('em_gateways_transactions_table_gateway_id_'.$transaction->transaction_gateway, $transaction_gateway_id, $transaction, $EM_Booking);
 							} else {
-								echo __('None yet','events-manager');
+								echo __('None yet','events');
 							}
 						?>
 					</td>
@@ -282,7 +282,7 @@ class EM_Gateways_Transactions{
 							if(!empty($transaction->transaction_gateway)) {
 								echo $transaction->transaction_gateway;
 							} else {
-								echo __('None yet','events-manager');
+								echo __('None yet','events');
 							}
 						?>
 					</td>
@@ -291,10 +291,10 @@ class EM_Gateways_Transactions{
 							if(!empty($transaction->transaction_status)) {
 								echo "<span class='em-label " . str_replace(" ", "-", strtolower($transaction->transaction_status)) . "'>"; 
 								echo '<i class="material-symbols-outlined">check_circle</i>';
-								_e($transaction->transaction_status, 'events-manager');
+								_e($transaction->transaction_status, 'events');
 								echo "</span>";
 							} else {
-								echo __('None yet','events-manager');
+								echo __('None yet','events');
 							}
 						?>
 					</td>
@@ -303,13 +303,13 @@ class EM_Gateways_Transactions{
 							if(!empty($transaction->transaction_note)) {
 								echo esc_html($transaction->transaction_note);
 							} else {
-								echo __('None','events-manager');
+								echo __('None','events');
 							}
 						?>
 					</td>
 					<td class="column-trans-note-id">
 						<?php if( $EM_Booking->can_manage() ): ?>
-						<span class="trash"><a class="em-transaction-delete" href="<?php echo add_query_arg(['action'=>'transaction_delete', 'txn_id'=>$transaction->transaction_id, '_wpnonce'=>wp_create_nonce('transaction_delete_'.$transaction->transaction_id.'_'.get_current_user_id())], $_SERVER['REQUEST_URI']); ?>"><?php esc_html_e('Delete','events-manager'); ?></a></span>
+						<span class="trash"><a class="em-transaction-delete" href="<?php echo add_query_arg(['action'=>'transaction_delete', 'txn_id'=>$transaction->transaction_id, '_wpnonce'=>wp_create_nonce('transaction_delete_'.$transaction->transaction_id.'_'.get_current_user_id())], $_SERVER['REQUEST_URI']); ?>"><?php esc_html_e('Delete','events'); ?></a></span>
 						<?php endif; ?>
 					</td>
 			    </tr>
@@ -318,7 +318,7 @@ class EM_Gateways_Transactions{
 		} else {
 			?>
 			<tr valign="middle" class="alternate" >
-				<td colspan="<?php echo $columns; ?>" scope="row"><?php _e('No Transactions','events-manager'); ?></td>
+				<td colspan="<?php echo $columns; ?>" scope="row"><?php _e('No Transactions','events'); ?></td>
 		    </tr>
 			<?php
 		}
@@ -405,8 +405,8 @@ class EM_Gateways_Transactions{
 	}
 	
 	function em_bookings_table_cols_template($template, $EM_Bookings_Table){
-		$template['gateway_txn_id'] = __('Transaction ID','events-manager');
-		$template['payment_total'] = __('Total Paid','events-manager');
+		$template['gateway_txn_id'] = __('Transaction ID','events');
+		$template['payment_total'] = __('Total Paid','events');
 		return $template;
 	}
 }
@@ -428,11 +428,11 @@ function emp_transactions_init(){
 			if( (!empty($EM_Booking->booking_id) && $EM_Booking->can_manage()) || is_super_admin() ){
 				//all good, delete it
 				$wpdb->query('DELETE FROM '.EM_TRANSACTIONS_TABLE." WHERE transaction_id='".$_REQUEST['txn_id']."'");
-				_e('Transaction deleted','events-manager');
+				_e('Transaction deleted','events');
 				exit();
 			}
 		}
-		_e('Transaction could not be deleted', 'events-manager');
+		_e('Transaction could not be deleted', 'events');
 		exit();
 	}
 }

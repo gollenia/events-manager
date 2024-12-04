@@ -49,11 +49,11 @@ const peopleSelector = () => {
 	return (
 		<PluginDocumentSettingPanel
 			name="events-location-settings"
-			title={ __( 'Persons', 'events-manager' ) }
+			title={ __( 'Persons', 'events' ) }
 			className="events-location-settings"
 		>
 			<ComboboxControl
-				label={ __( 'Select a speaker', 'events-manager' ) }
+				label={ __( 'Select a speaker', 'events' ) }
 				value={ meta._speaker_id }
 				onChange={ ( value ) => {
 					setMeta( { _speaker_id: value || 0 } );
@@ -62,7 +62,7 @@ const peopleSelector = () => {
 				__experimentalRenderItem={ ( { item } ) => {
 					if ( item.value == 0 ) return <></>;
 					return (
-						<div className="events-manager-speaker-item">
+						<div className="events-speaker-item">
 							{ item.media ? (
 								<img className="icon-round" width="24px" height="24px" src={ item.media } />
 							) : (
@@ -75,7 +75,7 @@ const peopleSelector = () => {
 			/>
 
 			<TextControl
-				label={ __( 'Audience', 'events-manager' ) }
+				label={ __( 'Audience', 'events' ) }
 				value={ meta._event_audience }
 				onChange={ ( value ) => {
 					setMeta( { _event_audience: value } );

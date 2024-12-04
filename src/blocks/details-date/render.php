@@ -11,7 +11,7 @@ $date = \Contexis\Events\Intl\Date::get_date($event->start()->getTimestamp(), $e
 		<i class="material-icons material-symbols-outlined"><?php echo $attributes['icon'] ?: 'event' ?></i>
 	</div>
 	<div class="event-details-text">
-		<h4><?php echo $attributes['description'] ?: __("Date", "events-manager") ?></h4>
+		<h4><?php echo $attributes['description'] ?: __("Date", "events") ?></h4>
 		<div class="event-details-data"><?php echo $date ?></div> 
 	</div>
 </div> 

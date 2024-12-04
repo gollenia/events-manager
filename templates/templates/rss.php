@@ -2,7 +2,7 @@
 /*
  * RSS Page
  * This page handles the even RSS feed.
- * You can override this file by and copying it to yourthemefolder/plugins/events-manager/templates/ and modifying as necessary.
+ * You can override this file by and copying it to yourthemefolder/plugins/events/templates/ and modifying as necessary.
  * 
  */ 
 header ( "Content-type: application/rss+xml; charset=UTF-8" );

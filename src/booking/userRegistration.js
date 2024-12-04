@@ -1,5 +1,5 @@
-//import { InputField } from '@contexis/wp-react-form';
-import InputField from '../__experimantalForm/InputField';
+import { InputField } from '@contexis/wp-react-form';
+//import InputField from '../__experimantalForm/InputField';
 import Summary from './summary';
 
 const UserRegistration = ( props ) => {
@@ -23,6 +23,7 @@ const UserRegistration = ( props ) => {
 							name={ field.fieldid }
 							disabled={ state.state == 'SUBMITTING' }
 							key={ index }
+							tabIndex={ index + 1 }
 							type={ field.type }
 							value={ state.request.registration[ field.fieldid ] }
 							onChange={ ( event ) => {
@@ -43,6 +44,7 @@ const UserRegistration = ( props ) => {
 									payload: { form: 'registration', field: 'data_privacy_consent', value: event },
 								} );
 							} }
+							tabIndex={ 98 }
 							value={ request.registration.data_privacy_consent }
 							settings={ {
 								name: 'data_privacy_consent',
@@ -51,7 +53,13 @@ const UserRegistration = ( props ) => {
 							} }
 						/>
 					) }
-
+					<div
+						tabIndex={ 99 }
+						onFocus={ () => {
+							console.log( 'focus' );
+							document.getElementById( 'focusButton' ).focus();
+						} }
+					></div>
 					{ data.event.is_free && error != '' && (
 						<div class="alert bg-error text-white" dangerouslySetInnerHTML={ { __html: error } }></div>
 					) }

@@ -51,39 +51,39 @@ const Inspector = ( props ) => {
 	const postType = window.eventBlocksLocalization?.post_type;
 
 	const locationViewOptions = [
-		{ value: '', label: __( "Don't show", 'events-manager' ) },
-		{ value: 'name', label: __( 'Name', 'events-manager' ) },
-		{ value: 'city', label: __( 'City', 'events-manager' ) },
-		{ value: 'country', label: __( 'Country', 'events-manager' ) },
-		{ value: 'state', label: __( 'State', 'events-manager' ) },
+		{ value: '', label: __( "Don't show", 'events' ) },
+		{ value: 'name', label: __( 'Name', 'events' ) },
+		{ value: 'city', label: __( 'City', 'events' ) },
+		{ value: 'country', label: __( 'Country', 'events' ) },
+		{ value: 'state', label: __( 'State', 'events' ) },
 	];
 
 	const speakerViewOptions = [
-		{ value: '', label: __( "Don't show", 'events-manager' ) },
-		{ value: 'name', label: __( 'Name only', 'events-manager' ) },
-		{ value: 'image', label: __( 'Name and image', 'events-manager' ) },
+		{ value: '', label: __( "Don't show", 'events' ) },
+		{ value: 'name', label: __( 'Name only', 'events' ) },
+		{ value: 'image', label: __( 'Name and image', 'events' ) },
 	];
 
 	const scopeOptions = [
-		{ value: 'future', label: __( 'Future', 'events-manager' ) },
-		{ value: 'past', label: __( 'Past', 'events-manager' ) },
-		{ value: 'today', label: __( 'Today', 'events-manager' ) },
-		{ value: 'tomorrow', label: __( 'Tomorrow', 'events-manager' ) },
-		{ value: 'month', label: __( 'This month', 'events-manager' ) },
-		{ value: 'next-month', label: __( 'Next month', 'events-manager' ) },
+		{ value: 'future', label: __( 'Future', 'events' ) },
+		{ value: 'past', label: __( 'Past', 'events' ) },
+		{ value: 'today', label: __( 'Today', 'events' ) },
+		{ value: 'tomorrow', label: __( 'Tomorrow', 'events' ) },
+		{ value: 'month', label: __( 'This month', 'events' ) },
+		{ value: 'next-month', label: __( 'Next month', 'events' ) },
 	];
 
 	const orderListViewOptions = [
-		{ value: 'ASC', label: __( 'Ascending', 'events-manager' ) },
-		{ value: 'DESC', label: __( 'Descending', 'events-manager' ) },
+		{ value: 'ASC', label: __( 'Ascending', 'events' ) },
+		{ value: 'DESC', label: __( 'Descending', 'events' ) },
 	];
 
 	return (
 		<InspectorControls>
-			<PanelBody title={ __( 'Data', 'events-manager' ) } initialOpen={ true }>
+			<PanelBody title={ __( 'Data', 'events' ) } initialOpen={ true }>
 				<SelectControl
 					multiple
-					label={ __( 'Category', 'events-manager' ) }
+					label={ __( 'Category', 'events' ) }
 					value={ selectedCategory }
 					options={ categoryList }
 					onChange={ ( value ) => {
@@ -91,7 +91,7 @@ const Inspector = ( props ) => {
 					} }
 				/>
 				<FormTokenField
-					label={ __( 'Tags', 'events-manager' ) }
+					label={ __( 'Tags', 'events' ) }
 					value={ tagsFieldValue }
 					suggestions={ tagNames }
 					onChange={ ( selectedTags ) => {
@@ -111,7 +111,7 @@ const Inspector = ( props ) => {
 				/>
 
 				<SelectControl
-					label={ __( 'Location', 'events-manager' ) }
+					label={ __( 'Location', 'events' ) }
 					value={ selectedLocation }
 					options={ locationList }
 					onChange={ ( value ) => {
@@ -120,7 +120,7 @@ const Inspector = ( props ) => {
 				/>
 
 				<SelectControl
-					label={ __( 'Scope', 'events-manager' ) }
+					label={ __( 'Scope', 'events' ) }
 					value={ scope }
 					options={ scopeOptions }
 					onChange={ ( value ) => {
@@ -129,7 +129,7 @@ const Inspector = ( props ) => {
 				/>
 
 				<SelectControl
-					label={ __( 'Sorting', 'events-manager' ) }
+					label={ __( 'Sorting', 'events' ) }
 					value={ order }
 					options={ orderListViewOptions }
 					onChange={ ( value ) => {
@@ -138,7 +138,7 @@ const Inspector = ( props ) => {
 				/>
 
 				<RangeControl
-					label={ __( 'Limit', 'events-manager' ) }
+					label={ __( 'Limit', 'events' ) }
 					max={ 100 }
 					min={ 1 }
 					value={ limit }
@@ -148,44 +148,44 @@ const Inspector = ( props ) => {
 				/>
 				{ postType === 'event' && (
 					<CheckboxControl
-						label={ __( 'Exclude current event', 'events-manager' ) }
+						label={ __( 'Exclude current event', 'events' ) }
 						checked={ excludeCurrent }
 						onChange={ ( value ) => setAttributes( { excludeCurrent: value } ) }
-						help={ __( 'If applicable, exclude the current event from the list', 'events-manager' ) }
+						help={ __( 'If applicable, exclude the current event from the list', 'events' ) }
 					/>
 				) }
 			</PanelBody>
-			<PanelBody title={ __( 'Filter', 'events-manager' ) }>
+			<PanelBody title={ __( 'Filter', 'events' ) }>
 				<CheckboxControl
-					label={ __( 'Show category filter', 'events-manager' ) }
+					label={ __( 'Show category filter', 'events' ) }
 					checked={ showCategoryFilter }
 					onChange={ ( value ) => setAttributes( { showCategoryFilter: value } ) }
 				/>
 				<CheckboxControl
-					label={ __( 'Show tag filter', 'events-manager' ) }
+					label={ __( 'Show tag filter', 'events' ) }
 					checked={ showTagFilter }
 					onChange={ ( value ) => setAttributes( { showTagFilter: value } ) }
 				/>
 				<CheckboxControl
-					label={ __( 'Show search bar', 'events-manager' ) }
+					label={ __( 'Show search bar', 'events' ) }
 					checked={ showSearch }
 					onChange={ ( value ) => setAttributes( { showSearch: value } ) }
 				/>
 				<RadioControl
-					label={ __( 'Position', 'events-manager' ) }
-					help={ __( 'May not apply on mobile phones', 'events-manager' ) }
+					label={ __( 'Position', 'events' ) }
+					help={ __( 'May not apply on mobile phones', 'events' ) }
 					options={ [
-						{ label: __( 'Top', 'events-manager' ), value: 'top' },
-						{ label: __( 'Side', 'events-manager' ), value: 'side' },
+						{ label: __( 'Top', 'events' ), value: 'top' },
+						{ label: __( 'Side', 'events' ), value: 'side' },
 					] }
 					selected={ filterPosition }
 					onChange={ ( value ) => setAttributes( { filterPosition: value } ) }
 				/>
 			</PanelBody>
 
-			<PanelBody title={ __( 'Appearance', 'events-manager' ) } initialOpen={ true }>
+			<PanelBody title={ __( 'Appearance', 'events' ) } initialOpen={ true }>
 				<label className="components-base-control__label" htmlFor="inspector-range-control-4">
-					{ __( 'Style', 'events-manager' ) }
+					{ __( 'Style', 'events' ) }
 				</label>
 				<br />
 
@@ -195,32 +195,32 @@ const Inspector = ( props ) => {
 						className={ view == 'mini' ? 'active' : '' }
 					>
 						<Icon size="64" className="icon" icon={ icons.mini } />
-						<div>{ __( 'Table', 'events-manager' ) }</div>
+						<div>{ __( 'Table', 'events' ) }</div>
 					</Button>
 					<Button
 						onClick={ () => setAttributes( { view: 'list' } ) }
 						className={ view == 'list' ? 'active' : '' }
 					>
 						<Icon size="64" className="icon" icon={ icons.list } />
-						<div>{ __( 'List', 'events-manager' ) }</div>
+						<div>{ __( 'List', 'events' ) }</div>
 					</Button>
 					<Button
 						onClick={ () => setAttributes( { view: 'cards' } ) }
 						className={ view == 'cards' ? 'active' : '' }
 					>
 						<Icon size="64" className="icon" icon={ icons.cards } />
-						<div>{ __( 'Cards', 'events-manager' ) }</div>
+						<div>{ __( 'Cards', 'events' ) }</div>
 					</Button>
 				</div>
 
 				<CheckboxControl
-					label={ __( 'Let user select style', 'events-manager' ) }
+					label={ __( 'Let user select style', 'events' ) }
 					checked={ userStylePicker }
 					onChange={ ( value ) => setAttributes( { userStylePicker: value } ) }
 				/>
 
 				<SelectControl
-					label={ __( 'Location', 'events-manager' ) }
+					label={ __( 'Location', 'events' ) }
 					value={ showLocation }
 					options={ locationViewOptions }
 					onChange={ ( value ) => {
@@ -229,7 +229,7 @@ const Inspector = ( props ) => {
 				/>
 
 				<SelectControl
-					label={ __( 'Show Speaker', 'events-manager' ) }
+					label={ __( 'Show Speaker', 'events' ) }
 					value={ showSpeaker }
 					options={ speakerViewOptions }
 					onChange={ ( value ) => {
@@ -238,10 +238,10 @@ const Inspector = ( props ) => {
 				/>
 
 				<RangeControl
-					label={ __( 'Length of preview text', 'events-manager' ) }
+					label={ __( 'Length of preview text', 'events' ) }
 					max={ 200 }
 					min={ 0 }
-					help={ __( 'Number of words', 'events-manager' ) }
+					help={ __( 'Number of words', 'events' ) }
 					onChange={ ( value ) => {
 						setAttributes( { excerptLength: value } );
 					} }
@@ -249,7 +249,7 @@ const Inspector = ( props ) => {
 				/>
 				<PanelRow>
 					<CheckboxControl
-						label={ __( 'Show audience', 'events-manager' ) }
+						label={ __( 'Show audience', 'events' ) }
 						checked={ showAudience }
 						onChange={ ( value ) => setAttributes( { showAudience: value } ) }
 					/>
@@ -257,7 +257,7 @@ const Inspector = ( props ) => {
 
 				<PanelRow>
 					<CheckboxControl
-						label={ __( 'Show image', 'events-manager' ) }
+						label={ __( 'Show image', 'events' ) }
 						checked={ showImages }
 						onChange={ ( value ) => setAttributes( { showImages: value } ) }
 					/>
@@ -265,25 +265,25 @@ const Inspector = ( props ) => {
 
 				<PanelRow>
 					<CheckboxControl
-						label={ __( 'Show category', 'events-manager' ) }
+						label={ __( 'Show category', 'events' ) }
 						checked={ showCategory }
 						onChange={ ( value ) => setAttributes( { showCategory: value } ) }
 					/>
 				</PanelRow>
 				<CheckboxControl
-					label={ __( 'Show if event is booked up or nearly booked up', 'events-manager' ) }
+					label={ __( 'Show if event is booked up or nearly booked up', 'events' ) }
 					checked={ showBookedUp }
 					onChange={ ( value ) => setAttributes( { showBookedUp: value } ) }
 				/>
 				<RangeControl
-					label={ __( 'Warning threshold', 'events-manager' ) }
+					label={ __( 'Warning threshold', 'events' ) }
 					value={ bookedUpWarningThreshold }
 					onChange={ ( value ) => setAttributes( { bookedUpWarningThreshold: value } ) }
 					min={ 0 }
 					max={ 10 }
 					help={ __(
 						'Show a warning that the event is nearly booked up when only this number of spaces are left',
-						'events-manager'
+						'events'
 					) }
 				/>
 			</PanelBody>

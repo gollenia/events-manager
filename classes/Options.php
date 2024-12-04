@@ -166,7 +166,7 @@ class Options {
 	}
 	
 	public static function radio_binary($title, $name, $description='', $option_names = '', $trigger='', $untrigger=false) {
-		if( empty($option_names) ) $option_names = array(0 => __('No','events-manager'), 1 => __('Yes','events-manager'));
+		if( empty($option_names) ) $option_names = array(0 => __('No','events'), 1 => __('Yes','events'));
 		if( substr($name, 0, 7) == 'dbem_ms' ){
 			$list_events_page = get_site_option($name);
 		}else{
@@ -273,7 +273,7 @@ class Options {
 	}
 
 	public static function save_button() {
-		return '<tr><th>&nbsp;</th><td><p class="submit" style="margin:0px; padding:0px; text-align:right;"><input type="submit" class="button-primary" name="Submit" value="'. __( 'Save Changes', 'events-manager') .' ('. __('All','events-manager') .')" /></p></td></tr>';
+		return '<tr><th>&nbsp;</th><td><p class="submit" style="margin:0px; padding:0px; text-align:right;"><input type="submit" class="button-primary" name="Submit" value="'. __( 'Save Changes', 'events') .' ('. __('All','events') .')" /></p></td></tr>';
 	}
 	
 	

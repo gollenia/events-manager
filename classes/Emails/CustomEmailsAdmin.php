@@ -93,9 +93,9 @@ class EM_Custom_Emails_Admin {
 				<div class="em-settings-field">
 					<table class="form-table">
 						<tr>
-						<th><label><?php _e('Also Send Event Owner Emails To:', 'events-manager'); ?></label></th>
+						<th><label><?php _e('Also Send Event Owner Emails To:', 'events'); ?></label></th>
 						<td><input type="email" class="emp-cet-email regular-text" multiple name="<?php echo $param ?>_admins[<?php echo $email_array_group_name; ?>]" value="<?php if( !empty($admin_emails_custom[$email_array_group_name]) ) echo $admin_emails_custom[$email_array_group_name]; ?>" /><br />
-						<p><?php esc_html_e('For multiple emails, seperate by commas (e.g. email1@test.com,email2@test.com, etc.)','events-manager'); ?></p></td>
+						<p><?php esc_html_e('For multiple emails, seperate by commas (e.g. email1@test.com,email2@test.com, etc.)','events'); ?></p></td>
 						</tr>
 					</table>
 				<?php endif; ?>				
@@ -123,9 +123,9 @@ class EM_Custom_Emails_Admin {
 						<div class="em-select-mail-status">
 							<div class="em-mail-status-indicator" data-status="<?php echo $status ?>"></div>
 							<select class="em-cet-status" name="<?php echo $param; ?>[<?php echo $email_array_subgroup; ?>][<?php echo $email_type_name; ?>][status]">
-								<option value="0" class="emp-default"><?php esc_html_e('Default','events-manager'); ?></option>
-								<option value="1" class="emp-enabled" <?php if( $status == 1) echo 'selected="selected"' ?>><?php esc_html_e('Enabled','events-manager'); ?></option>
-								<option value="2" class="emp-disabled" <?php if( $status == 2) echo 'selected="selected"' ?>><?php esc_html_e('Disabled','events-manager'); ?></option>
+								<option value="0" class="emp-default"><?php esc_html_e('Default','events'); ?></option>
+								<option value="1" class="emp-enabled" <?php if( $status == 1) echo 'selected="selected"' ?>><?php esc_html_e('Enabled','events'); ?></option>
+								<option value="2" class="emp-disabled" <?php if( $status == 2) echo 'selected="selected"' ?>><?php esc_html_e('Disabled','events'); ?></option>
 							</select>  
 						
 							<strong><?php echo $email_type['title'] ?></strong>
@@ -134,11 +134,11 @@ class EM_Custom_Emails_Admin {
 						<div class="em-mail-vals <?php echo $status == 1 ? "" : "hidden"; ?>">
 							<table class="form-table">
 							<tr class="em-mail-val">
-								<th><label><?php _e('Subject','events-manager'); ?></label></th>
+								<th><label><?php _e('Subject','events'); ?></label></th>
 								<td><input type="text" class="large-text" name="<?php echo $param; ?>[<?php echo $email_array_subgroup; ?>][<?php echo $email_type_name; ?>][subject]" value="<?php echo esc_attr($subject); ?>" /></td>
 							</tr>
 							<tr class="em-mail-val">
-								<th><label><?php _e('Message','events-manager'); ?></label></th>
+								<th><label><?php _e('Message','events'); ?></label></th>
 								<td><textarea id="description" rows="7" class="large-text code codemirror" name="<?php echo $param; ?>[<?php echo $email_array_subgroup; ?>][<?php echo $email_type_name; ?>][message]"><?php echo esc_html($message); ?></textarea></td>
 							</td>
 							</table>
@@ -168,26 +168,26 @@ class EM_Custom_Emails_Admin {
 	public static function get_default_emails(){
 		$emails = array(
 			'default' => array(
-				'title' => __('Default','events-manager'),
+				'title' => __('Default','events'),
 				'subgroups' => array(
 					'admin'=>array(
-						'title' => __('Event Owner Emails','events-manager'),
-						'text' => __('These emails get sent to the event owners when a person has made a booking.','events-manager'),
+						'title' => __('Event Owner Emails','events'),
+						'text' => __('These emails get sent to the event owners when a person has made a booking.','events'),
 						'emails' => array(
-							0 => array('title'=> __('Pending booking email','events-manager')),
-							1 => array('title'=> __('Confirmed booking email','events-manager')),
-							2 => array('title'=> __('Rejected booking email','events-manager')),
-							3 => array('title'=> __('Booking cancelled','events-manager'))
+							0 => array('title'=> __('Pending booking email','events')),
+							1 => array('title'=> __('Confirmed booking email','events')),
+							2 => array('title'=> __('Rejected booking email','events')),
+							3 => array('title'=> __('Booking cancelled','events'))
 						)
 					),
 					'user'=>array(
-						'title' => __('Attendee Emails','events-manager'),
-						'text' => __('These emails will be sent to the person who booked a place at your event.','events-manager'),
+						'title' => __('Attendee Emails','events'),
+						'text' => __('These emails will be sent to the person who booked a place at your event.','events'),
 						'emails' => array(
-							0 => array('title'=> __('Pending booking email','events-manager')),
-							1 => array('title'=> __('Confirmed booking email','events-manager')),
-							2 => array('title'=> __('Rejected booking email','events-manager')),
-							3 => array('title'=> __('Booking cancelled','events-manager'))
+							0 => array('title'=> __('Pending booking email','events')),
+							1 => array('title'=> __('Confirmed booking email','events')),
+							2 => array('title'=> __('Rejected booking email','events')),
+							3 => array('title'=> __('Booking cancelled','events'))
 						)
 					)
 				)
@@ -307,12 +307,12 @@ class EM_Custom_Emails_Admin {
 		if( get_option('dbem_custom_emails_gateways_admins') ){
 			$admin_emails = EM_Custom_Emails::get_gateway_admin_emails($EM_Gateway);
 		}
-		echo "<h3>". esc_html__('Custom Booking Email Templates','events-manager').'</h3>';
-		$default_emails[$gateway]['title'] = __('Booking Email Templates','events-manager');
-		$default_emails[$gateway]['text'] = '<p>'. sprintf(__('Below you can modify the emails that are sent when bookings are made. This will override the default emails located in your %s settings page.','events-manager'), '<a href="'.admin_url('edit.php?post_type=event&page=events-manager-options#emails:booking-emails').'">'.esc_html('Booking Email Templates','events-manager').'</a>');
-		$default_emails[$gateway]['text'] .= __('Additionally, you can also override these emails at an event level when editing an event. Should you choose not to, any overriden emails on this page will be considered the default email for this gateway.','events-manager') .'</p>';
-		$default_emails[$gateway]['text'] .= '<p>'. __('Note that some gateways do not automatically send pending or confirmed emails, in these cases they may only apply to when event admins manually change the status of a booking resulting in an automated email getting sent.','events-manager').'</p>';
-		$default_emails[$gateway]['text'] .= '<p>'. __('Click on the title texts with a plus (+) next to them to reveal further options, and the minus (-) sign to hide them.','events-manager').'</p>';
+		echo "<h3>". esc_html__('Custom Booking Email Templates','events').'</h3>';
+		$default_emails[$gateway]['title'] = __('Booking Email Templates','events');
+		$default_emails[$gateway]['text'] = '<p>'. sprintf(__('Below you can modify the emails that are sent when bookings are made. This will override the default emails located in your %s settings page.','events'), '<a href="'.admin_url('edit.php?post_type=event&page=events-options#emails:booking-emails').'">'.esc_html('Booking Email Templates','events').'</a>');
+		$default_emails[$gateway]['text'] .= __('Additionally, you can also override these emails at an event level when editing an event. Should you choose not to, any overriden emails on this page will be considered the default email for this gateway.','events') .'</p>';
+		$default_emails[$gateway]['text'] .= '<p>'. __('Note that some gateways do not automatically send pending or confirmed emails, in these cases they may only apply to when event admins manually change the status of a booking resulting in an automated email getting sent.','events').'</p>';
+		$default_emails[$gateway]['text'] .= '<p>'. __('Click on the title texts with a plus (+) next to them to reveal further options, and the minus (-) sign to hide them.','events').'</p>';
 		
 		self::emails_editor($email_values, $default_emails, $admin_emails);
 		do_action('after_gatweay_custom_emails', $EM_Gateway, $email_values, $default_emails, $default_email_values, $admin_emails);
@@ -344,7 +344,7 @@ class EM_Custom_Emails_Admin {
 	        $custom_admin_emails = self::update_gateway_admin_emails($EM_Gateway, $default_emails);
 	        if( $custom_admin_emails === false ){
     			global $EM_Notices;
-    			$EM_Notices->add_error(__('An invalid admin email was supplied for your custom emails and was not saved in your settings.','events-manager'),true);
+    			$EM_Notices->add_error(__('An invalid admin email was supplied for your custom emails and was not saved in your settings.','events'),true);
     		}else{
     			$EM_Gateway->update_option('emails_admins', serialize($custom_admin_emails));
     		}
@@ -384,34 +384,34 @@ class EM_Custom_Emails_Admin {
 		$gateways = is_object($EM_Gateway) ? array($EM_Gateway->gateway => $EM_Gateway->title) : EM_Gateways::active_gateways();		
 		foreach($gateways as $gateway => $gateway_name ){
 			$emails[$gateway] = array(
-				'title' => sprintf(__('%s Gateway','events-manager'), $gateway_name),
+				'title' => sprintf(__('%s Gateway','events'), $gateway_name),
 				'subgroups' => array(
 					$gateway.'-admin'=>array(
-						'title' => __('Event Owner Emails','events-manager'),
-						'text' => __('These emails get sent to the event owners when a person has made a booking using this specific gateway.','events-manager'),
+						'title' => __('Event Owner Emails','events'),
+						'text' => __('These emails get sent to the event owners when a person has made a booking using this specific gateway.','events'),
 						'emails' => array(
-							0 => array('title'=> __('Pending booking email','events-manager')),
-							1 => array('title'=> __('Confirmed booking email','events-manager')),
-							2 => array('title'=> __('Rejected booking email','events-manager')),
-							3 => array('title'=> __('Booking cancelled','events-manager'))
+							0 => array('title'=> __('Pending booking email','events')),
+							1 => array('title'=> __('Confirmed booking email','events')),
+							2 => array('title'=> __('Rejected booking email','events')),
+							3 => array('title'=> __('Booking cancelled','events'))
 						)
 					),
 					$gateway.'-user'=>array(
-						'title' => __('Attendee Emails','events-manager'),
-						'text' => __('These emails will be sent to the person who booked a place at your event and selected this specific gateway.','events-manager'),
+						'title' => __('Attendee Emails','events'),
+						'text' => __('These emails will be sent to the person who booked a place at your event and selected this specific gateway.','events'),
 						'emails' => array(
-							0 => array('title'=> __('Pending booking email','events-manager')),
-							1 => array('title'=> __('Confirmed booking email','events-manager')),
-							2 => array('title'=> __('Rejected booking email','events-manager')),
-							3 => array('title'=> __('Booking cancelled','events-manager'))
+							0 => array('title'=> __('Pending booking email','events')),
+							1 => array('title'=> __('Confirmed booking email','events')),
+							2 => array('title'=> __('Rejected booking email','events')),
+							3 => array('title'=> __('Booking cancelled','events'))
 						)
 					)
 				)
 			);
 			//temporary fix, we assume everything is online except for offline - maybe a good reason for split offline/online base gateway subclasses
 			if( $gateway == 'offline' ){
-				$emails[$gateway]['subgroups'][$gateway.'-admin']['emails'][5] = array('title'=> __('Awaiting Offline Payment','events-manager'));
-				$emails[$gateway]['subgroups'][$gateway.'-user']['emails'][5] = array('title'=> __('Awaiting Offline Payment','events-manager'));
+				$emails[$gateway]['subgroups'][$gateway.'-admin']['emails'][5] = array('title'=> __('Awaiting Offline Payment','events'));
+				$emails[$gateway]['subgroups'][$gateway.'-user']['emails'][5] = array('title'=> __('Awaiting Offline Payment','events'));
 			}
 		}
 		return $emails;
@@ -451,8 +451,8 @@ class EM_Custom_Emails_Admin {
 	
 	public static function meta_boxes(){
 		if( current_user_can(self::$caps['custom_emails']) ){
-			add_meta_box('em-event-custom-emails', __('Custom Automated Emails','events-manager'), array('EM_Custom_Emails_Admin','event_meta_box'),EM_POST_TYPE_EVENT, 'normal','low');
-			add_meta_box('em-event-custom-emails', __('Custom Automated Emails','events-manager'), array('EM_Custom_Emails_Admin','event_meta_box'), 'event-recurring', 'normal','low');
+			add_meta_box('em-event-custom-emails', __('Custom Automated Emails','events'), array('EM_Custom_Emails_Admin','event_meta_box'),EM_POST_TYPE_EVENT, 'normal','low');
+			add_meta_box('em-event-custom-emails', __('Custom Automated Emails','events'), array('EM_Custom_Emails_Admin','event_meta_box'), 'event-recurring', 'normal','low');
 		}
 	}
 	
@@ -465,11 +465,11 @@ class EM_Custom_Emails_Admin {
 			$custom_admin_emails = EM_Custom_Emails::get_event_admin_emails($EM_Event);
 		}
 		
-		echo '<p>'. sprintf(__('Below you can modify the emails that are sent when bookings are made. This will override the default emails located in your %s settings page.','events-manager'), '<a href="'.admin_url('edit.php?post_type=event&page=events-manager-options#emails:booking-emails').'">'.esc_html('Booking Email Templates','events-manager').'</a>');
+		echo '<p>'. sprintf(__('Below you can modify the emails that are sent when bookings are made. This will override the default emails located in your %s settings page.','events'), '<a href="'.admin_url('edit.php?post_type=event&page=events-options#emails:booking-emails').'">'.esc_html('Booking Email Templates','events').'</a>');
 		if( get_option('dbem_custom_emails_gateways') ){
-			echo '<p>'. sprintf(__('You can also create default emails for specific gateways in your individual %s settings page.','events-manager'), '<a href="'.admin_url('edit.php?post_type=event&page=events-manager-gateways').'">'.__('Gateway Settings','events-manager').'</a>');
+			echo '<p>'. sprintf(__('You can also create default emails for specific gateways in your individual %s settings page.','events'), '<a href="'.admin_url('edit.php?post_type=event&page=events-gateways').'">'.__('Gateway Settings','events').'</a>');
 		}
-		echo "<p>".__('Click on the title texts with a plus (+) next to them to reveal further options, and the minus (-) sign to hide them.','events-manager')."</p>";
+		echo "<p>".__('Click on the title texts with a plus (+) next to them to reveal further options, and the minus (-) sign to hide them.','events')."</p>";
 		self::emails_editor($custom_email_values, array(), $custom_admin_emails);
 	}
 
@@ -501,7 +501,7 @@ class EM_Custom_Emails_Admin {
 		}
 		if($email_errors){
 			global $EM_Notices;
-			$EM_Notices->add_error(__('An invalid admin email was supplied for your custom emails and was not saved in your settings.','events-manager'),true);
+			$EM_Notices->add_error(__('An invalid admin email was supplied for your custom emails and was not saved in your settings.','events'),true);
 		}
 		return $result;
 	}

@@ -9,11 +9,9 @@ const Registration = ( { store } ) => {
 	return (
 		<>
 			<div className="flex-header">
-				<h2>{ __( 'Registration', 'events-manager' ) }</h2>
+				<h2>{ __( 'Registration', 'events' ) }</h2>
 				<Button onClick={ () => setShowNotesModal( true ) } variant="secondary">
-					{ data.booking?.note?.text == ''
-						? __( 'Add Note', 'events-manager' )
-						: __( 'Edit Note', 'events-manager' ) }
+					{ data.booking?.note?.text == '' ? __( 'Add Note', 'events' ) : __( 'Edit Note', 'events' ) }
 				</Button>
 			</div>
 			<Panel>

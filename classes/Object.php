@@ -855,6 +855,16 @@ class EM_Object {
 	    }
 	    return 0;
 	}
+
+	function get_id(){
+		switch( get_class($this) ){
+	        case 'EM_Event':
+	            return $this->event_id;
+	        case 'EM_Location':
+	            return $this->location_id;
+	    }
+		return $this->id;
+	}
 	
 	/**
 	 * Used by "single" objects, e.g. bookings, events, locations to verify if they have the capability to edit this or someone else's object. Relies on the fact that the object has an owner property with id of user (or admin capability must pass).
@@ -863,7 +873,6 @@ class EM_Object {
 	 * @return boolean
 	 */
 	function can_manage( $owner_capability = false, $admin_capability = false, $user_to_check = false ){
-		global $em_capabilities_array;
 		
 		//set user to the desired user we're verifying, otherwise default to current user
 	    if( $user_to_check ){
@@ -878,16 +887,11 @@ class EM_Object {
 		if( $is_owner && $owner_capability && $user->has_cap($owner_capability) ){
 			//user owns the object and can therefore manage it
 			$can_manage = true;
-		}elseif( $owner_capability && array_key_exists($owner_capability, $em_capabilities_array) ){
-			//currently user is not able to manage as they aren't the owner
-			$error_msg = $em_capabilities_array[$owner_capability];
 		}
 		//admins have special rights
 		if( !$admin_capability ) $admin_capability = $owner_capability;
 		if( $admin_capability && $user->has_cap($admin_capability) ){
 			$can_manage = true;
-		}elseif( $admin_capability && array_key_exists($admin_capability, $em_capabilities_array) ){
-			$error_msg = $em_capabilities_array[$admin_capability];
 		}
 		$can_manage = apply_filters('em_object_can_manage', $can_manage, $this, $owner_capability, $admin_capability, $user_to_check);
 		if( !$can_manage && !$is_owner && !empty($error_msg) ){
@@ -1016,21 +1020,21 @@ class EM_Object {
 		$end_of_week_name = $start_of_week > 0 ? $wp_locale->get_weekday($start_of_week-1) : $wp_locale->get_weekday(6);
 		$start_of_week_name = $wp_locale->get_weekday($start_of_week);
 		return array(
-			'all' => __('All events','events-manager'),
-			'future' => __('Future events','events-manager'),
-			'past' => __('Past events','events-manager'),
-			'today' => __('Today\'s events','events-manager'),
-			'tomorrow' => __('Tomorrow\'s events','events-manager'),
-			'week' => sprintf(__('Events this whole week (%s to %s)','events-manager'), $wp_locale->get_weekday_abbrev($start_of_week_name), $wp_locale->get_weekday_abbrev($end_of_week_name)),
-			'this-week' => sprintf(__('Events this week (today to %s)','events-manager'), $wp_locale->get_weekday_abbrev($end_of_week_name)),
-			'month' => __('Events this month','events-manager'),
-			'this-month' => __('Events this month (today onwards)', 'events-manager'),
-			'next-month' => __('Events next month','events-manager'),
-			'1-months'  => __('Events current and next month','events-manager'),
-			'2-months'  => __('Events within 2 months','events-manager'),
-			'3-months'  => __('Events within 3 months','events-manager'),
-			'6-months'  => __('Events within 6 months','events-manager'),
-			'12-months' => __('Events within 12 months','events-manager')
+			'all' => __('All events','events'),
+			'future' => __('Future events','events'),
+			'past' => __('Past events','events'),
+			'today' => __('Today\'s events','events'),
+			'tomorrow' => __('Tomorrow\'s events','events'),
+			'week' => sprintf(__('Events this whole week (%s to %s)','events'), $wp_locale->get_weekday_abbrev($start_of_week_name), $wp_locale->get_weekday_abbrev($end_of_week_name)),
+			'this-week' => sprintf(__('Events this week (today to %s)','events'), $wp_locale->get_weekday_abbrev($end_of_week_name)),
+			'month' => __('Events this month','events'),
+			'this-month' => __('Events this month (today onwards)', 'events'),
+			'next-month' => __('Events next month','events'),
+			'1-months'  => __('Events current and next month','events'),
+			'2-months'  => __('Events within 2 months','events'),
+			'3-months'  => __('Events within 3 months','events'),
+			'6-months'  => __('Events within 6 months','events'),
+			'12-months' => __('Events within 12 months','events')
 		);
 	}
 		

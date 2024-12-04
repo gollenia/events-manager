@@ -17,7 +17,7 @@ class EM_Form extends EM_Object {
 		'user_url' => 'Website',
 	);
 	protected $custom_user_fields = [];
-	public $form_required_error = '';
+	public $form_required_error = 'bimmling';
 	static $validate;
 	/**
 	 * If this form represents user fields, then it's set to true, otherwise set to false
@@ -99,7 +99,7 @@ class EM_Form extends EM_Object {
 		//output formatted value for special fields
 		switch( $field['type'] ){
 			case 'checkbox':
-				$field_value = ($field_value && $field_value != 'n/a') ? __('Yes','events-manager'):__('No','events-manager');
+				$field_value = ($field_value && $field_value != 'n/a') ? __('Yes','events'):__('No','events');
 				break;
 			
 			case 'time':
@@ -182,23 +182,12 @@ class EM_Form extends EM_Object {
 		$field = array_key_exists($field_id, $this->form_fields) ? $this->form_fields[$field_id]:false;
 		$value = (is_array($value)) ? $value:trim($value);
 		if(!$field) return;
-		$err = sprintf($this->form_required_error, $field['label']);
+		$err = sprintf("WE HAVE A PROBLEM WITH %s", $field_id);
 		if( is_array($field) ){
 			$result = true; //innocent until proven guilty
 			switch($field['type']){
 				case 'text':
 				case 'textarea':
-					//regex
-					if( trim($value) != '' && !empty($field['options_text_regex']) ){
-						//check to see if regex has modifiers if starting with a / string
-						$regex = $field['options_text_regex'][0] == '/' ? $field['options_text_regex'] : '/'.$field['options_text_regex'].'/';
-						if( !@preg_match($regex,$value) ){
-							$this_err = (!empty($field['options_text_error'])) ? $field['options_text_error']:$err;
-							$this->add_error($this_err);
-							$result = false;
-						}
-					}
-					//non-empty match
 					if( $result && trim($value) == '' && !empty($field['required']) ){
 						$this->add_error($err);
 						$result = false;
@@ -206,9 +195,9 @@ class EM_Form extends EM_Object {
 					break;
 				case 'checkbox':
 					//non-empty match
-					if( empty($value) && !empty($field['required']) ){
+					if( $value !== "1" && !empty($field['required']) ){
 						$this_err = (!empty($field['options_checkbox_error'])) ? $field['options_checkbox_error']:$err;
-						$this->add_error($this_err);
+						$this->add_error($this_err .' ' . print_r($value, true) . ' ' . gettype($value));
 						$result = false;
 					}
 					break;
@@ -235,7 +224,7 @@ class EM_Form extends EM_Object {
 					}		
 					break;
 				case 'country':
-					$values = \Contexis\Events\Intl\Countries::get(__('none selected','events-manager'));
+					$values = \Contexis\Events\Intl\Countries::get(__('none selected','events'));
 					//in-values
 					$result = false;
 					$this_err = "Select a country";
@@ -259,7 +248,7 @@ class EM_Form extends EM_Object {
 						$current = strtotime($value);
 						$min = strtotime($field['min']);
 						if($current < $min) {
-							$this_err = (!empty($field['options_date_min_error'])) ? $field['options_date_min_error']:__('Too mini','events-manager');
+							$this_err = (!empty($field['options_date_min_error'])) ? $field['options_date_min_error']:__('Too mini','events');
 							$this->add_error($this_err);
 							$result = false;
 						}
@@ -269,7 +258,7 @@ class EM_Form extends EM_Object {
 						$current = strtotime($value);
 						$max = strtotime($field['max']);
 						if($current > $max) {
-							$this_err = (!empty($field['options_date_min_error'])) ? $field['options_date_max_error']:__('Too maxi','events-manager');
+							$this_err = (!empty($field['options_date_min_error'])) ? $field['options_date_max_error']:__('Too maxi','events');
 							$this->add_error($this_err);
 							$result = false;
 						}
@@ -278,7 +267,7 @@ class EM_Form extends EM_Object {
 
 				case 'email':
 					if( ! is_email( $value ) ){
-						$this->add_error( __( '<strong>ERROR</strong>: The email address isn&#8217;t correct.', 'events-manager') );
+						$this->add_error( __( '<strong>ERROR</strong>: The email address isn&#8217;t correct.', 'events') );
 						$result = false;
 					}
 					break;	
@@ -287,7 +276,7 @@ class EM_Form extends EM_Object {
 				   
 				    if( !empty($value) ){
 						if( !preg_match('/^([01]\d|2[0-3]):([0-5]\d) ?(AM|PM)?$/', $value) ){
-							$this_err = (!empty($field['options_time_error_format'])) ? $field['options_time_error_format']:__('Please use the time picker provided to select the appropriate time format.','events-manager');
+							$this_err = (!empty($field['options_time_error_format'])) ? $field['options_time_error_format']:__('Please use the time picker provided to select the appropriate time format.','events');
 							$this->add_error($this_err);
 							$result = false;
 						}
@@ -309,12 +298,12 @@ class EM_Form extends EM_Object {
 						//add field-specific validation
 						if ( $field['type'] == 'user_email' ) {
 							if( ! is_email( $value ) ){
-								$this->add_error( __( '<strong>ERROR</strong>: The email address isn&#8217;t correct.', 'events-manager') );
+								$this->add_error( __( '<strong>ERROR</strong>: The email address isn&#8217;t correct.', 'events') );
 								$result = false;
 							}elseif( is_user_logged_in() ){
 								$email_exists = email_exists($value);
 								if( $email_exists && $email_exists != get_current_user_id() ){
-									$this->add_error( __('This email already exists in our system, please log in to register to proceed with your booking.','events-manager') );
+									$this->add_error( __('This email already exists in our system, please log in to register to proceed with your booking.','events') );
 									$result = false;	
 								}
 							}
@@ -432,7 +421,7 @@ class EM_Form extends EM_Object {
 					"fr_FR" => "CH"
 				];
 				echo '<select name="' . $field['name'] . '" class="' . $field['fieldid'] . '" ' . ($required ? "required " : "") . '>';
-				foreach(\Contexis\Events\Intl\Countries::get(__('none selected','em-pro')) as $country_key => $country_name) {
+				foreach(\Contexis\Events\Intl\Countries::get(__('none selected','events')) as $country_key => $country_name) {
 						echo '<option text="' . '" value="' . $country_key .'" ' . (($country_key == $countries[get_locale()]) ? 'selected="selected"':'') . '>' . $country_name . '</option>';
 				}
 				echo '</select>';
