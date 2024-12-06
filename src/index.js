@@ -121,9 +121,9 @@ import { unregisterBlockType } from '@wordpress/blocks';
 import domReady from '@wordpress/dom-ready';
 
 domReady( function () {
-	if ( window.typenow !== 'event' ) unregisterBlockType( 'events/details' );
-	if ( window.typenow !== 'event' ) unregisterBlockType( 'events/booking' );
-	if ( window.typenow !== 'location' ) unregisterBlockType( 'events/locationeditor' );
+	if ( window.typenow !== 'event' ) unregisterBlockType( 'events-manager/details' );
+	if ( window.typenow !== 'event' ) unregisterBlockType( 'events-manager/booking' );
+	if ( window.typenow !== 'location' ) unregisterBlockType( 'events-manager/locationeditor' );
 	if ( window.typenow !== 'bookingform' && window.typenow !== 'attendeeform' )
-		unregisterBlockType( 'events/form-container' );
+		unregisterBlockType( 'events-manager/form-container' );
 } );

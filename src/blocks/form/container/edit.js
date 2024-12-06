@@ -17,16 +17,16 @@ export default function Edit( { ...props } ) {
 		?.setAttribute( 'href', 'edit.php?post_type=event&page=events-forms' );
 
 	const allowedBlocks = [
-		'events/form-text',
-		'events/form-email',
-		'events/form-textarea',
-		'events/form-select',
-		'events/form-country',
-		'events/form-phone',
-		'events/form-radio',
-		'events/form-checkbox',
-		'events/form-date',
-		'events/form-html',
+		'events-manager/form-text',
+		'events-manager/form-email',
+		'events-manager/form-textarea',
+		'events-manager/form-select',
+		'events-manager/form-country',
+		'events-manager/form-phone',
+		'events-manager/form-radio',
+		'events-manager/form-checkbox',
+		'events-manager/form-date',
+		'events-manager/form-html',
 	];
 
 	const innerBlocksProps = useInnerBlocksProps( blockProps, { allowedBlocks, renderAppender: false } );
