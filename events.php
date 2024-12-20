@@ -33,6 +33,9 @@ class Events {
 	const DIR = __DIR__;
 }
 
+
+
+
 function em_load_textdomain() {
 	load_plugin_textdomain('events', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' ); 
 }
@@ -40,7 +43,13 @@ function em_load_textdomain() {
 add_action( 'plugin_loaded', 'em_load_textdomain', 10 );
 
 
+require_once __DIR__ . '/classes/Install.php';
 
+if(!class_exists('IntlDateFormatter')) {
+	add_action( 'admin_init', ['\\Contexis\\Events\\Install', 'deactivate_plugin'] );
+	add_action( 'admin_notices', ['\\Contexis\\Events\\Install', 'intallation_error_notice'] ); 
+	return;
+}
 
 require_once( plugin_dir_path( __FILE__ ) . '/vendor/autoload.php');
 
@@ -174,8 +183,6 @@ function em_init(){
 			em_install();
 		}
 	}
-	//add custom functions.php file
-	locate_template('plugins/events/functions.php', true);
 	//fire a loaded hook, most plugins should consider going through here to load anything EM related
 	do_action('events_manager_loaded');
 }
@@ -284,7 +291,7 @@ register_deactivation_hook( __FILE__,function() {
 
 
 
-register_uninstall_hook(__FILE__, 'em_uninstall');
+register_uninstall_hook(__DIR__ . '/classes/Install.php', '\Contexis\Events\Install::uninstall');
 
 
 //cron functions - ran here since functions aren't loaded, scheduling done by gateways and other modules

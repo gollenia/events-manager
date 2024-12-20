@@ -114,7 +114,7 @@ const TicketModal = ( props ) => {
 										onClick={ () => {
 											setCurrentTicket( {
 												ticket_id: 0,
-												ticket_name: __( 'New Ticket', 'events' ),
+												ticket_name: '',
 												ticket_description: '',
 												ticket_price: 0,
 												ticket_spaces: meta._event_spaces,

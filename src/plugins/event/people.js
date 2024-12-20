@@ -32,14 +32,11 @@ const peopleSelector = () => {
 		}
 
 		list.map( ( speaker ) => {
+			console.log( speaker );
 			speakers.push( {
 				value: speaker.id,
 				label: speaker.title.raw,
-				media:
-					speaker &&
-					speaker._embedded &&
-					speaker._embedded[ 'wp:featuredmedia' ] &&
-					speaker._embedded[ 'wp:featuredmedia' ][ 0 ].media_details.sizes?.thumbnail?.source_url,
+				media: speaker.meta.thumbnail
 			} );
 		} );
 

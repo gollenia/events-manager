@@ -36,7 +36,13 @@ function em_uninstall() {
 	exit();
 }
 
+
+
+
 function em_install() {
+
+	
+
 	global $wp_rewrite;
 	$wp_rewrite->flush_rules();
 	$old_version = get_option('dbem_version');	
@@ -54,11 +60,6 @@ function em_install() {
 			em_create_coupons_table(); 
 			em_create_reminders_table();
 			em_create_bookings_relationships_table();
-			
-			
-			if( empty($old_version) ){
-				update_option('dbem_hello_to_user',1);
-			}
 					
 			//set caps and options
 			em_set_capabilities();
@@ -722,7 +723,6 @@ function em_set_capabilities(){
 		em_set_mass_caps( array('administrator','editor','contributor','author','subscriber'), $default_caps);
 	}
 }
-
 
 
 

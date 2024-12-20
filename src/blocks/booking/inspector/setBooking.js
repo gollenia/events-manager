@@ -6,15 +6,27 @@ import TicketModal from './ticketModal';
 const SetBooking = ( props ) => {
 	const { meta, setMeta } = props;
 	const [ showTickets, setShowTickets ] = React.useState( false );
+	
+	
+	console.log(window?.eventBlocksLocalization?.bookings_enabled);
 
 	return (
 		<PanelBody title={ __( 'Booking Settings', 'events' ) } initialOpen={ true }>
+
+			{ !window?.eventBlocksLocalization?.bookings_enabled?.is_enabled ? (
+			<div className="inspector-message inspector-message--error">
+				<div><b>{ __( 'Bookings are disabled', 'events' ) }</b></div>
+				<span>{ window?.eventBlocksLocalization?.bookings_enabled?.message }</span>
+			</div>
+			) : null }
+
 			<CheckboxControl
 				label={ __( 'Enable Bookings', 'events' ) }
 				checked={ meta._event_rsvp }
 				onChange={ ( value ) => {
 					setMeta( { _event_rsvp: value } );
 				} }
+				disabled={ ! window?.eventBlocksLocalization?.bookings_enabled?.is_enabled }
 			/>
 
 			<TextControl

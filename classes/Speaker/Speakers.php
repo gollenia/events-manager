@@ -6,9 +6,7 @@ class EM_Speakers {
         $instance = new self;
         
         add_action( 'init', array($instance, 'register_post_type') );
-        add_action( 'add_meta_boxes', array($instance, 'add_meta_boxes') );
 		add_action( 'rest_api_init', array($instance, 'register_metadata'));
-        add_action( 'save_post', array($instance, 'save'), 1, 2 );
         add_filter( 'manage_event-speaker_posts_columns', array($instance, 'set_custom_columns') );
         add_action( 'manage_event-speaker_posts_custom_column' , array($instance, 'custom_column'), 10, 2 );
         add_action( 'edit_form_advanced', [$instance, 'add_back_button'] );
@@ -24,7 +22,7 @@ class EM_Speakers {
             'show_in_menu' => 'edit.php?post_type=event',
             'show_in_nav_menus'=>true,
             'can_export' => true,
-            'publicly_queryable' => true,
+            'publicly_queryable' => false,
             'rewrite' => ['slug' => 'event-speaker', 'with_front'=>false],
             'query_var' => false,
             'has_archive' => false,
@@ -50,30 +48,6 @@ class EM_Speakers {
         ]);
 
 		register_post_type( 'event-speaker', $args );     
-    }
-
-	public function add_meta_boxes() {
-        add_meta_box(
-                'person_details',
-                __( 'Person Details', 'ctx-theme' ),
-                [$this, 'metabox_callback'],
-                'event-speaker',
-                'normal'
-            ); 
-    }
-
-    public function metabox_callback() {
-        global $post;
-        $email = get_post_meta( $post->ID, 'email', true );
-		$gender = get_post_meta( $post->ID, 'gender', true );
-		$role = get_post_meta( $post->ID, 'role', true );
-        wp_nonce_field( basename( __FILE__ ), 'person_details' );
-        echo '<table class="form-table"><tbody>';
-        echo '<tr><th>' . __( 'E-Mail', 'events' ) . '</th><td><input name="email" type="email" value="' . $email . '"></td></tr>';
-		echo '<tr><th>' . __( 'Role', 'events' ) . '</th><td><input name="role" type="text" value="' . $role . '"></td><p>' . __("If the speaker has a special Role (e.g. Organizator, Leder, etc), type in here, else leave blank", 'events') . '</p></tr>';
-		echo '<tr><th>' . __( 'Gender', 'events' ) . '</th><td><select name="gender"><option value="male" ' . ($gender == 'male' ? 'selected' : '') . '>' . __('Male', 'events') . '</option><option value="female" ' . ($gender == 'female' ? 'selected' : '') . '>' . __('Female', 'events') . '</option></select></td></tr>';
-        echo '</tbody></table>';
-
     }
 
 	public function register_metadata() {
@@ -137,40 +111,21 @@ class EM_Speakers {
 				return current_user_can( 'edit_posts' );
 			}
 		]);
+
+		register_rest_field( 'event-speaker', 'meta', [
+			'get_callback' => function($object) {
+				$meta = get_post_meta($object['id']);
+				$meta['thumbnail'] = get_the_post_thumbnail_url($object['id']);
+				return $meta;
+			},
+			'schema' => null,
+		]);
+
 	}
 
-    public function save( $post_id, $post ) {
-
-        if($post->post_type != "event-speaker" || ! current_user_can( 'edit_post', $post_id )) {
-            return $post_id;
-        }
-    
-        if ( ! isset( $_POST['email'] ) || ! wp_verify_nonce( $_POST['person_details'], basename(__FILE__) ) ) {
-            return $post_id;
-        }
-        
-        $meta = [
-            "email" => sanitize_text_field( $_POST['email'] ),
-			"gender" => sanitize_text_field( $_POST['gender'] ),
-			"role" => sanitize_text_field( $_POST['role'] )
-        ];
-    
-        foreach ( $meta as $key => $value ) {    
-            if ( get_post_meta( $post_id, $key, false ) ) {
-                update_post_meta( $post_id, $key, $value );
-                continue;
-            } 
-
-            if ( ! $value ) {
-                delete_post_meta( $post_id, $key );
-                continue;
-            }
-            
-            add_post_meta( $post_id, $key, $value); 
-        }
-    
-    }
-    
+    public function register_custom_fields() {
+		
+	}
     
     public function set_custom_columns($columns) {
         $columns['email'] = __( 'E-Mail', 'ctx-theme' );

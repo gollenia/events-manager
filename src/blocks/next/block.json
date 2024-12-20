@@ -1,0 +1,66 @@
+{
+	"name": "events-manager/next",
+	"title": "Event Countdown",
+	"description": "Display a countdown to the next event or its date",
+	"text-domain": "events",
+	"apiVersion": 2,
+	"category": "widgets",
+	"attributes": {
+		"display": {
+			"type": "string",
+			"default": "date"
+		},
+		"selectedCategories": {
+			"type": "array",
+			"default": []
+		},
+		"selectedLocation": {
+			"type": "number",
+			"default": 0
+		},
+		"selectedTags": {
+			"type": "array",
+			"default": []
+		},
+		"showAudience": {
+			"type": "boolean",
+			"default": false
+		},
+		"showSpeaker": {
+			"type": "string",
+			"default": ""
+		},
+		"scope": {
+			"type": "string",
+			"default": "future"
+		},
+		"bookedUpWarningThreshold": {
+			"type": "number",
+			"default": 0
+		},
+		"showBookedUp": {
+			"type": "boolean",
+			"default": true
+		},
+		"altText": {
+			"type": "string",
+			"default": ""
+		}
+	},
+	"supports": {
+		"align": [ "wide", "full" ],
+		"anchor": true,
+		"spacing": {
+			"margin": [ "top", "bottom" ],
+			"padding": [ "left", "right" ],
+			"blockGap": true,
+			"__experimentalDefaultControls": {
+				"padding": true,
+				"blockGap": true
+			}
+		}
+	},
+	"style": "events-frontend-style",
+	"viewScript": "events-frontend-view",
+	"editorStyle": "events-block-editor-style"
+}

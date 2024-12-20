@@ -5,8 +5,9 @@
 /**
  * WordPress dependencies
  */
-import { CheckboxControl, PanelRow, TextControl } from '@wordpress/components';
-import { select } from '@wordpress/data';
+import { CheckboxControl, TextControl } from '@wordpress/components';
+import { dispatch, select, useDispatch } from '@wordpress/data';
+
 import { PluginDocumentSettingPanel } from '@wordpress/editor';
 import './datetime.scss';
 
@@ -15,10 +16,26 @@ import { __ } from '@wordpress/i18n';
 
 const datetimeSelector = () => {
 	const postType = select( 'core/editor' ).getCurrentPostType();
+	const { lockPostSaving, unlockPostSaving } = useDispatch( 'core/editor' );
 
 	if ( postType !== 'event' ) return <></>;
 
 	const [ meta, setMeta ] = useEntityProp( 'postType', postType, 'meta' );
+
+	if ( ! meta._event_start_date || ! meta._event_end_date ) {
+		wp.data.dispatch( 'core/notices' ).createNotice(
+			'warning',
+			'Do not forget about a date your post!',
+			{ 
+				id: 'rudr-featured-img', 
+				isDismissible: false 
+			}
+		);
+        dispatch( 'core/editor' ).lockPostSaving( 'requiredValueLock' );
+    } else {
+		dispatch( 'core/notices' ).removeNotice( 'rudr-featured-img' );
+        unlockPostSaving( 'requiredValueLock' );
+    }
 
 	const getNextHour = ( offset = 0, time = false ) => {
 		let nextHourDate = time ? new Date( '01/01/1970 ' + time ) : new Date();
@@ -42,20 +59,13 @@ const datetimeSelector = () => {
 	};
 
 	if ( ! meta._event_start_date ) {
-		setMeta( { _event_start_date: getNow() } );
+		setMeta( { _event_start_date: getNow(), _event_start_time: getNextHour() } );
 	}
 
 	if ( ! meta._event_end_date ) {
-		setMeta( { _event_end_date: getNow() } );
+		setMeta( { _event_end_date: getNow(), _event_end_time: getNextHour( 1 ) } );
 	}
-
-	if ( ! meta._event_start_time ) {
-		setMeta( { _event_start_time: getNextHour( 1 ) } );
-	}
-
-	if ( ! meta._event_end_time ) {
-		setMeta( { _event_end_time: getNextHour( 2 ) } );
-	}
+	
 
 	return (
 		<PluginDocumentSettingPanel
@@ -63,72 +73,44 @@ const datetimeSelector = () => {
 			title={ __( 'Time and Date', 'events' ) }
 			className="events-datetime-settings"
 		>
-			<div className="em-date-row">
-				<h3>{ __( 'Date', 'events' ) }</h3>
-				<PanelRow>
-					<label for="em-from-date">{ __( 'From', 'events' ) }</label>
-					<div>
-						<TextControl
-							value={ meta._event_start_date }
-							onChange={ ( value ) => {
-								setMeta( { _event_start_date: value } );
-								const startDate = new Date( value );
-								const endDate = new Date( meta._event_end_date );
-								console.log( startDate, endDate );
-								if ( startDate > endDate ) {
-									setMeta( { _event_end_date: value } );
-								}
-							} }
-							name="em-from-date"
-							type="date"
-							className="em-date-input"
-						/>
-					</div>
-				</PanelRow>
-				<PanelRow>
-					<label for="em-to-date">{ __( 'To', 'events' ) }</label>
-					<div>
-						<TextControl
-							value={ meta._event_end_date }
-							onChange={ ( value ) => {
-								setMeta( { _event_end_date: value } );
-							} }
-							name="em-to-date"
-							min={ meta._event_start_date }
-							type="date"
-							className="em-date-input"
-						/>
-					</div>
-				</PanelRow>
-			</div>
-			<h3>{ __( 'Time', 'events' ) }</h3>
-			<PanelRow className="em-time-row">
-				<TextControl
-					value={ meta._event_start_time ? meta._event_start_time : '00:00' }
-					onChange={ ( value ) => {
-						setMeta( { _event_start_time: value } );
-						if ( compareTime( value, meta._event_end_time ) ) {
-							setMeta( { _event_end_time: getNextHour( 1, value ) } );
-						}
-					} }
-					label={ __( 'Starts at', 'events' ) }
-					disabled={ meta._event_all_day }
-					type="time"
-				/>
-
-				<TextControl
-					value={ meta._event_end_time ? meta._event_end_time : '00:00' }
-					onChange={ ( value ) => {
-						setMeta( { _event_end_time: value } );
-						if ( ! meta._event_end_time ) {
-							setMeta( { _event_end_time: value } );
-						}
-					} }
-					disabled={ meta._event_all_day }
-					label={ __( 'Ends at', 'events' ) }
-					type="time"
-				/>
-			</PanelRow>
+		
+					
+					
+			<TextControl
+				label={ __( 'Starts at', 'events' ) }
+				value={ meta._event_start_date + 'T' + meta._event_start_time }
+				onChange={ ( value ) => {
+					const date = value.split( 'T' )[ 0 ];
+					const time = value.split( 'T' )[ 1 ];
+					setMeta( { _event_start_date: date, _event_start_time: time } );
+					if( ! meta._event_end_date || compareTime( time, meta._event_end_time ) ) {
+						setMeta( { _event_end_date: date, _event_end_time: getNextHour( 1, time ) } );
+					}
+				} }
+				min={ getNow() + 'T' + getNextHour() }
+				step={300}
+				name="em-from-date"
+				type="datetime-local"
+				
+			/>
+					
+				
+		
+			<TextControl
+				label={ __( 'Ends at', 'events' ) }
+				value={ meta._event_end_date + 'T' + meta._event_end_time }
+				onChange={ ( value ) => {
+					const date = value.split( 'T' )[ 0 ];
+					const time = value.split( 'T' )[ 1 ];
+					setMeta( { _event_end_date: date, _event_end_time: time } );
+				} }
+				step={300}
+				min={ meta._event_start_date + 'T' + meta._event_start_time }
+				name="em-to-date"
+				type="datetime-local"
+				
+			/>
+			
 			<CheckboxControl
 				checked={ meta._event_all_day == 1 }
 				onChange={ ( value ) => {

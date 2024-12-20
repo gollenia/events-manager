@@ -1,3 +1,4 @@
+import apiFetch from '@wordpress/api-fetch';
 import { __ } from '@wordpress/i18n';
 import { React, useState } from 'react';
 import { STATES } from './modules/constants';
@@ -14,10 +15,11 @@ function Coupon( { state, dispatch } ) {
 			code: state.request.coupon,
 		};
 
-		const url = new URL( data.rest_url + 'events/v2/check_coupon' );
-		url.search = new URLSearchParams( params ).toString();
-
-		await fetch( url, {} )
+		apiFetch( {
+			path: 'events/v2/check_coupon',
+			method: 'GET',
+			data: params,
+		} )
 			.then( ( response ) => response.json() )
 			.then( ( response ) => {
 				setStatus( STATES.LOADING );

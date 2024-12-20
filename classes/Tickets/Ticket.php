@@ -15,13 +15,13 @@ class Ticket extends \EM_Object{
 	//DB Fields
 	public $ticket_id;
 	public int $event_id = 0;
-	protected string $ticket_name;
-	protected string $ticket_description;
-	public float $ticket_price;
+	protected $ticket_name;
+	protected $ticket_description;
+	public $ticket_price;
 	protected $ticket_start;
 	protected $ticket_end;
-	public int $ticket_min;
-	public int $ticket_max;
+	public int $ticket_min = 0;
+	public int $ticket_max = 0;
 	public int $ticket_spaces = 10;
 	public $ticket_members = false;
 	public $ticket_members_roles = array();
@@ -92,7 +92,7 @@ class Ticket extends \EM_Object{
 				$sql = "SELECT * FROM ". EM_TICKETS_TABLE ." WHERE ticket_id ='$ticket_data'";   
 			  	$ticket = $wpdb->get_row($sql, ARRAY_A);
 			}
-			//Save into the object
+			
 			if(is_array($ticket)) $this->from_array($ticket);
 			//serialized arrays
 			$this->ticket_meta = (!empty($ticket['ticket_meta'])) ? maybe_unserialize($ticket['ticket_meta']):array();

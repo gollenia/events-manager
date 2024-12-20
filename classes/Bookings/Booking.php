@@ -526,8 +526,8 @@ class EM_Booking extends EM_Object{
 	function get_price_summary_array(){
 	    $summary = array();
 	    $summary['total_base'] = $this->get_price_base();
-	    $summary['discounts'] = $this->get_price_adjustments_summary('discounts');
-	    $summary['donation'] = $this->get_price_adjustments_summary('donation');
+	    $summary['discounts'] = $this->get_price_adjustments_amount('discounts');
+	    $summary['donation'] = $this->get_price_adjustments_amount('donation');
 	    $summary['total'] =  $this->get_price();
 	    return $summary;
 	}
@@ -1048,7 +1048,42 @@ class EM_Booking extends EM_Object{
 	function can_manage( $owner_capability = false, $admin_capability = false, $user_to_check = false ){
 		return $this->get_event()->can_manage('manage_bookings','manage_others_bookings') || empty($this->booking_id) || !empty($this->manage_override);
 	}
-	
+
+	static function booking_enabled() : array
+	{
+		$enabled = [
+			'is_enabled' => true,
+			'message' => ''
+			
+		];
+
+		$active_gateways = EM_Gateways::active_gateways();
+
+		if( count($active_gateways) == 0 ){
+			$enabled['is_enabled'] = false;
+			$enabled['message'] = __('No payment gateways are enabled. Please enable at least one payment gateway.', 'events');
+			return $enabled;
+		}
+
+		if( array_key_exists('offline', $active_gateways) && (!get_option('em_offline_iban', false) || !get_option('em_offline_beneficiary', false) || !get_option('em_offline_bank', false)) ) {
+			$enabled['is_enabled'] = false;
+			$missing_fields = array();
+			if( !get_option('em_offline_iban', false) ) $missing_fields[] = __('IBAN', 'events');
+			if( !get_option('em_offline_beneficiary', false) ) $missing_fields[] = __('Beneficiary', 'events');
+			if( !get_option('em_offline_bank', false) ) $missing_fields[] = __('Bank', 'events');
+			$enabled['message'] = __('Offline Payment is not configured correctly. The following fields are missing:', 'events') . ' ' . implode(', ', $missing_fields) . __('. Please check your gateway settings.', 'events');
+			return $enabled;
+		}
+
+		if( array_key_exists('mollie', $active_gateways) && !get_option('em_mollie_api_key', false) ) {
+			$enabled['is_enabled'] = false;
+			$enabled['message'] = __('Mollie API Key is not set. Please check your gateway settings.', 'events');
+			return $enabled;
+		}
+
+		return $enabled;
+	}
+
 	/**
 	 * Returns this object in the form of an array
 	 * @return array

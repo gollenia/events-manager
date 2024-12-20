@@ -80,6 +80,16 @@ const AttendeeTable = ( { store } ) => {
 							</tr>
 						);
 					} ) }
+				<tr>
+					<td>
+						{ __( 'Donation', 'events' ) }
+					</td>
+					<td colSpan={4}></td>
+					
+					<td>
+						{ formatPrice( state.data.booking.donation, state.data.l10n.currency ) }
+					</td>
+				</tr>
 				</tbody>
 				<tfoot>
 					<FullPrice store={ store } />

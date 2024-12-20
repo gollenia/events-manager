@@ -264,23 +264,9 @@ class EventPost {
 
 	}
 
-	public function get_rest_data() {
-
-		$args = [
-            'category' => array_key_exists('category', $_REQUEST) ? $_REQUEST['category'] : null,
-			'tag' => array_key_exists('tag', $_REQUEST) ? $_REQUEST['tag'] : null,
-			'scope' => array_key_exists('scope', $_REQUEST) ? $_REQUEST['scope'] : null,
-			'event' => array_key_exists('event', $_REQUEST) ? $_REQUEST['event'] : null, 
-			'excerpt' => array_key_exists('excerpt', $_REQUEST) ? $_REQUEST['excerpt'] : null,
-			'exclude' => array_key_exists('exclude', $_REQUEST) ? $_REQUEST['exclude'] : null,
-			'limit' => array_key_exists('limit', $_REQUEST) ? $_REQUEST['limit'] : 0,
-			'location' => array_key_exists('location', $_REQUEST) ? $_REQUEST['location'] : null,
-			'post_id' => array_key_exists('post_id', $_REQUEST) ? $_REQUEST['post_id'] : null,
-			'event' => array_key_exists('event', $_REQUEST) ? $_REQUEST['event'] : null,
-        ];
-		
+	public function get_rest_data($request) {
+		$args = $request->get_params();
 		return \EM_Events::get_rest($args);
-		
 	}
 
 

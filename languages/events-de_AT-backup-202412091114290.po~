@@ -10,26 +10,26 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-06-06T05:55:35+00:00\n"
-"PO-Revision-Date: 2024-11-28 16:03+0000\n"
+"PO-Revision-Date: 2024-12-02 12:08+0000\n"
 "X-Generator: Loco https://localise.biz/\n"
 "X-Domain: events\n"
 "Language: de_AT\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Loco-Version: 2.6.6; wp-6.6.2"
+"X-Loco-Version: 2.6.14; wp-6.7"
 
 #: classes/Locations/Location.php:306
 msgid " is required."
 msgstr " ist erforderlich."
 
-#: classes/Bookings/Booking.php:670
+#: classes/Bookings/Booking.php:676
 msgid "%s could not be deleted"
 msgstr "%s konnte nicht gelöscht werden"
 
-#: em-actions.php:80
+#: em-actions.php:44
 msgid "%s could not be deleted."
 msgstr "%s konnte nicht gelöscht werden."
 
-#: classes/Bookings/Booking.php:667
+#: classes/Bookings/Booking.php:673
 msgid "%s deleted"
 msgstr "%s gelöscht"
 
@@ -50,7 +50,7 @@ msgstr "%s ID"
 msgid "%s is required."
 msgstr "%s wird benötigt."
 
-#: classes/Coupons/Coupon.php:172 classes/Coupons/Coupon.php:176
+#: classes/Coupons/Coupon.php:171 classes/Coupons/Coupon.php:175
 msgid "%s Off"
 msgstr "%s Nachlass"
 
@@ -69,7 +69,7 @@ msgid_plural "%s spaces left"
 msgstr[0] "%s Platz übrig"
 msgstr[1] "%s Plätze übrig"
 
-#: em-actions.php:77
+#: em-actions.php:41
 msgid "%s successfully deleted."
 msgstr "%s erfolgreich gelöscht."
 
@@ -83,7 +83,7 @@ msgstr "%s erfolgreich kopiert."
 msgid "%s tickets for %s"
 msgstr "%s Tickets für %s"
 
-#: classes/Forms/Forms.php:281 classes/Forms/Forms.php:312
+#: classes/Forms/Forms.php:270 classes/Forms/Forms.php:301
 msgid "<strong>ERROR</strong>: The email address isn&#8217;t correct."
 msgstr "<strong>FEHLER</strong>: Die E-Mail-Adresse ist nicht korrekt."
 
@@ -106,6 +106,8 @@ msgid ""
 "A message that is displayed when a customer is asked to donate for other "
 "customers"
 msgstr ""
+"Eine Nachricht, die angezeigt wird, wenn ein Kunde gebeten wird für andere "
+"Teinehmer zu spenden"
 
 #: em-install.php:411
 msgid ""
@@ -177,9 +179,9 @@ msgstr ""
 "einzuschränken. Lasse das Feld leer, um keine obere bzw. untere Grenze "
 "festzulegen."
 
-#: build/admin.js:239 build/admin.js:197
+#: build/admin.js:1
 msgid "Add Attendee"
-msgstr ""
+msgstr "Teinehmer hinzufügen"
 
 #: classes/Gateways/gateway.offline.php:192
 msgid "Add Booking"
@@ -202,9 +204,9 @@ msgstr "Neues Buchungs-Formular"
 msgid "Add br tags to HTML emails?"
 msgstr "br Tags zu HTML E-Mails hinzufügen?"
 
-#: build/index.js:4680 build/index.js:3128
+#: build/index.js:1
 msgid "Add Field"
-msgstr ""
+msgstr "Feld hinzufügen"
 
 #: classes/Forms/FormPost.php:98
 msgid "Add Form"
@@ -218,9 +220,9 @@ msgstr "iCal-Einladung hinzufügen"
 msgid "Add Location"
 msgstr "Neuer Ort"
 
-#: build/index.js:1906 build/index.js:1259
+#: build/index.js:1
 msgid "Add Media"
-msgstr ""
+msgstr "Bild hinzufügen"
 
 #: classes/Coupons/CouponsAdmin.php:190
 msgid "Add New"
@@ -254,9 +256,9 @@ msgstr "Neue wiederkehrende Veranstaltung hinzufügen"
 msgid "Add New Speaker"
 msgstr "Neuen Referent hinzufügen"
 
-#: build/admin.js:870 build/admin.js:637
+#: build/admin.js:1
 msgid "Add Note"
-msgstr ""
+msgstr "Neue Notiz"
 
 #: classes/Gateways/gateway.offline.php:210
 #: classes/Gateways/gateway.offline.php:235
@@ -275,9 +277,9 @@ msgstr "Wiederkehrende Veranstaltung hinzufügen"
 msgid "Add Speaker"
 msgstr "Neuer Referent"
 
-#: build/index.js:916 build/index.js:608
+#: build/index.js:1
 msgid "Add Ticket"
-msgstr ""
+msgstr "Neues Ticket"
 
 #: classes/Emails/CustomEmailsAdmin.php:313
 msgid ""
@@ -291,7 +293,7 @@ msgstr ""
 "Email für dieses Gateway behandelt."
 
 #: classes/Locations/LocationPostsAdmin.php:57 em-install.php:584
-#: em-install.php:608 build/index.js:7526 build/index.js:4960
+#: em-install.php:608 build/index.js:1
 msgid "Address"
 msgstr "Adresse"
 
@@ -317,7 +319,7 @@ msgstr ""
 "dass einige Gateways sie für die Zahlungsverarbeitung verwenden können."
 
 #: classes/Bookings/BookingsTable.php:64 classes/Options.php:276
-#: build/frontend.js:660 build/frontend.js:559
+#: build/frontend.js:1
 msgid "All"
 msgstr "Alle"
 
@@ -346,8 +348,7 @@ msgid "All Day"
 msgstr "Ganztägig"
 
 #: templates/forms/event/when-with-recurring.php:27
-#: templates/forms/event/when.php:32 build/index.js:8985 build/index.js:9439
-#: build/index.js:6002 build/index.js:6342
+#: templates/forms/event/when.php:32 build/index.js:1
 msgid "All day"
 msgstr "Ganztägig"
 
@@ -367,7 +368,7 @@ msgstr "Alle Veranstaltungsschlagwörter"
 msgid "All Events"
 msgstr "Alle Veranstaltungen"
 
-#: admin/bookings/em-events.php:13 classes/Object.php:1013
+#: admin/bookings/em-events.php:13 classes/Object.php:1023
 msgid "All events"
 msgstr "Alle Veranstaltungen"
 
@@ -419,9 +420,9 @@ msgstr ""
 "Erlaube Administratoren des Blogs, eigene Buchungsemail-Vorlagen innerhalb "
 "jeder %s Einstellungen Seite zu verwenden."
 
-#: build/index.js:520 build/index.js:303
+#: build/index.js:1
 msgid "Allow attendees to donate for other attendees when booking."
-msgstr ""
+msgstr "Kunden dürfen für andere Teilnehmer spenden, wenn sie buchen"
 
 #: admin/settings/general.php:16
 msgid "Allow bookings and tickets for events."
@@ -452,9 +453,9 @@ msgstr ""
 msgid "Allow custom emails for gateways?"
 msgstr "Erlaube eigene Emails für Gateways?"
 
-#: build/index.js:519 build/index.js:302
+#: build/index.js:1
 msgid "Allow Donation"
-msgstr ""
+msgstr "Spenden erlauben"
 
 #: admin/settings/bookings.php:13
 msgid "Allow overbooking when approving?"
@@ -464,13 +465,12 @@ msgstr "Überbuchung bei Genehmigung zulassen?"
 msgid "Also Send Event Owner Emails To:"
 msgstr "Also Send Event Owner Emails To:"
 
-#: build/index.js:6753 build/index.js:4460
+#: build/index.js:1
 msgid "Alternate text for the empty option"
-msgstr ""
+msgstr "Alternativer Text für die Leeroption"
 
 #: classes/Gateways/gateway.offline.php:218
-#: classes/Gateways/gateways.transactions.php:132 build/booking.js:3075
-#: build/booking.js:3266
+#: classes/Gateways/gateways.transactions.php:132 build/booking.js:1
 msgid "Amount"
 msgstr "Betrag"
 
@@ -485,13 +485,13 @@ msgstr ""
 "Wenn jemand eine Buchung storniert, wird eine E-Mail an die Kontaktperson "
 "geschickt."
 
-#: build/index.js:6745 build/index.js:4453
+#: build/index.js:1
 msgid "An empty option ist shown and selected as default"
-msgstr ""
+msgstr "Eine leere Option wird angezeigt und als Standard ausgewählt"
 
-#: build/booking.js:2478
+#: build/booking.js:1
 msgid "An error occured. Please try again later."
-msgstr ""
+msgstr "Es gab einen Fehler. Bitte versuche es später."
 
 #: classes/Bookings/Bookings.php:342
 msgid "An error occurred."
@@ -510,21 +510,9 @@ msgstr ""
 msgid "and"
 msgstr "und"
 
-#: build/index.js:1200 build/index.js:1413 build/index.js:2465
-#: build/index.js:2676 build/index.js:3304 build/index.js:3587
-#: build/index.js:3767 build/index.js:4235 build/index.js:4576
-#: build/index.js:5085 build/index.js:5444 build/index.js:5733
-#: build/index.js:5944 build/index.js:6203 build/index.js:6479
-#: build/index.js:6775 build/index.js:7074 build/index.js:7374
-#: build/index.js:8409 build/index.js:775 build/index.js:896
-#: build/index.js:1630 build/index.js:1760 build/index.js:2191
-#: build/index.js:2367 build/index.js:2477 build/index.js:2820
-#: build/index.js:3051 build/index.js:3388 build/index.js:3660
-#: build/index.js:3840 build/index.js:3929 build/index.js:4094
-#: build/index.js:4274 build/index.js:4478 build/index.js:4667
-#: build/index.js:4833 build/index.js:5522
+#: build/index.js:1
 msgid "Appearance"
-msgstr ""
+msgstr "Darstellung"
 
 #: classes/Gateways/gateway.mollie.php:454
 msgid "Apple Pay"
@@ -597,8 +585,7 @@ msgstr ""
 "weitere Buchungen verhindern willst, reduziere die Anzahl der verfügbaren "
 "Plätze auf die Anzahl der bisherigen Buchungen."
 
-#: admin/settings/general.php:62 build/index.js:4187 build/index.js:8290
-#: build/index.js:2775 build/index.js:5413
+#: admin/settings/general.php:62 build/index.js:1
 msgid "Ascending"
 msgstr "Aufsteigend"
 
@@ -606,13 +593,13 @@ msgstr "Aufsteigend"
 msgid "at"
 msgstr "bei"
 
-#: build/index.js:5379 build/index.js:3595
+#: build/index.js:1
 msgid "at best"
-msgstr ""
+msgstr "höchstens"
 
-#: build/index.js:5382 build/index.js:3598
+#: build/index.js:1
 msgid "at least"
-msgstr ""
+msgstr "mindestens"
 
 #: classes/Emails/EmailsAdmin.php:42
 msgid "Attach ical invite?"
@@ -632,7 +619,7 @@ msgstr "Teilnehmer %s"
 msgid "Attendee Emails"
 msgstr "Teilnehmer E-Mails"
 
-#: classes/Forms/FormPost.php:95 build/index.js:390 build/index.js:219
+#: classes/Forms/FormPost.php:95 build/index.js:1
 msgid "Attendee Form"
 msgstr "Teilnehmerformular"
 
@@ -640,13 +627,12 @@ msgstr "Teilnehmerformular"
 msgid "Attendee Forms"
 msgstr "Teilnehmerformulare"
 
-#: classes/Forms/AttendeeForms.php:400 build/admin.js:231 build/admin.js:190
+#: classes/Forms/AttendeeForms.php:400 build/admin.js:1
 msgid "Attendees"
 msgstr "Teilnehmer"
 
 #: build/blocks/details-audience/render.php:15
-#: templates/forms/event/people.php:20 build/index.js:1068 build/index.js:9234
-#: build/index.js:707 build/index.js:6183
+#: templates/forms/event/people.php:20 build/index.js:1
 msgid "Audience"
 msgstr "Zielgruppe"
 
@@ -687,6 +673,10 @@ msgstr "Verfügbare Plätze"
 msgid "Available until"
 msgstr "Verfügbar bis"
 
+#: build/booking.js:1
+msgid "Available:"
+msgstr "Verfügbar:"
+
 #: classes/Emails/CustomEmailsAdmin.php:413
 #: classes/Emails/CustomEmailsAdmin.php:414 classes/Gateways/Gateways.php:63
 msgid "Awaiting Offline Payment"
@@ -700,9 +690,9 @@ msgstr "Online Zahlung ausstehend"
 msgid "Awaiting Payment"
 msgstr "Bezahlung ausstehend"
 
-#: build/booking.js:1981
+#: build/booking.js:1
 msgid "Back"
-msgstr ""
+msgstr "Zurück"
 
 #: classes/Gateways/gateway.php:602
 msgid "Back to gateways"
@@ -712,13 +702,13 @@ msgstr "Zurück zu Gateways"
 msgid "Bancontact"
 msgstr "Bancontact"
 
-#: classes/Gateways/gateway.offline.php:454 build/booking.js:3231
+#: classes/Gateways/gateway.offline.php:454 build/booking.js:1
 msgid "Bank"
 msgstr "Bank"
 
-#: build/booking.js:3353
+#: build/booking.js:1
 msgid "Base price:"
-msgstr ""
+msgstr "Grundpreis:"
 
 #: classes/Gateways/gateway.offline.php:79
 msgid ""
@@ -755,10 +745,9 @@ msgstr ""
 msgid "Begins at:"
 msgstr "Beginnt um:"
 
-#: build/index.js:1693 build/index.js:2232 build/index.js:2909
-#: build/index.js:1080 build/index.js:1500 build/index.js:1926
+#: build/index.js:1
 msgid "Behaviour"
-msgstr ""
+msgstr "Verhalten"
 
 #: classes/Emails/CustomEmailsAdmin.php:312
 #: classes/Emails/CustomEmailsAdmin.php:468
@@ -770,21 +759,21 @@ msgstr ""
 "durchgeführt werden. Dies überstimmt die Standardemail in Deiner %s "
 "Einstellungen Seite."
 
-#: build/booking.js:3252
+#: build/booking.js:1
 msgid "Beneficial"
-msgstr ""
+msgstr "Begünstigter"
 
 #: classes/Gateways/gateway.offline.php:455
 msgid "Beneficiary"
 msgstr "Begünstigter"
 
-#: classes/Gateways/gateway.offline.php:453 build/booking.js:3245
+#: classes/Gateways/gateway.offline.php:453 build/booking.js:1
 msgid "BIC"
 msgstr "BIC"
 
-#: build/index.js:9667 build/index.js:6522
+#: build/index.js:1
 msgid "Birthday"
-msgstr ""
+msgstr "Geburtstag"
 
 #: build/blocks/booking/block.json
 msgctxt "block description"
@@ -797,7 +786,7 @@ msgstr ""
 msgctxt "block description"
 msgid ""
 "Create your very own description item with icon, image and custom content."
-msgstr ""
+msgstr "Erstellt einen eigenen Punkt mit Symbol, Bild und eigenem Inhalt"
 
 #: build/blocks/location-editor/block.json
 msgctxt "block description"
@@ -907,12 +896,12 @@ msgstr "Zeigt eine Liste oder Karten mit den kommenden Veranstaltungen"
 #: build/blocks/details-item/block.json build/blocks/details/block.json
 msgctxt "block keyword"
 msgid "list"
-msgstr ""
+msgstr "Liste"
 
 #: build/blocks/details-item/block.json build/blocks/details/block.json
 msgctxt "block keyword"
 msgid "table"
-msgstr ""
+msgstr "Tabelle"
 
 #: build/blocks/booking/block.json
 msgctxt "block style label"
@@ -982,7 +971,7 @@ msgstr "Veranstaltungs-Datum"
 #: build/blocks/details/block.json
 msgctxt "block title"
 msgid "Event Details"
-msgstr ""
+msgstr "Veranstaltungsdetails"
 
 #: build/blocks/details-location/block.json
 msgctxt "block title"
@@ -1027,7 +1016,7 @@ msgstr "Nummernfeld"
 #: build/blocks/details-item/block.json
 msgctxt "block title"
 msgid "Other Item"
-msgstr ""
+msgstr "Eigener Punkt"
 
 #: build/blocks/form/phone/block.json
 msgctxt "block title"
@@ -1068,25 +1057,18 @@ msgstr "Anstehende Veranstaltungen"
 msgid "Bold Font"
 msgstr "Fettschrift"
 
-#: build/booking.js:2003
+#: build/booking.js:1
 msgid "Book now"
-msgstr ""
-
-#: build/index.js:567 build/index.js:325
-msgid "Bookable Spaces"
-msgstr ""
+msgstr "Jetzt buchen"
 
 #: admin/bookings/em-events.php:95 classes/Events/EventPostsAdmin.php:194
 #: templates/templates/bookings-event-printable.php:44
 msgid "Booked"
 msgstr "Gebucht"
 
-#: build/frontend.js:94 build/frontend.js:201 build/frontend.js:310
-#: build/index.js:2786 build/index.js:2949 build/frontend.js:67
-#: build/frontend.js:156 build/frontend.js:245 build/index.js:1862
-#: build/index.js:1966
+#: build/frontend.js:1 build/index.js:1
 msgid "Booked up"
-msgstr ""
+msgstr "Ausgebucht"
 
 #: admin/settings/emails.php:84
 msgid "Booked User Emails"
@@ -1094,18 +1076,18 @@ msgstr "E-Mails der buchenden Benutzer"
 
 #: admin/bookings/em-cancelled.php:64 admin/bookings/em-confirmed.php:53
 #: admin/bookings/em-pending.php:80 admin/bookings/em-rejected.php:51
-#: classes/Coupons/Coupons.php:328 classes/Coupons/CouponsAdmin.php:343
+#: classes/Coupons/Coupons.php:326 classes/Coupons/CouponsAdmin.php:343
 #: classes/Coupons/CouponsAdmin.php:354
 msgid "Booker"
 msgstr "Bucher"
 
-#: classes/Bookings/Booking.php:206 classes/Bookings/Booking.php:667
-#: classes/Bookings/Booking.php:670 classes/Tickets/TicketsBookings.php:188
-#: build/booking.js:2494
+#: classes/Bookings/Booking.php:206 classes/Bookings/Booking.php:673
+#: classes/Bookings/Booking.php:676 classes/Tickets/TicketsBookings.php:188
+#: build/booking.js:1
 msgid "Booking"
 msgstr "Buchung"
 
-#: classes/Bookings/Booking.php:720
+#: classes/Bookings/Booking.php:726
 msgid "Booking %s."
 msgstr "Buchung %s."
 
@@ -1150,7 +1132,7 @@ msgstr "E-Mail Inhalt bei Buchungsbestätigung"
 msgid "Booking confirmed email subject"
 msgstr "Betreff der E-Mail für Buchungsbestätigung"
 
-#: classes/Bookings/Booking.php:735 classes/Bookings/Booking.php:736
+#: classes/Bookings/Booking.php:741 classes/Bookings/Booking.php:742
 msgid "Booking could not be %s."
 msgstr "Buchung konnte nicht %s."
 
@@ -1158,7 +1140,7 @@ msgstr "Buchung konnte nicht %s."
 msgid "Booking could not be created"
 msgstr "Buchung konnte nicht erstellt werden"
 
-#: classes/Bookings/BookingsTable.php:98 classes/Coupons/Coupons.php:326
+#: classes/Bookings/BookingsTable.php:98 classes/Coupons/Coupons.php:324
 msgid "Booking Date"
 msgstr "Buchungsdatum"
 
@@ -1170,14 +1152,13 @@ msgstr "Buchungsdetails"
 msgid "Booking Email Templates"
 msgstr "E-Mail-Vorlagen für die Buchung"
 
-#: build/blocks/details-shutdown/render.php:14 build/index.js:2555
-#: build/index.js:1697
+#: build/blocks/details-shutdown/render.php:14 build/index.js:1
 msgid "Booking end"
-msgstr ""
+msgstr "Buchungsende"
 
-#: build/index.js:460 build/index.js:264
+#: build/index.js:1
 msgid "Booking End Date"
-msgstr ""
+msgstr "Buchungsende"
 
 #: classes/Forms/FormPost.php:55
 msgid "Booking Form"
@@ -1187,11 +1168,11 @@ msgstr "Buchungsformular"
 msgid "Booking Form Information"
 msgstr "Buchungsformular-Informationen"
 
-#: classes/Forms/FormPostAdmin.php:20 build/index.js:376 build/index.js:206
+#: classes/Forms/FormPostAdmin.php:20 build/index.js:1
 msgid "Booking Forms"
 msgstr "Registrierungsformulare"
 
-#: classes/Bookings/BookingsTable.php:100 build/admin.js:342 build/admin.js:286
+#: classes/Bookings/BookingsTable.php:100 build/admin.js:1
 msgid "Booking ID"
 msgstr "Buchungs ID"
 
@@ -1227,13 +1208,13 @@ msgstr "Betreff der E-Mail, wenn die Buchung abgelehnt wurde."
 msgid "Booking Related Placeholders"
 msgstr "Platzhalter für Buchungen"
 
-#: build/index.js:439 build/index.js:244
+#: build/index.js:1
 msgid "Booking Settings"
-msgstr ""
+msgstr "Buchungseinstellungen"
 
-#: build/index.js:450 build/index.js:254
+#: build/index.js:1
 msgid "Booking Start Date"
-msgstr ""
+msgstr "Beginn der Buchung"
 
 #: em-install.php:507
 msgid ""
@@ -1258,7 +1239,7 @@ msgstr "Buchungs-Transaktionen"
 msgid "Bookings"
 msgstr "Buchungen"
 
-#: em-actions.php:179 em-actions.php:202
+#: em-actions.php:143 em-actions.php:166
 msgctxt "bookings"
 msgid "No emails to send for this booking."
 msgstr "Für diese Buchung gibt es keine Nachrichten zu senden."
@@ -1276,7 +1257,7 @@ msgstr "Buchungsinformationen"
 msgid "Bookings for %s"
 msgstr "Buchungen für %s"
 
-#: classes/Bookings/Booking.php:381
+#: classes/Bookings/Booking.php:386
 msgid "Bookings have closed (e.g. event has started)."
 msgstr ""
 "Buchungsmöglichkeit wurde bereits geschlossen (z.B. Veranstaltung hat "
@@ -1306,17 +1287,17 @@ msgstr ""
 msgid "Bookings/Registration"
 msgstr "Buchung/Anmeldung"
 
-#: build/index.js:4595 build/index.js:3062
+#: build/index.js:1
 msgid "Box"
-msgstr ""
+msgstr "Box"
 
-#: build/index.js:279 build/index.js:148
+#: build/index.js:1
 msgid "Button Icon"
-msgstr ""
+msgstr "Button Symbol"
 
-#: build/index.js:276 build/index.js:146
+#: build/index.js:1
 msgid "Button Settings"
-msgstr ""
+msgstr "Button Einstellungen"
 
 #: classes/Gateways/gateway.mollie.php:336
 msgid ""
@@ -1344,9 +1325,9 @@ msgstr ""
 "buchen, wähle Ja aus."
 
 #: admin/bookings/em-confirmed.php:85 classes/Bookings/BookingsTable.php:641
-#: build/index.js:743 build/index.js:459
+#: build/index.js:1
 msgid "Cancel"
-msgstr "Abbrechen"
+msgstr "Stornieren"
 
 #: classes/Gateways/gateway.mollie.php:437
 msgid "canceled"
@@ -1355,14 +1336,13 @@ msgstr "abgebrochen"
 #: classes/Bookings/Booking.php:102 classes/Bookings/BookingsTable.php:67
 #: classes/Gateways/gateway.mollie.php:181 em-install.php:426
 msgid "Cancelled"
-msgstr "Abgesagt"
+msgstr "Storniert"
 
-#: build/index.js:8451 build/index.js:5548
+#: build/index.js:1
 msgid "Cards"
-msgstr ""
+msgstr "Karten"
 
-#: em-install.php:462 build/index.js:4197 build/index.js:8301
-#: build/index.js:2783 build/index.js:5422
+#: em-install.php:462 build/index.js:1
 msgid "Category"
 msgstr "Kategorie"
 
@@ -1387,9 +1367,9 @@ msgstr "rückzahlung"
 msgid "Charged back"
 msgstr "Zurück gezahlt"
 
-#: build/booking.js:2273
+#: build/booking.js:1
 msgid "Check coupon"
-msgstr ""
+msgstr "Überprüfen"
 
 #: admin/settings/emails.php:46
 msgid ""
@@ -1436,8 +1416,7 @@ msgstr ""
 msgid "Choose your currency for displaying event pricing."
 msgstr "Wähle die Währung für die Anzeige der Veranstaltungspreise."
 
-#: build/index.js:4180 build/index.js:7556 build/index.js:8251
-#: build/index.js:2770 build/index.js:4990 build/index.js:5392
+#: build/index.js:1
 msgid "City"
 msgstr "Ort"
 
@@ -1459,11 +1438,11 @@ msgstr ""
 msgid "Click to toggle"
 msgstr "Klicken zum Umschalten"
 
-#: build/booking.js:2011
+#: build/booking.js:1
 msgid "Close"
-msgstr ""
+msgstr "Schließen"
 
-#: classes/Coupons/Coupon.php:58 classes/Coupons/Coupons.php:281
+#: classes/Coupons/Coupon.php:58 classes/Coupons/Coupons.php:279
 #: classes/Coupons/CouponsAdmin.php:56 classes/Coupons/CouponsAdmin.php:221
 #: classes/Coupons/CouponsAdmin.php:231
 #| msgid "Scope"
@@ -1504,7 +1483,7 @@ msgstr "Allgemeine Benutzerfelder für Gateways"
 msgid "Company"
 msgstr "Firma"
 
-#: classes/Bookings/Booking.php:959
+#: classes/Bookings/Booking.php:965
 msgid ""
 "Confirmation email could not be sent to admin. Registrant should have gotten "
 "their email (only admin see this warning)."
@@ -1529,27 +1508,26 @@ msgstr "E-Mail für Buchungsbestätigungen"
 msgid "Confirmed Spaces"
 msgstr "Bestätigte Plätze"
 
-#: build/index.js:9579 build/index.js:6449
+#: build/index.js:1
 msgid "Contact"
-msgstr ""
+msgstr "Kontakt"
 
 #: classes/Gateways/gateway.mollie.php:209
 msgid "Continue"
 msgstr "Weiter"
 
-#: classes/Coupons/Coupons.php:285
+#: classes/Coupons/Coupons.php:283
 msgid "Count"
 msgstr "Anzahl"
 
 #: classes/Locations/LocationPostsAdmin.php:60 em-install.php:466
-#: em-install.php:589 em-install.php:612 build/index.js:7570
-#: build/index.js:8254 build/index.js:5006 build/index.js:5393
+#: em-install.php:589 em-install.php:612 build/index.js:1
 msgid "Country"
 msgstr "Land"
 
 #: classes/Coupons/CouponAdmin.php:75 classes/Coupons/CouponAdmin.php:79
 #: classes/Coupons/CouponAdmin.php:84 classes/Coupons/CouponAdmin.php:86
-#: classes/Coupons/CouponAdmin.php:106 build/booking.js:3401
+#: classes/Coupons/CouponAdmin.php:106 build/booking.js:1
 msgid "Coupon"
 msgstr "Gutschein"
 
@@ -1561,30 +1539,30 @@ msgstr "Gutschein"
 msgid "Coupon Availability"
 msgstr "Gutschein-Verfügbarkeit"
 
-#: classes/Coupons/Coupons.php:545 classes/Coupons/Coupons.php:662
-#: classes/Coupons/CouponsAdmin.php:432 build/admin.js:516 build/admin.js:393
+#: classes/Coupons/Coupons.php:546 classes/Coupons/Coupons.php:663
+#: classes/Coupons/CouponsAdmin.php:432 build/admin.js:1
 msgid "Coupon Code"
 msgstr "Gutscheincode"
 
-#: build/booking.js:2255
+#: build/booking.js:1
 msgid "Coupon code"
-msgstr ""
+msgstr "Gutscheincode"
 
 #: classes/Coupons/CouponsAdmin.php:346 classes/Coupons/CouponsAdmin.php:357
 msgid "Coupon Discount"
 msgstr "Rabattgutschein"
 
-#: classes/Coupons/Coupons.php:177 classes/Coupons/Coupons.php:191
-#: classes/Coupons/Coupons.php:261 classes/Coupons/Coupons.php:566
+#: classes/Coupons/Coupons.php:174 classes/Coupons/Coupons.php:188
+#: classes/Coupons/Coupons.php:259 classes/Coupons/Coupons.php:567
 msgid "Coupon Invalid"
 msgstr "Ungültiger Gutschein"
 
-#: classes/Coupons/Coupons.php:331
+#: classes/Coupons/Coupons.php:329
 msgid "Coupon Name"
 msgstr "Gutscheinname"
 
-#: classes/Coupons/Coupons.php:180 classes/Coupons/Coupons.php:185
-#: classes/Coupons/Coupons.php:248 classes/Coupons/Coupons.php:557
+#: classes/Coupons/Coupons.php:177 classes/Coupons/Coupons.php:182
+#: classes/Coupons/Coupons.php:246 classes/Coupons/Coupons.php:558
 msgid "Coupon Not Found"
 msgstr "Gutschein nicht gefunden"
 
@@ -1650,43 +1628,31 @@ msgstr "Eigene automatisierte Emails"
 msgid "Custom Booking Email Templates"
 msgstr "Eigene Buchungs Email-Vorlagen"
 
-#: build/index.js:2241 build/index.js:1507
+#: build/index.js:1
 msgid "Custom Link"
-msgstr ""
+msgstr "Eigener Link"
 
-#: build/index.js:3334 build/index.js:3339 build/index.js:2210
-#: build/index.js:2216
+#: build/index.js:1
 msgid "Custom URL"
-msgstr ""
+msgstr "Eigene URL"
 
 #: admin/settings/bookings.php:31
 msgid "Customize Feedback Messages"
 msgstr "Feedback Nachrichten Anpassen"
 
-#: templates/forms/event/when-with-recurring.php:35 build/index.js:9451
-#: build/index.js:6354
+#: templates/forms/event/when-with-recurring.php:35 build/index.js:1
 msgid "Daily"
 msgstr "Täglich"
 
-#: build/index.js:2198 build/index.js:3347 build/index.js:4194
-#: build/index.js:4559 build/index.js:5061 build/index.js:5393
-#: build/index.js:5708 build/index.js:6179 build/index.js:6455
-#: build/index.js:6734 build/index.js:7042 build/index.js:7350
-#: build/index.js:8297 build/index.js:1472 build/index.js:2222
-#: build/index.js:2781 build/index.js:3037 build/index.js:3367
-#: build/index.js:3614 build/index.js:3820 build/index.js:4074
-#: build/index.js:4254 build/index.js:4445 build/index.js:4641
-#: build/index.js:4813 build/index.js:5419
+#: build/index.js:1
 msgid "Data"
-msgstr ""
+msgstr "Daten"
 
 #: admin/em-bookings.php:105 build/blocks/details-date/render.php:14
 #: classes/Forms/FormPostAdmin.php:29 classes/Forms/FormPostAdmin.php:71
 #: classes/Gateways/Gateways.php:485
-#: classes/Gateways/gateways.transactions.php:131 build/admin.js:338
-#: build/index.js:1288 build/index.js:8898 build/index.js:9362
-#: build/admin.js:283 build/index.js:836 build/index.js:5932
-#: build/index.js:6277
+#: classes/Gateways/gateways.transactions.php:131 build/admin.js:1
+#: build/index.js:1
 msgid "Date"
 msgstr "Datum"
 
@@ -1709,8 +1675,7 @@ msgid ""
 msgstr ""
 "Daten müssen richtig formatiert werden. Bitte benutze die Datumsauswahl."
 
-#: templates/forms/event/when-with-recurring.php:41 build/index.js:5133
-#: build/index.js:3438
+#: templates/forms/event/when-with-recurring.php:41 build/index.js:1
 msgid "day"
 msgstr "Tag"
 
@@ -1719,8 +1684,7 @@ msgstr "Tag"
 msgid "day(s)"
 msgstr "Tage"
 
-#: templates/forms/event/when-with-recurring.php:42 build/index.js:5133
-#: build/index.js:3440
+#: templates/forms/event/when-with-recurring.php:42 build/index.js:1
 msgid "days"
 msgstr "Tage"
 
@@ -1813,8 +1777,7 @@ msgstr "Standard-Land"
 #: classes/Bookings/BookingsTable.php:658 classes/Coupons/CouponsAdmin.php:244
 #: classes/Events/EventPostsAdmin.php:247 classes/Forms/FormPostAdmin.php:42
 #: classes/Forms/FormPostAdmin.php:84 classes/Gateways/gateway.offline.php:181
-#: classes/Gateways/gateways.transactions.php:312 build/index.js:978
-#: build/index.js:647
+#: classes/Gateways/gateways.transactions.php:312 build/index.js:1
 msgid "Delete"
 msgstr "Löschen"
 
@@ -1837,17 +1800,15 @@ msgstr ""
 "Abhängig von den Server Einstellungen, können manche Sendemethoden diese "
 "Einstellungen ignorieren."
 
-#: admin/settings/general.php:63 build/index.js:4190 build/index.js:8293
-#: build/index.js:2776 build/index.js:5414
+#: admin/settings/general.php:63 build/index.js:1
 msgid "Descending"
 msgstr "Absteigend"
 
-#: admin/em-bookings.php:161 classes/Coupons/Coupons.php:282
+#: admin/em-bookings.php:161 classes/Coupons/Coupons.php:280
 #: classes/Coupons/CouponsAdmin.php:59 classes/Coupons/CouponsAdmin.php:223
 #: classes/Coupons/CouponsAdmin.php:233 classes/Coupons/CouponsAdmin.php:443
 #: classes/Forms/FormPostAdmin.php:28 classes/Forms/FormPostAdmin.php:70
-#: templates/forms/event/bookings-ticket-form.php:20 build/index.js:639
-#: build/index.js:874 build/index.js:370 build/index.js:568
+#: templates/forms/event/bookings-ticket-form.php:20 build/index.js:1
 msgid "Description"
 msgstr "Beschreibung"
 
@@ -1855,9 +1816,9 @@ msgstr "Beschreibung"
 msgid "Detach"
 msgstr "Herauslösen"
 
-#: build/index.js:7060 build/index.js:4656
+#: build/index.js:1
 msgid "Details about how to fill this field"
-msgstr ""
+msgstr "Details wie dieses Feld gefüllt werden kann"
 
 #: classes/Gateways/gateway.mollie.php:472
 msgid "Digital Payment Service"
@@ -1871,10 +1832,10 @@ msgstr "Direct Debit"
 msgid "Disabled"
 msgstr "Deaktiviert"
 
-#: classes/Coupons/Coupon.php:58 classes/Coupons/Coupons.php:283
-#: classes/Coupons/Coupons.php:333 classes/Coupons/CouponsAdmin.php:58
+#: classes/Coupons/Coupon.php:58 classes/Coupons/Coupons.php:281
+#: classes/Coupons/Coupons.php:331 classes/Coupons/CouponsAdmin.php:58
 #: classes/Coupons/CouponsAdmin.php:224 classes/Coupons/CouponsAdmin.php:234
-#: build/admin.js:594 build/admin.js:454
+#: build/admin.js:1
 #| msgid "Disconnect"
 msgid "Discount"
 msgstr "Rabatt"
@@ -1886,14 +1847,6 @@ msgstr "Rabattbetrag"
 #: classes/Coupons/CouponsAdmin.php:475
 msgid "Discount Type"
 msgstr "Rabatt-Art"
-
-#: templates/emails/bookingsummary.php:52
-msgid "Discounts (After Taxes)"
-msgstr "Nachlässe (nach Steuern)"
-
-#: templates/emails/bookingsummary.php:29
-msgid "Discounts Before Taxes"
-msgstr "Nachlässe vor Steuern"
 
 #: em-posts.php:130
 msgid "Display events on your blog."
@@ -1965,22 +1918,21 @@ msgstr "Zeige Benutzer"
 msgid "Displays the beneficiary name."
 msgstr "Zeigt den namen des Begünstigten"
 
-#: build/index.js:8245 build/index.js:8261 build/index.js:5390
-#: build/index.js:5398
+#: build/index.js:1
 msgid "Don't show"
-msgstr ""
+msgstr "Nicht zeigen"
 
-#: classes/Bookings/Booking.php:466 build/booking.js:3053
+#: classes/Bookings/Booking.php:470 build/booking.js:1
 msgid "Donation"
-msgstr ""
+msgstr "Spende"
 
 #: admin/settings/bookings.php:39
 msgid "Donation Message"
-msgstr ""
+msgstr "Spendeninformation"
 
-#: build/booking.js:2673
+#: build/booking.js:1
 msgid "Done"
-msgstr ""
+msgstr "Fertig"
 
 #: classes/Bookings/BookingsTable.php:256
 msgid "Drag items to or from the left column to add or remove them."
@@ -1988,12 +1940,12 @@ msgstr ""
 "Felder von oder zur linken Spalte ziehen, um sie hinzuzufügen oder zu "
 "entfernen."
 
-#: build/index.js:4239 build/index.js:2823
+#: build/index.js:1
 msgid "Drop shadow"
-msgstr ""
+msgstr "Schatten anzeigen"
 
 #: classes/Events/EventPostsAdmin.php:305
-#: classes/Events/EventPostsAdmin.php:442 build/index.js:974 build/index.js:643
+#: classes/Events/EventPostsAdmin.php:442 build/index.js:1
 msgid "Duplicate"
 msgstr "Duplizieren"
 
@@ -2002,8 +1954,7 @@ msgstr "Duplizieren"
 msgid "Duplicate %s"
 msgstr "%s duplizieren "
 
-#: classes/Speaker/Speakers.php:72 build/index.js:3325 build/index.js:9583
-#: build/index.js:2207 build/index.js:6454
+#: classes/Speaker/Speakers.php:72 build/index.js:1
 msgid "E-Mail"
 msgstr "E-Mail"
 
@@ -2018,13 +1969,13 @@ msgstr "E-Mail"
 msgid "e.g. %s - you can use / Separators too"
 msgstr "z.B. %s - kannst du / Seperatoren ebenfalls verwenden"
 
-#: build/index.js:5417 build/index.js:3635
+#: build/index.js:1
 msgid "e.g. maximal age for an attendee"
-msgstr ""
+msgstr "z.B. Maximalalter für einen Teilnehmer"
 
-#: build/index.js:5425 build/index.js:3642
+#: build/index.js:1
 msgid "e.g. minimal age for an attendee"
-msgstr ""
+msgstr "z.B. Minimalalter für einen Teilnehmer"
 
 #: templates/forms/event/when-with-recurring.php:69
 msgid "Each event spans %s day(s)"
@@ -2033,7 +1984,7 @@ msgstr "Jede Veranstaltung dauert %s Tage."
 #: classes/Forms/FormPost.php:60 classes/Forms/FormPost.php:100
 #: classes/Forms/FormPostAdmin.php:41 classes/Forms/FormPostAdmin.php:83
 #: classes/Speaker/Speakers.php:40 em-posts.php:136 em-posts.php:182
-#: em-posts.php:233 build/index.js:970 build/index.js:639
+#: em-posts.php:233 build/index.js:1
 msgid "Edit"
 msgstr "Bearbeiten"
 
@@ -2049,7 +2000,7 @@ msgstr "Bearbeiten %s"
 msgid "Edit %s settings"
 msgstr "%s Einstellungen bearbeiten"
 
-#: classes/Bookings/Booking.php:848
+#: classes/Bookings/Booking.php:854
 msgid "Edit Booking"
 msgstr "Buchung bearbeiten"
 
@@ -2095,9 +2046,9 @@ msgstr "Gateway bearbeiten"
 msgid "Edit Location"
 msgstr "Standort bearbeiten"
 
-#: build/admin.js:870 build/admin.js:637
+#: build/admin.js:1
 msgid "Edit Note"
-msgstr ""
+msgstr "Notiz bearbeiten"
 
 #: em-posts.php:183
 msgid "Edit Recurring Event"
@@ -2111,13 +2062,13 @@ msgstr "Wiederkehrende Veranstaltungen bearbeiten"
 msgid "Edit Speaker"
 msgstr "Referent bearbeiten"
 
-#: build/admin.js:954 build/index.js:851 build/admin.js:694 build/index.js:545
+#: build/admin.js:1 build/index.js:1
 msgid "Edit Ticket"
-msgstr ""
+msgstr "Ticket bearbeiten"
 
-#: build/index.js:473 build/index.js:278
+#: build/index.js:1
 msgid "Edit Tickets"
-msgstr ""
+msgstr "Ticketeditor"
 
 #: admin/em-bookings.php:239
 msgid "Edit User"
@@ -2133,7 +2084,7 @@ msgstr "Benutzer bearbeiten"
 msgid "Edit/View"
 msgstr "Bearbeiten/Anzeigen"
 
-#: classes/Coupons/Coupons.php:329 classes/Forms/BookingsForm.php:48
+#: classes/Coupons/Coupons.php:327 classes/Forms/BookingsForm.php:48
 #: classes/Forms/FormPost.php:50 classes/Gateways/Gateways.php:393
 #: classes/People/Person.php:96 classes/People/Person.php:109
 #: em-install.php:421 em-install.php:607
@@ -2148,7 +2099,7 @@ msgstr "E-Mails an den Veranstaltungseigentümer"
 msgid "Email events admin?"
 msgstr "E-Mails an Administrator der Veranstaltung?"
 
-#: classes/Bookings/Booking.php:725 em-actions.php:177 em-actions.php:200
+#: classes/Bookings/Booking.php:731 em-actions.php:141 em-actions.php:164
 msgid "Email Sent."
 msgstr "Nachricht versendet."
 
@@ -2160,17 +2111,16 @@ msgstr "E-Mail Einstellungen"
 msgid "Emails"
 msgstr "E-Mails"
 
-#: build/index.js:5077 build/index.js:6744 build/index.js:3382
-#: build/index.js:4452
+#: build/index.js:1
 msgid "Empty option"
-msgstr ""
+msgstr "Leeroption"
 
 #: classes/Emails/EmailsAdmin.php:40 classes/Emails/EmailsAdmin.php:83
 msgctxt "Enable a feature in settings page"
 msgid "Enable %s?"
 msgstr "%s aktivieren?"
 
-#: build/index.js:442 build/index.js:246
+#: build/index.js:1
 msgid "Enable Bookings"
 msgstr "Buchungen aktivieren"
 
@@ -2182,7 +2132,7 @@ msgstr "Individuelle Ticket-Sortierung aktivieren?"
 msgid "Enabled"
 msgstr "Aktiviert"
 
-#: admin/em-bookings.php:167 build/index.js:9429 build/index.js:6332
+#: admin/em-bookings.php:167 build/index.js:1
 msgid "End"
 msgstr "Ende"
 
@@ -2190,18 +2140,17 @@ msgstr "Ende"
 msgid "End Date"
 msgstr "Enddatum"
 
-#: build/index.js:8975 build/index.js:5993
+#: build/index.js:1
 msgid "Ends at"
-msgstr ""
+msgstr "Endet um"
 
 #: classes/Intl/Date.php:62
 msgid "Ends at:"
 msgstr "Endet um:"
 
-#: build/index.js:2789 build/index.js:2941 build/index.js:1867
-#: build/index.js:1958
+#: build/index.js:1
 msgid "Enough free spaces left"
-msgstr ""
+msgstr "Genug freie Plätze übrig"
 
 #: templates/forms/event/bookings-ticket-form.php:26
 msgid "Enter a maximum number of spaces (required)."
@@ -2215,36 +2164,31 @@ msgstr "Zahl eingeben, nur Dezimalzahlen erlaubt"
 msgid "Enter a ticket name."
 msgstr "Gebe einen Ticketnamen an."
 
-#: build/index.js:1078 build/index.js:716
+#: build/index.js:1
 msgid "Enter audience"
-msgstr ""
+msgstr "Zielgruppe eingeben"
 
 #: classes/Gateways/gateway.mollie.php:458
 msgid "EPS"
 msgstr "EPS"
 
-#: build/admin.js:726 build/admin.js:544
+#: build/admin.js:1
 msgid "Error"
-msgstr ""
+msgstr "Fehler"
 
-#: classes/Bookings/Booking.php:729 classes/Bookings/Booking.php:730
-#: em-actions.php:182 em-actions.php:209
+#: classes/Bookings/Booking.php:735 classes/Bookings/Booking.php:736
+#: em-actions.php:146 em-actions.php:173
 msgid "ERROR : Email Not Sent."
 msgstr "FEHLER: Nachricht nicht versendet."
 
-#: build/index.js:4568 build/index.js:5409 build/index.js:5725
-#: build/index.js:6195 build/index.js:6464 build/index.js:6760
-#: build/index.js:7066 build/index.js:7366 build/index.js:3045
-#: build/index.js:3628 build/index.js:3834 build/index.js:4088
-#: build/index.js:4262 build/index.js:4466 build/index.js:4661
-#: build/index.js:4827
+#: build/index.js:1
 msgid "Error message"
-msgstr ""
+msgstr "Fehlermeldung"
 
 #: admin/bookings/em-events.php:93 admin/bookings/em-pending.php:82
 #: admin/bookings/em-person.php:66 admin/em-bookings.php:87
 #: admin/em-bookings.php:88 classes/Bookings/BookingsTable.php:91
-#: classes/Coupons/Coupons.php:325 classes/Coupons/CouponsAdmin.php:342
+#: classes/Coupons/Coupons.php:323 classes/Coupons/CouponsAdmin.php:342
 #: classes/Coupons/CouponsAdmin.php:353 classes/Events/Event.php:1006
 #: classes/Events/Event.php:1021 classes/Events/Event.php:1096
 #: classes/Events/EventPostsAdmin.php:181
@@ -2253,7 +2197,7 @@ msgstr ""
 #: classes/Events/EventPostsAdmin.php:382
 #: classes/Events/EventPostsAdmin.php:384
 #: classes/Events/EventPostsAdmin.php:442 classes/Gateways/Gateways.php:481
-#: classes/Gateways/gateways.transactions.php:129 em-actions.php:75
+#: classes/Gateways/gateways.transactions.php:129 em-actions.php:39
 #: em-posts.php:133
 msgid "Event"
 msgstr "Veranstaltung"
@@ -2370,7 +2314,7 @@ msgid "Event Time(s)"
 msgstr "Veranstaltungszeit(en)"
 
 #. Plugin Name of the plugin
-#: em-actions.php:75 em-install.php:476 em-posts.php:129 em-posts.php:132
+#: em-actions.php:39 em-install.php:476 em-posts.php:129 em-posts.php:132
 #: em-posts.php:134
 msgid "Events"
 msgstr "Veranstaltungen"
@@ -2396,7 +2340,7 @@ msgstr ""
 msgid "Events cannot start after they end."
 msgstr "Veranstaltung kann nicht enden, bevor sie begonnen hat."
 
-#: classes/Object.php:1023
+#: classes/Object.php:1033
 msgid "Events current and next month"
 msgstr "Veranstaltungen in diesem und nächsten Monat"
 
@@ -2425,7 +2369,7 @@ msgstr "Events Manager Platzhalter"
 msgid "Events Manager Settings"
 msgstr "Events Manager Einstellungen"
 
-#: classes/Object.php:1022
+#: classes/Object.php:1032
 msgid "Events next month"
 msgstr "Veranstaltungen im nächsten Monat"
 
@@ -2433,19 +2377,19 @@ msgstr "Veranstaltungen im nächsten Monat"
 msgid "Events start from"
 msgstr "Veranstaltungen beginnen ab"
 
-#: classes/Object.php:1020
+#: classes/Object.php:1030
 msgid "Events this month"
 msgstr "Veranstaltungen in diesem Monat"
 
-#: classes/Object.php:1021
+#: classes/Object.php:1031
 msgid "Events this month (today onwards)"
 msgstr "Veranstaltungen in diesem Monat (ab heute)"
 
-#: classes/Object.php:1019
+#: classes/Object.php:1029
 msgid "Events this week (today to %s)"
 msgstr "Veranstaltungen in dieser Woche (heute bis %s)"
 
-#: classes/Object.php:1018
+#: classes/Object.php:1028
 msgid "Events this whole week (%s to %s)"
 msgstr "Veranstaltungen in dieser Woche (%s bis %s)"
 
@@ -2453,25 +2397,25 @@ msgstr "Veranstaltungen in dieser Woche (%s bis %s)"
 msgid "Events With Bookings Enabled"
 msgstr "Veranstaltungen mit Buchungsmöglichkeit"
 
-#: classes/Object.php:1027
+#: classes/Object.php:1037
 msgid "Events within 12 months"
 msgstr "Veranstaltungen innerhalb von 12 Monaten"
 
-#: classes/Object.php:1024
+#: classes/Object.php:1034
 msgid "Events within 2 months"
 msgstr "Veranstaltungen innerhalb von 2 Monaten"
 
-#: classes/Object.php:1025
+#: classes/Object.php:1035
 msgid "Events within 3 months"
 msgstr "Veranstaltungen innerhalb von 3 Monaten"
 
-#: classes/Object.php:1026
+#: classes/Object.php:1036
 msgid "Events within 6 months"
 msgstr "Veranstaltungen innerhalb von 6 Monaten"
 
-#: build/index.js:9492 build/index.js:6392
+#: build/index.js:1
 msgid "Every"
-msgstr ""
+msgstr "Jede(n)"
 
 #: templates/forms/event/when-with-recurring.php:39
 msgid "every"
@@ -2521,9 +2465,9 @@ msgstr "täglich"
 msgid "Everyone"
 msgstr "Jeden"
 
-#: build/index.js:8366 build/index.js:5487
+#: build/index.js:1
 msgid "Exclude current event"
-msgstr ""
+msgstr "Aktuelles Event ausschließen"
 
 #: Assets.php:198
 msgid "Expand All"
@@ -2549,9 +2493,9 @@ msgstr "CSV exportieren"
 msgid "Export these bookings."
 msgstr "Diese Buchungen exportieren."
 
-#: build/index.js:516 build/index.js:300
+#: build/index.js:1
 msgid "Extras"
-msgstr ""
+msgstr "Extras"
 
 #: classes/Gateways/gateway.mollie.php:439
 msgid "failed"
@@ -2562,35 +2506,34 @@ msgstr "fehlgeschlagen"
 msgid "Fax"
 msgstr "Fax"
 
-#: classes/Speaker/Speakers.php:74 build/index.js:9662 build/index.js:6514
+#: classes/Speaker/Speakers.php:74 build/index.js:1
 msgid "Female"
 msgstr "Weiblich"
 
-#: build/index.js:2783 build/index.js:1848 build/index.js:1853
-#: build/index.js:1856
+#: build/index.js:1
 msgid "few"
-msgstr ""
+msgstr "wenige"
 
-#: build/index.js:9506 build/index.js:6398
+#: build/index.js:1
 msgid "Fifth"
-msgstr ""
+msgstr "Fünfter"
 
 #: templates/forms/event/when-with-recurring.php:59
 msgid "fifth"
 msgstr "fünfte"
 
-#: build/index.js:8374 build/index.js:5494
+#: build/index.js:1
 msgid "Filter"
-msgstr ""
+msgstr "Filter"
 
-#: classes/Coupons/Coupons.php:334 classes/Coupons/CouponsAdmin.php:347
+#: classes/Coupons/Coupons.php:332 classes/Coupons/CouponsAdmin.php:347
 #: classes/Coupons/CouponsAdmin.php:358
 msgid "Final Price"
 msgstr "Gesamtpreis"
 
-#: build/index.js:9494 build/index.js:6394
+#: build/index.js:1
 msgid "First"
-msgstr ""
+msgstr "Erste"
 
 #: templates/forms/event/when-with-recurring.php:59
 msgid "first"
@@ -2601,9 +2544,9 @@ msgstr "erste"
 msgid "First Name"
 msgstr "Vorname"
 
-#: build/index.js:9366 build/index.js:6279
+#: build/index.js:1
 msgid "First time"
-msgstr ""
+msgstr "Erstes Mal"
 
 #: classes/Coupons/CouponsAdmin.php:479
 msgid "Fixed Amount"
@@ -2655,9 +2598,9 @@ msgstr "Formularname"
 msgid "Forms"
 msgstr "Formulare"
 
-#: build/index.js:9503 build/index.js:6397
+#: build/index.js:1
 msgid "Fourth"
-msgstr ""
+msgstr "Vierte"
 
 #: templates/forms/event/when-with-recurring.php:59
 msgid "fourth"
@@ -2668,8 +2611,7 @@ msgid "France"
 msgstr "Frankreich"
 
 #: admin/bookings/em-events.php:131 build/blocks/details-price/render.php:22
-#: classes/Events/EventPostsAdmin.php:266 build/index.js:2343
-#: build/index.js:1571
+#: classes/Events/EventPostsAdmin.php:266 build/index.js:1
 msgid "Free"
 msgstr "Frei"
 
@@ -2677,29 +2619,29 @@ msgstr "Frei"
 msgid "Free Booking Message"
 msgstr "Nachricht bei Gratis-Veranstaltungen"
 
-#: build/index.js:2771 build/index.js:1834
+#: build/index.js:1
 msgid "Free Spaces"
-msgstr ""
+msgstr "Free spaces"
 
 #: build/blocks/details-spaces/render.php:17
 msgid "Free spaces"
-msgstr ""
+msgstr "Freie Plätze"
 
-#: classes/Intl/Date.php:120 build/index.js:9319 build/index.js:6246
+#: classes/Intl/Date.php:120 build/index.js:1
 msgid "Fri"
 msgstr "Fri"
 
-#: build/index.js:9341 build/index.js:6256
+#: build/index.js:1
 msgid "Friday"
-msgstr ""
+msgstr "Freitag"
 
-#: build/index.js:8902 build/index.js:5934
+#: build/index.js:1
 msgid "From"
-msgstr ""
+msgstr "Von"
 
-#: build/index.js:5388 build/index.js:3605
+#: build/index.js:1
 msgid "from"
-msgstr ""
+msgstr "von"
 
 #: templates/forms/event/when-with-recurring.php:13
 #: templates/forms/event/when.php:12
@@ -2710,27 +2652,27 @@ msgstr "Von "
 msgid "From %1$s to %2$s"
 msgstr "von %1$s bis %2$s"
 
-#: build/admin.js:605 build/admin.js:466
+#: build/admin.js:1
 msgid "Full Price"
-msgstr ""
+msgstr "Gesamtpreis"
 
-#: build/booking.js:3424
+#: build/booking.js:1
 msgid "Full price"
-msgstr ""
+msgstr "Gesamtpreis"
 
 #: classes/Gateways/gateway.offline.php:428
 msgid "Fully Paid"
 msgstr "Vollständig bezahlt"
 
-#: build/index.js:8271 build/index.js:5404
+#: build/index.js:1
 msgid "Future"
-msgstr ""
+msgstr "Zukunft"
 
 #: admin/bookings/em-events.php:34
 msgid "Future Events"
 msgstr "Zukünftige Veranstaltungen"
 
-#: admin/bookings/em-events.php:14 classes/Object.php:1014
+#: admin/bookings/em-events.php:14 classes/Object.php:1024
 msgid "Future events"
 msgstr "Zukünftige Veranstaltungen"
 
@@ -2792,7 +2734,7 @@ msgstr "Gateway aktualisiert"
 msgid "Gateway Used"
 msgstr "Benutztes Gateway"
 
-#: classes/Speaker/Speakers.php:74 build/index.js:9651 build/index.js:6503
+#: classes/Speaker/Speakers.php:74 build/index.js:1
 msgid "Gender"
 msgstr "Geschlecht"
 
@@ -2832,7 +2774,7 @@ msgstr "Gehe zurück zu den &quot;%s&quot; Buchungen"
 msgid "Google Pay"
 msgstr "Google Pay"
 
-#: classes/Bookings/Booking.php:635 classes/Bookings/Booking.php:642
+#: classes/Bookings/Booking.php:641 classes/Bookings/Booking.php:648
 msgid "Guest User"
 msgstr "Gast Benutzer"
 
@@ -2840,32 +2782,29 @@ msgstr "Gast Benutzer"
 msgid "Guest Users"
 msgstr "Gastbenutzer"
 
-#: build/index.js:7386 build/index.js:4843
+#: build/index.js:1
 msgid "Height"
-msgstr ""
+msgstr "Höhe"
 
-#: admin/em-admin.php:41 build/index.js:5402 build/index.js:5718
-#: build/index.js:6752 build/index.js:7059 build/index.js:3622
-#: build/index.js:3828 build/index.js:4459 build/index.js:4655
+#: admin/em-admin.php:41 build/index.js:1
 msgid "Help"
 msgstr "Hilfe"
 
-#: build/index.js:5403 build/index.js:3623
+#: build/index.js:1
 msgid "Help text for the date field"
-msgstr ""
+msgstr "Hilfetext für Datumsfeld"
 
-#: build/index.js:5719 build/index.js:6189 build/index.js:7360
-#: build/index.js:3829 build/index.js:4083 build/index.js:4822
+#: build/index.js:1
 msgid "Help text for the input field"
-msgstr ""
+msgstr "Hilfetext für Eingabefeld"
 
 #: em-install.php:447
 msgid "Hide Advanced Search"
 msgstr "Erweiterte Suche verbergen"
 
-#: build/index.js:5424 build/index.js:3641
+#: build/index.js:1
 msgid "Highest Date"
-msgstr ""
+msgstr "Neuestes Datum"
 
 #: classes/Export/ExportAdmin.php:36
 msgid "Hint: Theme path is "
@@ -2894,27 +2833,27 @@ msgstr ""
 "Ich erkläre mich damit einverstanden, dass die eingegebenen Daten gemäß der "
 "Seite %s verarbeitet werden."
 
-#: classes/Gateways/gateway.offline.php:452 build/booking.js:3238
+#: classes/Gateways/gateway.offline.php:452 build/booking.js:1
 msgid "IBAN"
 msgstr "IBAN"
 
-#: build/index.js:1713 build/index.js:1096
+#: build/index.js:1
 msgid "Icon"
-msgstr ""
+msgstr "Symbol"
 
-#: build/index.js:1725 build/index.js:1107
+#: build/index.js:1
 msgid "Icon Background"
-msgstr ""
+msgstr "Hintergrund des Symbols"
 
-#: build/index.js:1741 build/index.js:1127
+#: build/index.js:1
 msgid "Icon Color"
-msgstr ""
+msgstr "Symbolfarbe"
 
-#: build/index.js:1702 build/index.js:1087
+#: build/index.js:1
 msgid "Icon for Link"
-msgstr ""
+msgstr "Symbol für Link"
 
-#: classes/Coupons/Coupons.php:324 classes/Taxonomies/TaxonomyAdmin.php:54
+#: classes/Coupons/Coupons.php:322 classes/Taxonomies/TaxonomyAdmin.php:54
 msgid "ID"
 msgstr "ID"
 
@@ -2931,9 +2870,9 @@ msgstr ""
 "Wenn ein Benutzer dieses Zahlungsgateway wählt, oder es standardmäßig "
 "gewählt ist, wird diese Nachricht unter der Auswahl angezeigt."
 
-#: build/index.js:8371 build/index.js:5490
+#: build/index.js:1
 msgid "If applicable, exclude the current event from the list"
-msgstr ""
+msgstr "Aktuelles Event aus der Liste entfernen"
 
 #: templates/forms/event/bookings-ticket-form.php:81
 msgid ""
@@ -3025,9 +2964,9 @@ msgstr ""
 "Administrator geschickt werden soll, gib hier seine E-Mail-Adresse ein (leer "
 "lassen, um keine E-Mails zu verschicken)."
 
-#: build/index.js:1709 build/index.js:1093
+#: build/index.js:1
 msgid "Image"
-msgstr ""
+msgstr "Bild"
 
 #: classes/Gateways/Gateways.php:388
 msgid ""
@@ -3085,9 +3024,9 @@ msgstr "Dektiviert"
 msgid "Incomplete Bookings"
 msgstr "Unvollständige Buchungen"
 
-#: build/admin.js:732 build/admin.js:546
+#: build/admin.js:1
 msgid "Info"
-msgstr ""
+msgstr "Info"
 
 #: admin/settings/emails.php:26
 msgid "Insert the address of the notification sender."
@@ -3099,11 +3038,11 @@ msgstr ""
 msgid "Insert the display name of the notification sender."
 msgstr "Gib hier den Namen für den Absender bei Benachrichtigungen an."
 
-#: build/index.js:9480 build/index.js:6381
+#: build/index.js:1
 msgid "Interval"
-msgstr ""
+msgstr "Interval"
 
-#: classes/Coupons/Coupons.php:212
+#: classes/Coupons/Coupons.php:209
 msgid "Invalid coupon code provided"
 msgstr "Ungültiger Gutscheincode angegeben"
 
@@ -3116,27 +3055,17 @@ msgstr "Kursivschrift"
 msgid "Klarna"
 msgstr "Klarna"
 
-#: build/index.js:4374 build/index.js:4885 build/index.js:5221
-#: build/index.js:5549 build/index.js:6032 build/index.js:6293
-#: build/index.js:6578 build/index.js:6883 build/index.js:7197
-#: build/index.js:2931 build/index.js:3259 build/index.js:3517
-#: build/index.js:3744 build/index.js:4002 build/index.js:4161
-#: build/index.js:4357 build/index.js:4564 build/index.js:4731
+#: build/index.js:1
 msgid "Label"
 msgstr "Beschriftung"
 
-#: build/index.js:4894 build/index.js:5229 build/index.js:5557
-#: build/index.js:6040 build/index.js:6301 build/index.js:6586
-#: build/index.js:6891 build/index.js:7205 build/index.js:3265
-#: build/index.js:3521 build/index.js:3748 build/index.js:4006
-#: build/index.js:4166 build/index.js:4361 build/index.js:4569
-#: build/index.js:4736
+#: build/index.js:1
 msgid "Label for the field"
 msgstr "Beschriftung für das Feld"
 
-#: build/index.js:9509 build/index.js:6399
+#: build/index.js:1
 msgid "Last"
-msgstr ""
+msgstr "Letzte"
 
 #: templates/forms/event/when-with-recurring.php:59
 msgid "last"
@@ -3147,50 +3076,48 @@ msgstr "letzte"
 msgid "Last Name"
 msgstr "Nachname"
 
-#: build/index.js:9388 build/index.js:6296
+#: build/index.js:1
 msgid "Last time"
-msgstr ""
+msgstr "Letztes Mal"
 
 #: templates/forms/event/bookings-ticket-form.php:32
 #: templates/forms/event/bookings-ticket-form.php:37
 msgid "Leave either blank for no upper/lower limit."
 msgstr "Leer lassen für keine obere/untere Grenze."
 
-#: build/index.js:4257 build/index.js:8479 build/index.js:2840
-#: build/index.js:5577
+#: build/index.js:1
 msgid "Length of preview text"
-msgstr ""
+msgstr "Länge des Vorschautextes"
 
-#: build/index.js:8455 build/index.js:5553
+#: build/index.js:1
 msgid "Let user select style"
-msgstr ""
+msgstr "Benutzer kann den Stil wählen"
 
-#: build/index.js:8356 build/index.js:5477
+#: build/index.js:1
 msgid "Limit"
-msgstr ""
+msgstr "Limit"
 
-#: build/index.js:3771 build/index.js:2480
+#: build/index.js:1
 msgid "Lines as separators"
-msgstr ""
+msgstr "Linien als Trenner"
 
-#: build/index.js:1696 build/index.js:1920 build/index.js:1082
-#: build/index.js:1277
+#: build/index.js:1
 msgid "Link"
-msgstr ""
+msgstr "Link"
 
-#: build/index.js:3319 build/index.js:2203
+#: build/index.js:1
 msgid "Link to"
-msgstr ""
+msgstr "Link zu"
 
-#: build/index.js:8439 build/index.js:5541
+#: build/index.js:1
 msgid "List"
-msgstr ""
+msgstr "Liste"
 
-#: build/admin.js:430 build/admin.js:338
+#: build/admin.js:1
 msgid "Loading Data..."
-msgstr ""
+msgstr "Lade Daten..."
 
-#: Assets.php:170 build/index.js:3299 build/index.js:2187
+#: Assets.php:170 build/index.js:1
 msgid "Loading..."
 msgstr "Wird geladen..."
 
@@ -3199,10 +3126,7 @@ msgstr "Wird geladen..."
 #: classes/Events/EventPostsAdmin.php:390 classes/Locations/Location.php:381
 #: classes/Locations/LocationPostsAdmin.php:49
 #: classes/Locations/LocationPostsAdmin.php:51 em-posts.php:229
-#: build/index.js:2047 build/index.js:4225 build/index.js:4247
-#: build/index.js:8329 build/index.js:8461 build/index.js:9097
-#: build/index.js:1389 build/index.js:2811 build/index.js:2831
-#: build/index.js:5450 build/index.js:5559 build/index.js:6075
+#: build/index.js:1
 msgid "Location"
 msgstr "Veranstaltungsort"
 
@@ -3228,15 +3152,15 @@ msgstr "Veranstaltungsorte"
 msgid "Logged In Users"
 msgstr "angemeldete Benutzer"
 
-#: build/index.js:5416 build/index.js:3634
+#: build/index.js:1
 msgid "Lowest Date"
-msgstr ""
+msgstr "Ältestes Datum"
 
-#: build/index.js:6609 build/index.js:4380
+#: build/index.js:1
 msgid "Make a selection"
-msgstr ""
+msgstr "Auswahl treffen"
 
-#: classes/Speaker/Speakers.php:74 build/index.js:9659 build/index.js:6510
+#: classes/Speaker/Speakers.php:74 build/index.js:1
 msgid "Male"
 msgstr "Männlich"
 
@@ -3266,41 +3190,41 @@ msgstr "Marcus Sykes, Thomas Gollenia"
 msgid "Mastercard, VISA, Amex"
 msgstr "Master Card, Visa, American Express, ..."
 
-#: admin/em-bookings.php:165 build/index.js:882 build/index.js:572
+#: admin/em-bookings.php:165 build/index.js:1
 msgid "Max"
 msgstr "Max"
 
-#: build/index.js:700 build/index.js:425
+#: build/index.js:1
 msgid "Maximum bookable"
-msgstr ""
+msgstr "Maximal buchbar"
 
-#: build/index.js:577 build/index.js:335
-msgid "Maximum bookable spaces per booking"
-msgstr ""
+#: build/index.js:1
+msgid "Maximum spaces per booking"
+msgstr "Maximale Plätze pro Buchung"
 
-#: build/index.js:8395 build/index.js:5512
+#: build/index.js:1
 msgid "May not apply on mobile phones"
-msgstr ""
+msgstr "Trifft möglicherweise nicht auf Mobiltelefone zu"
 
 #: classes/Emails/CustomEmailsAdmin.php:141
 msgid "Message"
 msgstr "Nachricht"
 
-#: build/index.js:2935 build/index.js:1954
+#: build/index.js:1
 msgid "Message when enough spaces are free"
-msgstr ""
+msgstr "Nachricht, wenn genug Plätze frei sind"
 
-#: build/index.js:2943 build/index.js:1962
+#: build/index.js:1
 msgid "Message when event is booked up"
-msgstr ""
+msgstr "Nachricht, wenn die Veranstaltung ausgebucht ist"
 
-#: admin/em-bookings.php:164 build/index.js:880 build/index.js:571
+#: admin/em-bookings.php:164 build/index.js:1
 msgid "Min"
 msgstr "Min"
 
-#: build/index.js:685 build/index.js:415
+#: build/index.js:1
 msgid "Minimum bookable"
-msgstr ""
+msgstr "Mindestanzahl"
 
 #: classes/Events/Event.php:848
 msgid "Missing fields: "
@@ -3344,15 +3268,15 @@ msgstr "Mollie API-Schlüssel"
 msgid "Mollie API Key is not found."
 msgstr "Mollie API-Schlüssel nicht gefunden"
 
-#: classes/Intl/Date.php:116 build/index.js:9307 build/index.js:6242
+#: classes/Intl/Date.php:116 build/index.js:1
 msgid "Mon"
 msgstr "Mon"
 
-#: build/index.js:9329 build/index.js:6252
+#: build/index.js:1
 msgid "Monday"
 msgstr "Montag"
 
-#: build/index.js:5133 build/index.js:3433
+#: build/index.js:1
 msgid "month"
 msgstr "Monat"
 
@@ -3360,12 +3284,11 @@ msgstr "Monat"
 msgid "month on the"
 msgstr "Monat am"
 
-#: templates/forms/event/when-with-recurring.php:35 build/index.js:9457
-#: build/index.js:6356
+#: templates/forms/event/when-with-recurring.php:35 build/index.js:1
 msgid "Monthly"
 msgstr "Monatlich"
 
-#: build/index.js:5133 build/index.js:3435
+#: build/index.js:1
 msgid "months"
 msgstr "Monate"
 
@@ -3386,17 +3309,15 @@ msgid "N/A"
 msgstr "n. a."
 
 #: admin/em-bookings.php:160 classes/Bookings/BookingsTable.php:88
-#: classes/Coupons/Coupon.php:58 classes/Coupons/Coupons.php:280
+#: classes/Coupons/Coupon.php:58 classes/Coupons/Coupons.php:278
 #: classes/Coupons/CouponsAdmin.php:57 classes/Coupons/CouponsAdmin.php:220
 #: classes/Coupons/CouponsAdmin.php:230 classes/Coupons/CouponsAdmin.php:438
 #: classes/Forms/AttendeeForms.php:35 classes/Forms/FormPost.php:91
 #: classes/People/Person.php:92 classes/People/Person.php:94
 #: classes/People/Person.php:108 em-install.php:420 em-install.php:606
 #: templates/forms/event/bookings-ticket-form.php:16
-#: templates/templates/bookings-event-printable.php:24 build/admin.js:246
-#: build/index.js:629 build/index.js:872 build/index.js:4183
-#: build/index.js:8248 build/admin.js:203 build/index.js:362 build/index.js:567
-#: build/index.js:2771 build/index.js:5391
+#: templates/templates/bookings-event-printable.php:24 build/admin.js:1
+#: build/index.js:1
 msgid "Name"
 msgstr "Name"
 
@@ -3404,7 +3325,7 @@ msgstr "Name"
 msgid "Name (first/last)"
 msgstr "Name"
 
-#: build/index.js:8267 build/index.js:5400
+#: build/index.js:1
 msgid "Name and image"
 msgstr "Name und Bild"
 
@@ -3412,7 +3333,7 @@ msgstr "Name und Bild"
 msgid "Name of the Bank"
 msgstr "Name der Bank"
 
-#: build/index.js:8264 build/index.js:5399
+#: build/index.js:1
 msgid "Name only"
 msgstr "Nur den namen"
 
@@ -3420,8 +3341,7 @@ msgstr "Nur den namen"
 msgid "Near..."
 msgstr "Nahe ..."
 
-#: build/frontend.js:89 build/frontend.js:196 build/frontend.js:305
-#: build/frontend.js:61 build/frontend.js:151 build/frontend.js:240
+#: build/frontend.js:1
 msgid "Nearly Booked up"
 msgstr "Beinahe ausgebucht"
 
@@ -3457,15 +3377,15 @@ msgstr "Neue wiederkehrende Veranstaltung"
 msgid "New Speaker"
 msgstr "Neuer Referent"
 
-#: build/index.js:851 build/index.js:906 build/index.js:544 build/index.js:595
+#: build/index.js:1
 msgid "New Ticket"
 msgstr "Neues Ticket"
 
-#: build/booking.js:1995
+#: build/booking.js:1
 msgid "Next"
 msgstr "Nächste"
 
-#: build/index.js:8286 build/index.js:5409
+#: build/index.js:1
 msgid "Next month"
 msgstr "Nächstes Monat"
 
@@ -3508,7 +3428,7 @@ msgstr "kein Standard-Land"
 msgid "no default location"
 msgstr "kein Standard-Veranstaltungsort"
 
-#: classes/Coupons/Coupons.php:256
+#: classes/Coupons/Coupons.php:254
 msgid "No event given"
 msgstr "Keine Veranstaltung angegeben"
 
@@ -3520,7 +3440,7 @@ msgstr "keine Veranstaltungen"
 msgid "No Events Found"
 msgstr "Keine Veranstaltungen gefunden"
 
-#: build/index.js:4034 build/index.js:2687
+#: build/index.js:1
 msgid "No events found"
 msgstr "Keine Veranstaltung gefunden"
 
@@ -3545,7 +3465,7 @@ msgstr "Keine Formulare im Papierkorb"
 msgid "No Location"
 msgstr "Kein Veranstaltungsort"
 
-#: build/index.js:2072 build/index.js:1415
+#: build/index.js:1
 msgid "No location selected"
 msgstr "Keim Ort ausgewählt"
 
@@ -3600,12 +3520,11 @@ msgstr "Keine Transaktionen"
 #: classes/Events/EventPostsAdmin.php:225
 #: classes/Events/EventPostsAdmin.php:422
 #: classes/Gateways/gateway.mollie.php:358 classes/Gateways/Gateways.php:302
-#: classes/Gateways/gateways.transactions.php:306 build/index.js:9448
-#: build/index.js:6353
+#: classes/Gateways/gateways.transactions.php:306 build/index.js:1
 msgid "None"
 msgstr "keine(r)"
 
-#: classes/Forms/Forms.php:238 classes/Forms/Forms.php:435
+#: classes/Forms/Forms.php:227 classes/Forms/Forms.php:424
 #: classes/Gateways/Gateways.php:399
 msgid "none selected"
 msgstr "keine ausgewählt"
@@ -3616,7 +3535,7 @@ msgstr "keine ausgewählt"
 msgid "None yet"
 msgstr "Noch nicht"
 
-#: classes/Bookings/Booking.php:711
+#: classes/Bookings/Booking.php:717
 msgid "Not approved, spaces full."
 msgstr "Nicht bestätigt, alle Plätze sind ausgebucht."
 
@@ -3624,7 +3543,7 @@ msgstr "Nicht bestätigt, alle Plätze sind ausgebucht."
 msgid "Not enough spaces"
 msgstr "Keine ausreichenden Plätze vorhanden"
 
-#: build/admin.js:710 build/admin.js:532
+#: build/admin.js:1
 msgid "Note"
 msgstr "Notiz"
 
@@ -3661,13 +3580,7 @@ msgstr ""
 "Jetzt sind #_BOOKEDSPACES Plätze reserviert. #_AVAILABLESPACES Plätze sind "
 "noch verfügbar."
 
-#: build/index.js:4613 build/index.js:5089 build/index.js:5448
-#: build/index.js:5737 build/index.js:5948 build/index.js:6207
-#: build/index.js:6483 build/index.js:6779 build/index.js:7078
-#: build/index.js:7378 build/index.js:3076 build/index.js:3391
-#: build/index.js:3663 build/index.js:3843 build/index.js:3932
-#: build/index.js:4097 build/index.js:4277 build/index.js:4481
-#: build/index.js:4670 build/index.js:4836
+#: build/index.js:1
 msgid "Number of columns the input field will occupy"
 msgstr "Anzahl der Spalten, die dieses Feld einnehmen wird"
 
@@ -3675,16 +3588,15 @@ msgstr "Anzahl der Spalten, die dieses Feld einnehmen wird"
 msgid "Number of days until payment has to be made"
 msgstr "Anzahl von Tagen, innerhalb derer die Zahlung erfolgen muss"
 
-#: build/index.js:2919 build/index.js:1935
+#: build/index.js:1
 msgid "Number of spaces when the warning message is shown"
 msgstr "Anzahl der freien Plätze, ab der die Warnung angezeigt wird"
 
-#: build/index.js:7387 build/index.js:4844
+#: build/index.js:1
 msgid "Number of text rows"
 msgstr "Anzahl der Zeilen"
 
-#: build/index.js:4260 build/index.js:8482 build/index.js:2843
-#: build/index.js:5580
+#: build/index.js:1
 msgid "Number of words"
 msgstr "Anzahl der Wörter"
 
@@ -3708,8 +3620,7 @@ msgstr "eines jedes Monats"
 msgid "Off"
 msgstr "von"
 
-#: build/blocks/details-spaces/render.php:21 build/index.js:2783
-#: build/index.js:2933 build/index.js:1850 build/index.js:1948
+#: build/blocks/details-spaces/render.php:21 build/index.js:1
 msgid "Only %s space left"
 msgid_plural "Only %s spaces left"
 msgstr[0] "Nur noch %s Platz frei"
@@ -3719,11 +3630,11 @@ msgstr[1] "Nur noch %s Plätze frei"
 msgid "Only few spaces left"
 msgstr "Nur noch wenige Plätze frei"
 
-#: build/index.js:4382 build/index.js:2937
+#: build/index.js:1
 msgid "Only for internal usage - place field text below"
 msgstr "Nur für den internen Gebrauch"
 
-#: build/index.js:5435 build/index.js:3650
+#: build/index.js:1
 msgid "Only for testing"
 msgstr "Nur zum Testen"
 
@@ -3735,20 +3646,19 @@ msgstr "Nur bei bestimmten Veranstaltungen, die ich verwalte."
 msgid "open"
 msgstr "offen"
 
-#: build/index.js:6471 build/index.js:6767 build/index.js:4268
-#: build/index.js:4472
+#: build/index.js:1
 msgid "Options"
 msgstr "Optionen"
 
-#: build/index.js:6476 build/index.js:4271
+#: build/index.js:1
 msgid "Options for the radio control. Each line represents one option"
 msgstr "Optionen für das Radiofeld. Jede Zeile entspricht einer Option"
 
-#: build/index.js:6772 build/index.js:4475
+#: build/index.js:1
 msgid "Options for the select control. Each line represents one option"
 msgstr "Optionen für das Auswahlfeld. Jede Zeile entspricht einer Option"
 
-#: build/index.js:723 build/index.js:444
+#: build/index.js:1
 msgid "Order"
 msgstr "Reihenfolge"
 
@@ -3772,7 +3682,7 @@ msgstr "Nach Startdatum, Startzeit, dann Veranstaltungsname sortieren"
 msgid "Order Tickets By"
 msgstr "Tickets sortieren nach"
 
-#: classes/Coupons/Coupons.php:332 classes/Coupons/CouponsAdmin.php:345
+#: classes/Coupons/Coupons.php:330 classes/Coupons/CouponsAdmin.php:345
 #: classes/Coupons/CouponsAdmin.php:356
 msgid "Original Total Price"
 msgstr "Originaler Gesamtpreis"
@@ -3822,7 +3732,7 @@ msgstr "Übergeordnete wiederkehrende Veranstaltung"
 msgid "Parent Speaker"
 msgstr "Übergeordneter Referent"
 
-#: build/index.js:8274 build/index.js:5405
+#: build/index.js:1
 msgid "Past"
 msgstr "Letze"
 
@@ -3834,12 +3744,11 @@ msgstr "Vergangene und aktuelle Buchungen"
 msgid "Past Events"
 msgstr "Vergangene Veranstaltungen"
 
-#: admin/bookings/em-events.php:12 classes/Object.php:1015
+#: admin/bookings/em-events.php:12 classes/Object.php:1025
 msgid "Past events"
 msgstr "Vergangene Veranstaltungen"
 
-#: build/index.js:6188 build/index.js:7052 build/index.js:7359
-#: build/index.js:4082 build/index.js:4649 build/index.js:4821
+#: build/index.js:1
 msgid "Pattern"
 msgstr "Muster"
 
@@ -3859,8 +3768,7 @@ msgstr "Bezahle mit deiner AppleID"
 msgid "Pay with your Google Account"
 msgstr "Bezahle mmit deinem Google-Account"
 
-#: build/admin.js:801 build/booking.js:2331 build/booking.js:2666
-#: build/admin.js:595
+#: build/admin.js:1 build/booking.js:1
 msgid "Payment"
 msgstr "Bezahlung"
 
@@ -3882,7 +3790,7 @@ msgstr "Zahlungsgateways"
 msgid "Payment has been registered."
 msgstr "Bezahlung wurde registriert"
 
-#: build/admin.js:809 build/booking.js:3038 build/admin.js:601
+#: build/admin.js:1 build/booking.js:1
 msgid "Payment Method"
 msgstr "Zahlungsweise"
 
@@ -3900,8 +3808,9 @@ msgstr "Zahlungsstatus Text"
 msgid "PayPal"
 msgstr "PayPal"
 
-#: admin/bookings/em-events.php:136 classes/Bookings/BookingsTable.php:65
-#: classes/Events/Event.php:357 classes/Events/EventPostsAdmin.php:280
+#: admin/bookings/em-events.php:136 classes/Bookings/Booking.php:99
+#: classes/Bookings/BookingsTable.php:65 classes/Events/Event.php:357
+#: classes/Events/EventPostsAdmin.php:280
 #: classes/Gateways/gateway.mollie.php:178
 #: classes/Gateways/gateway.mollie.php:183 em-install.php:425
 msgid "Pending"
@@ -3935,16 +3844,16 @@ msgstr "Permalink"
 msgid "Personal Details"
 msgstr "Persönliche Angaben"
 
-#: build/index.js:9648 build/index.js:6499
+#: build/index.js:1
 msgid "Personal Information"
 msgstr "Persönliche Information"
 
-#: build/index.js:9203 build/index.js:6157
+#: build/index.js:1
 msgid "Persons"
 msgstr "Personen"
 
 #: classes/People/Person.php:97 em-install.php:590 em-install.php:613
-#: build/index.js:3328 build/index.js:2208
+#: build/index.js:1
 msgid "Phone"
 msgstr "Telefon"
 
@@ -3966,7 +3875,7 @@ msgstr "Physischer Ort"
 msgid "Placeholders for customizing event pages"
 msgstr "Platzhalter für die Anpassung von Veranstaltungsseiten"
 
-#: build/booking.js:1968
+#: build/booking.js:1
 msgid "Please accept the privacy policy"
 msgstr "Bitte stimme der Datenschutzerklärung zu"
 
@@ -3999,7 +3908,7 @@ msgid "Please enter a valid ticket price e.g. 10.50 (no currency signs)"
 msgstr ""
 "Bitte gib einen korrekten Ticketpreis an z.B. 10.50 (Kein Währungszeichen)"
 
-#: build/booking.js:1965 build/booking.js:1966
+#: build/booking.js:1
 msgid "Please fill in all required fields"
 msgstr "Bitte alle Pflichtfelder ausfüllen"
 
@@ -4008,15 +3917,15 @@ msgstr "Bitte alle Pflichtfelder ausfüllen"
 msgid "Please fill in the field: %s"
 msgstr "Bitte Feld ausfüllen: %s"
 
-#: build/booking.js:2529 build/booking.js:2536
+#: build/booking.js:1
 msgid "Please fill out all required fields"
 msgstr "Bitte alle Pflichtfelder ausfüllen"
 
-#: build/booking.js:1915
+#: build/booking.js:1
 msgid "Please hang on a little longer. This can take a few seconds."
 msgstr "Bitte warte noch etwas. Das kann ein paar Sekunden dauern."
 
-#: build/booking.js:1967
+#: build/booking.js:1
 msgid "Please select a payment method"
 msgstr "Bitte die Zahlungsart wählen"
 
@@ -4028,7 +3937,7 @@ msgstr "Bitte wähle eine Zahlungsmethode"
 msgid "Please select a valid location."
 msgstr "Bitte wähle einen gültigen Veranstaltungsort."
 
-#: build/booking.js:1964 build/booking.js:2529
+#: build/booking.js:1
 msgid "Please select at least one ticket"
 msgstr "Bitte wähle mindestens ein Ticket aus"
 
@@ -4040,26 +3949,21 @@ msgstr "Wochentage für diese Veranstaltung angeben."
 msgid "Please supply a valid email format."
 msgstr "Bitte gib ein eine gültige E-Mail-Adresse ein."
 
-#: build/index.js:5575 build/index.js:3762
+#: build/index.js:1
 msgid "Please type in a unique identifier for the field"
 msgstr "Bitte gib einen Bezeichner für das Feld an"
 
-#: build/index.js:4394 build/index.js:4907 build/index.js:5241
-#: build/index.js:6052 build/index.js:6313 build/index.js:6598
-#: build/index.js:6909 build/index.js:7217 build/index.js:2951
-#: build/index.js:3279 build/index.js:3532 build/index.js:4018
-#: build/index.js:4179 build/index.js:4373 build/index.js:4583
-#: build/index.js:4749
+#: build/index.js:1
 msgid "Please type in a unique itentifier for the field"
 msgstr "Bitte eine eindeutige ID für das Feld angeben"
 
-#: classes/Forms/Forms.php:290
+#: classes/Forms/Forms.php:279
 msgid ""
 "Please use the time picker provided to select the appropriate time format."
 msgstr ""
 "Bitte verwende den Zeit-Selektor, um das geeignete Zeitformat auszuwählen."
 
-#: build/booking.js:1910
+#: build/booking.js:1
 msgid "Please wait"
 msgstr "Bitte warten"
 
@@ -4079,7 +3983,7 @@ msgstr "Beliebte Veranstaltungskategorien"
 msgid "Popular Event Tags"
 msgstr "Beliebte Veranstaltungsschlagwörter"
 
-#: build/index.js:8394 build/index.js:5511
+#: build/index.js:1
 msgid "Position"
 msgstr "Position"
 
@@ -4094,12 +3998,11 @@ msgid "PostFinance"
 msgstr "PostFinance"
 
 #: admin/em-bookings.php:162 build/blocks/details-price/render.php:21
-#: build/blocks/details-price/render.php:31 classes/Coupons/Coupons.php:327
+#: build/blocks/details-price/render.php:31 classes/Coupons/Coupons.php:325
 #: classes/Tickets/Tickets.php:262 templates/emails/bookingsummary.php:15
 #: templates/emails/bookingtickets.php:9
-#: templates/forms/event/bookings-ticket-form.php:23 build/admin.js:250
-#: build/index.js:653 build/index.js:876 build/index.js:2333 build/admin.js:207
-#: build/index.js:383 build/index.js:569 build/index.js:1562
+#: templates/forms/event/bookings-ticket-form.php:23 build/admin.js:1
+#: build/index.js:1
 msgid "Price"
 msgstr "Preis"
 
@@ -4115,7 +4018,7 @@ msgstr "Druckansicht"
 msgid "Privacy Message"
 msgstr "Datenschutz-Nachricht"
 
-#: build/booking.js:3259
+#: build/booking.js:1
 msgid "Purpose"
 msgstr "Zweck"
 
@@ -4127,7 +4030,7 @@ msgstr "Menge"
 msgid "Recent Bookings"
 msgstr "Neueste Buchungen"
 
-#: build/index.js:9443 build/index.js:6347
+#: build/index.js:1
 msgid "Recurrence"
 msgstr "Wiederholung"
 
@@ -4139,7 +4042,7 @@ msgstr "Wiederkehrende Veranstaltungen"
 msgid "Recurrences span from "
 msgstr "Wiederholung findet statt von"
 
-#: build/index.js:9446 build/index.js:6351
+#: build/index.js:1
 msgid "Recurring"
 msgstr "Wiederkehrend"
 
@@ -4164,7 +4067,7 @@ msgstr "Weiterleitungsnachricht"
 msgid "Redirecting to complete your online payment..."
 msgstr "Weiterleitung zum Abschluss Ihrer Online-Zahlung..."
 
-#: build/index.js:5434 build/index.js:3649
+#: build/index.js:1
 msgid "Reference Date"
 msgstr "Referenzdatum"
 
@@ -4176,7 +4079,7 @@ msgstr "zurückerstattet"
 msgid "Refunded on %s"
 msgstr "Zurückerstattet auf %s"
 
-#: em-install.php:469 build/index.js:5070 build/index.js:3375
+#: em-install.php:469 build/index.js:1
 msgid "Region"
 msgstr "Region"
 
@@ -4184,8 +4087,7 @@ msgstr "Region"
 msgid "Register"
 msgstr "Anmelden"
 
-#: build/admin.js:866 build/booking.js:2659 build/booking.js:2793
-#: build/index.js:117 build/admin.js:635 build/index.js:76
+#: build/admin.js:1 build/booking.js:1 build/index.js:1
 msgid "Registration"
 msgstr "Anmeldung"
 
@@ -4193,11 +4095,11 @@ msgstr "Anmeldung"
 msgid "Registration Fields"
 msgstr "Registrierungsfelder"
 
-#: build/index.js:379 build/index.js:208
+#: build/index.js:1
 msgid "Registration Form"
 msgstr "Anmeldeformular"
 
-#: build/index.js:7053 build/index.js:4650
+#: build/index.js:1
 msgid "Regular expression to prevent wrong or illegal input"
 msgstr "Regulärer Ausdruck, um falsche Eingaben zu vermeiden"
 
@@ -4232,20 +4134,15 @@ msgstr "Erinnerung"
 msgid "Reminder subject"
 msgstr "Betreff der Erinnerung"
 
-#: build/index.js:1909 build/index.js:1264
+#: build/index.js:1
 msgid "Remove Media"
 msgstr "Bild entfernen"
 
-#: build/index.js:1906 build/index.js:1259
+#: build/index.js:1
 msgid "Replace"
 msgstr "Ersetzen"
 
-#: build/index.js:4562 build/index.js:5064 build/index.js:5396
-#: build/index.js:5711 build/index.js:6182 build/index.js:6458
-#: build/index.js:6737 build/index.js:7045 build/index.js:7353
-#: build/index.js:3039 build/index.js:3369 build/index.js:3616
-#: build/index.js:3822 build/index.js:4076 build/index.js:4256
-#: build/index.js:4447 build/index.js:4643 build/index.js:4815
+#: build/index.js:1
 msgid "Required"
 msgstr "Pflichtfeld"
 
@@ -4289,15 +4186,15 @@ msgstr "Funktion"
 msgid "Same goes with Bank name."
 msgstr "Selbiges gilt für den Namen der Bank"
 
-#: classes/Intl/Date.php:121 build/index.js:9322 build/index.js:6247
+#: classes/Intl/Date.php:121 build/index.js:1
 msgid "Sat"
 msgstr "Sat"
 
-#: build/index.js:9344 build/index.js:6257
+#: build/index.js:1
 msgid "Saturday"
 msgstr "Samstag"
 
-#: build/index.js:751 build/index.js:469
+#: build/index.js:1
 msgid "Save"
 msgstr "Speichern"
 
@@ -4317,24 +4214,23 @@ msgstr "Einstellungen speichern"
 msgid "Save Ticket"
 msgstr "Ticket speichern"
 
-#: build/booking.js:3213
+#: build/booking.js:1
 msgid "Scan the QR-Code with your phone to start payment"
 msgstr ""
 "Scanne den QR-Code mit deinem Smartphone, um eine Überweisung zu tätigen"
 
-#: build/booking.js:3211
+#: build/booking.js:1
 msgid "Scan to pay"
 msgstr "Scan to Pay"
 
-#: build/index.js:8338 build/index.js:5459
+#: build/index.js:1
 msgid "Scope"
 msgstr "Zeitfenster"
 
 #: admin/bookings/em-cancelled.php:38 admin/bookings/em-cancelled.php:40
 #: admin/bookings/em-pending.php:54 admin/bookings/em-pending.php:56
 #: admin/bookings/em-person.php:40 admin/bookings/em-person.php:42
-#: Assets.php:168 em-install.php:443 em-install.php:449 build/frontend.js:604
-#: build/frontend.js:501
+#: Assets.php:168 em-install.php:443 em-install.php:449 build/frontend.js:1
 msgid "Search"
 msgstr "Suche"
 
@@ -4370,7 +4266,7 @@ msgstr "Referent suchen"
 msgid "Searching..."
 msgstr "Suche..."
 
-#: build/index.js:9497 build/index.js:6395
+#: build/index.js:1
 msgid "Second"
 msgstr "Zweite(n)"
 
@@ -4378,12 +4274,11 @@ msgstr "Zweite(n)"
 msgid "second"
 msgstr "zweite"
 
-#: build/index.js:9100 build/index.js:6079
+#: build/index.js:1
 msgid "Select a location"
 msgstr "Ort auswählen"
 
-#: build/index.js:3350 build/index.js:9206 build/index.js:2224
-#: build/index.js:6161
+#: build/index.js:1
 msgid "Select a speaker"
 msgstr "Referent auswählen"
 
@@ -4391,19 +4286,18 @@ msgstr "Referent auswählen"
 msgid "Select a user, or enter a new one below."
 msgstr "Wähle einen Benutzer aus, oder füge einen Neuen hinzu."
 
-#: build/frontend.js:652 build/frontend.js:551
+#: build/frontend.js:1
 msgid "Select category"
 msgstr "Kategorie auswählen"
 
-#: build/index.js:7482 build/index.js:4909
+#: build/index.js:1
 msgid "Select Country"
 msgstr "Land auswählen"
 
 #: classes/Export/ExportAdmin.php:33
-#, fuzzy
 #| msgid "Select tags"
 msgid "Select Image"
-msgstr "Schlagworte auswählen"
+msgstr "Bild auswählen"
 
 #: templates/forms/event/location.php:38
 msgid "Select Location"
@@ -4414,7 +4308,7 @@ msgstr "Ort auswählen"
 msgid "Select Speaker"
 msgstr "Referent auswählen"
 
-#: build/frontend.js:673 build/frontend.js:576
+#: build/frontend.js:1
 msgid "Select tags"
 msgstr "Schlagworte auswählen"
 
@@ -4447,7 +4341,7 @@ msgstr "Trenne Veranstaltungskategorien mit Kommata"
 msgid "Separate event tags with commas"
 msgstr "Trenne Veranstaltungsschlagwörter mit Komma"
 
-#: build/index.js:7974 build/index.js:5285
+#: build/index.js:1
 msgid "Set a text here to show when no events are visible"
 msgstr "Text, der angezeigt wird, wenn keine Veranstaltungen anstehen"
 
@@ -4455,7 +4349,7 @@ msgstr "Text, der angezeigt wird, wenn keine Veranstaltungen anstehen"
 msgid "Settings"
 msgstr "Einstellungen"
 
-#: build/index.js:8527 build/index.js:5620
+#: build/index.js:1
 msgid ""
 "Show a warning that the event is nearly booked up when only this number of "
 "spaces are left"
@@ -4463,7 +4357,7 @@ msgstr ""
 "Eine Warnung anzeigen, wenn diese Veranstaltung nur noch wenige freie Plätze "
 "hat"
 
-#: build/index.js:2207 build/index.js:1479
+#: build/index.js:1
 msgid "Show Address"
 msgstr "Adresse anzeigen"
 
@@ -4471,64 +4365,60 @@ msgstr "Adresse anzeigen"
 msgid "Show Advanced Search"
 msgstr "Erweiterte Suche anzeigen"
 
-#: build/index.js:4269 build/index.js:2851
+#: build/index.js:1
 msgid "Show Audience"
 msgstr "Show audience"
 
-#: build/index.js:8491 build/index.js:5588
+#: build/index.js:1
 msgid "Show audience"
 msgstr "Zielgruppe anzeigen"
 
-#: build/index.js:4285 build/index.js:8507 build/index.js:2866
-#: build/index.js:5604
+#: build/index.js:1
 msgid "Show category"
 msgstr "Kategorie anzeigen"
 
-#: build/index.js:8376 build/index.js:5496
+#: build/index.js:1
 msgid "Show category filter"
 msgstr "Kategoriefilter"
 
-#: build/index.js:2219 build/index.js:1489
+#: build/index.js:1
 msgid "Show City"
 msgstr "Stadt anzeigen"
 
-#: build/index.js:2225 build/index.js:1495
-#, fuzzy
+#: build/index.js:1
 #| msgid "The country"
 msgid "Show Country"
-msgstr "Das Land"
+msgstr "Land anzeigen"
 
-#: build/index.js:8514 build/index.js:5610
+#: build/index.js:1
 msgid "Show if event is booked up or nearly booked up"
 msgstr "Anzeigen, ob eine Veranstaltung fast oder ganz ausgebucht ist"
 
-#: build/index.js:8499 build/index.js:5596
+#: build/index.js:1
 msgid "Show image"
 msgstr "Bild anzeigen"
 
-#: build/index.js:2235 build/index.js:3313 build/index.js:1502
-#: build/index.js:2198
+#: build/index.js:1
 msgid "Show Link"
 msgstr "Link anzeigen"
 
-#: build/index.js:2912 build/index.js:1928
+#: build/index.js:1
 msgid "Show Number"
 msgstr "Nummer anzeigen"
 
-#: build/index.js:3307 build/index.js:2193
+#: build/index.js:1
 msgid "Show Portrait if possible"
 msgstr "Portrait anzeigen, wenn möglich"
 
-#: build/index.js:8388 build/index.js:5506
+#: build/index.js:1
 msgid "Show search bar"
 msgstr "Suchleiste"
 
-#: build/index.js:4277 build/index.js:8470 build/index.js:2858
-#: build/index.js:5568
+#: build/index.js:1
 msgid "Show Speaker"
 msgstr "Sprecher oder Referent anzeigen"
 
-#: build/index.js:8382 build/index.js:5501
+#: build/index.js:1
 msgid "Show tag filter"
 msgstr "Schlagwortfilter"
 
@@ -4536,11 +4426,11 @@ msgstr "Schlagwortfilter"
 msgid "Show the date until the payment has to be done"
 msgstr "Zeigt das Datum, bis zu dem die Überweisung getätigt sein muss"
 
-#: build/index.js:2201 build/index.js:1474
+#: build/index.js:1
 msgid "Show Title"
 msgstr "Titel anzeigen"
 
-#: build/index.js:2213 build/index.js:1484
+#: build/index.js:1
 msgid "Show Zip"
 msgstr "Postleitzahl anzeigen"
 
@@ -4572,7 +4462,7 @@ msgstr ""
 msgid "Shows the IBAN number for Offline Payments."
 msgstr "Zeigt die IBAN Nummer für Überweisungen"
 
-#: build/index.js:8400 build/index.js:5515
+#: build/index.js:1
 msgid "Side"
 msgstr "Seite"
 
@@ -4584,12 +4474,7 @@ msgstr ""
 "Da die Veranstaltung sich wiederholt, musst du einen Veranstaltungsenddatum "
 "eingeben welches später liegt als das Startdatum."
 
-#: build/index.js:4390 build/index.js:4903 build/index.js:5237
-#: build/index.js:5565 build/index.js:6048 build/index.js:6309
-#: build/index.js:6594 build/index.js:6899 build/index.js:7213
-#: build/index.js:2946 build/index.js:3274 build/index.js:3529
-#: build/index.js:3756 build/index.js:4015 build/index.js:4174
-#: build/index.js:4370 build/index.js:4577 build/index.js:4744
+#: build/index.js:1
 msgid "Slug"
 msgstr "Slug"
 
@@ -4597,7 +4482,7 @@ msgstr "Slug"
 msgid "SOFORT Banking"
 msgstr "SOFORT-Überweisung"
 
-#: build/booking.js:1915
+#: build/booking.js:1
 msgid ""
 "Something seems to be wrong. Maybe your internet connection is interrupted "
 "or our server is overloaded. Please try again later"
@@ -4618,25 +4503,28 @@ msgstr "Etwas ging schief beim Aktualisieren von %s."
 msgid "Something went wrong with the recurrence update..."
 msgstr "Bei der Aktualisierung der Wiederholungen ist ein Fehler passiert ..."
 
-#: build/index.js:8347 build/index.js:5468
+#: build/index.js:1
 msgid "Sorting"
 msgstr "Sortierung"
 
 #: admin/bookings/em-cancelled.php:67 admin/bookings/em-confirmed.php:56
 #: admin/bookings/em-pending.php:86 admin/bookings/em-person.php:67
 #: admin/bookings/em-rejected.php:54 admin/em-bookings.php:163
-#: classes/Bookings/BookingsTable.php:96 classes/Coupons/Coupons.php:330
+#: classes/Bookings/BookingsTable.php:96 classes/Coupons/Coupons.php:328
 #: classes/Coupons/CouponsAdmin.php:344 classes/Coupons/CouponsAdmin.php:355
 #: classes/Tickets/Tickets.php:262
 #: templates/forms/event/bookings-ticket-form.php:26
-#: templates/templates/bookings-event-printable.php:27 build/index.js:668
-#: build/index.js:878 build/index.js:398 build/index.js:570
+#: templates/templates/bookings-event-printable.php:27 build/index.js:1
 msgid "Spaces"
 msgstr "Plätze"
 
 #: admin/em-bookings.php:99
 msgid "Spaces confirmed"
 msgstr "Plätze bestätigt"
+
+#: build/index.js:1
+msgid "Spaces overall"
+msgstr "Gesamtplätze"
 
 #: templates/forms/event/bookings-ticket-form.php:34
 #: templates/forms/event/bookings-ticket-form.php:39
@@ -4653,12 +4541,12 @@ msgctxt "spaces per booking"
 msgid "At most"
 msgstr "Maximal"
 
-#: build/index.js:564 build/index.js:323
+#: build/index.js:1
 msgid "Spaces Settings"
 msgstr "Freie Plätze"
 
 #: build/blocks/details-speaker/render.php:66 classes/Speaker/Speakers.php:36
-#: templates/forms/event/people.php:24 build/index.js:3077 build/index.js:2071
+#: templates/forms/event/people.php:24 build/index.js:1
 msgid "Speaker"
 msgstr "Referent"
 
@@ -4687,7 +4575,7 @@ msgstr "Standard"
 msgid "Standard Ticket"
 msgstr "Standard-Ticket"
 
-#: admin/em-bookings.php:166 build/index.js:9416 build/index.js:6319
+#: admin/em-bookings.php:166 build/index.js:1
 msgid "Start"
 msgstr "Beginn"
 
@@ -4695,16 +4583,15 @@ msgstr "Beginn"
 msgid "Start Date"
 msgstr "Startdatum"
 
-#: build/index.js:713 build/index.js:436
+#: build/index.js:1
 msgid "Start date"
 msgstr "Start-Datum"
 
-#: build/index.js:8959 build/index.js:5979
+#: build/index.js:1
 msgid "Starts at"
 msgstr "Beginnt um"
 
-#: build/index.js:7583 build/index.js:8257 build/index.js:5021
-#: build/index.js:5394
+#: build/index.js:1
 msgid "State"
 msgstr "Staat"
 
@@ -4718,8 +4605,7 @@ msgstr "Bundesland"
 msgid "Status"
 msgstr "Status"
 
-#: build/index.js:4582 build/index.js:8414 build/index.js:3054
-#: build/index.js:5524
+#: build/index.js:1
 msgid "Style"
 msgstr "Stil"
 
@@ -4727,7 +4613,7 @@ msgstr "Stil"
 msgid "Subject"
 msgstr "Betreff"
 
-#: build/admin.js:735 build/admin.js:547
+#: build/admin.js:1
 msgid "Success"
 msgstr "Erfolg"
 
@@ -4753,21 +4639,13 @@ msgstr "%s Erfolgreich gelöscht"
 msgid "Successfully saved %s"
 msgstr "%s erfolgreich gespeichert."
 
-#: classes/Intl/Date.php:122 build/index.js:9304 build/index.js:6241
+#: classes/Intl/Date.php:122 build/index.js:1
 msgid "Sun"
 msgstr "Son"
 
-#: build/index.js:9326 build/index.js:6251
+#: build/index.js:1
 msgid "Sunday"
 msgstr "Sonntag"
-
-#: templates/emails/bookingsummary.php:61
-msgid "Surcharges (After Taxes)"
-msgstr "Zuschläge (nach Steuern)"
-
-#: templates/emails/bookingsummary.php:38
-msgid "Surcharges Before Taxes"
-msgstr "Zuschläge vor Steuern"
 
 #: classes/Gateways/gateway.mollie.php:466
 #: classes/Gateways/gateway.mollie.php:483
@@ -4782,20 +4660,15 @@ msgstr "Beliebter Zahlungsdienstleister in der Schweiz"
 msgid "Switzerland"
 msgstr "Schweiz"
 
-#: build/index.js:8427 build/index.js:5534
+#: build/index.js:1
 msgid "Table"
 msgstr "Tabelle"
 
-#: build/index.js:4206 build/index.js:8310 build/index.js:2791
-#: build/index.js:5430
+#: build/index.js:1
 msgid "Tags"
 msgstr "Schlagworte"
 
-#: templates/emails/bookingsummary.php:47
-msgid "Taxes"
-msgstr "Steuern"
-
-#: build/index.js:9592 build/index.js:6463
+#: build/index.js:1
 msgid "Telephone"
 msgstr "Telefon"
 
@@ -4803,30 +4676,26 @@ msgstr "Telefon"
 msgid "Test Email Settings"
 msgstr "E-Mail Einstellungen testen"
 
-#: build/admin.js:738 build/admin.js:552
+#: build/admin.js:1
 msgid "Text"
 msgstr "Text"
 
-#: build/index.js:5078 build/index.js:3383
+#: build/index.js:1
 msgid "Text to display when no country is selected"
 msgstr "Text, der den Benutzer informiert, dass kein Land ausgewählt ist"
 
-#: build/index.js:5410 build/index.js:5726 build/index.js:6196
-#: build/index.js:7067 build/index.js:7367 build/index.js:3629
-#: build/index.js:3835 build/index.js:4089 build/index.js:4662
-#: build/index.js:4828
+#: build/index.js:1
 msgid "Text to display when the user types in invalid or insufficient data"
 msgstr ""
 "Text, der den Benutzer informiert, dass der Benutzer falsche Angaben gemacht "
 "hat"
 
-#: build/index.js:6465 build/index.js:6761 build/index.js:4263
-#: build/index.js:4467
+#: build/index.js:1
 msgid "Text to inform the user that a choice has to be made"
 msgstr ""
 "Text, der den Benutzer informiert, dass eine Auswahl getroffen werden muss"
 
-#: build/index.js:4569 build/index.js:3046
+#: build/index.js:1
 msgid "Text to inform the user that this checkbox must be checked"
 msgstr ""
 "Text, der den Benutzer informiert, dass die Checkbox abgehakt sein muss"
@@ -4866,7 +4735,7 @@ msgstr ""
 "Diese Nachricht wird dem Benutzer angezeigt, wenn eine Buchung mit Offline-"
 "Bezahlung erfolgreich war."
 
-#: build/booking.js:1915
+#: build/booking.js:1
 msgid "The request is lasting longer than expected. We try our best"
 msgstr "Die Anfrage dauert länger als erwartet..."
 
@@ -4890,7 +4759,7 @@ msgstr "Der Status Ihrer Zahlung ist:"
 msgid "the third %s of the month"
 msgstr "der dritte %s des Monats"
 
-#: classes/Bookings/Booking.php:386
+#: classes/Bookings/Booking.php:391
 msgid "The ticket %s is no longer available."
 msgstr "Das Ticket %s ist nicht länger verfügbar."
 
@@ -4971,7 +4840,7 @@ msgid ""
 msgstr ""
 "Diese Emails werden an Teilnehmer versandt, die einen Platz gebucht haben."
 
-#: build/index.js:9500 build/index.js:6396
+#: build/index.js:1
 msgid "Third"
 msgstr "Dritten"
 
@@ -4989,7 +4858,7 @@ msgstr ""
 "Dieser Gutscheincode ist bereits in Verwendung. Jeder Code darf nur einmal "
 "verwendet werden."
 
-#: classes/Forms/Forms.php:317
+#: classes/Forms/Forms.php:306
 msgid ""
 "This email already exists in our system, please log in to register to "
 "proceed with your booking."
@@ -5045,7 +4914,7 @@ msgstr ""
 "Diese Nachricht wird den Benutzern angezeigt, wenn sie dieses Gateway "
 "auswählen."
 
-#: build/index.js:8283 build/index.js:5408
+#: build/index.js:1
 msgid "This month"
 msgstr "Dieses Monat"
 
@@ -5103,11 +4972,11 @@ msgid "Though not needed, some banks are only happy if you provide a BIC"
 msgstr ""
 "Obwohl sie nicht benötigt wird, bestehen manche Banken auf Angabe einer BIC"
 
-#: classes/Intl/Date.php:119 build/index.js:9316 build/index.js:6245
+#: classes/Intl/Date.php:119 build/index.js:1
 msgid "Thu"
 msgstr "Don"
 
-#: build/index.js:9338 build/index.js:6255
+#: build/index.js:1
 msgid "Thursday"
 msgstr "Donnerstag"
 
@@ -5175,13 +5044,11 @@ msgstr "Tickets Gesamt"
 msgid "Ticket Type"
 msgstr "Ticket-Typ"
 
-#: build/booking.js:2652 build/index.js:851 build/index.js:546
+#: build/booking.js:1 build/index.js:1
 msgid "Tickets"
 msgstr "Tickets"
 
-#: build/blocks/details-time/render.php:14 build/index.js:3466
-#: build/index.js:8944 build/index.js:9405 build/index.js:2310
-#: build/index.js:5969 build/index.js:6311
+#: build/blocks/details-time/render.php:14 build/index.js:1
 msgid "Time"
 msgstr "Zeit"
 
@@ -5191,12 +5058,11 @@ msgctxt "time"
 msgid "at"
 msgstr "um"
 
-#: build/index.js:8893 build/index.js:9357 build/index.js:5928
-#: build/index.js:6273
+#: build/index.js:1
 msgid "Time and Date"
 msgstr "Zeit und Datum"
 
-#: build/index.js:8927 build/index.js:5954
+#: build/index.js:1
 msgid "To"
 msgstr "Bis"
 
@@ -5205,7 +5071,7 @@ msgstr "Bis"
 #: templates/forms/event/when-with-recurring.php:17
 #: templates/forms/event/when-with-recurring.php:25
 #: templates/forms/event/when.php:17 templates/forms/event/when.php:28
-#: build/index.js:5388 build/index.js:3607
+#: build/index.js:1
 msgid "to"
 msgstr "bis"
 
@@ -5217,15 +5083,15 @@ msgstr ""
 "Um die ganze Veranstaltungsreihe zu bearbeiten, <a href=\"%s\">bearbeite die "
 "Vorlage Veranstaltungsreihe</a>."
 
-#: build/index.js:8277 build/index.js:5406
+#: build/index.js:1
 msgid "Today"
 msgstr "Heute"
 
-#: classes/Object.php:1016
+#: classes/Object.php:1026
 msgid "Today's events"
 msgstr "Heutige Veranstaltungen"
 
-#: build/index.js:4607 build/index.js:3069
+#: build/index.js:1
 msgid "Toggle"
 msgstr "Umschalten"
 
@@ -5233,23 +5099,23 @@ msgstr "Umschalten"
 msgid "Toggle activation"
 msgstr "Toggle-Aktivierung"
 
-#: build/index.js:8280 build/index.js:5407
+#: build/index.js:1
 msgid "Tomorrow"
 msgstr "Morgen"
 
-#: classes/Object.php:1017
+#: classes/Object.php:1027
 msgid "Tomorrow's events"
 msgstr "Veranstaltungen von morgen"
 
-#: classes/Forms/Forms.php:272
+#: classes/Forms/Forms.php:261
 msgid "Too maxi"
 msgstr "Zu groß"
 
-#: classes/Forms/Forms.php:262
+#: classes/Forms/Forms.php:251
 msgid "Too mini"
 msgstr "Zu klein"
 
-#: build/index.js:8397 build/index.js:5514
+#: build/index.js:1
 msgid "Top"
 msgstr "Oben"
 
@@ -5265,7 +5131,7 @@ msgstr "Gesamtzahl Gutscheine"
 msgid "Total Paid"
 msgstr "Gesamtsumme (bezahlt)"
 
-#: templates/emails/bookingsummary.php:69
+#: templates/emails/bookingsummary.php:28
 msgid "Total Price"
 msgstr "Gesamtpreis"
 
@@ -5299,11 +5165,11 @@ msgstr "Transaktionen"
 msgid "Transfer Money from Your Account within Seconds"
 msgstr "Überweisen Sie Geld von Ihrem Konto innerhalb von Sekunden"
 
-#: classes/Intl/Date.php:117 build/index.js:9310 build/index.js:6243
+#: classes/Intl/Date.php:117 build/index.js:1
 msgid "Tue"
 msgstr "Di"
 
-#: build/index.js:9332 build/index.js:6253
+#: build/index.js:1
 msgid "Tuesday"
 msgstr "Dienstag"
 
@@ -5311,7 +5177,7 @@ msgstr "Dienstag"
 msgid "Twint"
 msgstr "Twint"
 
-#: classes/Forms/FormPostAdmin.php:14 build/admin.js:717 build/admin.js:539
+#: classes/Forms/FormPostAdmin.php:14 build/admin.js:1
 msgid "Type"
 msgstr "Typ"
 
@@ -5330,12 +5196,7 @@ msgstr "Unberechtigter Zugriff"
 msgid "Undo"
 msgstr "Rückgängig machen"
 
-#: build/index.js:4397 build/index.js:4910 build/index.js:5244
-#: build/index.js:5578 build/index.js:6055 build/index.js:6316
-#: build/index.js:6601 build/index.js:6912 build/index.js:7220
-#: build/index.js:2955 build/index.js:3283 build/index.js:3533
-#: build/index.js:3763 build/index.js:4019 build/index.js:4183
-#: build/index.js:4374 build/index.js:4584 build/index.js:4753
+#: build/index.js:1
 msgid "Unique identifier"
 msgstr "Eindeutige ID"
 
@@ -5343,7 +5204,7 @@ msgstr "Eindeutige ID"
 msgid "Unlimited"
 msgstr "Unbegrenzt"
 
-#: build/index.js:7969 build/index.js:5280
+#: build/index.js:1
 msgid "Upcoming Events"
 msgstr "Anstehende Vernstaltungen"
 
@@ -5355,11 +5216,11 @@ msgstr "Veranstaltungskategorie aktualisieren"
 msgid "Update Event Tag"
 msgstr "Veranstaltungsschlagwort aktualisieren"
 
-#: build/index.js:7592 build/index.js:5032
+#: build/index.js:1
 msgid "URL"
 msgstr "URL"
 
-#: build/index.js:2928 build/index.js:1944
+#: build/index.js:1
 msgid "Use %s as placeholder for the number of spaces left"
 msgstr "Benutze %s als Platzhalter für die übrigen Plätze"
 
@@ -5379,7 +5240,7 @@ msgstr ""
 "Dies können Anwender mit %s Berechtigung durchführen, wenn sie "
 "Veranstaltungen hinzufügen/ändern."
 
-#: classes/Coupons/Coupons.php:284 classes/Coupons/CouponsAdmin.php:60
+#: classes/Coupons/Coupons.php:282 classes/Coupons/CouponsAdmin.php:60
 #: classes/Coupons/CouponsAdmin.php:225 classes/Coupons/CouponsAdmin.php:235
 #: classes/Coupons/CouponsAdmin.php:318
 msgid "Uses"
@@ -5443,15 +5304,15 @@ msgstr "V Pay oder Maestro"
 msgid "Waiting for Mollie"
 msgstr "Warte auf Mollie"
 
-#: build/admin.js:729 build/admin.js:545
+#: build/admin.js:1
 msgid "Warning"
 msgstr "Warnung"
 
-#: build/index.js:2918 build/index.js:1934
+#: build/index.js:1
 msgid "Warning Threshold"
 msgstr "Schwellenwert für Warnung"
 
-#: build/index.js:8520 build/index.js:5615
+#: build/index.js:1
 msgid "Warning threshold"
 msgstr "Schwellenwert für Warnung"
 
@@ -5518,15 +5379,15 @@ msgstr ""
 "nach Veranstaltungen Autovervollständigung anzubieten. Diese sammeln Daten "
 "in Übereinstimmung mit Googles <a href=\"%s\">Datenschutzerklärung</a>."
 
-#: build/index.js:3331 build/index.js:2209
+#: build/index.js:1
 msgid "Website"
 msgstr "Webseite"
 
-#: classes/Intl/Date.php:118 build/index.js:9313 build/index.js:6244
+#: classes/Intl/Date.php:118 build/index.js:1
 msgid "Wed"
 msgstr "Mi"
 
-#: build/index.js:9335 build/index.js:6254
+#: build/index.js:1
 msgid "Wednesday"
 msgstr "Mittwoch"
 
@@ -5534,12 +5395,11 @@ msgstr "Mittwoch"
 msgid "week on"
 msgstr "Woche am "
 
-#: build/index.js:9519 build/index.js:6408
+#: build/index.js:1
 msgid "Weekday"
 msgstr "Wochentag"
 
-#: templates/forms/event/when-with-recurring.php:35 build/index.js:9454
-#: build/index.js:6355
+#: templates/forms/event/when-with-recurring.php:35 build/index.js:1
 msgid "Weekly"
 msgstr "Wöchentlich"
 
@@ -5547,7 +5407,7 @@ msgstr "Wöchentlich"
 msgid "weeks on"
 msgstr "Wochen am"
 
-#: build/index.js:4417 build/index.js:2979
+#: build/index.js:1
 msgid "What should your visitor say \"yes\" to?"
 msgstr "Zu was soll der Benutzer zustimmen?"
 
@@ -5582,13 +5442,7 @@ msgstr ""
 "Startdatum in aufsteigender Reihenfolge. Um die Sortierung zu ändern, passe "
 "die Werte oben an."
 
-#: build/index.js:4612 build/index.js:5088 build/index.js:5447
-#: build/index.js:5736 build/index.js:5947 build/index.js:6206
-#: build/index.js:6482 build/index.js:6778 build/index.js:7077
-#: build/index.js:7377 build/index.js:3075 build/index.js:3390
-#: build/index.js:3662 build/index.js:3842 build/index.js:3931
-#: build/index.js:4096 build/index.js:4276 build/index.js:4480
-#: build/index.js:4669 build/index.js:4835
+#: build/index.js:1
 msgid "Width"
 msgstr "Breite"
 
@@ -5604,18 +5458,15 @@ msgstr "WordPress Suche"
 msgid "WP Cron Time"
 msgstr "WP Cron Zeit"
 
-#: templates/forms/event/when-with-recurring.php:47 build/index.js:5133
-#: build/index.js:3428
+#: templates/forms/event/when-with-recurring.php:47 build/index.js:1
 msgid "year"
 msgstr "Jahr"
 
-#: templates/forms/event/when-with-recurring.php:35 build/index.js:9460
-#: build/index.js:6357
+#: templates/forms/event/when-with-recurring.php:35 build/index.js:1
 msgid "Yearly"
 msgstr "Jährlich"
 
-#: templates/forms/event/when-with-recurring.php:48 build/index.js:5133
-#: build/index.js:3430
+#: templates/forms/event/when-with-recurring.php:48 build/index.js:1
 msgid "years"
 msgstr "Jahre"
 
@@ -5624,7 +5475,7 @@ msgstr "Jahre"
 msgid "Yes"
 msgstr "Ja"
 
-#: build/booking.js:3072
+#: build/booking.js:1
 msgid "Yes, I want to donate"
 msgstr "Ja, ich möchte einen zusätzlichen Betrag spenden"
 
@@ -5709,6 +5560,10 @@ msgstr ""
 msgid "You can type any HTML Content here."
 msgstr "Hier kann jeder HTML-Inhalt eingefügt werden."
 
+#: classes/Bookings/Booking.php:405
+msgid "You cannot book more spaces than are available."
+msgstr "Du kannst nicht mehr Plätze buchen als verfügbar sind"
+
 #: classes/Tickets/Ticket.php:492
 msgid "You cannot delete a ticket that has a booking on it."
 msgstr ""
@@ -5761,13 +5616,17 @@ msgid ""
 msgstr ""
 "Du musst uns erlauben, die Daten zu speichern, um die Buchung abzuschließen."
 
-#: classes/Bookings/Booking.php:362
+#: classes/Tickets/TicketBooking.php:121
+msgid "You must book at least one space."
+msgstr "Du musst mindestens einen Platz buchen"
+
+#: classes/Bookings/Booking.php:367
 msgid "You must request at least one space to book an event."
 msgstr ""
 "Du musst bei der Buchung mindestens einen Platz anfordern, um die "
 "Veranstaltung zu buchen."
 
-#: build/booking.js:1969
+#: build/booking.js:1
 msgid "You will be redirected to the payment gateway"
 msgstr "Du wirst zu unserem Zahlungsdienstleister weitergeleitet"
 
@@ -5783,7 +5642,7 @@ msgstr ""
 msgid "Your booking has been recorded"
 msgstr "Deine Buchung wurde erfasst"
 
-#: build/booking.js:1912
+#: build/booking.js:1
 msgid "Your booking is beeing processed."
 msgstr "Deine Buchung wird bearbeitet"
 
@@ -5808,7 +5667,7 @@ msgstr ""
 "Veranstaltung konnte nicht angelegt werden. Bitte korrigiere erst diese "
 "Fehler:"
 
-#: build/index.js:7541 build/index.js:4975
+#: build/index.js:1
 msgid "ZIP Code"
 msgstr "Postleitzahl"
 

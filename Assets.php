@@ -108,6 +108,7 @@ class Assets {
 			'countries' => \Contexis\Events\Intl\Countries::get(),
 			'default_country' => get_option('dbem_location_default_country'),
 			'currency' => get_option('dbem_bookings_currency'),
+			'bookings_enabled' => \EM_Booking::booking_enabled(),
 		]);
 
 		wp_register_style(

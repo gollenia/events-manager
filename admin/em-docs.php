@@ -138,7 +138,7 @@ function em_docs_init($force_init = false){
 							'#_LOCATIONPOSTCODE' => array( 'desc' => 'Displays the postcode.' ),
 							'#_LOCATIONREGION' => array( 'desc' => 'Displays the region.' ),
 							'#_LOCATIONCOUNTRY' => array( 'desc' => 'Displays the country.' ),
-							'#_LOCATIONIMAGE' => array( 'desc' => 'Shows the location image.' ),
+							'#_LOCATIONFULLLINE' => array( 'desc' => 'Shows the full address in one line.' ),
 						)
 					),
 					'Links' => array(

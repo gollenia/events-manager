@@ -10,7 +10,7 @@ import { useEntityProp } from '@wordpress/core-data';
 /**
  * Internal dependencies
  */
-import { formatTime } from './../../common/formatDate';
+import { formatTimeRange } from './../../common/formatDate';
 import Inspector from './inspector.js';
 
 /**
@@ -43,7 +43,7 @@ const edit = ( props ) => {
 				: '';
 		const end =
 			meta?._event_end_date && meta?._event_end_time ? meta?._event_end_date + ' ' + meta?._event_end_time : '';
-		return formatTime( start, end );
+		return formatTimeRange( start, end );
 	};
 
 	return (

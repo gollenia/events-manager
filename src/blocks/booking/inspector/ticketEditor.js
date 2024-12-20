@@ -114,6 +114,7 @@ const TicketEditor = ( props ) => {
 				<FlexItem>
 					<Button
 						variant="primary"
+						disabled={ ! ticket.ticket_name || ! ticket.dicket_description }
 						onClick={ () => {
 							onUpdate();
 						} }

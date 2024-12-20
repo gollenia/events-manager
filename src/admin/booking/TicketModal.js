@@ -22,6 +22,8 @@ const TicketModal = ( { store, onCancel, onSave } ) => {
 		return options;
 	};
 
+	console.log( 'shadowTicket', shadowTicket );
+
 	return (
 		<>
 			{ ticket && (
@@ -32,9 +34,9 @@ const TicketModal = ( { store, onCancel, onSave } ) => {
 							<SelectControl
 								label="Ticket Type"
 								type="select"
-								value={ shadowTicket?.id }
+								value={ shadowTicket?.ticket_id }
 								onChange={ ( value ) => {
-									const newTicket = { ...shadowTicket, id: parseInt( value ) };
+									const newTicket = { ...shadowTicket, ticket_id: parseInt( value ) };
 									setShadowTicket( newTicket );
 								} }
 								options={ ticketOptions() }

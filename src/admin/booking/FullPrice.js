@@ -35,6 +35,8 @@ const FullPrice = ( { store } ) => {
 				} );
 			}
 		}
+
+		price += state.data.booking.donation;
 		setPrice( price );
 	}, [ state ] );
 

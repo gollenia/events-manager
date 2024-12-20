@@ -27,8 +27,6 @@ const edit = ( props ) => {
 	const postType = select( 'core/editor' ).getCurrentPostType();
 	const [ meta, setMeta ] = useEntityProp( 'postType', postType, 'meta' );
 
-	console.log( meta );
-
 	const blockProps = useBlockProps( {
 		className: [ 'ctx-event-booking' ].filter( Boolean ).join( ' ' ),
 	} );

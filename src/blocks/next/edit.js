@@ -9,17 +9,20 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
+import apiFetch from '@wordpress/api-fetch';
 import Inspector from './inspector.js';
 
 /**
  * @param {Props} props
  * @return {JSX.Element} Element
  */
-const EditUpcoming = ( props ) => {
+const EditCountdown = ( props ) => {
 	const {
-		attributes: { textAlignment, selectedTags, altText },
+		attributes: { textAlignment, selectedTags, altText, selectedCategories },
 		setAttributes,
 	} = props;
+
+	const [ nextEvent, setNextEvent ] = useState( null );
 
 	const availableCategories = useSelect( ( select ) => {
 		const { getEntityRecords } = select( coreStore );
@@ -78,6 +81,17 @@ const EditUpcoming = ( props ) => {
 			return wantedTag.name;
 		} );
 	}
+
+	useEffect( () => {
+		apiFetch( {
+			path: '/wp/v2/events',
+			method: 'GET',
+			data: {
+				per_page: 1,
+				category: selectedCategories,
+			},
+		} );
+	}, [ tagsFieldValue ] );
 
 	const blockProps = useBlockProps();
 

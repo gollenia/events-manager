@@ -108,11 +108,11 @@ function wp_events_plugin_init(){
 				['ctx-blocks/grid-row', [], [
 					['ctx-blocks/grid-column', ['widthLarge' => 2], [['core/paragraph', ['placeholder' => 'Event-Beschreibung']],]],
 					['ctx-blocks/grid-column', ['widthLarge' => 1], [
-						['events/details', []],
+						['events-manager/details', []],
 					]]
 				]],
 				['core/separator'],
-				['core/group', ['type' => 'flex', 'flexWrap' => 'nowrap'], [['events/booking', ['title' => 'Anmeldung']]]]
+				['core/group', ['layout' => ['type' => 'flex', 'flexWrap' => 'nowrap', 'justifyContent' => 'right']], [['events-manager/booking', ['title' => 'Anmeldung']]]]
 		],
 		'capability_type' => 'event',
 		'capabilities' => [
@@ -207,7 +207,7 @@ function wp_events_plugin_init(){
 			'query_var' => true,
 			'has_archive' => false,
 			'template' => [
-				['events/locationeditor']
+				['events-manager/locationeditor']
 			],
 			'supports' => apply_filters('em_cp_location_supports', ['title','excerpt','thumbnail','editor','custom-fields']),
 			'capability_type' => 'location',

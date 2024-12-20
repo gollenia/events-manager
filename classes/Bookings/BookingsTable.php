@@ -9,7 +9,7 @@ class EM_Bookings_Table {
 	 * * value - label for use in column headers 
 	 * @var array
 	 */
-	public $cols = ['user_name','event_name','booking_spaces','booking_status','booking_price','donation','booking_date'];
+	public $cols = ['user_name','event_name','booking_spaces','booking_status','booking_price','donation'];
 	/**
 	 * Asoociative array of available column keys and corresponding headers, which will be used to display this table of bookings
 	 * @var array
@@ -96,7 +96,8 @@ class EM_Bookings_Table {
 			'booking_date'=>__('Booking Date','events'),
 			'booking_price'=>__('Total','events'),
 			'booking_id'=>__('Booking ID','events'),
-			'booking_comment'=>__('Booking Comment','events')
+			'booking_comment'=>__('Booking Comment','events'),
+			'donation'=>__('Donation','events'),
 		), $this);
 		$this->cols_tickets_template = apply_filters('em_bookings_table_cols_tickets_template', array(
 			'ticket_name'=>__('Ticket Name','events'),
@@ -144,7 +145,7 @@ class EM_Bookings_Table {
 				$settings = get_user_meta(get_current_user_id(), 'em_bookings_view', true );
 			}
 			if( !empty($settings) ){
-				$this->cols = $settings;
+				//$this->cols = $settings;
 			}
 		}elseif( !empty($_REQUEST['cols']) && empty($_REQUEST['no_save']) ){ //save view settings for next time
 		    if( !empty($this->cols_view) && is_object($this->cols_view) ){

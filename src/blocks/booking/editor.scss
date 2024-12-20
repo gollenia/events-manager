@@ -35,3 +35,18 @@
 	 margin-left: 0 !important;
 	 margin-right: 0 !important;
  }
+
+ .inspector-message {
+	 margin-top: 10px;
+	 margin-bottom: 10px;
+	 padding: 1rem;
+
+	 &--error {
+		 background-color: #f8d7da;
+		 border-color: #f5c6cb;
+		 color: #721c24;
+		 border: 1px solid #721c24;
+		 border-radius: 3px;
+	 }
+ }
+

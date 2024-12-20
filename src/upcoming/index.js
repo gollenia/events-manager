@@ -1,5 +1,6 @@
 import apiFetch from '@wordpress/api-fetch';
 import { __ } from '@wordpress/i18n';
+import { addQueryArgs } from '@wordpress/url';
 import { useEffect, useState } from 'react';
 import CardView from './CardView';
 import ListView from './ListView';
@@ -44,6 +45,7 @@ function Upcoming( props ) {
 		tags: [],
 		string: '',
 	} );
+	const [ error, setError ] = useState( '' );
 
 	const changeFilter = ( key, value ) => {
 		setFilter( { ...filter, [ key ]: value } );
@@ -60,34 +62,29 @@ function Upcoming( props ) {
 		tagFilter.push( tag );
 		changeFilter( 'tags', tagFilter );
 	};
-
-	const getUrl = ( params = '' ) => {
-		const base = window.eventBlocksLocalization?.rest_url;
-		if ( base === undefined ) return;
-		if ( params === '' ) return base;
-		return base + ( base.includes( '?' ) ? '&' : '?' ) + params;
-	};
-
+	
 	useEffect( () => {
-		const params = [
-			limit > 0 ? `limit=${ limit }` : false,
-			'order=' + order,
-			selectedCategory ? `category=${ selectedCategory.join( ',' ) }` : false,
-			selectedTags?.length ? `tag=${ selectedTags.join( ',' ) }` : false,
-			scope != '' ? `scope=${ scope }` : false,
-			selectedLocation ? `location=${ selectedLocation }` : false,
-			excludeCurrent && window.eventBlocksLocalization?.current_id
-				? `exclude=${ window.eventBlocksLocalization?.current_id }`
-				: false,
-		]
-			.filter( Boolean )
-			.join( '&' );
-		console.log( getUrl( params ) );
-		apiFetch( { url: getUrl( params ) } ).then( ( posts ) => {
+		let queryParams = {
+			limit,
+			order,
+			category: selectedCategory,
+			tag: selectedTags,
+			scope
+		};
+		
+		Object.entries(queryParams).forEach(([key, value]) => {
+			if (value === 0) delete queryParams[key];
+		});
+
+		console.log( queryParams );
+		
+		apiFetch( { path: addQueryArgs( 'events/v2/events', queryParams ) } ).then( ( posts ) => {
 			setEvents( posts );
-			console.log( posts );
+			
+			
 			let categories = {};
 			let tags = {};
+			
 			posts.map( ( event ) => {
 				if ( ! event.category ) return;
 				if ( categories[ event.category.id ] == undefined ) categories[ event.category.id ] = event.category;
@@ -102,6 +99,10 @@ function Upcoming( props ) {
 			setTags( tags );
 			setCategories( categories );
 			setStatus( 'LOADED' );
+		} ).catch( ( error ) => {
+			console.log( error );
+			setStatus( 'ERROR' );
+			setError( error.message );
 		} );
 	}, [] );
 
@@ -143,6 +144,10 @@ function Upcoming( props ) {
 	const currentView = customView != '' ? customView : view;
 
 	const showFilters = showCategoryFilter || showTagFilter || showSearch;
+
+	if( status == 'ERROR' ) {
+		return <div className='error'><h4>{ __('An Error occurred', 'events') }</h4>{ error }</div>;
+	}
 
 	if ( events.length == 0 && status == 'LOADED' ) {
 		return <div>{ altText }</div>;

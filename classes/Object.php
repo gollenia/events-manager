@@ -911,6 +911,7 @@ class EM_Object {
 			}elseif( is_array($array[$key]) ){
 				$array[$key] = ($addslashes) ? wp_unslash($array[$key]):$array[$key];
 			}
+			if($array[$key] == null) continue;
 			$this->$key = $array[$key];
 		}
 	}
@@ -996,19 +997,20 @@ class EM_Object {
 	public static function clean_id_atts( $array = array(), $id_atts = array() ){
 		if( is_array($array) && is_array($id_atts) ){
 			foreach( $array as $key => $string ){
-				if( in_array($key, $id_atts) ){
-					//This is in the list of atts we want cleaned
-					if( is_numeric($string) ){
-						$array[$key] = (int) $string;
-					}elseif( is_array($string) && !empty($string) && array_is_list($string) ){
-						$array[$key] = $string;
-					}elseif( !is_array($string) && preg_match('/^( ?[\-0-9] ?,?)+$/', $string) ){
-					    $array[$key] = explode(',', str_replace(' ','',$string));
-					}else{
-						//No format we accept
-						unset($array[$key]);
-					}
+				if(!is_string($string) || !in_array($key, $id_atts)) continue;
+				
+				//This is in the list of atts we want cleaned
+				if( is_numeric($string) ){
+					$array[$key] = (int) $string;
+				}elseif( is_array($string) && !empty($string) && array_is_list($string) ){
+					$array[$key] = $string;
+				}elseif( !is_array($string) && preg_match('/^( ?[\-0-9] ?,?)+$/', $string) ){
+					$array[$key] = explode(',', str_replace(' ','',$string));
+				}else{
+					//No format we accept
+					unset($array[$key]);
 				}
+				
 			}
 		}
 		return $array;

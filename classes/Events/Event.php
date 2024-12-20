@@ -193,9 +193,9 @@ class EM_Event extends \EM_Object{
 	 * Timestamp for booking cut-off date/time
 	 * @var EM_DateTime
 	 */
-	protected $rsvp_end;
+	var $rsvp_end;
 
-	protected $rspv_start;
+	var $rspv_start = null;
 	
 	/**
 	 * @var EM_Location
@@ -378,12 +378,12 @@ class EM_Event extends \EM_Object{
 	            $this->event_date_created = $row->event_date_created;
 	            return $this->$var;
 	        }
-	    }elseif( in_array($var, array('event_start_date', 'event_start_time', 'event_end_date', 'event_end_time', 'event_rsvp_end', 'event_rsvp_start')) ){
-	    	return $this->$var;
 	    }elseif( $var == 'event_timezone' ){
 	    	return $this->get_timezone()->getName();
 	    }
-	    
+	    if(!isset($this->$var)){
+	    	return null;
+	    }
 	    return $this->$var;
 	}
 	
@@ -805,6 +805,7 @@ class EM_Event extends \EM_Object{
 			//if we're all good, let's save the event
 			$this->force_status = 'publish';
 		}
+		file_put_contents('/var/www/vhosts/kids-team.internal/log/eventerrors.log', print_r(['post' => $validate_post, 'meta' => $validate_meta, 'tickets' => $validate_tickets], true));
 		return apply_filters('em_event_validate', $validate_post && $validate_meta && $validate_tickets, $this );		
 	}
 	
@@ -1422,19 +1423,19 @@ class EM_Event extends \EM_Object{
 	public function can_book(){
 
 		if(!$this->event_rsvp) {
-			echo "event_rsvp is false";
+			echo __("Booking for this event is disabled", "events");
 			return false;
 		}
 		if( $this->get_spaces() <= 0 ) {
-			echo "get_spaces is 0";
+			echo __("No spaces left for this event", "events");
 			return false;
 		}
 		if( !$this->booking_has_started()) {
-			echo "booking has not started";
+			echo __("Booking has not started yet", "events");
 			return false;
 		}
 		if( $this->booking_has_ended()) {
-			echo "booking has ended";
+			echo __("Booking has ended", "events");
 			return false;
 		}
 		if( $this->get_bookings()->get_available_spaces() == 0 ) return false;
@@ -1445,12 +1446,14 @@ class EM_Event extends \EM_Object{
 	
 	function booking_has_started(){
 		$now = new DateTime();
+		if( $this->rspv_start == 0 ) return true;
 		$start = $this->rsvp_start();
 		return $start->getTimestamp() < $now->getTimestamp();
 	}
 
 	function booking_has_ended(){
 		$now = new DateTime();
+		if( $this->rspv_end == 0 ) return false;
 		$end = $this->rsvp_end();
 		return $end->getTimestamp() < $now->getTimestamp();
 	}
