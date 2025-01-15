@@ -452,6 +452,7 @@ Class EM_Gateway_Mollie extends EM_Gateway {
 	public static function mollie_method( string $method ) : array {
 		$names = [
 			'applepay' 	    => __('Apple Pay', 'events'),
+			'googlepay' 	=> __('Google Pay', 'events'),
 			'bancontact' 	=> __('Bancontact', 'events'),
 			'creditcard' 	=> __('Credit Card', 'events'),
 			'directdebit' 	=> __('Direct Debit', 'events'),
@@ -469,6 +470,7 @@ Class EM_Gateway_Mollie extends EM_Gateway {
 
 		$descriptions = [
 			'applepay'  	=> __('Pay with your Apple ID', 'events'),
+			'googlepay' 	=> __('Pay with your Google Account', 'events'),
 			'bancontact' 	=> __('Digital Payment Service', 'events'),
 			'creditcard' 	=> __('Mastercard, VISA, Amex', 'events'),
 			'directdebit' 	=> __('Vpay or Maestro', 'events'),
@@ -513,21 +515,24 @@ Class EM_Gateway_Mollie extends EM_Gateway {
 		}
 
 		$methods = get_option('mollie_activated_methods');
-		if( !$methods ) {
-			$methods	= array();
-			$mollie 	= self::start_mollie();
-			$all 		= $mollie->methods->allActive();
-			foreach( $all as $method ) {
 
-				$texts = self::mollie_method($method->id);
-				$methods[$method->id] = [
-					'name' => $texts['name'],
-					'description' => $texts['description'],
-					'image' => plugin_dir_url( __FILE__ ) . 'icons/' . $method->id . '.svg',
-				];
+		if( $methods ) return $methods;
 
-			}
+		$methods	= array();
+		$mollie 	= self::start_mollie();
+		$all 		= $mollie->methods->all(['locale' => get_locale(), 'includeWallets' => 'applepay,googlepay']);
+		var_dump($all);
+		foreach( $all as $method ) {
+
+			$texts = self::mollie_method($method->id);
+			$methods[$method->id] = [
+				'name' => $texts['name'],
+				'description' => $texts['description'],
+				'image' => plugin_dir_url( __FILE__ ) . 'icons/' . $method->id . '.svg',
+			];
+
 		}
+
 		return $methods;
 	}
 
