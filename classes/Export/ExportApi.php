@@ -65,7 +65,7 @@ class ExportApi {
 	public function get_featured_events() {
 		if(!array_key_exists('featured', $_REQUEST)) return [];
 		
-		return EM_Events::get_rest(['scope' => 'future', 'category' => $_REQUEST['featured']]);
+		return EM_Events::get_rest(['scope' => 'future', 'category' => $_REQUEST['important']]);
 	}
 
 	public function get_pdf_fonts() {
@@ -112,18 +112,19 @@ class ExportApi {
 	public function get_date_range($offset = 0) {
 		$start = new DateTime();
 
-		if($offset) {			
-			$start->add(new DateInterval("P" . $offset . "M"));
-		}
+		$start->modify('first day of this month');
 		
-		$month = date("m",$start->getTimestamp());
-		$year = date("Y",$start->getTimestamp());
+		if ($offset) {
+			$start->modify("+$offset months");
+		}
+	
+		$end = clone $start;
+		$end->modify('last day of this month');
 
 		return [
-			date('Y-m-d', mktime(0, 0, 0, $month, 1, $year)),
-			date('Y-m-t', mktime(0, 0, 0, $month, 1, $year))
+			$start->format('Y-m-d'),
+			$end->format('Y-m-d')
 		];
-
 	}
 
 	public function generate_month() {
